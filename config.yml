@@ -1,0 +1,601 @@
+#
+#Config file for Cannons
+#
+#Dont use TABs in this file or Bukkit will be unable to read it
+
+
+language: custom
+general:
+  muzzleflash: true
+  use player name for damage: true
+  confuses shooter: 5
+  max gunpowder: 5
+  gunpowder varies for length: true
+  barrel cooldown time: 3
+  fuse burn time: 1
+  player ammunition consumption: true
+  redstone ammunition consumption: true
+fire and reload:
+  redstone autoload: true
+  fire torch with flint and steel: false
+  fire with torch: true
+  fire with button: false
+amount of built cannons:
+  use limits: false
+  build limit A: 1
+  build limit B: 100
+angles:
+  max horizontal angle: 30.0
+  min horizontal angle: -30.0
+  max vertical angle: 30.0
+  min vertical angle: -30.0
+  angle step: 1.0
+  deviation angle: 5.0
+construction:
+  cannon material: 35
+  max barrel length: 6
+  min barrel length: 2
+protectionplugin:
+  use protection hooks: true
+  blockdamage in regions: false
+  playerdamage in regions: true
+projectiles: 
+- cobblestone
+- stone
+- gravel
+- glass
+- tnt
+- wool
+- wood
+- cake
+- redstone
+- blaze_powder
+- rotten_flesh
+- ender_pearl
+- lava_bucket
+- water_bucket
+- obsidian
+- diamond
+- diamond_block
+- monster_egg
+
+cobblestone:
+  player damage: 7
+  max speed: 3
+  cannonball:
+    cannonball: true
+    explosion power: 2
+    penetration: 1
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+    
+stone:
+  player damage: 10
+  max speed: 4
+  cannonball:
+    cannonball: true
+    explosion power: 3
+    penetration: 2
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+
+obsidian:
+  player damage: 7
+  max speed: 6
+  cannonball:
+    cannonball: true
+    explosion power: 2
+    penetration: 3
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+
+diamond:
+  player damage: 4
+  max speed: 6
+  cannonball:
+    cannonball: true
+    explosion power: 2
+    penetration: 4
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: true
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+    
+diamond_block:
+  player damage: 4
+  max speed: 5
+  cannonball:
+    cannonball: false
+    explosion power: 0
+    penetration: 4
+    timefuse: 0
+  canistershot:
+    canister shot: true
+    spread: 3
+    amount of bullets: 10
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: true
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+ 
+gravel:
+  player damage: 15
+  max speed: 4
+  cannonball:
+    cannonball: false
+    explosion power: 0
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: true
+    spread: 3
+    amount of bullets: 40
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false 
+    teleport to impact: false
+    
+glass:
+  player damage: 25
+  max speed: 5
+  cannonball:
+    cannonball: true
+    explosion power: 0
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: true
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+    
+tnt:
+  player damage: 14
+  max speed: 3
+  cannonball:
+    cannonball: true
+    explosion power: 4
+    penetration: 0
+    timefuse: 1.5
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+ 
+wood:
+  player damage: 0
+  max speed: 3
+  cannonball:
+    cannonball: true
+    explosion power: 0
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: true
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+ 
+cake:
+  player damage: 5
+  max speed: 3
+  cannonball:
+    cannonball: true
+    explosion power: 1
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: true
+    poison: false
+    slowness: true
+    slowDigging: false
+    weakness: true
+    confusion: false
+    hunger: false
+    teleport to impact: false
+    
+redstone:
+  player damage: 8
+  max speed: 4
+  cannonball:
+    cannonball: true
+    explosion power: 0
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 10
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: true
+    slowness: false
+    slowDigging: true
+    weakness: true
+    confusion: true
+    hunger: false
+    teleport to impact: false
+    
+blaze_powder:
+  player damage: 8
+  max speed: 5
+  cannonball:
+    cannonball: true
+    explosion power: 2
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 7
+    super breaker: false
+    incendiary: true
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: true
+    confusion: true
+    hunger: false
+    teleport to impact: false
+    
+rotten_flesh:
+  player damage: 12
+  max speed: 3
+  cannonball:
+    cannonball: true
+    explosion power: 1
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 10
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: true
+    slowness: false
+    slowDigging: false
+    weakness: true
+    confusion: false
+    hunger: true
+    teleport to impact: false
+
+ender_pearl:
+  player damage: 4
+  max speed: 3
+  cannonball:
+    cannonball: true
+    explosion power: 1
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: false
+    radius: 0
+    amount: 0
+    material: AIR
+  effects:
+    effect duration: 0
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: true
+    
+lava_bucket:
+  player damage: 10
+  max speed: 2
+  cannonball:
+    cannonball: true
+    explosion power: 2
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: true
+    radius: 2
+    amount: 3
+    material: LAVA
+  effects:
+    effect duration: 10
+    super breaker: false
+    incendiary: true 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+    
+water_bucket:
+  player damage: 6
+  max speed: 2
+  cannonball:
+    cannonball: true
+    explosion power: 2
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: true
+    radius: 2
+    amount: 3
+    material: WATER
+  effects:
+    effect duration: 0
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+
+wool:
+  player damage: 7
+  max speed: 3
+  cannonball:
+    cannonball: true
+    explosion power: 1
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: true
+    radius: 3
+    amount: 20
+    material: WEB
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+    
+monster_egg:
+  player damage: 7
+  max speed: 3
+  cannonball:
+    cannonball: true
+    explosion power: 1
+    penetration: 0
+    timefuse: 0
+  canistershot:
+    canister shot: false
+    spread: 0
+    amount of bullets: 0
+  placeBlock:
+    enabled: true
+    radius: 3
+    amount: 3
+    material: MONSTER_EGG
+  effects:
+    effect duration: 5
+    super breaker: false
+    incendiary: false 
+    blindness: false
+    poison: false
+    slowness: false
+    slowDigging: false
+    weakness: false
+    confusion: false
+    hunger: false
+    teleport to impact: false
+ 
