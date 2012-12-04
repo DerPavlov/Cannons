@@ -82,7 +82,7 @@ public class CannonPlugin extends JavaPlugin {
    	   worldguard = getWorldGuard();
    	   ps = getPreciousStones();
    	   towny = getTowny();
-   	   //factions = getFactions();
+   	   factions = getFactions();
    	   griefPrevention = getGriefPrevention();
    	   areaGuard = getAreaGuard();
    	   
@@ -197,7 +197,6 @@ public class CannonPlugin extends JavaPlugin {
 	}
 	
 	//##################### getFactions ###################################
-	@SuppressWarnings({"unused"})
 	private Plugin getFactions() 
 	{
 		Plugin plug = pm.getPlugin("Factions");	

@@ -3,7 +3,6 @@
 #
 #Dont use TABs in this file or Bukkit will be unable to read it
 
-
 language: custom
 general:
   muzzleflash: true

@@ -235,7 +235,7 @@ public class CreateExplosion {
     
     //####################################  checkLineOfSight ##############################
     private int checkLineOfSight(Location impact, Location target)
-    {
+    {    	
     	int blockingBlocks = 0;
     	
     	// vector pointing from impact to target

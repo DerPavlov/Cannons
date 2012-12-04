@@ -34,6 +34,7 @@ ErrorPermRestoneTorch: RED You are not allowed to control cannons with Redstone.
 ErrorPermFire: RED You have no idea how to fire this cannon.
 ErrorPermLoad: RED No permission to load this gun.
 ErrorPermAdjust: RED You have no idea how to adjust this cannon.
+ErrorPermissionProjectile: RED No permission for this projectile.
 
 
 HelpText: NEWLINE Cannons plugin NEWLINE RED /cannons build GREEN - How to build a cannon NEWLINE RED /cannons fire GREEN - How to load and fire a cannon NEWLINE RED /cannons adjust GREEN - A small guide aim with a cannon  

@@ -3,16 +3,17 @@ package at.pavlov.Cannons;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
@@ -76,7 +77,7 @@ public class FireCannon {
 			if (player != null) player.sendMessage(userMessages.NoProjectile);
 			return false;
 		}	
-		if (cannon_loc.LastFired + config.fireDelay*20 >= cannon_loc.location.getWorld().getFullTime() )
+		if (cannon_loc.LastFired + config.fireDelay*1000 >= System.currentTimeMillis())
 		{
 			if (player != null) player.sendMessage(userMessages.BarreltoHot);
 			return false;
@@ -96,9 +97,10 @@ public class FireCannon {
 			{
 				//fire the gun
 				player.sendMessage(userMessages.FireGun);
-						
+				
 				//Player fires the gun
-				delayedFire(cannon_loc, player,deleteCharge);
+				delayedFire(cannon_loc, player, deleteCharge);
+
 			}
 			else
 			{
@@ -114,18 +116,18 @@ public class FireCannon {
 		return true;
 	}
 	
-	//####################################  FIRE  ##############################
+	//####################################  DELAYED FIRE  ##############################
     private void delayedFire(CannonData cannon_loc, Player player, Boolean deleteCharge)
     {
 		//reset after firing
-		cannon_loc.LastFired =  cannon_loc.location.getWorld().getFullTime();
+		cannon_loc.LastFired =  System.currentTimeMillis();
 		
 		//Set up smoke effects on the torch
 		Location torchLoc = cannon_loc.location.getBlock().getRelative(cannon_loc.face.getOppositeFace(),cannon_loc.barrel_length - 1).getRelative(BlockFace.UP, 1).getLocation().clone();
 		torchLoc.setX(torchLoc.getX() + 0.5);
 		torchLoc.setZ(torchLoc.getZ() + 0.5);
 		torchLoc.getWorld().playEffect(torchLoc, Effect.SMOKE, BlockFace.UP);
-		torchLoc.getWorld().playEffect(torchLoc, Effect.EXTINGUISH, 0);
+		torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 1,1);
 		
 		//set up delayed task
 		Object fireTask = new FireTaskWrapper(cannon_loc, player, deleteCharge);
@@ -153,7 +155,8 @@ public class FireCannon {
 		loc.setZ(loc.getZ()+0.5);
     	
 		//Muzzle flash + Muzzle_displ
-		if (config.Muzzle_flash == true){
+		if (config.Muzzle_flash == true)
+		{
 			cannon_locs.location.getWorld().createExplosion(Block.getRelative(cannon_locs.face, config.Muzzle_displ).getLocation(), 0F);
 		}
 		
@@ -177,63 +180,43 @@ public class FireCannon {
     		cannonball.snowball.setFireTicks(100);
     		cannonball.snowball.setTicksLived(2);
     		
-    		//confuse shooter if he wears no helmet
-    		if ( i == 0 )
+    		//confuse shooter if he wears no helmet (only for one projectile and if its configured)
+    		if ( i == 0 && config.confusesShooter > 0)
     		{
     			List<Entity> living = cannonball.snowball.getNearbyEntities(10, 10, 10);
     			Iterator<Entity> iter = living.iterator();
     			while (iter.hasNext())
     			{
+    				boolean harmEntity = false;
     				Entity next = iter.next();
     				if (next instanceof Player)
     				{
+    					
     					Player player = (Player) next;
-    					if (player.isOnline()){
-    						if (!CheckHelmet(player) && player.getGameMode() != GameMode.CREATIVE && config.confusesShooter > 0 )
-    						{
-    							//no savefty gear
-    							player.damage(1);
-    							player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,(int) config.confusesShooter*20, 0));
-    						}
+    					if ( player.isOnline() && !CheckHelmet(player) && player.getGameMode() != GameMode.CREATIVE  )
+    					{
+    						//if player has no helmet and is not in creative and there are confusion effects - harm him
+        					harmEntity = true;		
     					}
+    				}
+    				else if (next instanceof LivingEntity)
+    				{
+    					//damage entity
+    					harmEntity = true;
+    				}
+    				if (harmEntity == true)
+    				{
+    					//damage living entities and unprotected players
+						LivingEntity livingEntity = (LivingEntity) next;
+						livingEntity.damage(1);
+						livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,(int) config.confusesShooter*20, 0));
+	
     				}
     			}
     		}
     		
-    		//set direction of the snowball
-    		Vector vect = new Vector(1f,0f,0f);
-    		Random r = new Random();
-    		//1.0 for min_barrel_length and gets smaller
-    		double shrinkFactor =  Math.exp(- 2.0 * ((double) cannon_locs.barrel_length - config.min_barrel_length)/(config.max_barrel_length - config.min_barrel_length));
-    		
-    		double deviation = r.nextGaussian() * config.angle_deviation * shrinkFactor;
-    		if (projectile.canisterShot) deviation += r.nextGaussian() * projectile.spreadCanisterShot;
-    		double horizontal =  Math.sin((cannon_locs.horizontal_angle + deviation) * Math.PI/180);
-    		
-    		deviation = r.nextGaussian() * config.angle_deviation *shrinkFactor;
-    		if (projectile.canisterShot) deviation += r.nextGaussian() * projectile.spreadCanisterShot;
-    		double vertical = Math.sin((cannon_locs.vertical_angle+ deviation)  * Math.PI/180);
-    		
-    		if (cannon_locs.face == BlockFace.NORTH) 
-    		{
-    			 vect = new Vector( -1.0f, vertical, -horizontal);
-    		}
-    		else if (cannon_locs.face == BlockFace.EAST) 
-    		{
-    			 vect = new Vector(horizontal , vertical, -1.0f);
-    		}
-    		else if (cannon_locs.face == BlockFace.SOUTH) 
-    		{
-    			vect = new Vector( 1.0f, vertical, horizontal);
-    		}
-    		else if (cannon_locs.face == BlockFace.WEST) 
-    		{
-    			 vect = new Vector(-horizontal , vertical,1.0f);
-    		}
-    		
-    		double multi = cannonball.projectile.max_speed  * cannon_locs.gunpowder / config.max_gunpowder;
-    		vect=vect.multiply(multi) ;
-    		if (multi < 0.1) multi=0.1;
+    		//calculate firing vector
+    		Vector vect = cannon_locs.getFiringVector(config);
     		
     		cannonball.snowball.setVelocity(vect);
     		if (shooter != null) cannonball.snowball.setShooter(shooter);
@@ -271,7 +254,7 @@ public class FireCannon {
 		
 		
 		//reset after firing
-		cannon_locs.LastFired =  loc.getWorld().getFullTime();
+		cannon_locs.LastFired =  System.currentTimeMillis();
 
 		if (deleteCharge)
 		{

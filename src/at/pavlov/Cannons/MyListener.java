@@ -3,6 +3,7 @@ package at.pavlov.Cannons;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -12,7 +13,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -88,11 +91,24 @@ public class MyListener implements Listener
 	}
 
 	// ########### EntityExplode #######################################
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void EntityExplode(EntityExplodeEvent event)
 	{
-		// is not canceled
-		if (event.isCancelled() == false)
+		//map explosions to TNT
+		if((event.getEntity() ==  null || event.getEntity() instanceof Snowball) && !event.blockList().isEmpty())
+		{
+			Location eventLoc = event.getLocation();
+			TNTPrimed tnt = eventLoc.getWorld().spawn(eventLoc, TNTPrimed.class);
+			//new event
+	    	EntityExplodeEvent newEvent = new EntityExplodeEvent(tnt,eventLoc, event.blockList(), 0.3f);
+			plugin.getServer().getPluginManager().callEvent(newEvent);
+			
+			tnt.remove();
+			event.setCancelled(newEvent.isCancelled());
+		}
+		
+		// handle normal events not canceled
+		if (!event.isCancelled())
 		{
 			List<Block> blocks = event.blockList();
 
@@ -143,19 +159,32 @@ public class MyListener implements Listener
 							// break Obsidian if no other plugin is loaded
 							if (plugin.BlockBreakPluginLoaded() == false)
 							{
-								block.breakNaturally();
+								BlockBreak(block,event.getYield());
 							}
 						}
 						else
 						{
 							if (plugin.isCreeperHealLoaded() == false)
 							{
-								block.breakNaturally();
+								BlockBreak(block,event.getYield());
 							}
 						}
 					}
 				}
 			}
+		}
+	}
+	
+	private void BlockBreak(Block block, float yield)
+	{
+		Random r = new Random();
+		if (r.nextFloat() > yield) 
+		{
+			block.breakNaturally();
+		}
+		else
+		{
+			block.setTypeId(0);
 		}
 	}
 
@@ -407,7 +436,10 @@ public class MyListener implements Listener
 	}
 	
 
-	// ########### ProjecitleHit #######################################
+	/**
+	 * Cannon snowball this the ground
+	 * @param event
+	 */
 	@EventHandler
 	public void ProjectileHit(ProjectileHitEvent event)
 	{
@@ -514,16 +546,20 @@ public class MyListener implements Listener
 		}
 		return;
 	}
-	// ############## CheckPermProjectile ################################
-	private boolean CheckPermProjectile(Player player, CannonData cannon_loc)
+	/**
+	 * Check the if the cannons can be loaded
+	 * @param player whose permissions are checked
+	 * @param cannon cannon to check
+	 * @return true if the player and cannons can load the projectile
+	 */
+	private boolean CheckPermProjectile(Player player, CannonData cannon)
 	{
-		// check for too many cannons
-		if (cannon_loc.projectile != Material.AIR)
+		if (cannon.projectile != Material.AIR)
 		{
-			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon_loc.gunpowder, cannon_loc.projectile));
+			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.gunpowder, cannon.projectile));
 			return false;
 		}
-		if (cannon_loc.gunpowder == 0)
+		if (cannon.gunpowder == 0)
 		{
 			player.sendMessage(userMessages.NoSulphur);
 			return false;
@@ -533,16 +569,26 @@ public class MyListener implements Listener
 			player.sendMessage(userMessages.ErrorPermLoad);
 			return false;
 		}
-
+		String ItemInHand = player.getItemInHand().getType().toString();
+		if(!player.hasPermission("cannons.projectile." + ItemInHand.toString()) && !player.hasPermission("cannons.projectile")) 
+		{
+			player.sendMessage(userMessages.ErrorPermissionProjectile);
+			return false;
+		}
 		return true;
 	}
 
-	// ############## CheckPermSulphur ################################
-	private boolean CheckPermSulphur(Player player, CannonData cannon_loc)
+	/**
+	 * Check if cannons can be loaded with gunpowder by the player
+	 * @param player check permissions of this player
+	 * @param cannon check if this cannon can be loaded
+	 * @return true if the cannon can be loaded
+	 */
+	private boolean CheckPermSulphur(Player player, CannonData cannon)
 	{
-		if (cannon_loc.projectile != Material.AIR)
+		if (cannon.projectile != Material.AIR)
 		{
-			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon_loc.gunpowder, cannon_loc.projectile));
+			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.gunpowder, cannon.projectile));
 			return false;
 		}
 		
@@ -553,12 +599,11 @@ public class MyListener implements Listener
 		int max_gunpowder = config.max_gunpowder;
 		if (config.gunpowder_depends_on_length == true)
 		{
-			max_gunpowder = 1 + (config.max_gunpowder - 1) * (cannon_loc.barrel_length - config.min_barrel_length) / (config.max_barrel_length - config.min_barrel_length);
-			
+			max_gunpowder = 1 + (config.max_gunpowder - 1) * (cannon.barrel_length - config.min_barrel_length) / (config.max_barrel_length - config.min_barrel_length);
 		}
-		if (cannon_loc.gunpowder >= max_gunpowder)
+		if (cannon.gunpowder >= max_gunpowder)
 		{
-			player.sendMessage(userMessages.getMaximumGunpowderLoaded(cannon_loc.gunpowder));
+			player.sendMessage(userMessages.getMaximumGunpowderLoaded(cannon.gunpowder));
 			return false;
 		}
 		if (player.hasPermission("cannons.player.load") == false)

@@ -44,6 +44,7 @@ public class UserMessages {
 	public String ErrorPermFire;
 	public String ErrorPermLoad;
 	public String ErrorPermAdjust;
+	public String ErrorPermissionProjectile;
 	
 	public String HelpText;
 	public String HelpBuild;
@@ -109,6 +110,7 @@ public class UserMessages {
 		ErrorPermFire = ChatColor.RED + "You have no idea how to fire this cannon.";
 		ErrorPermLoad = ChatColor.RED + "No permission to load this gun.";
 		ErrorPermAdjust = ChatColor.RED + "You have no idea how to adjust this cannon.";
+		ErrorPermissionProjectile  = ChatColor.RED + "No permission for this projectile.";
 		
 		HelpText = "\n Cannons plugin \n " + 
 				ChatColor.RED + "/cannons build " + ChatColor.GREEN + " - How to build a cannon" + "\n " +
@@ -161,6 +163,7 @@ public class UserMessages {
 		ErrorPermFire = ChatColor.RED + "Du weisst leider nicht wie man eine Kanonen abfeuert.";
 		ErrorPermLoad = ChatColor.RED + "Du würdest dich beim Laden der Kanone nur verletzen.";
 		ErrorPermAdjust = ChatColor.RED + "Das Zielen mit Kanonen liegt dir nicht im Blut.";
+		ErrorPermissionProjectile  = ChatColor.RED + "Keine Rechte für dieses Projektil.";
 		
 		HelpText = "\n Cannons Plugin " + "\n"  + 
 				ChatColor.RED + "/cannons build " + ChatColor.GREEN + " - Wie baue ich eine Kanone" + "\n " +
