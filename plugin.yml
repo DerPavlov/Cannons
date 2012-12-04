@@ -11,10 +11,10 @@ commands:
 permissions:
   cannons.*:
     description: Gives single permissions for loading, adjusting, firing and recall help with cannons
-      children:
-        cannons.player.*: true
-        cannons.admin.*: true
-        cannons.projectile.*: true
+    children:
+      cannons.player.*: true
+      cannons.admin.*: true
+      cannons.projectile.*: true
   
   cannons.player.*:
     description: Gives single permissions for loading, adjusting, firing and recall help with cannons

@@ -50,19 +50,19 @@ public class CannonData {
  		if (proj.canisterShot) deviation += r.nextGaussian() * proj.spreadCanisterShot;
  		double vertical = Math.sin((vertical_angle + deviation)  * Math.PI/180);
  		
- 		if (face == BlockFace.NORTH) 
+ 		if (face == BlockFace.WEST) 
  		{
  			 vect = new Vector( -1.0f, vertical, -horizontal);
  		}
- 		else if (face == BlockFace.EAST) 
+ 		else if (face == BlockFace.NORTH) 
  		{
  			 vect = new Vector(horizontal , vertical, -1.0f);
  		}
- 		else if (face == BlockFace.SOUTH) 
+ 		else if (face == BlockFace.EAST) 
  		{
  			vect = new Vector( 1.0f, vertical, horizontal);
  		}
- 		else if (face == BlockFace.WEST) 
+ 		else if (face == BlockFace.SOUTH) 
  		{
  			 vect = new Vector(-horizontal , vertical,1.0f);
  		}
