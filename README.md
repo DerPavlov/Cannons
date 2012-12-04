@@ -1,8 +1,7 @@
 Cannons
 =======
 
-by derPavlov
-
+by derPavlov    
 http://dev.bukkit.org/server-mods/block-cannons-v1-1/
 
 How to install:
