@@ -95,17 +95,22 @@ public class MyListener implements Listener
 	public void EntityExplode(EntityExplodeEvent event)
 	{
 		//map explosions to TNT
-		if((event.getEntity() ==  null || event.getEntity() instanceof Snowball) && !event.blockList().isEmpty())
+		if (config.forceTNTexplosion)
 		{
-			Location eventLoc = event.getLocation();
-			TNTPrimed tnt = eventLoc.getWorld().spawn(eventLoc, TNTPrimed.class);
-			//new event
-	    	EntityExplodeEvent newEvent = new EntityExplodeEvent(tnt,eventLoc, event.blockList(), 0.3f);
-			plugin.getServer().getPluginManager().callEvent(newEvent);
+			if((event.getEntity() ==  null || event.getEntity() instanceof Snowball) && !event.blockList().isEmpty())
+			{
+				Location eventLoc = event.getLocation();
+				TNTPrimed tnt = eventLoc.getWorld().spawn(eventLoc, TNTPrimed.class);
+				//new event
+				EntityExplodeEvent newEvent = new EntityExplodeEvent(tnt,eventLoc, event.blockList(), 0.3f);
+				plugin.getServer().getPluginManager().callEvent(newEvent);
 			
-			tnt.remove();
-			event.setCancelled(newEvent.isCancelled());
+				tnt.remove();
+				event.setCancelled(newEvent.isCancelled());
+				event.blockList().clear();
+			}
 		}
+		
 		
 		// handle normal events not canceled
 		if (!event.isCancelled())

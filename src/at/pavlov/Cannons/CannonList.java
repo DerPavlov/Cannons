@@ -19,7 +19,7 @@ import org.bukkit.material.Torch;
 public class CannonList {
 	 private HashMap<UUID,CannonData> Cannon_list= new HashMap<UUID,CannonData>();
 	 private HashMap<Location,UUID> CannonBlocks = new HashMap<Location,UUID>();
-	 private HashMap<UUID,vessel> vesselList = new HashMap<UUID,vessel>();
+	 //private HashMap<UUID,vessel> vesselList = new HashMap<UUID,vessel>();
 	 
 	 private UserMessages message;
 	 private Config config;
@@ -523,13 +523,4 @@ public class CannonList {
         return Blocks;
     }
 
-	public HashMap<UUID,vessel> getVesselList()
-	{
-		return vesselList;
-	}
-
-	public void setVesselList(HashMap<UUID,vessel> vesselList)
-	{
-		this.vesselList = vesselList;
-	}
 }

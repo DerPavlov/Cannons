@@ -42,9 +42,7 @@ public class Config
 	 public int cannonLimitA = 3;
 	 public int cannonLimitB = 100;
 	 
-	 public boolean enableProtectionHook = true;
-	 public boolean allowPlayerDamageInProtectedWorlds = true;
-	 public boolean allowBlockDamageInProtectedWorlds = false;
+	 public boolean forceTNTexplosion = true;
 	 
 	 public int version_number;
 	 
@@ -99,10 +97,8 @@ public class Config
 		 max_barrel_length =  plugin.getConfig().getInt("construction.max barrel length");
 		 min_barrel_length =  plugin.getConfig().getInt("construction.min barrel length");
 		 //protection plugin
-		 enableProtectionHook = plugin.getConfig().getBoolean("protectionplugin.use protection hooks");
-		 allowPlayerDamageInProtectedWorlds = plugin.getConfig().getBoolean("protectionplugin.playerdamage in regions");
-		 allowBlockDamageInProtectedWorlds = plugin.getConfig().getBoolean("protectionplugin.blockdamage in regions");
-		 
+		 forceTNTexplosion = plugin.getConfig().getBoolean("protectionplugin.force tnt event");
+		
 		 //load language
 		 if (userMessage.loadLanguage(plugin.getConfig().getString("language"))== false)
 		 {

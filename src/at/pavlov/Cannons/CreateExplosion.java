@@ -45,10 +45,7 @@ public class CreateExplosion {
 
     //####################################  breakBreak ##############################
     private boolean breakBlock(Block block, List<Block> blocklist, Boolean superBreaker)
-    {
-    	boolean worldguardperm = plugin.checkPermission(block.getLocation());
-    	if (!worldguardperm && config.allowBlockDamageInProtectedWorlds == false) return false;
-    	
+    {    	
     	Material material = block.getType();
 				
 		//register explosion event
@@ -147,29 +144,23 @@ public class CreateExplosion {
     private void makeBlockPlace(Location impactLoc, Location Loc, Projectile projectile)
     {
 		Block block = Loc.getBlock();
-		Boolean worldperm = plugin.checkPermission(block.getLocation());
 		if (block.getType() == Material.AIR)
 		{
-			if (checkLineOfSight(impactLoc, Loc) == 0){
-				if ((worldperm || config.allowBlockDamageInProtectedWorlds==true))
+			if (checkLineOfSight(impactLoc, Loc) == 0)
+			{
+				//check if Material is no mob egg
+				if (projectile == null) return;
+				if (projectile.placeBlockMaterial != null)
 				{
+					if (projectile.placeBlockMaterial.equals(Material.MONSTER_EGG))
 					{
-						//check if Material is no mob egg
-						if (projectile == null) return;
-						
-						if (projectile.placeBlockMaterial != null)
-						{
-							if (projectile.placeBlockMaterial.equals(Material.MONSTER_EGG))
-							{
-								//else place mob
-								PlaceRandomMob(Loc);
-							}
-							else
-							{
-								//replace block (air with blocktype)
-								block.setType(projectile.placeBlockMaterial);
-							}
-						}
+						//else place mob
+						PlaceRandomMob(Loc);
+					}
+					else
+					{
+						//replace block (air with blocktype)
+						block.setType(projectile.placeBlockMaterial);
 					}
 				}
 			}
@@ -346,11 +337,7 @@ public class CreateExplosion {
     	//blocks form the impact to the impactloc
     	Location impactLoc = blockBreaker(cannonball);	
     	
-    	
-    	//check worldguard
-    	boolean worldperm = plugin.checkPermission(impactLoc);
     	float explosion_power = (float) cannonball.projectile.explosion_power;
-    	if (!worldperm && config.allowBlockDamageInProtectedWorlds == false) explosion_power = 0;
     	//find living entities
 		List<Entity> entity;
 		if (cannonball.projectile.canisterShot)
@@ -369,15 +356,11 @@ public class CreateExplosion {
 		//place blocks around the impact
 		spreadBlocks(impactLoc, cannonball.projectile);
 		
-		//do damage to player if worldguard allows it
-		if (worldperm == true || config.allowPlayerDamageInProtectedWorlds == true) 
+		Iterator<Entity> it = entity.iterator();
+		while (it.hasNext())
 		{
-			Iterator<Entity> it = entity.iterator();
-			while (it.hasNext())
-			{
-				Entity next = it.next();
-				doPlayerDamage(impactLoc, next, cannonball);
-			}
+			Entity next = it.next();
+			doPlayerDamage(impactLoc, next, cannonball);
 		}
 		
 		

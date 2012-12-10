@@ -35,9 +35,7 @@ construction:
   max barrel length: 6
   min barrel length: 2
 protectionplugin:
-  use protection hooks: true
-  blockdamage in regions: false
-  playerdamage in regions: true
+  force tnt event: true
 projectiles: 
 - cobblestone
 - stone

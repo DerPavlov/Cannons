@@ -2,13 +2,7 @@ package at.pavlov.Cannons;
 
 import java.util.logging.Logger;
 
-import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
-import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
-
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,25 +11,11 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.gmail.alternejtiw.AreaGuard.AreaGuard;
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.struct.FFlag;
 import com.nitnelave.CreeperHeal.CreeperHeal;
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import com.sk89q.worldguard.protection.managers.RegionManager;
 
 import de.tyranus.minecraft.bukkit.guildawards.GuildAwardsPlugin;
 import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
-import static com.sk89q.worldguard.bukkit.BukkitUtil.*;
 
 import at.pavlov.Cannons.MyListener;
 
@@ -46,14 +26,6 @@ public class CannonPlugin extends JavaPlugin {
 	private UserMessages userMessages;
 	private MyListener myListener;
 	PluginManager pm;
-	
-	//block protection
-	private WorldGuardPlugin worldguard;
-	private PreciousStones ps;
-	private Towny towny;
-	private Plugin factions;
-	private GriefPrevention griefPrevention;
-	private AreaGuard areaGuard;
 	
 	//creeperHeal to restore blocks
 	private CreeperHeal creeperHeal;
@@ -77,15 +49,7 @@ public class CannonPlugin extends JavaPlugin {
    {
 	   pm = getServer().getPluginManager();
    	   pm.registerEvents(new MyListener(this),this);
-   	   
-   	   //load protection hooks
-   	   worldguard = getWorldGuard();
-   	   ps = getPreciousStones();
-   	   towny = getTowny();
-   	   factions = getFactions();
-   	   griefPrevention = getGriefPrevention();
-   	   areaGuard = getAreaGuard();
-   	   
+   	      	   
    	   //obsidian Breaker
    	   creeperHeal = getCreeperHeal();
    	   obsidianDestroyer = getObsidianDestroyer();
@@ -153,7 +117,7 @@ public class CannonPlugin extends JavaPlugin {
 	}
 		
 	//##################### getWorldGuard ###################################
-	private WorldGuardPlugin getWorldGuard() 
+	/*private WorldGuardPlugin getWorldGuard() 
 	{
 		Plugin plugin = pm.getPlugin("WorldGuard");
 		 
@@ -165,143 +129,10 @@ public class CannonPlugin extends JavaPlugin {
 		    
 		logger.info(getLogPrefix() + "Worldguard hook loaded");
 		return (WorldGuardPlugin) plugin;
-	}	
+	}	*/
 	
 	
-	//##################### getPreciousStones ###################################
-	private PreciousStones getPreciousStones() 
-	{
-		PreciousStones ps = null;
-		Plugin plug = pm.getPlugin("PreciousStones");
-		//PreciousStones may not be loaded
-	    if (plug != null) 
-	    {
-	        ps = ((PreciousStones) plug);
-			logger.info(getLogPrefix() + "PreciousStones hook loaded");
-	    }
-		return ps;
-	}
-	
-	//##################### getTowny ###################################
-	private Towny getTowny() 
-	{
-		Towny towny = null;
-		Plugin plug = pm.getPlugin("Towny");
-		//Towny may not be loaded
-	    if (plug != null) 
-	    {
-	    	towny = ((Towny) plug);
-			logger.info(getLogPrefix() + "Towny hook loaded");
-	    }
-		return towny;
-	}
-	
-	//##################### getFactions ###################################
-	private Plugin getFactions() 
-	{
-		Plugin plug = pm.getPlugin("Factions");	
-		//Factions may not be loaded
-	    if (plug != null) 
-	    {
-			logger.info(getLogPrefix() + "Factions hook loaded");
-	    }
 
-		return plug;
-	}
-	
-	//##################### getGriefPrevention ###################################
-	private GriefPrevention getGriefPrevention() 
-	{
-		GriefPrevention grief = null;
-		Plugin plug = pm.getPlugin("GriefPrevention");	
-		//GriefPrevention may not be loaded
-	    if (plug != null) 
-	    {
-	    	grief = ((GriefPrevention) plug);
-			logger.info(getLogPrefix() + "GriefPrevention hook loaded");
-	    }
-
-		return grief;
-	}
-	
-	//##################### getGriefPrevention ###################################
-	private AreaGuard getAreaGuard() 
-	{
-		AreaGuard areaGuard = null;
-		Plugin plug = pm.getPlugin("AreaGuard");	
-		//AreaGuard may not be loaded
-	    if (plug != null) 
-	    {
-	    	areaGuard = ((AreaGuard) plug);
-			logger.info(getLogPrefix() + "AreaGuard hook loaded");
-	    }
-
-		return areaGuard;
-	}
-	
-	//##################### checkPermission #################################
-	public boolean checkPermission(Location loc)
-	{
-		//false will cancel explosions
-		
-		//no enable hooks enabled -> no explosions are blocked
-		if (config.enableProtectionHook == false) return true;
-		
-		//Worldguard
-		if (worldguard != null)
-		{
-			Vector pt = toVector(loc); // This also takes a location
-			RegionManager regionManager = worldguard.getRegionManager(loc.getWorld());
-			if (regionManager != null)
-			{
-				ApplicableRegionSet set = regionManager.getApplicableRegions(pt);
-				if (set.allows(DefaultFlag.TNT) == false) return false;
-			}
-		}
-		//PreciousStones
-	    if (ps != null)
-	    {
-	        if (ps.getForceFieldManager().hasSourceField(loc, FieldFlag.PREVENT_EXPLOSIONS) == true) return false;
-	    }
-		//Towny
-	    if (towny != null)
-	    {
-	    	//towny.getTownyUniverse();
-			TownBlock townblock = TownyUniverse.getTownBlock(loc);
-	    	if (townblock != null){
-	    		if (townblock.getPermissions().explosion == false) return false;
-	    	}
-	       
-	    }
-		//Factions
-	    if (factions != null)
-	    {	
-	    	FLocation floc = new FLocation (loc);
-			Faction faction = Board.getFactionAt(floc);
-			if (faction != null)
-			{//peaceful, safezones -> no tnt allowed
-				// || faction.getFlag(FFlag.PEACEFUL) == true
-				if (faction.getFlag(FFlag.EXPLOSIONS) == false) return false;
-			}
-       
-	    }
-		//GriefPrevention
-	    if (griefPrevention != null)
-	    {
-	    	Claim claim = griefPrevention.dataStore.getClaimAt(loc, false, null);
-	    	if (claim != null) return false;
-       
-	    }
-		//AreaGuard
-	    if (areaGuard != null)
-	    {
-	    	//areaGuard.
-	    	//if (claim != null) return false;
-       
-	    }
-		return true;
-	}
-	
 	
 	//##################### getCreeperHeal ###################################
 	private CreeperHeal getCreeperHeal() 
