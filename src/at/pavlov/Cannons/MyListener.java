@@ -106,8 +106,11 @@ public class MyListener implements Listener
 				plugin.getServer().getPluginManager().callEvent(newEvent);
 			
 				tnt.remove();
-				event.setCancelled(newEvent.isCancelled());
-				event.blockList().clear();
+				if (newEvent.isCancelled() == true)
+				{
+					event.setCancelled(newEvent.isCancelled());
+					event.blockList().clear();
+				}
 			}
 		}
 		
