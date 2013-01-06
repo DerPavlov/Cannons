@@ -10,10 +10,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
 
+import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.UserMessages;
+import at.pavlov.Cannons.dao.CannonData;
+
 
 public class CalcAngle {
 	
-	CannonPlugin plugin;
+	Cannons plugin;
 	UserMessages userMessages;
 	Config config;
 	
@@ -49,14 +53,19 @@ public class CalcAngle {
 	
 	
 	//##################### Constructor ##############################
-	public CalcAngle(CannonPlugin plugin, UserMessages userMessages, Config config)
+	public CalcAngle(Cannons plugin, UserMessages userMessages, Config config)
 	{
 		this.plugin = plugin;
 		this.userMessages = userMessages;
 		this.config = config;
+		
 		inAimingMode = new HashMap<Player, CannonData>();
-		
-		
+
+	}
+	
+	//##################### InitAimingMode ##############################
+	public void initAimingMode()
+	{
 		//changing angles for aiming mode
 		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() 
 		{

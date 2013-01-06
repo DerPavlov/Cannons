@@ -2,7 +2,7 @@ package at.pavlov.Cannons.utils;
 
 import org.bukkit.entity.Player;
 
-import at.pavlov.Cannons.CannonData;
+import at.pavlov.Cannons.dao.CannonData;
 
 public class FireTaskWrapper{
 	public CannonData cannon;

@@ -24,18 +24,20 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import at.pavlov.Cannons.FireCannon.FlyingProjectile;
+import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.Projectile;
+import at.pavlov.Cannons.utils.FlyingProjectile;
 import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
 
 public class CreateExplosion {
 	
-	private CannonPlugin plugin;
+	private Cannons plugin;
 	private Config config;
 	
 	LinkedList<UUID> transmittedEntities = new LinkedList<UUID>();
 	
 	//################### Constructor ############################################
-	public CreateExplosion (CannonPlugin plugin, Config config)
+	public CreateExplosion (Cannons plugin, Config config)
 	{
 		this.plugin = plugin;
 		this.config = config;
@@ -104,7 +106,7 @@ public class CreateExplosion {
     		breakBlock(block.getRelative(BlockFace.NORTH), blocklist, superbreaker);
     	}
     	
-    	EntityExplodeEvent event = new EntityExplodeEvent(cannonball.snowball, impactLoc, blocklist, 0.3f);
+    	EntityExplodeEvent event = new EntityExplodeEvent(cannonball.snowball, impactLoc, blocklist, 1.0f);
 	    
 	    
 	    //handle with bukkit

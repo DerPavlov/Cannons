@@ -1,4 +1,4 @@
-package at.pavlov.Cannons;
+package at.pavlov.Cannons.listener;
 
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -33,30 +33,39 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.material.Button;
 
-import at.pavlov.Cannons.FireCannon.FlyingProjectile;
+import at.pavlov.Cannons.CalcAngle;
+import at.pavlov.Cannons.Cannons;
+import at.pavlov.Cannons.CreateExplosion;
+import at.pavlov.Cannons.FireCannon;
+import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.Projectile;
+import at.pavlov.Cannons.config.UserMessages;
+import at.pavlov.Cannons.dao.CannonData;
+import at.pavlov.Cannons.dao.CannonList;
+import at.pavlov.Cannons.utils.FlyingProjectile;
+import at.pavlov.Cannons.utils.InventoryManagement;
 
-public class MyListener implements Listener
+public class PlayerListener implements Listener
 {
 	private Config config;
 	private UserMessages userMessages;
-	private CannonPlugin plugin;
+	private Cannons plugin;
 	private CannonList cannonList;
 	private InventoryManagement InvManage;
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
 	private CalcAngle calcAngle;
 
-	public MyListener(CannonPlugin plugin)
+	public PlayerListener(Cannons plugin)
 	{
-		this.InvManage = new InventoryManagement();
+		this.InvManage = plugin.getInvManage();
 		this.config = plugin.getmyConfig();
 		this.userMessages = plugin.getmyConfig().getUserMessages();
 		this.plugin = plugin;
-		this.cannonList = new CannonList(userMessages, config);
-		this.explosion = new CreateExplosion(plugin, config);
-		this.fireCannon = new FireCannon(plugin, config, userMessages, InvManage, explosion);
-		this.calcAngle = new CalcAngle(plugin, userMessages, config);
-		plugin.setListener(this);
+		this.cannonList = plugin.getCannonList();
+		this.explosion = plugin.getExplosion();
+		this.fireCannon = plugin.getFireCannon();
+		this.calcAngle = plugin.getCalcAngle();
 	}
 	
 	// ########### PlayerMove #######################################
@@ -94,7 +103,7 @@ public class MyListener implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void EntityExplode(EntityExplodeEvent event)
 	{
-		//map explosions to TNT
+		//map explosions to TNT event
 		if (config.forceTNTexplosion)
 		{
 			if((event.getEntity() ==  null || event.getEntity() instanceof Snowball) && !event.blockList().isEmpty())
@@ -172,7 +181,7 @@ public class MyListener implements Listener
 						}
 						else
 						{
-							if (plugin.isCreeperHealLoaded() == false)
+							if (plugin.BlockBreakPluginLoaded() == false)
 							{
 								BlockBreak(block,event.getYield());
 							}
@@ -181,6 +190,8 @@ public class MyListener implements Listener
 				}
 			}
 		}
+		
+
 	}
 	
 	private void BlockBreak(Block block, float yield)
@@ -505,7 +516,7 @@ public class MyListener implements Listener
 					if (CheckPermProjectile(player, cannon_loc)) 
 					{
 						// load projectile
-						cannon_loc.projectile = ItemInHand;
+						cannon_loc.projectileID = ItemInHand.getId();
 						player.sendMessage(userMessages.getloadProjectile(ItemInHand));
 
 						InvManage.TakeFromPlayerInventory(player, config.inventory_take);
@@ -562,9 +573,9 @@ public class MyListener implements Listener
 	 */
 	private boolean CheckPermProjectile(Player player, CannonData cannon)
 	{
-		if (cannon.projectile != Material.AIR)
+		if (cannon.isLoaded())
 		{
-			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.gunpowder, cannon.projectile));
+			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.gunpowder, cannon.projectileID));
 			return false;
 		}
 		if (cannon.gunpowder == 0)
@@ -594,9 +605,9 @@ public class MyListener implements Listener
 	 */
 	private boolean CheckPermSulphur(Player player, CannonData cannon)
 	{
-		if (cannon.projectile != Material.AIR)
+		if (cannon.isLoaded())
 		{
-			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.gunpowder, cannon.projectile));
+			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.gunpowder, cannon.projectileID));
 			return false;
 		}
 		
@@ -657,15 +668,5 @@ public class MyListener implements Listener
 		return false;
 	}
 
-	// ############## CleanUpEntries ################################
-	public void CleanUpEntries()
-	{
-		// displayArraySize();
 
-		// check if the cannon exists
-		cannonList.DeleteObsoletCannons();
-		fireCannon.deleteOldSnowballs();
-		explosion.deleteTransmittedEntities();
-
-	}
 }

@@ -1,8 +1,9 @@
-package at.pavlov.Cannons;
+package at.pavlov.Cannons.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -15,6 +16,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
+
+import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.UserMessages;
 
 public class CannonList {
 	 private HashMap<UUID,CannonData> Cannon_list= new HashMap<UUID,CannonData>();
@@ -70,7 +74,7 @@ public class CannonList {
 	 }
 	 
 	 //############### createCannon ############################### 
-	 public void createCannon(UUID Id, CannonData cannon, Player player)
+	 private void createCannon(UUID Id, CannonData cannon, Player player)
 	 {
 		 Cannon_list.put(Id, cannon);
 		 Iterator<Location> iter = cannon.CannonBlocks.iterator();
@@ -119,6 +123,15 @@ public class CannonList {
 				 }
 		 }
          return i;
+	 }
+	 
+	 /**
+	  * 
+	  * @return List of cannons
+	  */
+	 public List<CannonData> getCannonList()
+	 {
+		 return new ArrayList<CannonData>(Cannon_list.values());
 	 }
 	 
 	 //############### getCannonListSize ############################### 
@@ -218,7 +231,7 @@ public class CannonList {
 	    		new_cannon.barrel_length = att_cannon.barrel_length;
 	    		new_cannon.LastFired = 0;
 	    		new_cannon.gunpowder = 0;
-	    		new_cannon.projectile = Material.AIR;
+	    		new_cannon.projectileID = Material.AIR.getId();
 	    		new_cannon.horizontal_angle = 0;
 	    		new_cannon.vertical_angle = 0;   
 	    		new_cannon.builder = player;

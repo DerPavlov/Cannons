@@ -1,4 +1,4 @@
-package at.pavlov.Cannons;
+package at.pavlov.Cannons.config;
 
 
 import java.util.ArrayList;
@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Material;
+
+import at.pavlov.Cannons.Cannons;
 
 public class Config 
 {
@@ -47,9 +49,9 @@ public class Config
 	 public int version_number;
 	 
 	 private UserMessages userMessage;
-	 private CannonPlugin plugin;
+	 private Cannons plugin;
 	 
-	 public Config(CannonPlugin plugin)
+	 public Config(Cannons plugin)
 	 {
 		 this.plugin = plugin;
 		 allowedProjectiles.add(new Projectile());
@@ -112,7 +114,7 @@ public class Config
 
 	 }
 	 
-	 private void loadProjectiles(CannonPlugin plugin)
+	 private void loadProjectiles(Cannons plugin)
 	 {
 		 //Load Projectiles
 		 allowedProjectiles.clear();
@@ -140,7 +142,7 @@ public class Config
 		 }
 	 }
 	 
-	 private Projectile loadProjectileData(CannonPlugin plugin, String next)
+	 private Projectile loadProjectileData(Cannons plugin, String next)
 	 {
 		 // get data of projectile
 		 Projectile projectile = new Projectile();
@@ -208,13 +210,13 @@ public class Config
 	 
 	 
 	 //################# getProjectile ############################
-	 public Projectile getProjectile(Material material)
+	 public Projectile getProjectile(int projectileID)
 	 {
 		 Iterator<Projectile> iter = allowedProjectiles.iterator();
 		 while (iter.hasNext())
 		 {
 			 Projectile next =  iter.next();
-			 if (next.material ==  material)
+			 if (next.material.getId() ==  projectileID)
 			 {
 				 return next;
 			 }

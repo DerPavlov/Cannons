@@ -21,28 +21,29 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.Projectile;
+import at.pavlov.Cannons.config.UserMessages;
+import at.pavlov.Cannons.dao.CannonData;
 import at.pavlov.Cannons.utils.DelayedFireTask;
 import at.pavlov.Cannons.utils.FireTaskWrapper;
+import at.pavlov.Cannons.utils.FlyingProjectile;
+import at.pavlov.Cannons.utils.InventoryManagement;
 
 public class FireCannon {
 	
 	private Config config;
 	private UserMessages userMessages;
 	private InventoryManagement InvManage;
-	private CannonPlugin plugin;
+	private Cannons plugin;
 	private CreateExplosion explosion;
 	
-	public class FlyingProjectile
-	{
-		Snowball snowball;
-		Projectile projectile;
-	}
 	public LinkedList<FlyingProjectile> flying_projectiles = new LinkedList<FlyingProjectile>();
 	 
 	
 	
 	
-	public FireCannon(CannonPlugin plugin, Config config, UserMessages userMessages, InventoryManagement invManage, CreateExplosion explosion)
+	public FireCannon(Cannons plugin, Config config, UserMessages userMessages, InventoryManagement invManage, CreateExplosion explosion)
 	{
 		this.plugin = plugin;
 		this.config = config;
@@ -72,7 +73,7 @@ public class FireCannon {
 			if (player != null) player.sendMessage(userMessages.NoSulphur);
 			return false;
 		}
-		if(cannon_loc.projectile == Material.AIR)
+		if(cannon_loc.projectileID == Material.AIR.getId())
 		{
 			if (player != null) player.sendMessage(userMessages.NoProjectile);
 			return false;
@@ -145,7 +146,7 @@ public class FireCannon {
 	//####################################  FIRE  ##############################
     private void fire(CannonData cannon_locs, Player shooter, Boolean deleteCharge)
     {	
-    	Projectile projectile = config.getProjectile(cannon_locs.projectile);
+    	Projectile projectile = config.getProjectile(cannon_locs.projectileID);
     	
 		Block Block = cannon_locs.location.getBlock();
 		Location loc = Block.getRelative(cannon_locs.face).getLocation();
@@ -260,7 +261,7 @@ public class FireCannon {
 		{
 			//delete charge for human gunner
 			cannon_locs.gunpowder = 0;
-			cannon_locs.projectile = Material.AIR;
+			cannon_locs.projectileID = Material.AIR.getId();
 		}
 		else
 		{
@@ -268,11 +269,11 @@ public class FireCannon {
 			if (config.redstone_consumption == true)
 			{
 				//ammo is removed form chest
-				if (InvManage.removeAmmoFromChests(cannon_locs, cannon_locs.gunpowder, cannon_locs.projectile) == false)
+				if (InvManage.removeAmmoFromChests(cannon_locs, cannon_locs.gunpowder, cannon_locs.projectileID) == false)
 				{
 					//no more ammo in the chests - delete Charge
 	    			cannon_locs.gunpowder = 0;
-	    			cannon_locs.projectile = Material.AIR;
+	    			cannon_locs.projectileID = Material.AIR.getId();
 				}
 			}
 		}

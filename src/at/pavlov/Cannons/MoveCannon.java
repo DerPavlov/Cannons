@@ -2,6 +2,8 @@ package at.pavlov.Cannons;
 
 public class MoveCannon
 {
+	
+	//empty and waiting for the implementation
 	public void createVessel()
 	{
 		
