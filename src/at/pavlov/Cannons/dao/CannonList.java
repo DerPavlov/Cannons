@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -49,7 +50,7 @@ public class CannonList {
 		 if (cannon != null)
 		 {
 			//send message to the owner
-			Player player = cannon.builder;
+			Player player = Bukkit.getPlayer(cannon.builder);
 			if (player != null) player.sendMessage(message.cannonDestroyed);
 			
 		 	if (CannonBlocks != null)
@@ -117,7 +118,7 @@ public class CannonList {
          for(Map.Entry<UUID, CannonData> cannon : Cannon_list.entrySet())
          {
 			   CannonData next = cannon.getValue();
-				 if (next.builder == player)
+				 if (next.builder == player.getName())
 				 {
 					 i ++;
 				 }
@@ -234,7 +235,7 @@ public class CannonList {
 	    		new_cannon.projectileID = Material.AIR.getId();
 	    		new_cannon.horizontal_angle = 0;
 	    		new_cannon.vertical_angle = 0;   
-	    		new_cannon.builder = player;
+	    		if (player != null) new_cannon.builder = player.getName();
 	    		new_cannon.isValid = true;
 	    		UUID id = UUID.randomUUID();
 	    	

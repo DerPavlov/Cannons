@@ -6,7 +6,6 @@ import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.config.Config;
@@ -25,7 +24,7 @@ public class CannonData
 	public int projectileData;
 	public double horizontal_angle;
 	public double vertical_angle;
-	public Player builder;
+	public String builder;
 	public boolean isValid;
 	public ArrayList<Location> CannonBlocks = new ArrayList<Location>();
 

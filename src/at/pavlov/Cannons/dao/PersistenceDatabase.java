@@ -55,8 +55,7 @@ public class PersistenceDatabase
 						// cannon found - load properties
 						cannonData.id = bean.getId();
 						cannonData.name = bean.getName();
-						cannonData.builder = Bukkit.getPlayer(bean.getBuilder());
-						plugin.logDebug("builder " + cannonData.builder + " bean " + bean.getBuilder());
+						cannonData.builder = bean.getBuilder();
 						cannonData.gunpowder = bean.getGunpowder();
 						cannonData.projectileID = bean.getProjectileID();
 						cannonData.projectileData = bean.getProjectileData();
@@ -118,7 +117,7 @@ public class PersistenceDatabase
 			// fill the bean with values to store
 			// since bukkit manages the bean, we do not need to set
 			// the ID property
-			bean.setBuilder(cannon.builder.getName());
+			bean.setBuilder(cannon.builder);
 			bean.setWorld(cannon.location.getWorld().getName());
 			// get one Cannonblock
 			if (cannon.CannonBlocks.size() > 0)
