@@ -517,7 +517,7 @@ public class PlayerListener implements Listener
 					{
 						// load projectile
 						cannon_loc.projectileID = ItemInHand.getId();
-						player.sendMessage(userMessages.getloadProjectile(ItemInHand));
+						player.sendMessage(userMessages.getloadProjectile(ItemInHand.getId()));
 
 						InvManage.TakeFromPlayerInventory(player, config.inventory_take);
 						return;

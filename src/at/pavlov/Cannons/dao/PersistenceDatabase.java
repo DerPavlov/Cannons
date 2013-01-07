@@ -55,12 +55,13 @@ public class PersistenceDatabase
 						// cannon found - load properties
 						cannonData.id = bean.getId();
 						cannonData.name = bean.getName();
-						cannonData.builder = bean.getBuilder();
+						cannonData.owner = bean.getOwner();
 						cannonData.gunpowder = bean.getGunpowder();
 						cannonData.projectileID = bean.getProjectileID();
 						cannonData.projectileData = bean.getProjectileData();
 						cannonData.horizontal_angle = bean.getHorizontalAngle();
 						cannonData.vertical_angle = bean.getVerticalAngle();
+						cannonData.designId = bean.getDesignId();
 						cannonData.isValid = bean.isValid();
 					}
 					else
@@ -117,7 +118,7 @@ public class PersistenceDatabase
 			// fill the bean with values to store
 			// since bukkit manages the bean, we do not need to set
 			// the ID property
-			bean.setBuilder(cannon.builder);
+			bean.setOwner(cannon.owner);
 			bean.setWorld(cannon.location.getWorld().getName());
 			// get one Cannonblock
 			if (cannon.CannonBlocks.size() > 0)
@@ -140,6 +141,7 @@ public class PersistenceDatabase
 		bean.setProjectileData(cannon.projectileData);
 		bean.setHorizontalAngle(cannon.horizontal_angle);
 		bean.setVerticalAngle(cannon.vertical_angle);
+		bean.setDesignId(cannon.designId);
 		bean.setValid(cannon.isValid);
 
 		// store the bean

@@ -14,7 +14,7 @@ import at.pavlov.Cannons.config.Projectile;
 public class CannonData
 {
 	public int id;
-	public String name; 
+	public String name;
 	public Location location;
 	public BlockFace face;
 	public int barrel_length;
@@ -24,7 +24,8 @@ public class CannonData
 	public int projectileData;
 	public double horizontal_angle;
 	public double vertical_angle;
-	public String builder;
+	public String owner;
+	public int designId;
 	public boolean isValid;
 	public ArrayList<Location> CannonBlocks = new ArrayList<Location>();
 
@@ -64,21 +65,18 @@ public class CannonData
 		{
 			vect = new Vector(-1.0f, vertical, -horizontal);
 		}
-		else
-			if (face == BlockFace.NORTH)
-			{
-				vect = new Vector(horizontal, vertical, -1.0f);
-			}
-			else
-				if (face == BlockFace.EAST)
-				{
-					vect = new Vector(1.0f, vertical, horizontal);
-				}
-				else
-					if (face == BlockFace.SOUTH)
-					{
-						vect = new Vector(-horizontal, vertical, 1.0f);
-					}
+		else if (face == BlockFace.NORTH)
+		{
+			vect = new Vector(horizontal, vertical, -1.0f);
+		}
+		else if (face == BlockFace.EAST)
+		{
+			vect = new Vector(1.0f, vertical, horizontal);
+		}
+		else if (face == BlockFace.SOUTH)
+		{
+			vect = new Vector(-horizontal, vertical, 1.0f);
+		}
 
 		// old code for version below 1.4.5 R0.3
 		/*
@@ -96,7 +94,7 @@ public class CannonData
 
 		return vect.multiply(multi);
 	}
-	
+
 	public boolean isLoaded()
 	{
 		return (projectileID == Material.AIR.getId()) ? false : true;

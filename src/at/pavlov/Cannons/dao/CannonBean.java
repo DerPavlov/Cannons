@@ -16,7 +16,7 @@ public class CannonBean
 
 	private String name;
 	
-	private String builder;
+	private String owner;
 
 	@NotEmpty
 	private String world;
@@ -28,6 +28,7 @@ public class CannonBean
 	private int projectileData;
 	private double horizontalAngle;
 	private double verticalAngle;
+	private int designId;
 	private boolean Valid;
 	
 	
@@ -121,14 +122,6 @@ public class CannonBean
 	{
 		this.verticalAngle = verticalAngle;
 	}
-	public String getBuilder()
-	{
-		return builder;
-	}
-	public void setBuilder(String builder)
-	{
-		this.builder = builder;
-	}
 	public boolean isValid()
 	{
 		return Valid;
@@ -136,6 +129,22 @@ public class CannonBean
 	public void setValid(boolean valid)
 	{
 		Valid = valid;
+	}
+	public String getOwner()
+	{
+		return owner;
+	}
+	public void setOwner(String owner)
+	{
+		this.owner = owner;
+	}
+	public int getDesignId()
+	{
+		return designId;
+	}
+	public void setDesignId(int designId)
+	{
+		this.designId = designId;
 	}
 	
 	

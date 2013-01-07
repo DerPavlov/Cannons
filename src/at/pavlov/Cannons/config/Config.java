@@ -79,6 +79,7 @@ public class Config
 		 ignitionDelay = plugin.getConfig().getInt("general.fuse burn time");
 		 inventory_take = plugin.getConfig().getBoolean("general.player ammunition consumption");
 		 redstone_consumption = plugin.getConfig().getBoolean("general.redstone ammunition consumption");
+		 
 		 //fire and reload
 		 redstone_autoload = plugin.getConfig().getBoolean("fire and reload.redstone autoload");
 		 flint_and_steel = plugin.getConfig().getBoolean("fire and reload.fire torch with flint and steel");
@@ -149,7 +150,7 @@ public class Config
 		
 		 projectile.material = getMaterial(next);
 
-		 projectile.max_speed =  plugin.getConfig().getDouble(next + "." + "max speed");
+		 projectile.max_speed =  plugin.getConfig().getDouble(next + "." + "max speed", 5.0);
 		 projectile.player_damage =  plugin.getConfig().getDouble(next + "." + "player damage");
 		 //cannonball
 		 projectile.cannonball =  plugin.getConfig().getBoolean(next + "." + "cannonball.cannonball");

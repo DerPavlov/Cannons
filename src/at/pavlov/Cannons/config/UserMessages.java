@@ -443,7 +443,7 @@ public class UserMessages {
 	public String getProjectileAlreadyLoaded(int gunpowder, int projectileID)
 	{		
 		String string = splitString(ProjectileAlreadyLoaded, "GUNPOWDER", Integer.toString(gunpowder));
-		return splitString(string, "PROJECTILE", Integer.toString(projectileID));
+		return splitString(string, "PROJECTILE", Material.getMaterial(projectileID).toString());
 	}
 	
 	//############# getSettingCombinedAngle ##########################################
@@ -489,9 +489,9 @@ public class UserMessages {
 	}
 	
 	//############# getloadProjectile ##########################################
-	public String getloadProjectile(Material Projectile)
+	public String getloadProjectile(int projectileID)
 	{		
-		return splitString(loadProjectile, "PROJECTILE", Projectile.toString());
+		return splitString(loadProjectile, "PROJECTILE", Material.getMaterial(projectileID).toString());
 	}
 	
 	//############# getloadGunpowder ##########################################

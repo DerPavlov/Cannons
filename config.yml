@@ -14,6 +14,12 @@ general:
   fuse burn time: 1
   player ammunition consumption: true
   redstone ammunition consumption: true
+database:
+  username: bukkit
+  password: walrus
+  isolation: SERIALIZABLE
+  driver: org.sqlite.JDBC
+  url: jdbc:sqlite:{DIR}{NAME}.db
 fire and reload:
   redstone autoload: true
   fire torch with flint and steel: false

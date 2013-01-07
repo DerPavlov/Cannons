@@ -1,20 +1,20 @@
 package at.pavlov.Cannons;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
-import javax.persistence.PersistenceException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.avaje.ebean.EbeanServer;
 import com.nitnelave.CreeperHeal.CreeperHeal;
 import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
 
@@ -25,6 +25,7 @@ import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.dao.CannonBean;
 import at.pavlov.Cannons.dao.CannonList;
+import at.pavlov.Cannons.dao.MyDatabase;
 import at.pavlov.Cannons.dao.PersistenceDatabase;
 import at.pavlov.Cannons.listener.PlayerListener;
 import at.pavlov.Cannons.utils.InventoryManagement;
@@ -43,6 +44,9 @@ public class Cannons extends JavaPlugin
 	private CalcAngle calcAngle;
 	private PlayerListener playerListener;
 	private PersistenceDatabase persistenceDatabase;
+
+	// database
+	private MyDatabase database;
 
 	// creeperHeal to restore blocks
 	private CreeperHeal creeperHeal;
@@ -64,78 +68,107 @@ public class Cannons extends JavaPlugin
 		this.persistenceDatabase = new PersistenceDatabase(this);
 		this.playerListener = new PlayerListener(this);
 
+
 	}
 
 	public void onDisable()
 	{
-		//save database on shutdown
-		persistenceDatabase.saveAllCannons(); 
-		
+		// save database on shutdown
+		persistenceDatabase.saveAllCannons();
+
 		logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been disabled");
 	}
 
 	public void onEnable()
 	{
-		pm = getServer().getPluginManager();
-		pm.registerEvents(playerListener, this);
+		try
+		{
+			pm = getServer().getPluginManager();
+			pm.registerEvents(playerListener, this);
 
-		// obsidian Breaker
-		creeperHeal = getCreeperHeal();
-		obsidianDestroyer = getObsidianDestroyer();
+			// obsidian Breaker
+			creeperHeal = getCreeperHeal();
+			obsidianDestroyer = getObsidianDestroyer();
 
-		// cannon guild
-		guildAwards = getGuildAwards();
+			// cannon guild
+			guildAwards = getGuildAwards();
 
-		// load config
-		config.loadConfig();
-		logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been enabled");
+			// load config
+			config.loadConfig();
+			logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been enabled");
 
-		// database
-		setupDatabase();
+			// Initialize the database
+			initializeDatabase();
 
-		// load cannons from database
-		persistenceDatabase.loadCannons();
+			// load cannons from database
+			persistenceDatabase.loadCannons();
 
-		// setting up Aiming Mode Task
-		calcAngle.initAimingMode();
+			// setting up Aiming Mode Task
+			calcAngle.initAimingMode();
 
-		// save cannons
-		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() 
-		{ 
-			public void run() 
-			{ 
-				persistenceDatabase.saveAllCannons(); 
-			} 
-		}, 6000L, 6000L);
+			// save cannons
+			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
+			{
+				public void run()
+				{
+					persistenceDatabase.saveAllCannons();
+				}
+			}, 6000L, 6000L);
+			
+			// Plugin succesfully enabled
+			System.out.print(String.format("[%s v%s] has been succesfully enabled!", getDescription().getName(), getDescription().getVersion()));
+
+
+		}
+		catch (Exception ex)
+		{
+			// Plugin failed to enable
+			System.out.print(String.format("[%s v%s] could not be enabled!", getDescription().getName(), getDescription().getVersion()));
+
+			// Print the stack trace of the actual cause
+			Throwable t = ex;
+			while (t != null)
+			{
+				if (t.getCause() == null)
+				{
+					System.out.println(String.format("[%s v%s] exception:", getDescription().getName(), getDescription().getVersion()));
+					t.printStackTrace();
+				}
+
+				t = t.getCause();
+			}
+		}
 
 	}
 
-	// set up ebeans database
-	private void setupDatabase()
+	// set up ebean database
+	private void initializeDatabase()
 	{
-		try
+		Configuration config = getConfig();
+
+		database = new MyDatabase(this)
 		{
-			getDatabase().find(CannonBean.class).findRowCount();
-		}
-		catch (PersistenceException ex)
-		{
-			logDebug("Installing database for " + getDescription().getName() + " due to first time usage");
-			installDDL();
-		}
+			protected java.util.List<Class<?>> getDatabaseClasses()
+			{
+				List<Class<?>> list = new ArrayList<Class<?>>();
+				list.add(CannonBean.class);
+
+				return list;
+			};
+		};
+
+		database.initializeDatabase(config.getString("database.driver", "org.sqlite.JDBC"),
+				config.getString("database.url", "jdbc:sqlite:{DIR}{NAME}.db"), 
+				config.getString("database.username", "bukkit"), 
+				config.getString("database.password", "walrus"),
+				config.getString("database.isolation", "SERIALIZABLE"), 
+				config.getBoolean("database.logging", false));
 	}
 
 	@Override
-	public List<Class<?>> getDatabaseClasses()
+	public EbeanServer getDatabase()
 	{
-		// register database beans/pojos
-		List<Class<?>> classes = new LinkedList<Class<?>>();
-
-		// add all beans here
-		classes.add(CannonBean.class);
-		// ... add other beans
-
-		// return the complete list
-		return classes;
+		return database.getDatabase();
 	}
 
 	public boolean isPluginEnabled()
