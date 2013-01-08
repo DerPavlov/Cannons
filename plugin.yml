@@ -26,6 +26,7 @@ permissions:
       cannons.player.placeRedstoneTorch: true
       cannons.player.limitA: false
       cannons.player.limitB: false
+      cannons.player.limit: false
   cannons.admin.*:
     description: Gives all admin rights
     children:
@@ -49,6 +50,9 @@ permissions:
       default: false
   cannons.player.limitB:
       description: Maximum amount of cannons a player can place
+      default: false
+  cannons.player.limit:
+      description: Set the of cannons a player can build as number e.g. limit.5
       default: false
   cannons.player.command:
       description: Allows a player to request help with a cannon

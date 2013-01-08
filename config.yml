@@ -26,7 +26,7 @@ fire and reload:
   fire with torch: true
   fire with button: false
 amount of built cannons:
-  use limits: false
+  use limits: true
   build limit A: 1
   build limit B: 100
 angles:
@@ -63,6 +63,7 @@ projectiles:
 - monster_egg
 
 cobblestone:
+  name: cannonball
   player damage: 7
   max speed: 3
   cannonball:
@@ -93,6 +94,7 @@ cobblestone:
     teleport to impact: false
     
 stone:
+  name: enhanced cannonball
   player damage: 10
   max speed: 4
   cannonball:
@@ -123,6 +125,7 @@ stone:
     teleport to impact: false
 
 obsidian:
+  name: piercing cannonball
   player damage: 7
   max speed: 6
   cannonball:
@@ -153,6 +156,7 @@ obsidian:
     teleport to impact: false
 
 diamond:
+  name: obsidian breaker
   player damage: 4
   max speed: 6
   cannonball:
@@ -183,6 +187,7 @@ diamond:
     teleport to impact: false
     
 diamond_block:
+  name: wall smash
   player damage: 4
   max speed: 5
   cannonball:
@@ -213,6 +218,7 @@ diamond_block:
     teleport to impact: false
  
 gravel:
+  name: canister shot
   player damage: 15
   max speed: 4
   cannonball:
@@ -243,6 +249,7 @@ gravel:
     teleport to impact: false
     
 glass:
+  name: shrapnel cannonball
   player damage: 25
   max speed: 5
   cannonball:
@@ -273,6 +280,7 @@ glass:
     teleport to impact: false
     
 tnt:
+  name: timefused cannonball
   player damage: 14
   max speed: 3
   cannonball:
@@ -303,6 +311,7 @@ tnt:
     teleport to impact: false
  
 wood:
+  name: trainings cannonsball
   player damage: 0
   max speed: 3
   cannonball:
@@ -333,6 +342,7 @@ wood:
     teleport to impact: false
  
 cake:
+  name: cake
   player damage: 5
   max speed: 3
   cannonball:
@@ -363,6 +373,7 @@ cake:
     teleport to impact: false
     
 redstone:
+  name: poison redstone
   player damage: 8
   max speed: 4
   cannonball:
@@ -393,6 +404,7 @@ redstone:
     teleport to impact: false
     
 blaze_powder:
+  name: incinerating cannonball
   player damage: 8
   max speed: 5
   cannonball:
@@ -423,6 +435,7 @@ blaze_powder:
     teleport to impact: false
     
 rotten_flesh:
+  name: rotten cow
   player damage: 12
   max speed: 3
   cannonball:
@@ -453,6 +466,7 @@ rotten_flesh:
     teleport to impact: false
 
 ender_pearl:
+  name: teleporting pearl
   player damage: 4
   max speed: 3
   cannonball:
@@ -483,6 +497,7 @@ ender_pearl:
     teleport to impact: true
     
 lava_bucket:
+  name: lava bucket
   player damage: 10
   max speed: 2
   cannonball:
@@ -513,6 +528,7 @@ lava_bucket:
     teleport to impact: false
     
 water_bucket:
+  name: water bucket
   player damage: 6
   max speed: 2
   cannonball:
@@ -543,6 +559,7 @@ water_bucket:
     teleport to impact: false
 
 wool:
+  name: net projectile
   player damage: 7
   max speed: 3
   cannonball:
@@ -573,6 +590,7 @@ wool:
     teleport to impact: false
     
 monster_egg:
+  name: monster egg
   player damage: 7
   max speed: 3
   cannonball:

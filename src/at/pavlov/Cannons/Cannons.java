@@ -61,7 +61,7 @@ public class Cannons extends JavaPlugin
 		this.invManage = new InventoryManagement();
 		this.config = new Config(this);
 		this.userMessages = this.config.getUserMessages();
-		this.cannonList = new CannonList(userMessages, config);
+		this.cannonList = new CannonList(this, userMessages, config);
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, userMessages, invManage, explosion);
 		this.calcAngle = new CalcAngle(this, userMessages, config);
@@ -162,8 +162,13 @@ public class Cannons extends JavaPlugin
 				config.getString("database.username", "bukkit"), 
 				config.getString("database.password", "walrus"),
 				config.getString("database.isolation", "SERIALIZABLE"), 
-				config.getBoolean("database.logging", false));
-	}
+				config.getBoolean("database.logging", false),
+				config.getBoolean("database.rebuild", false)
+				);
+		
+		config.set("database.rebuild", false);
+		saveConfig();
+    }
 
 	@Override
 	public EbeanServer getDatabase()
@@ -199,6 +204,11 @@ public class Cannons extends JavaPlugin
 	public void logSevere(String msg)
 	{
 		this.logger.severe(getLogPrefix() + msg);
+	}
+	
+	public void logInfo(String msg)
+	{
+		this.logger.info(getLogPrefix() + msg);
 	}
 
 	public void logDebug(String msg)
@@ -383,6 +393,7 @@ public class Cannons extends JavaPlugin
 	}
 
 	// ############## CleanUpEntries ################################
+	@Deprecated
 	public void CleanUpEntries()
 	{
 		// displayArraySize();

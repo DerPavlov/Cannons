@@ -488,14 +488,25 @@ public class PlayerListener implements Listener
 	@EventHandler
 	public void PlayerInteract(PlayerInteractEvent event) 
 	{		
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) 
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) 
 		{
+			Block clickedBlock;
+			if (event.getClickedBlock() == null)
+			{
+				//no clicked block - get block player is looking at
+
+				clickedBlock = event.getPlayer().getTargetBlock(null, 4);
+			}
+			else
+			{
+				clickedBlock = event.getClickedBlock();
+			}
 			// check if it is a used material
-			if (CheckClickedBlock(event.getClickedBlock()) == true) 
+			if (CheckClickedBlock(clickedBlock) == true) 
 			{
 				Player player = event.getPlayer();
-				Location barrel = event.getClickedBlock().getLocation();
-				Material material = event.getClickedBlock().getType();
+				Location barrel = clickedBlock.getLocation();
+				Material material = clickedBlock.getType();
 
 				// find cannon or add it to the list
 				CannonData cannon_loc = cannonList.find_cannon(barrel, player);

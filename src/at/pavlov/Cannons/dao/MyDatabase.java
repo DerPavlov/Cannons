@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.PersistenceException;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -73,7 +72,7 @@ public abstract class MyDatabase {
      * @param logging       If set to false, all logging will be disabled
      * @param rebuild       If set to true, all tables will be dropped and recreated. Be sure to create a backup before doing so!
      */
-    public void initializeDatabase(String driver, String url, String username, String password, String isolation, boolean logging){ //, boolean rebuild) {
+    public void initializeDatabase(String driver, String url, String username, String password, String isolation, boolean logging, boolean rebuild) {
         //Logging needs to be set back to the original level, no matter what happens
         try {            
             //Disable all logging
@@ -86,14 +85,7 @@ public abstract class MyDatabase {
             loadDatabase();
 
             //install Database only if the Table does not exist
-        	try
-    		{
-    			getDatabase().find(CannonBean.class).findRowCount();
-    		}
-    		catch (PersistenceException ex)
-    		{
-    			installDatabase(true);
-    		}
+            installDatabase(rebuild);
         }
         catch(Exception ex) {
             throw new RuntimeException("An exception has occured while initializing the database", ex);
