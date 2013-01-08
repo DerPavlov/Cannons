@@ -1,9 +1,12 @@
 package at.pavlov.Cannons.config;
 
-import org.bukkit.Material;
+
 
 public class Projectile {
-	public Material material;
+	public String name;
+	
+	public int id;
+	public int data;
 	
 	public boolean cannonball;
 	public double explosion_power;
@@ -19,7 +22,8 @@ public class Projectile {
 	public boolean placeBlock;
 	public double placeBlockRadius;
 	public int placeBlockAmount;
-	public Material placeBlockMaterial;
+	public int placeBlockMaterialId;
+	public int placeBlockMaterialData;
 	
 	public double effectDuration;
 	public boolean superBreaker;
@@ -34,7 +38,10 @@ public class Projectile {
 	public boolean teleport;
 	
 	public Projectile(){
-		material = Material.COBBLESTONE;
+		name = "default projectile";
+		
+		id = 4;
+		data = 0;
 		
 		cannonball = true;
 		explosion_power = 4;
@@ -50,7 +57,8 @@ public class Projectile {
 		placeBlock = false;
 		placeBlockRadius = 2;
 		placeBlockAmount = 10;
-		placeBlockMaterial = Material.AIR;
+		placeBlockMaterialId = 0;
+		placeBlockMaterialData = 0;
 
 		effectDuration = 5;
 		superBreaker = false;
@@ -64,4 +72,29 @@ public class Projectile {
 		hunger = false;
 		teleport = false;
 	}
+	
+	public boolean isEqual(int _id, int _data)
+	{
+		if (_id == id)
+		{
+			// negative data values all data values
+			if (data < 0 || _data == data)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isMobEgg()
+	{
+		if (placeBlockMaterialId == 383)
+		{
+			return true;
+		}
+		return false;
+		
+	}
+	
+
 }

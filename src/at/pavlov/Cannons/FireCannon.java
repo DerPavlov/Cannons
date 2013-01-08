@@ -146,7 +146,7 @@ public class FireCannon {
 	//####################################  FIRE  ##############################
     private void fire(CannonData cannon_locs, Player shooter, Boolean deleteCharge)
     {	
-    	Projectile projectile = config.getProjectile(cannon_locs.projectileID);
+    	Projectile projectile = config.getProjectile(cannon_locs.projectileID, cannon_locs.projectileData);
     	
 		Block Block = cannon_locs.location.getBlock();
 		Location loc = Block.getRelative(cannon_locs.face).getLocation();
@@ -269,7 +269,7 @@ public class FireCannon {
 			if (config.redstone_consumption == true)
 			{
 				//ammo is removed form chest
-				if (InvManage.removeAmmoFromChests(cannon_locs, cannon_locs.gunpowder, cannon_locs.projectileID) == false)
+				if (InvManage.removeAmmoFromChests(cannon_locs, cannon_locs.gunpowder, cannon_locs.projectileID, cannon_locs.projectileData) == false)
 				{
 					//no more ammo in the chests - delete Charge
 	    			cannon_locs.gunpowder = 0;

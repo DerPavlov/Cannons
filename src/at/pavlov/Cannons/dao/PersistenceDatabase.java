@@ -48,7 +48,7 @@ public class PersistenceDatabase
 				{
 					Location loc = new Location(world, bean.getLocX(), bean.getLocY(), bean.getLocZ());
 					// find the cannon to this block
-					CannonData cannonData = plugin.getCannonList().find_cannon(loc, null);
+					CannonData cannonData = plugin.getCannonManager().find_cannon(loc, null);
 
 					if (cannonData != null)
 					{
@@ -86,7 +86,7 @@ public class PersistenceDatabase
 		obsoleteIdList = plugin.getDatabase().find(CannonBean.class).findIds();
 		
 		// get list of all cannons
-		List<CannonData> cannonList = plugin.getCannonList().getCannonList();
+		List<CannonData> cannonList = plugin.getCannonManager().getCannonList();
 
 		// save all cannon to database
 		for (CannonData cannon : cannonList)

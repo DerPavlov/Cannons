@@ -1,4 +1,4 @@
-package at.pavlov.Cannons.dao;
+package at.pavlov.Cannons;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,21 +18,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
 
-import at.pavlov.Cannons.Cannons;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
+import at.pavlov.Cannons.dao.CannonData;
+import at.pavlov.Cannons.utils.BlockHelper;
 
-public class CannonList
+public class CannonManager
 {
 	private HashMap<UUID, CannonData> Cannon_list = new HashMap<UUID, CannonData>();
 	private HashMap<Location, UUID> CannonBlocks = new HashMap<Location, UUID>();
 	// private HashMap<UUID,vessel> vesselList = new HashMap<UUID,vessel>();
 
+	@SuppressWarnings("unused")
 	private Cannons plugin;
 	private UserMessages message;
 	private Config config;
 
-	public CannonList(Cannons cannons, UserMessages userMessages, Config config)
+	public CannonManager(Cannons cannons, UserMessages userMessages, Config config)
 	{
 		this.message = userMessages;
 		this.config = config;
@@ -363,24 +365,24 @@ public class CannonList
 
 		boolean redo = false;
 		int length = 0, length_plus = 0, length_minus = 0;
-		if (block.getType() == config.Cannon_material)
+		if (BlockHelper.hasIdData(block, config.CannonMaterialId, config.CannonMaterialData))
 		{
 			do
 			{
 				// Select Barrel direction
-				if (block.getRelative(BlockFace.EAST).getType() == config.Cannon_material && redo == false)
+				if (BlockHelper.hasIdData(block.getRelative(BlockFace.EAST), config.CannonMaterialId, config.CannonMaterialData) && redo == false)
 				{
 					face = BlockFace.EAST;
 				}
-				else if (block.getRelative(BlockFace.WEST).getType() == config.Cannon_material && redo == false)
+				else if (BlockHelper.hasIdData(block.getRelative(BlockFace.WEST), config.CannonMaterialId, config.CannonMaterialData) && redo == false)
 				{
 					face = BlockFace.WEST;
 				}
-				else if (block.getRelative(BlockFace.SOUTH).getType() == config.Cannon_material)
+				else if (BlockHelper.hasIdData(block.getRelative(BlockFace.SOUTH), config.CannonMaterialId, config.CannonMaterialData))
 				{
 					face = BlockFace.SOUTH;
 				}
-				else if (block.getRelative(BlockFace.NORTH).getType() == config.Cannon_material)
+				else if (BlockHelper.hasIdData(block.getRelative(BlockFace.NORTH), config.CannonMaterialId, config.CannonMaterialData))
 				{
 					face = BlockFace.NORTH;
 				}
@@ -393,11 +395,11 @@ public class CannonList
 				do
 				{
 					length_plus++;
-				} while (block.getRelative(face, length_plus).getType() == config.Cannon_material && length_plus < config.max_barrel_length);
+				} while (BlockHelper.hasIdData(block.getRelative(face, length_plus), config.CannonMaterialId, config.CannonMaterialData) && length_plus < config.max_barrel_length);
 				do
 				{
 					length_minus++;
-				} while (block.getRelative(face.getOppositeFace(), length_minus).getType() == config.Cannon_material && length_minus < config.max_barrel_length);
+				} while (BlockHelper.hasIdData(block.getRelative(face.getOppositeFace(), length_minus), config.CannonMaterialId, config.CannonMaterialData) && length_minus < config.max_barrel_length);
 
 				// Check Buttons and Torch
 				if (CheckAttachedButton(block.getRelative(face.getOppositeFace(), length_minus - 1), face.getOppositeFace()))
@@ -424,6 +426,7 @@ public class CannonList
 						}
 					}
 				}
+				
 
 				length = length_plus + length_minus - 1;
 				if (!(length >= config.min_barrel_length && length <= config.max_barrel_length && find_cannon == true))
@@ -514,7 +517,7 @@ public class CannonList
 
 		// is cannonmaterial
 		Block block = cannon.location.getBlock();
-		if (block.getType() == config.Cannon_material)
+		if (BlockHelper.hasIdData(block, config.CannonMaterialId, config.CannonMaterialData))
 		{
 			BlockFace reverse = cannon.face.getOppositeFace();
 			// button in front

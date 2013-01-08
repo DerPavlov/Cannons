@@ -31,9 +31,11 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 
 import at.pavlov.Cannons.CalcAngle;
+import at.pavlov.Cannons.CannonManager;
 import at.pavlov.Cannons.Cannons;
 import at.pavlov.Cannons.CreateExplosion;
 import at.pavlov.Cannons.FireCannon;
@@ -41,7 +43,6 @@ import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.Projectile;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.dao.CannonData;
-import at.pavlov.Cannons.dao.CannonList;
 import at.pavlov.Cannons.utils.FlyingProjectile;
 import at.pavlov.Cannons.utils.InventoryManagement;
 
@@ -50,7 +51,7 @@ public class PlayerListener implements Listener
 	private Config config;
 	private UserMessages userMessages;
 	private Cannons plugin;
-	private CannonList cannonList;
+	private CannonManager cannonManager;
 	private InventoryManagement InvManage;
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
@@ -62,7 +63,7 @@ public class PlayerListener implements Listener
 		this.config = plugin.getmyConfig();
 		this.userMessages = plugin.getmyConfig().getUserMessages();
 		this.plugin = plugin;
-		this.cannonList = plugin.getCannonList();
+		this.cannonManager = plugin.getCannonManager();
 		this.explosion = plugin.getExplosion();
 		this.fireCannon = plugin.getFireCannon();
 		this.calcAngle = plugin.getCalcAngle();
@@ -92,7 +93,7 @@ public class PlayerListener implements Listener
 		Block block = event.getToBlock();
 		if (block.getType() == Material.STONE_BUTTON || block.getType() == Material.TORCH)
 		{
-			if (cannonList.contains(block.getLocation()))
+			if (cannonManager.contains(block.getLocation()))
 			{
 				event.setCancelled(true);
 			}
@@ -133,7 +134,7 @@ public class PlayerListener implements Listener
 			for (int i = 0; i < blocks.size(); i++)
 			{
 				Block block = blocks.get(i);
-				UUID cannonId = cannonList.getID(block.getLocation());
+				UUID cannonId = cannonManager.getID(block.getLocation());
 				if (cannonId != null)
 				{
 					Entity explosionEntity = event.getEntity();
@@ -150,7 +151,7 @@ public class PlayerListener implements Listener
 						if (distance < 2)
 						{
 							// closer impact will break the cannon
-							cannonList.remove(cannonId);
+							cannonManager.remove(cannonId);
 						}
 						else
 						{
@@ -216,10 +217,10 @@ public class PlayerListener implements Listener
 		if (event.isSticky() == true)
 		{
 			Location loc = event.getBlock().getRelative(event.getDirection(), 2).getLocation();
-			UUID cannonId = cannonList.getID(loc);
+			UUID cannonId = cannonManager.getID(loc);
 			if (cannonId != null)
 			{
-				cannonList.remove(cannonId);
+				cannonManager.remove(cannonId);
 			}
 		}
 	}
@@ -233,10 +234,10 @@ public class PlayerListener implements Listener
 		while (iter.hasNext())
 		{
 			// if deleted block is cannonBlock delete cannon
-			UUID cannonId = cannonList.getID(iter.next().getLocation());
+			UUID cannonId = cannonManager.getID(iter.next().getLocation());
 			if (cannonId != null)
 			{
-				cannonList.remove(cannonId);
+				cannonManager.remove(cannonId);
 			}
 		}
 	}
@@ -246,7 +247,7 @@ public class PlayerListener implements Listener
 	public void BlockBurn(BlockBurnEvent event)
 	{
 		// the cannon will not burn down
-		UUID cannonId = cannonList.getID(event.getBlock().getLocation());
+		UUID cannonId = cannonManager.getID(event.getBlock().getLocation());
 		if (cannonId != null)
 		{
 			event.setCancelled(true);
@@ -259,10 +260,10 @@ public class PlayerListener implements Listener
 	{
 
 		// if deleted block is cannonBlock delete cannon
-		UUID cannonId = cannonList.getID(event.getBlock().getLocation());
+		UUID cannonId = cannonManager.getID(event.getBlock().getLocation());
 		if (cannonId != null)
 		{
-			cannonList.remove(cannonId);
+			cannonManager.remove(cannonId);
 		}
 	}
 
@@ -271,14 +272,14 @@ public class PlayerListener implements Listener
 	public void PlayerBucketEmpty(PlayerBucketEmptyEvent event)
 	{
 		// if player loads a lava/water bucket in the cannon
-		if (CheckClickedBlock(event.getBlockClicked()))
+		if (config.isCannonBarrel(event.getBlockClicked()))
 		{
 			Location barrel = event.getBlockClicked().getLocation();
 			// check if block is cannonblock
-			if (cannonList.contains(barrel) == true)
+			if (cannonManager.contains(barrel) == true)
 			{
 				// delete projectile
-				if (CheckLoadedProjectile(event.getBucket().getId()))
+				if (CheckLoadedProjectile(event.getBucket().getId(), 0))
 				{
 					event.setCancelled(true);
 				}
@@ -293,14 +294,14 @@ public class PlayerListener implements Listener
 		// delete place projectile if clicked against the barrel
 		if (event.getBlockAgainst() != null)
 		{
-			if (CheckClickedBlock(event.getBlockAgainst()))
+			if (config.isCannonBlock(event.getBlockAgainst()))
 			{
 				Location barrel = event.getBlockAgainst().getLocation();
 				// check if block is cannonblock
-				if (cannonList.contains(barrel) == true)
+				if (cannonManager.contains(barrel) == true)
 				{
 					// delete projectile
-					if (CheckLoadedProjectile(event.getBlock().getTypeId()))
+					if (CheckLoadedProjectile(event.getBlock()))
 					{
 						event.setCancelled(true);
 					}
@@ -315,12 +316,12 @@ public class PlayerListener implements Listener
 			if (event.getPlayer().hasPermission("cannons.player.placeRedstoneTorch") == false)
 			{
 				// check cannon
-				for (Block b : cannonList.SurroundingBlocks(event.getBlock()))
+				for (Block b : cannonManager.SurroundingBlocks(event.getBlock()))
 				{
-					if (b.getType() == config.Cannon_material)
+					if (config.isCannonBarrel(b))
 					{
 						Location loc = b.getLocation();
-						if (cannonList.find_cannon(loc, event.getPlayer()) != null)
+						if (cannonManager.find_cannon(loc, event.getPlayer()) != null)
 						{
 							event.getPlayer().sendMessage(userMessages.ErrorPermRestoneTorch);
 							event.setCancelled(true);
@@ -338,12 +339,12 @@ public class PlayerListener implements Listener
 			if (event.getPlayer().hasPermission("cannons.player.placeRedstoneTorch") == false)
 			{
 				// check cannon
-				for (Block b : cannonList.HorizontalSurroundingBlocks(event.getBlock()))
+				for (Block b : cannonManager.HorizontalSurroundingBlocks(event.getBlock()))
 				{
 					if (b.getType() == Material.STONE_BUTTON)
 					{
 						Location loc = b.getLocation();
-						if (cannonList.find_cannon(loc, event.getPlayer()) != null)
+						if (cannonManager.find_cannon(loc, event.getPlayer()) != null)
 						{
 							event.getPlayer().sendMessage(userMessages.ErrorPermRestoneTorch);
 							event.setCancelled(true);
@@ -355,7 +356,7 @@ public class PlayerListener implements Listener
 
 
 		// Cannon building complete - Checks also for permissions redstonetorches
-		if (CheckClickedBlock(event.getBlockPlaced()))
+		if (config.isCannonBlock(event.getBlockPlaced()))
 		{
 			Block block = event.getBlockPlaced();
 			Location barrel = block.getLocation();
@@ -374,7 +375,7 @@ public class PlayerListener implements Listener
 				barrel = barrelBlock.getLocation();
 			}
 			// will check for redstonetorches and delete them
-			cannonList.find_cannon(barrel, event.getPlayer());
+			cannonManager.find_cannon(barrel, event.getPlayer());
 		}
 
 		// cancel igniting of the cannon
@@ -382,7 +383,7 @@ public class PlayerListener implements Listener
 		{
 			// check cannon
 			Location loc = event.getBlockAgainst().getLocation();
-			if (cannonList.find_cannon(loc, event.getPlayer()) != null)
+			if (cannonManager.find_cannon(loc, event.getPlayer()) != null)
 			{
 				event.setCancelled(true);
 			}
@@ -397,15 +398,15 @@ public class PlayerListener implements Listener
 		Block block = event.getBlock();
 		if (block.getType() == Material.REDSTONE_TORCH_ON)
 		{
-			for (Block b : cannonList.SurroundingBlocks(block))
+			for (Block b : cannonManager.SurroundingBlocks(block))
 			{
-				if (b.getType() == config.Cannon_material)
+				if (config.isCannonBarrel(b))
 				{	
 					Location barrel = b.getLocation();
-					UUID id = cannonList.getID(barrel);
+					UUID id = cannonManager.getID(barrel);
 					if (id != null)
 					{
-						fireCannon.prepare_fire(cannonList.getCannon(id), null, !config.redstone_autoload);
+						fireCannon.prepare_fire(cannonManager.getCannon(id), null, !config.redstone_autoload);
 					}
 				}
 			}
@@ -418,15 +419,15 @@ public class PlayerListener implements Listener
 			//block is powered
 			if (block.getData() == 0)
 			{	
-				for (Block b : cannonList.HorizontalSurroundingBlocks(block))
+				for (Block b : cannonManager.HorizontalSurroundingBlocks(block))
 				{
 					if (b.getType() == Material.STONE_BUTTON)
 					{	
 						Location barrel = b.getLocation();
-						UUID id = cannonList.getID(barrel);
+						UUID id = cannonManager.getID(barrel);
 						if (id != null)
 						{
-							fireCannon.prepare_fire(cannonList.getCannon(id), null, !config.redstone_autoload);
+							fireCannon.prepare_fire(cannonManager.getCannon(id), null, !config.redstone_autoload);
 						}
 					}
 				}
@@ -438,15 +439,15 @@ public class PlayerListener implements Listener
 		{
 			Button button = (Button) event.getBlock().getState().getData();
 			block = block.getRelative(button.getAttachedFace());
-			if (cannonList.CheckAttachedTorch(block))
+			if (cannonManager.CheckAttachedTorch(block))
 			{
-				if (block.getType() == config.Cannon_material)
+				if (config.isCannonBarrel(block))
 				{
 					Location barrel = block.getLocation();
-					UUID id = cannonList.getID(barrel);
+					UUID id = cannonManager.getID(barrel);
 					if (id != null)
 					{
-						fireCannon.prepare_fire(cannonList.getCannon(id), null, true);
+						fireCannon.prepare_fire(cannonManager.getCannon(id), null, true);
 					}
 				}
 			}
@@ -501,15 +502,15 @@ public class PlayerListener implements Listener
 			{
 				clickedBlock = event.getClickedBlock();
 			}
+			plugin.broadcast("id " + clickedBlock.getTypeId() + " data " + clickedBlock.getData());
 			// check if it is a used material
-			if (CheckClickedBlock(clickedBlock) == true) 
+			if (config.isCannonBlock(clickedBlock) == true) 
 			{
 				Player player = event.getPlayer();
 				Location barrel = clickedBlock.getLocation();
-				Material material = clickedBlock.getType();
 
 				// find cannon or add it to the list
-				CannonData cannon_loc = cannonList.find_cannon(barrel, player);
+				CannonData cannon_loc = cannonManager.find_cannon(barrel, player);
 				if (cannon_loc == null)
 					return;
 				
@@ -521,8 +522,8 @@ public class PlayerListener implements Listener
 				}
 
 				// ########## Load Projectile ######################
-				if (material.equals(config.Cannon_material) && CheckLoadedProjectile(event.getPlayer()
-								.getItemInHand().getTypeId())) 
+				if (config.isCannonBarrel(clickedBlock) && CheckLoadedProjectile(event.getPlayer()
+								.getItemInHand())) 
 				{
 					if (CheckPermProjectile(player, cannon_loc)) 
 					{
@@ -536,7 +537,7 @@ public class PlayerListener implements Listener
 				}
 
 				// ########## Barrel clicked with Sulphur ##########################
-				if (material.equals(config.Cannon_material) && event.getMaterial() == Material.SULPHUR) 
+				if (config.isCannonBarrel(clickedBlock) && event.getMaterial() == Material.SULPHUR) 
 				{
 					if (CheckPermSulphur(player, cannon_loc)) 
 					{
@@ -549,19 +550,19 @@ public class PlayerListener implements Listener
 				}
 
 				// ############ Torch clicked ############################
-				if (material == Material.TORCH && config.fireTorch == true) {
+				if (clickedBlock.getType() == Material.TORCH && config.fireTorch == true) {
 					fireCannon.prepare_fire(cannon_loc, player, true);
 					return;
 				}
 				
 				// ############ Button clicked ############################
-				if (material == Material.STONE_BUTTON && config.fireButton == true) {
+				if (clickedBlock.getType() == Material.STONE_BUTTON && config.fireButton == true) {
 					fireCannon.displayPrepareFireMessage(cannon_loc, player);
 					return;
 				}
 
 				// ############ set angle ################################
-				if ((player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.WATCH) && material == config.Cannon_material) {
+				if ((player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.WATCH) && config.isCannonBarrel(clickedBlock)) {
 					calcAngle.ChangeAngle(cannon_loc, event.getAction(), event.getBlockFace(), player);
 					return;
 				}
@@ -644,37 +645,41 @@ public class PlayerListener implements Listener
 		return true;
 	}
 
-	// ############## CheckClickedBlock ################################
-	private boolean CheckClickedBlock(Block block)
+	
+	private boolean CheckLoadedProjectile(ItemStack item)
 	{
-		Iterator<Material> iter = config.usedMaterial.iterator();
-		while (iter.hasNext())
-		{
-			if (iter.next().getId() == block.getTypeId()) { return true; }
-		}
-		return false;
+		return CheckLoadedProjectile(item.getTypeId(), item.getData().getData());
+	}
+	
+	
+	private boolean CheckLoadedProjectile(Block block)
+	{
+		return CheckLoadedProjectile(block.getTypeId(), block.getData());
 	}
 
 	// ############## CheckLoadedProjectile ################################
-	private boolean CheckLoadedProjectile(int blockid)
+	private boolean CheckLoadedProjectile(int blockId, int blockData)
 	{
 		Iterator<Projectile> iter = config.allowedProjectiles.iterator();
 		while (iter.hasNext())
 		{
-			int next = iter.next().material.getId();
+			Projectile next = iter.next();
 			// change redstone wire to redstone
-			if (blockid == Material.REDSTONE_WIRE.getId())
+			if (blockId == Material.REDSTONE_WIRE.getId())
 			{
-				blockid = Material.REDSTONE.getId();
+				blockId = Material.REDSTONE.getId();
 			}
 			// cake
-			if (blockid == Material.CAKE_BLOCK.getId())
+			if (blockId == Material.CAKE_BLOCK.getId())
 			{
-				blockid = Material.CAKE.getId();
+				blockId = Material.CAKE.getId();
 			}
 
 			// compare
-			if (next == blockid) { return true; }
+			if (next.isEqual(blockId, blockData)) 
+			{ 
+				return true; 
+			}
 		}
 		return false;
 	}

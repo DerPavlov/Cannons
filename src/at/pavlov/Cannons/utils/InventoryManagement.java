@@ -10,6 +10,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 import at.pavlov.Cannons.dao.CannonData;
 
@@ -35,8 +36,14 @@ public class InventoryManagement
 	}
 	
 	//####################################  removeAmmoFromChest ##############################
-	public boolean removeAmmoFromChests(CannonData cannon, int gunpowder, int projectile)
+	public boolean removeAmmoFromChests(CannonData cannon, int gunpowder, int projectileId, int projectileData)
 	{   
+		// create a new projectile stack with one projectile
+		ItemStack projectile = newItem(projectileId, projectileData, 1);
+		
+		// gunpowder stack
+		ItemStack powder = newItem(Material.SULPHUR.getId(), 0, gunpowder);
+		
 	    BlockFace face = cannon.face;
 	    // goto the last first block of the cannon
 	    Block block = cannon.location.getBlock().getRelative(face.getOppositeFace(), cannon.barrel_length-1);
@@ -44,18 +51,18 @@ public class InventoryManagement
 	    //left and right chest
 	    if (face == BlockFace.EAST || face == BlockFace.WEST)
 	    {
-	    	if (removeAmmoFromChest(block.getRelative(BlockFace.NORTH), block.getRelative(BlockFace.SOUTH), gunpowder, projectile)) return true;		
+	    	if (removeAmmoFromChest(block.getRelative(BlockFace.NORTH), block.getRelative(BlockFace.SOUTH), powder, projectile)) return true;		
 	    }
 	    else
 	    {
-	    	if (removeAmmoFromChest(block.getRelative(BlockFace.EAST), block.getRelative(BlockFace.WEST), gunpowder, projectile)) return true;
+	    	if (removeAmmoFromChest(block.getRelative(BlockFace.EAST), block.getRelative(BlockFace.WEST), powder, projectile)) return true;
 	    }
 	    		
 	    return false;
 	}
 	    
 	//####################################  removeAmmoFromChest ##############################
-	private boolean removeAmmoFromChest(Block block1, Block block2, int gunpowder, int projectile)
+	private boolean removeAmmoFromChest(Block block1, Block block2, ItemStack gunpowder, ItemStack projectile)
 	{
 		ArrayList<Inventory> invlist = new ArrayList<Inventory>();
 	    //check if block is a chest
@@ -70,15 +77,16 @@ public class InventoryManagement
 	    boolean notEnoughGunpowder = false;
 	    do
 	    {
-	    	notEnoughGunpowder = !removeItemInChests(invlist, Material.SULPHUR.getId());
+	    	notEnoughGunpowder = !removeItemInChests(invlist, gunpowder);
 	    	removed_gunpowder++;
-	    } while(removed_gunpowder < gunpowder && notEnoughGunpowder == false);
+	    } while(removed_gunpowder < gunpowder.getAmount() && notEnoughGunpowder == false);
 	    	
 	    removed_gunpowder--;
 	    if (notEnoughGunpowder == true)
 	    {   
 	    	//restore items
-	    	addItemInChests(invlist,  Material.SULPHUR.getId(), removed_gunpowder);
+	    	gunpowder.setAmount(removed_gunpowder);
+	    	addItemInChests(invlist,  gunpowder);
 	    	return false;
 	    }
 	    	
@@ -87,7 +95,8 @@ public class InventoryManagement
    		{
    			//this case should not be called because we check if a projectile exist
 	    	//restore items
-	    	addItemInChests(invlist,  Material.SULPHUR.getId(), removed_gunpowder);
+   			gunpowder.setAmount(removed_gunpowder);
+	    	addItemInChests(invlist,  gunpowder);
 	    	//no projectile found 
 	    	return false;
    		}
@@ -95,7 +104,7 @@ public class InventoryManagement
 	}
 	    
 	//####################################  removeAmmoFromChest ##############################
-	private boolean removeItemInChests(ArrayList<Inventory> invlist, int item)
+	private boolean removeItemInChests(ArrayList<Inventory> invlist, ItemStack item)
 	{
 		Iterator<Inventory> iter = invlist.iterator();
 		while (iter.hasNext())
@@ -104,7 +113,7 @@ public class InventoryManagement
 			// if inventory contains item
 			if (next.contains(item) == true)
 			{
-				next.removeItem(new ItemStack(item,1));
+				next.removeItem(item);
 				return true;
 			}
 		}
@@ -112,8 +121,11 @@ public class InventoryManagement
 	}
 	
 	//####################################  containsItemInChests ##############################
-	private boolean containsItemInChests(ArrayList<Inventory> invlist, int item)
+	private boolean containsItemInChests(ArrayList<Inventory> invlist, ItemStack item)
 	{
+		//return if there should be nothing removed
+	    if (item == null || item.getAmount() == 0) return true;
+				
 		Iterator<Inventory> iter = invlist.iterator();
 		while (iter.hasNext())
 		{
@@ -126,10 +138,10 @@ public class InventoryManagement
 	}
 	    
 	//####################################  addItemInChests ##############################
-	private boolean addItemInChests(ArrayList<Inventory> invlist, int item, int amount)
+	private boolean addItemInChests(ArrayList<Inventory> invlist, ItemStack item)
 	{
 		//return if there should be nothing removed
-		if (amount <= 0) return true;
+		if (item == null || item.getAmount() == 0) return true;
 		
    		//return false if something is missing
 		Iterator<Inventory> iter = invlist.iterator();
@@ -137,13 +149,27 @@ public class InventoryManagement
 		{
 			Inventory next = iter.next();
 			//add items and returned hashmap is zero
-			int size = next.addItem(new ItemStack(item, amount)).size();
+			int size = next.addItem().size();
 			if (size == 0)
 			{
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * returns a new ItemStack
+	 * @param itemId
+	 * @param itemData
+	 * @param amount
+	 * @return
+	 */
+	private ItemStack newItem(int itemId, int itemData, int amount)
+	{
+		ItemStack item = new ItemStack(itemId, amount);
+		item.setData(new MaterialData(itemData));
+		return item;
 	}
 	      
 

@@ -152,9 +152,9 @@ public class CreateExplosion {
 			{
 				//check if Material is no mob egg
 				if (projectile == null) return;
-				if (projectile.placeBlockMaterial != null)
+				if (projectile.placeBlockMaterialId != 0)
 				{
-					if (projectile.placeBlockMaterial.equals(Material.MONSTER_EGG))
+					if (projectile.isMobEgg())
 					{
 						//else place mob
 						PlaceRandomMob(Loc);
@@ -162,7 +162,8 @@ public class CreateExplosion {
 					else
 					{
 						//replace block (air with blocktype)
-						block.setType(projectile.placeBlockMaterial);
+						block.setTypeId(projectile.placeBlockMaterialId);
+						block.setData((byte) projectile.placeBlockMaterialData);
 					}
 				}
 			}

@@ -119,13 +119,13 @@ public class UserMessages {
 				ChatColor.RED + "/cannons fire " + ChatColor.GREEN + " - How to load and fire a cannon" + "\n " +
 				ChatColor.RED + "/cannons adjust " + ChatColor.GREEN + " - A small guide aim with a cannon";
 		HelpBuild = "\n How to build a cannon: \n " +
-				"To make the barrel place " + config.min_barrel_length + "-" + config.max_barrel_length + " " + config.Cannon_material + " Blocks in x or z direction.\n " +
+				"To make the barrel place " + config.min_barrel_length + "-" + config.max_barrel_length + " " + config.CannonMaterialName + " Blocks in x or z direction.\n " +
 				"Place a Button on each end of the barrel \n " +
 				"Finish it by placing a torch on the first block of the barrel. \n " +
 				"To check if the cannon works right click the torch and you will\nget a message.";
 		HelpFire = "\n How to load and fire: \n "+
 				"1) Load the barrel with Sulphur by right clicking a few times \n" + "with sulphur. \n " +
-				"2) Right click with a projectile block (e.g. " + config.allowedProjectiles.get(0).material + ").\n "+
+				"2) Right click with a projectile block (e.g. " + config.allowedProjectiles.get(0).name + ").\n "+
 				"3) When you have done everthing right right click the torch.";
 		HelpAdjust = "\n You missed the target? Learn now how to aim: \n "+
 				"Right clicking with empty hands will increase the angle. \n "+
@@ -172,12 +172,12 @@ public class UserMessages {
 				ChatColor.RED + "/cannons fire " + ChatColor.GREEN + " - Wie lade und feuere ich?" + "\n " +
 				ChatColor.RED + "/cannons adjust " + ChatColor.GREEN + " - Wie kann ich diese Kanone ausrichten?";
 		HelpBuild = "\n Bauanleitung für Kanonen: \n " +
-				"Für das Rohr platziere " + config.min_barrel_length + "-" + config.max_barrel_length + " " + config.Cannon_material + " Blöcke in x oder z Richtung.\n " +
+				"Für das Rohr platziere " + config.min_barrel_length + "-" + config.max_barrel_length + " " + config.CannonMaterialName + " Blöcke in x oder z Richtung.\n " +
 				"Damit die Kanone erkannt platziere einen Schalter an beiden Enden des Rohrs und eine Fackel auf dem ersten Block. \n " +
 				"Wenn du die Fackel rechts anklickst und eine Meldung bekommst\n " + "ist alles richtig gebaut.";
 		HelpFire = "\n Wie lade ich eine Kanone? Weiterlesen und mehr erfahren:\n "+
 				"1) Wähle Scharzpuvlver aus und mache mehrere Rechtsklicks auf das Rohr.\n" +
-				"2) Ein Rechtsklick mit dem Projektil (z.B. " + config.allowedProjectiles.get(0).material + ") um die\n " + "Kanonenkugel zu laden. \n "+
+				"2) Ein Rechtsklick mit dem Projektil (z.B. " + config.allowedProjectiles.get(0).name + ") um die\n " + "Kanonenkugel zu laden. \n "+
 				"3) Hast du alles richtig gemacht kannst du die Kanone mit\n" + "Rechtsklick auf die Fackel abfeuern.";
 		HelpAdjust = "\n Ziel verfehlt? Lese und lerne wie man zielt: \n "+
 				"Ein Rechtsklick mit einer leeren Hand erhöht den Winkel. \n "+
@@ -354,7 +354,7 @@ public class UserMessages {
 		entry = splitString(entry, "GOLD ", replace);
 		
 		//replace Projectile expample
-		replace = "" + config.allowedProjectiles.get(0).material;
+		replace = "" + config.allowedProjectiles.get(0).name;
 		entry = splitString(entry, "ALLOWED_PROJECTILE", replace);
 		//replace min barrel length
 		replace = "" + config.min_barrel_length;
@@ -363,7 +363,7 @@ public class UserMessages {
 		replace = "" + config.max_barrel_length;
 		entry = splitString(entry, "MAX_BARREL_LENGTH", replace);
 		//replace cannon material
-		replace = "" + config.Cannon_material;
+		replace = "" + config.CannonMaterialName;
 		entry = splitString(entry, "CANNON_MATERIAL", replace);
 		//replace new line
 		replace = "\n ";

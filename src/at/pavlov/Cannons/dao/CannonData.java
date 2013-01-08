@@ -43,7 +43,7 @@ public class CannonData
 	public Vector getFiringVector(Config config)
 	{
 		// get projectile
-		Projectile proj = config.getProjectile(projectileID);
+		Projectile proj = config.getProjectile(projectileID, projectileData);
 
 		// set direction of the snowball
 		Vector vect = new Vector(1f, 0f, 0f);

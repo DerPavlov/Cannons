@@ -37,7 +37,9 @@ angles:
   angle step: 1.0
   deviation angle: 5.0
 construction:
-  cannon material: 35
+  cannon material name: BLACK WOOL
+  cannon material ID: 35
+  cannon material data: 15
   max barrel length: 6
   min barrel length: 2
 protectionplugin:
@@ -64,6 +66,8 @@ projectiles:
 
 cobblestone:
   name: cannonball
+  id: 4
+  data: 0
   player damage: 7
   max speed: 3
   cannonball:
@@ -79,7 +83,8 @@ cobblestone:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: false
@@ -95,6 +100,8 @@ cobblestone:
     
 stone:
   name: enhanced cannonball
+  id: 1
+  data: 0
   player damage: 10
   max speed: 4
   cannonball:
@@ -110,7 +117,8 @@ stone:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: false
@@ -126,6 +134,8 @@ stone:
 
 obsidian:
   name: piercing cannonball
+  id: 49
+  data: 0
   player damage: 7
   max speed: 6
   cannonball:
@@ -141,7 +151,8 @@ obsidian:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: false
@@ -157,6 +168,8 @@ obsidian:
 
 diamond:
   name: obsidian breaker
+  id: 264
+  data: 0
   player damage: 4
   max speed: 6
   cannonball:
@@ -172,7 +185,8 @@ diamond:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: true
@@ -188,6 +202,8 @@ diamond:
     
 diamond_block:
   name: wall smash
+  id: 57
+  data: 0
   player damage: 4
   max speed: 5
   cannonball:
@@ -203,7 +219,8 @@ diamond_block:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: true
@@ -219,6 +236,8 @@ diamond_block:
  
 gravel:
   name: canister shot
+  id: 13
+  data: 0
   player damage: 15
   max speed: 4
   cannonball:
@@ -234,7 +253,8 @@ gravel:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: false
@@ -250,6 +270,8 @@ gravel:
     
 glass:
   name: shrapnel cannonball
+  id: 20
+  data: 0
   player damage: 25
   max speed: 5
   cannonball:
@@ -265,7 +287,8 @@ glass:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: false
@@ -281,7 +304,7 @@ glass:
     
 tnt:
   name: timefused cannonball
-  player damage: 14
+  player damage: 46
   max speed: 3
   cannonball:
     cannonball: true
@@ -296,7 +319,8 @@ tnt:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: false
@@ -311,7 +335,9 @@ tnt:
     teleport to impact: false
  
 wood:
-  name: trainings cannonsball
+  name: trainings cannonball
+  id: 5
+  data: -1
   player damage: 0
   max speed: 3
   cannonball:
@@ -327,7 +353,8 @@ wood:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: false
@@ -343,6 +370,8 @@ wood:
  
 cake:
   name: cake
+  id: 354
+  data: 0
   player damage: 5
   max speed: 3
   cannonball:
@@ -358,7 +387,8 @@ cake:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: false
@@ -374,6 +404,8 @@ cake:
     
 redstone:
   name: poison redstone
+  id: 331
+  data: 0
   player damage: 8
   max speed: 4
   cannonball:
@@ -389,7 +421,8 @@ redstone:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 10
     super breaker: false
@@ -405,6 +438,8 @@ redstone:
     
 blaze_powder:
   name: incinerating cannonball
+  id: 369
+  data: 0
   player damage: 8
   max speed: 5
   cannonball:
@@ -420,7 +455,8 @@ blaze_powder:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 7
     super breaker: false
@@ -436,6 +472,8 @@ blaze_powder:
     
 rotten_flesh:
   name: rotten cow
+  id: 367
+  data: 0
   player damage: 12
   max speed: 3
   cannonball:
@@ -451,7 +489,8 @@ rotten_flesh:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 10
     super breaker: false
@@ -467,6 +506,8 @@ rotten_flesh:
 
 ender_pearl:
   name: teleporting pearl
+  id: 368
+  data: 0
   player damage: 4
   max speed: 3
   cannonball:
@@ -482,7 +523,8 @@ ender_pearl:
     enabled: false
     radius: 0
     amount: 0
-    material: AIR
+    materialID: 0
+    materialData: 0
   effects:
     effect duration: 0
     super breaker: false
@@ -498,6 +540,8 @@ ender_pearl:
     
 lava_bucket:
   name: lava bucket
+  id: 327
+  data: 0
   player damage: 10
   max speed: 2
   cannonball:
@@ -513,7 +557,8 @@ lava_bucket:
     enabled: true
     radius: 2
     amount: 3
-    material: LAVA
+    materialID: 10
+    materialData: 0
   effects:
     effect duration: 10
     super breaker: false
@@ -529,6 +574,8 @@ lava_bucket:
     
 water_bucket:
   name: water bucket
+  id: 326
+  data: 0
   player damage: 6
   max speed: 2
   cannonball:
@@ -544,7 +591,8 @@ water_bucket:
     enabled: true
     radius: 2
     amount: 3
-    material: WATER
+    materialID: 8
+    materialData: 0
   effects:
     effect duration: 0
     super breaker: false
@@ -560,6 +608,8 @@ water_bucket:
 
 wool:
   name: net projectile
+  id: 35
+  data: -1
   player damage: 7
   max speed: 3
   cannonball:
@@ -575,7 +625,8 @@ wool:
     enabled: true
     radius: 3
     amount: 20
-    material: WEB
+    materialID: 30
+    materialData: 0
   effects:
     effect duration: 5
     super breaker: false
@@ -591,6 +642,8 @@ wool:
     
 monster_egg:
   name: monster egg
+  id: 383
+  data: -1
   player damage: 7
   max speed: 3
   cannonball:
@@ -606,7 +659,8 @@ monster_egg:
     enabled: true
     radius: 3
     amount: 3
-    material: MONSTER_EGG
+    materialID: 383
+    materialData: -1
   effects:
     effect duration: 5
     super breaker: false

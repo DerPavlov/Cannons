@@ -24,7 +24,6 @@ import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.dao.CannonBean;
-import at.pavlov.Cannons.dao.CannonList;
 import at.pavlov.Cannons.dao.MyDatabase;
 import at.pavlov.Cannons.dao.PersistenceDatabase;
 import at.pavlov.Cannons.listener.PlayerListener;
@@ -37,7 +36,7 @@ public class Cannons extends JavaPlugin
 
 	private Config config;
 	private UserMessages userMessages;
-	private CannonList cannonList;
+	private CannonManager cannonManager;
 	private InventoryManagement invManage;
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
@@ -61,7 +60,7 @@ public class Cannons extends JavaPlugin
 		this.invManage = new InventoryManagement();
 		this.config = new Config(this);
 		this.userMessages = this.config.getUserMessages();
-		this.cannonList = new CannonList(this, userMessages, config);
+		this.cannonManager = new CannonManager(this, userMessages, config);
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, userMessages, invManage, explosion);
 		this.calcAngle = new CalcAngle(this, userMessages, config);
@@ -107,6 +106,7 @@ public class Cannons extends JavaPlugin
 			calcAngle.initAimingMode();
 
 			// save cannons
+			//.Formatter:off
 			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
 			{
 				public void run()
@@ -114,6 +114,7 @@ public class Cannons extends JavaPlugin
 					persistenceDatabase.saveAllCannons();
 				}
 			}, 6000L, 6000L);
+			//.Formatter:on
 			
 			// Plugin succesfully enabled
 			System.out.print(String.format("[%s v%s] has been succesfully enabled!", getDescription().getName(), getDescription().getVersion()));
@@ -156,7 +157,7 @@ public class Cannons extends JavaPlugin
 				return list;
 			};
 		};
-
+		//.Formatter:off
 		database.initializeDatabase(config.getString("database.driver", "org.sqlite.JDBC"),
 				config.getString("database.url", "jdbc:sqlite:{DIR}{NAME}.db"), 
 				config.getString("database.username", "bukkit"), 
@@ -165,6 +166,7 @@ public class Cannons extends JavaPlugin
 				config.getBoolean("database.logging", false),
 				config.getBoolean("database.rebuild", false)
 				);
+		//.Formatter:on
 		
 		config.set("database.rebuild", false);
 		saveConfig();
@@ -306,8 +308,7 @@ public class Cannons extends JavaPlugin
 		return null;
 	}
 
-	// ########################### OnCommand
-	// ####################################
+	// ########################### OnCommand ###########################
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
 	{
@@ -399,7 +400,7 @@ public class Cannons extends JavaPlugin
 		// displayArraySize();
 
 		// check if the cannon exists
-		cannonList.DeleteObsoletCannons();
+		cannonManager.DeleteObsoletCannons();
 		fireCannon.deleteOldSnowballs();
 		explosion.deleteTransmittedEntities();
 
@@ -410,9 +411,9 @@ public class Cannons extends JavaPlugin
 		return persistenceDatabase;
 	}
 
-	public CannonList getCannonList()
+	public CannonManager getCannonManager()
 	{
-		return cannonList;
+		return cannonManager;
 	}
 
 	public InventoryManagement getInvManage()
