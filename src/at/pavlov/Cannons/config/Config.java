@@ -86,7 +86,7 @@ public class Config
 		loadProjectiles(plugin);
 		// Load Cannon material
 		CannonMaterialName = plugin.getConfig().getString("construction.cannon material name", "cannon material name missing");
-		CannonMaterialId = plugin.getConfig().getInt("construction.cannon material ID", 34);
+		CannonMaterialId = plugin.getConfig().getInt("construction.cannon material ID", 35);
 		CannonMaterialData = plugin.getConfig().getInt("construction.cannon material data", 15);
 
 		usedMaterial.add(new MaterialHolder(CannonMaterialId, CannonMaterialData));
@@ -148,8 +148,21 @@ public class Config
 			Iterator<String> iter = list_material.iterator();
 			while (iter.hasNext())
 			{
+				//add the projectile only if there is a property section in the config
 				String next = iter.next();
-				allowedProjectiles.add(loadProjectileData(plugin, next));
+				if (plugin.getConfig().contains(next))
+				{
+					allowedProjectiles.add(loadProjectileData(plugin, next));
+				}
+				else
+				{
+					plugin.logSevere("missing cannon property entry for " + next);
+				}
+			}
+			if (allowedProjectiles.size() == 0)
+			{
+				// add a dummy projectile, so the list is not empty
+				allowedProjectiles.add(new Projectile());
 			}
 		}
 		else

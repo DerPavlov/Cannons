@@ -6,6 +6,7 @@ import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.config.Config;
@@ -98,5 +99,25 @@ public class CannonData
 	public boolean isLoaded()
 	{
 		return (projectileID == Material.AIR.getId()) ? false : true;
+	}
+	
+	/**
+	 * removes gunpowder and the projectile. Items are drop at the cannonball exit point
+	 */
+	public void dropCharge()
+	{
+		if (gunpowder > 0)
+		{
+			ItemStack powder = new ItemStack(Material.SULPHUR, gunpowder);
+			location.getWorld().dropItemNaturally(location, powder);	
+		}
+		
+		//can't drop Air
+		if (projectileID > 0)
+		{
+			ItemStack projectile = new ItemStack(projectileID, 1, (short) projectileData);
+			location.getWorld().dropItemNaturally(location, projectile);
+		}
+		
 	}
 }

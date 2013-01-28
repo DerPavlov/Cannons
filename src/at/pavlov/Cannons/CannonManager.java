@@ -59,9 +59,13 @@ public class CannonManager
 			Player player = Bukkit.getPlayer(cannon.owner);
 			if (player != null)
 				player.sendMessage(message.cannonDestroyed);
-
+			
+			// drop items
+			cannon.dropCharge();
+			
+			
 			if (CannonBlocks != null)
-			{
+			{				
 				// remove all cannon blocks
 				Iterator<Location> iter = cannon.CannonBlocks.iterator();
 				while (iter.hasNext())
@@ -213,7 +217,7 @@ public class CannonManager
 	 */
 	private int getBuildLimit(Player player)
 	{	
-		for(int i = 0; i < 100; i++)
+		for(int i = 100; i > 0; i--)
 		{
 			if(player.hasPermission("cannons.player.limit." + i))
 				return i;

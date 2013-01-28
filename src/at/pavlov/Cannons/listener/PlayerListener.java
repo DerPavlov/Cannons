@@ -502,7 +502,6 @@ public class PlayerListener implements Listener
 			{
 				clickedBlock = event.getClickedBlock();
 			}
-			plugin.broadcast("id " + clickedBlock.getTypeId() + " data " + clickedBlock.getData());
 			// check if it is a used material
 			if (config.isCannonBlock(clickedBlock) == true) 
 			{

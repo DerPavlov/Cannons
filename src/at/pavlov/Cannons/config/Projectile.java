@@ -92,9 +92,10 @@ public class Projectile {
 		{
 			return true;
 		}
-		return false;
-		
+		return false;	
 	}
+	
+
 	
 
 }
