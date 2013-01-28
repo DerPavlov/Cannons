@@ -531,6 +531,7 @@ public class PlayerListener implements Listener
 						player.sendMessage(userMessages.getloadProjectile(ItemInHand.getId()));
 
 						InvManage.TakeFromPlayerInventory(player, config.inventory_take);
+						event.setCancelled(true);
 						return;
 					}
 				}
@@ -544,6 +545,7 @@ public class PlayerListener implements Listener
 						player.sendMessage(userMessages.getloadGunpowder(cannon_loc.gunpowder));
 						// take item from the player
 						InvManage.TakeFromPlayerInventory(player, config.inventory_take);
+						event.setCancelled(true);
 						return;
 					}
 				}
