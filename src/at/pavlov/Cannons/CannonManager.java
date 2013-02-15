@@ -217,6 +217,13 @@ public class CannonManager
 	 */
 	private int getBuildLimit(Player player)
 	{	
+		//if all notes are enabled, set limit to a high number
+		if(player.hasPermission("cannons.player.limit." + Integer.MAX_VALUE))
+		{
+			return Integer.MAX_VALUE;
+		}
+			
+		//else check all nodes for the player
 		for(int i = 100; i > 0; i--)
 		{
 			if(player.hasPermission("cannons.player.limit." + i))
