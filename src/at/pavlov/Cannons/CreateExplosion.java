@@ -12,10 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.entity.CraftCreeper;
-import org.bukkit.craftbukkit.entity.CraftSkeleton;
-import org.bukkit.craftbukkit.entity.CraftSpider;
-import org.bukkit.craftbukkit.entity.CraftZombie;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -125,19 +121,19 @@ public class CreateExplosion {
     	{
     		case 0:
     			//spawn Zombie
-    			world.spawn(Loc, CraftZombie.class);
+    			world.spawn(Loc, org.bukkit.craftbukkit.v1_4_R1.entity.CraftZombie.class);
     			break;
     		case 1:
     			//spawn Creeper
-    			world.spawn(Loc, CraftCreeper.class);
+    			world.spawn(Loc, org.bukkit.craftbukkit.v1_4_R1.entity.CraftCreeper.class);
     			break;
     		case 2:
     			//spawn Spider
-    			world.spawn(Loc, CraftSpider.class);
+    			world.spawn(Loc, org.bukkit.craftbukkit.v1_4_R1.entity.CraftSpider.class);
     			break;
     		case 3:
     			//spawn Skeleton
-    			world.spawn(Loc, CraftSkeleton.class);
+    			world.spawn(Loc, org.bukkit.craftbukkit.v1_4_R1.entity.CraftSkeleton.class);
     			break;
     	}
     }
