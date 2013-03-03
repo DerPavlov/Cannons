@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.config.Config;
@@ -41,7 +42,13 @@ public class CreateExplosion {
 	}
 
 
-    //####################################  breakBreak ##############################
+    /**
+     * Breaks a obsidian/water/lava blocks if the projectile has superbreaker
+     * @param block
+     * @param blocklist
+     * @param superBreaker
+     * @return true if the block can be destroyed
+     */
     private boolean breakBlock(Block block, List<Block> blocklist, Boolean superBreaker)
     {    	
     	Material material = block.getType();
@@ -49,13 +56,29 @@ public class CreateExplosion {
 		//register explosion event
 		if (material != Material.AIR)
 		{
-			//add obsidian/water/lava blocks
-			if ((material == Material.OBSIDIAN || material == Material.WATER || material == Material.LAVA))
+			//test if obsidian
+			if ((material == Material.OBSIDIAN))
 			{
 				if (superBreaker)
 				{
 					blocklist.add(block);
+					// break obsidian/water/laver
+					return true;
 				}
+				//can't break it
+				return false;
+			}
+			//test if water/lava blocks
+			else if ((material == Material.WATER || material == Material.LAVA))
+			{
+				if (superBreaker)
+				{
+					blocklist.add(block);
+					// break water/lava
+					return true;
+				}
+				//can't break it but the projectile can pass this block
+				return true;
 			}
 			else
 			{
@@ -64,11 +87,14 @@ public class CreateExplosion {
 				{
 					//no obsidian, add block to explosion blocklist
 					blocklist.add(block);
+					return true;
 				}
+				//bedrock can't be destroyed
+				return false;
 			}
-			return true;
 		}  
-    	return false;
+		// air can be destroyed
+    	return true;
     }
     
     //####################################  blockBreaker ##############################
@@ -78,17 +104,40 @@ public class CreateExplosion {
     	
     	Boolean superbreaker = cannonball.projectile.superBreaker;
     	
-    	int i=0;
     	Vector vel = cannonball.snowball.getVelocity();
-    	Location loc = cannonball.snowball.getLocation();
-    	Vector vect = vel.multiply((cannonball.projectile.penetration + 1) / cannonball.projectile.max_speed);
-    	for (i = 0; i <= cannonball.projectile.penetration; i++)
+    	Location snowballLoc = cannonball.snowball.getLocation();
+    	int penetration = (int) ((cannonball.projectile.penetration) * vel.length() / cannonball.projectile.max_speed);
+    	Location impactLoc = snowballLoc.clone();
+    	
+    	// the cannonball will only break blocks if it has penetration. 
+    	if (cannonball.projectile.penetration > 0)
     	{
-    		vect = vel.clone().multiply((i + 1) / cannonball.projectile.max_speed);
-    		breakBlock(loc.clone().add(vect).getBlock(), blocklist, superbreaker);
+    		BlockIterator iter = new BlockIterator(snowballLoc.getWorld(), snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
+    		
+    		int i=0;
+    		while (iter.hasNext() && i <= penetration + 1)
+    		{
+    			i++;
+    			Block next = iter.next();
+    			//Break block on ray
+    			if (i <= penetration)
+    			{
+    				// if block can be destroyed the the iterator will check the next block. Else the projectile will explode
+    				if (breakBlock(next, blocklist, superbreaker) == false)
+    				{
+    					//found undestroyable block - set impactloc
+    					impactLoc = next.getLocation();
+    					break;
+    				}
+    			}
+    			//set impact location
+    			else
+    			{
+        			impactLoc = next.getLocation();
+    			}
+    		}
     	}
     		    	
-		Location impactLoc = loc.add(vect).getBlock().getLocation();
     	if (cannonball.projectile.superBreaker == true)
     	{
     		//small explosion on impact

@@ -3,9 +3,12 @@ package at.pavlov.Cannons.dao;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -14,18 +17,25 @@ import at.pavlov.Cannons.config.Projectile;
 
 public class CannonData
 {
-	public int id;
+	// Database id - is 0 until stored in the database. Then it is the id is the database
+	public int id;    
 	public String name;
+	// point where the snowball is fired
 	public Location location;
+	// direction the cannon is facing
 	public BlockFace face;
+	// length of the barrel
 	public int barrel_length;
+	// time the cannon was last time fired
 	public long LastFired;
 	public int gunpowder;
 	public int projectileID;
 	public int projectileData;
 	public double horizontal_angle;
 	public double vertical_angle;
+	// player who has build this cannon
 	public String owner;
+	// designID of the cannon, for different types of cannons - not in use
 	public int designId;
 	public boolean isValid;
 	public ArrayList<Location> CannonBlocks = new ArrayList<Location>();
@@ -104,7 +114,7 @@ public class CannonData
 	/**
 	 * removes gunpowder and the projectile. Items are drop at the cannonball exit point
 	 */
-	public void dropCharge()
+	private void dropCharge()
 	{
 		if (gunpowder > 0)
 		{
@@ -120,4 +130,106 @@ public class CannonData
 		}
 		
 	}
+	
+	
+	/**
+	 * removes the sign text and charge of the cannon after destruction 
+	 */
+	public void destroyCannon()
+	{
+		//update cannon signs the last time
+		isValid = false;
+		updateCannonSigns();
+		
+		//drop charge
+		dropCharge();
+	}
+	
+	/**
+	 * updates all signs that are attachted to a cannon
+	 */
+	public void updateCannonSigns()
+	{
+		// goto the last first block of the cannon
+		Block block = location.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
+
+		// left and right sign
+		if (face == BlockFace.EAST || face == BlockFace.WEST)
+		{
+			updateSign(block.getRelative(BlockFace.NORTH));
+			updateSign(block.getRelative(BlockFace.SOUTH));
+		}
+		else
+		{
+			updateSign(block.getRelative(BlockFace.WEST));
+			updateSign(block.getRelative(BlockFace.EAST));	
+		}
+	}
+	
+	/**
+	 * updates the selected sign
+	 * @param block
+	 */
+	private void updateSign(Block block)
+	{
+		if (block.getType() != Material.WALL_SIGN) return;
+		
+		Sign sign = (Sign) block.getState();
+		
+		if (isValid == true)
+		{
+			//Cannon name in the first line
+			sign.setLine(0, getSignString(0));
+			//Cannon owner in the second
+			sign.setLine(1, getSignString(1));
+			//loaded Gunpowder/Projectile
+			sign.setLine(2, getSignString(2));		
+			//angles
+			sign.setLine(3, getSignString(3));
+		}
+		else
+		{
+			//Cannon name in the first line
+			sign.setLine(0, "cannon destroyed");
+			//Cannon owner in the second
+			sign.setLine(1, "");
+			//loaded Gunpowder/Projectile
+			sign.setLine(2, "");		
+			//angles
+			sign.setLine(3, "");
+		}
+		
+		sign.update(true);
+	}
+	
+	/**
+	 * returns the strings for the sign
+	 * @param index
+	 * @return
+	 */
+	public String getSignString(int index)
+	{
+
+		switch (index)
+		{
+
+			case 0:
+				//Cannon name in the first line
+				if (name == null)  name = "missing Name";
+				return name;
+			case 1:
+				//Cannon owner in the second
+				if (owner == null) owner = "missing Owner";
+				return owner;
+			case 2:
+				//loaded Gunpowder/Projectile
+				return "p: " + gunpowder + " c: " + projectileID + ":" + projectileData;	
+			case 3:
+				//angles
+				return "" + horizontal_angle + "/" + vertical_angle;
+		}
+		return "missing";
+	}
+	
+	
 }

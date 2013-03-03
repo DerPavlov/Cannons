@@ -144,12 +144,12 @@ public class FireCannon {
     }
 	
 	//####################################  FIRE  ##############################
-    private void fire(CannonData cannon_locs, Player shooter, Boolean deleteCharge)
+    private void fire(CannonData cannon, Player shooter, Boolean deleteCharge)
     {	
-    	Projectile projectile = config.getProjectile(cannon_locs.projectileID, cannon_locs.projectileData);
+    	Projectile projectile = config.getProjectile(cannon.projectileID, cannon.projectileData);
     	
-		Block Block = cannon_locs.location.getBlock();
-		Location loc = Block.getRelative(cannon_locs.face).getLocation();
+		Block Block = cannon.location.getBlock();
+		Location loc = Block.getRelative(cannon.face).getLocation();
 		World world = loc.getWorld();
 		loc.setX(loc.getX()+0.5);
 		loc.setY(loc.getY()+0.5);
@@ -158,7 +158,7 @@ public class FireCannon {
 		//Muzzle flash + Muzzle_displ
 		if (config.Muzzle_flash == true)
 		{
-			cannon_locs.location.getWorld().createExplosion(Block.getRelative(cannon_locs.face, config.Muzzle_displ).getLocation(), 0F);
+			cannon.location.getWorld().createExplosion(Block.getRelative(cannon.face, config.Muzzle_displ).getLocation(), 0F);
 		}
 		
 		int max_projectiles = 1;
@@ -217,7 +217,7 @@ public class FireCannon {
     		}
     		
     		//calculate firing vector
-    		Vector vect = cannon_locs.getFiringVector(config);
+    		Vector vect = cannon.getFiringVector(config);
     		
     		cannonball.snowball.setVelocity(vect);
     		if (shooter != null) cannonball.snowball.setShooter(shooter);
@@ -255,13 +255,16 @@ public class FireCannon {
 		
 		
 		//reset after firing
-		cannon_locs.LastFired =  System.currentTimeMillis();
+		cannon.LastFired =  System.currentTimeMillis();
 
 		if (deleteCharge)
 		{
 			//delete charge for human gunner
-			cannon_locs.gunpowder = 0;
-			cannon_locs.projectileID = Material.AIR.getId();
+			cannon.gunpowder = 0;
+			cannon.projectileID = Material.AIR.getId();
+			
+			//update Sign
+			cannon.updateCannonSigns();
 		}
 		else
 		{
@@ -269,11 +272,13 @@ public class FireCannon {
 			if (config.redstone_consumption == true)
 			{
 				//ammo is removed form chest
-				if (InvManage.removeAmmoFromChests(cannon_locs, cannon_locs.gunpowder, cannon_locs.projectileID, cannon_locs.projectileData) == false)
+				if (InvManage.removeAmmoFromChests(cannon, cannon.gunpowder, cannon.projectileID, cannon.projectileData) == false)
 				{
 					//no more ammo in the chests - delete Charge
-	    			cannon_locs.gunpowder = 0;
-	    			cannon_locs.projectileID = Material.AIR.getId();
+	    			cannon.gunpowder = 0;
+	    			cannon.projectileID = Material.AIR.getId();
+	    			//update Sign
+	    			cannon.updateCannonSigns();
 				}
 			}
 		}

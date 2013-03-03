@@ -27,6 +27,7 @@ import at.pavlov.Cannons.dao.CannonBean;
 import at.pavlov.Cannons.dao.MyDatabase;
 import at.pavlov.Cannons.dao.PersistenceDatabase;
 import at.pavlov.Cannons.listener.PlayerListener;
+import at.pavlov.Cannons.listener.SignListener;
 import at.pavlov.Cannons.utils.InventoryManagement;
 
 public class Cannons extends JavaPlugin
@@ -41,10 +42,13 @@ public class Cannons extends JavaPlugin
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
 	private CalcAngle calcAngle;
+	
+	//Events
 	private PlayerListener playerListener;
-	private PersistenceDatabase persistenceDatabase;
-
+	private SignListener signListener;
+	
 	// database
+	private PersistenceDatabase persistenceDatabase;
 	private MyDatabase database;
 
 	// creeperHeal to restore blocks
@@ -64,8 +68,11 @@ public class Cannons extends JavaPlugin
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, userMessages, invManage, explosion);
 		this.calcAngle = new CalcAngle(this, userMessages, config);
-		this.persistenceDatabase = new PersistenceDatabase(this);
+
 		this.playerListener = new PlayerListener(this);
+		this.signListener = new SignListener(this);
+		
+		this.persistenceDatabase = new PersistenceDatabase(this);
 
 
 	}
@@ -84,6 +91,7 @@ public class Cannons extends JavaPlugin
 		{
 			pm = getServer().getPluginManager();
 			pm.registerEvents(playerListener, this);
+			pm.registerEvents(signListener, this);
 
 			// obsidian Breaker
 			creeperHeal = getCreeperHeal();
@@ -400,7 +408,7 @@ public class Cannons extends JavaPlugin
 		// displayArraySize();
 
 		// check if the cannon exists
-		cannonManager.DeleteObsoletCannons();
+		//cannonManager.DeleteObsoletCannons();
 		fireCannon.deleteOldSnowballs();
 		explosion.deleteTransmittedEntities();
 
@@ -439,6 +447,11 @@ public class Cannons extends JavaPlugin
 	public PlayerListener getPlayerListener()
 	{
 		return playerListener;
+	}
+
+	public SignListener getSignListener()
+	{
+		return signListener;
 	}
 
 }
