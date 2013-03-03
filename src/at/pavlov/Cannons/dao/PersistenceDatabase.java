@@ -48,7 +48,7 @@ public class PersistenceDatabase
 				{
 					Location loc = new Location(world, bean.getLocX(), bean.getLocY(), bean.getLocZ());
 					// find the cannon to this block
-					CannonData cannonData = plugin.getCannonManager().find_cannon(loc, null);
+					CannonData cannonData = plugin.getCannonManager().getCannon(loc);
 
 					if (cannonData != null)
 					{
@@ -63,6 +63,9 @@ public class PersistenceDatabase
 						cannonData.vertical_angle = bean.getVerticalAngle();
 						cannonData.designId = bean.getDesignId();
 						cannonData.isValid = bean.isValid();
+						
+						//update sign
+						cannonData.updateCannonSigns();
 					}
 					else
 					{

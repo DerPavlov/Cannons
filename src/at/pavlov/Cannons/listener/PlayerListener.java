@@ -291,6 +291,33 @@ public class PlayerListener implements Listener
 	@EventHandler
 	public void BlockPlace(BlockPlaceEvent event)
 	{
+		// Cannon building complete - Checks also for permissions redstonetorches
+		if (config.isCannonBlock(event.getBlockPlaced()))
+		{
+			Block block = event.getBlockPlaced();
+			Location barrel = block.getLocation();
+
+			// check cannon
+			if (block.getType() == Material.TORCH || block.getType() == Material.STONE_BUTTON)
+			{
+				// change location to barrel
+				Block barrelBlock = event.getBlockAgainst();
+
+				// if placed on snow the torch must be moved one down
+				if (barrelBlock.getLocation().equals(event.getBlockPlaced().getLocation()))
+				{
+					barrelBlock = barrelBlock.getRelative(BlockFace.DOWN);
+				}
+				barrel = barrelBlock.getLocation();
+			}
+			// will check for redstonetorches and delete them
+
+			cannonManager.getCannon(barrel, event.getPlayer());
+			
+			return;
+		}
+		
+		
 		// delete place projectile if clicked against the barrel
 		if (event.getBlockAgainst() != null)
 		{
@@ -321,7 +348,7 @@ public class PlayerListener implements Listener
 					if (config.isCannonBarrel(b))
 					{
 						Location loc = b.getLocation();
-						if (cannonManager.find_cannon(loc, event.getPlayer()) != null)
+						if (cannonManager.getCannon(loc, event.getPlayer()) != null)
 						{
 							event.getPlayer().sendMessage(userMessages.ErrorPermRestoneTorch);
 							event.setCancelled(true);
@@ -344,7 +371,7 @@ public class PlayerListener implements Listener
 					if (b.getType() == Material.STONE_BUTTON)
 					{
 						Location loc = b.getLocation();
-						if (cannonManager.find_cannon(loc, event.getPlayer()) != null)
+						if (cannonManager.getCannon(loc, event.getPlayer()) != null)
 						{
 							event.getPlayer().sendMessage(userMessages.ErrorPermRestoneTorch);
 							event.setCancelled(true);
@@ -355,35 +382,14 @@ public class PlayerListener implements Listener
 		}
 
 
-		// Cannon building complete - Checks also for permissions redstonetorches
-		if (config.isCannonBlock(event.getBlockPlaced()))
-		{
-			Block block = event.getBlockPlaced();
-			Location barrel = block.getLocation();
 
-			// check cannon
-			if (block.getType() == Material.TORCH || block.getType() == Material.STONE_BUTTON)
-			{
-				// change location to barrel
-				Block barrelBlock = event.getBlockAgainst();
-
-				// if placed on snow the torch must be moved one down
-				if (barrelBlock.getLocation().equals(event.getBlockPlaced().getLocation()))
-				{
-					barrelBlock = barrelBlock.getRelative(BlockFace.DOWN);
-				}
-				barrel = barrelBlock.getLocation();
-			}
-			// will check for redstonetorches and delete them
-			cannonManager.find_cannon(barrel, event.getPlayer());
-		}
 
 		// cancel igniting of the cannon
 		if (event.getBlock().getType() == Material.FIRE)
 		{
 			// check cannon
 			Location loc = event.getBlockAgainst().getLocation();
-			if (cannonManager.find_cannon(loc, event.getPlayer()) != null)
+			if (cannonManager.getCannon(loc, event.getPlayer()) != null)
 			{
 				event.setCancelled(true);
 			}
@@ -509,7 +515,7 @@ public class PlayerListener implements Listener
 				Location barrel = clickedBlock.getLocation();
 
 				// find cannon or add it to the list
-				CannonData cannon = cannonManager.find_cannon(barrel, player);
+				CannonData cannon = cannonManager.getCannon(barrel, player);
 				if (cannon == null)
 					return;
 				

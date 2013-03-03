@@ -90,8 +90,8 @@ public class Config
 		CannonMaterialData = plugin.getConfig().getInt("construction.cannon material data", 15);
 
 		usedMaterial.add(new MaterialHolder(CannonMaterialId, CannonMaterialData));
-		usedMaterial.add(new MaterialHolder(Material.STONE_BUTTON.getId(), 5));
-		usedMaterial.add(new MaterialHolder(Material.TORCH.getId(), -1));
+		usedMaterial.add(new MaterialHolder(Material.STONE_BUTTON.getId(), -1));
+		usedMaterial.add(new MaterialHolder(Material.TORCH.getId(), 5));
 		// Load other parameter
 		Muzzle_flash = plugin.getConfig().getBoolean("general.muzzleflash", true);
 		usePlayerName = plugin.getConfig().getBoolean("general.use player name for damage", false);

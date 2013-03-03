@@ -3,7 +3,6 @@ package at.pavlov.Cannons;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -37,7 +36,7 @@ public class CannonManager
 		this.plugin = cannons;
 	}
 
-	public class cannon_att
+	public class CannonAttribute
 	{
 		public Location barrel;
 		public BlockFace face;
@@ -62,7 +61,7 @@ public class CannonManager
 			if (player != null)
 				player.sendMessage(message.cannonDestroyed);
 			
-			// drop items
+			// destroy cannon (drops items, edit sign)
 			cannon.destroyCannon();
 			
 			CannonList.remove(cannon);
@@ -75,7 +74,7 @@ public class CannonManager
 	 * @param name
 	 * @return true if the name is unique
 	 */
-	private boolean isCannonNameUnique(String name)
+	private boolean isCannonNameUnique(String name, String owner)
 	{
 		for (CannonData cannon : CannonList)
 		{
@@ -90,9 +89,13 @@ public class CannonManager
 		return true;
 	}
 	
-	private String newCannonName()
+	/**
+	 * generates a new unique cannon name
+	 * @return
+	 */
+	private String newCannonName(String owner)
 	{
-		String[] nameList = {"Cannon", "Artillery", "Gun"};
+		String[] nameList = {"Cannon"};//, "Artillery", "Gun"};
 		
 		Random r = new Random();
 		String pre = nameList[r.nextInt(nameList.length)];
@@ -101,7 +104,7 @@ public class CannonManager
 		{
 			String cannonName = pre + " " + i;
 
-			if (isCannonNameUnique(cannonName) == true)
+			if (isCannonNameUnique(cannonName, owner) == true)
 			{
 				return cannonName;
 			}
@@ -113,35 +116,49 @@ public class CannonManager
 
 
 	// ############### createCannon ###############################
-	private void createCannon(UUID Id, CannonData cannon, Player player)
+	private void createCannon(CannonData cannon, Player player)
 	{
 		CannonList.add(cannon);
 		if (player != null)
 			player.sendMessage(message.cannonBuilt);
 	}
 	
-	// ############### getCannon ###############################
-	public CannonData getCannon(String cannonName)
+	/**
+	 * get cannon by cannonName and Owner - used for Signs
+	 * @param cannonName
+	 * @return
+	 */
+	public CannonData getCannonFromStorage(String cannonName, String owner)
 	{
+		if (cannonName == null || owner == null) return null;
+		
 		for (CannonData cannon : CannonList)
 		{
-			if (cannon.name.equals(cannonName))
+			if (cannonName.equals(cannon.name))
 			{
-				return cannon;
+				if (owner.equals(cannon.owner))
+				{
+					return cannon;
+				}
 			}
 			
 		}
 		return null;
 	}
-
-	// ############### getCannon ###############################
-	public CannonData getCannon(Location loc)
+	
+	
+	/**
+	 * Searches the storage if there is already a cannonblock on this location and returns the cannon
+	 * @param loc
+	 * @return
+	 */
+	private CannonData getCannonFromStorage(Location loc)
 	{
 		for (CannonData cannon : CannonList)
 		{
-			for (Location blockLoc : cannon.CannonBlocks)
+			for (Location cannonBlock : cannon.CannonBlocks)
 			{
-				if (blockLoc.equals(loc))
+				if (cannonBlock.equals(loc))
 				{
 					return cannon;
 				}
@@ -150,6 +167,62 @@ public class CannonManager
 		return null;
 	}
 
+	/**
+	 * searches for a cannon
+	 * @param loc
+	 * @return
+	 */
+	public CannonData getCannon(Location loc)
+	{
+		return getCannon(loc, null);
+	}
+	
+
+
+	/**
+	 * searches for a cannon and creates a new entry if it does not exist
+	 * @param cannonBlock
+	 * @param player
+	 * @return
+	 */
+	public CannonData getCannon(Location cannonBlock, Player player)
+	{
+		CannonData cannon = getCannonFromStorage(cannonBlock);
+		
+		if (cannon != null)
+		{
+			// Cannon found
+			
+			// search cannon that is written on the sign
+			CannonData CannonFromSign = getCannonFromStorage(cannon.getLineOfCannonSigns(0), cannon.getLineOfCannonSigns(1));
+
+			// check if the name matches with the attached sign or if the name is not valid
+			if (CannonFromSign == null || cannon.isCannonEqualSign() == true )
+			{
+				return cannon;
+			}
+			else
+			{
+				// different cannon, search the database for the right entry by the cannon name from the sign
+				return CannonFromSign;
+			}
+		}
+		else
+		{
+			// no existing cannon in storage -> check if there is a cannon
+			CannonAttribute attribute = check_Cannon(cannonBlock, player);
+			if (attribute.find == true)
+			{
+				// cannon found -> add cannon
+				return addCannon(attribute, player);
+			}
+		}
+
+		return null;
+	}
+
+	
+	
 	// ############### contains ###############################
 	public boolean isCannonBlock(Location loc)
 	{
@@ -258,7 +331,7 @@ public class CannonManager
 	}
 
 	// #################################### addCannonBlocks #########################
-	private CannonData addCannonBlocks(CannonData cannon, UUID uniqueId)
+	private CannonData addCannonBlocks(CannonData cannon)
 	{
 		if (cannon == null)
 			return null;
@@ -294,7 +367,7 @@ public class CannonManager
 	}
 
 	// #################################### ADD_CANNON ######################
-	private CannonData add_cannon(cannon_att att_cannon, Player player)
+	private CannonData addCannon(CannonAttribute att_cannon, Player player)
 	{
 		// check if player is allowed to build a new cannon
 		boolean create = true;
@@ -306,59 +379,66 @@ public class CannonManager
 		{
 			// add
 			CannonData new_cannon = new CannonData();
-			new_cannon.name = newCannonName();
+
+			if (player != null)
+			{
+				new_cannon.owner = player.getName();
+				new_cannon.name = newCannonName(new_cannon.owner);
+			}
 			new_cannon.location = att_cannon.barrel;
 			new_cannon.face = att_cannon.face;
 			new_cannon.barrel_length = att_cannon.barrel_length;
-			new_cannon.LastFired = 0;
-			new_cannon.gunpowder = 0;
-			new_cannon.projectileID = Material.AIR.getId();
-			new_cannon.horizontal_angle = 0;
-			new_cannon.vertical_angle = 0;
-			if (player != null)
-				new_cannon.owner = player.getName();
-			new_cannon.designId = 0; // not used at the moment
-			new_cannon.isValid = true;
-			UUID id = UUID.randomUUID();
+			
+			
+			//search if there is a entry with this name written on the sign of the cannon
+			CannonData old_cannon = getCannonFromStorage(new_cannon.getLineOfCannonSigns(0), new_cannon.getLineOfCannonSigns(1));
 
-			// add cannon blocks
-			new_cannon = addCannonBlocks(new_cannon, id);
-			// add cannon
-			createCannon(id, new_cannon, player);
-
-			return new_cannon;
-		}
-		return null;
-	}
-
-	// #################################### FIND_CANNON ####################
-	public CannonData find_cannon(Location cannonBlock, Player player)
-	{
-		CannonData cannon = getCannon(cannonBlock);
-
-		if (cannon != null)
-		{
-			// Cannon found, return value can be null
-			return cannon;
-		}
-		else
-		{
-			// no existing cannon in storage -> check if there is a cannon
-			cannon_att att_cannon = check_Cannon(cannonBlock, player);
-			if (att_cannon.find == true)
+			
+			if (old_cannon != null)
 			{
-				// cannon found -> add cannon
-				return add_cannon(att_cannon, player);
-			}
-		}
+				//there is a cannon with this name in the storage -> update entry
+				old_cannon.location = new_cannon.location;
+				old_cannon.face = new_cannon.face;
 
+				
+				// add cannon blocks
+				old_cannon.CannonBlocks.clear();
+				old_cannon = addCannonBlocks(old_cannon);
+				
+				old_cannon.updateCannonSigns();
+				return old_cannon;
+			}
+			else
+			{
+				
+				new_cannon.LastFired = 0;
+				new_cannon.gunpowder = 0;
+				new_cannon.projectileID = Material.AIR.getId();
+				new_cannon.projectileData = 0;
+				new_cannon.horizontal_angle = 0;
+				new_cannon.vertical_angle = 0;
+				new_cannon.designId = 0; // not used at the moment
+				new_cannon.isValid = true;
+				
+				// add cannon blocks
+				new_cannon = addCannonBlocks(new_cannon);
+				// add cannon
+				createCannon(new_cannon, player);
+
+				new_cannon.updateCannonSigns();
+				return new_cannon;
+			}
+			
+		}
 		return null;
 	}
 
 	
 
+	
+
 	// #################################### CHECK_CANNON ###########################
-	private cannon_att check_Cannon(Location barrel, Player player)
+	private CannonAttribute check_Cannon(Location barrel, Player player)
 	{
 		boolean find_cannon = false;
 		Block block = barrel.getBlock();
@@ -479,8 +559,7 @@ public class CannonManager
 			}
 		}
 
-		cannon_att cannon;
-		cannon = new cannon_att();
+		CannonAttribute cannon = new CannonAttribute();
 		cannon.barrel = barrel;
 		cannon.face = face;
 		cannon.find = find_cannon;
@@ -521,6 +600,7 @@ public class CannonManager
 
 		return broke;
 	}
+	
 
 
 

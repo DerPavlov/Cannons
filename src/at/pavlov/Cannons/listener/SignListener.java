@@ -1,5 +1,6 @@
 package at.pavlov.Cannons.listener;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -43,12 +44,29 @@ public class SignListener implements Listener
 		{
 			Block block = event.getBlock();
 			Sign s = (Sign) event.getBlock().getState();
-
+			
+			//get block which is the sign attached to
 			BlockFace signFace = ((org.bukkit.material.Sign) s.getData()).getFacing();
 			Block cannonBlock = block.getRelative(signFace.getOppositeFace());
 			
 
+			//get cannon from location
 	        CannonData cannon = cannonManager.getCannon(cannonBlock.getLocation());
+			
+	        //get cannon from the sign
+			CannonData cannonFromSign = cannonManager.getCannonFromStorage(event.getLine(0), event.getLine(1));
+			
+			//if the sign is placed against a cannon - no problem
+			//if the sign has the name of other cannon - change it
+			if(cannon == null && cannonFromSign  != null)
+			{
+				//this sign is in conflict with cannons
+				plugin.sendMessage("This sign is in conflict with cannons", event.getPlayer(), ChatColor.RED);
+				event.setLine(0, "[Cannons]");
+				event.setLine(1, "Player");
+			}
+
+
 			if (cannon != null)
 			{
 				event.setLine(0, cannon.getSignString(0));
@@ -59,3 +77,4 @@ public class SignListener implements Listener
 		}
 	}
 }
+

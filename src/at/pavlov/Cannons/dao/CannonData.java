@@ -3,7 +3,6 @@ package at.pavlov.Cannons.dao;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -146,7 +145,7 @@ public class CannonData
 	}
 	
 	/**
-	 * updates all signs that are attachted to a cannon
+	 * updates all signs that are attached to a cannon
 	 */
 	public void updateCannonSigns()
 	{
@@ -190,9 +189,9 @@ public class CannonData
 		else
 		{
 			//Cannon name in the first line
-			sign.setLine(0, "cannon destroyed");
+			sign.setLine(0, "cannon");
 			//Cannon owner in the second
-			sign.setLine(1, "");
+			sign.setLine(1, "damaged");
 			//loaded Gunpowder/Projectile
 			sign.setLine(2, "");		
 			//angles
@@ -231,5 +230,88 @@ public class CannonData
 		return "missing";
 	}
 	
+	/**
+	 * returns false if the name of the cannon and the name on the sign are different
+	 * @return
+	 */
+	public boolean isCannonEqualSign()
+	{
+		// goto the last first block of the cannon
+		Block block = location.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
+		
+
+		// left and right sign
+		if (face == BlockFace.EAST || face == BlockFace.WEST)
+		{
+			// if one is false then cannon on the sign is different from the storage
+			return isCannonEqualThisSign(block.getRelative(BlockFace.NORTH)) && isCannonEqualThisSign(block.getRelative(BlockFace.SOUTH));
+		}
+		else
+		{
+			return isCannonEqualThisSign(block.getRelative(BlockFace.EAST)) && isCannonEqualThisSign(block.getRelative(BlockFace.WEST));
+		}
+	}
+	
+	/**
+	 * extracts the cannon name and owner from the sign and comperes to the cannon
+	 * @param block
+	 * @return
+	 */
+	private boolean isCannonEqualThisSign(Block block)
+	{
+		if (block.getType() != Material.WALL_SIGN) return true;
+		
+		Sign sign = (Sign) block.getState();
+		
+		if (sign.getLine(0) == null || sign.getLine(1) == null) return true;
+		
+		if (sign.getLine(0).equals(name) && sign.getLine(1).equals(owner)) return true;
+			
+		return false;
+	}
+	
+	/**
+	 * returns the name of the cannon written on the sign
+	 * @return
+	 */
+	public String getLineOfCannonSigns(int line)
+	{
+		// goto the last first block of the cannon
+		Block block = location.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
+		
+		String lineStr = null;		
+		
+		// left and right sign
+		if (face == BlockFace.EAST || face == BlockFace.WEST)
+		{
+			// if one is false then cannon on the sign is different from the storage
+			lineStr = getLineOfThisSign(block.getRelative(BlockFace.NORTH),line);
+			if (lineStr != null) return lineStr;
+			lineStr = getLineOfThisSign(block.getRelative(BlockFace.SOUTH),line);
+			if (lineStr != null) return lineStr;
+		}
+		else
+		{
+			lineStr = getLineOfThisSign(block.getRelative(BlockFace.EAST),line);
+			if (lineStr != null) return lineStr;
+			lineStr = getLineOfThisSign(block.getRelative(BlockFace.WEST),line);
+			if (lineStr != null) return lineStr;
+		}	
+		return null;
+	}
+
+	
+	/**
+	 * returns line written on the sign
+	 * @return
+	 */
+	private String getLineOfThisSign(Block block, int line)
+	{
+		if (block.getType() != Material.WALL_SIGN) return null;
+		
+		Sign sign = (Sign) block.getState();
+		
+		return sign.getLine(line);
+	}
 	
 }
