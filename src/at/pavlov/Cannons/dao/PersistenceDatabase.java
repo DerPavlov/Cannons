@@ -100,11 +100,12 @@ public class PersistenceDatabase
 		// if the obsoleteList is empty there are no cannon to remove
 		if (obsoleteIdList == null || obsoleteIdList.size() == 0) return; 
 		
+		//deactivated, since the cannon can be every if signs are used
 		//remove all row with the id
-		for (Object id : obsoleteIdList)
-		{
-			plugin.getDatabase().delete(CannonBean.class, id);
-		}
+		//for (Object id : obsoleteIdList)
+		//{
+		//	plugin.getDatabase().delete(CannonBean.class, id);
+		//}
 		
 		
 	}
@@ -165,6 +166,27 @@ public class PersistenceDatabase
 			if (iter.next().equals(id))
 			{
 				iter.remove();
+			}
+		}
+	}
+	
+	public void deleteCannons(String owner)
+	{
+		// create a query that returns CannonBean
+		List<CannonBean> beans = plugin.getDatabase().find(CannonBean.class).where().eq("owner", owner).findList();
+
+		// process the result
+		if (beans == null || beans.size() == 0)
+		{
+			// nothing found; list is empty
+			return;
+		}
+		else
+		{
+			// found cannons - load them
+			for (CannonBean bean : beans)
+			{
+				plugin.getDatabase().delete(CannonBean.class, bean.getId());
 			}
 		}
 	}

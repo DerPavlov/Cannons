@@ -22,12 +22,12 @@ settingHorizontalAngleLeft: YELLOW Aiming GOLD HDEGREE degree YELLOW to the GOLD
 
 loadProjectile: YELLOW Projectile GOLD PROJECTILE YELLOW has been loaded. Fire the gun if ready.  
 loadGunpowder: GOLD GUNPOWDERkg YELLOW of Gunpowder loaded.
-
-
 twoTorches: RED You can't place two torches on one cannon.
 tooManyGuns: RED You cant build more than GOLD CANNONS YELLOW guns
+
 cannonBuilt: GREEN You have created a cannon
 cannonDestroyed: RED One of your cannons has been destroyed
+cannonsReseted: GREEN All your cannons have been deleted from the database
 
 
 ErrorPermRestoneTorch: RED You are not allowed to control cannons with Redstone.

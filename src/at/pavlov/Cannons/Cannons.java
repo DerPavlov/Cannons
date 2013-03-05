@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -26,6 +24,7 @@ import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.dao.CannonBean;
 import at.pavlov.Cannons.dao.MyDatabase;
 import at.pavlov.Cannons.dao.PersistenceDatabase;
+import at.pavlov.Cannons.listener.Commands;
 import at.pavlov.Cannons.listener.PlayerListener;
 import at.pavlov.Cannons.listener.SignListener;
 import at.pavlov.Cannons.utils.InventoryManagement;
@@ -42,6 +41,7 @@ public class Cannons extends JavaPlugin
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
 	private CalcAngle calcAngle;
+	private Commands commands;
 	
 	//Events
 	private PlayerListener playerListener;
@@ -68,11 +68,13 @@ public class Cannons extends JavaPlugin
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, userMessages, invManage, explosion);
 		this.calcAngle = new CalcAngle(this, userMessages, config);
-
-		this.playerListener = new PlayerListener(this);
-		this.signListener = new SignListener(this);
 		
 		this.persistenceDatabase = new PersistenceDatabase(this);
+
+		this.playerListener = new PlayerListener(this);
+		this.signListener = new SignListener(this);	
+		this.commands = new Commands(this);
+		
 
 
 	}
@@ -92,6 +94,8 @@ public class Cannons extends JavaPlugin
 			pm = getServer().getPluginManager();
 			pm.registerEvents(playerListener, this);
 			pm.registerEvents(signListener, this);
+			//call command executer
+			getCommand("cannons").setExecutor(commands);
 
 			// obsidian Breaker
 			creeperHeal = getCreeperHeal();
@@ -316,77 +320,6 @@ public class Cannons extends JavaPlugin
 		return null;
 	}
 
-	// ########################### OnCommand ###########################
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
-	{
-
-		Player player = null;
-		if (sender instanceof Player)
-		{
-			player = (Player) sender;
-		}
-
-		if (cmd.getName().equalsIgnoreCase("cannons"))
-		{
-			if (player == null)
-			{
-				sender.sendMessage("this command can only be run by a player!");
-			}
-			else
-			{
-				if (args.length >= 1)
-				{
-					if (args[0].equalsIgnoreCase("build") && sender.hasPermission("cannons.player.command"))
-					{
-						// how to build a cannon
-						sendMessage(userMessages.HelpBuild, sender, ChatColor.GREEN);
-					}
-					else if (args[0].equalsIgnoreCase("fire") && sender.hasPermission("cannons.player.command"))
-					{
-						// how to fire
-						sendMessage(userMessages.HelpFire, sender, ChatColor.GREEN);
-					}
-					else if (args[0].equalsIgnoreCase("adjust") && sender.hasPermission("cannons.player.command"))
-					{
-						// how to adjust
-						sendMessage(userMessages.HelpAdjust, sender, ChatColor.GREEN);
-					}
-					else if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("cannons.admin.reload"))
-					{
-						// reload config
-						config.loadConfig();
-						sendMessage("Cannons config loaded ", sender, ChatColor.GREEN);
-					}
-					else if (args[0].equalsIgnoreCase("save") && sender.hasPermission("cannons.admin.reload"))
-					{
-						// reload config
-						persistenceDatabase.saveAllCannons();
-						sendMessage("Cannons database saved ", sender, ChatColor.GREEN);
-					}
-					else if (args[0].equalsIgnoreCase("load") && sender.hasPermission("cannons.admin.reload"))
-					{
-						// reload config
-						persistenceDatabase.loadCannons();
-						sendMessage("Cannons database loaed ", sender, ChatColor.GREEN);
-					}
-					else
-					{
-						// display help
-						sendMessage(userMessages.HelpText, sender, ChatColor.GREEN);
-					}
-				}
-				else
-				{
-					// display help
-					sendMessage(userMessages.HelpText, sender, ChatColor.GREEN);
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
 	// ################################# SENDMESSAGE #########################
 	public void sendMessage(String string, CommandSender player, ChatColor chatcolor)
 	{
@@ -398,19 +331,6 @@ public class Cannons extends JavaPlugin
 			player.sendMessage(chatcolor + message[x]); // Send each argument in
 														// the message
 		}
-
-	}
-
-	// ############## CleanUpEntries ################################
-	@Deprecated
-	public void CleanUpEntries()
-	{
-		// displayArraySize();
-
-		// check if the cannon exists
-		//cannonManager.DeleteObsoletCannons();
-		fireCannon.deleteOldSnowballs();
-		explosion.deleteTransmittedEntities();
 
 	}
 

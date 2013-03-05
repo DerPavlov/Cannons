@@ -1,6 +1,7 @@
 package at.pavlov.Cannons;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -194,7 +195,7 @@ public class CannonManager
 			// Cannon found
 			
 			// search cannon that is written on the sign
-			CannonData CannonFromSign = getCannonFromStorage(cannon.getLineOfCannonSigns(0), cannon.getLineOfCannonSigns(1));
+			CannonData CannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
 
 			// check if the name matches with the attached sign or if the name is not valid
 			if (CannonFromSign == null || cannon.isCannonEqualSign() == true )
@@ -391,7 +392,7 @@ public class CannonManager
 			
 			
 			//search if there is a entry with this name written on the sign of the cannon
-			CannonData old_cannon = getCannonFromStorage(new_cannon.getLineOfCannonSigns(0), new_cannon.getLineOfCannonSigns(1));
+			CannonData old_cannon = getCannonFromStorage(new_cannon.getCannonNameFromSign(), new_cannon.getOwnerFromSign());
 
 			
 			if (old_cannon != null)
@@ -410,7 +411,6 @@ public class CannonManager
 			}
 			else
 			{
-				
 				new_cannon.LastFired = 0;
 				new_cannon.gunpowder = 0;
 				new_cannon.projectileID = Material.AIR.getId();
@@ -602,7 +602,23 @@ public class CannonManager
 	}
 	
 
-
+	/**
+	 * Deletes all cannons of this player in the database to reset the cannon limit
+	 * @param player
+	 */
+	public void deleteCannons(String owner)
+	{
+		Iterator<CannonData> iter = CannonList.iterator();
+		
+		while(iter.hasNext())
+		{
+			CannonData next = iter.next();
+			if (next.owner == owner)
+			{
+				iter.remove();
+			}
+		}
+	}
 
 
 

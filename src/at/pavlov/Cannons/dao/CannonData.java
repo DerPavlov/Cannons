@@ -16,6 +16,8 @@ import at.pavlov.Cannons.config.Projectile;
 
 public class CannonData
 {
+	
+	
 	// Database id - is 0 until stored in the database. Then it is the id is the database
 	public int id;    
 	public String name;
@@ -225,7 +227,7 @@ public class CannonData
 				return "p: " + gunpowder + " c: " + projectileID + ":" + projectileData;	
 			case 3:
 				//angles
-				return "" + horizontal_angle + "/" + vertical_angle;
+				return  horizontal_angle + "/" + vertical_angle;
 		}
 		return "missing";
 	}
@@ -274,7 +276,7 @@ public class CannonData
 	 * returns the name of the cannon written on the sign
 	 * @return
 	 */
-	public String getLineOfCannonSigns(int line)
+	private String getLineOfCannonSigns(int line)
 	{
 		// goto the last first block of the cannon
 		Block block = location.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
@@ -299,10 +301,10 @@ public class CannonData
 		}	
 		return null;
 	}
-
+	
 	
 	/**
-	 * returns line written on the sign
+	 * returns line written on the sign sign
 	 * @return
 	 */
 	private String getLineOfThisSign(Block block, int line)
@@ -314,4 +316,107 @@ public class CannonData
 		return sign.getLine(line);
 	}
 	
+	/**
+	 * returns the cannon name that is written on a cannon sign
+	 * @return
+	 */
+	public String getCannonNameFromSign()
+	{
+		return getLineOfCannonSigns(0);
+	}
+	
+	/**
+	 * returns the cannon owner that is written on a cannon sign
+	 * @return
+	 */
+	public String getOwnerFromSign()
+	{
+		return getLineOfCannonSigns(1);
+	}
+	
+	/**
+	 * returns the amount of gunpowder that is written on a cannon sign
+	 * @return
+	 */
+	public int getGunpowderFromSign()
+	{
+		String str[] = getLineOfCannonSigns(2).split(" ");
+		// g: 2 c: 123:1
+		if (str.length >= 4 )
+		{
+			return Integer.parseInt(str[1]);
+		}
+		return 0;
+	}
+	
+	/**
+	 * returns the projectileID that is written on a cannon sign
+	 * @return
+	 */
+	public int getProjectileIDFromSign()
+	{
+		// g: 2 c: 123:1
+		String str[] = getLineOfCannonSigns(2).split(" ");
+		if (str.length >= 4 )
+		{
+			//123:1
+			String str2[] = str[3].split(":");
+			if (str.length >= 2)
+			{
+				return Integer.parseInt(str2[0]);
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * returns the projectileData that is written on a cannon sign
+	 * @return
+	 */
+	public int getProjectileDataFromSign()
+	{
+		// g: 2 c: 123:1
+		String str[] = getLineOfCannonSigns(2).split(" ");
+		if (str.length >= 4 )
+		{
+			//123:1
+			String str2[] = str[3].split(":");
+			if (str.length >= 2)
+			{
+				return Integer.parseInt(str2[1]);
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * returns the horizontal angle that is written on a cannon sign
+	 * @return
+	 */
+	public double getHorizontalAngleFromSign()
+	{
+		// 12/-2
+		String str[] = getLineOfCannonSigns(2).split("/");
+		if (str.length >= 2 )
+		{
+			return Double.parseDouble(str[0]);
+		}
+		return 0;
+	}
+	
+	/**
+	 * returns the vertical angle that is written on a cannon sign
+	 * @return
+	 */
+	public double getVerticalAngleFromSign()
+	{
+		// 12/-2
+		String str[] = getLineOfCannonSigns(2).split("/");
+		if (str.length >= 2 )
+		{
+			return Double.parseDouble(str[1]);
+		}
+		return 0;
+	}
+
 }

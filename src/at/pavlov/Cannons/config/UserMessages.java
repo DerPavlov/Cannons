@@ -41,6 +41,7 @@ public class UserMessages {
 	
 	public String cannonBuilt;
 	public String cannonDestroyed;
+	public String cannonsReseted;
 	
 	public String ErrorPermRestoneTorch;
 	public String ErrorPermFire;
@@ -107,6 +108,7 @@ public class UserMessages {
 		
 		cannonBuilt = ChatColor.GREEN + "You have created a cannon";
 		cannonDestroyed = ChatColor.RED + "One of your cannons has been destroyed";
+		cannonsReseted = ChatColor.GREEN + "All your cannons have been deleted from the database";
 		
 		ErrorPermRestoneTorch = ChatColor.RED + "You are not allowed to control cannons with Redstone";
 		ErrorPermFire = ChatColor.RED + "You have no idea how to fire this cannon.";
@@ -160,6 +162,7 @@ public class UserMessages {
 		
 		cannonBuilt = ChatColor.GREEN + "Kanone wurde fertiggestellt";
 		cannonDestroyed = ChatColor.RED + "Eine deiner Kanonen wurde zerstört";
+		cannonsReseted = ChatColor.GREEN + "Alle deine Kanonen wurden aus der Datenbank gelöscht";
 		
 		ErrorPermRestoneTorch = ChatColor.RED + "Nicht genügend Rechte um eine Kanone mit Redstone zu steuern.";
 		ErrorPermFire = ChatColor.RED + "Du weisst leider nicht wie man eine Kanonen abfeuert.";
@@ -187,109 +190,7 @@ public class UserMessages {
 
 	}
 
-	/*
-	@SuppressWarnings("unused")
-	private void loadFrench(){
-		BarreltoHot = "Le canon est trop chaud et doit refroidir";
-		NoProjectile ="Le canon n'est pas chargé, veuillez y mettre un projectile !";
-		NoSulphur = "Pas de poudre. Mettez en à l'intérieur .";
-		NoFlintAndSteel ="You need Flint and Steel to fire";
-		MaxiumGunpowderLoaded1 = "Maximum gunpowder of";
-		MaxiumGunpowderLoaded2 = "already loaded. More will destroyed the barrel.";
-		ProjectileAlreadyLoaded1 = "Projectile";
-		ProjectileAlreadyLoaded2 = "gunpowder already loaded. Fire the damn gun before you blow yourself up.";
-		//MaxiumGunpowderLoaded = "Maximum de poudre chargée atteind. Encore un peu et le canon explosera.";
-		//ProjectileAlreadyLoaded = "Projectile déjà chargé. Veuillez faire feu avant d'exploser";
-		FireGun = "FEU !";
-		settingVerticalAngle1 = "Angle verticale réglé à";
-		settingVerticalAngle2 = "degré(s)";
-		settingHorizontalAngle1 = "Angle horizontale régléà ";
-		settingHorizontalAngle2 = "degré(s)";
-		loadProjectile1 = "Projectile";
-		loadProjectile2 = "a été charhé. Faites feu si vous êtes prêt.";
-		loadGunpowder = "Kg de pourdre chargé(s).";
-		twoTorches = "Vous ne pouvez pas placer deux torches sur un canon !";
-		tooManyGuns1 = "You cant build more than";
-		tooManyGuns2 = "guns";
-		
-		cannonBuilt = "You have created a cannon";
-		cannonDestroyed = "One of your cannons has been destroyed";
-		
-		ErrorPermRestoneTorch = "Vous n'avez pas les autorisations pour activer le canon avec de la redstone";
-		ErrorPermFire = "Vous ne savez tirer avec un canon.";
-		ErrorPermLoad = "Vous n'avez pas les autorisations pour charger un canon.";
-		ErrorPermAdjust = "Vous ne savez pas ajuster l'angle de tir sur un canon.";
-		
-		HelpText = "\n Cannons plugin " + "\n " + 
-				ChatColor.RED + "/cannons build " + ChatColor.GREEN + " - Comment frabriquer un canon" + "\n " +
-				ChatColor.RED + "/cannons fire " + ChatColor.GREEN + " - Comment charger un canon" + "\n " +
-				ChatColor.RED + "/cannons adjust " + ChatColor.GREEN + " - un petit guide avec le Plugins Cannons";
-		HelpBuild = "\n Comment fabriquer un canon: \n " +
-				"Pour faire un canon, placer " + config.min_barrel_length + "-" + config.max_barrel_length + " blocs de " + config.Cannon_material + " dans les directions X ou Z.\n" +
-				"Placer un Bouton à chaque extrémité du canon \n " +
-				"Finir en plaçant une torche sur le premier bloc du canon. \n " +
-				"Pour vérifier si le canon fonctionne un clic droit sur la torche et un méssage vous l'indiquera. ";
-		HelpFire = "\n Comment charger et faire feu: \n "+
-				"1) Charger le canon avec en faisant un clique droit \n " + "avec la poudre en main. \n " +
-				"2) Clic droit avec un block de (e.g. " + config.allowedProjectiles.get(0).material + ") pour charger un projectile.\n "+
-				"3) Une fois fait, clique droit à la main sur la toche.";
-		HelpAdjust = "\n Vous avez raté la cible? Apprenez à viser: \n "+
-				"Clic droit avec les mains vides va augmenter l'angle. \n "+
-				"Sneak + clic droit avec la main sur le canon augmente l'angle. \n "+
-				"En cliquant sur le dessus du canon modifie l'angle verticale.\n " +
-				"En cliquant sur le côté du canon modifie l'angle horizontale.\n ";
 
-	}
-	
-	@SuppressWarnings("unused")
-	private void loadPtBr(){
-		BarreltoHot = "O barril esta muito quente, espere resfriar.";
-		NoProjectile= "Sem municao. Recarregue!";
-		NoSulphur= "Sem polvora. Coloque polvora no canhao";
-		NoFlintAndSteel= "Voce precisa de 'Flint and Steel' para atirar";
-		MaxiumGunpowderLoaded1 = "Maximum gunpowder of";
-		MaxiumGunpowderLoaded2 = "already loaded. More will destroyed the barrel.";
-		ProjectileAlreadyLoaded1 = "Projectile";
-		ProjectileAlreadyLoaded2 = "gunpowder already loaded. Fire the damn gun before you blow yourself up.";
-		//MaxiumGunpowderLoaded= "Ha muita polvora. Se houver mais o barril estourara.";
-		//ProjectileAlreadyLoaded= "Projetil ja carregado. Descarregue o canhao.";
-		FireGun= "FOGO!";
-		settingVerticalAngle1= "Ajustando o angulo vertical para";
-		settingVerticalAngle2= "grau(s)";
-		settingHorizontalAngle1= "Ajustando o angulo horizontal para";
-		settingHorizontalAngle2= "grau(s)";
-		loadProjectile1= "Projetil";
-		loadProjectile2= "foi carregado. Atire o canhao.";
-		loadGunpowder= "kg de Polvora carregado(s).";
-		twoTorches= "Voce nao pode colocar duas tochas em um unico canhao.";
-		tooManyGuns1= "Voce nao pode criar mais que";
-		tooManyGuns2= "Canhoes";
-		cannonBuilt= "Voce criou um canhao.";
-		cannonDestroyed= "Um de seus canhoes foi destruido.";
-		ErrorPermRestoneTorch= "Voce nao esta permitido para usar 'Redstone' nos canhoes.";
-		ErrorPermFire= "Voce nao pode atirar.";
-		ErrorPermLoad= "Voce nao pode recarregar o canhao.";
-		ErrorPermAdjust= "Voce nao pode ajustar o angulo.";
-		HelpText = "\n Cannons plugin \n " + 
-				ChatColor.RED + "/cannons build " + ChatColor.GREEN + " - How to build a cannon" + "\n " +
-				ChatColor.RED + "/cannons fire " + ChatColor.GREEN + " - How to load and fire a cannon" + "\n " +
-				ChatColor.RED + "/cannons adjust " + ChatColor.GREEN + " - A small guide aim with a cannon";
-		HelpBuild = "\n How to build a cannon: \n " +
-				"To make the barrel place " + config.min_barrel_length + "-" + config.max_barrel_length + " " + config.Cannon_material + " Blocks in x or z direction.\n " +
-				"Place a Button on each end of the barrel \n " +
-				"Finish it by placing a torch on the first block of the barrel. \n " +
-				"To check if the cannon works right click the torch and you will\nget a message.";
-		HelpFire = "\n How to load and fire: \n "+
-				"1) Load the barrel with Sulphur by right clicking a few times \n" + "with sulphur. \n " +
-				"2) Right click with a projectile block (e.g. " + config.allowedProjectiles.get(0).material + ").\n "+
-				"3) When you have done everthing right right click the torch.";
-		HelpAdjust = "\n You missed the target? Learn now how to aim: \n "+
-				"Right clicking with empty hands will increase the angle. \n "+
-				"Shift + right click will decrease the angle. \n "+
-				"Clicking on the top of the barrel will change the vertical angle.\n " +
-				"Clicking on the side will change the horizontal angle.";
-		}
-	 */
 	
 	
 	private void loadCustom(String filename)
@@ -336,8 +237,10 @@ public class UserMessages {
 	public String getEntry(String key)
 	{
 		String entry = customLanguage.getString(key);
+		String replace = null;
+		
 		//replace red color
-		String replace = "" + ChatColor.RED;
+		replace = "" + ChatColor.RED;
 		entry = splitString(entry, "ChatColor.RED ", replace);
 		entry = splitString(entry, "RED ", replace);
 		//replace green color

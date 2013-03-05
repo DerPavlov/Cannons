@@ -22,7 +22,8 @@ permissions:
       cannons.player.load: true
       cannons.player.adjust: true
       cannons.player.fire: true
-      cannons.player.command: true
+      cannons.player.help: true
+      cannons.player.reset: true
       cannons.player.placeRedstoneTorch: true
       cannons.player.limitA: false
       cannons.player.limitB: false
@@ -54,8 +55,11 @@ permissions:
   cannons.player.limit:
       description: Set the of cannons a player can build as number e.g. limit.5
       default: false
-  cannons.player.command:
+  cannons.player.help:
       description: Allows a player to request help with a cannon
+      default: true
+  cannons.player.reset:
+      description: Allows a player to delete all of his build cannons.
       default: true
   cannons.player.placeRedstoneTorch:
       description: Allows a player to place redstone torch under a cannon
