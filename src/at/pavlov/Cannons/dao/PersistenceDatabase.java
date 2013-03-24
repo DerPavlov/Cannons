@@ -123,7 +123,7 @@ public class PersistenceDatabase
 			// since bukkit manages the bean, we do not need to set
 			// the ID property
 			bean.setOwner(cannon.owner);
-			bean.setWorld(cannon.location.getWorld().getName());
+			bean.setWorld(cannon.firingLocation.getWorld().getName());
 			// get one Cannonblock
 			if (cannon.CannonBlocks.size() > 0)
 			{
@@ -133,9 +133,9 @@ public class PersistenceDatabase
 			}
 			else
 			{
-				bean.setLocX(cannon.location.getBlockX());
-				bean.setLocY(cannon.location.getBlockY());
-				bean.setLocZ(cannon.location.getBlockZ());
+				bean.setLocX(cannon.firingLocation.getBlockX());
+				bean.setLocY(cannon.firingLocation.getBlockY());
+				bean.setLocZ(cannon.firingLocation.getBlockZ());
 			}
 		}
 		

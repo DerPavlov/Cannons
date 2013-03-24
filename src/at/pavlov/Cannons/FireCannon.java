@@ -124,7 +124,7 @@ public class FireCannon {
 		cannon_loc.LastFired =  System.currentTimeMillis();
 		
 		//Set up smoke effects on the torch
-		Location torchLoc = cannon_loc.location.getBlock().getRelative(cannon_loc.face.getOppositeFace(),cannon_loc.barrel_length - 1).getRelative(BlockFace.UP, 1).getLocation().clone();
+		Location torchLoc = cannon_loc.firingLocation.getBlock().getRelative(cannon_loc.face.getOppositeFace(),cannon_loc.barrel_length - 1).getRelative(BlockFace.UP, 1).getLocation().clone();
 		torchLoc.setX(torchLoc.getX() + 0.5);
 		torchLoc.setZ(torchLoc.getZ() + 0.5);
 		torchLoc.getWorld().playEffect(torchLoc, Effect.SMOKE, BlockFace.UP);
@@ -148,7 +148,7 @@ public class FireCannon {
     {	
     	Projectile projectile = config.getProjectile(cannon.projectileID, cannon.projectileData);
     	
-		Block Block = cannon.location.getBlock();
+		Block Block = cannon.firingLocation.getBlock();
 		Location loc = Block.getRelative(cannon.face).getLocation();
 		World world = loc.getWorld();
 		loc.setX(loc.getX()+0.5);
@@ -158,7 +158,7 @@ public class FireCannon {
 		//Muzzle flash + Muzzle_displ
 		if (config.Muzzle_flash == true)
 		{
-			cannon.location.getWorld().createExplosion(Block.getRelative(cannon.face, config.Muzzle_displ).getLocation(), 0F);
+			cannon.firingLocation.getWorld().createExplosion(Block.getRelative(cannon.face, config.Muzzle_displ).getLocation(), 0F);
 		}
 		
 		int max_projectiles = 1;

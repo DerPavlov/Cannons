@@ -192,7 +192,7 @@ public class CannonManager
 		
 		if (cannon != null)
 		{
-			// Cannon found
+			// this block is a part of the cannon - cannon found
 			
 			// search cannon that is written on the sign
 			CannonData CannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
@@ -338,7 +338,7 @@ public class CannonManager
 			return null;
 
 		// is cannonmaterial
-		Block block = cannon.location.getBlock();
+		Block block = cannon.firingLocation.getBlock();
 		BlockFace reverse = cannon.face.getOppositeFace();
 
 		// button in front
@@ -386,7 +386,7 @@ public class CannonManager
 				new_cannon.owner = player.getName();
 				new_cannon.name = newCannonName(new_cannon.owner);
 			}
-			new_cannon.location = att_cannon.barrel;
+			new_cannon.firingLocation = att_cannon.barrel;
 			new_cannon.face = att_cannon.face;
 			new_cannon.barrel_length = att_cannon.barrel_length;
 			
@@ -398,7 +398,7 @@ public class CannonManager
 			if (old_cannon != null)
 			{
 				//there is a cannon with this name in the storage -> update entry
-				old_cannon.location = new_cannon.location;
+				old_cannon.firingLocation = new_cannon.firingLocation;
 				old_cannon.face = new_cannon.face;
 
 				

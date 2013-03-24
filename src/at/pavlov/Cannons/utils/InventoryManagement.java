@@ -48,7 +48,7 @@ public class InventoryManagement
 
 		BlockFace face = cannon.face;
 		// goto the last first block of the cannon
-		Block block = cannon.location.getBlock().getRelative(face.getOppositeFace(), cannon.barrel_length - 1);
+		Block block = cannon.firingLocation.getBlock().getRelative(face.getOppositeFace(), cannon.barrel_length - 1);
 
 		// left and right chest
 		if (face == BlockFace.EAST || face == BlockFace.WEST)

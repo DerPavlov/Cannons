@@ -322,7 +322,7 @@ public class CalcAngle {
 			//check if player if far away from the cannon
 			CannonData cannon = inAimingMode.get(player);
 			//go the back of the cannon
-			Location locCannon = cannon.location.getBlock().getRelative(cannon.face.getOppositeFace(), cannon.barrel_length).getLocation();
+			Location locCannon = cannon.firingLocation.getBlock().getRelative(cannon.face.getOppositeFace(), cannon.barrel_length).getLocation();
 			if (player.getLocation().distance(locCannon) > 5)
 			{
 				//cancel aiming mode if too far away

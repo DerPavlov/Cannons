@@ -18,11 +18,11 @@ public class CannonData
 {
 	
 	
-	// Database id - is 0 until stored in the database. Then it is the id is the database
+	// Database id - is 0 until stored in the database. Then it is the id in the database
 	public int id;    
 	public String name;
 	// point where the snowball is fired
-	public Location location;
+	public Location firingLocation;
 	// direction the cannon is facing
 	public BlockFace face;
 	// length of the barrel
@@ -89,6 +89,8 @@ public class CannonData
 		{
 			vect = new Vector(-horizontal, vertical, 1.0f);
 		}
+		
+		
 
 		// old code for version below 1.4.5 R0.3
 		/*
@@ -120,14 +122,14 @@ public class CannonData
 		if (gunpowder > 0)
 		{
 			ItemStack powder = new ItemStack(Material.SULPHUR, gunpowder);
-			location.getWorld().dropItemNaturally(location, powder);	
+			firingLocation.getWorld().dropItemNaturally(firingLocation, powder);	
 		}
 		
 		//can't drop Air
 		if (projectileID > 0)
 		{
 			ItemStack projectile = new ItemStack(projectileID, 1, (short) projectileData);
-			location.getWorld().dropItemNaturally(location, projectile);
+			firingLocation.getWorld().dropItemNaturally(firingLocation, projectile);
 		}
 		
 	}
@@ -152,7 +154,7 @@ public class CannonData
 	public void updateCannonSigns()
 	{
 		// goto the last first block of the cannon
-		Block block = location.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
+		Block block = firingLocation.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
 
 		// left and right sign
 		if (face == BlockFace.EAST || face == BlockFace.WEST)
@@ -239,7 +241,7 @@ public class CannonData
 	public boolean isCannonEqualSign()
 	{
 		// goto the last first block of the cannon
-		Block block = location.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
+		Block block = firingLocation.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
 		
 
 		// left and right sign
@@ -279,7 +281,7 @@ public class CannonData
 	private String getLineOfCannonSigns(int line)
 	{
 		// goto the last first block of the cannon
-		Block block = location.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
+		Block block = firingLocation.getBlock().getRelative(face.getOppositeFace(), barrel_length - 1);
 		
 		String lineStr = null;		
 		

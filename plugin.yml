@@ -1,6 +1,6 @@
-name: Cannons
+﻿name: Cannons
 main: at.pavlov.Cannons.Cannons
-version: 1.9.4
+version: 1.9.5
 author: Pavlov
 description: >
              A small plugin to fire cannons which are build out of blocks.
@@ -25,9 +25,6 @@ permissions:
       cannons.player.help: true
       cannons.player.reset: true
       cannons.player.placeRedstoneTorch: true
-      cannons.player.limitA: false
-      cannons.player.limitB: false
-      cannons.player.limit: false
   cannons.admin.*:
     description: Gives all admin rights
     children:
@@ -39,13 +36,13 @@ permissions:
       
   cannons.player.load:
       description: Allows a player to load a cannon
-      default: true
+      default: false
   cannons.player.adjust:
       description: Allows a player to adjust a cannon
-      default: true  
+      default: false  
   cannons.player.fire:
       description: Allows a player to fire a cannon
-      default: true
+      default: false
   cannons.player.limitA:
       description: Maximum amount of cannons a player can place
       default: false
@@ -57,17 +54,17 @@ permissions:
       default: false
   cannons.player.help:
       description: Allows a player to request help with a cannon
-      default: true
+      default: false
   cannons.player.reset:
       description: Allows a player to delete all of his build cannons.
-      default: true
+      default: false
   cannons.player.placeRedstoneTorch:
       description: Allows a player to place redstone torch under a cannon
-      default: op  
+      default: false  
   cannons.admin.reload:
       description: Allows a player to reload the config
       default: op
   cannons.projectile:
       description: Right to load all projectiles
-      default: true
+      default: false
   

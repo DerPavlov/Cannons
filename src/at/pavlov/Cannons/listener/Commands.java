@@ -81,7 +81,7 @@ public class Commands implements CommandExecutor
 						persistenceDatabase.loadCannons();
 						plugin.sendMessage("Cannons database loaed ", sender, ChatColor.GREEN);
 					}
-					else if(args[0].equalsIgnoreCase("load") && sender.hasPermission("cannons.admin.reload"))
+					else if(args[0].equalsIgnoreCase("load") && sender.hasPermission("cannons.player.reset"))
 					{
 						// delete all cannon entries for this player
 						persistenceDatabase.deleteCannons(player.getName());
