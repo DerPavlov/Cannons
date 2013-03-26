@@ -16,7 +16,7 @@ public class UserMessages {
 	private File customLanguageFile = null;
 
 	
-	public String BarreltoHot;
+	public String BarrelTooHot;
 	
 	public String NoProjectile;
 	public String NoSulphur;
@@ -83,7 +83,7 @@ public class UserMessages {
 	}
 	
 	private void loadEnglish(){
-		BarreltoHot = ChatColor.RED + "The Barrel is too hot and must cool down";
+		BarrelTooHot = ChatColor.RED + "The Barrel is too hot and must cool down";
 		NoProjectile = ChatColor.RED + "No Projectile loaded. Load something!";
 		NoFlintAndSteel =ChatColor.RED + "You need Flint and Steel to fire";
 		NoSulphur = ChatColor.RED + "No gunpowder. Please load the barrel with gunpowder.";
@@ -138,7 +138,7 @@ public class UserMessages {
 	}
 	
 	private void loadGerman(){
-		BarreltoHot = ChatColor.RED + "Das Rohr ist zu heiss";
+		BarrelTooHot = ChatColor.RED + "Das Rohr ist zu heiss";
 		NoProjectile = ChatColor.RED + "Kein Kanonkugel im Rohr. Lade einen Block!";
 		NoSulphur = ChatColor.RED + "Kein Schwarzpuvler. Lade zuerst die Treibladung!";
 		NoFlintAndSteel =ChatColor.RED + "Du brauchst ein Feuerzeug zum Feuern";
@@ -199,7 +199,7 @@ public class UserMessages {
 		customLanguage.options().copyDefaults(true);
 		savecustomLanguage();
 		
-		BarreltoHot = getEntry("BarreltoHot");
+		BarrelTooHot = getEntry("BarrelTooHot");
 		NoProjectile = getEntry("NoProjectile");
 		NoSulphur = getEntry("NoSulphur");
 		NoFlintAndSteel = getEntry("NoFlintAndSteel");
@@ -271,17 +271,17 @@ public class UserMessages {
 		//replace new line
 		replace = "\n ";
 		entry = splitString(entry, "NEWLINE " , replace);
+		if (entry == null)
+		{
+			plugin.logSevere("Wrong entry '" + key + "' in the lanugagefile");
+		}
 		return entry;
 	}
 
 
 	public String splitString(String entry, String split, String replace)
 	{
-		if (entry == null) 
-		{
-			plugin.logSevere("Wrong entry in the lanugagefile");
-			return null;
-		}
+		if (entry == null) return null;
 		
 		String tempEntry[] = entry.split(split);
 		if (tempEntry.length > 0)

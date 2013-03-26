@@ -80,7 +80,7 @@ public class FireCannon {
 		}	
 		if (cannon_loc.LastFired + config.fireDelay*1000 >= System.currentTimeMillis())
 		{
-			if (player != null) player.sendMessage(userMessages.BarreltoHot);
+			if (player != null) player.sendMessage(userMessages.BarrelTooHot);
 			return false;
 		}	
 		return true;
@@ -242,7 +242,7 @@ public class FireCannon {
    							if (flying.snowball.getTicksLived() > flying.projectile.timefuse*20 && flying.projectile.timefuse > 0)
    	   			    		{
    	   			    			//detonate timefuse
-   	   			    			explosion.create_explosion(flying);
+   	   			    			explosion.detonate(flying);
    	   			    			flying.snowball.remove();
    	   			    			iterator.remove();
    	   			    		}

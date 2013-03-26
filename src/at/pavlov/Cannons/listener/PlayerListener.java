@@ -104,6 +104,7 @@ public class PlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void EntityExplode(EntityExplodeEvent event)
 	{
+		/*
 		//map explosions to TNT event
 		if (config.forceTNTexplosion)
 		{
@@ -122,7 +123,7 @@ public class PlayerListener implements Listener
 					event.blockList().clear();
 				}
 			}
-		}
+		}*/
 		
 		
 		// handle normal events not canceled
@@ -484,7 +485,7 @@ public class PlayerListener implements Listener
 				if (event.getEntity().equals(flying.snowball))
 				{
 					flying.snowball = (Snowball) event.getEntity();
-					explosion.create_explosion(flying);
+					explosion.detonate(flying);
 					iterator.remove();
 				}
 			}

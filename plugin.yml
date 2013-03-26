@@ -1,6 +1,6 @@
 ﻿name: Cannons
 main: at.pavlov.Cannons.Cannons
-version: 1.9.5
+version: 1.9.6
 author: Pavlov
 description: >
              A small plugin to fire cannons which are build out of blocks.

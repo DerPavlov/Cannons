@@ -22,10 +22,7 @@ import at.pavlov.Cannons.utils.BlockHelper;
 public class CannonManager
 {
 	private ArrayList<CannonData> CannonList = new  ArrayList<CannonData>();
-	//private HashMap<Location, Integer> CannonBlocks = new HashMap<Location, Integer>();
-	// private HashMap<UUID,vessel> vesselList = new HashMap<UUID,vessel>();
 
-	@SuppressWarnings("unused")
 	private Cannons plugin;
 	private UserMessages message;
 	private Config config;
@@ -240,12 +237,16 @@ public class CannonManager
 
 
 	// ############### getCannonAmount ###############################
-	public int getCannonAmount(Player player)
-	{
+	public int getCannonAmount(String player)
+	{	
 		int i = 1;
 		for (CannonData cannon: CannonList)
 		{
-			if (cannon.owner.equalsIgnoreCase(player.getName()))
+			if (cannon.owner == null)
+			{
+				plugin.logSevere("Cannon has no owner. Contact the plugin developer");
+			}
+			else if (cannon.owner.equalsIgnoreCase(player))
 			{
 				i++;
 			}
@@ -274,10 +275,11 @@ public class CannonManager
 	{
 		// the player is not valid - no limit check
 		if (player == null) return true;
+		if (player.getName() == null) return true;
 		
 		// both limitA/B and cannons.player.limit.5 work
 		int newBuildLimit = getBuildLimit(player);
-		int i = getCannonAmount(player); 
+		int i = getCannonAmount(player.getName()); 
 
 		if (newBuildLimit == -1)
 		{
@@ -613,7 +615,7 @@ public class CannonManager
 		while(iter.hasNext())
 		{
 			CannonData next = iter.next();
-			if (next.owner == owner)
+			if (next.owner.equals(owner))
 			{
 				iter.remove();
 			}

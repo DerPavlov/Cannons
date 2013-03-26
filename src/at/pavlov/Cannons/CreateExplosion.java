@@ -7,14 +7,19 @@ import java.util.ListIterator;
 import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.server.v1_5_R2.WorldServer;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.v1_5_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -170,19 +175,19 @@ public class CreateExplosion {
     	{
     		case 0:
     			//spawn Zombie
-    			world.spawn(Loc, org.bukkit.craftbukkit.v1_4_R1.entity.CraftZombie.class);
+    			world.spawn(Loc, org.bukkit.craftbukkit.v1_5_R2.entity.CraftZombie.class);
     			break;
     		case 1:
     			//spawn Creeper
-    			world.spawn(Loc, org.bukkit.craftbukkit.v1_4_R1.entity.CraftCreeper.class);
+    			world.spawn(Loc, org.bukkit.craftbukkit.v1_5_R2.entity.CraftCreeper.class);
     			break;
     		case 2:
     			//spawn Spider
-    			world.spawn(Loc, org.bukkit.craftbukkit.v1_4_R1.entity.CraftSpider.class);
+    			world.spawn(Loc, org.bukkit.craftbukkit.v1_5_R2.entity.CraftSpider.class);
     			break;
     		case 3:
     			//spawn Skeleton
-    			world.spawn(Loc, org.bukkit.craftbukkit.v1_4_R1.entity.CraftSkeleton.class);
+    			world.spawn(Loc, org.bukkit.craftbukkit.v1_5_R2.entity.CraftSkeleton.class);
     			break;
     	}
     }
@@ -380,10 +385,26 @@ public class CreateExplosion {
     }
     
     //####################################  CREATE_EXPLOSION ##############################
-    public void create_explosion(FlyingProjectile cannonball)
+    public void detonate(FlyingProjectile cannonball)
     {
+    	
+    	
     	//blocks form the impact to the impactloc
-    	Location impactLoc = blockBreaker(cannonball);	
+    	Location impactLoc = blockBreaker(cannonball);
+    	
+    	//get world
+    	World world = impactLoc.getWorld();
+    	plugin.logDebug("CWorld");
+    	
+    	CraftWorld cworld = (CraftWorld) world;
+    	plugin.logDebug("Worldserver");
+    	
+    	WorldServer worldserver = cworld.getHandle();
+    	
+    	plugin.logDebug("World found");
+    	
+    	//teleport snowball to impact
+    	cannonball.snowball.teleport(impactLoc);
     	
     	float explosion_power = (float) cannonball.projectile.explosion_power;
     	//find living entities
@@ -397,11 +418,19 @@ public class CreateExplosion {
 		{
 			//normal shot + explosion
 			entity = cannonball.snowball.getNearbyEntities(20, 20, 20);
-	    	cannonball.snowball.getLocation().getWorld().createExplosion(impactLoc, explosion_power, cannonball.projectile.incendiary);
+			
+		   	plugin.logDebug("spawn tnt");
+			//spawn tnt and set event
+	    	TNTPrimed tnt = world.spawn(impactLoc, TNTPrimed.class);
+	    	
+	       	plugin.logDebug("explosion");
+	    	worldserver.createExplosion(((CraftEntity) tnt).getHandle(), impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, cannonball.projectile.incendiary, true);
+	       	plugin.logDebug("kill tnt");
+	    	tnt.remove();
 		}
 		
 		
-		//place blocks around the impact
+		//place blocks around the impact like webs, lava, water
 		spreadBlocks(impactLoc, cannonball.projectile);
 		
 		Iterator<Entity> it = entity.iterator();

@@ -1,6 +1,4 @@
-﻿#English language file. Feel free to edit this file. The upper case words are keywords and will be replaced by the plugin. 
-
-BarreltoHot: RED The Barrel is too hot and must cool down.
+BarrelTooHot: RED The Barrel is too hot and must cool down.
 NoProjectile: RED No Projectile loaded. Load something!
 NoSulphur: RED No Sulphur. Please load the Barrel with Sulphur.
 NoFlintAndSteel: RED You need Flint and Steel to fire
@@ -8,17 +6,14 @@ MaximumGunpowderLoaded: YELLOW Maximum gunpowder of GOLD GUNPOWDER YELLOW alread
 ProjectileAlreadyLoaded: YELLOW Projectile GOLD PROJECTILE YELLOW and GOLD GUNPOWDER YELLOW gunpowder already loaded. Fire the damn gun before you blow yourself up.
 FireGun: YELLOW FIRE!
 
-
 enableAimingMode: GREEN Entering aiming mode
 disableAimingMode: RED Leaving aiming mode
-
 
 settingCombinedAngle: YELLOW New angle GOLD HDEGREE degree YELLOW horizontal and GOLD VDEGREE degree YELLOW vertical
 settingVerticalAngleUp: YELLOW Setting vertical angle to GOLD VDEGREE degree
 settingVerticalAngleDown: YELLOW Setting vertical angle to GOLD -VDEGREE degree
 settingHorizontalAngleRight: YELLOW Aiming GOLD HDEGREE degree YELLOW to the GOLD right
 settingHorizontalAngleLeft: YELLOW Aiming GOLD HDEGREE degree YELLOW to the GOLD left
-
 
 loadProjectile: YELLOW Projectile GOLD PROJECTILE YELLOW has been loaded. Fire the gun if ready.  
 loadGunpowder: GOLD GUNPOWDERkg YELLOW of Gunpowder loaded.
@@ -29,13 +24,11 @@ cannonBuilt: GREEN You have created a cannon
 cannonDestroyed: RED One of your cannons has been destroyed
 cannonsReseted: GREEN All your cannons have been deleted from the database
 
-
 ErrorPermRestoneTorch: RED You are not allowed to control cannons with Redstone.
 ErrorPermFire: RED You have no idea how to fire this cannon.
 ErrorPermLoad: RED No permission to load this gun.
 ErrorPermAdjust: RED You have no idea how to adjust this cannon.
 ErrorPermissionProjectile: RED No permission for this projectile.
-
 
 HelpText: NEWLINE Cannons plugin NEWLINE RED /cannons build GREEN - How to build a cannon NEWLINE RED /cannons fire GREEN - How to load and fire a cannon NEWLINE RED /cannons adjust GREEN - A small guide aim with a cannon  
 HelpBuild: NEWLINE How to build a cannon NEWLINE To make the barrel place MIN_BARREL_LENGTH - MAX_BARREL_LENGTH CANNON_MATERIAL Blocks in x or z. NEWLINE Place a Button on each end of the barrel NEWLINE Finish it by placing a torch on the first block of the barrel. NEWLINE To check if the cannon works right click the torch and you NEWLINE will get a message.  

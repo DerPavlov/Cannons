@@ -48,44 +48,52 @@ public class Commands implements CommandExecutor
 			{
 				if (args.length >= 1)
 				{
+					//cannons build
 					if (args[0].equalsIgnoreCase("build") && sender.hasPermission("cannons.player.command"))
 					{
 						// how to build a cannon
 						plugin.sendMessage(userMessages.HelpBuild, sender, ChatColor.GREEN);
 					}
+					//cannons fire
 					else if (args[0].equalsIgnoreCase("fire") && sender.hasPermission("cannons.player.command"))
 					{
 						// how to fire
 						plugin.sendMessage(userMessages.HelpFire, sender, ChatColor.GREEN);
 					}
+					//cannons adjust
 					else if (args[0].equalsIgnoreCase("adjust") && sender.hasPermission("cannons.player.command"))
 					{
 						// how to adjust
 						plugin.sendMessage(userMessages.HelpAdjust, sender, ChatColor.GREEN);
 					}
+					//cannons reload
 					else if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("cannons.admin.reload"))
 					{
 						// reload config
 						config.loadConfig();
 						plugin.sendMessage("Cannons config loaded ", sender, ChatColor.GREEN);
 					}
+					//cannons save
 					else if (args[0].equalsIgnoreCase("save") && sender.hasPermission("cannons.admin.reload"))
 					{
 						// save database
 						persistenceDatabase.saveAllCannons();
 						plugin.sendMessage("Cannons database saved ", sender, ChatColor.GREEN);
 					}
+					//cannons load
 					else if (args[0].equalsIgnoreCase("load") && sender.hasPermission("cannons.admin.reload"))
 					{
 						// load database
 						persistenceDatabase.loadCannons();
 						plugin.sendMessage("Cannons database loaed ", sender, ChatColor.GREEN);
 					}
-					else if(args[0].equalsIgnoreCase("load") && sender.hasPermission("cannons.player.reset"))
+					//cannons reset
+					else if(args[0].equalsIgnoreCase("reset") && sender.hasPermission("cannons.player.reset"))
 					{
 						// delete all cannon entries for this player
 						persistenceDatabase.deleteCannons(player.getName());
 						plugin.getCannonManager().deleteCannons(player.getName());
+						plugin.sendMessage(userMessages.cannonsReseted, sender, ChatColor.GREEN);
 					}
 					else
 					{
