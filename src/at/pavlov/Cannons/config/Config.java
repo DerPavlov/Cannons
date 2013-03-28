@@ -65,8 +65,6 @@ public class Config
 	public int cannonLimitA = 3;
 	public int cannonLimitB = 100;
 
-	public boolean forceTNTexplosion = true;
-
 	public int version_number;
 
 	private UserMessages userMessage;
@@ -122,8 +120,6 @@ public class Config
 		// length
 		max_barrel_length = plugin.getConfig().getInt("construction.max barrel length", 5);
 		min_barrel_length = plugin.getConfig().getInt("construction.min barrel length", 2);
-		// protection plugin
-		forceTNTexplosion = plugin.getConfig().getBoolean("protectionplugin.force tnt event", true);
 
 		// load language
 		if (userMessage.loadLanguage(plugin.getConfig().getString("language")) == false)

@@ -42,8 +42,6 @@ construction:
   cannon material data: 15
   max barrel length: 6
   min barrel length: 2
-protectionplugin:
-  force tnt event: true
 projectiles: 
 - cobblestone
 - stone

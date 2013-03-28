@@ -39,17 +39,12 @@ public class CannonData
 	// designID of the cannon, for different types of cannons - not in use
 	public int designId;
 	public boolean isValid;
-	public ArrayList<Location> CannonBlocks = new ArrayList<Location>();
+	private ArrayList<Location> CannonBlocks = new ArrayList<Location>();
 
 	public CannonData()
 	{
 		CannonBlocks = new ArrayList<Location>();
 		isValid = true;
-	}
-
-	public void addBlock(Location loc)
-	{
-		CannonBlocks.add(loc);
 	}
 
 	public Vector getFiringVector(Config config)
@@ -267,8 +262,10 @@ public class CannonData
 		
 		Sign sign = (Sign) block.getState();
 		
+		//sign is empty
 		if (sign.getLine(0) == null || sign.getLine(1) == null) return true;
 		
+		//sign name and owner are the same
 		if (sign.getLine(0).equals(name) && sign.getLine(1).equals(owner)) return true;
 			
 		return false;
@@ -421,4 +418,19 @@ public class CannonData
 		return 0;
 	}
 
+	public ArrayList<Location> getCannonBlocks()
+	{
+		return CannonBlocks;
+	}
+	
+	public void addCannonBlock(Location cannonBlock)
+	{
+		CannonBlocks.add(cannonBlock);
+	}
+	
+	public void setCannonBlocks(ArrayList<Location> cannonBlocks)
+	{
+		this.CannonBlocks = cannonBlocks;
+	}
+	
 }

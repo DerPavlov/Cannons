@@ -154,7 +154,7 @@ public class CannonManager
 	{
 		for (CannonData cannon : CannonList)
 		{
-			for (Location cannonBlock : cannon.CannonBlocks)
+			for (Location cannonBlock : cannon.getCannonBlocks())
 			{
 				if (cannonBlock.equals(loc))
 				{
@@ -187,22 +187,21 @@ public class CannonManager
 	{
 		CannonData cannon = getCannonFromStorage(cannonBlock);
 		
+		// this block is a part of an existing cannon 
 		if (cannon != null)
 		{
-			// this block is a part of the cannon - cannon found
-			
 			// search cannon that is written on the sign
-			CannonData CannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
+			CannonData cannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
 
 			// check if the name matches with the attached sign or if the name is not valid
-			if (CannonFromSign == null || cannon.isCannonEqualSign() == true )
+			if (cannonFromSign == null || cannon.isCannonEqualSign() == true )
 			{
 				return cannon;
 			}
 			else
 			{
 				// different cannon, search the database for the right entry by the cannon name from the sign
-				return CannonFromSign;
+				return cannonFromSign;
 			}
 		}
 		else
@@ -219,7 +218,25 @@ public class CannonManager
 		return null;
 	}
 
-	
+	/**
+	 * returns true if this block is a part of a cannon
+	 * @param loc
+	 * @return
+	 */
+	public boolean isPartOfCannon(Location loc)
+	{
+		for (CannonData cannon : CannonList)
+		{
+			for (Location cannonblock : cannon.getCannonBlocks())
+			{
+				if (cannonblock.equals(loc))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	// ############### contains ###############################
 	public boolean isCannonBlock(Location loc)
@@ -345,11 +362,11 @@ public class CannonManager
 
 		// button in front
 		Location loc = block.getRelative(cannon.face).getLocation();
-		cannon.addBlock(loc);
+		cannon.addCannonBlock(loc);
 
 		// barrel
 		loc = block.getLocation();
-		cannon.addBlock(loc);
+		cannon.addCannonBlock(loc);
 
 		// go back along the barrel + button backside
 		int length = 1;
@@ -358,13 +375,13 @@ public class CannonManager
 			length++;
 			block = block.getRelative(reverse, 1);
 			loc = block.getLocation();
-			cannon.addBlock(loc);
+			cannon.addCannonBlock(loc);
 		} while (length < cannon.barrel_length + 1);
 		block = block.getRelative(cannon.face, 1);
 
 		// torch backside
 		loc = block.getRelative(BlockFace.UP).getLocation();
-		cannon.addBlock(loc);
+		cannon.addCannonBlock(loc);
 
 		return cannon;
 	}
@@ -393,11 +410,11 @@ public class CannonManager
 			new_cannon.barrel_length = att_cannon.barrel_length;
 			
 			
-			//search if there is a entry with this name written on the sign of the cannon
+			//search if there is a entry with this name written on the sign of the cannon with the same length
 			CannonData old_cannon = getCannonFromStorage(new_cannon.getCannonNameFromSign(), new_cannon.getOwnerFromSign());
 
 			
-			if (old_cannon != null)
+			if (old_cannon != null && old_cannon.barrel_length == new_cannon.barrel_length)
 			{
 				//there is a cannon with this name in the storage -> update entry
 				old_cannon.firingLocation = new_cannon.firingLocation;
@@ -405,7 +422,7 @@ public class CannonManager
 
 				
 				// add cannon blocks
-				old_cannon.CannonBlocks.clear();
+				old_cannon.setCannonBlocks(new ArrayList<Location>());
 				old_cannon = addCannonBlocks(old_cannon);
 				
 				old_cannon.updateCannonSigns();
@@ -413,6 +430,9 @@ public class CannonManager
 			}
 			else
 			{
+				//there needs to be a player to create a cannon
+				if (player == null ) return null;
+				
 				new_cannon.LastFired = 0;
 				new_cannon.gunpowder = 0;
 				new_cannon.projectileID = Material.AIR.getId();

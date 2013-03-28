@@ -50,8 +50,8 @@ public class SignListener implements Listener
 			Block cannonBlock = block.getRelative(signFace.getOppositeFace());
 			
 
-			//get cannon from location
-	        CannonData cannon = cannonManager.getCannon(cannonBlock.getLocation());
+			//get cannon from location and creates a cannon if not existing
+	        CannonData cannon = cannonManager.getCannon(cannonBlock.getLocation(), event.getPlayer());
 			
 	        //get cannon from the sign
 			CannonData cannonFromSign = cannonManager.getCannonFromStorage(event.getLine(0), event.getLine(1));

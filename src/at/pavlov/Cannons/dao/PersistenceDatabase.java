@@ -125,11 +125,11 @@ public class PersistenceDatabase
 			bean.setOwner(cannon.owner);
 			bean.setWorld(cannon.firingLocation.getWorld().getName());
 			// get one Cannonblock
-			if (cannon.CannonBlocks.size() > 0)
+			if (cannon.getCannonBlocks().size() > 0)
 			{
-				bean.setLocX(cannon.CannonBlocks.get(0).getBlockX());
-				bean.setLocY(cannon.CannonBlocks.get(0).getBlockY());
-				bean.setLocZ(cannon.CannonBlocks.get(0).getBlockZ());
+				bean.setLocX(cannon.getCannonBlocks().get(0).getBlockX());
+				bean.setLocY(cannon.getCannonBlocks().get(0).getBlockY());
+				bean.setLocZ(cannon.getCannonBlocks().get(0).getBlockZ());
 			}
 			else
 			{

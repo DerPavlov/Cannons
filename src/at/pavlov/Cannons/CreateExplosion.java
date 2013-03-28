@@ -15,11 +15,35 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_5_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftBat;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftBlaze;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftCaveSpider;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftChicken;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftCow;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftCreeper;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftEnderman;
 import org.bukkit.craftbukkit.v1_5_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftGhast;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftMagmaCube;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftMushroomCow;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftOcelot;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPig;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPigZombie;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSheep;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSilverfish;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSkeleton;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSlime;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSpider;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSquid;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftVillager;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftWitch;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftWolf;
+import org.bukkit.craftbukkit.v1_5_R2.entity.CraftZombie;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -111,6 +135,7 @@ public class CreateExplosion {
     	
     	Vector vel = cannonball.snowball.getVelocity();
     	Location snowballLoc = cannonball.snowball.getLocation();
+    	World world = snowballLoc.getWorld();
     	int penetration = (int) ((cannonball.projectile.penetration) * vel.length() / cannonball.projectile.max_speed);
     	Location impactLoc = snowballLoc.clone();
     	
@@ -156,64 +181,207 @@ public class CreateExplosion {
     		breakBlock(block.getRelative(BlockFace.NORTH), blocklist, superbreaker);
     	}
     	
-    	EntityExplodeEvent event = new EntityExplodeEvent(cannonball.snowball, impactLoc, blocklist, 1.0f);
-	    
-	    
-	    //handle with bukkit
-		plugin.getServer().getPluginManager().callEvent(event);
-	    	
+    	//no eventhandling if the list is empty
+    	if (blocklist.size() > 0) 
+    	{
+    	
+    		//create tnt event
+    		TNTPrimed tnt = world.spawn(impactLoc, TNTPrimed.class);
+    		EntityExplodeEvent event = new EntityExplodeEvent(tnt, impactLoc, blocklist, 1.0f);
+    		tnt.remove();
+    		
+    		//handle with bukkit
+    		plugin.getServer().getPluginManager().callEvent(event);
+		
+    		//if not canceled 
+    		if(!event.isCancelled() && plugin.BlockBreakPluginLoaded() == false)
+    		{
+    			// break water, lava, obsidian if cannon projectile
+    			for (int i = 0; i < event.blockList().size(); i++)
+    			{
+    				Block block =  event.blockList().get(i);
+    				if (event.getEntity() != null)
+    				{
+    					block =  event.blockList().get(i);
+					
+    					// break the block, no matter what it is
+    					BlockBreak(block,event.getYield());
+    				}
+    			}
+    		}
+    	}
     	return impactLoc;
     }
     
+    /***
+     * Breaks a block with a certain yield
+     * @param block
+     * @param yield
+     */
+	private void BlockBreak(Block block, float yield)
+	{
+		Random r = new Random();
+		if (r.nextFloat() > yield) 
+		{
+			block.breakNaturally();
+		}
+		else
+		{
+			block.setTypeId(0);
+		}
+	}
+    
     //####################################  PlaceMob ##############################
-    private void PlaceRandomMob(Location Loc)
+    private void PlaceRandomMob(Location Loc, int data)
     {
-    	World world = Loc.getWorld();
-    	Random r = new Random();
+    	Loc.add(0.5, 0, 0.5);
     	
-    	switch (r.nextInt(4))
+    	World world = Loc.getWorld();
+     	Random r = new Random();
+     	
+     	Integer mobList[] = {50,51,52,54,55,56,57,58,59,60,61,62,65,66,90,91,92,93,94,95,96,98,120};
+    	
+    	if (data < 0) 
     	{
-    		case 0:
-    			//spawn Zombie
-    			world.spawn(Loc, org.bukkit.craftbukkit.v1_5_R2.entity.CraftZombie.class);
-    			break;
-    		case 1:
+    		//if all datavalues are allowed create a random spawn
+    		data = mobList[r.nextInt(mobList.length)];
+    	}
+    	
+    	
+    	
+    	switch (data)
+    	{
+    		
+    		case 50:
     			//spawn Creeper
-    			world.spawn(Loc, org.bukkit.craftbukkit.v1_5_R2.entity.CraftCreeper.class);
+    			world.spawn(Loc, CraftCreeper.class);
     			break;
-    		case 2:
-    			//spawn Spider
-    			world.spawn(Loc, org.bukkit.craftbukkit.v1_5_R2.entity.CraftSpider.class);
-    			break;
-    		case 3:
+    		case 51:
     			//spawn Skeleton
-    			world.spawn(Loc, org.bukkit.craftbukkit.v1_5_R2.entity.CraftSkeleton.class);
+    			world.spawn(Loc, CraftSkeleton.class);
     			break;
+    		case 52:
+    			//spawn Spider
+    			world.spawn(Loc, CraftSpider.class);
+    			break;
+    		case 54:
+    			//spawn Zombie
+    			world.spawn(Loc, CraftZombie.class);
+    			break;
+    		case 55:
+    			//spawn Slime
+    			world.spawn(Loc, CraftSlime.class);
+    			break;
+    		case 56:
+    			//spawn Ghast
+    			world.spawn(Loc, CraftGhast.class);
+    			break;
+    		case 57:
+    			//spawn ZomebiePigmen
+    			world.spawn(Loc, CraftPigZombie.class);
+    			break;
+    		case 58:
+    			//spawn Enderman
+    			world.spawn(Loc, CraftEnderman.class);
+    			break;
+    		case 59:
+    			//spawn Cavespider
+    			world.spawn(Loc, CraftCaveSpider.class);
+    			break;
+    		case 60:
+    			//spawn Silverfish
+    			world.spawn(Loc, CraftSilverfish.class);
+    			break;
+    		case 61:
+    			//spawn Blaze
+    			world.spawn(Loc, CraftBlaze.class);
+    			break;
+    		case 62:
+    			//spawn Magmacube
+    			world.spawn(Loc, CraftMagmaCube.class);
+    			break;
+    		case 66:
+    			//spawn Witch
+    			world.spawn(Loc, CraftWitch.class);
+    			break;
+    		case 65:
+    			//spawn Bat
+    			world.spawn(Loc, CraftBat.class);
+    			break;
+    		case 90:
+    			//spawn Pig
+    			world.spawn(Loc, CraftPig.class);
+    			break;
+    		case 91:
+    			//spawn Sheep
+    			world.spawn(Loc, CraftSheep.class);
+    			break;
+    		case 92:
+    			//spawn Cow
+    			world.spawn(Loc, CraftCow.class);
+    			break;
+    		case 93:
+    			//spawn Chicken
+    			world.spawn(Loc, CraftChicken.class);
+    			break;
+    		case 94:
+    			//spawn Squid
+    			world.spawn(Loc, CraftSquid.class);
+    			break;
+    		case 95:
+    			//spawn Wolf
+    			world.spawn(Loc, CraftWolf.class);
+    			break;
+    		case 96:
+    			//spawn Mushroomcow
+    			world.spawn(Loc, CraftMushroomCow.class);
+    			break;
+    		case 98:
+    			//spawn Ocelot
+    			world.spawn(Loc, CraftOcelot.class);
+    			break;
+    		case 120:
+    			//spawn Villager
+    			world.spawn(Loc, CraftVillager.class);
+    			break;
+    		default:
+    			plugin.logSevere("[Cannons] ID: " + data + " for Monster egg not found");
     	}
     }
     
     //####################################  makeBlockPlace ##############################
-    private void makeBlockPlace(Location impactLoc, Location Loc, Projectile projectile)
+    private void makeBlockPlace(Location impactLoc, Location Loc, FlyingProjectile cannonball)
     {
+    	Projectile projectile = cannonball.projectile;
+    	
 		Block block = Loc.getBlock();
 		if (block.getType() == Material.AIR)
 		{
 			if (checkLineOfSight(impactLoc, Loc) == 0)
 			{
-				//check if Material is no mob egg
 				if (projectile == null) return;
-				if (projectile.placeBlockMaterialId != 0)
+				if (projectile.placeBlockMaterialId == 0) return;
+				
+				//check if Material is no mob egg
+				if (projectile.isMobEgg())
 				{
-					if (projectile.isMobEgg())
+					//else place mob
+					PlaceRandomMob(Loc, projectile.placeBlockMaterialData);
+				}
+				else
+				{
+					if (cannonball.snowball.getShooter() instanceof Player)
 					{
-						//else place mob
-						PlaceRandomMob(Loc);
-					}
-					else
-					{
-						//replace block (air with blocktype)
+						Player player = (Player) cannonball.snowball.getShooter();
+						//replace air
 						block.setTypeId(projectile.placeBlockMaterialId);
 						block.setData((byte) projectile.placeBlockMaterialData);
+						BlockPlaceEvent event = new BlockPlaceEvent(block, block.getState(), block.getRelative(BlockFace.DOWN), null, player, true);
+						if (event.isCancelled())
+						{
+							//place air again
+							block.setTypeId(0);
+						}
 					}
 				}
 			}
@@ -222,8 +390,10 @@ public class CreateExplosion {
     }
     
 	//####################################  spreadBlocks ##############################
-    private void spreadBlocks(Location impactLoc, Projectile projectile)
+    private void spreadBlocks(Location impactLoc, FlyingProjectile cannonball)
     {
+    	Projectile projectile = cannonball.projectile;
+    	
     	if (projectile.placeBlock == true)
     	{
     		double spread = projectile.placeBlockRadius;
@@ -271,7 +441,7 @@ public class CreateExplosion {
     			if (finished == true)
     			{
     				i++;
-    				makeBlockPlace(impactLoc, block.getLocation(), projectile);
+    				makeBlockPlace(impactLoc, block.getLocation(), cannonball);
     			}
     		} while (iterations1 < maxPlacement * 2 && i < maxPlacement);
     	}  	
@@ -393,15 +563,11 @@ public class CreateExplosion {
     	Location impactLoc = blockBreaker(cannonball);
     	
     	//get world
-    	World world = impactLoc.getWorld();
-    	plugin.logDebug("CWorld");
-    	
+    	World world = impactLoc.getWorld();  
     	CraftWorld cworld = (CraftWorld) world;
-    	plugin.logDebug("Worldserver");
-    	
     	WorldServer worldserver = cworld.getHandle();
     	
-    	plugin.logDebug("World found");
+   
     	
     	//teleport snowball to impact
     	cannonball.snowball.teleport(impactLoc);
@@ -413,25 +579,24 @@ public class CreateExplosion {
 		{
 			//canister shot - no explosion
 			entity = cannonball.snowball.getNearbyEntities(2, 2, 2);
+			
+			//face explosion
+			world.createExplosion(impactLoc, 0F);
 		}
 		else 
 		{
 			//normal shot + explosion
 			entity = cannonball.snowball.getNearbyEntities(20, 20, 20);
 			
-		   	plugin.logDebug("spawn tnt");
 			//spawn tnt and set event
 	    	TNTPrimed tnt = world.spawn(impactLoc, TNTPrimed.class);
-	    	
-	       	plugin.logDebug("explosion");
 	    	worldserver.createExplosion(((CraftEntity) tnt).getHandle(), impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, cannonball.projectile.incendiary, true);
-	       	plugin.logDebug("kill tnt");
 	    	tnt.remove();
 		}
 		
 		
 		//place blocks around the impact like webs, lava, water
-		spreadBlocks(impactLoc, cannonball.projectile);
+		spreadBlocks(impactLoc, cannonball);
 		
 		Iterator<Entity> it = entity.iterator();
 		while (it.hasNext())

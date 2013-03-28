@@ -3,7 +3,6 @@ package at.pavlov.Cannons.listener;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,9 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
-import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -50,6 +47,7 @@ public class PlayerListener implements Listener
 {
 	private Config config;
 	private UserMessages userMessages;
+	@SuppressWarnings("unused")
 	private Cannons plugin;
 	private CannonManager cannonManager;
 	private InventoryManagement InvManage;
@@ -101,114 +99,45 @@ public class PlayerListener implements Listener
 	}
 
 	// ########### EntityExplode #######################################
-	@EventHandler(priority = EventPriority.HIGHEST)
 	public void EntityExplode(EntityExplodeEvent event)
 	{
-		/*
-		//map explosions to TNT event
-		if (config.forceTNTexplosion)
-		{
-			if((event.getEntity() ==  null || event.getEntity() instanceof Snowball) && !event.blockList().isEmpty())
-			{
-				Location eventLoc = event.getLocation();
-				TNTPrimed tnt = eventLoc.getWorld().spawn(eventLoc, TNTPrimed.class);
-				//new event
-				EntityExplodeEvent newEvent = new EntityExplodeEvent(tnt,eventLoc, event.blockList(), 0.3f);
-				plugin.getServer().getPluginManager().callEvent(newEvent);
-			
-				tnt.remove();
-				if (newEvent.isCancelled() == true)
-				{
-					event.setCancelled(newEvent.isCancelled());
-					event.blockList().clear();
-				}
-			}
-		}*/
-		
-		
-		// handle normal events not canceled
-		if (!event.isCancelled())
-		{
-			List<Block> blocks = event.blockList();
+		List<Block> blocks = event.blockList();
 
-			// protect the cannon from explosion
-			for (int i = 0; i < blocks.size(); i++)
-			{
-				Block block = blocks.get(i);
+		// protect the cannon from explosion
+		for (int i = 0; i < blocks.size(); i++)
+		{
+			Block block = blocks.get(i);
 				
-				// if it is a cannon block
-				if (cannonManager.isCannonBlock(block.getLocation()))
+			// if it is a cannon block
+			if (cannonManager.isCannonBlock(block.getLocation()))
+			{
+				Entity explosionEntity = event.getEntity();
+				if (explosionEntity == null)
 				{
-					Entity explosionEntity = event.getEntity();
-					if (explosionEntity == null)
+					// dont allow this event to break a cannon
+					blocks.remove(i--);
+				}
+				else
+				{
+					// get distance to the impact
+					Location impact = explosionEntity.getLocation();
+					double distance = impact.distance(block.getLocation());
+					if (distance < 2)
 					{
-						// dont allow this event to break a cannon
-						blocks.remove(i--);
+						// closer impact will break the cannon
+						cannonManager.removeCannon(block.getLocation());
 					}
 					else
 					{
-						// get distance to the impact
-						Location impact = explosionEntity.getLocation();
-						double distance = impact.distance(block.getLocation());
-						if (distance < 2)
-						{
-							// closer impact will break the cannon
-							cannonManager.removeCannon(block.getLocation());
-						}
-						else
-						{
-							// impact farther away will not destroy the cannon
-							blocks.remove(i--);
-						}
-					}
-				}
-			}
-
-			// break water, lava, obsidian if cannon projectile
-			for (int i = 0; i < blocks.size(); i++)
-			{
-				Block block = blocks.get(i);
-				if (event.getEntity() != null)
-				{
-					block = blocks.get(i);
-					if (event.getEntity().toString().equals("CraftSnowball"))
-					{
-						Material material = block.getType();
-						if ((material == Material.OBSIDIAN || material == Material.WATER || material == Material.LAVA))
-						{
-							// break Obsidian if no other plugin is loaded
-							if (plugin.BlockBreakPluginLoaded() == false)
-							{
-								BlockBreak(block,event.getYield());
-							}
-						}
-						else
-						{
-							if (plugin.BlockBreakPluginLoaded() == false)
-							{
-								BlockBreak(block,event.getYield());
-							}
-						}
+						// impact farther away will not destroy the cannon
+						blocks.remove(i--);
 					}
 				}
 			}
 		}
-		
-
 	}
 	
-	private void BlockBreak(Block block, float yield)
-	{
-		Random r = new Random();
-		if (r.nextFloat() > yield) 
-		{
-			block.breakNaturally();
-		}
-		else
-		{
-			block.setTypeId(0);
-		}
-	}
+
 
 	// ########### BlockPistonRetract #######################################
 	@EventHandler
@@ -292,6 +221,7 @@ public class PlayerListener implements Listener
 	@EventHandler
 	public void BlockPlace(BlockPlaceEvent event)
 	{
+
 		// Cannon building complete - Checks also for permissions redstonetorches
 		if (config.isCannonBlock(event.getBlockPlaced()))
 		{
@@ -314,10 +244,8 @@ public class PlayerListener implements Listener
 			// will check for redstonetorches and delete them
 
 			cannonManager.getCannon(barrel, event.getPlayer());
-			
-			return;
 		}
-		
+
 		
 		// delete place projectile if clicked against the barrel
 		if (event.getBlockAgainst() != null)
@@ -326,7 +254,7 @@ public class PlayerListener implements Listener
 			{
 				Location barrel = event.getBlockAgainst().getLocation();
 				// check if block is cannonblock
-				if (cannonManager.isCannonBlock(barrel) == true)
+				if (cannonManager.isCannonBlock(barrel) == true && cannonManager.isPartOfCannon(event.getBlock().getLocation()) == false)
 				{
 					// delete projectile
 					if (CheckLoadedProjectile(event.getBlock()))
@@ -335,7 +263,13 @@ public class PlayerListener implements Listener
 					}
 				}
 			}
+			
 		}
+		
+
+		
+		
+	
 
 		// Place redstonetorch next to the cannon
 		if (event.getBlockPlaced().getType() == Material.REDSTONE_TORCH_ON || event.getBlockPlaced().getType() == Material.REDSTONE_TORCH_OFF)

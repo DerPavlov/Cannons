@@ -148,17 +148,18 @@ public class FireCannon {
     {	
     	Projectile projectile = config.getProjectile(cannon.projectileID, cannon.projectileData);
     	
-		Block Block = cannon.firingLocation.getBlock();
-		Location loc = Block.getRelative(cannon.face).getLocation();
-		World world = loc.getWorld();
-		loc.setX(loc.getX()+0.5);
-		loc.setY(loc.getY()+0.5);
-		loc.setZ(loc.getZ()+0.5);
+		Block block = cannon.firingLocation.getBlock();
+		Location firingLoc = block.getRelative(cannon.face,2).getLocation();
+		World world = firingLoc.getWorld();
+		firingLoc.setX(firingLoc.getX()+0.5);
+		firingLoc.setY(firingLoc.getY()+0.5);
+		firingLoc.setZ(firingLoc.getZ()+0.5);
     	
 		//Muzzle flash + Muzzle_displ
 		if (config.Muzzle_flash == true)
 		{
-			cannon.firingLocation.getWorld().createExplosion(Block.getRelative(cannon.face, config.Muzzle_displ).getLocation(), 0F);
+			world.createExplosion(firingLoc, 0F);
+			world.playEffect(firingLoc, Effect.SMOKE, cannon.face);
 		}
 		
 		int max_projectiles = 1;
@@ -177,7 +178,7 @@ public class FireCannon {
 		{
     		FlyingProjectile cannonball = new FlyingProjectile();
     		cannonball.projectile = projectile;
-    		cannonball.snowball = world.spawn(loc, Snowball.class);
+    		cannonball.snowball = world.spawn(firingLoc, Snowball.class);
     		cannonball.snowball.setFireTicks(100);
     		cannonball.snowball.setTicksLived(2);
     		
