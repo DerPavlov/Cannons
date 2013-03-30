@@ -243,7 +243,7 @@ public class PlayerListener implements Listener
 			}
 			// will check for redstonetorches and delete them
 
-			cannonManager.getCannon(barrel, event.getPlayer());
+			cannonManager.getCannon(barrel, event.getPlayer().getName());
 		}
 
 		
@@ -283,7 +283,7 @@ public class PlayerListener implements Listener
 					if (config.isCannonBarrel(b))
 					{
 						Location loc = b.getLocation();
-						if (cannonManager.getCannon(loc, event.getPlayer()) != null)
+						if (cannonManager.getCannon(loc, event.getPlayer().getName()) != null)
 						{
 							event.getPlayer().sendMessage(userMessages.ErrorPermRestoneTorch);
 							event.setCancelled(true);
@@ -306,7 +306,7 @@ public class PlayerListener implements Listener
 					if (b.getType() == Material.STONE_BUTTON)
 					{
 						Location loc = b.getLocation();
-						if (cannonManager.getCannon(loc, event.getPlayer()) != null)
+						if (cannonManager.getCannon(loc, event.getPlayer().getName()) != null)
 						{
 							event.getPlayer().sendMessage(userMessages.ErrorPermRestoneTorch);
 							event.setCancelled(true);
@@ -324,7 +324,7 @@ public class PlayerListener implements Listener
 		{
 			// check cannon
 			Location loc = event.getBlockAgainst().getLocation();
-			if (cannonManager.getCannon(loc, event.getPlayer()) != null)
+			if (cannonManager.getCannon(loc, event.getPlayer().getName()) != null)
 			{
 				event.setCancelled(true);
 			}
@@ -450,7 +450,7 @@ public class PlayerListener implements Listener
 				Location barrel = clickedBlock.getLocation();
 
 				// find cannon or add it to the list
-				CannonData cannon = cannonManager.getCannon(barrel, player);
+				CannonData cannon = cannonManager.getCannon(barrel, player.getName());
 				if (cannon == null)
 					return;
 				

@@ -55,7 +55,11 @@ public class CannonManager
 		if (cannon != null)
 		{
 			// send message to the owner
-			Player player = Bukkit.getPlayer(cannon.owner);
+			Player player = null;
+			if (cannon.owner != null)
+			{
+				player = Bukkit.getPlayer(cannon.owner);
+			}
 			if (player != null)
 				player.sendMessage(message.cannonDestroyed);
 			
@@ -183,7 +187,7 @@ public class CannonManager
 	 * @param player
 	 * @return
 	 */
-	public CannonData getCannon(Location cannonBlock, Player player)
+	public CannonData getCannon(Location cannonBlock, String owner)
 	{
 		CannonData cannon = getCannonFromStorage(cannonBlock);
 		
@@ -207,11 +211,16 @@ public class CannonManager
 		else
 		{
 			// no existing cannon in storage -> check if there is a cannon
+			Player player = null;
+			if (owner != null)
+			{
+				player = Bukkit.getPlayer(owner);
+			}
 			CannonAttribute attribute = check_Cannon(cannonBlock, player);
 			if (attribute.find == true)
 			{
 				// cannon found -> add cannon
-				return addCannon(attribute, player);
+				return addCannon(attribute, owner);
 			}
 		}
 
@@ -387,24 +396,14 @@ public class CannonManager
 	}
 
 	// #################################### ADD_CANNON ######################
-	private CannonData addCannon(CannonAttribute att_cannon, Player player)
+	private CannonData addCannon(CannonAttribute att_cannon, String owner)
 	{
-		// check if player is allowed to build a new cannon
-		boolean create = true;
-		if (config.enableLimits == true)
-		{
-			create = CheckCannonsAmount(player);
-		}
-		if (create == true)
-		{
-			// add
+	
+			// create a new cannon
 			CannonData new_cannon = new CannonData();
 
-			if (player != null)
-			{
-				new_cannon.owner = player.getName();
-				new_cannon.name = newCannonName(new_cannon.owner);
-			}
+
+				
 			new_cannon.firingLocation = att_cannon.barrel;
 			new_cannon.face = att_cannon.face;
 			new_cannon.barrel_length = att_cannon.barrel_length;
@@ -413,10 +412,10 @@ public class CannonManager
 			//search if there is a entry with this name written on the sign of the cannon with the same length
 			CannonData old_cannon = getCannonFromStorage(new_cannon.getCannonNameFromSign(), new_cannon.getOwnerFromSign());
 
-			
+			//there is a cannon with this name in the storage -> update entry
 			if (old_cannon != null && old_cannon.barrel_length == new_cannon.barrel_length)
 			{
-				//there is a cannon with this name in the storage -> update entry
+				
 				old_cannon.firingLocation = new_cannon.firingLocation;
 				old_cannon.face = new_cannon.face;
 
@@ -428,30 +427,44 @@ public class CannonManager
 				old_cannon.updateCannonSigns();
 				return old_cannon;
 			}
+			//no cannon stored, this is a new cannon - make a new entry
 			else
 			{
 				//there needs to be a player to create a cannon
-				if (player == null ) return null;
+				if (owner == null ) return null;
 				
-				new_cannon.LastFired = 0;
-				new_cannon.gunpowder = 0;
-				new_cannon.projectileID = Material.AIR.getId();
-				new_cannon.projectileData = 0;
-				new_cannon.horizontal_angle = 0;
-				new_cannon.vertical_angle = 0;
-				new_cannon.designId = 0; // not used at the moment
-				new_cannon.isValid = true;
+				Player player = Bukkit.getPlayer(owner);
 				
-				// add cannon blocks
-				new_cannon = addCannonBlocks(new_cannon);
-				// add cannon
-				createCannon(new_cannon, player);
+				// check if player is allowed to build a new cannon
+				boolean create = true;
+				if (config.enableLimits == true)
+				{
+					create = CheckCannonsAmount(player);
+				}
+				if (create == true)
+				{
+					new_cannon.owner = owner;
+					new_cannon.name = newCannonName(owner);
+					new_cannon.LastFired = 0;
+					new_cannon.gunpowder = 0;
+					new_cannon.projectileID = Material.AIR.getId();
+					new_cannon.projectileData = 0;
+					new_cannon.horizontal_angle = 0;
+					new_cannon.vertical_angle = 0;
+					new_cannon.designId = 0; // not used at the moment
+					new_cannon.isValid = true;
+				
+					// add cannon blocks
+					new_cannon = addCannonBlocks(new_cannon);
+					// add cannon
+					createCannon(new_cannon, player);
 
-				new_cannon.updateCannonSigns();
-				return new_cannon;
-			}
+					new_cannon.updateCannonSigns();
+					return new_cannon;
+				}
 			
-		}
+			}
+
 		return null;
 	}
 
@@ -637,6 +650,7 @@ public class CannonManager
 			CannonData next = iter.next();
 			if (next.owner.equals(owner))
 			{
+				next.destroyCannon();
 				iter.remove();
 			}
 		}

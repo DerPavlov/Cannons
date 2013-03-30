@@ -42,13 +42,14 @@ public class PersistenceDatabase
 				World world = Bukkit.getWorld(bean.getWorld());
 				if (world == null)
 				{
-					plugin.logSevere("World for cannon not found");
+					plugin.logSevere("World '" + bean.getWorld() + "' for cannon not found");
 				}
 				else
 				{
 					Location loc = new Location(world, bean.getLocX(), bean.getLocY(), bean.getLocZ());
+					
 					// find the cannon to this block
-					CannonData cannonData = plugin.getCannonManager().getCannon(loc);
+					CannonData cannonData = plugin.getCannonManager().getCannon(loc, bean.getOwner());
 
 					if (cannonData != null)
 					{
@@ -70,7 +71,7 @@ public class PersistenceDatabase
 					else
 					{
 						// no cannon found at this position
-						plugin.logSevere("Unable to find cannon at " + loc.toString());
+						plugin.logInfo("Unable to find cannon at x:" + loc.getX() + " y:" + loc.getY() + " z:" + loc.getZ());
 					}
 				}
 

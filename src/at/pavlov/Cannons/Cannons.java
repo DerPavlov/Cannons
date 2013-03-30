@@ -1,5 +1,6 @@
 package at.pavlov.Cannons;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ import at.pavlov.Cannons.dao.PersistenceDatabase;
 import at.pavlov.Cannons.listener.Commands;
 import at.pavlov.Cannons.listener.PlayerListener;
 import at.pavlov.Cannons.listener.SignListener;
+import at.pavlov.Cannons.mcstats.Metrics;
 import at.pavlov.Cannons.utils.InventoryManagement;
 
 public class Cannons extends JavaPlugin
@@ -128,8 +130,15 @@ public class Cannons extends JavaPlugin
 			}, 6000L, 6000L);
 			//.Formatter:on
 			
+			try {
+			    Metrics metrics = new Metrics(this);
+			    metrics.start();
+			} catch (IOException e) {
+			    // Failed to submit the stats :-(
+			}
+			
 			// Plugin succesfully enabled
-			System.out.print(String.format("[%s v%s] has been succesfully enabled!", getDescription().getName(), getDescription().getVersion()));
+			//System.out.print(String.format("[%s v%s] has been succesfully enabled!", getDescription().getName(), getDescription().getVersion()));
 
 
 		}
