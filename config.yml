@@ -302,6 +302,8 @@ glass:
     
 tnt:
   name: timefused cannonball
+  id: 46
+  data: 0
   player damage: 46
   max speed: 3
   cannonball:
@@ -436,7 +438,7 @@ redstone:
     
 blaze_powder:
   name: incinerating cannonball
-  id: 369
+  id: 377
   data: 0
   player damage: 8
   max speed: 5
