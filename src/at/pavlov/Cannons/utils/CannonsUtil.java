@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
 
@@ -118,4 +119,33 @@ public class CannonsUtil
 	        e.printStackTrace();
 	    }
 	}
+	
+	
+	/**
+	 * rotates the direction by 90°	
+	 * @param face
+	 * @return
+	 */
+	public static BlockFace roatateFace(BlockFace face)
+	{
+		if (face.equals(BlockFace.NORTH)) return BlockFace.EAST;
+		if (face.equals(BlockFace.EAST)) return BlockFace.SOUTH;
+		if (face.equals(BlockFace.SOUTH)) return BlockFace.WEST;
+		if (face.equals(BlockFace.WEST)) return BlockFace.NORTH;
+		return BlockFace.UP;
+	}
+	
+	/**
+	 * returns a new Itemstack
+	 * @param id
+	 * @param data
+	 * @param amount
+	 * @return
+	 */
+	public static ItemStack newItemStack(int id, int data, int amount)
+	{
+		ItemStack item = new ItemStack(id, amount, (short) data);
+		return item;
+	}
+
 }

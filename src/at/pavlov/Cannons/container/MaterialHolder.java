@@ -1,5 +1,7 @@
 package at.pavlov.Cannons.container;
 
+import org.bukkit.inventory.ItemStack;
+
 import com.sk89q.worldedit.blocks.BaseBlock;
 
 //small class as container for item id and data
@@ -17,6 +19,11 @@ public class MaterialHolder
 	public BaseBlock toBaseBlock()
 	{
 		return new BaseBlock(id, data);
+	}
+	
+	public ItemStack toItemStack(int amount)
+	{
+		return new ItemStack(id, amount, (short) data);
 	}
 	
 	public int getId()

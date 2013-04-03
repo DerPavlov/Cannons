@@ -10,7 +10,7 @@ import org.bukkit.World;
 import com.avaje.ebean.Query;
 
 import at.pavlov.Cannons.Cannons;
-import at.pavlov.Cannons.cannon.CannonData;
+import at.pavlov.Cannons.cannon.Cannon;
 
 public class PersistenceDatabase
 {
@@ -50,24 +50,24 @@ public class PersistenceDatabase
 					Location loc = new Location(world, bean.getLocX(), bean.getLocY(), bean.getLocZ());
 					
 					// find the cannon to this block
-					CannonData cannonData = plugin.getCannonManager().getCannon(loc, bean.getOwner());
+					Cannon Cannon = plugin.getCannonManager().getCannon(loc, bean.getOwner());
 
-					if (cannonData != null)
+					if (Cannon != null)
 					{
 						// cannon found - load properties
-						cannonData.id = bean.getId();
-						cannonData.name = bean.getName();
-						cannonData.owner = bean.getOwner();
-						cannonData.gunpowder = bean.getGunpowder();
-						cannonData.projectileID = bean.getProjectileID();
-						cannonData.projectileData = bean.getProjectileData();
-						cannonData.horizontal_angle = bean.getHorizontalAngle();
-						cannonData.vertical_angle = bean.getVerticalAngle();
-						cannonData.designId = bean.getDesignId();
-						cannonData.isValid = bean.isValid();
+						Cannon.setId(bean.getId());
+						Cannon.setName(bean.getName());
+						Cannon.setOwner(bean.getOwner());
+						Cannon.setLoadedGunpowder(bean.getGunpowder());
+						Cannon.setProjectileID(bean.getProjectileID());
+						Cannon.setProjectileData(bean.getProjectileData());
+						Cannon.setHorizontalAngle(bean.getHorizontalAngle());
+						Cannon.setVerticalAngle(bean.getVerticalAngle());
+						Cannon.setDesignID(bean.getDesignId());
+						Cannon.setValid(bean.isValid());
 						
 						//update sign
-						cannonData.updateCannonSigns();
+						Cannon.updateCannonSigns();
 					}
 					else
 					{
@@ -91,10 +91,10 @@ public class PersistenceDatabase
 		obsoleteIdList = plugin.getDatabase().find(CannonBean.class).findIds();
 		
 		// get list of all cannons
-		List<CannonData> cannonList = plugin.getCannonManager().getCannonList();
+		List<Cannon> cannonList = plugin.getCannonManager().getCannonList();
 
 		// save all cannon to database
-		for (CannonData cannon : cannonList)
+		for (Cannon cannon : cannonList)
 		{
 			saveCannon(cannon);
 		}
@@ -112,10 +112,10 @@ public class PersistenceDatabase
 		
 	}
 
-	private void saveCannon(CannonData cannon)
+	private void saveCannon(Cannon cannon)
 	{
 		//search if the is cannon already stored in the database
-		CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.id).findUnique();
+		CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.getId()).findUnique();
 		
 		if (bean == null)
 		{
@@ -124,38 +124,30 @@ public class PersistenceDatabase
 			// fill the bean with values to store
 			// since bukkit manages the bean, we do not need to set
 			// the ID property
-			bean.setOwner(cannon.owner);
-			bean.setWorld(cannon.firingLocation.getWorld().getName());
-			// get one Cannonblock
-			if (cannon.getCannonBlocks().size() > 0)
-			{
-				bean.setLocX(cannon.getCannonBlocks().get(0).getBlockX());
-				bean.setLocY(cannon.getCannonBlocks().get(0).getBlockY());
-				bean.setLocZ(cannon.getCannonBlocks().get(0).getBlockZ());
-			}
-			else
-			{
-				bean.setLocX(cannon.firingLocation.getBlockX());
-				bean.setLocY(cannon.firingLocation.getBlockY());
-				bean.setLocZ(cannon.firingLocation.getBlockZ());
-			}
+			bean.setOwner(cannon.getOwner());
+			bean.setWorld(cannon.getWorld());
+			// save offset
+			bean.setLocX(cannon.getOffset().getBlockX());
+			bean.setLocY(cannon.getOffset().getBlockY());
+			bean.setLocZ(cannon.getOffset().getBlockZ());
+		
 		}
 		
-		bean.setName(cannon.name);
-		bean.setGunpowder(cannon.gunpowder);
-		bean.setProjectileID(cannon.projectileID);
-		bean.setProjectileData(cannon.projectileData);
-		bean.setHorizontalAngle(cannon.horizontal_angle);
-		bean.setVerticalAngle(cannon.vertical_angle);
-		bean.setDesignId(cannon.designId);
-		bean.setValid(cannon.isValid);
+		bean.setName(cannon.getName());
+		bean.setGunpowder(cannon.getLoadedGunpowder());
+		bean.setProjectileID(cannon.getProjectileID());
+		bean.setProjectileData(cannon.getProjectileData());
+		bean.setHorizontalAngle(cannon.getHorizontalAngle());
+		bean.setVerticalAngle(cannon.getVerticalAngle());
+		bean.setDesignId(cannon.getDesignID());
+		bean.setValid(cannon.isValid());
 
 		// store the bean
 		plugin.getDatabase().save(bean);
-		cannon.id = bean.getId();
+		cannon.setId(bean.getId());
 		
 		//this cannons is not obsolete - remove it from the list
-		removeObsoleteID(cannon.id);
+		removeObsoleteID(cannon.getId());
 	}
 	
 	private void removeObsoleteID(int id)

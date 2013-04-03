@@ -21,7 +21,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import at.pavlov.Cannons.cannon.CannonData;
+import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.inventory.InventoryManagement;
@@ -34,7 +34,6 @@ public class FireCannon {
 	
 	private Config config;
 	private UserMessages userMessages;
-	private InventoryManagement InvManage;
 	private Cannons plugin;
 	private CreateExplosion explosion;
 	
@@ -43,12 +42,11 @@ public class FireCannon {
 	
 	
 	
-	public FireCannon(Cannons plugin, Config config, UserMessages userMessages, InventoryManagement invManage, CreateExplosion explosion)
+	public FireCannon(Cannons plugin, Config config, UserMessages userMessages, CreateExplosion explosion)
 	{
 		this.plugin = plugin;
 		this.config = config;
 		this.userMessages = userMessages;
-		this.InvManage = invManage;
 		this.explosion = explosion;
 	}
 	
@@ -58,7 +56,7 @@ public class FireCannon {
 	}
 	
 	//################################### PREPARE_FIRE #################################
-	public boolean displayPrepareFireMessage(CannonData cannon_loc, Player player)
+	public boolean displayPrepareFireMessage(Cannon cannon, Player player)
 	{
 		if (player!= null)
 		{
@@ -68,17 +66,17 @@ public class FireCannon {
 				return false;
 			}
 		}
-		if (cannon_loc.gunpowder <= 0)
+		if (cannon.getLoadedGunpowder() <= 0)
 		{
 			if (player != null) player.sendMessage(userMessages.NoSulphur);
 			return false;
 		}
-		if(cannon_loc.projectileID == Material.AIR.getId())
+		if(cannon.getProjectileID() == Material.AIR.getId())
 		{
 			if (player != null) player.sendMessage(userMessages.NoProjectile);
 			return false;
 		}	
-		if (cannon_loc.LastFired + config.fireDelay*1000 >= System.currentTimeMillis())
+		if (cannon.getLastFired() + config.fireDelay*1000 >= System.currentTimeMillis())
 		{
 			if (player != null) player.sendMessage(userMessages.BarrelTooHot);
 			return false;
@@ -87,9 +85,9 @@ public class FireCannon {
 	}
 	
 	//################################### PREPARE_FIRE #################################
-	public boolean prepare_fire(CannonData cannon_loc, Player player, Boolean deleteCharge)
+	public boolean prepare_fire(Cannon cannon, Player player, Boolean deleteCharge)
 	{		
-		if (displayPrepareFireMessage(cannon_loc, player) == false) return false;
+		if (displayPrepareFireMessage(cannon, player) == false) return false;
 		
 		//check if player or redstone has fired the gun
 		if (player != null)
@@ -100,7 +98,7 @@ public class FireCannon {
 				player.sendMessage(userMessages.FireGun);
 				
 				//Player fires the gun
-				delayedFire(cannon_loc, player, deleteCharge);
+				delayedFire(cannon, player, deleteCharge);
 
 			}
 			else
@@ -111,27 +109,31 @@ public class FireCannon {
 		else
 		{
 			//redstone fire
-			delayedFire(cannon_loc, player,deleteCharge);
+			delayedFire(cannon, player,deleteCharge);
 		}	
 		
 		return true;
 	}
 	
 	//####################################  DELAYED FIRE  ##############################
-    private void delayedFire(CannonData cannon_loc, Player player, Boolean deleteCharge)
+    private void delayedFire(Cannon cannon, Player player, Boolean deleteCharge)
     {
 		//reset after firing
-		cannon_loc.LastFired =  System.currentTimeMillis();
+		cannon.setLastFired(System.currentTimeMillis());
 		
 		//Set up smoke effects on the torch
-		Location torchLoc = cannon_loc.firingLocation.getBlock().getRelative(cannon_loc.face.getOppositeFace(),cannon_loc.barrel_length - 1).getRelative(BlockFace.UP, 1).getLocation().clone();
-		torchLoc.setX(torchLoc.getX() + 0.5);
-		torchLoc.setZ(torchLoc.getZ() + 0.5);
-		torchLoc.getWorld().playEffect(torchLoc, Effect.SMOKE, BlockFace.UP);
-		torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 1,1);
+		for (Location torchLoc : cannon.getFiringIndicator())
+		{
+			torchLoc.setX(torchLoc.getX() + 0.5);
+			torchLoc.setY(torchLoc.getY() + 1);
+			torchLoc.setZ(torchLoc.getZ() + 0.5);
+			torchLoc.getWorld().playEffect(torchLoc, Effect.SMOKE, BlockFace.UP);
+			torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 1,1);
+		}
+
 		
 		//set up delayed task
-		Object fireTask = new FireTaskWrapper(cannon_loc, player, deleteCharge);
+		Object fireTask = new FireTaskWrapper(cannon, player, deleteCharge);
 		Long delay = (long) config.ignitionDelay * 20;
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedFireTask(fireTask) 
 		{
@@ -144,23 +146,16 @@ public class FireCannon {
     }
 	
 	//####################################  FIRE  ##############################
-    private void fire(CannonData cannon, Player shooter, Boolean deleteCharge)
+    private void fire(Cannon cannon, Player shooter, Boolean deleteCharge)
     {	
-    	Projectile projectile = config.getProjectile(cannon.projectileID, cannon.projectileData);
+    	Projectile projectile = config.getProjectile(cannon.getProjectileID(), cannon.getProjectileData());
     	
-		Block block = cannon.firingLocation.getBlock();
-		Location firingLoc = block.getRelative(cannon.face,2).getLocation();
-		World world = firingLoc.getWorld();
-		firingLoc.setX(firingLoc.getX()+0.5);
-		firingLoc.setY(firingLoc.getY()+0.5);
-		firingLoc.setZ(firingLoc.getZ()+0.5);
+		Location firingLoc = cannon.getMuzzleLocation();
+		World world = cannon.getWorldBukkit();
     	
 		//Muzzle flash + Muzzle_displ
-		if (config.Muzzle_flash == true)
-		{
-			world.createExplosion(firingLoc, 0F);
-			world.playEffect(firingLoc, Effect.SMOKE, cannon.face);
-		}
+		world.createExplosion(firingLoc, 0F);
+		world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 		
 		int max_projectiles = 1;
 		if (projectile.canisterShot == true && projectile.cannonball == false)
@@ -260,13 +255,13 @@ public class FireCannon {
 		
 		
 		//reset after firing
-		cannon.LastFired =  System.currentTimeMillis();
+		cannon.setLastFired(System.currentTimeMillis());
 
 		if (deleteCharge)
 		{
 			//delete charge for human gunner
-			cannon.gunpowder = 0;
-			cannon.projectileID = Material.AIR.getId();
+			cannon.setLoadedGunpowder(0);
+			cannon.setProjectileID(Material.AIR.getId());
 			
 			//update Sign
 			cannon.updateCannonSigns();
@@ -277,11 +272,11 @@ public class FireCannon {
 			if (config.redstone_consumption == true)
 			{
 				//ammo is removed form chest
-				if (InvManage.removeAmmoFromChests(cannon, cannon.gunpowder, cannon.projectileID, cannon.projectileData) == false)
+				if (cannon.removeAmmoFromChests() == false)
 				{
 					//no more ammo in the chests - delete Charge
-	    			cannon.gunpowder = 0;
-	    			cannon.projectileID = Material.AIR.getId();
+	    			cannon.setLoadedGunpowder(0);
+	    			cannon.setProjectileID(Material.AIR.getId());
 	    			//update Sign
 	    			cannon.updateCannonSigns();
 				}

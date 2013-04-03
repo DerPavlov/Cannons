@@ -14,14 +14,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
 
-import at.pavlov.Cannons.cannon.CannonData;
+import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.utils.CannonsUtil;
 
 public class CannonManager
 {
-	private ArrayList<CannonData> CannonList = new  ArrayList<CannonData>();
+	private ArrayList<Cannon> CannonList = new  ArrayList<Cannon>();
 
 	private Cannons plugin;
 	private UserMessages message;
@@ -45,20 +45,20 @@ public class CannonManager
 	// ############### remove ###############################
 	public void removeCannon(Location loc)
 	{
-		CannonData cannon = getCannon(loc);
+		Cannon cannon = getCannon(loc);
 		removeCannon(cannon);
 	}
 	
 	// ############### remove ###############################
-	public void removeCannon(CannonData cannon)
+	public void removeCannon(Cannon cannon)
 	{
 		if (cannon != null)
 		{
 			// send message to the owner
 			Player player = null;
-			if (cannon.owner != null)
+			if (cannon.getOwner() != null)
 			{
-				player = Bukkit.getPlayer(cannon.owner);
+				player = Bukkit.getPlayer(cannon.getOwner());
 			}
 			if (player != null)
 				player.sendMessage(message.cannonDestroyed);
@@ -78,11 +78,11 @@ public class CannonManager
 	 */
 	private boolean isCannonNameUnique(String name, String owner)
 	{
-		for (CannonData cannon : CannonList)
+		for (Cannon cannon : CannonList)
 		{
-			if (cannon.name != null && name != null)
+			if (cannon.getName() != null && name != null)
 			{
-				if (cannon.name.equals(name))
+				if (cannon.getName().equals(name))
 				{
 					return false;
 				}
@@ -118,7 +118,7 @@ public class CannonManager
 
 
 	// ############### createCannon ###############################
-	private void createCannon(CannonData cannon, Player player)
+	private void createCannon(Cannon cannon, Player player)
 	{
 		CannonList.add(cannon);
 		if (player != null)
@@ -130,15 +130,15 @@ public class CannonManager
 	 * @param cannonName
 	 * @return
 	 */
-	public CannonData getCannonFromStorage(String cannonName, String owner)
+	public Cannon getCannonFromStorage(String cannonName, String owner)
 	{
 		if (cannonName == null || owner == null) return null;
 		
-		for (CannonData cannon : CannonList)
+		for (Cannon cannon : CannonList)
 		{
-			if (cannonName.equals(cannon.name))
+			if (cannonName.equals(cannon.getName()))
 			{
-				if (owner.equals(cannon.owner))
+				if (owner.equals(cannon.getOwner()))
 				{
 					return cannon;
 				}
@@ -154,9 +154,9 @@ public class CannonManager
 	 * @param loc
 	 * @return
 	 */
-	private CannonData getCannonFromStorage(Location loc)
+	private Cannon getCannonFromStorage(Location loc)
 	{
-		for (CannonData cannon : CannonList)
+		for (Cannon cannon : CannonList)
 		{
 			for (Location cannonBlock : cannon.getCannonBlocks())
 			{
@@ -174,7 +174,7 @@ public class CannonManager
 	 * @param loc
 	 * @return
 	 */
-	public CannonData getCannon(Location loc)
+	public Cannon getCannon(Location loc)
 	{
 		return getCannon(loc, null);
 	}
@@ -187,15 +187,15 @@ public class CannonManager
 	 * @param player
 	 * @return
 	 */
-	public CannonData getCannon(Location cannonBlock, String owner)
+	public Cannon getCannon(Location cannonBlock, String owner)
 	{
-		CannonData cannon = getCannonFromStorage(cannonBlock);
+		Cannon cannon = getCannonFromStorage(cannonBlock);
 		
 		// this block is a part of an existing cannon 
 		if (cannon != null)
 		{
 			// search cannon that is written on the sign
-			CannonData cannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
+			Cannon cannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
 
 			// check if the name matches with the attached sign or if the name is not valid
 			if (cannonFromSign == null || cannon.isCannonEqualSign() == true )
@@ -234,7 +234,7 @@ public class CannonManager
 	 */
 	public boolean isPartOfCannon(Location loc)
 	{
-		for (CannonData cannon : CannonList)
+		for (Cannon cannon : CannonList)
 		{
 			for (Location cannonblock : cannon.getCannonBlocks())
 			{
@@ -266,13 +266,13 @@ public class CannonManager
 	public int getCannonAmount(String player)
 	{	
 		int i = 1;
-		for (CannonData cannon: CannonList)
+		for (Cannon cannon: CannonList)
 		{
-			if (cannon.owner == null)
+			if (cannon.getOwner() == null)
 			{
 				plugin.logSevere("Cannon has no owner. Contact the plugin developer");
 			}
-			else if (cannon.owner.equalsIgnoreCase(player))
+			else if (cannon.getOwner().equalsIgnoreCase(player))
 			{
 				i++;
 			}
@@ -284,7 +284,7 @@ public class CannonManager
 	 * 
 	 * @return List of cannons
 	 */
-	public List<CannonData> getCannonList()
+	public List<Cannon> getCannonList()
 	{
 		return CannonList;
 	}
@@ -360,7 +360,7 @@ public class CannonManager
 	}
 
 	// #################################### addCannonBlocks #########################
-	private CannonData addCannonBlocks(CannonData cannon)
+	private Cannon addCannonBlocks(Cannon cannon)
 	{
 		if (cannon == null)
 			return null;
@@ -396,11 +396,11 @@ public class CannonManager
 	}
 
 	// #################################### ADD_CANNON ######################
-	private CannonData addCannon(CannonAttribute att_cannon, String owner)
+	private Cannon addCannon(CannonAttribute att_cannon, String owner)
 	{
 	
 			// create a new cannon
-			CannonData new_cannon = new CannonData();
+			Cannon new_cannon = new Cannon();
 
 
 				
@@ -410,7 +410,7 @@ public class CannonManager
 			
 			
 			//search if there is a entry with this name written on the sign of the cannon with the same length
-			CannonData old_cannon = getCannonFromStorage(new_cannon.getCannonNameFromSign(), new_cannon.getOwnerFromSign());
+			Cannon old_cannon = getCannonFromStorage(new_cannon.getCannonNameFromSign(), new_cannon.getOwnerFromSign());
 
 			//there is a cannon with this name in the storage -> update entry
 			if (old_cannon != null && old_cannon.barrel_length == new_cannon.barrel_length)
@@ -443,16 +443,16 @@ public class CannonManager
 				}
 				if (create == true)
 				{
-					new_cannon.owner = owner;
-					new_cannon.name = newCannonName(owner);
-					new_cannon.LastFired = 0;
-					new_cannon.gunpowder = 0;
-					new_cannon.projectileID = Material.AIR.getId();
-					new_cannon.projectileData = 0;
-					new_cannon.horizontal_angle = 0;
-					new_cannon.vertical_angle = 0;
-					new_cannon.designId = 0; // not used at the moment
-					new_cannon.isValid = true;
+					new_cannon.setOwner(owner);
+					new_cannon.setName(newCannonName(owner));
+					new_cannon.setLastFired(0);
+					new_cannon.setLoadedGunpowder(0);
+					new_cannon.setProjectileID(Material.AIR.getId());
+					new_cannon.setProjectileData(0);
+					new_cannon.setHorizontalAngle(0.0);
+					new_cannon.setVerticalAngle(0.0);
+					new_cannon.setDesignID(0);
+					new_cannon.setValid(true);
 				
 					// add cannon blocks
 					new_cannon = addCannonBlocks(new_cannon);
@@ -643,12 +643,12 @@ public class CannonManager
 	 */
 	public void deleteCannons(String owner)
 	{
-		Iterator<CannonData> iter = CannonList.iterator();
+		Iterator<Cannon> iter = CannonList.iterator();
 		
 		while(iter.hasNext())
 		{
-			CannonData next = iter.next();
-			if (next.owner.equals(owner))
+			Cannon next = iter.next();
+			if (next.getOwner().equals(owner))
 			{
 				next.destroyCannon();
 				iter.remove();

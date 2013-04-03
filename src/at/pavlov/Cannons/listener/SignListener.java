@@ -11,7 +11,7 @@ import org.bukkit.event.block.SignChangeEvent;
 
 import at.pavlov.Cannons.CannonManager;
 import at.pavlov.Cannons.Cannons;
-import at.pavlov.Cannons.cannon.CannonData;
+import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
 
@@ -51,10 +51,10 @@ public class SignListener implements Listener
 			
 
 			//get cannon from location and creates a cannon if not existing
-	        CannonData cannon = cannonManager.getCannon(cannonBlock.getLocation(), event.getPlayer().getName());
+	        Cannon cannon = cannonManager.getCannon(cannonBlock.getLocation(), event.getPlayer().getName());
 			
 	        //get cannon from the sign
-			CannonData cannonFromSign = cannonManager.getCannonFromStorage(event.getLine(0), event.getLine(1));
+			Cannon cannonFromSign = cannonManager.getCannonFromStorage(event.getLine(0), event.getLine(1));
 			
 			//if the sign is placed against a cannon - no problem
 			//if the sign has the name of other cannon - change it

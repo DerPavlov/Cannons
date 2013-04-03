@@ -9,7 +9,7 @@ import at.pavlov.Cannons.container.SimpleBlock;
 
 public class CannonBlocks
 {
-	private Vector rotationCenter;													//center off all rotation blocks
+	private Vector rotationCenter;														//center off all rotation blocks
     private Vector muzzle;																//center off all muzzle blocks - spawing Vector for snowball
     private ArrayList<SimpleBlock> allCannonBlocks = new ArrayList<SimpleBlock>();
     private ArrayList<Vector> loadingInterface = new ArrayList<Vector>();
@@ -22,6 +22,38 @@ public class CannonBlocks
     private ArrayList<Vector> rightClickTrigger = new ArrayList<Vector>();
     private ArrayList<Vector> firingIndicator = new ArrayList<Vector>();
     
+
+    /**
+     * returns true if this block is part of the loading interface
+     * @param loc
+     * @return
+     */
+    public boolean isLoadingInterface(Vector loc)
+    {
+    	for (Vector loadingBlock : loadingInterface)
+    	{
+    		if (loc.equals(loadingBlock))
+    		{
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * returns the location off one firing Trigger
+     * @param loc
+     * @return
+     */
+    public Vector getFiringTrigger()
+    {
+    	//return one tigger
+    	if (rightClickTrigger != null && rightClickTrigger.size() > 0)
+    		return rightClickTrigger.get(0);	
+    	if (redstoneTrigger != null && redstoneTrigger.size() > 0)
+        		return redstoneTrigger.get(0);
+        return null;	  	
+    }
     
 	public Vector getRotationCenter()
 	{

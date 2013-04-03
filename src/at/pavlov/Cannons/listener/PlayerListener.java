@@ -33,7 +33,7 @@ import at.pavlov.Cannons.CannonManager;
 import at.pavlov.Cannons.Cannons;
 import at.pavlov.Cannons.CreateExplosion;
 import at.pavlov.Cannons.FireCannon;
-import at.pavlov.Cannons.cannon.CannonData;
+import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.inventory.InventoryManagement;
@@ -55,7 +55,6 @@ public class PlayerListener implements Listener
 
 	public PlayerListener(Cannons plugin)
 	{
-		this.InvManage = plugin.getInvManage();
 		this.config = plugin.getmyConfig();
 		this.userMessages = plugin.getmyConfig().getUserMessages();
 		this.plugin = plugin;
@@ -129,7 +128,7 @@ public class PlayerListener implements Listener
 		if (event.isSticky() == true)
 		{
 			Location loc = event.getBlock().getRelative(event.getDirection(), 2).getLocation();
-			CannonData cannon = cannonManager.getCannon(loc);
+			Cannon cannon = cannonManager.getCannon(loc);
 			if (cannon != null)
 			{
 				cannonManager.removeCannon(cannon);
@@ -146,7 +145,7 @@ public class PlayerListener implements Listener
 		while (iter.hasNext())
 		{
 			// if moved block is cannonBlock delete cannon
-			CannonData cannon = cannonManager.getCannon(iter.next().getLocation());
+			Cannon cannon = cannonManager.getCannon(iter.next().getLocation());
 			if (cannon != null)
 			{
 				cannonManager.removeCannon(cannon);
@@ -171,7 +170,7 @@ public class PlayerListener implements Listener
 	{
 
 		// if deleted block is cannonBlock delete cannon
-		CannonData cannon = cannonManager.getCannon(event.getBlock().getLocation());
+		Cannon cannon = cannonManager.getCannon(event.getBlock().getLocation());
 		if (cannon != null)
 		{
 			cannonManager.removeCannon(cannon);
@@ -325,7 +324,7 @@ public class PlayerListener implements Listener
 				if (config.isCannonBarrel(b))
 				{	
 					Location barrel = b.getLocation();
-					CannonData cannon = cannonManager.getCannon(barrel);
+					Cannon cannon = cannonManager.getCannon(barrel);
 					if (cannon != null)
 					{
 						fireCannon.prepare_fire(cannon, null, !config.redstone_autoload);
@@ -346,7 +345,7 @@ public class PlayerListener implements Listener
 					if (b.getType() == Material.STONE_BUTTON)
 					{	
 						Location barrel = b.getLocation();
-						CannonData cannon = cannonManager.getCannon(barrel);
+						Cannon cannon = cannonManager.getCannon(barrel);
 						if (cannon != null)
 						{
 							fireCannon.prepare_fire(cannon, null, !config.redstone_autoload);
@@ -366,7 +365,7 @@ public class PlayerListener implements Listener
 				if (config.isCannonBarrel(block))
 				{
 					Location barrel = block.getLocation();
-					CannonData cannon = cannonManager.getCannon(barrel);
+					Cannon cannon = cannonManager.getCannon(barrel);
 					if (cannon != null)
 					{
 						fireCannon.prepare_fire(cannon, null, true);
@@ -431,7 +430,7 @@ public class PlayerListener implements Listener
 				Location barrel = clickedBlock.getLocation();
 
 				// find cannon or add it to the list
-				CannonData cannon = cannonManager.getCannon(barrel, player.getName());
+				Cannon cannon = cannonManager.getCannon(barrel, player.getName());
 				if (cannon == null)
 					return;
 				
@@ -449,7 +448,7 @@ public class PlayerListener implements Listener
 					if (CheckPermProjectile(player, cannon)) 
 					{
 						// load projectile
-						cannon.projectileID = ItemInHand.getId();
+						cannon.setProjectileID(ItemInHand.getId());
 						player.sendMessage(userMessages.getloadProjectile(ItemInHand.getId()));
 
 						InvManage.TakeFromPlayerInventory(player, config.inventory_take);
@@ -465,8 +464,8 @@ public class PlayerListener implements Listener
 				{
 					if (CheckPermSulphur(player, cannon)) 
 					{
-						cannon.gunpowder++;
-						player.sendMessage(userMessages.getloadGunpowder(cannon.gunpowder));
+						cannon.setLoadedGunpowder(cannon.getLoadedGunpowder() + 1);
+						player.sendMessage(userMessages.getloadGunpowder(cannon.getLoadedGunpowder()));
 						// take item from the player
 						InvManage.TakeFromPlayerInventory(player, config.inventory_take);
 						
@@ -515,14 +514,14 @@ public class PlayerListener implements Listener
 	 * @param cannon cannon to check
 	 * @return true if the player and cannons can load the projectile
 	 */
-	private boolean CheckPermProjectile(Player player, CannonData cannon)
+	private boolean CheckPermProjectile(Player player, Cannon cannon)
 	{
 		if (cannon.isLoaded())
 		{
-			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.gunpowder, cannon.projectileID));
+			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.getLoadedGunpowder(), cannon.getProjectileID()));
 			return false;
 		}
-		if (cannon.gunpowder == 0)
+		if (cannon.getLoadedGunpowder() == 0)
 		{
 			player.sendMessage(userMessages.NoSulphur);
 			return false;
@@ -547,26 +546,21 @@ public class PlayerListener implements Listener
 	 * @param cannon check if this cannon can be loaded
 	 * @return true if the cannon can be loaded
 	 */
-	private boolean CheckPermSulphur(Player player, CannonData cannon)
+	private boolean CheckPermSulphur(Player player, Cannon cannon)
 	{
 		if (cannon.isLoaded())
 		{
-			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.gunpowder, cannon.projectileID));
+			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.getLoadedGunpowder(), cannon.getProjectileID()));
 			return false;
 		}
 		
 		//check if there is a division by zero
 		int lengthDiff = (config.max_barrel_length - config.min_barrel_length);
 		if (lengthDiff == 0) lengthDiff=1;
-		// maximum loaded gunpowder depends on the length of the barrel
-		int max_gunpowder = config.max_gunpowder;
-		if (config.gunpowder_depends_on_length == true)
+		// maximum loaded gunpowder
+		if (cannon.getLoadedGunpowder() >= cannon.getMaxLoadableGunpowder())
 		{
-			max_gunpowder = 1 + (config.max_gunpowder - 1) * (cannon.barrel_length - config.min_barrel_length) / (config.max_barrel_length - config.min_barrel_length);
-		}
-		if (cannon.gunpowder >= max_gunpowder)
-		{
-			player.sendMessage(userMessages.getMaximumGunpowderLoaded(cannon.gunpowder));
+			player.sendMessage(userMessages.getMaximumGunpowderLoaded(cannon.getLoadedGunpowder()));
 			return false;
 		}
 		if (player.hasPermission("cannons.player.load") == false)

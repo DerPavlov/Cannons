@@ -18,7 +18,7 @@ timings:
   fuseBurnTime: 1
   barrelCooldownTime: 3
 angles:
-  defaulHorizonatalFacing: north
+  defaultHorizonatalFacing: north
   defaultVerticalAngle: 0.0
   maxHorizontalAngle: 45.0
   minHorizontalAngle: -45.0

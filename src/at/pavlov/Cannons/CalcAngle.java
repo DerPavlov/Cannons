@@ -10,9 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
 
-import at.pavlov.Cannons.cannon.CannonData;
+import at.pavlov.Cannons.cannon.Cannon;
+import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
+import at.pavlov.Cannons.utils.CannonsUtil;
 
 
 public class CalcAngle {
@@ -21,7 +23,7 @@ public class CalcAngle {
 	UserMessages userMessages;
 	Config config;
 	
-	HashMap<Player, CannonData> inAimingMode = new HashMap<Player, CannonData>();
+	HashMap<Player, Cannon> inAimingMode = new HashMap<Player, Cannon>();
 	
 	private class gunAngles
 	{
@@ -59,7 +61,7 @@ public class CalcAngle {
 		this.userMessages = userMessages;
 		this.config = config;
 		
-		inAimingMode = new HashMap<Player, CannonData>();
+		inAimingMode = new HashMap<Player, Cannon>();
 
 	}
 	
@@ -77,7 +79,7 @@ public class CalcAngle {
 	}
 	
 	//################# ChangeAngle #######################################################
-	public void ChangeAngle(CannonData cannon_loc, Action action, BlockFace clickedFace, Player player){
+	public void ChangeAngle(Cannon cannon_loc, Action action, BlockFace clickedFace, Player player){
 		if (action.equals(Action.RIGHT_CLICK_BLOCK )){
 			if (player.getItemInHand().getType() == Material.WATCH)
 			{
@@ -93,8 +95,10 @@ public class CalcAngle {
 	}
 	
 	//################# DisplayAngle #######################################################
-	private void DisplayAngle(CannonData cannon_loc, Action action, BlockFace clickedFace, Player player)
+	private void DisplayAngle(Cannon cannon, Action action, BlockFace clickedFace, Player player)
 	{
+		CannonDesign design = cannon.getCannonDesign();
+		
 		gunAngles angles = new gunAngles(0.0, 0.0);
 		//both horizontal and vertical angle will be displayed in one message
 		boolean combine = false;
@@ -113,13 +117,13 @@ public class CalcAngle {
 		if (player.getItemInHand().getType() == Material.WATCH)
 		{
 			//aiming mode
-			angles = CheckLookingDirection(cannon_loc, player.getLocation().getDirection());
+			angles = CheckLookingDirection(cannon, player.getLocation().getDirection());
 			combine = true;
 		}
 		else
 		{
 			//barrel clicked to change angle
-			angles = CheckBlockFace(clickedFace, cannon_loc.face, player.isSneaking());
+			angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking());
 			combine = false;
 		}
 		 
@@ -129,26 +133,26 @@ public class CalcAngle {
 			if (angles.getHorizontal() >= 0)
 			{
 				// right 
-				if (cannon_loc.horizontal_angle + config.angle_step <= config.max_h_angle)
+				if (cannon.getHorizontalAngle() + design.getAngleStepSize() <= design.getMaxHorizontalAngle())
 				{
-					cannon_loc.horizontal_angle += config.angle_step;
+					cannon.setHorizontalAngle(cannon.getHorizontalAngle() + design.getAngleStepSize());
 					hasChanged = true;
 					if (combine == false) 
 					{
-						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon_loc.horizontal_angle));
+						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon.getHorizontalAngle()));
 					}
 				}
 			}
 			else
 			{
 				// left 
-				if (cannon_loc.horizontal_angle - config.angle_step >= config.min_h_angle)
+				if (cannon.getHorizontalAngle() - design.getAngleStepSize() >= design.getMinHorizontalAngle())
 				{
-					cannon_loc.horizontal_angle -= config.angle_step;
+					cannon.setHorizontalAngle(cannon.getHorizontalAngle() - design.getAngleStepSize());
 					hasChanged = true;
 					if (combine == false) 
 					{
-						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon_loc.horizontal_angle));
+						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon.getHorizontalAngle()));
 					}
 				}
 			}
@@ -159,26 +163,26 @@ public class CalcAngle {
 			if (angles.getVertical() >= 0.0)
 			{
 				// up
-				if (cannon_loc.vertical_angle + config.angle_step <= config.max_v_angle)
+				if (cannon.getVerticalAngle() + design.getAngleStepSize() <= design.getMaxVerticalAngle())
 				{
-					cannon_loc.vertical_angle+= config.angle_step;
+					cannon.setVerticalAngle(cannon.getVerticalAngle() + design.getAngleStepSize());
 					hasChanged = true;
 					if (combine == false) 
 					{
-						player.sendMessage(userMessages.getSettingVerticalAngle(cannon_loc.vertical_angle));
+						player.sendMessage(userMessages.getSettingVerticalAngle(cannon.getVerticalAngle()));
 					}
 				}
 			}
 			else
 			{
 				// down
-				if (cannon_loc.vertical_angle - config.angle_step >= config.min_v_angle)
+				if (cannon.getVerticalAngle() - design.getAngleStepSize() >= design.getMaxVerticalAngle())
 				{
-					cannon_loc.vertical_angle -= config.angle_step;
+					cannon.setVerticalAngle(cannon.getVerticalAngle() - design.getAngleStepSize());
 					hasChanged = true;
 					if (combine == false) 
 					{
-						player.sendMessage(userMessages.getSettingVerticalAngle(cannon_loc.vertical_angle));
+						player.sendMessage(userMessages.getSettingVerticalAngle(cannon.getVerticalAngle()));
 					}		
 				}
 			}
@@ -187,7 +191,7 @@ public class CalcAngle {
 		//display the combined messages with both angles
 		if (combine == true && hasChanged == true)
 		{
-			player.sendMessage(userMessages.getSettingCombinedAngle(cannon_loc.horizontal_angle, cannon_loc.vertical_angle));
+			player.sendMessage(userMessages.getSettingCombinedAngle(cannon.getHorizontalAngle(), cannon.getVerticalAngle()));
 		}
 	}
 	
@@ -195,35 +199,35 @@ public class CalcAngle {
 	
 	
 	//############## CheckLookingDirection   ################################
-	private gunAngles CheckLookingDirection(CannonData cannon, Vector lookingDirection)
+	private gunAngles CheckLookingDirection(Cannon cannon, Vector lookingDirection)
 	{	
 		gunAngles returnValue = new gunAngles(0.0 ,0.0);
 		
 		//calc vertical angle difference
-		returnValue.setVertical((lookingDirection.getY() - Math.sin(cannon.vertical_angle * Math.PI / 180)) * 180 / Math.PI);
+		returnValue.setVertical((lookingDirection.getY() - Math.sin(cannon.getVerticalAngle() * Math.PI / 180)) * 180 / Math.PI);
 
 		
 		//calc horizontal angle difference
-		if (cannon.face == BlockFace.NORTH) 
+		if (cannon.getCannonDirection().equals(BlockFace.NORTH)) 
 		{
 			//vect = new Vector( -1.0f, 0, 0);
-			returnValue.setHorizontal( (-lookingDirection.getZ() - Math.sin(cannon.horizontal_angle * Math.PI / 180) ) * 180 / Math.PI);
+			returnValue.setHorizontal( (-lookingDirection.getZ() - Math.sin(cannon.getHorizontalAngle() * Math.PI / 180) ) * 180 / Math.PI);
 		}
-		else if (cannon.face == BlockFace.EAST) 
+		else if (cannon.getCannonDirection().equals(BlockFace.EAST)) 
 		{
 			//vect = new Vector(0 , 0, -1.0f);
-			returnValue.setHorizontal( (lookingDirection.getX() - Math.sin(cannon.horizontal_angle * Math.PI / 180) ) * 180 / Math.PI);
+			returnValue.setHorizontal( (lookingDirection.getX() - Math.sin(cannon.getHorizontalAngle() * Math.PI / 180) ) * 180 / Math.PI);
 		}
-		else if (cannon.face == BlockFace.SOUTH) 
+		else if (cannon.getCannonDirection().equals(BlockFace.SOUTH)) 
 		{
 			//vect = new Vector( 1.0f, 0, 0);
-			returnValue.setHorizontal( (lookingDirection.getZ() - Math.sin(cannon.horizontal_angle * Math.PI / 180) ) * 180 / Math.PI);
+			returnValue.setHorizontal( (lookingDirection.getZ() - Math.sin(cannon.getHorizontalAngle() * Math.PI / 180) ) * 180 / Math.PI);
 		}
-		else if (cannon.face == BlockFace.WEST) 
+		else if (cannon.getCannonDirection().equals(BlockFace.WEST)) 
 		{
 			//vect = new Vector(0, 0, 1.0f);
 			
-			returnValue.setHorizontal( (-lookingDirection.getX() - Math.sin(cannon.horizontal_angle * Math.PI / 180) ) * 180 / Math.PI);
+			returnValue.setHorizontal( (-lookingDirection.getX() - Math.sin(cannon.getHorizontalAngle() * Math.PI / 180) ) * 180 / Math.PI);
 		}
 		
 		
@@ -264,7 +268,7 @@ public class CalcAngle {
 			}
 		}
 		//check left 
-		BlockFace rightFace = getRightBlockFace(cannonDirection);
+		BlockFace rightFace = CannonsUtil.roatateFace(cannonDirection);
 		if (clickedFace.equals(rightFace.getOppositeFace())) 
 		{
 			if (isSneaking == true)
@@ -304,15 +308,7 @@ public class CalcAngle {
 		return new gunAngles(0.0, 0.0);
 	}
 	
-	//############## getRightBlockFace   ################################
-	private BlockFace getRightBlockFace(BlockFace face)
-	{
-		if (face == BlockFace.NORTH) return BlockFace.EAST;
-		if (face == BlockFace.EAST) return BlockFace.SOUTH;
-		if (face == BlockFace.SOUTH) return BlockFace.WEST;
-		if (face == BlockFace.WEST) return BlockFace.NORTH;
-		return BlockFace.UP;
-	}
+
 	
 	//############## PlayerMove ################################
 	public void PlayerMove(Player player)
@@ -320,27 +316,25 @@ public class CalcAngle {
 		if (inAimingMode.containsKey(player) == true)
 		{	
 			//check if player if far away from the cannon
-			CannonData cannon = inAimingMode.get(player);
-			//go the back of the cannon
-			Location locCannon = cannon.firingLocation.getBlock().getRelative(cannon.face.getOppositeFace(), cannon.barrel_length).getLocation();
-			if (player.getLocation().distance(locCannon) > 5)
+			Cannon cannon = inAimingMode.get(player);
+			//go to tigger location
+			Location locCannon = cannon.getFiringTriggerLocation();
+			if (player.getLocation().distance(locCannon) > 2)
 			{
 				//cancel aiming mode if too far away
 				disableAimingMode(player);
 			}
-		}
-		
-		
+		}		
 	}
 	
 	//############## updateAimingMode   ################################
 	public void updateAimingMode()
 	{
 		//player in map change the angle to the angle the player is looking
-    	for(Map.Entry<Player, CannonData> entry : inAimingMode.entrySet()){
+    	for(Map.Entry<Player, Cannon> entry : inAimingMode.entrySet()){
     		Player player = entry.getKey();
-    		CannonData cannon = entry.getValue();
-    		if (player.getItemInHand().getType() == Material.WATCH && player.isOnline() == true && cannon.isValid == true)
+    		Cannon cannon = entry.getValue();
+    		if (player.getItemInHand().getType() == Material.WATCH && player.isOnline() == true && cannon.isValid() == true)
     		{
         		DisplayAngle(cannon, null, null, player);   
     		}		
@@ -354,7 +348,7 @@ public class CalcAngle {
 	
 	
 	//############## ToggleAimingMode   ################################
-	public void ToggleAimingMode(Player player, CannonData cannon)
+	public void ToggleAimingMode(Player player, Cannon cannon)
 	{
 		
 		if (inAimingMode.containsKey(player) == true)

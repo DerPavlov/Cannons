@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.util.Vector;
@@ -160,7 +161,7 @@ class DesignStorage
 		cannonDesign.setBarrelCooldownTime(cannonDesignConfig.getDouble("timings.barrelCooldownTime", 1.0));
 
 		// angles
-		cannonDesign.setDefaulHorizonatalFacing(cannonDesignConfig.getString("angles.defaulHorizonatalFacing", "NORTH"));
+		cannonDesign.setDefaultHorizonatalFacing(BlockFace.valueOf(cannonDesignConfig.getString("angles.defaultHorizonatalFacing", "NORTH")));
 		cannonDesign.setDefaultVerticalAngle(cannonDesignConfig.getDouble("angles.defaultVerticalAngle", 0.0));
 		cannonDesign.setMaxHorizontalAngle(cannonDesignConfig.getDouble("angles.maxHorizontalAngle", 45.0));
 		cannonDesign.setMinHorizontalAngle(cannonDesignConfig.getDouble("angles.minHorizontalAngle", -45.0));
@@ -270,7 +271,7 @@ class DesignStorage
 		BaseBlock blockFiringIndicator = cannonDesign.getSchematicBlockTypeFiringIndicator().toBaseBlock();
 		
 		// get facing of the cannon
-		String cannonDirection = cannonDesign.getDefaulHorizonatalFacing();
+		BlockFace cannonDirection = cannonDesign.getDefaultHorizonatalFacing();
 
 		// for all directions
 		for (int i = 0; i < 4; i++)
@@ -415,7 +416,7 @@ class DesignStorage
 			plugin.logDebug("rotation loc " + cannonBlocks.getRotationCenter());
 
 			// add blocks to the HashMap
-			cannonDesign.getCannonBlocks().put(cannonDirection, cannonBlocks);
+			cannonDesign.getCannonBlockMap().put(cannonDirection, cannonBlocks);
 			
 			//rotate blocks for the next iteration
 			blockIgnore.rotate90();
@@ -434,7 +435,7 @@ class DesignStorage
 			cc.rotate2D(90);
 			
 			//rotate cannonDirection
-			cannonDirection = rotateCannon(cannonDirection);
+			cannonDirection = CannonsUtil.roatateFace(cannonDirection);
 			
 
 		}
@@ -482,16 +483,6 @@ class DesignStorage
 		}
 	}
 	
-	private String rotateCannon(String direction)
-	{
-		if (direction.equalsIgnoreCase("NORTH")) return "EAST";
-		if (direction.equalsIgnoreCase("EAST")) return "SOUTH";
-		if (direction.equalsIgnoreCase("SOUTH")) return "WEST";
-		if (direction.equalsIgnoreCase("WEST")) return "NORTH";
-		plugin.logSevere("cannon direction " + direction + "not found");
-		return "NORTH";
-	}
-
 	private String getPath()
 	{
 		// Directory path here

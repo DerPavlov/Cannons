@@ -39,7 +39,6 @@ public class Cannons extends JavaPlugin
 	private Config config;
 	private UserMessages userMessages;
 	private CannonManager cannonManager;
-	private InventoryManagement invManage;
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
 	private CalcAngle calcAngle;
@@ -63,12 +62,11 @@ public class Cannons extends JavaPlugin
 	public Cannons()
 	{
 
-		this.invManage = new InventoryManagement();
 		this.config = new Config(this);
 		this.userMessages = this.config.getUserMessages();
 		this.cannonManager = new CannonManager(this, userMessages, config);
 		this.explosion = new CreateExplosion(this, config);
-		this.fireCannon = new FireCannon(this, config, userMessages, invManage, explosion);
+		this.fireCannon = new FireCannon(this, config, userMessages, explosion);
 		this.calcAngle = new CalcAngle(this, userMessages, config);
 		
 		this.persistenceDatabase = new PersistenceDatabase(this);
@@ -351,11 +349,6 @@ public class Cannons extends JavaPlugin
 	public CannonManager getCannonManager()
 	{
 		return cannonManager;
-	}
-
-	public InventoryManagement getInvManage()
-	{
-		return invManage;
 	}
 
 	public FireCannon getFireCannon()

@@ -1,9 +1,14 @@
 package at.pavlov.Cannons.cannon;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.block.BlockFace;
+import org.bukkit.util.Vector;
+
 import at.pavlov.Cannons.container.MaterialHolder;
+import at.pavlov.Cannons.container.SimpleBlock;
 
 
 public class CannonDesign
@@ -21,7 +26,7 @@ public class CannonDesign
     private boolean ammoInfiniteForRedstone;
     private boolean autoreloadRedstone;
     
-    //barrel_properties
+    //barrelProperties
 	private int maxLoadableGunpowder;
 	private double multiplierVelocity;
 	private double spreadOfCannon;
@@ -31,8 +36,8 @@ public class CannonDesign
 	private double fuseBurnTime;
     private double barrelCooldownTime;
 	
-    //angles:
-	private String defaulHorizonatalFacing;
+    //angles
+	private BlockFace defaultHorizonatalFacing;
 	private double defaultVerticalAngle;
 	private double maxHorizontalAngle;
 	private double minHorizontalAngle;
@@ -80,9 +85,142 @@ public class CannonDesign
     private MaterialHolder ingameBlockTypeFiringIndicatorOn;   			//block type of firing indicator on
     
     //cannon design block lists for every direction (NORTH, EAST, SOUTH, WEST)
-    private HashMap<String, CannonBlocks> cannonBlocks = new HashMap<String, CannonBlocks>();
+    private HashMap<BlockFace, CannonBlocks> cannonBlockMap = new HashMap<BlockFace, CannonBlocks>();
     
     
+    /**
+     * returns the rotation center of a cannon design
+     * @param cannonDirection
+     * @param offset
+     * @return
+     */
+    public Vector getRotationCenter(String cannonDirection, Vector offset)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	if (cannonBlocks != null)
+    	{
+    		return cannonBlocks.getRotationCenter().add(offset);
+    	}
+    	
+    	return null;
+    } 
+    
+    
+    /**
+     * returns the muzzle location
+     * @param cannonDirection
+     * @param offset
+     * @return
+     */
+    public Vector getMuzzle(BlockFace cannonDirection, Vector offset)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	if (cannonBlocks != null)
+    	{
+    		return cannonBlocks.getMuzzle().add(offset);
+    	}
+    	
+    	return null;
+    }
+    
+    /**
+     * returns one trigger location
+     * @param cannonDirection
+     * @param offset
+     * @return
+     */
+    public Vector getFiringTriggerLocation(BlockFace cannonDirection, Vector offset)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	if (cannonBlocks != null)
+    	{
+    		return cannonBlocks.getFiringTrigger().add(offset);
+    	}
+    	
+    	return null;
+    }
+    
+    /**
+     * returns a list of the trigger indicator location
+     * @param cannonDirection
+     * @param offset
+     * @return
+     */
+    public List<Vector> getFiringIndicatorLocations(BlockFace cannonDirection)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	if (cannonBlocks != null)
+    	{
+    		return cannonBlocks.getFiringIndicator();
+    	}
+    	
+    	return null;
+    }
+    
+    /**
+     * returns a list of all cannonBlocks
+     * @param cannonDirection
+     * @return
+     */
+    public List<SimpleBlock> getAllCannonBlocks(String cannonDirection)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	if (cannonBlocks != null)
+    	{
+    		return cannonBlocks.getAllCannonBlocks();
+    	}
+    	
+    	return new ArrayList<SimpleBlock>();
+    }
+    
+    /**
+     * returns a list of all loading interface blocks
+     * @param cannonDirection
+     * @return
+     */
+    public List<Vector> getLoadingInterface(String cannonDirection)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	if (cannonBlocks != null)
+    	{
+    		return cannonBlocks.getLoadingInterface();
+    	}
+    	
+    	return new ArrayList<Vector>();
+    }
+    
+    /**
+     * returns a list of all sign blocks
+     * @param cannonDirection
+     * @return
+     */
+    public List<Vector> getSignsLocations(BlockFace cannonDirection)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	if (cannonBlocks != null)
+    	{
+    		return cannonBlocks.getSigns();
+    	}
+    	//return a empty list
+    	return new ArrayList<Vector>();
+    }
+    
+    /**
+     * returns a list of all chest blocks
+     * @param cannonDirection
+     * @return
+     */
+    public List<Vector> getChestsLocations(BlockFace cannonDirection)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	if (cannonBlocks != null)
+    	{
+    		return cannonBlocks.getChests();
+    	}
+    	//return a empty list
+    	return new ArrayList<Vector>();
+    }
+     
     
     
 	public int getUniqueID()
@@ -189,13 +327,13 @@ public class CannonDesign
 	{
 		this.barrelCooldownTime = barrelCooldownTime;
 	}
-	public String getDefaulHorizonatalFacing()
+	public BlockFace getDefaultHorizonatalFacing()
 	{
-		return defaulHorizonatalFacing;
+		return defaultHorizonatalFacing;
 	}
-	public void setDefaulHorizonatalFacing(String defaulHorizonatalFacing)
+	public void setDefaultHorizonatalFacing(BlockFace defaultHorizonatalFacing)
 	{
-		this.defaulHorizonatalFacing = defaulHorizonatalFacing;
+		this.defaultHorizonatalFacing = defaultHorizonatalFacing;
 	}
 	public double getDefaultVerticalAngle()
 	{
@@ -477,13 +615,13 @@ public class CannonDesign
 	{
 		this.ingameBlockTypeFiringIndicatorOn = ingameBlockTypeFiringIndicatorOn;
 	}
-	public HashMap<String, CannonBlocks> getCannonBlocks()
+	public HashMap<BlockFace, CannonBlocks> getCannonBlockMap()
 	{
-		return cannonBlocks;
+		return cannonBlockMap;
 	}
-	public void setCannonBlocks(HashMap<String, CannonBlocks> cannonBlocks)
+	public void setCannonBlockMap(HashMap<BlockFace, CannonBlocks> cannonBlockMap)
 	{
-		this.cannonBlocks = cannonBlocks;
+		this.cannonBlockMap = cannonBlockMap;
 	}
 	
 }

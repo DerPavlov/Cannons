@@ -36,19 +36,70 @@ public class SimpleBlock
 		data = material.getData();
 	}
 	
+	public SimpleBlock(int x, int y, int z, int id, int data)
+	{
+		locX = x;
+		locY = y;
+		locZ = z;
+		
+		this.id = id;
+		this.data = data;
+	}
+
+	/**
+	 * compare the location of the block and the id
+	 * @param block
+	 * @param offset
+	 * @return
+	 */
 	public boolean compareBlockAndLoc(Block block, Vector offset)
 	{		
 		if (block.getX() == locX - offset.getBlockY() && block.getX() == locY - offset.getBlockY() && block.getZ() == locZ - offset.getBlockZ())
 		{
-			if (compareBlock(block)) return true;
+			if (compareBlockFuzzy(block)) return true;
 		}
 		return false;
 	}
 	
-	public boolean compareBlock(Block block)
+	/**
+	 * return true if id and data are equal or data is -1
+	 * @param block
+	 * @return
+	 */
+	public boolean compareBlockFuzzy(Block block)
 	{
-		return (block.getTypeId() == id && block.getData() == data) ? true : false;
+		if (block.getTypeId() == id)
+		{
+			if (block.getData() == data || data == -1 || block.getData() == -1)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
+	
+	/** 
+	 * shifts the location of the block without comparing the id
+	 * @param block
+	 * @return
+	 */
+	public SimpleBlock add(SimpleBlock block)
+	{
+		return new SimpleBlock(locX + block.getLocX(), locY + block.getLocY(), locZ + block.getLocZ(), id, data);
+	}
+	
+	/** 
+	 * shifts the location of the block without comparing the id
+	 * @param block
+	 * @return
+	 */
+	public SimpleBlock add(Vector vect)
+	{
+		return new SimpleBlock(locX + vect.getBlockX(), locY + vect.getBlockY(), locZ + vect.getBlockZ(), id, data);
+	}
+	
+	
+	
 
 	public int getLocX()
 	{

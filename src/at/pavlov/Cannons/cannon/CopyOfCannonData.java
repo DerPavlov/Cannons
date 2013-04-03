@@ -14,7 +14,7 @@ import org.bukkit.util.Vector;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.projectile.Projectile;
 
-public class CannonData
+public class CopyOfCannonData
 {
 	
 	
@@ -41,7 +41,7 @@ public class CannonData
 	public boolean isValid;
 	private ArrayList<Location> CannonBlocks = new ArrayList<Location>();
 
-	public CannonData()
+	public CopyOfCannonData()
 	{
 		CannonBlocks = new ArrayList<Location>();
 		isValid = true;
