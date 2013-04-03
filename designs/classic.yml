@@ -1,0 +1,111 @@
+general:
+  uniqueID: 1
+  designName: Classic
+signs:
+  isSignRequired: false
+ammunition:
+  gunpowderTypeID: 289
+  gunpowderTypeData: 0
+  ammoInfiniteForPlayer: true
+  ammoInfiniteForRedstone: true
+  autoreloadRestone: true
+barrelProperties:
+  maxLoadableGunpowder: 3
+  multiplierVelocity: 1.0
+  spreadOfCannon: 5.0
+timings:
+  backblastConfusion: 5
+  fuseBurnTime: 1
+  barrelCooldownTime: 3
+angles:
+  defaulHorizonatalFacing: north
+  defaultVerticalAngle: 0.0
+  maxHorizontalAngle: 45.0
+  minHorizontalAngle: -45.0
+  maxVerticalAngle: 45.0
+  minVerticalAngle: -45.0
+  angleStepSize: 1.0
+  angleUpdateSpeed: 1.0
+realisticBehaviour:
+  hasRecoil: false
+  isFrontloader: false
+  isRotabable: false
+permissions:
+  build: cannon.player.build
+  load: cannons.player.load
+  fire: cannons.player.fire
+  adjust: cannons.player.adjust
+  autoaim: cannons.player.autoaim
+  targetTracking: cannons.player.targetTracking
+  redstone: cannons.player.redstone
+  autoreload: cannons.player.autoreload
+accessRestriction:
+  ownerOnly: false
+allowedProjectiles:
+- cobblestone
+- stone
+- gravel
+- glass
+- tnt
+- wool
+- wood
+- cake
+- redstone
+- blaze_powder
+- rotten_flesh
+- ender_pearl
+- lava_bucket
+- water_bucket
+- obsidian
+- diamond
+- diamond_block
+- monster_egg
+- leather
+- blaze
+constructionBlocks:
+  ignore:
+    id: 12
+    data: 0
+  muzzle:
+    id: 80
+    data: 0
+  chest: 
+    id: 63
+    data: -1
+  sign: 
+    id: 63
+    data: -1
+  redstoneTorch: 
+    id: 76
+    data: 5
+  restoneWire: 
+    id: 55
+    data: -1
+  repeater: 
+    id: 55
+    data: -1
+  redstoneTrigger: 
+    schematic:
+      id: 69
+      data: -1
+    ingame:
+      id: 77
+      data: 1
+  rightClickTrigger: 
+    schematic:
+      id: 50
+      data: 5
+    ingame:
+      id: 50
+      data: 5
+  firingIndicator:
+    schematic:
+      id: 50
+      data: 5
+    ingame:
+      normalId: 50
+      normalData: 5
+      firingId: 76
+      firingData: 5
+
+

@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -21,7 +20,6 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -35,13 +33,13 @@ import at.pavlov.Cannons.CannonManager;
 import at.pavlov.Cannons.Cannons;
 import at.pavlov.Cannons.CreateExplosion;
 import at.pavlov.Cannons.FireCannon;
+import at.pavlov.Cannons.cannon.CannonData;
 import at.pavlov.Cannons.config.Config;
-import at.pavlov.Cannons.config.Projectile;
 import at.pavlov.Cannons.config.UserMessages;
-import at.pavlov.Cannons.dao.CannonData;
-import at.pavlov.Cannons.utils.BlockHelper;
-import at.pavlov.Cannons.utils.FlyingProjectile;
-import at.pavlov.Cannons.utils.InventoryManagement;
+import at.pavlov.Cannons.inventory.InventoryManagement;
+import at.pavlov.Cannons.projectile.FlyingProjectile;
+import at.pavlov.Cannons.projectile.Projectile;
+import at.pavlov.Cannons.utils.CannonsUtil;
 
 public class PlayerListener implements Listener
 {
@@ -75,14 +73,6 @@ public class PlayerListener implements Listener
 		calcAngle.PlayerMove(event.getPlayer());
 	}
 
-	// ########### EntityDeath #######################################
-	@EventHandler
-	public void EntityDeath(EntityDeathEvent event)
-	{
-		// plugin.broadcast("entity " +
-		// event.getEntity().getLastDamageCause().getCause());
-		// plugin.broadcast("entity " + event.getEntity().getKiller());
-	}
 
 	// ########### BlockFromTo #######################################
 	@EventHandler
@@ -111,28 +101,19 @@ public class PlayerListener implements Listener
 			// if it is a cannon block
 			if (cannonManager.isCannonBlock(block.getLocation()))
 			{
-				Entity explosionEntity = event.getEntity();
-				if (explosionEntity == null)
+				// get distance to the impact
+				double distance = event.getLocation().distance(block.getLocation());
+				if (distance < 2)
 				{
-					// dont allow this event to break a cannon
-					blocks.remove(i--);
+					// closer impact will break the cannon
+					cannonManager.removeCannon(block.getLocation());
 				}
 				else
 				{
-					// get distance to the impact
-					Location impact = explosionEntity.getLocation();
-					double distance = impact.distance(block.getLocation());
-					if (distance < 2)
-					{
-						// closer impact will break the cannon
-						cannonManager.removeCannon(block.getLocation());
-					}
-					else
-					{
-						// impact farther away will not destroy the cannon
-						blocks.remove(i--);
-					}
+					// impact farther away will not destroy the cannon
+					blocks.remove(i--);
 				}
+				
 			}
 		}
 	}
@@ -380,7 +361,7 @@ public class PlayerListener implements Listener
 		{
 			Button button = (Button) event.getBlock().getState().getData();
 			block = block.getRelative(button.getAttachedFace());
-			if (BlockHelper.CheckAttachedTorch(block))
+			if (CannonsUtil.CheckAttachedTorch(block))
 			{
 				if (config.isCannonBarrel(block))
 				{

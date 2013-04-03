@@ -10,6 +10,7 @@ import org.bukkit.World;
 import com.avaje.ebean.Query;
 
 import at.pavlov.Cannons.Cannons;
+import at.pavlov.Cannons.cannon.CannonData;
 
 public class PersistenceDatabase
 {

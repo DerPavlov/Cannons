@@ -1,4 +1,4 @@
-package at.pavlov.Cannons.dao;
+package at.pavlov.Cannons.cannon;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.config.Config;
-import at.pavlov.Cannons.config.Projectile;
+import at.pavlov.Cannons.projectile.Projectile;
 
 public class CannonData
 {

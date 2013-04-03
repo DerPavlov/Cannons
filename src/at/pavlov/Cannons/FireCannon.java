@@ -21,14 +21,14 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import at.pavlov.Cannons.cannon.CannonData;
 import at.pavlov.Cannons.config.Config;
-import at.pavlov.Cannons.config.Projectile;
 import at.pavlov.Cannons.config.UserMessages;
-import at.pavlov.Cannons.dao.CannonData;
+import at.pavlov.Cannons.inventory.InventoryManagement;
+import at.pavlov.Cannons.projectile.FlyingProjectile;
+import at.pavlov.Cannons.projectile.Projectile;
 import at.pavlov.Cannons.utils.DelayedFireTask;
 import at.pavlov.Cannons.utils.FireTaskWrapper;
-import at.pavlov.Cannons.utils.FlyingProjectile;
-import at.pavlov.Cannons.utils.InventoryManagement;
 
 public class FireCannon {
 	
@@ -221,7 +221,11 @@ public class FireCannon {
     		Vector vect = cannon.getFiringVector(config);
     		
     		cannonball.snowball.setVelocity(vect);
-    		if (shooter != null) cannonball.snowball.setShooter(shooter);
+    		if (shooter != null) 
+    		{
+    			cannonball.snowball.setShooter(shooter);
+    			cannonball.projectile.shooter = shooter.getName();
+    		}
 			flying_projectiles.add(cannonball);
 			
     		//detonate if timefuse is used

@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
 
+import at.pavlov.Cannons.cannon.CannonData;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
-import at.pavlov.Cannons.dao.CannonData;
 
 
 public class CalcAngle {

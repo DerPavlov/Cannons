@@ -7,42 +7,17 @@ import java.util.ListIterator;
 import java.util.Random;
 import java.util.UUID;
 
-import net.minecraft.server.v1_5_R2.WorldServer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_5_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftBat;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftBlaze;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftCaveSpider;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftChicken;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftCow;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftCreeper;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftEnderman;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftGhast;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftMagmaCube;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftMushroomCow;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftOcelot;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPig;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPigZombie;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSheep;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSilverfish;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSkeleton;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSlime;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSpider;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftSquid;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftVillager;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftWitch;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftWolf;
-import org.bukkit.craftbukkit.v1_5_R2.entity.CraftZombie;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.potion.PotionEffect;
@@ -51,8 +26,8 @@ import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.config.Config;
-import at.pavlov.Cannons.config.Projectile;
-import at.pavlov.Cannons.utils.FlyingProjectile;
+import at.pavlov.Cannons.projectile.FlyingProjectile;
+import at.pavlov.Cannons.projectile.Projectile;
 import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
 
 public class CreateExplosion {
@@ -142,7 +117,7 @@ public class CreateExplosion {
     	// the cannonball will only break blocks if it has penetration. 
     	if (cannonball.projectile.penetration > 0)
     	{
-    		BlockIterator iter = new BlockIterator(snowballLoc.getWorld(), snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
+    		BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
     		
     		int i=0;
     		while (iter.hasNext() && i <= penetration + 1)
@@ -186,9 +161,7 @@ public class CreateExplosion {
     	{
     	
     		//create tnt event
-    		TNTPrimed tnt = world.spawn(impactLoc, TNTPrimed.class);
-    		EntityExplodeEvent event = new EntityExplodeEvent(tnt, impactLoc, blocklist, 1.0f);
-    		tnt.remove();
+    		EntityExplodeEvent event = new EntityExplodeEvent(cannonball.snowball, impactLoc, blocklist, 1.0f);
     		
     		//handle with bukkit
     		plugin.getServer().getPluginManager().callEvent(event);
@@ -254,95 +227,95 @@ public class CreateExplosion {
     		
     		case 50:
     			//spawn Creeper
-    			world.spawn(Loc, CraftCreeper.class);
+    			world.spawnEntity(Loc, EntityType.CREEPER);
     			break;
     		case 51:
     			//spawn Skeleton
-    			world.spawn(Loc, CraftSkeleton.class);
+    			world.spawnEntity(Loc, EntityType.SKELETON);
     			break;
     		case 52:
     			//spawn Spider
-    			world.spawn(Loc, CraftSpider.class);
+    			world.spawnEntity(Loc, EntityType.SPIDER);
     			break;
     		case 54:
     			//spawn Zombie
-    			world.spawn(Loc, CraftZombie.class);
+    			world.spawnEntity(Loc, EntityType.ZOMBIE);
     			break;
     		case 55:
     			//spawn Slime
-    			world.spawn(Loc, CraftSlime.class);
+    			world.spawnEntity(Loc, EntityType.SLIME);
     			break;
     		case 56:
     			//spawn Ghast
-    			world.spawn(Loc, CraftGhast.class);
+    			world.spawnEntity(Loc, EntityType.GHAST);
     			break;
     		case 57:
     			//spawn ZomebiePigmen
-    			world.spawn(Loc, CraftPigZombie.class);
+    			world.spawnEntity(Loc, EntityType.PIG_ZOMBIE);
     			break;
     		case 58:
     			//spawn Enderman
-    			world.spawn(Loc, CraftEnderman.class);
+    			world.spawnEntity(Loc, EntityType.ENDERMAN);
     			break;
     		case 59:
     			//spawn Cavespider
-    			world.spawn(Loc, CraftCaveSpider.class);
+    			world.spawnEntity(Loc, EntityType.CAVE_SPIDER);
     			break;
     		case 60:
     			//spawn Silverfish
-    			world.spawn(Loc, CraftSilverfish.class);
+    			world.spawnEntity(Loc, EntityType.SILVERFISH);
     			break;
     		case 61:
     			//spawn Blaze
-    			world.spawn(Loc, CraftBlaze.class);
+    			world.spawnEntity(Loc, EntityType.BLAZE);
     			break;
     		case 62:
     			//spawn Magmacube
-    			world.spawn(Loc, CraftMagmaCube.class);
+    			world.spawnEntity(Loc, EntityType.MAGMA_CUBE);
     			break;
     		case 66:
     			//spawn Witch
-    			world.spawn(Loc, CraftWitch.class);
+    			world.spawnEntity(Loc, EntityType.WITCH);
     			break;
     		case 65:
     			//spawn Bat
-    			world.spawn(Loc, CraftBat.class);
+    			world.spawnEntity(Loc, EntityType.BAT);
     			break;
     		case 90:
     			//spawn Pig
-    			world.spawn(Loc, CraftPig.class);
+    			world.spawnEntity(Loc, EntityType.PIG);
     			break;
     		case 91:
     			//spawn Sheep
-    			world.spawn(Loc, CraftSheep.class);
+    			world.spawnEntity(Loc, EntityType.SHEEP);
     			break;
     		case 92:
     			//spawn Cow
-    			world.spawn(Loc, CraftCow.class);
+    			world.spawnEntity(Loc, EntityType.COW);
     			break;
     		case 93:
     			//spawn Chicken
-    			world.spawn(Loc, CraftChicken.class);
+    			world.spawnEntity(Loc, EntityType.CHICKEN);
     			break;
     		case 94:
     			//spawn Squid
-    			world.spawn(Loc, CraftSquid.class);
+    			world.spawnEntity(Loc, EntityType.SQUID);
     			break;
     		case 95:
     			//spawn Wolf
-    			world.spawn(Loc, CraftWolf.class);
+    			world.spawnEntity(Loc, EntityType.WOLF);
     			break;
     		case 96:
     			//spawn Mushroomcow
-    			world.spawn(Loc, CraftMushroomCow.class);
+    			world.spawnEntity(Loc, EntityType.MUSHROOM_COW);
     			break;
     		case 98:
     			//spawn Ocelot
-    			world.spawn(Loc, CraftOcelot.class);
+    			world.spawnEntity(Loc, EntityType.OCELOT);
     			break;
     		case 120:
     			//spawn Villager
-    			world.spawn(Loc, CraftVillager.class);
+    			world.spawnEntity(Loc, EntityType.VILLAGER);
     			break;
     		default:
     			plugin.logSevere("[Cannons] ID: " + data + " for Monster egg not found");
@@ -497,59 +470,66 @@ public class CreateExplosion {
 			//critical
 			Random r = new Random();
 			int crit = r.nextInt(10);
-			if (crit == 0) damage *= 3;  
-			if (damage >= 1)
+			if (crit == 0) damage *= 3; 
+			
+
+			//get shooter
+			Player shooter = null;	
+			if (config.usePlayerName == true)
 			{
-						
-				//to obtain half heart damage
-				int intDamage = (int) (damage * 2.0);
+				// transmit the player for player damage. Kill can be displayed.
+				if (cannonball.projectile.shooter != null)
+				{
+					shooter = Bukkit.getPlayer(cannonball.projectile.shooter);
+				}
 				
-				if (config.usePlayerName == true)
-				{
-					// transmit the player for player damage. Kill can be displayed.
-					living.damage(intDamage,  cannonball.snowball.getShooter());
-				}
-				else
-				{
-					//some plugins seems to interfere if the player is used
-					living.damage(intDamage,  null);
-				}
 			}
+	
 			
-			//only use effects if serious damage is done
-			int amplifer = 0;
-			if (damage >= 2)
-			{
-				amplifer = 1;
-			}
+			//to obtain half heart damage
+			int intDamage = (int) (damage * 2.0);
+		
 			
-			if (cannonball.projectile.blindness && damage >= 1)
+			if (intDamage > 1)
 			{
-				living.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) (cannonball.projectile.effectDuration*20), amplifer));
-			}
-			if (cannonball.projectile.confusion && damage >= 1)
-			{
-				living.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int) (cannonball.projectile.effectDuration*20), amplifer));
-			}
-			if (cannonball.projectile.hunger && damage >= 1)
-			{
-				living.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (int) (cannonball.projectile.effectDuration*20), amplifer));
-			}
-			if (cannonball.projectile.poison && damage >= 1)
-			{					
-				living.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int) (cannonball.projectile.effectDuration*5), 0));
-			}
-			if (cannonball.projectile.slowDigging && damage >= 1)
-			{
-				living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (int) (cannonball.projectile.effectDuration*20), amplifer));
-			}
-			if (cannonball.projectile.slowness && damage >= 1)
-			{
-				living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (cannonball.projectile.effectDuration*20), amplifer));
-			}
-			if (cannonball.projectile.weakness && damage >= 1)
-			{
-				living.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (int) (cannonball.projectile.effectDuration*20), amplifer));
+				//do damage
+				living.damage(intDamage, shooter);
+				
+				//only use effects if serious damage is done
+				int amplifer = 0;
+				if (damage >= 2)
+				{
+					amplifer = 1;
+				}
+			
+				if (cannonball.projectile.blindness && damage >= 1)
+				{
+					living.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) (cannonball.projectile.effectDuration*20), amplifer));
+				}
+				if (cannonball.projectile.confusion && damage >= 1)
+				{
+					living.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int) (cannonball.projectile.effectDuration*20), amplifer));
+				}
+				if (cannonball.projectile.hunger && damage >= 1)
+				{
+					living.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (int) (cannonball.projectile.effectDuration*20), amplifer));
+				}
+				if (cannonball.projectile.poison && damage >= 1)
+				{					
+					living.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int) (cannonball.projectile.effectDuration*5), 0));
+				}
+				if (cannonball.projectile.slowDigging && damage >= 1)
+				{
+					living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (int) (cannonball.projectile.effectDuration*20), amplifer));
+				}
+				if (cannonball.projectile.slowness && damage >= 1)
+				{
+					living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (cannonball.projectile.effectDuration*20), amplifer));
+				}
+				if (cannonball.projectile.weakness && damage >= 1)
+				{
+					living.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (int) (cannonball.projectile.effectDuration*20), amplifer));
+				}
 			}
 		}
     }
@@ -563,10 +543,7 @@ public class CreateExplosion {
     	Location impactLoc = blockBreaker(cannonball);
     	
     	//get world
-    	World world = impactLoc.getWorld();  
-    	CraftWorld cworld = (CraftWorld) world;
-    	WorldServer worldserver = cworld.getHandle();
-    	
+    	World world = impactLoc.getWorld();      	
    
     	
     	//teleport snowball to impact
@@ -588,10 +565,8 @@ public class CreateExplosion {
 			//normal shot + explosion
 			entity = cannonball.snowball.getNearbyEntities(20, 20, 20);
 			
-			//spawn tnt and set event
-	    	TNTPrimed tnt = world.spawn(impactLoc, TNTPrimed.class);
-	    	worldserver.createExplosion(((CraftEntity) tnt).getHandle(), impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, cannonball.projectile.incendiary, true);
-	    	tnt.remove();
+			//explosion event
+	    	world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, cannonball.projectile.incendiary, cannonball.projectile.blockDamage);
 		}
 		
 		

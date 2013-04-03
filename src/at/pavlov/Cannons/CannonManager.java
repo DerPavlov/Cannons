@@ -14,10 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
 
+import at.pavlov.Cannons.cannon.CannonData;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
-import at.pavlov.Cannons.dao.CannonData;
-import at.pavlov.Cannons.utils.BlockHelper;
+import at.pavlov.Cannons.utils.CannonsUtil;
 
 public class CannonManager
 {
@@ -202,13 +202,13 @@ public class CannonManager
 			{
 				return cannon;
 			}
-			else
-			{
+			//else
+			//{
 				// different cannon, search the database for the right entry by the cannon name from the sign
-				return cannonFromSign;
-			}
+			//	return cannonFromSign;
+			//}
 		}
-		else
+		// else
 		{
 			// no existing cannon in storage -> check if there is a cannon
 			Player player = null;
@@ -494,24 +494,24 @@ public class CannonManager
 
 		boolean redo = false;
 		int length = 0, length_plus = 0, length_minus = 0;
-		if (BlockHelper.hasIdData(block, config.CannonMaterialId, config.CannonMaterialData))
+		if (CannonsUtil.hasIdData(block, config.CannonMaterialId, config.CannonMaterialData))
 		{
 			do
 			{
 				// Select Barrel direction
-				if (BlockHelper.hasIdData(block.getRelative(BlockFace.EAST), config.CannonMaterialId, config.CannonMaterialData) && redo == false)
+				if (CannonsUtil.hasIdData(block.getRelative(BlockFace.EAST), config.CannonMaterialId, config.CannonMaterialData) && redo == false)
 				{
 					face = BlockFace.EAST;
 				}
-				else if (BlockHelper.hasIdData(block.getRelative(BlockFace.WEST), config.CannonMaterialId, config.CannonMaterialData) && redo == false)
+				else if (CannonsUtil.hasIdData(block.getRelative(BlockFace.WEST), config.CannonMaterialId, config.CannonMaterialData) && redo == false)
 				{
 					face = BlockFace.WEST;
 				}
-				else if (BlockHelper.hasIdData(block.getRelative(BlockFace.SOUTH), config.CannonMaterialId, config.CannonMaterialData))
+				else if (CannonsUtil.hasIdData(block.getRelative(BlockFace.SOUTH), config.CannonMaterialId, config.CannonMaterialData))
 				{
 					face = BlockFace.SOUTH;
 				}
-				else if (BlockHelper.hasIdData(block.getRelative(BlockFace.NORTH), config.CannonMaterialId, config.CannonMaterialData))
+				else if (CannonsUtil.hasIdData(block.getRelative(BlockFace.NORTH), config.CannonMaterialId, config.CannonMaterialData))
 				{
 					face = BlockFace.NORTH;
 				}
@@ -524,29 +524,29 @@ public class CannonManager
 				do
 				{
 					length_plus++;
-				} while (BlockHelper.hasIdData(block.getRelative(face, length_plus), config.CannonMaterialId, config.CannonMaterialData) && length_plus < config.max_barrel_length);
+				} while (CannonsUtil.hasIdData(block.getRelative(face, length_plus), config.CannonMaterialId, config.CannonMaterialData) && length_plus < config.max_barrel_length);
 				do
 				{
 					length_minus++;
-				} while (BlockHelper.hasIdData(block.getRelative(face.getOppositeFace(), length_minus), config.CannonMaterialId, config.CannonMaterialData) && length_minus < config.max_barrel_length);
+				} while (CannonsUtil.hasIdData(block.getRelative(face.getOppositeFace(), length_minus), config.CannonMaterialId, config.CannonMaterialData) && length_minus < config.max_barrel_length);
 
 				// Check Buttons and Torch
-				if (BlockHelper.CheckAttachedButton(block.getRelative(face.getOppositeFace(), length_minus - 1), face.getOppositeFace()))
+				if (CannonsUtil.CheckAttachedButton(block.getRelative(face.getOppositeFace(), length_minus - 1), face.getOppositeFace()))
 				{
-					if (BlockHelper.CheckAttachedButton(block.getRelative(face, length_plus - 1), face))
+					if (CannonsUtil.CheckAttachedButton(block.getRelative(face, length_plus - 1), face))
 					{
-						if (BlockHelper.CheckAttachedTorch(block.getRelative(face.getOppositeFace(), length_minus - 1)))
+						if (CannonsUtil.CheckAttachedTorch(block.getRelative(face.getOppositeFace(), length_minus - 1)))
 						{
-							if (!BlockHelper.CheckAttachedTorch(block.getRelative(face, length_plus - 1)))
+							if (!CannonsUtil.CheckAttachedTorch(block.getRelative(face, length_plus - 1)))
 							{
 								// no change of Face necessary
 								barrel = block.getRelative(face, length_plus - 1).getLocation();
 								find_cannon = true;
 							}
 						}
-						else if (BlockHelper.CheckAttachedTorch(block.getRelative(face, length_plus - 1)))
+						else if (CannonsUtil.CheckAttachedTorch(block.getRelative(face, length_plus - 1)))
 						{
-							if (!BlockHelper.CheckAttachedTorch(block.getRelative(face.getOppositeFace(), length_minus - 1)))
+							if (!CannonsUtil.CheckAttachedTorch(block.getRelative(face.getOppositeFace(), length_minus - 1)))
 							{
 								face = face.getOppositeFace();
 								barrel = block.getRelative(face, length_minus - 1).getLocation();

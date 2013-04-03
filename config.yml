@@ -71,6 +71,7 @@ cobblestone:
   cannonball:
     cannonball: true
     explosion power: 2
+    block_damage: true
     penetration: 1
     timefuse: 0
   canistershot:
@@ -105,6 +106,7 @@ stone:
   cannonball:
     cannonball: true
     explosion power: 3
+    block_damage: true
     penetration: 2
     timefuse: 0
   canistershot:
@@ -139,6 +141,7 @@ obsidian:
   cannonball:
     cannonball: true
     explosion power: 2
+    block_damage: true
     penetration: 3
     timefuse: 0
   canistershot:
@@ -173,6 +176,7 @@ diamond:
   cannonball:
     cannonball: true
     explosion power: 2
+    block_damage: true
     penetration: 4
     timefuse: 0
   canistershot:
@@ -207,6 +211,7 @@ diamond_block:
   cannonball:
     cannonball: false
     explosion power: 0
+    block_damage: false
     penetration: 4
     timefuse: 0
   canistershot:
@@ -241,6 +246,7 @@ gravel:
   cannonball:
     cannonball: false
     explosion power: 0
+    block_damage: false
     penetration: 0
     timefuse: 0
   canistershot:
@@ -275,6 +281,7 @@ glass:
   cannonball:
     cannonball: true
     explosion power: 0
+    block_damage: false
     penetration: 0
     timefuse: 0
   canistershot:
@@ -309,6 +316,7 @@ tnt:
   cannonball:
     cannonball: true
     explosion power: 4
+    block_damage: true
     penetration: 0
     timefuse: 1.5
   canistershot:
@@ -343,6 +351,7 @@ wood:
   cannonball:
     cannonball: true
     explosion power: 0
+    block_damage: false
     penetration: 0
     timefuse: 0
   canistershot:
@@ -377,6 +386,7 @@ cake:
   cannonball:
     cannonball: true
     explosion power: 1
+    block_damage: false
     penetration: 0
     timefuse: 0
   canistershot:
@@ -410,7 +420,8 @@ redstone:
   max speed: 4
   cannonball:
     cannonball: true
-    explosion power: 0
+    explosion power: 4
+    block_damage: false
     penetration: 0
     timefuse: 0
   canistershot:
@@ -445,6 +456,7 @@ blaze_powder:
   cannonball:
     cannonball: true
     explosion power: 2
+    block_damage: true
     penetration: 0
     timefuse: 0
   canistershot:
@@ -479,6 +491,7 @@ rotten_flesh:
   cannonball:
     cannonball: true
     explosion power: 1
+    block_damage: false
     penetration: 0
     timefuse: 0
   canistershot:
@@ -513,6 +526,7 @@ ender_pearl:
   cannonball:
     cannonball: true
     explosion power: 1
+    block_damage: true
     penetration: 0
     timefuse: 0
   canistershot:
@@ -547,6 +561,7 @@ lava_bucket:
   cannonball:
     cannonball: true
     explosion power: 2
+    block_damage: true
     penetration: 0
     timefuse: 0
   canistershot:
@@ -581,6 +596,7 @@ water_bucket:
   cannonball:
     cannonball: true
     explosion power: 2
+    block_damage: true
     penetration: 0
     timefuse: 0
   canistershot:
@@ -615,6 +631,7 @@ wool:
   cannonball:
     cannonball: true
     explosion power: 1
+    block_damage: false
     penetration: 0
     timefuse: 0
   canistershot:
@@ -649,6 +666,7 @@ monster_egg:
   cannonball:
     cannonball: true
     explosion power: 1
+    block_damage: true
     penetration: 0
     timefuse: 0
   canistershot:

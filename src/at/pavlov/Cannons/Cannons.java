@@ -25,11 +25,11 @@ import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.dao.CannonBean;
 import at.pavlov.Cannons.dao.MyDatabase;
 import at.pavlov.Cannons.dao.PersistenceDatabase;
+import at.pavlov.Cannons.inventory.InventoryManagement;
 import at.pavlov.Cannons.listener.Commands;
 import at.pavlov.Cannons.listener.PlayerListener;
 import at.pavlov.Cannons.listener.SignListener;
 import at.pavlov.Cannons.mcstats.Metrics;
-import at.pavlov.Cannons.utils.InventoryManagement;
 
 public class Cannons extends JavaPlugin
 {

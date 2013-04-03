@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import at.pavlov.Cannons.Cannons;
+import at.pavlov.Cannons.container.MaterialHolder;
+import at.pavlov.Cannons.projectile.Projectile;
 
 /**
  * 
@@ -15,18 +17,7 @@ import at.pavlov.Cannons.Cannons;
  * 
  */
 
-// small class as container for item id and data
-class MaterialHolder
-{
-	int id;
-	int data;
 
-	public MaterialHolder(int _id, int _data)
-	{
-		id = _id;
-		data = _data;
-	}
-}
 
 public class Config
 {
@@ -69,12 +60,14 @@ public class Config
 
 	private UserMessages userMessage;
 	private Cannons plugin;
+	private DesignStorage designStorage;
 
 	public Config(Cannons plugin)
 	{
 		this.plugin = plugin;
 		allowedProjectiles.add(new Projectile());
-		userMessage = new UserMessages(plugin, this);
+		userMessage = new UserMessages(this.plugin, this);
+		designStorage = new DesignStorage(this.plugin);
 	}
 
 	public void loadConfig()
@@ -82,6 +75,9 @@ public class Config
 		plugin.reloadConfig();
 
 		loadProjectiles(plugin);
+		designStorage.loadCannonDesigns();
+		
+		
 		// Load Cannon material
 		CannonMaterialName = plugin.getConfig().getString("construction.cannon material name", "cannon material name missing");
 		CannonMaterialId = plugin.getConfig().getInt("construction.cannon material ID", 35);
@@ -182,6 +178,7 @@ public class Config
 		// cannonball
 		projectile.cannonball = plugin.getConfig().getBoolean(next + "." + "cannonball.cannonball", true);
 		projectile.explosion_power = plugin.getConfig().getDouble(next + "." + "cannonball.explosion power", 2.0);
+		projectile.blockDamage = plugin.getConfig().getBoolean(next + "." + "cannonball.block_damage", true);
 		projectile.penetration = plugin.getConfig().getDouble(next + "." + "cannonball.penetration", 1.0);
 		projectile.timefuse = plugin.getConfig().getDouble(next + "." + "cannonball.timefuse", 0.0);
 		// canister shot
@@ -263,13 +260,20 @@ public class Config
 		while (iter.hasNext())
 		{
 			MaterialHolder next = iter.next();
-			if (block.getTypeId() == next.id)
+			if (block.getTypeId() == next.getId())
 			{
 				//negative values mean all data values are allowed
-				if (next.data < 0 || block.getData() == next.data) { return true; }
+				if (next.getData() < 0 || block.getData() == next.getData()) { return true; }
 			}
 		}
 		return false;
 	}
+
+	public DesignStorage getDesignStorage()
+	{
+		return designStorage;
+	}
+	
+	
 
 }

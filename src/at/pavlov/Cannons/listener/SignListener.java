@@ -11,9 +11,9 @@ import org.bukkit.event.block.SignChangeEvent;
 
 import at.pavlov.Cannons.CannonManager;
 import at.pavlov.Cannons.Cannons;
+import at.pavlov.Cannons.cannon.CannonData;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
-import at.pavlov.Cannons.dao.CannonData;
 
 public class SignListener implements Listener
 {

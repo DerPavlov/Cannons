@@ -1,4 +1,4 @@
-package at.pavlov.Cannons.utils;
+package at.pavlov.Cannons.inventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import at.pavlov.Cannons.dao.CannonData;
+import at.pavlov.Cannons.cannon.CannonData;
 
 
 
