@@ -1,11 +1,11 @@
 general:
-  uniqueID: 1
+  designID: 1
   designName: Classic
 signs:
   isSignRequired: false
 ammunition:
-  gunpowderTypeID: 289
-  gunpowderTypeData: 0
+  gunpowderName: gunpowder
+  gunpowderType: '289:0'
   ammoInfiniteForPlayer: true
   ammoInfiniteForRedstone: true
   autoreloadRestone: true
@@ -42,70 +42,38 @@ permissions:
 accessRestriction:
   ownerOnly: false
 allowedProjectiles:
-- cobblestone
-- stone
-- gravel
-- glass
-- tnt
-- wool
-- wood
-- cake
-- redstone
-- blaze_powder
-- rotten_flesh
-- ender_pearl
-- lava_bucket
-- water_bucket
-- obsidian
-- diamond
-- diamond_block
-- monster_egg
-- leather
-- blaze
+  - cobblestone
+  - stone
+  - gravel
+  - glass
+  - tnt
+  - wool
+  - wood
+  - cake
+  - redstone
+  - blaze_powder
+  - rotten_flesh
+  - ender_pearl
+  - lava_bucket
+  - water_bucket
+  - obsidian
+  - diamond
+  - diamond_block
+  - monster_egg
+  - leather
+  - blaze
 constructionBlocks:
-  ignore:
-    id: 12
-    data: 0
-  muzzle:
-    id: 80
-    data: 0
-  chest: 
-    id: 63
-    data: -1
-  sign: 
-    id: 63
-    data: -1
-  redstoneTorch: 
-    id: 76
-    data: 5
-  restoneWire: 
-    id: 55
-    data: -1
-  repeater: 
-    id: 55
-    data: -1
+  ignore: '12:0'
+  muzzle: '80:0'
+  firingIndicator: '50:5'
+  chestAndSign: '63:-1'
+  redstoneTorch: '76:5'
+  restoneWireAndRepeater: '55:-1'
   redstoneTrigger: 
-    schematic:
-      id: 69
-      data: -1
-    ingame:
-      id: 77
-      data: 1
+    schematic: '69:-1'
+    ingame: '77:-1'
   rightClickTrigger: 
-    schematic:
-      id: 50
-      data: 5
-    ingame:
-      id: 50
-      data: 5
-  firingIndicator:
-    schematic:
-      id: 50
-      data: 5
-    ingame:
-      normalId: 50
-      normalData: 5
-      firingId: 76
-      firingData: 5
+    schematic: '50:5'
+    ingame: '50:5'
 
 

@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -22,9 +21,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.cannon.Cannon;
+import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.DesignStorage;
 import at.pavlov.Cannons.config.UserMessages;
-import at.pavlov.Cannons.inventory.InventoryManagement;
 import at.pavlov.Cannons.projectile.FlyingProjectile;
 import at.pavlov.Cannons.projectile.Projectile;
 import at.pavlov.Cannons.utils.DelayedFireTask;
@@ -32,10 +32,11 @@ import at.pavlov.Cannons.utils.FireTaskWrapper;
 
 public class FireCannon {
 	
-	private Config config;
-	private UserMessages userMessages;
-	private Cannons plugin;
-	private CreateExplosion explosion;
+	private final Config config;
+	private final DesignStorage designStorage;
+	private final UserMessages userMessages;
+	private final Cannons plugin;
+	private final CreateExplosion explosion;
 	
 	public LinkedList<FlyingProjectile> flying_projectiles = new LinkedList<FlyingProjectile>();
 	 
@@ -46,6 +47,7 @@ public class FireCannon {
 	{
 		this.plugin = plugin;
 		this.config = config;
+		this.designStorage = plugin.getDesignStorage();
 		this.userMessages = userMessages;
 		this.explosion = explosion;
 	}
@@ -118,11 +120,13 @@ public class FireCannon {
 	//####################################  DELAYED FIRE  ##############################
     private void delayedFire(Cannon cannon, Player player, Boolean deleteCharge)
     {
+    	CannonDesign design = designStorage.getDesign(cannon);
+    	
 		//reset after firing
 		cannon.setLastFired(System.currentTimeMillis());
 		
 		//Set up smoke effects on the torch
-		for (Location torchLoc : cannon.getFiringIndicator())
+		for (Location torchLoc : design.getFiringIndicator(cannon))
 		{
 			torchLoc.setX(torchLoc.getX() + 0.5);
 			torchLoc.setY(torchLoc.getY() + 1);
@@ -148,9 +152,10 @@ public class FireCannon {
 	//####################################  FIRE  ##############################
     private void fire(Cannon cannon, Player shooter, Boolean deleteCharge)
     {	
+    	CannonDesign design = designStorage.getDesign(cannon);
     	Projectile projectile = config.getProjectile(cannon.getProjectileID(), cannon.getProjectileData());
     	
-		Location firingLoc = cannon.getMuzzleLocation();
+		Location firingLoc = design.getMuzzle(cannon);
 		World world = cannon.getWorldBukkit();
     	
 		//Muzzle flash + Muzzle_displ
@@ -294,6 +299,8 @@ public class FireCannon {
 		}
 		return false;
 	}
+	
+
 	
 	//############## deleteOldSnowballs  ################################
 	public void deleteOldSnowballs()

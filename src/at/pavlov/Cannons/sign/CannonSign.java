@@ -1,6 +1,8 @@
 package at.pavlov.Cannons.sign;
 
-import at.pavlov.Cannons.cannon.Cannon;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 
 
 public class CannonSign
@@ -11,46 +13,13 @@ public class CannonSign
 		
 	}
 	
-	/**
-	 * returns the name of the cannon written on the sign
-	 * @return
-	 */
-	private String getLineOfCannonSigns(int line, Cannon Cannon)
-	{
-		// goto the last first block of the cannon
-		//for (Location signLoc : design.getc)
-		//Block block = 
-		
-		String lineStr = "";		
-		
-		/*
-		// left and right sign
-		if (cannonDa == BlockFace.EAST || face == BlockFace.WEST)
-		{
-			// if one is false then cannon on the sign is different from the storage
-			lineStr = getLineOfThisSign(block.getRelative(BlockFace.NORTH),line);
-			if (lineStr != null) return lineStr;
-			lineStr = getLineOfThisSign(block.getRelative(BlockFace.SOUTH),line);
-			if (lineStr != null) return lineStr;
-		}
-		else
-		{
-			lineStr = getLineOfThisSign(block.getRelative(BlockFace.EAST),line);
-			if (lineStr != null) return lineStr;
-			lineStr = getLineOfThisSign(block.getRelative(BlockFace.WEST),line);
-			if (lineStr != null) return lineStr;
-		}	
-		return null;
-		*/
-		return lineStr;
-	}
+
 	
 	/**
 	 * returns line written on the sign sign
 	 * @return
 	 */
-	/*
-	public String getLineOfThisSign(Block block, int line)
+	public static String getLineOfThisSign(Block block, int line)
 	{
 		if (block.getType() != Material.WALL_SIGN) return null;
 		
@@ -59,25 +28,7 @@ public class CannonSign
 		return sign.getLine(line);
 	}
 	
-	/**
-	 * returns the cannon name that is written on a cannon sign
-	 * @return
-	 */
-	/*
-	public String getCannonNameFromSign()
-	{
-		return getLineOfCannonSigns(0);
-	}
-	
-	/**
-	 * returns the cannon owner that is written on a cannon sign
-	 * @return
-	 */
-	/*
-	public String getOwnerFromSign()
-	{
-		return getLineOfCannonSigns(1);
-	}
+
 	
 	/**
 	 * returns the amount of gunpowder that is written on a cannon sign

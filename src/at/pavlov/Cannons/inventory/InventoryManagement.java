@@ -17,20 +17,17 @@ public class InventoryManagement
 {
 
 	// ############## TakeFromPlayerInventory ################################
-	public void TakeFromPlayerInventory(Player player, boolean inventory_take)
+	public static void TakeFromPlayerInventory(Player player)
 	{
-		// take item from the player
-		if (inventory_take == true)
+
+		int amount = player.getInventory().getItemInHand().getAmount();
+		if (amount == 1)
 		{
-			int amount = player.getInventory().getItemInHand().getAmount();
-			if (amount == 1)
-			{
-				player.getInventory().removeItem(player.getInventory().getItemInHand());
-			}
-			else
-			{
-				player.getInventory().getItemInHand().setAmount(amount - 1);
-			}
+			player.getInventory().removeItem(player.getInventory().getItemInHand());
+		}
+		else
+		{
+			player.getInventory().getItemInHand().setAmount(amount - 1);
 		}
 	}
 

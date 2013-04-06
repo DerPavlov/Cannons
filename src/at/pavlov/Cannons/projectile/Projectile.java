@@ -1,12 +1,17 @@
 package at.pavlov.Cannons.projectile;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.entity.Player;
+
 
 
 public class Projectile {
 	public String name;
 	
-	public int id;
-	public int data;
+	private int id;
+	private int data;
 	
 	public String shooter;
 	
@@ -40,11 +45,13 @@ public class Projectile {
 	public boolean hunger;
 	public boolean teleport;
 	
+	private List<String> permissions = new ArrayList<String>();
+	
 	public Projectile(){
 		name = "default projectile";
 		
-		id = 4;
-		data = 0;
+		setId(4);
+		setData(0);
 		
 		cannonball = true;
 		explosion_power = 4;
@@ -81,7 +88,7 @@ public class Projectile {
 	{
 		if (_id == id)
 		{
-			// negative data values all data values
+			// negative data values - allow all data values
 			if (data < 0 || _data == data)
 			{
 				return true;
@@ -97,6 +104,61 @@ public class Projectile {
 			return true;
 		}
 		return false;	
+	}
+	
+	/**
+	 * compares data and id. If projectile data is -1, comparision is skipped
+	 * @param _id
+	 * @param _data
+	 * @return
+	 */
+	public boolean equalsFuzzy(int _id, int _data)
+	{
+		if (_id == id)
+		{
+			//compare data - if data is -1 skip
+			return (data == _data || data == -1);
+		}
+		return false;
+	}
+	
+	/**
+	 * returns true if the player has permission to use that projectile
+	 * @param player
+	 * @return
+	 */
+	public boolean hasPermission(Player player)
+	{
+		for (String perm : permissions)
+		{
+			if(!player.hasPermission(perm))
+			{
+				//missing permission
+				return false;
+			}
+		}
+		//player has all permissions
+		return true;
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+
+	public int getData()
+	{
+		return data;
+	}
+
+	public void setData(int data)
+	{
+		this.data = data;
 	}
 	
 

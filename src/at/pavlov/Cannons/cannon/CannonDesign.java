@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
 
@@ -14,13 +15,14 @@ import at.pavlov.Cannons.container.SimpleBlock;
 public class CannonDesign
 {
 	//general
-	private int uniqueID;
+	private int designID;
 	private String designName;
 	
 	//sign
 	private boolean isSignRequired; 
 	
 	//ammunition_consumption
+	private String gunpowderName;
 	private MaterialHolder gunpowderType;
 	private boolean ammoInfiniteForPlayer;
     private boolean ammoInfiniteForRedstone;
@@ -71,22 +73,20 @@ public class CannonDesign
 	private MaterialHolder schematicBlockTypeIgnore;     				//this block this is ignored in the schematic file
     private MaterialHolder schematicBlockTypeMuzzle;					//location of the muzzle
     private MaterialHolder schematicBlockTypeRotationCenter;			//location of the muzzle
-    private MaterialHolder schematicBlockTypeChest;						//locations of the chest
-    private MaterialHolder schematicBlockTypeSign;						//locations of the sign
+    private MaterialHolder schematicBlockTypeChestAndSign;				//locations of the chest and sign
     private MaterialHolder schematicBlockTypeRedstoneTorch;				//locations of the redstone torches
-    private MaterialHolder schematicBlockTypeRedstoneWire;				//locations of the redstone wires
-    private MaterialHolder schematicBlockTypeRepeater;					//locations of the repeaters
+    private MaterialHolder schematicBlockTypeRedstoneWireAndRepeater;	//locations of the redstone wires and repeaters
     private MaterialHolder schematicBlockTypeRedstoneTrigger; 			//locations of button or levers
     private MaterialHolder ingameBlockTypeRedstoneTrigger;    			//block which is placed instead of the place holder
     private MaterialHolder schematicBlockTypeRightClickTrigger; 		//locations of the right click trigger 
     private MaterialHolder ingameBlockTypeRightClickTrigger;   			//block type of the tigger in game
     private MaterialHolder schematicBlockTypeFiringIndicator;			//location of the firing indicator
-    private MaterialHolder ingameBlockTypeFiringIndicatorOff;			//block type of firing indicator off
-    private MaterialHolder ingameBlockTypeFiringIndicatorOn;   			//block type of firing indicator on
     
     //cannon design block lists for every direction (NORTH, EAST, SOUTH, WEST)
     private HashMap<BlockFace, CannonBlocks> cannonBlockMap = new HashMap<BlockFace, CannonBlocks>();
     
+   
+
     
     /**
      * returns the rotation center of a cannon design
@@ -94,15 +94,16 @@ public class CannonDesign
      * @param offset
      * @return
      */
-    public Vector getRotationCenter(String cannonDirection, Vector offset)
+    public Location getRotationCenter(Cannon cannon)
     {
-    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
     	if (cannonBlocks != null)
     	{
-    		return cannonBlocks.getRotationCenter().add(offset);
+    		return cannonBlocks.getRotationCenter().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
     	
-    	return null;
+    	System.out.println("[Cannons] missing rotation center for cannon design " + cannon.getCannonName());
+    	return cannon.getOffset().toLocation(cannon.getWorldBukkit());
     } 
     
     
@@ -112,15 +113,16 @@ public class CannonDesign
      * @param offset
      * @return
      */
-    public Vector getMuzzle(BlockFace cannonDirection, Vector offset)
+    public Location getMuzzle(Cannon cannon)
     {
-    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
     	if (cannonBlocks != null)
     	{
-    		return cannonBlocks.getMuzzle().add(offset);
+    		return cannonBlocks.getMuzzle().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
-    	
-    	return null;
+
+    	System.out.println("[Cannons] missing muzzle location for cannon design " + cannon.getCannonName());
+    	return cannon.getOffset().toLocation(cannon.getWorldBukkit());
     }
     
     /**
@@ -129,32 +131,16 @@ public class CannonDesign
      * @param offset
      * @return
      */
-    public Vector getFiringTriggerLocation(BlockFace cannonDirection, Vector offset)
+    public Location getFiringTrigger(Cannon cannon)
     {
-    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
     	if (cannonBlocks != null)
     	{
-    		return cannonBlocks.getFiringTrigger().add(offset);
+    		return cannonBlocks.getFiringTrigger().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
     	
-    	return null;
-    }
-    
-    /**
-     * returns a list of the trigger indicator location
-     * @param cannonDirection
-     * @param offset
-     * @return
-     */
-    public List<Vector> getFiringIndicatorLocations(BlockFace cannonDirection)
-    {
-    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
-    	if (cannonBlocks != null)
-    	{
-    		return cannonBlocks.getFiringIndicator();
-    	}
-    	
-    	return null;
+    	System.out.println("[Cannons] missing FiringIndicator for cannon design" + cannon.getCannonName());
+    	return cannon.getOffset().toLocation(cannon.getWorldBukkit());
     }
     
     /**
@@ -162,7 +148,7 @@ public class CannonDesign
      * @param cannonDirection
      * @return
      */
-    public List<SimpleBlock> getAllCannonBlocks(String cannonDirection)
+    public List<SimpleBlock> getAllCannonBlocks(BlockFace cannonDirection)
     {
     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
     	if (cannonBlocks != null)
@@ -173,63 +159,148 @@ public class CannonDesign
     	return new ArrayList<SimpleBlock>();
     }
     
+    
+    /**
+     * returns a list of all firingIndicator blocks
+     * @param cannonDirection
+     * @return
+     */
+    public List<Location> getFiringIndicator(Cannon cannon)
+    {
+     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+    	List<Location> locList = new ArrayList<Location>();
+    	if (cannonBlocks != null)
+    	{
+    		for (Vector vect : cannonBlocks.getFiringIndicator())
+    		{
+    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    		}
+    	}
+		return locList;
+    }
     /**
      * returns a list of all loading interface blocks
      * @param cannonDirection
      * @return
      */
-    public List<Vector> getLoadingInterface(String cannonDirection)
+    public List<Location> getLoadingInterface(Cannon cannon)
     {
-    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+    	List<Location> locList = new ArrayList<Location>();
     	if (cannonBlocks != null)
     	{
-    		return cannonBlocks.getLoadingInterface();
+    		for (Vector vect : cannonBlocks.getLoadingInterface())
+    		{
+    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    		}
     	}
-    	
-    	return new ArrayList<Vector>();
+		return locList;
     }
     
     /**
-     * returns a list of all sign blocks
+     * returns a list of all right click trigger blocks
      * @param cannonDirection
      * @return
      */
-    public List<Vector> getSignsLocations(BlockFace cannonDirection)
+    public List<Location> getRightClickTrigger(Cannon cannon)
     {
-    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+    	List<Location> locList = new ArrayList<Location>();
     	if (cannonBlocks != null)
     	{
-    		return cannonBlocks.getSigns();
+    		for (Vector vect : cannonBlocks.getRightClickTrigger())
+    		{
+    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    		}
     	}
-    	//return a empty list
-    	return new ArrayList<Vector>();
+		return locList;
     }
     
     /**
-     * returns a list of all chest blocks
+     * returns a list of all redstone trigger blocks
      * @param cannonDirection
      * @return
      */
-    public List<Vector> getChestsLocations(BlockFace cannonDirection)
+    public List<Location> getRedstoneTrigger(Cannon cannon)
     {
-    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannonDirection);
+     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+    	List<Location> locList = new ArrayList<Location>();
     	if (cannonBlocks != null)
     	{
-    		return cannonBlocks.getChests();
+    		for (Vector vect : cannonBlocks.getRedstoneTrigger())
+    		{
+    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    		}
     	}
-    	//return a empty list
-    	return new ArrayList<Vector>();
+		return locList;
     }
-     
     
     
-	public int getUniqueID()
+    /**
+     * returns a list of all chest/sign blocks
+     * @param cannonDirection
+     * @return
+     */
+    public List<Location> getChestsAndSigns(Cannon cannon)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+    	List<Location> locList = new ArrayList<Location>();
+    	if (cannonBlocks != null)
+    	{
+    		for (Vector vect : cannonBlocks.getChestsAndSigns())
+    		{
+    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    		}
+    	}
+		return locList;
+    }
+    
+    /**
+     * returns a list of all redstone torch blocks
+     * @param cannonDirection
+     * @return
+     */
+    public List<Location> getRedstoneTorches(Cannon cannon)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+    	List<Location> locList = new ArrayList<Location>();
+    	if (cannonBlocks != null)
+    	{
+    		for (Vector vect : cannonBlocks.getRedstoneTorches())
+    		{
+    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    		}
+    	}
+		return locList;
+    }
+    
+    /**
+     * returns a list of all redstone wire/repeater blocks
+     * @param cannonDirection
+     * @return
+     */
+    public List<Location> getRedstoneWireAndRepeater(Cannon cannon)
+    {
+    	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+    	List<Location> locList = new ArrayList<Location>();
+    	if (cannonBlocks != null)
+    	{
+    		for (Vector vect : cannonBlocks.getRedstoneWiresAndRepeater())
+    		{
+    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    		}
+    	}
+		return locList;
+    }
+
+    
+	public int getDesignID()
 	{
-		return uniqueID;
+		return designID;
 	}
-	public void setUniqueID(int uniqueID)
+	public void setDesignID(int designID)
 	{
-		this.uniqueID = uniqueID;
+		this.designID = designID;
 	}
 	public String getDesignName()
 	{
@@ -519,22 +590,6 @@ public class CannonDesign
 	{
 		this.schematicBlockTypeRotationCenter = schematicBlockTypeRotationCenter;
 	}
-	public MaterialHolder getSchematicBlockTypeChest()
-	{
-		return schematicBlockTypeChest;
-	}
-	public void setSchematicBlockTypeChest(MaterialHolder schematicBlockTypeChest)
-	{
-		this.schematicBlockTypeChest = schematicBlockTypeChest;
-	}
-	public MaterialHolder getSchematicBlockTypeSign()
-	{
-		return schematicBlockTypeSign;
-	}
-	public void setSchematicBlockTypeSign(MaterialHolder schematicBlockTypeSign)
-	{
-		this.schematicBlockTypeSign = schematicBlockTypeSign;
-	}
 	public MaterialHolder getSchematicBlockTypeRedstoneTorch()
 	{
 		return schematicBlockTypeRedstoneTorch;
@@ -542,22 +597,6 @@ public class CannonDesign
 	public void setSchematicBlockTypeRedstoneTorch(MaterialHolder schematicBlockTypeRedstoneTorch)
 	{
 		this.schematicBlockTypeRedstoneTorch = schematicBlockTypeRedstoneTorch;
-	}
-	public MaterialHolder getSchematicBlockTypeRedstoneWire()
-	{
-		return schematicBlockTypeRedstoneWire;
-	}
-	public void setSchematicBlockTypeRedstoneWire(MaterialHolder schematicBlockTypeRedstoneWire)
-	{
-		this.schematicBlockTypeRedstoneWire = schematicBlockTypeRedstoneWire;
-	}
-	public MaterialHolder getSchematicBlockTypeRepeater()
-	{
-		return schematicBlockTypeRepeater;
-	}
-	public void setSchematicBlockTypeRepeater(MaterialHolder schematicBlockTypeRepeater)
-	{
-		this.schematicBlockTypeRepeater = schematicBlockTypeRepeater;
 	}
 	public MaterialHolder getSchematicBlockTypeRedstoneTrigger()
 	{
@@ -591,30 +630,6 @@ public class CannonDesign
 	{
 		this.ingameBlockTypeRightClickTrigger = ingameBlockTypeRightClickTrigger;
 	}
-	public MaterialHolder getSchematicBlockTypeFiringIndicator()
-	{
-		return schematicBlockTypeFiringIndicator;
-	}
-	public void setSchematicBlockTypeFiringIndicator(MaterialHolder schematicBlockTypeFiringIndicator)
-	{
-		this.schematicBlockTypeFiringIndicator = schematicBlockTypeFiringIndicator;
-	}
-	public MaterialHolder getIngameBlockTypeFiringIndicatorOff()
-	{
-		return ingameBlockTypeFiringIndicatorOff;
-	}
-	public void setIngameBlockTypeFiringIndicatorOff(MaterialHolder ingameBlockTypeFiringIndicatorOff)
-	{
-		this.ingameBlockTypeFiringIndicatorOff = ingameBlockTypeFiringIndicatorOff;
-	}
-	public MaterialHolder getIngameBlockTypeFiringIndicatorOn()
-	{
-		return ingameBlockTypeFiringIndicatorOn;
-	}
-	public void setIngameBlockTypeFiringIndicatorOn(MaterialHolder ingameBlockTypeFiringIndicatorOn)
-	{
-		this.ingameBlockTypeFiringIndicatorOn = ingameBlockTypeFiringIndicatorOn;
-	}
 	public HashMap<BlockFace, CannonBlocks> getCannonBlockMap()
 	{
 		return cannonBlockMap;
@@ -623,5 +638,60 @@ public class CannonDesign
 	{
 		this.cannonBlockMap = cannonBlockMap;
 	}
+	
+	public String toString()
+	{
+		return "designID:" + designID + " name:" + designName;
+	}
+
+
+	public MaterialHolder getSchematicBlockTypeChestAndSign()
+	{
+		return schematicBlockTypeChestAndSign;
+	}
+
+
+	public void setSchematicBlockTypeChestAndSign(MaterialHolder schematicBlockTypeChestAndSign)
+	{
+		this.schematicBlockTypeChestAndSign = schematicBlockTypeChestAndSign;
+	}
+
+
+	public MaterialHolder getSchematicBlockTypeRedstoneWireAndRepeater()
+	{
+		return schematicBlockTypeRedstoneWireAndRepeater;
+	}
+
+
+	public void setSchematicBlockTypeRedstoneWireAndRepeater(MaterialHolder schematicBlockTypeRedstoneWireAndRepeater)
+	{
+		this.schematicBlockTypeRedstoneWireAndRepeater = schematicBlockTypeRedstoneWireAndRepeater;
+	}
+
+
+	public MaterialHolder getSchematicBlockTypeFiringIndicator()
+	{
+		return schematicBlockTypeFiringIndicator;
+	}
+
+
+	public void setSchematicBlockTypeFiringIndicator(MaterialHolder schematicBlockTypeFiringIndicator)
+	{
+		this.schematicBlockTypeFiringIndicator = schematicBlockTypeFiringIndicator;
+	}
+
+
+	public String getGunpowderName()
+	{
+		return gunpowderName;
+	}
+
+
+	public void setGunpowderName(String gunpowderName)
+	{
+		this.gunpowderName = gunpowderName;
+	}
+	
+
 	
 }

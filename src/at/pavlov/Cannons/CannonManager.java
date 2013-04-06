@@ -5,42 +5,38 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.material.Button;
-import org.bukkit.material.Torch;
+import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.cannon.Cannon;
+import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
+import at.pavlov.Cannons.container.SimpleBlock;
+import at.pavlov.Cannons.enums.MessageEnum;
 import at.pavlov.Cannons.utils.CannonsUtil;
 
 public class CannonManager
 {
-	private ArrayList<Cannon> CannonList = new  ArrayList<Cannon>();
+	private ArrayList<Cannon> cannonList = new ArrayList<Cannon>();
 
 	private Cannons plugin;
-	private UserMessages message;
+	private UserMessages userMessages;
 	private Config config;
 
 	public CannonManager(Cannons cannons, UserMessages userMessages, Config config)
 	{
-		this.message = userMessages;
+		this.userMessages = userMessages;
 		this.config = config;
 		this.plugin = cannons;
 	}
 
-	public class CannonAttribute
-	{
-		public Location barrel;
-		public BlockFace face;
-		public int barrel_length;
-		public boolean find;
-	}
 
 	// ############### remove ###############################
 	public void removeCannon(Location loc)
@@ -48,7 +44,7 @@ public class CannonManager
 		Cannon cannon = getCannon(loc);
 		removeCannon(cannon);
 	}
-	
+
 	// ############### remove ###############################
 	public void removeCannon(Cannon cannon)
 	{
@@ -60,29 +56,30 @@ public class CannonManager
 			{
 				player = Bukkit.getPlayer(cannon.getOwner());
 			}
-			if (player != null)
-				player.sendMessage(message.cannonDestroyed);
-			
+
 			// destroy cannon (drops items, edit sign)
-			cannon.destroyCannon();
+			MessageEnum message = cannon.destroyCannon();
 			
-			CannonList.remove(cannon);
+			if (player != null) userMessages.displayMessage(player, message);
+
+			//remove from list
+			cannonList.remove(cannon);
 		}
 	}
-	
-	
+
 	/**
 	 * Checks if the name of a cannon is unique
+	 * 
 	 * @param name
 	 * @return true if the name is unique
 	 */
 	private boolean isCannonNameUnique(String name, String owner)
 	{
-		for (Cannon cannon : CannonList)
+		for (Cannon cannon : cannonList)
 		{
-			if (cannon.getName() != null && name != null)
+			if (cannon.getCannonName() != null && name != null)
 			{
-				if (cannon.getName().equals(name))
+				if (cannon.getCannonName().equals(name))
 				{
 					return false;
 				}
@@ -90,19 +87,20 @@ public class CannonManager
 		}
 		return true;
 	}
-	
+
 	/**
 	 * generates a new unique cannon name
+	 * 
 	 * @return
 	 */
 	private String newCannonName(String owner)
 	{
-		String[] nameList = {"Cannon"};//, "Artillery", "Gun"};
-		
+		String[] nameList = {"Cannon"};// , "Artillery", "Gun"};
+
 		Random r = new Random();
 		String pre = nameList[r.nextInt(nameList.length)];
 
-		for (int i=1; i < Integer.MAX_VALUE; i++)
+		for (int i = 1; i < Integer.MAX_VALUE; i++)
 		{
 			String cannonName = pre + " " + i;
 
@@ -111,59 +109,66 @@ public class CannonManager
 				return cannonName;
 			}
 		}
-		
-		
+
 		return "no unique name";
 	}
 
-
-	// ############### createCannon ###############################
-	private void createCannon(Cannon cannon, Player player)
+	/**
+	 * adds a new cannon to the list of cannons
+	 * @param cannon
+	 * @param owner
+	 */
+	private void createCannon(Cannon cannon)
 	{
-		CannonList.add(cannon);
-		if (player != null)
-			player.sendMessage(message.cannonBuilt);
+		cannon.setCannonName(newCannonName(cannon.getOwner()));
+		Player player;
+
+		player = Bukkit.getPlayer(cannon.getOwner());
+		MessageEnum message = cannon.checkRedstonePermission(player);
+		if (player != null) userMessages.displayMessage(player, message);
+
+		// add cannon to the list
+		cannonList.add(cannon);
 	}
-	
+
 	/**
 	 * get cannon by cannonName and Owner - used for Signs
+	 * 
 	 * @param cannonName
 	 * @return
 	 */
 	public Cannon getCannonFromStorage(String cannonName, String owner)
 	{
 		if (cannonName == null || owner == null) return null;
-		
-		for (Cannon cannon : CannonList)
+
+		for (Cannon cannon : cannonList)
 		{
-			if (cannonName.equals(cannon.getName()))
+			if (cannonName.equals(cannon.getCannonName()))
 			{
 				if (owner.equals(cannon.getOwner()))
 				{
 					return cannon;
 				}
 			}
-			
+
 		}
 		return null;
 	}
-	
-	
+
 	/**
-	 * Searches the storage if there is already a cannonblock on this location and returns the cannon
+	 * Searches the storage if there is already a cannonblock on this location
+	 * and returns the cannon
+	 * 
 	 * @param loc
 	 * @return
 	 */
 	private Cannon getCannonFromStorage(Location loc)
 	{
-		for (Cannon cannon : CannonList)
+		for (Cannon cannon : cannonList)
 		{
-			for (Location cannonBlock : cannon.getCannonBlocks())
+			if (cannon.isCannonBlock(loc.getBlock()))
 			{
-				if (cannonBlock.equals(loc))
-				{
-					return cannon;
-				}
+				return cannon;
 			}
 		}
 		return null;
@@ -171,6 +176,7 @@ public class CannonManager
 
 	/**
 	 * searches for a cannon
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -178,11 +184,10 @@ public class CannonManager
 	{
 		return getCannon(loc, null);
 	}
-	
-
 
 	/**
 	 * searches for a cannon and creates a new entry if it does not exist
+	 * 
 	 * @param cannonBlock
 	 * @param player
 	 * @return
@@ -190,83 +195,126 @@ public class CannonManager
 	public Cannon getCannon(Location cannonBlock, String owner)
 	{
 		Cannon cannon = getCannonFromStorage(cannonBlock);
-		
-		// this block is a part of an existing cannon 
+
+		// this block is a part of an existing cannon
 		if (cannon != null)
 		{
-			// search cannon that is written on the sign
-			Cannon cannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
 
-			// check if the name matches with the attached sign or if the name is not valid
-			if (cannonFromSign == null || cannon.isCannonEqualSign() == true )
+			// search cannon that is written on the sign
+			// Cannon cannonFromSign =
+			// getCannonFromStorage(cannon.getCannonNameFromSign(design),
+			// cannon.getOwnerFromSign(design));
+
+			// check if the name matches with the attached sign or if the name
+			// is not valid
+			// if (cannonFromSign == null || cannon.isCannonEqualSign(design) ==
+			// true )
 			{
 				return cannon;
 			}
-			//else
-			//{
-				// different cannon, search the database for the right entry by the cannon name from the sign
-			//	return cannonFromSign;
-			//}
+			// else
+			// {
+			// different cannon, search the database for the right entry by the
+			// cannon name from the sign
+			// return cannonFromSign;
+			// }
 		}
 		// else
 		{
 			// no existing cannon in storage -> check if there is a cannon
-			Player player = null;
-			if (owner != null)
-			{
-				player = Bukkit.getPlayer(owner);
-			}
-			CannonAttribute attribute = check_Cannon(cannonBlock, player);
-			if (attribute.find == true)
-			{
-				// cannon found -> add cannon
-				return addCannon(attribute, owner);
-			}
+			return checkCannon(cannonBlock, owner);
 		}
+
+	}
+
+	public Cannon checkCannon(Location cannonBlock, String owner)
+	{
+		Validate.notNull(owner, "The Owner of the cannon can not be null");
+
+		// get world
+		World world = cannonBlock.getWorld();
+
+		plugin.logDebug("check cannon");
+
+		// check all cannon design if this block is part of the design
+		for (CannonDesign cannonDesign : plugin.getDesignStorage().getCannonDesignList())
+		{
+			// check of all directions
+			BlockFace cannonDirection = BlockFace.NORTH;
+			for (int i = 0; i < 4; i++)
+			{
+				// for all blocks for the design
+				List<SimpleBlock> designBlockList = cannonDesign.getAllCannonBlocks(cannonDirection);
+				for (SimpleBlock designBlock : designBlockList)
+				{
+					// compare blocks
+					if (designBlock.compareBlockFuzzy(cannonBlock.getBlock()))
+					{
+						// this block is same as in the design, get the offset
+						Vector offset = designBlock.substractInverted(cannonBlock).toVector();
+
+						// check all other blocks of the cannon
+						boolean isCannon = true;
+						for (SimpleBlock checkBlocks : designBlockList)
+						{
+							// plugin.logDebug("check block " +
+							// checkBlocks.getID() + " " + checkBlocks.getData()
+							// + " loc " + checkBlocks.toVector().add(offset));
+							if (!checkBlocks.compareBlockFuzzy(world, offset))
+							{
+								// if the block does not match this is not the
+								// right one
+								isCannon = false;
+								break;
+							}
+						}
+
+						// this is a cannon
+						if (isCannon == true)
+						{
+							// make a new cannon if there is no sign on the
+							// cannon
+							Cannon cannon = new Cannon(cannonDesign, world.getName(), offset, cannonDirection, owner);
+							createCannon(cannon);
+
+							plugin.logDebug("Cannon found");
+							return cannon;
+						}
+					}
+				}
+
+				// rotate cannon direction
+				cannonDirection = CannonsUtil.roatateFace(cannonDirection);
+			}
+
+		}
+
+		plugin.logDebug("Nothing found");
 
 		return null;
 	}
 
-	/**
-	 * returns true if this block is a part of a cannon
-	 * @param loc
-	 * @return
-	 */
-	public boolean isPartOfCannon(Location loc)
-	{
-		for (Cannon cannon : CannonList)
-		{
-			for (Location cannonblock : cannon.getCannonBlocks())
-			{
-				if (cannonblock.equals(loc))
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	// ############### contains ###############################
+	// ############### isCannonBlock ###############################
 	public boolean isCannonBlock(Location loc)
 	{
 		if (getCannon(loc) == null)
 		{
-			//no cannon block
-			return false;
-		}
-		else
-		{
+			// no cannon block
 			return true;
 		}
+		return false;
 	}
 
-
-	// ############### getCannonAmount ###############################
-	public int getCannonAmount(String player)
-	{	
+	/**
+	 * returns the number of owned cannons of a player
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public int getNumberOfCannons(String player)
+	{
 		int i = 1;
-		for (Cannon cannon: CannonList)
+		for (Cannon cannon : cannonList)
 		{
 			if (cannon.getOwner() == null)
 			{
@@ -286,366 +334,230 @@ public class CannonManager
 	 */
 	public List<Cannon> getCannonList()
 	{
-		return CannonList;
-	}
-
-	// ############### getCannonListSize ###############################
-	public int getCannonListSize()
-	{
-		return CannonList.size();
-	}
-
-
-	// ############## CheckCannonsAmount ################################
-	private boolean CheckCannonsAmount(Player player)
-	{
-		// the player is not valid - no limit check
-		if (player == null) return true;
-		if (player.getName() == null) return true;
-		
-		// both limitA/B and cannons.player.limit.5 work
-		int newBuildLimit = getBuildLimit(player);
-		int i = getCannonAmount(player.getName()); 
-
-		if (newBuildLimit == -1)
-		{
-			// previous implementation
-			if (player.hasPermission("cannons.player.limitB") && i > config.cannonLimitB)
-			{
-				player.sendMessage(message.getTooManyGuns(config.cannonLimitB));
-				return false;
-			}
-			// limit B is stronger
-			if (player.hasPermission("cannons.player.limitB") == false && player.hasPermission("cannons.player.limitA") && i > config.cannonLimitA)
-			{
-				player.sendMessage(message.getTooManyGuns(config.cannonLimitA));
-				return false;
-			}
-			return true;
-		}
-		else
-		{
-			// new implementation
-			if (i > newBuildLimit)
-			{
-				player.sendMessage(message.getTooManyGuns(newBuildLimit));
-				return false;
-			}
-			return true;
-		}
+		return cannonList;
 	}
 
 	/**
-	 * Extracts the build limit of a player
+	 * returns the number of cannons manged by the plugin
+	 * 
+	 * @return
+	 */
+	public int getcannonListSize()
+	{
+		return cannonList.size();
+	}
+
+	/**
+	 * returns the amout of cannons a player can build
 	 * 
 	 * @param player
 	 * @return
 	 */
-	private int getBuildLimit(Player player)
-	{	
-		//if all notes are enabled, set limit to a high number
-		if(player.hasPermission("cannons.player.limit." + Integer.MAX_VALUE))
-		{
-			return Integer.MAX_VALUE;
-		}
-			
-		//else check all nodes for the player
-		for(int i = 100; i > 0; i--)
-		{
-			if(player.hasPermission("cannons.player.limit." + i))
-				return i;
-		}
-		
-		return -1;
-	}
-
-	// #################################### addCannonBlocks #########################
-	private Cannon addCannonBlocks(Cannon cannon)
+	public int getCannonBuiltLimit(Player player)
 	{
-		if (cannon == null)
-			return null;
+		// the player is not valid - no limit check
+		if (player == null) return Integer.MAX_VALUE;
+		if (player.getName() == null) return Integer.MAX_VALUE;
 
-		// is cannonmaterial
-		Block block = cannon.firingLocation.getBlock();
-		BlockFace reverse = cannon.face.getOppositeFace();
-
-		// button in front
-		Location loc = block.getRelative(cannon.face).getLocation();
-		cannon.addCannonBlock(loc);
-
-		// barrel
-		loc = block.getLocation();
-		cannon.addCannonBlock(loc);
-
-		// go back along the barrel + button backside
-		int length = 1;
-		do
+		// both limitA/B and cannons.player.limit.5 work
+		// if all notes are enabled, set limit to a high number
+		int newBuiltLimit = -1;
+		if (player.hasPermission("cannons.player.limit." + Integer.MAX_VALUE))
 		{
-			length++;
-			block = block.getRelative(reverse, 1);
-			loc = block.getLocation();
-			cannon.addCannonBlock(loc);
-		} while (length < cannon.barrel_length + 1);
-		block = block.getRelative(cannon.face, 1);
+			newBuiltLimit = Integer.MAX_VALUE;
+		}
 
-		// torch backside
-		loc = block.getRelative(BlockFace.UP).getLocation();
-		cannon.addCannonBlock(loc);
+		// else check all nodes for the player
+		for (int i = 100; i > 0; i--)
+		{
+			if (player.hasPermission("cannons.player.limit." + i)) newBuiltLimit = i;
+		}
 
-		return cannon;
+		// config implementation
+		if (newBuiltLimit == -1)
+		{
+			if (player.hasPermission("cannons.player.limitB"))
+			{
+				// return the
+				return config.cannonLimitB;
+			}
+			// limit B is stronger
+			else if (player.hasPermission("cannons.player.limitA"))
+			{
+				return config.cannonLimitA;
+			}
+		}
+		// player implementation
+		else
+		{
+			return newBuiltLimit;
+		}
+		return Integer.MAX_VALUE;
 	}
-
-	// #################################### ADD_CANNON ######################
-	private Cannon addCannon(CannonAttribute att_cannon, String owner)
+	/**
+	 * checks if the player can build a cannon (permission, builtLimit)
+	 * 
+	 * @param cannon
+	 * @param player
+	 * @return
+	 */
+	public MessageEnum canBuildCannon(Cannon cannon, Player player)
 	{
-	
-			// create a new cannon
-			Cannon new_cannon = new Cannon();
+		CannonDesign design = cannon.getCannonDesign();
 
-
-				
-			new_cannon.firingLocation = att_cannon.barrel;
-			new_cannon.face = att_cannon.face;
-			new_cannon.barrel_length = att_cannon.barrel_length;
-			
-			
-			//search if there is a entry with this name written on the sign of the cannon with the same length
-			Cannon old_cannon = getCannonFromStorage(new_cannon.getCannonNameFromSign(), new_cannon.getOwnerFromSign());
-
-			//there is a cannon with this name in the storage -> update entry
-			if (old_cannon != null && old_cannon.barrel_length == new_cannon.barrel_length)
-			{
-				
-				old_cannon.firingLocation = new_cannon.firingLocation;
-				old_cannon.face = new_cannon.face;
-
-				
-				// add cannon blocks
-				old_cannon.setCannonBlocks(new ArrayList<Location>());
-				old_cannon = addCannonBlocks(old_cannon);
-				
-				old_cannon.updateCannonSigns();
-				return old_cannon;
-			}
-			//no cannon stored, this is a new cannon - make a new entry
-			else
-			{
-				//there needs to be a player to create a cannon
-				if (owner == null ) return null;
-				
-				Player player = Bukkit.getPlayer(owner);
-				
-				// check if player is allowed to build a new cannon
-				boolean create = true;
-				if (config.enableLimits == true)
-				{
-					create = CheckCannonsAmount(player);
-				}
-				if (create == true)
-				{
-					new_cannon.setOwner(owner);
-					new_cannon.setName(newCannonName(owner));
-					new_cannon.setLastFired(0);
-					new_cannon.setLoadedGunpowder(0);
-					new_cannon.setProjectileID(Material.AIR.getId());
-					new_cannon.setProjectileData(0);
-					new_cannon.setHorizontalAngle(0.0);
-					new_cannon.setVerticalAngle(0.0);
-					new_cannon.setDesignID(0);
-					new_cannon.setValid(true);
-				
-					// add cannon blocks
-					new_cannon = addCannonBlocks(new_cannon);
-					// add cannon
-					createCannon(new_cannon, player);
-
-					new_cannon.updateCannonSigns();
-					return new_cannon;
-				}
-			
-			}
-
-		return null;
+		// check if player has permission to build
+		if (!player.hasPermission(design.getPermissionBuild()))
+		{
+			return MessageEnum.PermissionErrorBuild;
+		}
+		// player does not have too many guns
+		if (getCannonBuiltLimit(player) > getNumberOfCannons(player.getName()))
+		{
+			return MessageEnum.ErrorCannonBuiltLimit;
+		}
+		// player has sufficient permission to build a cannon
+		return MessageEnum.CannonCreated;
 	}
 
-	
+	/*
+	 * // #################################### ADD_CANNON ######################
+	 * private Cannon addCannon(CannonAttribute att_cannon, String owner) {
+	 * 
+	 * // create a new cannon Cannon new_cannon = new Cannon();
+	 * 
+	 * 
+	 * 
+	 * new_cannon.firingLocation = att_cannon.barrel; new_cannon.face =
+	 * att_cannon.face; new_cannon.barrel_length = att_cannon.barrel_length;
+	 * 
+	 * 
+	 * //search if there is a entry with this name written on the sign of the
+	 * cannon with the same length Cannon old_cannon =
+	 * getCannonFromStorage(new_cannon.getCannonNameFromSign(),
+	 * new_cannon.getOwnerFromSign());
+	 * 
+	 * //there is a cannon with this name in the storage -> update entry if
+	 * (old_cannon != null && old_cannon.barrel_length ==
+	 * new_cannon.barrel_length) {
+	 * 
+	 * old_cannon.firingLocation = new_cannon.firingLocation; old_cannon.face =
+	 * new_cannon.face;
+	 * 
+	 * 
+	 * // add cannon blocks old_cannon.setCannonBlocks(new
+	 * ArrayList<Location>()); old_cannon = addCannonBlocks(old_cannon);
+	 * 
+	 * old_cannon.updateCannonSigns(); return old_cannon; } //no cannon stored,
+	 * this is a new cannon - make a new entry else { //there needs to be a
+	 * player to create a cannon if (owner == null ) return null;
+	 * 
+	 * Player player = Bukkit.getPlayer(owner);
+	 * 
+	 * // check if player is allowed to build a new cannon boolean create =
+	 * true; if (config.enableLimits == true) { create =
+	 * CheckCannonsAmount(player); } if (create == true) {
+	 * new_cannon.setOwner(owner); new_cannon.setName(newCannonName(owner));
+	 * new_cannon.setLastFired(0); new_cannon.setLoadedGunpowder(0);
+	 * new_cannon.setProjectileID(Material.AIR.getId());
+	 * new_cannon.setProjectileData(0); new_cannon.setHorizontalAngle(0.0);
+	 * new_cannon.setVerticalAngle(0.0); new_cannon.setDesignID(0);
+	 * new_cannon.setValid(true);
+	 * 
+	 * // add cannon blocks new_cannon = addCannonBlocks(new_cannon); // add
+	 * cannon createCannon(new_cannon, player);
+	 * 
+	 * new_cannon.updateCannonSigns(); return new_cannon; }
+	 * 
+	 * }
+	 * 
+	 * return null; }
+	 */
 
-	
-
-	// #################################### CHECK_CANNON ###########################
-	private CannonAttribute check_Cannon(Location barrel, Player player)
-	{
-		boolean find_cannon = false;
-		Block block = barrel.getBlock();
-		BlockFace face = BlockFace.SELF;
-
-		if (block.getType() == Material.TORCH)
-		{
-			Torch torch = (Torch) block.getState().getData();
-			// get attached Block
-			block = block.getRelative(torch.getAttachedFace());
-		}
-		else if (block.getType() == Material.STONE_BUTTON)
-		{
-			Button button = (Button) block.getState().getData();
-			// get attached Block
-			block = block.getRelative(button.getAttachedFace());
-		}
-
-		boolean redo = false;
-		int length = 0, length_plus = 0, length_minus = 0;
-		if (CannonsUtil.hasIdData(block, config.CannonMaterialId, config.CannonMaterialData))
-		{
-			do
-			{
-				// Select Barrel direction
-				if (CannonsUtil.hasIdData(block.getRelative(BlockFace.EAST), config.CannonMaterialId, config.CannonMaterialData) && redo == false)
-				{
-					face = BlockFace.EAST;
-				}
-				else if (CannonsUtil.hasIdData(block.getRelative(BlockFace.WEST), config.CannonMaterialId, config.CannonMaterialData) && redo == false)
-				{
-					face = BlockFace.WEST;
-				}
-				else if (CannonsUtil.hasIdData(block.getRelative(BlockFace.SOUTH), config.CannonMaterialId, config.CannonMaterialData))
-				{
-					face = BlockFace.SOUTH;
-				}
-				else if (CannonsUtil.hasIdData(block.getRelative(BlockFace.NORTH), config.CannonMaterialId, config.CannonMaterialData))
-				{
-					face = BlockFace.NORTH;
-				}
-				else
-				{
-					face = BlockFace.NORTH;
-				}
-
-				// get barrel length
-				do
-				{
-					length_plus++;
-				} while (CannonsUtil.hasIdData(block.getRelative(face, length_plus), config.CannonMaterialId, config.CannonMaterialData) && length_plus < config.max_barrel_length);
-				do
-				{
-					length_minus++;
-				} while (CannonsUtil.hasIdData(block.getRelative(face.getOppositeFace(), length_minus), config.CannonMaterialId, config.CannonMaterialData) && length_minus < config.max_barrel_length);
-
-				// Check Buttons and Torch
-				if (CannonsUtil.CheckAttachedButton(block.getRelative(face.getOppositeFace(), length_minus - 1), face.getOppositeFace()))
-				{
-					if (CannonsUtil.CheckAttachedButton(block.getRelative(face, length_plus - 1), face))
-					{
-						if (CannonsUtil.CheckAttachedTorch(block.getRelative(face.getOppositeFace(), length_minus - 1)))
-						{
-							if (!CannonsUtil.CheckAttachedTorch(block.getRelative(face, length_plus - 1)))
-							{
-								// no change of Face necessary
-								barrel = block.getRelative(face, length_plus - 1).getLocation();
-								find_cannon = true;
-							}
-						}
-						else if (CannonsUtil.CheckAttachedTorch(block.getRelative(face, length_plus - 1)))
-						{
-							if (!CannonsUtil.CheckAttachedTorch(block.getRelative(face.getOppositeFace(), length_minus - 1)))
-							{
-								face = face.getOppositeFace();
-								barrel = block.getRelative(face, length_minus - 1).getLocation();
-								find_cannon = true;
-							}
-						}
-					}
-				}
-				
-
-				length = length_plus + length_minus - 1;
-				if (!(length >= config.min_barrel_length && length <= config.max_barrel_length && find_cannon == true))
-				{
-					find_cannon = false;
-				}
-				if (find_cannon == false && redo == false)
-				{
-					// try other direction
-					redo = true;
-					length_plus = 0;
-					length_minus = 0;
-				}
-				else
-				{
-					redo = false;
-				}
-
-			} while (redo);
-		}
-
-		// check redstonetorches around the cannon
-		if (find_cannon == true)
-		{
-			if (player != null)
-			{
-				// player is not allowed to place redstonetorch
-				if (player.hasPermission("cannons.player.placeRedstoneTorch") == false)
-				{
-					// check all barrel blocks
-					if (CheckRedstone(barrel, length, face) == true)
-					{
-						player.sendMessage(message.ErrorPermRestoneTorch);
-					}
-				}
-			}
-		}
-
-		CannonAttribute cannon = new CannonAttribute();
-		cannon.barrel = barrel;
-		cannon.face = face;
-		cannon.find = find_cannon;
-		cannon.barrel_length = length;
-		return cannon;
-	}
-
-	// ############## CheckRedstone ##############################
-	private boolean CheckRedstone(Location barrel, int length, BlockFace face)
-	{
-
-		// torch
-		Block barrelBlock = barrel.getBlock();
-		Boolean broke = false;
-		for (int i = 0; i < length; i++)
-		{
-			Block next = barrelBlock.getRelative(face.getOppositeFace(), i);
-			for (Block b : SurroundingBlocks(next))
-			{
-				if (b.getType() == Material.REDSTONE_TORCH_ON || b.getType() == Material.REDSTONE_TORCH_OFF)
-				{
-					broke = true;
-					b.breakNaturally();
-				}
-			}
-		}
-
-		// wire
-		Block button = barrelBlock.getRelative(face.getOppositeFace(), length);
-		for (Block b : HorizontalSurroundingBlocks(button))
-		{
-			if (b.getType() == Material.REDSTONE_WIRE)
-			{
-				broke = true;
-				b.breakNaturally();
-			}
-		}
-
-		return broke;
-	}
-	
+	/*
+	 * // #################################### CHECK_CANNON
+	 * ########################### private CannonAttribute check_Cannon(Location
+	 * barrel, Player player) { boolean find_cannon = false; Block block =
+	 * barrel.getBlock(); BlockFace face = BlockFace.SELF;
+	 * 
+	 * if (block.getType() == Material.TORCH) { Torch torch = (Torch)
+	 * block.getState().getData(); // get attached Block block =
+	 * block.getRelative(torch.getAttachedFace()); } else if (block.getType() ==
+	 * Material.STONE_BUTTON) { Button button = (Button)
+	 * block.getState().getData(); // get attached Block block =
+	 * block.getRelative(button.getAttachedFace()); }
+	 * 
+	 * boolean redo = false; int length = 0, length_plus = 0, length_minus = 0;
+	 * if (CannonsUtil.hasIdData(block, config.CannonMaterialId,
+	 * config.CannonMaterialData)) { do { // Select Barrel direction if
+	 * (CannonsUtil.hasIdData(block.getRelative(BlockFace.EAST),
+	 * config.CannonMaterialId, config.CannonMaterialData) && redo == false) {
+	 * face = BlockFace.EAST; } else if
+	 * (CannonsUtil.hasIdData(block.getRelative(BlockFace.WEST),
+	 * config.CannonMaterialId, config.CannonMaterialData) && redo == false) {
+	 * face = BlockFace.WEST; } else if
+	 * (CannonsUtil.hasIdData(block.getRelative(BlockFace.SOUTH),
+	 * config.CannonMaterialId, config.CannonMaterialData)) { face =
+	 * BlockFace.SOUTH; } else if
+	 * (CannonsUtil.hasIdData(block.getRelative(BlockFace.NORTH),
+	 * config.CannonMaterialId, config.CannonMaterialData)) { face =
+	 * BlockFace.NORTH; } else { face = BlockFace.NORTH; }
+	 * 
+	 * // get barrel length do { length_plus++; } while
+	 * (CannonsUtil.hasIdData(block.getRelative(face, length_plus),
+	 * config.CannonMaterialId, config.CannonMaterialData) && length_plus <
+	 * config.max_barrel_length); do { length_minus++; } while
+	 * (CannonsUtil.hasIdData(block.getRelative(face.getOppositeFace(),
+	 * length_minus), config.CannonMaterialId, config.CannonMaterialData) &&
+	 * length_minus < config.max_barrel_length);
+	 * 
+	 * // Check Buttons and Torch if
+	 * (CannonsUtil.CheckAttachedButton(block.getRelative
+	 * (face.getOppositeFace(), length_minus - 1), face.getOppositeFace())) { if
+	 * (CannonsUtil.CheckAttachedButton(block.getRelative(face, length_plus -
+	 * 1), face)) { if
+	 * (CannonsUtil.CheckAttachedTorch(block.getRelative(face.getOppositeFace(),
+	 * length_minus - 1))) { if
+	 * (!CannonsUtil.CheckAttachedTorch(block.getRelative(face, length_plus -
+	 * 1))) { // no change of Face necessary barrel = block.getRelative(face,
+	 * length_plus - 1).getLocation(); find_cannon = true; } } else if
+	 * (CannonsUtil.CheckAttachedTorch(block.getRelative(face, length_plus -
+	 * 1))) { if
+	 * (!CannonsUtil.CheckAttachedTorch(block.getRelative(face.getOppositeFace
+	 * (), length_minus - 1))) { face = face.getOppositeFace(); barrel =
+	 * block.getRelative(face, length_minus - 1).getLocation(); find_cannon =
+	 * true; } } } }
+	 * 
+	 * 
+	 * length = length_plus + length_minus - 1; if (!(length >=
+	 * config.min_barrel_length && length <= config.max_barrel_length &&
+	 * find_cannon == true)) { find_cannon = false; } if (find_cannon == false
+	 * && redo == false) { // try other direction redo = true; length_plus = 0;
+	 * length_minus = 0; } else { redo = false; }
+	 * 
+	 * } while (redo); }
+	 * 
+	 * // check redstonetorches around the cannon if (find_cannon == true) { if
+	 * (player != null) { // player is not allowed to place redstonetorch if
+	 * (player.hasPermission("cannons.player.placeRedstoneTorch") == false) { //
+	 * check all barrel blocks if (CheckRedstone(barrel, length, face) == true)
+	 * { player.sendMessage(message.ErrorPermRestoneTorch); } } } }
+	 * 
+	 * CannonAttribute cannon = new CannonAttribute(); cannon.barrel = barrel;
+	 * cannon.face = face; cannon.find = find_cannon; cannon.barrel_length =
+	 * length; return cannon; }
+	 */
 
 	/**
-	 * Deletes all cannons of this player in the database to reset the cannon limit
+	 * Deletes all cannons of this player in the database to reset the cannon
+	 * limit
+	 * 
 	 * @param player
 	 */
 	public void deleteCannons(String owner)
 	{
-		Iterator<Cannon> iter = CannonList.iterator();
-		
-		while(iter.hasNext())
+		Iterator<Cannon> iter = cannonList.iterator();
+
+		while (iter.hasNext())
 		{
 			Cannon next = iter.next();
 			if (next.getOwner().equals(owner))
@@ -655,8 +567,6 @@ public class CannonManager
 			}
 		}
 	}
-
-
 
 	// ########### SurroundingBlocks #######################################
 	public ArrayList<Block> SurroundingBlocks(Block block)

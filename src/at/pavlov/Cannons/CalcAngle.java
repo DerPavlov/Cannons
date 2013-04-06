@@ -97,7 +97,7 @@ public class CalcAngle {
 	//################# DisplayAngle #######################################################
 	private void DisplayAngle(Cannon cannon, Action action, BlockFace clickedFace, Player player)
 	{
-		CannonDesign design = cannon.getCannonDesign();
+		CannonDesign design = plugin.getDesignStorage().getDesign(cannon);
 		
 		gunAngles angles = new gunAngles(0.0, 0.0);
 		//both horizontal and vertical angle will be displayed in one message
@@ -139,7 +139,7 @@ public class CalcAngle {
 					hasChanged = true;
 					if (combine == false) 
 					{
-						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon.getHorizontalAngle()));
+						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon));
 					}
 				}
 			}
@@ -152,7 +152,7 @@ public class CalcAngle {
 					hasChanged = true;
 					if (combine == false) 
 					{
-						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon.getHorizontalAngle()));
+						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon));
 					}
 				}
 			}
@@ -169,7 +169,7 @@ public class CalcAngle {
 					hasChanged = true;
 					if (combine == false) 
 					{
-						player.sendMessage(userMessages.getSettingVerticalAngle(cannon.getVerticalAngle()));
+						player.sendMessage(userMessages.getSettingVerticalAngle(cannon));
 					}
 				}
 			}
@@ -182,7 +182,7 @@ public class CalcAngle {
 					hasChanged = true;
 					if (combine == false) 
 					{
-						player.sendMessage(userMessages.getSettingVerticalAngle(cannon.getVerticalAngle()));
+						player.sendMessage(userMessages.getSettingVerticalAngle(cannon));
 					}		
 				}
 			}
@@ -191,7 +191,7 @@ public class CalcAngle {
 		//display the combined messages with both angles
 		if (combine == true && hasChanged == true)
 		{
-			player.sendMessage(userMessages.getSettingCombinedAngle(cannon.getHorizontalAngle(), cannon.getVerticalAngle()));
+			player.sendMessage(userMessages.getSettingCombinedAngle(cannon));
 		}
 	}
 	
@@ -313,12 +313,15 @@ public class CalcAngle {
 	//############## PlayerMove ################################
 	public void PlayerMove(Player player)
 	{
+		
+		
 		if (inAimingMode.containsKey(player) == true)
 		{	
 			//check if player if far away from the cannon
 			Cannon cannon = inAimingMode.get(player);
-			//go to tigger location
-			Location locCannon = cannon.getFiringTriggerLocation();
+			CannonDesign design = plugin.getCannonDesign(cannon);
+			//go to trigger location
+			Location locCannon = design.getFiringTrigger(cannon);
 			if (player.getLocation().distance(locCannon) > 2)
 			{
 				//cancel aiming mode if too far away

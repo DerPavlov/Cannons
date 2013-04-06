@@ -8,8 +8,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import at.pavlov.Cannons.Cannons;
+import at.pavlov.Cannons.cannon.Cannon;
+import at.pavlov.Cannons.enums.MessageEnum;
 
 public class UserMessages {
 	private FileConfiguration customLanguage = null;
@@ -335,34 +338,45 @@ public class UserMessages {
 	    }
 	}
 	
+	/**
+	 * sends a message to the player
+	 * @param player
+	 * @param message
+	 */
+	public void displayMessage(Player player, MessageEnum message)
+	{
+		if (player != null)
+			player.sendMessage("message: " + message.getString());
+	}
+	
 	
 	//############# getMaximumGunpowderLoaded ##########################################
-	public String getMaximumGunpowderLoaded(int gunpowder)
+	public String getMaximumGunpowderLoaded(Cannon cannon)
 	{		
-		return splitString(MaximumGunpowderLoaded, "GUNPOWDER", Integer.toString(gunpowder));
+		return splitString(MaximumGunpowderLoaded, "GUNPOWDER", Integer.toString(cannon.getLoadedGunpowder()));
 	}
 	
 	//############# getProjectileAlreadyLoaded ##########################################
-	public String getProjectileAlreadyLoaded(int gunpowder, int projectileID)
+	public String getProjectileAlreadyLoaded(Cannon cannon)
 	{		
-		String string = splitString(ProjectileAlreadyLoaded, "GUNPOWDER", Integer.toString(gunpowder));
-		return splitString(string, "PROJECTILE", Material.getMaterial(projectileID).toString());
+		String string = splitString(ProjectileAlreadyLoaded, "GUNPOWDER", Integer.toString(cannon.getLoadedGunpowder()));
+		return splitString(string, "PROJECTILE", Material.getMaterial(cannon.getProjectileID()).toString());
 	}
 	
 	//############# getSettingCombinedAngle ##########################################
-	public String getSettingCombinedAngle(double horizontal_angle, double vertical_angle)
+	public String getSettingCombinedAngle(Cannon cannon)
 	{		
-		int hangle = (int) horizontal_angle;
-		int vangle = (int) vertical_angle;
+		int hangle = (int) cannon.getHorizontalAngle();
+		int vangle = (int) cannon.getVerticalAngle();
 		String string = splitString(settingCombinedAngle, "HDEGREE", Integer.toString(hangle));
 		return splitString(string, "VDEGREE", Integer.toString(vangle));
 	}
 	
 	
 	//############# getSettingVerticalAngle ##########################################
-	public String getSettingVerticalAngle(double vangle)
+	public String getSettingVerticalAngle(Cannon cannon)
 	{		
-		int angle = (int) vangle;
+		int angle = (int) cannon.getVerticalAngle();
 		if (angle >= 0)
 		{
 			//UP
@@ -376,9 +390,9 @@ public class UserMessages {
 	}
 	
 	//############# getSettingHorizontalAngle ##########################################
-	public String getSettingHorizontalAngle(double horizontal_angle)
+	public String getSettingHorizontalAngle(Cannon cannon)
 	{		
-		int hori = (int)  horizontal_angle;
+		int hori = (int)  cannon.getHorizontalAngle();
 		if (hori >= 0)
 		{
 			//Right
@@ -392,15 +406,15 @@ public class UserMessages {
 	}
 	
 	//############# getloadProjectile ##########################################
-	public String getloadProjectile(int projectileID)
+	public String getloadProjectile(Cannon cannon)
 	{		
-		return splitString(loadProjectile, "PROJECTILE", Material.getMaterial(projectileID).toString());
+		return splitString(loadProjectile, "PROJECTILE", Material.getMaterial(cannon.getProjectileID()).toString());
 	}
 	
 	//############# getloadGunpowder ##########################################
-	public String getloadGunpowder(int gunpowder)
+	public String getloadGunpowder(Cannon cannon)
 	{		
-		return splitString(loadGunpowder, "GUNPOWDER", Integer.toString(gunpowder));
+		return splitString(loadGunpowder, "GUNPOWDER", Integer.toString(cannon.getLoadedGunpowder()));
 	}
 	
 	//############# getTooManyGuns ##########################################

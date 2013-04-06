@@ -1,0 +1,33 @@
+general:
+  name: cannonball
+  itemName: cobblestone
+  types:
+    - 4:0
+cannonball:
+  velocity: 3
+  penetration: 1
+  timefuse: 0
+  amountOfBullets: 1
+  spreadMultiplier: 1.0
+  properties:
+    - superbreaker
+    - incendiary
+    - teleport_shooter_to_impact
+explosion:
+  explosionPower: 2
+  blockDamage: false
+  effectRange: 5
+  effectDuration: 7
+  effectAmplifier: 0
+  entityEffects:
+    - instant_damage
+    - slowness
+placeBlock:
+  radius: 0
+  amount: 0
+  material:
+    - 1:0
+loadPermission:
+  - cannons.projectile.cobblestone
+
+

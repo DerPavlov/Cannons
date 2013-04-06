@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -20,16 +21,20 @@ import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
 import de.tyranus.minecraft.bukkit.guildawards.GuildAwardsPlugin;
 import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
 
+import at.pavlov.Cannons.cannon.Cannon;
+import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.DesignStorage;
+import at.pavlov.Cannons.config.ProjectileStorage;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.dao.CannonBean;
 import at.pavlov.Cannons.dao.MyDatabase;
 import at.pavlov.Cannons.dao.PersistenceDatabase;
-import at.pavlov.Cannons.inventory.InventoryManagement;
 import at.pavlov.Cannons.listener.Commands;
 import at.pavlov.Cannons.listener.PlayerListener;
 import at.pavlov.Cannons.listener.SignListener;
 import at.pavlov.Cannons.mcstats.Metrics;
+import at.pavlov.Cannons.projectile.Projectile;
 
 public class Cannons extends JavaPlugin
 {
@@ -37,6 +42,8 @@ public class Cannons extends JavaPlugin
 	private final Logger logger = Logger.getLogger("Minecraft");
 
 	private Config config;
+	private DesignStorage designStorage;
+	private ProjectileStorage projectileStorage;
 	private UserMessages userMessages;
 	private CannonManager cannonManager;
 	private FireCannon fireCannon;
@@ -63,7 +70,10 @@ public class Cannons extends JavaPlugin
 	{
 
 		this.config = new Config(this);
+		this.designStorage = this.config.getDesignStorage();
+		this.projectileStorage = this.config.getProjectileStorage();
 		this.userMessages = this.config.getUserMessages();
+		
 		this.cannonManager = new CannonManager(this, userMessages, config);
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, userMessages, explosion);
@@ -374,6 +384,41 @@ public class Cannons extends JavaPlugin
 	public SignListener getSignListener()
 	{
 		return signListener;
+	}
+
+	public DesignStorage getDesignStorage()
+	{
+		return designStorage;
+	}
+
+	public void setDesignStorage(DesignStorage designStorage)
+	{
+		this.designStorage = designStorage;
+	}
+	
+	public CannonDesign getCannonDesign(Cannon cannon)
+	{
+		return designStorage.getDesign(cannon);
+	}
+
+	public ProjectileStorage getProjectileStorage()
+	{
+		return projectileStorage;
+	}
+
+	public void setProjectileStorage(ProjectileStorage projectileStorage)
+	{
+		this.projectileStorage = projectileStorage;
+	}
+	
+	public Projectile getProjectile(int id, int data)
+	{
+		return this.projectileStorage.getProjectile(id, data);
+	}
+	
+	public Projectile getProjectile(ItemStack item)
+	{
+		return this.projectileStorage.getProjectile(item);
 	}
 
 }

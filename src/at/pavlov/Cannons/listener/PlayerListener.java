@@ -25,7 +25,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 
 import at.pavlov.Cannons.CalcAngle;
@@ -34,9 +33,10 @@ import at.pavlov.Cannons.Cannons;
 import at.pavlov.Cannons.CreateExplosion;
 import at.pavlov.Cannons.FireCannon;
 import at.pavlov.Cannons.cannon.Cannon;
+import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
-import at.pavlov.Cannons.inventory.InventoryManagement;
+import at.pavlov.Cannons.enums.MessageEnum;
 import at.pavlov.Cannons.projectile.FlyingProjectile;
 import at.pavlov.Cannons.projectile.Projectile;
 import at.pavlov.Cannons.utils.CannonsUtil;
@@ -45,23 +45,21 @@ public class PlayerListener implements Listener
 {
 	private Config config;
 	private UserMessages userMessages;
-	@SuppressWarnings("unused")
 	private Cannons plugin;
 	private CannonManager cannonManager;
-	private InventoryManagement InvManage;
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
 	private CalcAngle calcAngle;
 
 	public PlayerListener(Cannons plugin)
 	{
-		this.config = plugin.getmyConfig();
-		this.userMessages = plugin.getmyConfig().getUserMessages();
 		this.plugin = plugin;
-		this.cannonManager = plugin.getCannonManager();
-		this.explosion = plugin.getExplosion();
-		this.fireCannon = plugin.getFireCannon();
-		this.calcAngle = plugin.getCalcAngle();
+		this.config = this.plugin.getmyConfig();
+		this.userMessages = this.plugin.getmyConfig().getUserMessages();
+		this.cannonManager = this.plugin.getCannonManager();
+		this.explosion = this.plugin.getExplosion();
+		this.fireCannon = this.plugin.getFireCannon();
+		this.calcAngle = this.plugin.getCalcAngle();
 	}
 	
 	// ########### PlayerMove #######################################
@@ -189,7 +187,7 @@ public class PlayerListener implements Listener
 			if (cannonManager.isCannonBlock(barrel) == true)
 			{
 				// delete projectile
-				if (CheckLoadedProjectile(event.getBucket().getId(), 0))
+				//if (CheckLoadedProjectile(event.getBucket().getId(), 0))
 				{
 					event.setCancelled(true);
 				}
@@ -226,18 +224,18 @@ public class PlayerListener implements Listener
 			cannonManager.getCannon(barrel, event.getPlayer().getName());
 		}
 
-		
 		// delete place projectile if clicked against the barrel
 		if (event.getBlockAgainst() != null)
 		{
 			if (config.isCannonBlock(event.getBlockAgainst()))
 			{
 				Location barrel = event.getBlockAgainst().getLocation();
+				
 				// check if block is cannonblock
-				if (cannonManager.isCannonBlock(barrel) == true && cannonManager.isPartOfCannon(event.getBlock().getLocation()) == false)
+				if (cannonManager.isCannonBlock(barrel) == true )// && cannonManager.isPartOfCannon(event.getBlock().getLocation()) == false)
 				{
 					// delete projectile
-					if (CheckLoadedProjectile(event.getBlock()))
+					//if (CheckLoadedProjectile(event.getBlock()))
 					{
 						event.setCancelled(true);
 					}
@@ -378,7 +376,7 @@ public class PlayerListener implements Listener
 	
 
 	/**
-	 * Cannon snowball this the ground
+	 * Cannon snowball hits the ground
 	 * @param event
 	 */
 	@EventHandler
@@ -431,8 +429,12 @@ public class PlayerListener implements Listener
 
 				// find cannon or add it to the list
 				Cannon cannon = cannonManager.getCannon(barrel, player.getName());
+				
 				if (cannon == null)
 					return;
+				
+				//get cannon design
+				CannonDesign design = cannon.getCannonDesign();
 				
 				//prevent eggs and snowball from firing when loaded into the gun
 				Material ItemInHand = player.getItemInHand().getType();
@@ -442,55 +444,40 @@ public class PlayerListener implements Listener
 				}
 
 				// ########## Load Projectile ######################
-				if (config.isCannonBarrel(clickedBlock) && CheckLoadedProjectile(event.getPlayer()
-								.getItemInHand())) 
+				Projectile projectile = plugin.getProjectile(event.getItem());
+				if (cannon.isLoadingBlock(clickedBlock) && projectile != null) 
 				{
-					if (CheckPermProjectile(player, cannon)) 
-					{
-						// load projectile
-						cannon.setProjectileID(ItemInHand.getId());
-						player.sendMessage(userMessages.getloadProjectile(ItemInHand.getId()));
-
-						InvManage.TakeFromPlayerInventory(player, config.inventory_take);
-						
-						//update Signs
-						cannon.updateCannonSigns();
-						return;
-					}
+					//load projectile
+					MessageEnum message = cannon.loadProjectile(projectile, player);
+					//display message
+					userMessages.displayMessage(player, message);	
 				}
 
-				// ########## Barrel clicked with Sulphur ##########################
-				if (config.isCannonBarrel(clickedBlock) && event.getMaterial() == Material.SULPHUR) 
+				// ########## Barrel clicked with gunpowder ##########################
+				if (cannon.isLoadingBlock(clickedBlock) && design.getGunpowderType().equals(event.getItem())) 
 				{
-					if (CheckPermSulphur(player, cannon)) 
-					{
-						cannon.setLoadedGunpowder(cannon.getLoadedGunpowder() + 1);
-						player.sendMessage(userMessages.getloadGunpowder(cannon.getLoadedGunpowder()));
-						// take item from the player
-						InvManage.TakeFromPlayerInventory(player, config.inventory_take);
-						
-						//update Signs
-						cannon.updateCannonSigns();
-						return;
-					}
+					//load gunpowder
+					MessageEnum message = cannon.loadGunpowder(player);
+					//display message
+					userMessages.displayMessage(player, message);		
 				}
 
 				// ############ Torch clicked ############################
-				if (clickedBlock.getType() == Material.TORCH && config.fireTorch == true) {
+				if (cannon.isRightClickTrigger(clickedBlock)) {
 					fireCannon.prepare_fire(cannon, player, true);
 				
 					return;
 				}
 				
 				// ############ Button clicked ############################
-				if (clickedBlock.getType() == Material.STONE_BUTTON && config.fireButton == true) {
+				if (cannon.isRestoneTrigger(clickedBlock)) {
 					fireCannon.displayPrepareFireMessage(cannon, player);
 					
 					return;
 				}
 
 				// ############ set angle ################################
-				if ((player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.WATCH) && config.isCannonBarrel(clickedBlock)) {
+				if ((player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.WATCH) && cannon.isLoadingBlock(clickedBlock)) {
 					calcAngle.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
 					
 					//update Signs
@@ -508,107 +495,5 @@ public class PlayerListener implements Listener
 		}
 		return;
 	}
-	/**
-	 * Check the if the cannons can be loaded
-	 * @param player whose permissions are checked
-	 * @param cannon cannon to check
-	 * @return true if the player and cannons can load the projectile
-	 */
-	private boolean CheckPermProjectile(Player player, Cannon cannon)
-	{
-		if (cannon.isLoaded())
-		{
-			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.getLoadedGunpowder(), cannon.getProjectileID()));
-			return false;
-		}
-		if (cannon.getLoadedGunpowder() == 0)
-		{
-			player.sendMessage(userMessages.NoSulphur);
-			return false;
-		}
-		if (player.hasPermission("cannons.player.load") == false)
-		{
-			player.sendMessage(userMessages.ErrorPermLoad);
-			return false;
-		}
-		String ItemInHand = player.getItemInHand().getType().toString();
-		if(!player.hasPermission("cannons.projectile." + ItemInHand.toString()) && !player.hasPermission("cannons.projectile")) 
-		{
-			player.sendMessage(userMessages.ErrorPermissionProjectile);
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Check if cannons can be loaded with gunpowder by the player
-	 * @param player check permissions of this player
-	 * @param cannon check if this cannon can be loaded
-	 * @return true if the cannon can be loaded
-	 */
-	private boolean CheckPermSulphur(Player player, Cannon cannon)
-	{
-		if (cannon.isLoaded())
-		{
-			player.sendMessage(userMessages.getProjectileAlreadyLoaded(cannon.getLoadedGunpowder(), cannon.getProjectileID()));
-			return false;
-		}
-		
-		//check if there is a division by zero
-		int lengthDiff = (config.max_barrel_length - config.min_barrel_length);
-		if (lengthDiff == 0) lengthDiff=1;
-		// maximum loaded gunpowder
-		if (cannon.getLoadedGunpowder() >= cannon.getMaxLoadableGunpowder())
-		{
-			player.sendMessage(userMessages.getMaximumGunpowderLoaded(cannon.getLoadedGunpowder()));
-			return false;
-		}
-		if (player.hasPermission("cannons.player.load") == false)
-		{
-			player.sendMessage(userMessages.ErrorPermLoad);
-			return false;
-		}
-		return true;
-	}
-
-	
-	private boolean CheckLoadedProjectile(ItemStack item)
-	{
-		return CheckLoadedProjectile(item.getTypeId(), item.getData().getData());
-	}
-	
-	
-	private boolean CheckLoadedProjectile(Block block)
-	{
-		return CheckLoadedProjectile(block.getTypeId(), block.getData());
-	}
-
-	// ############## CheckLoadedProjectile ################################
-	private boolean CheckLoadedProjectile(int blockId, int blockData)
-	{
-		Iterator<Projectile> iter = config.allowedProjectiles.iterator();
-		while (iter.hasNext())
-		{
-			Projectile next = iter.next();
-			// change redstone wire to redstone
-			if (blockId == Material.REDSTONE_WIRE.getId())
-			{
-				blockId = Material.REDSTONE.getId();
-			}
-			// cake
-			if (blockId == Material.CAKE_BLOCK.getId())
-			{
-				blockId = Material.CAKE.getId();
-			}
-
-			// compare
-			if (next.isEqual(blockId, blockData)) 
-			{ 
-				return true; 
-			}
-		}
-		return false;
-	}
-
 
 }

@@ -61,6 +61,7 @@ public class Config
 	private UserMessages userMessage;
 	private Cannons plugin;
 	private DesignStorage designStorage;
+	private ProjectileStorage projectileStorage;
 
 	public Config(Cannons plugin)
 	{
@@ -68,6 +69,7 @@ public class Config
 		allowedProjectiles.add(new Projectile());
 		userMessage = new UserMessages(this.plugin, this);
 		designStorage = new DesignStorage(this.plugin);
+		projectileStorage = new ProjectileStorage(this.plugin);
 	}
 
 	public void loadConfig()
@@ -170,8 +172,8 @@ public class Config
 
 		projectile.name = plugin.getConfig().getString(next + "." + "name", "no cannonball name");
 
-		projectile.id = plugin.getConfig().getInt(next + "." + "id", 4);
-		projectile.data = plugin.getConfig().getInt(next + "." + "data", 0);
+		projectile.setId(plugin.getConfig().getInt(next + "." + "id", 4));
+		projectile.setData(plugin.getConfig().getInt(next + "." + "data", 0));
 
 		projectile.max_speed = plugin.getConfig().getDouble(next + "." + "max speed", 3.0);
 		projectile.player_damage = plugin.getConfig().getDouble(next + "." + "player damage", 7.0);
@@ -272,6 +274,16 @@ public class Config
 	public DesignStorage getDesignStorage()
 	{
 		return designStorage;
+	}
+
+	public ProjectileStorage getProjectileStorage()
+	{
+		return projectileStorage;
+	}
+
+	public void setProjectileStorage(ProjectileStorage projectileStorage)
+	{
+		this.projectileStorage = projectileStorage;
 	}
 	
 	
