@@ -78,6 +78,7 @@ public class Config
 
 		loadProjectiles(plugin);
 		designStorage.loadCannonDesigns();
+		userMessage.loadLanguage();
 		
 		
 		// Load Cannon material
@@ -119,11 +120,6 @@ public class Config
 		max_barrel_length = plugin.getConfig().getInt("construction.max barrel length", 5);
 		min_barrel_length = plugin.getConfig().getInt("construction.min barrel length", 2);
 
-		// load language
-		if (userMessage.loadLanguage(plugin.getConfig().getString("language")) == false)
-		{
-			plugin.logSevere("Can't load language. Check spelling.");
-		}
 
 		// save defaults
 		plugin.getConfig().options().copyHeader(true);
@@ -170,7 +166,7 @@ public class Config
 		// get data of projectile
 		Projectile projectile = new Projectile();
 
-		projectile.name = plugin.getConfig().getString(next + "." + "name", "no cannonball name");
+		projectile.setName(plugin.getConfig().getString(next + "." + "name", "no cannonball name"));
 
 		projectile.setId(plugin.getConfig().getInt(next + "." + "id", 4));
 		projectile.setData(plugin.getConfig().getInt(next + "." + "data", 0));
@@ -208,7 +204,7 @@ public class Config
 
 		if ((projectile.cannonball == false && projectile.canisterShot == false) || projectile.max_speed <= 0.1)
 		{
-			plugin.logSevere("No proporties of " + projectile.name + " found. Check if both names are written in the same way.");
+			plugin.logSevere("No proporties of " + projectile.getName() + " found. Check if both names are written in the same way.");
 		}
 
 		return projectile;

@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -60,7 +59,7 @@ public class CannonManager
 			// destroy cannon (drops items, edit sign)
 			MessageEnum message = cannon.destroyCannon();
 			
-			if (player != null) userMessages.displayMessage(player, message);
+			if (player != null) userMessages.displayMessage(player, message, cannon);
 
 			//remove from list
 			cannonList.remove(cannon);
@@ -93,9 +92,12 @@ public class CannonManager
 	 * 
 	 * @return
 	 */
-	private String newCannonName(String owner)
+	private String newCannonName(Cannon cannon)
 	{
-		String[] nameList = {"Cannon"};// , "Artillery", "Gun"};
+		if (cannon.getOwner() == null) return "missing Owner";
+				
+				
+		String[] nameList = {cannon.getCannonName()};//{"Cannon"};// , "Artillery", "Gun"};
 
 		Random r = new Random();
 		String pre = nameList[r.nextInt(nameList.length)];
@@ -104,7 +106,7 @@ public class CannonManager
 		{
 			String cannonName = pre + " " + i;
 
-			if (isCannonNameUnique(cannonName, owner) == true)
+			if (isCannonNameUnique(cannonName, cannon.getOwner()) == true)
 			{
 				return cannonName;
 			}
@@ -118,17 +120,19 @@ public class CannonManager
 	 * @param cannon
 	 * @param owner
 	 */
-	private void createCannon(Cannon cannon)
+	public void createCannon(Cannon cannon)
 	{
-		cannon.setCannonName(newCannonName(cannon.getOwner()));
-		Player player;
-
-		player = Bukkit.getPlayer(cannon.getOwner());
-		MessageEnum message = cannon.checkRedstonePermission(player);
-		if (player != null) userMessages.displayMessage(player, message);
-
+		//the owner can't be null
+		if (cannon.getOwner() == null) return;
+		
+		//if the cannonName is empty make a new one
+		if (cannon.getCannonName() ==  null || cannon.getCannonName() == "")
+			cannon.setCannonName(newCannonName(cannon));
+		
 		// add cannon to the list
 		cannonList.add(cannon);
+		
+		return ;
 	}
 
 	/**
@@ -229,8 +233,6 @@ public class CannonManager
 
 	public Cannon checkCannon(Location cannonBlock, String owner)
 	{
-		Validate.notNull(owner, "The Owner of the cannon can not be null");
-
 		// get world
 		World world = cannonBlock.getWorld();
 
@@ -272,13 +274,24 @@ public class CannonManager
 						// this is a cannon
 						if (isCannon == true)
 						{
+
 							// make a new cannon if there is no sign on the
 							// cannon
 							Cannon cannon = new Cannon(cannonDesign, world.getName(), offset, cannonDirection, owner);
-							createCannon(cannon);
-
-							plugin.logDebug("Cannon found");
-							return cannon;
+					
+							//check the permissions for redstone
+							Player player = Bukkit.getPlayer(cannon.getOwner());
+							MessageEnum message = cannon.checkRedstonePermission(player);
+							
+							//send messages
+							userMessages.displayMessage(owner, message, cannon);
+							
+							//add cannon to the list if everything was fine and return the cannon
+							if (message == MessageEnum.CannonCreated)
+							{
+								createCannon(cannon);
+								return cannon;
+							}
 						}
 					}
 				}
@@ -288,8 +301,6 @@ public class CannonManager
 			}
 
 		}
-
-		plugin.logDebug("Nothing found");
 
 		return null;
 	}

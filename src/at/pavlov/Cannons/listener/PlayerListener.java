@@ -220,7 +220,6 @@ public class PlayerListener implements Listener
 				barrel = barrelBlock.getLocation();
 			}
 			// will check for redstonetorches and delete them
-
 			cannonManager.getCannon(barrel, event.getPlayer().getName());
 		}
 
@@ -237,7 +236,7 @@ public class PlayerListener implements Listener
 					// delete projectile
 					//if (CheckLoadedProjectile(event.getBlock()))
 					{
-						event.setCancelled(true);
+						//event.setCancelled(true);
 					}
 				}
 			}
@@ -442,42 +441,47 @@ public class PlayerListener implements Listener
 				{
 					event.setCancelled(true);
 				}
+				
+
+				plugin.logDebug("interact event + is loading block " + cannon.isLoadingBlock(clickedBlock.getLocation()) + " gunpowder " + design.getGunpowderType().equalsFuzzy(event.getItem()));
 
 				// ########## Load Projectile ######################
 				Projectile projectile = plugin.getProjectile(event.getItem());
-				if (cannon.isLoadingBlock(clickedBlock) && projectile != null) 
+				if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null) 
 				{
+					plugin.logDebug("load projectile");
 					//load projectile
 					MessageEnum message = cannon.loadProjectile(projectile, player);
 					//display message
-					userMessages.displayMessage(player, message);	
+					userMessages.displayMessage(player, message, cannon);	
 				}
 
 				// ########## Barrel clicked with gunpowder ##########################
-				if (cannon.isLoadingBlock(clickedBlock) && design.getGunpowderType().equals(event.getItem())) 
+				if (cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(event.getItem())) 
 				{
+					plugin.logDebug("load gunpowder");
 					//load gunpowder
 					MessageEnum message = cannon.loadGunpowder(player);
 					//display message
-					userMessages.displayMessage(player, message);		
+					userMessages.displayMessage(player, message, cannon);		
 				}
 
 				// ############ Torch clicked ############################
-				if (cannon.isRightClickTrigger(clickedBlock)) {
+				if (cannon.isRightClickTrigger(clickedBlock.getLocation())) {
 					fireCannon.prepare_fire(cannon, player, true);
 				
 					return;
 				}
 				
 				// ############ Button clicked ############################
-				if (cannon.isRestoneTrigger(clickedBlock)) {
+				if (cannon.isRestoneTrigger(clickedBlock.getLocation())) {
 					fireCannon.displayPrepareFireMessage(cannon, player);
 					
 					return;
 				}
 
 				// ############ set angle ################################
-				if ((player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.WATCH) && cannon.isLoadingBlock(clickedBlock)) {
+				if ((player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.WATCH) && cannon.isLoadingBlock(clickedBlock.getLocation())) {
 					calcAngle.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
 					
 					//update Signs

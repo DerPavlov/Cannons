@@ -1,0 +1,36 @@
+Error:
+  BarrelTooHot: 'RED Das Rohr ist zu heiss'
+  NoProjectile: 'RED Kein Kanonenkugel im Rohr. Lade einen Block!'
+  NoGunpowder: 'RED Kein Schwarzpulver. Lade zuerst die Treibladung!'
+  NoFlintAndSteel: 'RED Du brauchst ein Feuerzeug zum Feuern.'
+  MaximumGunpowderLoaded: 'YELLOW Du hast bereits GOLD GUNPOWDERkg YELLOW Schwarzpulver geladen.'
+  ProjectileAlreadyLoaded: 'Es wurde bereits eine Kanonenkugel aus GOLD PROJECTILE YELLOW mit GOLD GUNPOWDERkg YELLOW Pulver geladen. \nFeuere die Kanone endlich ab!'
+  CannonBuiltLimit: 'RED Du darfst nicht mehr als GOLD CANNONS Kanone(n) YELLOW bauen.'
+Aiming:
+  EnableAimingMode: 'GREEN Zielmodus aktiviert'
+  DisableAimingMode: 'RED Zielmodus deaktiviert'
+  SettingCombinedAngle: 'YELLOW Neuer Winkel HDEGREE° YELLOW horizontal und GOLD VDEGREE° YELLOW vertikal'
+  SettingVerticalAngleUp: 'YELLOW Neuer vertikaler Winkel GOLD VDEGREE Grad'
+  SettingVerticalAngleDown: 'YELLOW Neuer vertikaler Winkel GOLD VDEGREE Grad'
+  SettingHorizontalAngleRight: 'YELLOW Neuer horizontaler Winkel GOLD HDEGREE Grad YELLOW nach GOLD rechts'
+  SettingHorizontalAngleLeft: 'YELLOW Neuer horizontaler Winkel GOLD HDEGREE Grad YELLOW nach GOLD links'
+Load:  
+  Projectile: 'YELLOW Projektil GOLD PROJECTILE YELLOW wurde geladen. Feuere wenn du bereit bist.'
+  Gunpowder: 'GOLD GUNPOWDERkg YELLOW Schwarzpulver geladen.'
+Cannon:
+  Fire: 'YELLOW FEUER!'
+  Created: 'GREEN Eine Kanone wurde erstellt.'
+  Destroyed: 'RED Eine deiner Kanonen wurde zerstört.'
+  Reseted: 'GREEN Alle deine Kanonen wurden aus der Datenbank entfernt.'
+Permission:
+  ErrorRedstone: 'RED Du kannst keine keine Kanone mit Redstone bedienen.'
+  ErrorBuild: 'RED Du darfst keine Kanone bauen.'
+  ErrorFire: 'RED Du weisst nicht wie du diese Kanone abfeuerst.'
+  ErrorLoad: 'RED Keine Berechtigung um die Kanone zu laden.'
+  ErrorAdjust: 'RED Dir fehlt die Berechtigung zum Zielen.'
+  ErrorProjectile: 'RED Keine Erlaubnis für dieses Projektil.'
+Help:
+  Text: 'NEWLINE Cannons plugin NEWLINE RED /cannons build GREEN - Wie man eine Kanone baut NEWLINE RED /cannons fire GREEN - Wie man eine Kanone abfeuert NEWLINE RED /cannons adjust GREEN - Wie man mit Kanonen zielt'
+  Build: 'NEWLINE Wie baut man eine Kanone? NEWLINE Plaziere 3 Block schwarze Wolle hintereinander für das Kanonenrohr. NEWLINE Auf jeder Seite des Rohrs ein Knopf. NEWLINE Zum Abschluss noch eine Fackel auf den ersten Block des Rohrs. NEWLINE Jetzt sollte eine Meldung erschienen sein.'
+  Fire: 'NEWLINE Wie ladet man eine Kanone NEWLINE 1) Lade Schwarzpuvler in das Kanonenrohr NEWLINE in dem du auf das Rohr rechts klickst. NEWLINE 2) Rechtsklick auf das Rohr mit dem Projektil (e.g. cobblestone). NEWLINE 3) Zum Feuern Rechtsklick an der Fackel.'
+  Adjust: 'NEWLINE Du hast das Ziel verfehlt? Lerne wie man richtig zielt NEWLINE Rechtsklick auf das Rohr dreht die Kanone. NEWLINE Shift+Rechtsklick ändert den Winkel in die andere Richtung. NEWLINE Ein Klick auf die obere oder untere Seite ändert den vertikalen Winkel NEWLINE Links- und Rechtsklicks den horizontalen Winkel.'

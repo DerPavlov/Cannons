@@ -37,6 +37,8 @@ public class Cannon
 	// time the cannon was last time fired
 	private long LastFired;
 	private int loadedGunpowder;
+	//the loaded projectile - can be null
+	private Projectile loadedProjectile;
 	private int projectileID;
 	private int projectileData;
 	private double horizontalAngle;
@@ -271,7 +273,7 @@ public class Cannon
 	 * @param block
 	 * @return
 	 */
-	public boolean isLoadingBlock(Block block)
+	public boolean isLoadingBlock(Location block)
 	{
 		for (Location loc : design.getLoadingInterface(this))
 		{
@@ -289,7 +291,7 @@ public class Cannon
 	 * @param block
 	 * @return
 	 */
-	public boolean isRightClickTrigger(Block block)
+	public boolean isRightClickTrigger(Location block)
 	{
 		for (Location loc : design.getRightClickTrigger(this))
 		{
@@ -307,7 +309,7 @@ public class Cannon
 	 * @param block
 	 * @return
 	 */
-	public boolean isRestoneTrigger(Block block)
+	public boolean isRestoneTrigger(Location block)
 	{
 		for (Location loc : design.getRedstoneTrigger(this))
 		{
@@ -737,5 +739,15 @@ public class Cannon
 	public CannonDesign getCannonDesign()
 	{
 		return this.design;
+	}
+
+	public Projectile getLoadedProjectile()
+	{
+		return loadedProjectile;
+	}
+
+	public void setLoadedProjectile(Projectile loadedProjectile)
+	{
+		this.loadedProjectile = loadedProjectile;
 	}
 }

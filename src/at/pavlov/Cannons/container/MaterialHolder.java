@@ -24,17 +24,12 @@ public class MaterialHolder
 	
 	public MaterialHolder(String str)
 	{
-		data = -1;
-		System.out.println("split" + str);
 		//remove all spaces
 		str = str.replace(" ", "");
-		
-		System.out.println("split1");
 		
 		//split string at :
 		String subStr[] = str.split(":");
 	
-		
 		//get ID
 		if (subStr.length>=1)
 			id = Integer.parseInt(subStr[0]);
@@ -42,9 +37,14 @@ public class MaterialHolder
 		//get Data
 		if (subStr.length >= 2)
 		{
-			System.out.println("split2 " + subStr.length + " split1:" + subStr[0] + " split2:" + subStr[1]);
 			data = Integer.parseInt(subStr[1]);
 		}
+		else
+		{
+			data = -1;
+		}
+		
+		System.out.println("id:" + id + " data:" + data);
 		
 	}
 	
@@ -77,6 +77,8 @@ public class MaterialHolder
 	
 	public boolean equalsFuzzy(ItemStack item)
 	{
+		//System.out.println("id:" + item.getTypeId() + "-" + id + " data:" + item.getData().getData() + "-" + data);
+		
 		if (item.getTypeId() == id)
 		{
 			return (item.getData().getData() == data || data == -1);

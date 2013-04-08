@@ -340,8 +340,8 @@ public class DesignStorage
 							else if (block.equalsFuzzy(blockChestAndSign))
 							{
 								cannonBlocks.getChestsAndSigns().add(new Vector(x, y, z));
-								// if a sign is requried the sign is a
-								// cannonblock
+								// if a sign is requried the sign is a cannonblock
+								plugin.logDebug("sign required " + cannonDesign.isSignRequired());
 								if (cannonDesign.isSignRequired())
 								{
 									cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, Material.SIGN.getId(), block.getData()));
@@ -478,9 +478,19 @@ public class DesignStorage
 	 */
 	public CannonDesign getDesign(Cannon cannon)
 	{
+		return getDesign(cannon.getDesignID());
+	}
+	
+	/**
+	 * returns the cannon design by its id
+	 * @param cannon
+	 * @return
+	 */
+	public CannonDesign getDesign(int designId)
+	{
 		for (CannonDesign cannonDesign : cannonDesignList)
 		{
-			if (cannon.equals(cannonDesign))
+			if (cannonDesign.getDesignID() == designId)
 				return cannonDesign;
 		}
 		return null;

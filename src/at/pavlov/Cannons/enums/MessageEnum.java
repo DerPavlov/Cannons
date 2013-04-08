@@ -21,13 +21,13 @@ public enum MessageEnum
 	AimingModeDisabled ("Aiming.DisableAimingMode"),
 	
 	//load
-	loadProjectile ("load.Projectile"),
-	loadGunpowder ("load.Gunpowder"),
+	loadProjectile ("Load.Projectile"),
+	loadGunpowder ("Load.Gunpowder"),
 	
 	//cannon
 	CannonCreated ("Cannon.Created"),
 	CannonDestroyed ("Cannon.Destroyed"),
-	CannonsReseted ("Cannons.Reseted"),
+	CannonsReseted ("Cannon.Reseted"),
 	CannonFire ("Cannon.Fire"),
 	
 	//Permission

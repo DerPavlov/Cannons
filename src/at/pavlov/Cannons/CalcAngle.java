@@ -14,6 +14,7 @@ import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.UserMessages;
+import at.pavlov.Cannons.enums.MessageEnum;
 import at.pavlov.Cannons.utils.CannonsUtil;
 
 
@@ -104,6 +105,8 @@ public class CalcAngle {
 		boolean combine = false;
 		//angle changed
 		boolean hasChanged = false;
+		//message Enum
+		MessageEnum message = null;
 		
 		if (player.hasPermission("cannons.player.adjust") == false)
 		{
@@ -137,10 +140,7 @@ public class CalcAngle {
 				{
 					cannon.setHorizontalAngle(cannon.getHorizontalAngle() + design.getAngleStepSize());
 					hasChanged = true;
-					if (combine == false) 
-					{
-						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon));
-					}
+					message = setMessageHorizontal(cannon, combine);
 				}
 			}
 			else
@@ -150,10 +150,7 @@ public class CalcAngle {
 				{
 					cannon.setHorizontalAngle(cannon.getHorizontalAngle() - design.getAngleStepSize());
 					hasChanged = true;
-					if (combine == false) 
-					{
-						player.sendMessage(userMessages.getSettingHorizontalAngle(cannon));
-					}
+					message = setMessageHorizontal(cannon, combine);
 				}
 			}
 		}
@@ -167,10 +164,7 @@ public class CalcAngle {
 				{
 					cannon.setVerticalAngle(cannon.getVerticalAngle() + design.getAngleStepSize());
 					hasChanged = true;
-					if (combine == false) 
-					{
-						player.sendMessage(userMessages.getSettingVerticalAngle(cannon));
-					}
+					message = setMessageVertical(cannon, combine);
 				}
 			}
 			else
@@ -180,19 +174,14 @@ public class CalcAngle {
 				{
 					cannon.setVerticalAngle(cannon.getVerticalAngle() - design.getAngleStepSize());
 					hasChanged = true;
-					if (combine == false) 
-					{
-						player.sendMessage(userMessages.getSettingVerticalAngle(cannon));
-					}		
+					message = setMessageVertical(cannon, combine);
 				}
 			}
 		}
 		
-		//display the combined messages with both angles
-		if (combine == true && hasChanged == true)
-		{
-			player.sendMessage(userMessages.getSettingCombinedAngle(cannon));
-		}
+		//display message only if the angle has changed
+		if (hasChanged)
+			userMessages.displayMessage(player, message, cannon);
 	}
 	
 	
@@ -384,6 +373,49 @@ public class CalcAngle {
 			//player in map -> remove
 			player.sendMessage(userMessages.disableAimingMode);
 			inAimingMode.remove(player);
+		}
+	}
+	
+	/**
+	 * finds the right message for the horizontal angle change
+	 * @param cannon
+	 * @return
+	 */
+	public MessageEnum setMessageHorizontal(Cannon cannon, boolean combinedAngle)
+	{
+		if (combinedAngle)
+			return MessageEnum.SettingCombinedAngle;
+		//correct some angle messages
+		if (cannon.getHorizontalAngle() > 0)
+		{
+			//aiming to the right
+			return MessageEnum.SettingHorizontalAngleRight;
+		}
+		else
+		{
+			//aiming to the left
+			return MessageEnum.SettingHorizontalAngleLeft;
+		}
+	}
+	
+	/**
+	 * finds the right message for the vertical angle change
+	 * @param cannon
+	 * @return
+	 */
+	public MessageEnum setMessageVertical(Cannon cannon, boolean combinedAngle)
+	{
+		if (combinedAngle)
+			return MessageEnum.SettingCombinedAngle;
+		if (cannon.getVerticalAngle() > 0)
+		{
+			//aiming to the down
+			return MessageEnum.SettingVerticalAngleUp;
+		}
+		else
+		{
+			//aiming to the up
+			return MessageEnum.SettingVerticalAngleDown;
 		}
 	}
 	

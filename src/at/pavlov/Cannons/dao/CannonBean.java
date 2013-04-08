@@ -8,7 +8,7 @@ import com.avaje.ebean.validation.NotEmpty;
 
 
 @Entity
-@Table(name ="cannonlist")
+@Table(name ="cannonlist_2")
 public class CannonBean
 {
 	@Id 
@@ -20,6 +20,7 @@ public class CannonBean
 
 	@NotEmpty
 	private String world;
+	private String cannonDirection;
 	private int locX;
 	private int locY;
 	private int locZ;
@@ -145,6 +146,14 @@ public class CannonBean
 	public void setDesignId(int designId)
 	{
 		this.designId = designId;
+	}
+	public String getCannonDirection()
+	{
+		return cannonDirection;
+	}
+	public void setCannonDirection(String cannonDirection)
+	{
+		this.cannonDirection = cannonDirection;
 	}
 	
 	

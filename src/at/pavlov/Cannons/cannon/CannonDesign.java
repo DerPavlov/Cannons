@@ -99,7 +99,7 @@ public class CannonDesign
     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
     	if (cannonBlocks != null)
     	{
-    		return cannonBlocks.getRotationCenter().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
+    		return cannonBlocks.getRotationCenter().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
     	
     	System.out.println("[Cannons] missing rotation center for cannon design " + cannon.getCannonName());
@@ -118,7 +118,7 @@ public class CannonDesign
     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
     	if (cannonBlocks != null)
     	{
-    		return cannonBlocks.getMuzzle().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
+    		return cannonBlocks.getMuzzle().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
 
     	System.out.println("[Cannons] missing muzzle location for cannon design " + cannon.getCannonName());
@@ -136,7 +136,7 @@ public class CannonDesign
     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
     	if (cannonBlocks != null)
     	{
-    		return cannonBlocks.getFiringTrigger().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
+    		return cannonBlocks.getFiringTrigger().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
     	
     	System.out.println("[Cannons] missing FiringIndicator for cannon design" + cannon.getCannonName());
@@ -173,7 +173,7 @@ public class CannonDesign
     	{
     		for (Vector vect : cannonBlocks.getFiringIndicator())
     		{
-    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
     		}
     	}
 		return locList;
@@ -191,7 +191,7 @@ public class CannonDesign
     	{
     		for (Vector vect : cannonBlocks.getLoadingInterface())
     		{
-    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
     		}
     	}
 		return locList;
@@ -210,7 +210,7 @@ public class CannonDesign
     	{
     		for (Vector vect : cannonBlocks.getRightClickTrigger())
     		{
-    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
     		}
     	}
 		return locList;
@@ -229,7 +229,7 @@ public class CannonDesign
     	{
     		for (Vector vect : cannonBlocks.getRedstoneTrigger())
     		{
-    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
     		}
     	}
 		return locList;
@@ -249,7 +249,7 @@ public class CannonDesign
     	{
     		for (Vector vect : cannonBlocks.getChestsAndSigns())
     		{
-    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
     		}
     	}
 		return locList;
@@ -268,7 +268,7 @@ public class CannonDesign
     	{
     		for (Vector vect : cannonBlocks.getRedstoneTorches())
     		{
-    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
     		}
     	}
 		return locList;
@@ -287,7 +287,7 @@ public class CannonDesign
     	{
     		for (Vector vect : cannonBlocks.getRedstoneWiresAndRepeater())
     		{
-    			locList.add(vect.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
     		}
     	}
 		return locList;

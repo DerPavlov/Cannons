@@ -181,6 +181,9 @@ public class FireCannon {
     		cannonball.snowball = world.spawn(firingLoc, Snowball.class);
     		cannonball.snowball.setFireTicks(100);
     		cannonball.snowball.setTicksLived(2);
+    		if (cannonball.projectile.teleport)
+    			cannonball.snowball.setPassenger(shooter);
+    
     		
     		//confuse shooter if he wears no helmet (only for one projectile and if its configured)
     		if ( i == 0 && config.confusesShooter > 0)
@@ -219,7 +222,7 @@ public class FireCannon {
     		
     		//calculate firing vector
     		Vector vect = cannon.getFiringVector(config);
-    		
+    		    		
     		cannonball.snowball.setVelocity(vect);
     		if (shooter != null) 
     		{

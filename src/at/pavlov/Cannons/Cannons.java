@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -30,7 +29,9 @@ import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.dao.CannonBean;
 import at.pavlov.Cannons.dao.MyDatabase;
 import at.pavlov.Cannons.dao.PersistenceDatabase;
+import at.pavlov.Cannons.enums.MessageEnum;
 import at.pavlov.Cannons.listener.Commands;
+import at.pavlov.Cannons.listener.EntityListener;
 import at.pavlov.Cannons.listener.PlayerListener;
 import at.pavlov.Cannons.listener.SignListener;
 import at.pavlov.Cannons.mcstats.Metrics;
@@ -53,6 +54,7 @@ public class Cannons extends JavaPlugin
 	
 	//Events
 	private PlayerListener playerListener;
+	private EntityListener entityListener;
 	private SignListener signListener;
 	
 	// database
@@ -82,6 +84,7 @@ public class Cannons extends JavaPlugin
 		this.persistenceDatabase = new PersistenceDatabase(this);
 
 		this.playerListener = new PlayerListener(this);
+		this.entityListener = new EntityListener(this);
 		this.signListener = new SignListener(this);	
 		this.commands = new Commands(this);
 		
@@ -91,8 +94,11 @@ public class Cannons extends JavaPlugin
 
 	public void onDisable()
 	{
+		getServer().getScheduler().cancelTasks(this);
+		
 		// save database on shutdown
 		persistenceDatabase.saveAllCannons();
+		
 
 		logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been disabled");
 	}
@@ -103,6 +109,7 @@ public class Cannons extends JavaPlugin
 		{
 			pm = getServer().getPluginManager();
 			pm.registerEvents(playerListener, this);
+			pm.registerEvents(entityListener, this);
 			pm.registerEvents(signListener, this);
 			//call command executer
 			getCommand("cannons").setExecutor(commands);
@@ -234,16 +241,19 @@ public class Cannons extends JavaPlugin
 
 	public void logSevere(String msg)
 	{
+		//msg = ChatColor.translateAlternateColorCodes('&', msg);
 		this.logger.severe(getLogPrefix() + msg);
 	}
 	
 	public void logInfo(String msg)
 	{
+		//msg = ChatColor.translateAlternateColorCodes('&', msg);
 		this.logger.info(getLogPrefix() + msg);
 	}
 
 	public void logDebug(String msg)
 	{
+		//msg = ChatColor.translateAlternateColorCodes('&', msg);
 		this.logger.info(getLogPrefix() + msg);
 	}
 
@@ -257,20 +267,10 @@ public class Cannons extends JavaPlugin
 		return this.getDescription();
 	}
 
-	// ##################### getWorldGuard ###################################
-	/*
-	 * private WorldGuardPlugin getWorldGuard() { Plugin plugin =
-	 * pm.getPlugin("WorldGuard");
-	 * 
-	 * // WorldGuard may not be loaded if (plugin == null || !(plugin instanceof
-	 * WorldGuardPlugin)) { return null; // Maybe you want throw an exception
-	 * instead }
-	 * 
-	 * logger.info(getLogPrefix() + "Worldguard hook loaded"); return
-	 * (WorldGuardPlugin) plugin; }
+	/**
+	 * returns the creeperheal handle
+	 * @return
 	 */
-
-	// ##################### getCreeperHeal ###################################
 	private CreeperHeal getCreeperHeal()
 	{
 		CreeperHeal creeperHeal = null;
@@ -284,7 +284,10 @@ public class Cannons extends JavaPlugin
 		return creeperHeal;
 	}
 
-	// ##################### isCreeperHealLoaded ##############################
+	/**
+	 * returns true if creeperHeal is loaded
+	 * @return
+	 */
 	public boolean isCreeperHealLoaded()
 	{
 		if (creeperHeal != null) { return true; }
@@ -292,7 +295,10 @@ public class Cannons extends JavaPlugin
 		return false;
 	}
 
-	// ##################### getObsidianDestroyer #############################
+	/**
+	 * returns the handle of obsidianDestroyer
+	 * @return
+	 */
 	private ObsidianDestroyer getObsidianDestroyer()
 	{
 		ObsidianDestroyer obsidianDestroyer = null;
@@ -306,7 +312,10 @@ public class Cannons extends JavaPlugin
 		return obsidianDestroyer;
 	}
 
-	// ##################### BlockBreakPluginLoaded ###########################
+	/**
+	 * return true if creeperHeal or obsidianDestroyer is loaded
+	 * @return
+	 */
 	public boolean BlockBreakPluginLoaded()
 	{
 		if (creeperHeal != null)
@@ -316,7 +325,10 @@ public class Cannons extends JavaPlugin
 		return false;
 	}
 
-	// ##################### getGuildAwards ###################################
+	/**
+	 * loads the guildawards hook
+	 * @return
+	 */
 	private GuildAwardsPlugin getGuildAwards()
 	{
 		GuildAwardsPlugin guildAwards = null;
@@ -330,26 +342,17 @@ public class Cannons extends JavaPlugin
 		return guildAwards;
 	}
 
-	// ##################### getCannonGuildHandler #############################
+	/**
+	 * returns the guildAwardsConnector
+	 * @return
+	 */
 	public GunnerGuildConnector getCannonGuildHandler()
 	{
 		if (guildAwards != null) { return guildAwards.getExternalInterface().getGunnerGuildConnector(); }
 		return null;
 	}
 
-	// ################################# SENDMESSAGE #########################
-	public void sendMessage(String string, CommandSender player, ChatColor chatcolor)
-	{
-		String[] message = string.split("\n "); // Split everytime the "\n" into
-												// a new array value
 
-		for (int x = 0; x < message.length; x++)
-		{
-			player.sendMessage(chatcolor + message[x]); // Send each argument in
-														// the message
-		}
-
-	}
 
 	public PersistenceDatabase getPersistenceDatabase()
 	{
@@ -400,6 +403,11 @@ public class Cannons extends JavaPlugin
 	{
 		return designStorage.getDesign(cannon);
 	}
+	
+	public CannonDesign getCannonDesign(int designId)
+	{
+		return designStorage.getDesign(designId);
+	}
 
 	public ProjectileStorage getProjectileStorage()
 	{
@@ -419,6 +427,26 @@ public class Cannons extends JavaPlugin
 	public Projectile getProjectile(ItemStack item)
 	{
 		return this.projectileStorage.getProjectile(item);
+	}
+
+	public EntityListener getEntityListener()
+	{
+		return entityListener;
+	}
+
+	public void setEntityListener(EntityListener entityListener)
+	{
+		this.entityListener = entityListener;
+	}
+	
+	public void displayMessage(Player player, MessageEnum message, Cannon cannon)
+	{
+		this.userMessages.displayMessage(player, message, cannon);
+	}
+	
+	public void createCannon(Cannon cannon)
+	{
+		this.getCannonManager().createCannon(cannon);
 	}
 
 }

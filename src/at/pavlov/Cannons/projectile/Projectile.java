@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 
 public class Projectile {
-	public String name;
+	private String name;
 	
 	private int id;
 	private int data;
@@ -48,7 +48,7 @@ public class Projectile {
 	private List<String> permissions = new ArrayList<String>();
 	
 	public Projectile(){
-		name = "default projectile";
+		setName("default projectile");
 		
 		setId(4);
 		setData(0);
@@ -122,6 +122,11 @@ public class Projectile {
 		return false;
 	}
 	
+	public String toString()
+	{
+		return id + ":" + data;
+	}
+	
 	/**
 	 * returns true if the player has permission to use that projectile
 	 * @param player
@@ -160,6 +165,18 @@ public class Projectile {
 	{
 		this.data = data;
 	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	
 	
 
 	

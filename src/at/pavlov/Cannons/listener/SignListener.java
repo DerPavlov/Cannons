@@ -61,7 +61,7 @@ public class SignListener implements Listener
 			if(cannon == null && cannonFromSign  != null)
 			{
 				//this sign is in conflict with cannons
-				plugin.sendMessage("This sign is in conflict with cannons", event.getPlayer(), ChatColor.RED);
+				event.getPlayer().sendMessage(ChatColor.RED + "This sign is in conflict with cannons");
 				event.setLine(0, "[Cannons]");
 				event.setLine(1, "Player");
 			}
