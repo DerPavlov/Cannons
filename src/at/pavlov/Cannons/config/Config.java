@@ -67,7 +67,7 @@ public class Config
 	{
 		this.plugin = plugin;
 		allowedProjectiles.add(new Projectile());
-		userMessage = new UserMessages(this.plugin, this);
+		userMessage = new UserMessages(this.plugin);
 		designStorage = new DesignStorage(this.plugin);
 		projectileStorage = new ProjectileStorage(this.plugin);
 	}

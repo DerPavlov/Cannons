@@ -35,8 +35,8 @@ import at.pavlov.Cannons.FireCannon;
 import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.MessageEnum;
 import at.pavlov.Cannons.config.UserMessages;
-import at.pavlov.Cannons.enums.MessageEnum;
 import at.pavlov.Cannons.projectile.FlyingProjectile;
 import at.pavlov.Cannons.projectile.Projectile;
 import at.pavlov.Cannons.utils.CannonsUtil;
@@ -262,7 +262,7 @@ public class PlayerListener implements Listener
 						Location loc = b.getLocation();
 						if (cannonManager.getCannon(loc, event.getPlayer().getName()) != null)
 						{
-							event.getPlayer().sendMessage(userMessages.ErrorPermRestoneTorch);
+							userMessages.displayMessage(event.getPlayer(), MessageEnum.PermissionErrorRedstone);
 							event.setCancelled(true);
 						}
 
@@ -285,7 +285,7 @@ public class PlayerListener implements Listener
 						Location loc = b.getLocation();
 						if (cannonManager.getCannon(loc, event.getPlayer().getName()) != null)
 						{
-							event.getPlayer().sendMessage(userMessages.ErrorPermRestoneTorch);
+							userMessages.displayMessage(event.getPlayer(), MessageEnum.PermissionErrorRedstone);
 							event.setCancelled(true);
 						}
 					}

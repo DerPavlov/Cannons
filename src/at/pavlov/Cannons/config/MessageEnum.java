@@ -1,4 +1,4 @@
-package at.pavlov.Cannons.enums;
+package at.pavlov.Cannons.config;
 
 public enum MessageEnum
 {

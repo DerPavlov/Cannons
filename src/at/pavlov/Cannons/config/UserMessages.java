@@ -7,13 +7,13 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import at.pavlov.Cannons.Cannons;
 import at.pavlov.Cannons.cannon.Cannon;
-import at.pavlov.Cannons.enums.MessageEnum;
 import at.pavlov.Cannons.utils.CannonsUtil;
 
 public class UserMessages {
@@ -23,51 +23,10 @@ public class UserMessages {
 	
 	private HashMap<String, String> messageMap = new HashMap<String, String>();
 
-	
-	public String BarrelTooHot;
-	
-	public String NoProjectile;
-	public String NoSulphur;
-	public String NoFlintAndSteel;
-	public String MaximumGunpowderLoaded;
-	public String ProjectileAlreadyLoaded;
-	public String FireGun;
-	
-	public String enableAimingMode;
-	public String disableAimingMode;
-	
-	public String settingCombinedAngle;
-	public String settingVerticalAngleUp;
-	public String settingVerticalAngleDown;
-	public String settingHorizontalAngleRight;
-	public String settingHorizontalAngleLeft;
-	
-	public String loadProjectile;
-	public String loadGunpowder;
-	public String twoTorches;
-	public String tooManyGuns;
-	
-	public String cannonBuilt;
-	public String cannonDestroyed;
-	public String cannonsReseted;
-	
-	public String ErrorPermRestoneTorch;
-	public String ErrorPermFire;
-	public String ErrorPermLoad;
-	public String ErrorPermAdjust;
-	public String ErrorPermissionProjectile;
-	
-	public String HelpText;
-	public String HelpBuild;
-	public String HelpFire;
-	public String HelpAdjust;
-	
-	
-	private Config config;
+
 	private Cannons plugin;
 	
-	public UserMessages(Cannons plugin, Config config){
-		this.config = config;
+	public UserMessages(Cannons plugin){
 		this.plugin = plugin;
 	}
 		 
@@ -208,16 +167,41 @@ public class UserMessages {
 	 * sends a message to the player
 	 * @param player
 	 * @param message
+	 */
+	public void displayMessage(Player player, MessageEnum messageEnum)
+	{
+		displayMessage(player, messageEnum, null);
+	}
+	
+	/**
+	 * sends a message to the player
+	 * @param player
+	 * @param message
 	 * @param cannon
 	 */
 	public void displayMessage(Player player, MessageEnum messageEnum, Cannon cannon)
 	{
-		//no message
-		if (messageEnum == null) return;
-			
-		//no player - no message
+		//no player no message
 		if (player == null) return;
 		
+		//get message from map
+		String message = getMessage(messageEnum, cannon, player);
+		
+		//send message to player
+		sendMessage("message: " + message, player);
+	}
+	
+	/**
+	 * returns the message from the Map
+	 * @param messageEnum
+	 * @param cannon
+	 * @param player
+	 * @return
+	 */
+	public String getMessage(MessageEnum messageEnum, Cannon cannon, Player player)
+	{
+		//no message
+		if (messageEnum == null) return null;
 
 				
 		String message = messageMap.get(messageEnum.getString());
@@ -226,25 +210,54 @@ public class UserMessages {
 		if (message == null)
 		{
 			plugin.logSevere("Message " + messageEnum.getString() + " not found.");
-			return;
+			return null;
 		}
 		
 		if (cannon != null)
 		{
 			//replace the loaded gunpowder
 			message = message.replace("GUNPOWDER", Integer.toString(cannon.getLoadedGunpowder()));
-			//replace the loaded projectilee
+			//replace the loaded projectile
 			message = message.replace("PROJECTILE", cannon.getLoadedProjectile().getName());
 			//replace the horizontal angle
 			message = message.replace("HDEGREE", Double.toString(cannon.getHorizontalAngle()));			
 			//replace the vertical angle
 			message = message.replace("VDEGREE", Double.toString(cannon.getVerticalAngle()));
 			//replace the number of cannons
-			message = message.replace("CANNONS", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getName())));
-			
+			if (player != null)
+			{
+				message = message.replace("CANNONS", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getName())));
+			}
 		}
-		
-		player.sendMessage("message: " + message);
+		return message;
+	}
+	
+	/**
+	 * returns a message from the map
+	 * @param messageEnum
+	 * @return
+	 */
+	public String getMessage(MessageEnum messageEnum)
+	{
+		return getMessage(messageEnum, null, null);
+	}
+	
+	/**
+	 * sends a message to the player which can span several lines. Line break with '\n'.
+	 * @param string
+	 * @param player
+	 */
+	private void sendMessage(String string, Player player)
+	{
+		String[] message = string.split("\n "); // Split everytime the "\n" into
+												// a new array value
+
+		for (int x = 0; x < message.length; x++)
+		{
+			player.sendMessage(message[x]); // Send each argument in
+														// the message
+		}
+
 	}
 	
 }

@@ -24,6 +24,7 @@ import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.DesignStorage;
+import at.pavlov.Cannons.config.MessageEnum;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.projectile.FlyingProjectile;
 import at.pavlov.Cannons.projectile.Projectile;
@@ -58,61 +59,54 @@ public class FireCannon {
 	}
 	
 	//################################### PREPARE_FIRE #################################
-	public boolean displayPrepareFireMessage(Cannon cannon, Player player)
+	public MessageEnum displayPrepareFireMessage(Cannon cannon, Player player)
 	{
+		CannonDesign design = cannon.getCannonDesign();
+		
+		
+		//check for flint and steel
 		if (player!= null)
 		{
 			if ( config.flint_and_steel==true && player.getItemInHand().getType() != Material.FLINT_AND_STEEL )
 			{
-				player.sendMessage(userMessages.NoFlintAndSteel);
-				return false;
+				return MessageEnum.ErrorNoFlintAndSteel;
 			}
 		}
+		//check if there is some gunpowder in the barrel
 		if (cannon.getLoadedGunpowder() <= 0)
 		{
-			if (player != null) player.sendMessage(userMessages.NoSulphur);
-			return false;
+			return MessageEnum.ErrorNoGunpowder;
 		}
+		//is there a projectile
 		if(cannon.getProjectileID() == Material.AIR.getId())
 		{
-			if (player != null) player.sendMessage(userMessages.NoProjectile);
-			return false;
+			return MessageEnum.ErrorNoProjectile;
 		}	
-		if (cannon.getLastFired() + config.fireDelay*1000 >= System.currentTimeMillis())
+		//if the player has permission to fire
+		if (player.hasPermission(design.getPermissionFire()))
 		{
-			if (player != null) player.sendMessage(userMessages.BarrelTooHot);
-			return false;
+			return MessageEnum.PermissionErrorFire;
+		}
+		//Barrel too hot
+		if (cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
+		{
+			return MessageEnum.ErrorBarrelTooHot;
 		}	
-		return true;
+		//everything fine fire the damn cannon
+		return MessageEnum.CannonFire;
 	}
 	
 	//################################### PREPARE_FIRE #################################
 	public boolean prepare_fire(Cannon cannon, Player player, Boolean deleteCharge)
 	{		
-		if (displayPrepareFireMessage(cannon, player) == false) return false;
+		//check for all permissions
+		MessageEnum message = displayPrepareFireMessage(cannon, player);
 		
-		//check if player or redstone has fired the gun
-		if (player != null)
-		{
-			if (player.hasPermission("cannons.player.fire") )
-			{
-				//fire the gun
-				player.sendMessage(userMessages.FireGun);
-				
-				//Player fires the gun
-				delayedFire(cannon, player, deleteCharge);
-
-			}
-			else
-			{
-				if (player != null) player.sendMessage(userMessages.ErrorPermFire);
-			}
-		}
-		else
-		{
-			//redstone fire
-			delayedFire(cannon, player,deleteCharge);
-		}	
+		//return if there are permission missing
+		if (message != MessageEnum.CannonFire) return false;
+		
+		//ignite the cannon
+		delayedFire(cannon, player, deleteCharge);	
 		
 		return true;
 	}

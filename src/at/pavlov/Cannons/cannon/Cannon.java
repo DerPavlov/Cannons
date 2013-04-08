@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.MessageEnum;
 import at.pavlov.Cannons.container.SimpleBlock;
-import at.pavlov.Cannons.enums.MessageEnum;
 import at.pavlov.Cannons.inventory.InventoryManagement;
 import at.pavlov.Cannons.projectile.Projectile;
 import at.pavlov.Cannons.sign.CannonSign;

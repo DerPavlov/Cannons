@@ -16,9 +16,9 @@ import org.bukkit.util.Vector;
 import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.MessageEnum;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.container.SimpleBlock;
-import at.pavlov.Cannons.enums.MessageEnum;
 import at.pavlov.Cannons.utils.CannonsUtil;
 
 public class CannonManager

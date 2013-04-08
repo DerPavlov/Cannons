@@ -13,8 +13,8 @@ import org.bukkit.util.Vector;
 import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.MessageEnum;
 import at.pavlov.Cannons.config.UserMessages;
-import at.pavlov.Cannons.enums.MessageEnum;
 import at.pavlov.Cannons.utils.CannonsUtil;
 
 
@@ -110,7 +110,7 @@ public class CalcAngle {
 		
 		if (player.hasPermission("cannons.player.adjust") == false)
 		{
-			player.sendMessage(userMessages.ErrorPermAdjust);
+			userMessages.displayMessage(player, MessageEnum.PermissionErrorAdjust, cannon);
 			return;
 		}
 			
@@ -353,13 +353,13 @@ public class CalcAngle {
 			//check if player has permission to aim
 			if (player.hasPermission("cannons.player.adjust") == true)
 			{
-				player.sendMessage(userMessages.enableAimingMode);
+				userMessages.displayMessage(player, MessageEnum.AimingModeEnabled, cannon);
 				inAimingMode.put(player, cannon);
 			}
 			else
 			{
 				//no Permission to aim
-				player.sendMessage(userMessages.ErrorPermAdjust);
+				userMessages.displayMessage(player, MessageEnum.PermissionErrorAdjust, cannon);
 				return;
 			}
 		}
@@ -371,7 +371,7 @@ public class CalcAngle {
 		if (inAimingMode.containsKey(player) == true)
 		{
 			//player in map -> remove
-			player.sendMessage(userMessages.disableAimingMode);
+			userMessages.displayMessage(player, MessageEnum.AimingModeDisabled, null);
 			inAimingMode.remove(player);
 		}
 	}

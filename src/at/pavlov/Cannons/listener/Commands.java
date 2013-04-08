@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import at.pavlov.Cannons.Cannons;
 import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.config.MessageEnum;
 import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.dao.PersistenceDatabase;
 
@@ -49,62 +50,62 @@ public class Commands implements CommandExecutor
 				if (args.length >= 1)
 				{
 					//cannons build
-					if (args[0].equalsIgnoreCase("build") && sender.hasPermission("cannons.player.command"))
+					if (args[0].equalsIgnoreCase("build") && player.hasPermission("cannons.player.command"))
 					{
 						// how to build a cannon
-						sendMessage(userMessages.HelpBuild, sender, ChatColor.GREEN);
+						userMessages.displayMessage(player, MessageEnum.HelpBuild);
 					}
 					//cannons fire
-					else if (args[0].equalsIgnoreCase("fire") && sender.hasPermission("cannons.player.command"))
+					else if (args[0].equalsIgnoreCase("fire") && player.hasPermission("cannons.player.command"))
 					{
 						// how to fire
-						sendMessage(userMessages.HelpFire, sender, ChatColor.GREEN);
+						userMessages.displayMessage(player, MessageEnum.HelpFire);
 					}
 					//cannons adjust
-					else if (args[0].equalsIgnoreCase("adjust") && sender.hasPermission("cannons.player.command"))
+					else if (args[0].equalsIgnoreCase("adjust") && player.hasPermission("cannons.player.command"))
 					{
 						// how to adjust
-						sendMessage(userMessages.HelpAdjust, sender, ChatColor.GREEN);
+						userMessages.displayMessage(player, MessageEnum.HelpAdjust);
 					}
 					//cannons reload
-					else if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("cannons.admin.reload"))
+					else if (args[0].equalsIgnoreCase("reload") && player.hasPermission("cannons.admin.reload"))
 					{
 						// reload config
 						config.loadConfig();
-						sendMessage("Cannons config loaded ", sender, ChatColor.GREEN);
+						player.sendMessage(ChatColor.GREEN + "Cannons config loaded");
 					}
 					//cannons save
-					else if (args[0].equalsIgnoreCase("save") && sender.hasPermission("cannons.admin.reload"))
+					else if (args[0].equalsIgnoreCase("save") && player.hasPermission("cannons.admin.reload"))
 					{
 						// save database
 						persistenceDatabase.saveAllCannons();
-						sendMessage("Cannons database saved ", sender, ChatColor.GREEN);
+						player.sendMessage(ChatColor.GREEN + "Cannons database saved ");
 					}
 					//cannons load
-					else if (args[0].equalsIgnoreCase("load") && sender.hasPermission("cannons.admin.reload"))
+					else if (args[0].equalsIgnoreCase("load") && player.hasPermission("cannons.admin.reload"))
 					{
 						// load database
 						persistenceDatabase.loadCannons();
-						sendMessage("Cannons database loaed ", sender, ChatColor.GREEN);
+						player.sendMessage(ChatColor.GREEN + "Cannons database loaded ");
 					}
 					//cannons reset
-					else if(args[0].equalsIgnoreCase("reset") && sender.hasPermission("cannons.player.reset"))
+					else if(args[0].equalsIgnoreCase("reset") && player.hasPermission("cannons.player.reset"))
 					{
 						// delete all cannon entries for this player
 						persistenceDatabase.deleteCannons(player.getName());
 						plugin.getCannonManager().deleteCannons(player.getName());
-						sendMessage(userMessages.cannonsReseted, sender, ChatColor.GREEN);
+						userMessages.displayMessage(player, MessageEnum.CannonsReseted);
 					}
 					else
 					{
 						// display help
-						sendMessage(userMessages.HelpText, sender, ChatColor.GREEN);
+						userMessages.displayMessage(player, MessageEnum.HelpText);
 					}
 				}
 				else
 				{
 					// display help
-					sendMessage(userMessages.HelpText, sender, ChatColor.GREEN);
+					userMessages.displayMessage(player, MessageEnum.HelpText);
 				}
 			}
 			return true;
@@ -113,23 +114,6 @@ public class Commands implements CommandExecutor
 	}
 
 
-	/**
-	 * sends a message to the player which can span several lines. Linebreak with '\n'.
-	 * @param string
-	 * @param player
-	 * @param chatcolor
-	 */
-	private void sendMessage(String string, CommandSender player, ChatColor chatcolor)
-	{
-		String[] message = string.split("\n "); // Split everytime the "\n" into
-												// a new array value
 
-		for (int x = 0; x < message.length; x++)
-		{
-			player.sendMessage(chatcolor + message[x]); // Send each argument in
-														// the message
-		}
-
-	}
 
 }
