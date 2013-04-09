@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
 
+
 public class CannonsUtil
 {
 	public static boolean hasIdData(Block block, int id, int data)
@@ -80,6 +81,16 @@ public class CannonsUtil
 			return originalName + newExtension;
 		}
 	}
+	
+	/**
+	 * removes the extrions of a filename like classic.yml
+	 * @param str
+	 * @return
+	 */
+	public static String removeExtension(String str)
+	{
+		return str.substring(str.lastIndexOf('.'), str.length());
+	}
 
 	/**
 	 * return true if the folder is empty
@@ -147,5 +158,6 @@ public class CannonsUtil
 		ItemStack item = new ItemStack(id, amount, (short) data);
 		return item;
 	}
+	
 
 }

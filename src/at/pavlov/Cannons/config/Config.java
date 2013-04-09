@@ -75,8 +75,7 @@ public class Config
 	public void loadConfig()
 	{
 		plugin.reloadConfig();
-
-		loadProjectiles(plugin);
+		projectileStorage.loadProjectiles();
 		designStorage.loadCannonDesigns();
 		userMessage.loadLanguage();
 		
@@ -128,102 +127,9 @@ public class Config
 
 	}
 
-	private void loadProjectiles(Cannons plugin)
-	{
-		// Load Projectiles
-		allowedProjectiles.clear();
-		List<String> list_material = plugin.getConfig().getStringList("projectiles");
-		if (list_material != null)
-		{
-			Iterator<String> iter = list_material.iterator();
-			while (iter.hasNext())
-			{
-				//add the projectile only if there is a property section in the config
-				String next = iter.next();
-				if (plugin.getConfig().contains(next))
-				{
-					allowedProjectiles.add(loadProjectileData(plugin, next));
-				}
-				else
-				{
-					plugin.logSevere("missing cannon property entry for " + next);
-				}
-			}
-			if (allowedProjectiles.size() == 0)
-			{
-				// add a dummy projectile, so the list is not empty
-				allowedProjectiles.add(new Projectile());
-			}
-		}
-		else
-		{
-			plugin.logSevere("No Projectile found.");
-		}
-	}
 
-	private Projectile loadProjectileData(Cannons plugin, String next)
-	{
-		// get data of projectile
-		Projectile projectile = new Projectile();
 
-		projectile.setName(plugin.getConfig().getString(next + "." + "name", "no cannonball name"));
-
-		projectile.setId(plugin.getConfig().getInt(next + "." + "id", 4));
-		projectile.setData(plugin.getConfig().getInt(next + "." + "data", 0));
-
-		projectile.max_speed = plugin.getConfig().getDouble(next + "." + "max speed", 3.0);
-		projectile.player_damage = plugin.getConfig().getDouble(next + "." + "player damage", 7.0);
-		// cannonball
-		projectile.cannonball = plugin.getConfig().getBoolean(next + "." + "cannonball.cannonball", true);
-		projectile.explosion_power = plugin.getConfig().getDouble(next + "." + "cannonball.explosion power", 2.0);
-		projectile.blockDamage = plugin.getConfig().getBoolean(next + "." + "cannonball.block_damage", true);
-		projectile.penetration = plugin.getConfig().getDouble(next + "." + "cannonball.penetration", 1.0);
-		projectile.timefuse = plugin.getConfig().getDouble(next + "." + "cannonball.timefuse", 0.0);
-		// canister shot
-		projectile.canisterShot = plugin.getConfig().getBoolean(next + "." + "canistershot.canister shot", false);
-		projectile.spreadCanisterShot = plugin.getConfig().getDouble(next + "." + "canistershot.spread", 1.0);
-		projectile.amountCanisterShot = plugin.getConfig().getInt(next + "." + "canistershot.amount of bullets", 40);
-		// placeBlock
-		projectile.placeBlock = plugin.getConfig().getBoolean(next + "." + "placeBlock.enabled", false);
-		projectile.placeBlockRadius = plugin.getConfig().getDouble(next + "." + "placeBlock.radius", 3);
-		projectile.placeBlockAmount = plugin.getConfig().getInt(next + "." + "placeBlock.amount", 3);
-		projectile.placeBlockMaterialId = plugin.getConfig().getInt(next + "." + "placeBlock.materialID", 0);
-		projectile.placeBlockMaterialData = plugin.getConfig().getInt(next + "." + "placeBlock.materialData", 0);
-		// effects
-		projectile.effectDuration = plugin.getConfig().getDouble(next + "." + "effects.effect duration");
-		projectile.superBreaker = plugin.getConfig().getBoolean(next + "." + "effects.super breaker");
-		projectile.incendiary = plugin.getConfig().getBoolean(next + "." + "effects.incendiary");
-		projectile.blindness = plugin.getConfig().getBoolean(next + "." + "effects.blindness");
-		projectile.poison = plugin.getConfig().getBoolean(next + "." + "effects.poison");
-		projectile.slowness = plugin.getConfig().getBoolean(next + "." + "effects.slowness");
-		projectile.slowDigging = plugin.getConfig().getBoolean(next + "." + "effects.slowDigging");
-		projectile.weakness = plugin.getConfig().getBoolean(next + "." + "effects.weakness");
-		projectile.confusion = plugin.getConfig().getBoolean(next + "." + "effects.confusion");
-		projectile.hunger = plugin.getConfig().getBoolean(next + "." + "effects.hunger");
-		projectile.teleport = plugin.getConfig().getBoolean(next + "." + "effects.teleport to impact");
-
-		if ((projectile.cannonball == false && projectile.canisterShot == false) || projectile.max_speed <= 0.1)
-		{
-			plugin.logSevere("No proporties of " + projectile.getName() + " found. Check if both names are written in the same way.");
-		}
-
-		return projectile;
-	}
-
-	// ################# getProjectile ############################
-	public Projectile getProjectile(int projectileID, int projectileData)
-	{
-		Iterator<Projectile> iter = allowedProjectiles.iterator();
-		while (iter.hasNext())
-		{
-			Projectile next = iter.next();
-			if (next.isEqual(projectileID, projectileData))
-			{
-				return next;
-			}
-		}
-		return null;
-	}
+	
 
 	// ################### getUserMessage ################################
 	public UserMessages getUserMessages()

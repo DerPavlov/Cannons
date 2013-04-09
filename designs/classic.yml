@@ -1,5 +1,4 @@
 general:
-  designID: 1
   designName: Classic
 signs:
   isSignRequired: false

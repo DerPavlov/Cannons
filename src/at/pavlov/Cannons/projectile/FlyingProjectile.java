@@ -6,6 +6,34 @@ import org.bukkit.entity.Snowball;
 
 public class FlyingProjectile
 {
-	public Snowball snowball;
-	public Projectile projectile;
+	private String shooter;
+	
+	private Snowball snowball;
+	private Projectile projectile;
+	
+	
+	public String getShooter()
+	{
+		return shooter;
+	}
+	public void setShooter(String shooter)
+	{
+		this.shooter = shooter;
+	}
+	public Snowball getSnowball()
+	{
+		return snowball;
+	}
+	public void setSnowball(Snowball snowball)
+	{
+		this.snowball = snowball;
+	}
+	public Projectile getProjectile()
+	{
+		return projectile;
+	}
+	public void setProjectile(Projectile projectile)
+	{
+		this.projectile = projectile;
+	}
 }

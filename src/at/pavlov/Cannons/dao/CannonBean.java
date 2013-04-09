@@ -29,7 +29,7 @@ public class CannonBean
 	private int projectileData;
 	private double horizontalAngle;
 	private double verticalAngle;
-	private int designId;
+	private String designId;
 	private boolean Valid;
 	
 	
@@ -139,14 +139,6 @@ public class CannonBean
 	{
 		this.owner = owner;
 	}
-	public int getDesignId()
-	{
-		return designId;
-	}
-	public void setDesignId(int designId)
-	{
-		this.designId = designId;
-	}
 	public String getCannonDirection()
 	{
 		return cannonDirection;
@@ -154,6 +146,14 @@ public class CannonBean
 	public void setCannonDirection(String cannonDirection)
 	{
 		this.cannonDirection = cannonDirection;
+	}
+	public String getDesignId()
+	{
+		return designId;
+	}
+	public void setDesignId(String designId)
+	{
+		this.designId = designId;
 	}
 	
 	

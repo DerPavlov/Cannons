@@ -1,13 +1,14 @@
 general:
-  name: cannonball
+  projectileName: cannonball
   itemName: cobblestone
-  types:
-    - 4:0
+  loadingItem: '4:0'
+  alternativeId: 
+    - '1:0'
 cannonball:
   velocity: 3
   penetration: 1
   timefuse: 0
-  amountOfBullets: 1
+  numberOfBullets: 1
   spreadMultiplier: 1.0
   properties:
     - superbreaker

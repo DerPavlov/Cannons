@@ -58,16 +58,18 @@ public class InventoryManagement
 			addItemInChests(invlist, gunpowder);
 			return false;
 		}
-
+		
 		// remove projectile
 		removeItemInChests(invlist, projectile);
-
+		
 		return true;
 	}
 
 	// #################################### removeAmmoFromChest ##############
 	private static ItemStack removeItemInChests(ArrayList<Inventory> invlist, ItemStack item)
 	{
+		if (item == null) return null;
+		
 		Iterator<Inventory> iter = invlist.iterator();
 		while (iter.hasNext() && item.getAmount() > 0)
 		{

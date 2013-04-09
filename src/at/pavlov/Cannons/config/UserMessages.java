@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -218,16 +217,16 @@ public class UserMessages {
 			//replace the loaded gunpowder
 			message = message.replace("GUNPOWDER", Integer.toString(cannon.getLoadedGunpowder()));
 			//replace the loaded projectile
-			message = message.replace("PROJECTILE", cannon.getLoadedProjectile().getName());
+			message = message.replace("PROJECTILE", cannon.getLoadedProjectile().getProjectileName());
 			//replace the horizontal angle
 			message = message.replace("HDEGREE", Double.toString(cannon.getHorizontalAngle()));			
 			//replace the vertical angle
 			message = message.replace("VDEGREE", Double.toString(cannon.getVerticalAngle()));
+		}
+		if (player != null)
+		{
 			//replace the number of cannons
-			if (player != null)
-			{
-				message = message.replace("CANNONS", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getName())));
-			}
+			message = message.replace("CANNONS", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getName())));
 		}
 		return message;
 	}

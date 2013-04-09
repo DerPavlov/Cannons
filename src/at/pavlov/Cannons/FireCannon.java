@@ -25,9 +25,9 @@ import at.pavlov.Cannons.cannon.CannonDesign;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.config.DesignStorage;
 import at.pavlov.Cannons.config.MessageEnum;
-import at.pavlov.Cannons.config.UserMessages;
 import at.pavlov.Cannons.projectile.FlyingProjectile;
 import at.pavlov.Cannons.projectile.Projectile;
+import at.pavlov.Cannons.projectile.ProjectileProperties;
 import at.pavlov.Cannons.utils.DelayedFireTask;
 import at.pavlov.Cannons.utils.FireTaskWrapper;
 
@@ -35,7 +35,6 @@ public class FireCannon {
 	
 	private final Config config;
 	private final DesignStorage designStorage;
-	private final UserMessages userMessages;
 	private final Cannons plugin;
 	private final CreateExplosion explosion;
 	
@@ -44,12 +43,11 @@ public class FireCannon {
 	
 	
 	
-	public FireCannon(Cannons plugin, Config config, UserMessages userMessages, CreateExplosion explosion)
+	public FireCannon(Cannons plugin, Config config, CreateExplosion explosion)
 	{
 		this.plugin = plugin;
 		this.config = config;
 		this.designStorage = plugin.getDesignStorage();
-		this.userMessages = userMessages;
 		this.explosion = explosion;
 	}
 	
@@ -78,7 +76,7 @@ public class FireCannon {
 			return MessageEnum.ErrorNoGunpowder;
 		}
 		//is there a projectile
-		if(cannon.getProjectileID() == Material.AIR.getId())
+		if(!cannon.isLoaded())
 		{
 			return MessageEnum.ErrorNoProjectile;
 		}	
@@ -147,7 +145,21 @@ public class FireCannon {
     private void fire(Cannon cannon, Player shooter, Boolean deleteCharge)
     {	
     	CannonDesign design = designStorage.getDesign(cannon);
-    	Projectile projectile = config.getProjectile(cannon.getProjectileID(), cannon.getProjectileData());
+    	Projectile projectile = cannon.getLoadedProjectile();
+    	
+    	//no projectile no firing
+    	if (projectile == null)
+    	{
+    		plugin.logInfo("Can't fire a cannon without a projectile");
+    		return;
+    	}
+    	//no gunpowder no shot
+    	if (cannon.getLoadedGunpowder() == 0)
+    	{
+    		plugin.logInfo("Can't fire a cannon without a gunpowder");
+    		return;
+    	}
+    	
     	
 		Location firingLoc = design.getMuzzle(cannon);
 		World world = cannon.getWorldBukkit();
@@ -156,33 +168,25 @@ public class FireCannon {
 		world.createExplosion(firingLoc, 0F);
 		world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 		
-		int max_projectiles = 1;
-		if (projectile.canisterShot == true && projectile.cannonball == false)
+		for (int i=0; i < projectile.getNumberOfBullets(); i++)
 		{
-			// get more snowball for canisterShot
-			max_projectiles = projectile.amountCanisterShot;
-		}
-		if (projectile.canisterShot == false && projectile.cannonball == false)
-		{
-			//fire nothing
-			max_projectiles = 0;
-		}
-		
-		for (int i=0; i < max_projectiles; i++)
-		{
-    		FlyingProjectile cannonball = new FlyingProjectile();
-    		cannonball.projectile = projectile;
-    		cannonball.snowball = world.spawn(firingLoc, Snowball.class);
-    		cannonball.snowball.setFireTicks(100);
-    		cannonball.snowball.setTicksLived(2);
-    		if (cannonball.projectile.teleport)
-    			cannonball.snowball.setPassenger(shooter);
-    
+			//one snowball for each projectile 
+    		Snowball snowball = world.spawn(firingLoc, Snowball.class);
+    		snowball.setFireTicks(100);
+    		snowball.setTicksLived(2);
+    		if (projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
+    			snowball.setPassenger(shooter);
     		
+    		//save all data of this projectile
+    		FlyingProjectile cannonball = new FlyingProjectile();
+    		cannonball.setProjectile(projectile);
+    		cannonball.setSnowball(snowball);
+    		
+	
     		//confuse shooter if he wears no helmet (only for one projectile and if its configured)
     		if ( i == 0 && config.confusesShooter > 0)
     		{
-    			List<Entity> living = cannonball.snowball.getNearbyEntities(10, 10, 10);
+    			List<Entity> living = snowball.getNearbyEntities(10, 10, 10);
     			Iterator<Entity> iter = living.iterator();
     			while (iter.hasNext())
     			{
@@ -217,44 +221,17 @@ public class FireCannon {
     		//calculate firing vector
     		Vector vect = cannon.getFiringVector(config);
     		    		
-    		cannonball.snowball.setVelocity(vect);
+    		cannonball.getSnowball().setVelocity(vect);
     		if (shooter != null) 
     		{
-    			cannonball.snowball.setShooter(shooter);
-    			cannonball.projectile.shooter = shooter.getName();
+    			cannonball.getSnowball().setShooter(shooter);
+    			cannonball.setShooter(shooter.getName());
     		}
 			flying_projectiles.add(cannonball);
 			
-    		//detonate if timefuse is used
-    		if (cannonball.projectile.timefuse > 0 && !cannonball.projectile.canisterShot)
-    		{
-    			
-    			//Delayed Task
-    			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() 
-    			{
-   			    public void run() {
-   			    	
-   			    	//check is list is not empty
-   			    	if (!flying_projectiles.isEmpty())
-   			    	{
-   						Iterator<FlyingProjectile> iterator = flying_projectiles.iterator();	       			    		  
-   						while( iterator.hasNext())
-   						{
-   							FlyingProjectile flying = iterator.next();		
-   							if (flying.snowball.getTicksLived() > flying.projectile.timefuse*20 && flying.projectile.timefuse > 0)
-   	   			    		{
-   	   			    			//detonate timefuse
-   	   			    			explosion.detonate(flying);
-   	   			    			flying.snowball.remove();
-   	   			    			iterator.remove();
-   	   			    		}
-   						}
-   					}
-   			    }}, (long) (cannonball.projectile.timefuse*20));
-    			
-    		}
+    		//detonate timefused projectiles
+			detonateTimefuse(cannonball);
 		}
-		
 		
 		//reset after firing
 		cannon.setLastFired(System.currentTimeMillis());
@@ -263,7 +240,7 @@ public class FireCannon {
 		{
 			//delete charge for human gunner
 			cannon.setLoadedGunpowder(0);
-			cannon.setProjectileID(Material.AIR.getId());
+			cannon.setLoadedProjectile(null);
 			
 			//update Sign
 			cannon.updateCannonSigns();
@@ -278,7 +255,7 @@ public class FireCannon {
 				{
 					//no more ammo in the chests - delete Charge
 	    			cannon.setLoadedGunpowder(0);
-	    			cannon.setProjectileID(Material.AIR.getId());
+	    			cannon.setLoadedProjectile(null);
 	    			//update Sign
 	    			cannon.updateCannonSigns();
 				}
@@ -286,6 +263,47 @@ public class FireCannon {
 		}
     }	 
     
+	/**
+	 * detonate a timefused projectile mid air	
+	 * @param cannonball
+	 */
+    private void detonateTimefuse(FlyingProjectile cannonball)
+    {
+		if (cannonball.getProjectile().getTimefuse() > 0)
+		{
+			
+			//Delayed Task
+			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() 
+			{
+			    public void run() {
+			    	
+			    	//check is list is not empty
+			    	if (!flying_projectiles.isEmpty())
+			    	{
+						Iterator<FlyingProjectile> iterator = flying_projectiles.iterator();	       			    		  
+						while( iterator.hasNext())
+						{
+							FlyingProjectile flying = iterator.next();	
+							Projectile proj = flying.getProjectile();
+							Snowball snow = flying.getSnowball();
+							if (flying.getSnowball() != null)
+							{
+	   							if (flying.getSnowball().getTicksLived() > proj.getTimefuse()*20 - 5 && proj.getTimefuse() > 0)
+	   	   			    		{
+	   	   			    			//detonate timefuse
+	   	   			    			explosion.detonate(flying);
+	   	   			    			snow.remove();
+	   	   			    			iterator.remove();
+	   	   			    		}	
+							}
+						}
+					}
+			    }}, (long) (cannonball.getProjectile().getTimefuse()*20));
+			
+		}
+	}
+		
+		
     //############## CheckHelmet   ################################
 	private boolean CheckHelmet(Player player)
 	{
@@ -307,9 +325,9 @@ public class FireCannon {
 		   while (flying.hasNext())
 		   {
 			   FlyingProjectile next = flying.next();
-			   if(next.snowball.getTicksLived() > 10000)
+			   if(next.getSnowball().getTicksLived() > 10000)
 			   {
-				   next.snowball.remove();
+				   next.getSnowball().remove();
 				   flying.remove();
 			   }
 		   }

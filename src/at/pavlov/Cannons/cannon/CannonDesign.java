@@ -15,7 +15,7 @@ import at.pavlov.Cannons.container.SimpleBlock;
 public class CannonDesign
 {
 	//general
-	private int designID;
+	private String designID;
 	private String designName;
 	
 	//sign
@@ -294,11 +294,11 @@ public class CannonDesign
     }
 
     
-	public int getDesignID()
+	public String getDesignID()
 	{
 		return designID;
 	}
-	public void setDesignID(int designID)
+	public void setDesignID(String designID)
 	{
 		this.designID = designID;
 	}

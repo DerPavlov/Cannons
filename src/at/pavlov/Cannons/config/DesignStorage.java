@@ -138,9 +138,7 @@ public class DesignStorage
 		// load all entries of the config file
 
 		// general
-		cannonDesign.setDesignID(cannonDesignConfig.getInt("general.designID", 0));
-		if (cannonDesign.getDesignID() == 0)
-			plugin.logSevere("UniqueID is 0 or missing for " + ymlFile);
+		cannonDesign.setDesignID(CannonsUtil.removeExtension(ymlFile));
 		cannonDesign.setDesignName(cannonDesignConfig.getString("general.designName", "noCannonName"));
 
 		// sign
@@ -486,11 +484,11 @@ public class DesignStorage
 	 * @param cannon
 	 * @return
 	 */
-	public CannonDesign getDesign(int designId)
+	public CannonDesign getDesign(String designId)
 	{
 		for (CannonDesign cannonDesign : cannonDesignList)
 		{
-			if (cannonDesign.getDesignID() == designId)
+			if (cannonDesign.getDesignID().equals(designId))
 				return cannonDesign;
 		}
 		return null;

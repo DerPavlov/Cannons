@@ -4,127 +4,90 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+
+import at.pavlov.Cannons.container.MaterialHolder;
 
 
 
 public class Projectile {
-	private String name;
+	private String projectileID;
+	private String projectileName;
+	private String itemName;
+	private MaterialHolder loadingItem;
+	//list of items or blocks that can represent this this (e.g. redstone dust may for wire when you click a block)
+	private List<MaterialHolder> alternativeItemList = new ArrayList<MaterialHolder>();
 	
-	private int id;
-	private int data;
+	//properties of the cannonball
+	private double velocity;	
+	private double penetration;
+	private double timefuse;
+	private int numberOfBullets;
+	private double spreadMultiplier;
+	private List<ProjectileProperties> propertyList = new ArrayList<ProjectileProperties>();
 	
-	public String shooter;
+	//explosion
+	private int explosionPower;
+	private boolean blockDamage;
+	private double effectRange;
+	private double effectDuration;
+	private int effectAmplifier;
+	private List<PotionEffect> entityEffects = new ArrayList<PotionEffect>();
 	
-	public boolean cannonball;
-	public double explosion_power;
-	public boolean blockDamage;
-	public double player_damage;
-	public double penetration;
-	public double timefuse;
-	public double max_speed;
-	
-	public boolean canisterShot;
-	public double spreadCanisterShot;
-	public int amountCanisterShot;
+	//placeBlock
+	private double blockPlaceRadius;
+	private double blockPlaceAmount;
+	private List<MaterialHolder> blockPlaceList = new ArrayList<MaterialHolder>();
 
-	public boolean placeBlock;
-	public double placeBlockRadius;
-	public int placeBlockAmount;
-	public int placeBlockMaterialId;
-	public int placeBlockMaterialData;
-	
-	public double effectDuration;
-	public boolean superBreaker;
-	public boolean incendiary;
-	public boolean blindness;
-	public boolean poison;
-	public boolean slowness;
-	public boolean slowDigging;
-	public boolean weakness;
-	public boolean confusion;
-	public boolean hunger;
-	public boolean teleport;
 	
 	private List<String> permissions = new ArrayList<String>();
 	
 	public Projectile(){
-		setName("default projectile");
-		
-		setId(4);
-		setData(0);
-		
-		cannonball = true;
-		explosion_power = 4;
-		player_damage = 0;
-		blockDamage = true;
-		penetration = 1;
-		timefuse = 0;
-		max_speed = 5;
-		
-		canisterShot = false;
-		spreadCanisterShot = 5;
-		amountCanisterShot = 30;
-		
-		placeBlock = false;
-		placeBlockRadius = 2;
-		placeBlockAmount = 10;
-		placeBlockMaterialId = 0;
-		placeBlockMaterialData = 0;
 
-		effectDuration = 5;
-		superBreaker = false;
-		incendiary = false;
-		blindness = false;
-		poison = false;
-		slowness = false;
-		slowDigging = false;
-		weakness = false;
-		confusion = false;
-		hunger = false;
-		teleport = false;
-	}
-	
-	public boolean isEqual(int _id, int _data)
-	{
-		if (_id == id)
-		{
-			// negative data values - allow all data values
-			if (data < 0 || _data == data)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean isMobEgg()
-	{
-		if (placeBlockMaterialId == 383)
-		{
-			return true;
-		}
-		return false;	
 	}
 	
 	/**
-	 * compares data and id. If projectile data is -1, comparision is skipped
-	 * @param _id
-	 * @param _data
+	 * returns true if both projectiles have the same identifier
+	 * @param projectile
 	 * @return
 	 */
-	public boolean equalsFuzzy(int _id, int _data)
+	public boolean equals(Projectile projectile)
 	{
-		if (_id == id)
+		return projectile.getProjectileID().equals(projectileID); 
+	}
+	
+	/**
+	 * returns true if both the id and data are equivalent of data == -1
+	 * @param id
+	 * @param data
+	 * @return
+	 */
+	public boolean equalsFuzzy(int id, int data)
+	{
+		if (id == loadingItem.getId())
 		{
-			//compare data - if data is -1 skip
-			return (data == _data || data == -1);
+			return (data == loadingItem.getData() || data == -1 || loadingItem.getData() == -1);
 		}
 		return false;
 	}
 	
+
+	/**
+	 * returns the ID and Data of the projectile
+	 */
 	public String toString()
 	{
-		return id + ":" + data;
+		return loadingItem.toString();
+	}
+	
+	public boolean hasProperty(ProjectileProperties properties)
+	{
+		for (ProjectileProperties propEnum : ProjectileProperties.values())
+		{
+			if (propEnum == properties)
+				return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -146,37 +109,242 @@ public class Projectile {
 		return true;
 	}
 
-	public int getId()
+	
+
+	public String getItemName()
 	{
-		return id;
+		return itemName;
 	}
 
-	public void setId(int id)
+
+	public void setItemName(String itemName)
 	{
-		this.id = id;
+		this.itemName = itemName;
 	}
 
-	public int getData()
+
+	public String getProjectileName()
 	{
-		return data;
+		return projectileName;
 	}
 
-	public void setData(int data)
-	{
-		this.data = data;
-	}
 
-	public String getName()
+	public void setProjectileName(String projectileName)
 	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
+		this.projectileName = projectileName;
 	}
 	
-	
+
+	public double getVelocity()
+	{
+		return velocity;
+	}
+
+
+	public void setVelocity(double velocity)
+	{
+		this.velocity = velocity;
+	}
+
+
+	public double getPenetration()
+	{
+		return penetration;
+	}
+
+
+	public void setPenetration(double penetration)
+	{
+		this.penetration = penetration;
+	}
+
+
+	public double getTimefuse()
+	{
+		return timefuse;
+	}
+
+
+	public void setTimefuse(double timefuse)
+	{
+		this.timefuse = timefuse;
+	}
+
+
+	public int getNumberOfBullets()
+	{
+		return numberOfBullets;
+	}
+
+
+	public void setNumberOfBullets(int numberOfBullets)
+	{
+		this.numberOfBullets = numberOfBullets;
+	}
+
+
+	public double getSpreadMultiplier()
+	{
+		return spreadMultiplier;
+	}
+
+
+	public void setSpreadMultiplier(double spreadMultiplier)
+	{
+		this.spreadMultiplier = spreadMultiplier;
+	}
+
+
+	public List<ProjectileProperties> getPropertyList()
+	{
+		return propertyList;
+	}
+
+
+	public void setPropertyList(List<ProjectileProperties> propertyList)
+	{
+		this.propertyList = propertyList;
+	}
+
+
+	public int getExplosionPower()
+	{
+		return explosionPower;
+	}
+
+
+	public void setExplosionPower(int explosionPower)
+	{
+		this.explosionPower = explosionPower;
+	}
+
+
+	public boolean isBlockDamage()
+	{
+		return blockDamage;
+	}
+
+
+	public void setBlockDamage(boolean blockDamage)
+	{
+		this.blockDamage = blockDamage;
+	}
+
+
+	public double getEffectRange()
+	{
+		return effectRange;
+	}
+
+
+	public void setEffectRange(double effectRange)
+	{
+		this.effectRange = effectRange;
+	}
+
+
+	public double getEffectDuration()
+	{
+		return effectDuration;
+	}
+
+
+	public void setEffectDuration(double effectDuration)
+	{
+		this.effectDuration = effectDuration;
+	}
+
+
+	public int getEffectAmplifier()
+	{
+		return effectAmplifier;
+	}
+
+
+	public void setEffectAmplifier(int effectAmplifier)
+	{
+		this.effectAmplifier = effectAmplifier;
+	}
+
+
+	public List<PotionEffect> getEntityEffects()
+	{
+		return entityEffects;
+	}
+
+
+	public void setEntityEffects(List<PotionEffect> entityEffects)
+	{
+		this.entityEffects = entityEffects;
+	}
+
+
+	public double getBlockPlaceRadius()
+	{
+		return blockPlaceRadius;
+	}
+
+
+	public void setBlockPlaceRadius(double blockPlaceRadius)
+	{
+		this.blockPlaceRadius = blockPlaceRadius;
+	}
+
+
+	public double getBlockPlaceAmount()
+	{
+		return blockPlaceAmount;
+	}
+
+
+	public void setBlockPlaceAmount(double blockPlaceAmount)
+	{
+		this.blockPlaceAmount = blockPlaceAmount;
+	}
+
+
+	public List<MaterialHolder> getBlockPlaceList()
+	{
+		return blockPlaceList;
+	}
+
+
+	public void setBlockPlaceList(List<MaterialHolder> blockPlaceList)
+	{
+		this.blockPlaceList = blockPlaceList;
+	}
+
+	public String getProjectileID()
+	{
+		return projectileID;
+	}
+
+	public void setProjectileID(String projectileID)
+	{
+		this.projectileID = projectileID;
+	}
+
+	public MaterialHolder getLoadingItem()
+	{
+		return loadingItem;
+	}
+
+	public void setLoadingItem(MaterialHolder loadingItem)
+	{
+		this.loadingItem = loadingItem;
+	}
+
+	public List<MaterialHolder> getAlternativeItemList()
+	{
+		return alternativeItemList;
+	}
+
+	public void setAlternativeItemList(List<MaterialHolder> alternativeItemList)
+	{
+		this.alternativeItemList = alternativeItemList;
+	}
+
+
 	
 
 	

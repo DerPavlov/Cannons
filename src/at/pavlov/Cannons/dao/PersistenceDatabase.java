@@ -9,6 +9,8 @@ import com.avaje.ebean.Query;
 
 import at.pavlov.Cannons.Cannons;
 import at.pavlov.Cannons.cannon.Cannon;
+import at.pavlov.Cannons.cannon.CannonDesign;
+import at.pavlov.Cannons.projectile.Projectile;
 
 public class PersistenceDatabase
 {
@@ -37,29 +39,42 @@ public class PersistenceDatabase
 			for (CannonBean bean : beans)
 			{
 
-				//load values for the cannon
-				String world = bean.getWorld();
-				Vector vect = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
-				BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
-				String owner = bean.getOwner();
+				//check if cannon design exists
+				CannonDesign design = plugin.getCannonDesign(bean.getDesignId());
+				if (design == null)
+				{
+					plugin.logSevere("Design " + bean.getDesignId() + " not found in plugin/designs");
+				}
+				else
+				{
+					//load values for the cannon
+					String world = bean.getWorld();
+					Vector offset = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
+					BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
+					String owner = bean.getOwner();
+					
+					//make a cannon
+					Cannon cannon = new Cannon(design, world, offset, cannonDirection, owner);
+					// cannon created - load properties
+					cannon.setDatabaseId(bean.getId());
+					cannon.setCannonName(bean.getName());
+					cannon.setLoadedGunpowder(bean.getGunpowder());
+					
+					//load projectile
+					cannon.setLoadedProjectile(plugin.getProjectile(bean.getProjectileID(), bean.getProjectileData()));
+					
+					//angles
+					cannon.setHorizontalAngle(bean.getHorizontalAngle());
+					cannon.setVerticalAngle(bean.getVerticalAngle());
+					
+					cannon.setValid(bean.isValid());
 
-				//make a cannon
-				Cannon cannon = new Cannon(plugin.getCannonDesign(bean.getDesignId()), world, vect, cannonDirection, owner);
-				// cannon created - load properties
-				cannon.setDatabaseId(bean.getId());
-				cannon.setCannonName(bean.getName());
-				cannon.setLoadedGunpowder(bean.getGunpowder());
-				cannon.setProjectileID(bean.getProjectileID());
-				cannon.setProjectileData(bean.getProjectileData());
-				cannon.setHorizontalAngle(bean.getHorizontalAngle());
-				cannon.setVerticalAngle(bean.getVerticalAngle());
-				cannon.setValid(bean.isValid());
-
-				//add a cannon to the cannon list
-				plugin.createCannon(cannon);
-				
-				// update sign
-				cannon.updateCannonSigns();
+					//add a cannon to the cannon list
+					plugin.createCannon(cannon);
+					
+					// update sign
+					cannon.updateCannonSigns();	
+				}
 
 			}
 			return true;
@@ -113,9 +128,20 @@ public class PersistenceDatabase
 		bean.setName(cannon.getCannonName());
 		// amount of gunpowder
 		bean.setGunpowder(cannon.getLoadedGunpowder());
-		// projectile
-		bean.setProjectileID(cannon.getProjectileID());
-		bean.setProjectileData(cannon.getProjectileData());
+		
+		// load projectile
+		// if no projectile is found, set it to air
+		Projectile projectile = cannon.getLoadedProjectile();
+		if (projectile != null)
+		{
+			bean.setProjectileID(projectile.getLoadingItem().getId());
+			bean.setProjectileData(projectile.getLoadingItem().getData());	
+		}
+		else
+		{
+			bean.setProjectileID(0);
+			bean.setProjectileData(0);	
+		}
 		// angles
 		bean.setHorizontalAngle(cannon.getHorizontalAngle());
 		bean.setVerticalAngle(cannon.getVerticalAngle());

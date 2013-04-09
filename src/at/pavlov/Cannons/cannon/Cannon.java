@@ -19,30 +19,34 @@ import at.pavlov.Cannons.container.SimpleBlock;
 import at.pavlov.Cannons.inventory.InventoryManagement;
 import at.pavlov.Cannons.projectile.Projectile;
 import at.pavlov.Cannons.sign.CannonSign;
-import at.pavlov.Cannons.utils.CannonsUtil;
 
 public class Cannon
 {
 	// Database id - is 0 until stored in the database. Then it is the id in the
 	// database
 	private int databaseId;
-	private int designID;
+	private String designID;
 	private String cannonName;
+	
 	// direction the cannon is facing
 	private BlockFace cannonDirection;
 	// the location is describe by the offset of the cannon and the design
 	private Vector offset;
 	// world of the cannon
 	private String world;
+	
 	// time the cannon was last time fired
 	private long LastFired;
+	
+	//amount of loaded gunpowder
 	private int loadedGunpowder;
 	//the loaded projectile - can be null
 	private Projectile loadedProjectile;
-	private int projectileID;
-	private int projectileData;
+	
+	//angles
 	private double horizontalAngle;
 	private double verticalAngle;
+	
 	// player who has build this cannon
 	private String owner;
 	// designID of the cannon, for different types of cannons - not in use
@@ -70,7 +74,11 @@ public class Cannon
 	public boolean removeAmmoFromChests()
 	{
 		// create a new projectile stack with one projectile
-		ItemStack projectile = CannonsUtil.newItemStack(projectileID, projectileData, 1);
+		ItemStack projectile = null;
+		if (loadedProjectile != null)
+		{
+			loadedProjectile.getLoadingItem().toItemStack(1);	
+		}
 
 		// gunpowder stack
 		ItemStack powder = design.getGunpowderType().toItemStack(loadedGunpowder);
@@ -121,10 +129,8 @@ public class Cannon
 		// check if loading of projectile was successful
 		if (returnVal.equals(MessageEnum.loadProjectile))
 		{
-			ItemStack itemInHand = player.getItemInHand();
 			// load projectile
-			projectileID = itemInHand.getTypeId();
-			projectileData = itemInHand.getData().getData();
+			loadedProjectile = projectile;
 
 			// remove from player
 			if (!design.isAmmoInfiniteForPlayer()) InventoryManagement.TakeFromPlayerInventory(player);
@@ -208,7 +214,7 @@ public class Cannon
 	 */
 	public boolean isLoaded()
 	{
-		return (projectileID == Material.AIR.getId()) ? false : true;
+		return (loadedProjectile != null);
 	}
 
 	/**
@@ -224,10 +230,9 @@ public class Cannon
 		}
 
 		// can't drop Air
-		if (projectileID > 0)
+		if (isLoaded())
 		{
-			ItemStack projectile = new ItemStack(projectileID, 1, (short) projectileData);
-			getWorldBukkit().dropItemNaturally(design.getMuzzle(this), projectile);
+			getWorldBukkit().dropItemNaturally(design.getMuzzle(this), loadedProjectile.getLoadingItem().toItemStack(1));
 		}
 
 	}
@@ -369,18 +374,14 @@ public class Cannon
 		// Config config =
 
 		// get projectile
-		Projectile proj = config.getProjectile(projectileID, projectileData);
-
 		// set direction of the snowball
 		Vector vect = new Vector(1f, 0f, 0f);
 		Random r = new Random();
 
-		double deviation = r.nextGaussian() * design.getSpreadOfCannon();
-		if (proj.canisterShot) deviation += r.nextGaussian() * proj.spreadCanisterShot;
+		double deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier();
 		double horizontal = Math.sin((horizontalAngle + deviation) * Math.PI / 180);
 
-		deviation = r.nextGaussian() * design.getSpreadOfCannon();
-		if (proj.canisterShot) deviation += r.nextGaussian() * proj.spreadCanisterShot;
+		deviation = r.nextGaussian() * design.getSpreadOfCannon()* loadedProjectile.getSpreadMultiplier();
 		double vertical = Math.sin((verticalAngle + deviation) * Math.PI / 180);
 
 		if (cannonDirection.equals(BlockFace.WEST))
@@ -400,7 +401,7 @@ public class Cannon
 			vect = new Vector(-horizontal, vertical, 1.0f);
 		}
 
-		double multi = proj.max_speed * design.getMultiplierVelocity() * (loadedGunpowder / design.getMaxLoadableGunpowder());
+		double multi = loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (loadedGunpowder / design.getMaxLoadableGunpowder());
 		if (multi < 0.1) multi = 0.1;
 
 		return vect.multiply(multi);
@@ -477,7 +478,7 @@ public class Cannon
 				return owner;
 			case 2 :
 				// loaded Gunpowder/Projectile
-				return "p: " + loadedGunpowder + " c: " + projectileID + ":" + projectileData;
+				return "p: " + loadedGunpowder + " c: " + loadedProjectile.toString();
 			case 3 :
 				// angles
 				return horizontalAngle + "/" + verticalAngle;
@@ -601,12 +602,12 @@ public class Cannon
 		this.databaseId = databaseId;
 	}
 
-	public int getDesignID()
+	public String getDesignID()
 	{
 		return designID;
 	}
 
-	public void setDesignID(int designID)
+	public void setDesignID(String designID)
 	{
 		this.designID = designID;
 	}
@@ -659,26 +660,6 @@ public class Cannon
 	public void setLoadedGunpowder(int loadedGunpowder)
 	{
 		this.loadedGunpowder = loadedGunpowder;
-	}
-
-	public int getProjectileID()
-	{
-		return projectileID;
-	}
-
-	public void setProjectileID(int projectileID)
-	{
-		this.projectileID = projectileID;
-	}
-
-	public int getProjectileData()
-	{
-		return projectileData;
-	}
-
-	public void setProjectileData(int projectileData)
-	{
-		this.projectileData = projectileData;
 	}
 
 	public double getHorizontalAngle()

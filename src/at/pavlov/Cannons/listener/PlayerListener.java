@@ -393,9 +393,9 @@ public class PlayerListener implements Listener
 			while (iterator.hasNext())
 			{
 				FlyingProjectile flying = iterator.next();
-				if (event.getEntity().equals(flying.snowball))
+				if (event.getEntity().equals(flying.getSnowball()))
 				{
-					flying.snowball = (Snowball) event.getEntity();
+					flying.setSnowball((Snowball) event.getEntity());
 					explosion.detonate(flying);
 					iterator.remove();
 				}

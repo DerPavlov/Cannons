@@ -28,6 +28,7 @@ import org.bukkit.util.Vector;
 import at.pavlov.Cannons.config.Config;
 import at.pavlov.Cannons.projectile.FlyingProjectile;
 import at.pavlov.Cannons.projectile.Projectile;
+import at.pavlov.Cannons.projectile.ProjectileProperties;
 import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
 
 public class CreateExplosion {
@@ -106,16 +107,16 @@ public class CreateExplosion {
     {
     	LinkedList<Block> blocklist = new LinkedList<Block>();
     	
-    	Boolean superbreaker = cannonball.projectile.superBreaker;
+    	Boolean superbreaker = cannonball.getProjectile().superBreaker;
     	
-    	Vector vel = cannonball.snowball.getVelocity();
-    	Location snowballLoc = cannonball.snowball.getLocation();
+    	Vector vel = cannonball.getSnowball().getVelocity();
+    	Location snowballLoc = cannonball.getSnowball().getLocation();
     	World world = snowballLoc.getWorld();
-    	int penetration = (int) ((cannonball.projectile.penetration) * vel.length() / cannonball.projectile.max_speed);
+    	int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / cannonball.getProjectile().max_speed);
     	Location impactLoc = snowballLoc.clone();
     	
     	// the cannonball will only break blocks if it has penetration. 
-    	if (cannonball.projectile.penetration > 0)
+    	if (cannonball.getProjectile().getPenetration() > 0)
     	{
     		BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
     		
@@ -143,7 +144,7 @@ public class CreateExplosion {
     		}
     	}
     		    	
-    	if (cannonball.projectile.superBreaker == true)
+    	if (cannonball.getProjectile().hasProperty(ProjectileProperties.SUPERBREAKER) == true)
     	{
     		//small explosion on impact
     		Block block = impactLoc.getBlock();
@@ -161,7 +162,7 @@ public class CreateExplosion {
     	{
     	
     		//create tnt event
-    		EntityExplodeEvent event = new EntityExplodeEvent(cannonball.snowball, impactLoc, blocklist, 1.0f);
+    		EntityExplodeEvent event = new EntityExplodeEvent(cannonball.getSnowball(), impactLoc, blocklist, 1.0f);
     		
     		//handle with bukkit
     		plugin.getServer().getPluginManager().callEvent(event);
@@ -325,7 +326,7 @@ public class CreateExplosion {
     //####################################  makeBlockPlace ##############################
     private void makeBlockPlace(Location impactLoc, Location Loc, FlyingProjectile cannonball)
     {
-    	Projectile projectile = cannonball.projectile;
+    	Projectile projectile = cannonball.getProjectile();
     	
 		Block block = Loc.getBlock();
 		if (block.getType() == Material.AIR)
@@ -343,9 +344,9 @@ public class CreateExplosion {
 				}
 				else
 				{
-					if (cannonball.snowball.getShooter() instanceof Player)
+					if (cannonball.getSnowball().getShooter() instanceof Player)
 					{
-						Player player = (Player) cannonball.snowball.getShooter();
+						Player player = (Player) cannonball.getSnowball().getShooter();
 						//replace air
 						block.setTypeId(projectile.placeBlockMaterialId);
 						block.setData((byte) projectile.placeBlockMaterialData);
@@ -365,7 +366,7 @@ public class CreateExplosion {
 	//####################################  spreadBlocks ##############################
     private void spreadBlocks(Location impactLoc, FlyingProjectile cannonball)
     {
-    	Projectile projectile = cannonball.projectile;
+    	Projectile projectile = cannonball.getProjectile();
     	
     	if (projectile.placeBlock == true)
     	{
@@ -455,12 +456,12 @@ public class CreateExplosion {
 			if (dist <= 16)
 			{
 				//set the damage to max if player is near to explosion (distance is squared)
-				damage = cannonball.projectile.player_damage;
+				damage = cannonball.getProjectile().player_damage;
 			}
 			else
 			{
 				//player is farer away
-				damage = Math.floor(cannonball.projectile.player_damage/(dist-15));	
+				damage = Math.floor(cannonball.getProjectile().player_damage/(dist-15));	
 			}
 			
 			//check line of sight and reduce damage if the way is blocked
@@ -478,9 +479,9 @@ public class CreateExplosion {
 			if (config.usePlayerName == true)
 			{
 				// transmit the player for player damage. Kill can be displayed.
-				if (cannonball.projectile.shooter != null)
+				if (cannonball.getProjectile().shooter != null)
 				{
-					shooter = Bukkit.getPlayer(cannonball.projectile.shooter);
+					shooter = Bukkit.getPlayer(cannonball.getProjectile().shooter);
 				}
 				
 			}
@@ -502,33 +503,33 @@ public class CreateExplosion {
 					amplifer = 1;
 				}
 			
-				if (cannonball.projectile.blindness && damage >= 1)
+				if (cannonball.getProjectile().blindness && damage >= 1)
 				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) (cannonball.projectile.effectDuration*20), amplifer));
+					living.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
 				}
-				if (cannonball.projectile.confusion && damage >= 1)
+				if (cannonball.getProjectile().confusion && damage >= 1)
 				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int) (cannonball.projectile.effectDuration*20), amplifer));
+					living.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
 				}
-				if (cannonball.projectile.hunger && damage >= 1)
+				if (cannonball.getProjectile().hunger && damage >= 1)
 				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (int) (cannonball.projectile.effectDuration*20), amplifer));
+					living.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
 				}
-				if (cannonball.projectile.poison && damage >= 1)
+				if (cannonball.getProjectile().poison && damage >= 1)
 				{					
-					living.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int) (cannonball.projectile.effectDuration*5), 0));
+					living.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int) (cannonball.getProjectile().getEffectDuration()*5), 0));
 				}
-				if (cannonball.projectile.slowDigging && damage >= 1)
+				if (cannonball.getProjectile().slowDigging && damage >= 1)
 				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (int) (cannonball.projectile.effectDuration*20), amplifer));
+					living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
 				}
-				if (cannonball.projectile.slowness && damage >= 1)
+				if (cannonball.getProjectile().slowness && damage >= 1)
 				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (cannonball.projectile.effectDuration*20), amplifer));
+					living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
 				}
-				if (cannonball.projectile.weakness && damage >= 1)
+				if (cannonball.getProjectile().weakness && damage >= 1)
 				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (int) (cannonball.projectile.effectDuration*20), amplifer));
+					living.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
 				}
 			}
 		}
@@ -547,15 +548,15 @@ public class CreateExplosion {
    
     	
     	//teleport snowball to impact
-    	cannonball.snowball.teleport(impactLoc);
+    	cannonball.getSnowball().teleport(impactLoc);
     	
-    	float explosion_power = (float) cannonball.projectile.explosion_power;
+    	float explosion_power = (float) cannonball.getProjectile().explosion_power;
     	//find living entities
 		List<Entity> entity;
-		if (cannonball.projectile.canisterShot)
+		if (cannonball.getProjectile().canisterShot)
 		{
 			//canister shot - no explosion
-			entity = cannonball.snowball.getNearbyEntities(2, 2, 2);
+			entity = cannonball.getSnowball().getNearbyEntities(2, 2, 2);
 			
 			//face explosion
 			world.createExplosion(impactLoc, 0F);
@@ -563,10 +564,10 @@ public class CreateExplosion {
 		else 
 		{
 			//normal shot + explosion
-			entity = cannonball.snowball.getNearbyEntities(20, 20, 20);
+			entity = cannonball.getSnowball().getNearbyEntities(20, 20, 20);
 			
 			//explosion event
-	    	world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, cannonball.projectile.incendiary, cannonball.projectile.blockDamage);
+	    	world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, cannonball.getProjectile().incendiary, cannonball.getProjectile().isBlockDamage());
 		}
 		
 		
@@ -582,15 +583,15 @@ public class CreateExplosion {
 		
 		
 		//teleport to impact
-		if (cannonball.projectile.teleport == true)
+		if (cannonball.getProjectile().teleport == true)
 		{
 			//teleport shooter to impact
-			LivingEntity shooter = cannonball.snowball.getShooter();
+			LivingEntity shooter = cannonball.getSnowball().getShooter();
 			if (shooter != null) shooter.teleport(impactLoc);
 		}
 		
-		List<Entity> EntitiesAfterExplosion = cannonball.snowball.getNearbyEntities(20, 20, 20);
-		transmittingEntities(EntitiesAfterExplosion, cannonball.snowball.getShooter());
+		List<Entity> EntitiesAfterExplosion = cannonball.getSnowball().getNearbyEntities(20, 20, 20);
+		transmittingEntities(EntitiesAfterExplosion, cannonball.getSnowball().getShooter());
 		
     }
     

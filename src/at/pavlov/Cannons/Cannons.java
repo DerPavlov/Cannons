@@ -78,7 +78,7 @@ public class Cannons extends JavaPlugin
 		
 		this.cannonManager = new CannonManager(this, userMessages, config);
 		this.explosion = new CreateExplosion(this, config);
-		this.fireCannon = new FireCannon(this, config, userMessages, explosion);
+		this.fireCannon = new FireCannon(this, config, explosion);
 		this.calcAngle = new CalcAngle(this, userMessages, config);
 		
 		this.persistenceDatabase = new PersistenceDatabase(this);
@@ -404,7 +404,7 @@ public class Cannons extends JavaPlugin
 		return designStorage.getDesign(cannon);
 	}
 	
-	public CannonDesign getCannonDesign(int designId)
+	public CannonDesign getCannonDesign(String designId)
 	{
 		return designStorage.getDesign(designId);
 	}
