@@ -2,7 +2,6 @@ package at.pavlov.Cannons.config;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;

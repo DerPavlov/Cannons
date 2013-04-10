@@ -401,10 +401,20 @@ public class Cannon
 			vect = new Vector(-horizontal, vertical, 1.0f);
 		}
 
-		double multi = loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (loadedGunpowder / design.getMaxLoadableGunpowder());
+		double multi = getCannonballVelocity();
 		if (multi < 0.1) multi = 0.1;
 
 		return vect.multiply(multi);
+	}
+	
+	/**
+	 * returns the speed of the cannonball depending on the cannon, projectile, loaded gunpowder
+	 * @return
+	 */
+	public double getCannonballVelocity()
+	{
+		if (loadedProjectile == null || design == null) return 0.0;
+		return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (loadedGunpowder / design.getMaxLoadableGunpowder());
 	}
 
 	/**

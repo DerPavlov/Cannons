@@ -16,11 +16,12 @@ cannonball:
     - teleport_shooter_to_impact
 explosion:
   explosionPower: 2
-  blockDamage: false
-  effectRange: 5
-  effectDuration: 7
-  effectAmplifier: 0
-  entityEffects:
+  blockExplosionDamage: false
+  blockPenetrationDamage: false
+  potionRange: 5
+  potionDuration: 7
+  potionAmplifier: 0
+  potionEffects:
     - instant_damage
     - slowness
 placeBlock:

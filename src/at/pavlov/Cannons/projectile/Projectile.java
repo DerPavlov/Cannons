@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import at.pavlov.Cannons.container.MaterialHolder;
 
@@ -27,16 +27,17 @@ public class Projectile {
 	private List<ProjectileProperties> propertyList = new ArrayList<ProjectileProperties>();
 	
 	//explosion
-	private int explosionPower;
-	private boolean blockDamage;
-	private double effectRange;
-	private double effectDuration;
-	private int effectAmplifier;
-	private List<PotionEffect> entityEffects = new ArrayList<PotionEffect>();
+	private float explosionPower;
+	private boolean blockExplosionDamage;
+	private boolean blockPenetrationDamage;
+	private double potionRange;
+	private double potionDuration;
+	private int potionAmplifier;
+	private List<PotionEffectType> potionsEffectList = new ArrayList<PotionEffectType>();
 	
 	//placeBlock
 	private double blockPlaceRadius;
-	private double blockPlaceAmount;
+	private int blockPlaceAmount;
 	private List<MaterialHolder> blockPlaceList = new ArrayList<MaterialHolder>();
 
 	
@@ -80,6 +81,11 @@ public class Projectile {
 		return loadingItem.toString();
 	}
 	
+	/**
+	 * returns true if the projectile has this property
+	 * @param properties
+	 * @return
+	 */
 	public boolean hasProperty(ProjectileProperties properties)
 	{
 		for (ProjectileProperties propEnum : ProjectileProperties.values())
@@ -88,6 +94,11 @@ public class Projectile {
 				return true;
 		}
 		return false;
+	}
+	
+	public boolean doesBlockPlace()
+	{
+		return (blockPlaceList != null && !blockPlaceList.isEmpty());
 	}
 	
 	/**
@@ -207,75 +218,63 @@ public class Projectile {
 	}
 
 
-	public int getExplosionPower()
+	public float getExplosionPower()
 	{
 		return explosionPower;
 	}
 
 
-	public void setExplosionPower(int explosionPower)
+	public void setExplosionPower(float explosionPower)
 	{
 		this.explosionPower = explosionPower;
 	}
 
 
-	public boolean isBlockDamage()
+	public double getPotionRange()
 	{
-		return blockDamage;
+		return potionRange;
 	}
 
 
-	public void setBlockDamage(boolean blockDamage)
+	public void setPotionRange(double potionRange)
 	{
-		this.blockDamage = blockDamage;
+		this.potionRange = potionRange;
 	}
 
 
-	public double getEffectRange()
+	public double getPotionDuration()
 	{
-		return effectRange;
+		return potionDuration;
 	}
 
 
-	public void setEffectRange(double effectRange)
+	public void setPotionDuration(double potionDuration)
 	{
-		this.effectRange = effectRange;
+		this.potionDuration = potionDuration;
 	}
 
 
-	public double getEffectDuration()
+	public int getPotionAmplifier()
 	{
-		return effectDuration;
+		return potionAmplifier;
 	}
 
 
-	public void setEffectDuration(double effectDuration)
+	public void setPotionAmplifier(int potionAmplifier)
 	{
-		this.effectDuration = effectDuration;
+		this.potionAmplifier = potionAmplifier;
 	}
 
 
-	public int getEffectAmplifier()
+	public List<PotionEffectType> getPotionsEffectList()
 	{
-		return effectAmplifier;
+		return potionsEffectList;
 	}
 
 
-	public void setEffectAmplifier(int effectAmplifier)
+	public void setPotionsEffectList(List<PotionEffectType> potionsEffectList)
 	{
-		this.effectAmplifier = effectAmplifier;
-	}
-
-
-	public List<PotionEffect> getEntityEffects()
-	{
-		return entityEffects;
-	}
-
-
-	public void setEntityEffects(List<PotionEffect> entityEffects)
-	{
-		this.entityEffects = entityEffects;
+		this.potionsEffectList = potionsEffectList;
 	}
 
 
@@ -291,13 +290,13 @@ public class Projectile {
 	}
 
 
-	public double getBlockPlaceAmount()
+	public int getBlockPlaceAmount()
 	{
 		return blockPlaceAmount;
 	}
 
 
-	public void setBlockPlaceAmount(double blockPlaceAmount)
+	public void setBlockPlaceAmount(int blockPlaceAmount)
 	{
 		this.blockPlaceAmount = blockPlaceAmount;
 	}
@@ -342,6 +341,26 @@ public class Projectile {
 	public void setAlternativeItemList(List<MaterialHolder> alternativeItemList)
 	{
 		this.alternativeItemList = alternativeItemList;
+	}
+
+	public boolean getBlockExplosionDamage()
+	{
+		return blockExplosionDamage;
+	}
+
+	public void setBlockExplosionDamage(boolean blockExplosionDamage)
+	{
+		this.blockExplosionDamage = blockExplosionDamage;
+	}
+
+	public boolean getBlockPenetrationDamage()
+	{
+		return blockPenetrationDamage;
+	}
+
+	public void setBlockPenetrationDamage(boolean blockPenetrationDamage)
+	{
+		this.blockPenetrationDamage = blockPenetrationDamage;
 	}
 
 

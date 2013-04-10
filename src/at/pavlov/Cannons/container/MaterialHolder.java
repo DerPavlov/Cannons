@@ -1,5 +1,6 @@
 package at.pavlov.Cannons.container;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import com.sk89q.worldedit.blocks.BaseBlock;
@@ -73,6 +74,12 @@ public class MaterialHolder
 	public void setData(int data)
 	{
 		this.data = data;
+	}
+	
+	public boolean equals(Material material)
+	{
+		if (material == null) return false;
+		return material.getId() == id;
 	}
 	
 	public boolean equalsFuzzy(ItemStack item)

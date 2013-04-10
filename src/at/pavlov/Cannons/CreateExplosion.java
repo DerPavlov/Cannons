@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.UUID;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -18,14 +17,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.config.Config;
+import at.pavlov.Cannons.container.MaterialHolder;
 import at.pavlov.Cannons.projectile.FlyingProjectile;
 import at.pavlov.Cannons.projectile.Projectile;
 import at.pavlov.Cannons.projectile.ProjectileProperties;
@@ -34,6 +34,7 @@ import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
 public class CreateExplosion {
 	
 	private Cannons plugin;
+	@SuppressWarnings("unused")
 	private Config config;
 	
 	LinkedList<UUID> transmittedEntities = new LinkedList<UUID>();
@@ -105,14 +106,19 @@ public class CreateExplosion {
     //####################################  blockBreaker ##############################
     private Location blockBreaker(FlyingProjectile cannonball)
     {
+    	Projectile projectile = cannonball.getProjectile();
+    	Snowball snowball = cannonball.getSnowball();
+   
+    	//has this projectile the super breaker property
+    	Boolean superbreaker = cannonball.getProjectile().hasProperty(ProjectileProperties.SUPERBREAKER);
+   
+    	//list of destroy blocks
     	LinkedList<Block> blocklist = new LinkedList<Block>();
     	
-    	Boolean superbreaker = cannonball.getProjectile().superBreaker;
-    	
-    	Vector vel = cannonball.getSnowball().getVelocity();
-    	Location snowballLoc = cannonball.getSnowball().getLocation();
-    	World world = snowballLoc.getWorld();
-    	int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / cannonball.getProjectile().max_speed);
+    	Vector vel = snowball.getVelocity();
+    	Location snowballLoc = snowball.getLocation();
+    	World world = snowball.getWorld();
+    	int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
     	Location impactLoc = snowballLoc.clone();
     	
     	// the cannonball will only break blocks if it has penetration. 
@@ -144,7 +150,7 @@ public class CreateExplosion {
     		}
     	}
     		    	
-    	if (cannonball.getProjectile().hasProperty(ProjectileProperties.SUPERBREAKER) == true)
+    	if (superbreaker)
     	{
     		//small explosion on impact
     		Block block = impactLoc.getBlock();
@@ -208,6 +214,7 @@ public class CreateExplosion {
     //####################################  PlaceMob ##############################
     private void PlaceRandomMob(Location Loc, int data)
     {
+    	//set spawnpoint to the middle
     	Loc.add(0.5, 0, 0.5);
     	
     	World world = Loc.getWorld();
@@ -221,143 +228,57 @@ public class CreateExplosion {
     		data = mobList[r.nextInt(mobList.length)];
     	}
     	
-    	
-    	
-    	switch (data)
+    	EntityType entityType = EntityType.fromId(data);
+    	if (entityType != null)
     	{
-    		
-    		case 50:
-    			//spawn Creeper
-    			world.spawnEntity(Loc, EntityType.CREEPER);
-    			break;
-    		case 51:
-    			//spawn Skeleton
-    			world.spawnEntity(Loc, EntityType.SKELETON);
-    			break;
-    		case 52:
-    			//spawn Spider
-    			world.spawnEntity(Loc, EntityType.SPIDER);
-    			break;
-    		case 54:
-    			//spawn Zombie
-    			world.spawnEntity(Loc, EntityType.ZOMBIE);
-    			break;
-    		case 55:
-    			//spawn Slime
-    			world.spawnEntity(Loc, EntityType.SLIME);
-    			break;
-    		case 56:
-    			//spawn Ghast
-    			world.spawnEntity(Loc, EntityType.GHAST);
-    			break;
-    		case 57:
-    			//spawn ZomebiePigmen
-    			world.spawnEntity(Loc, EntityType.PIG_ZOMBIE);
-    			break;
-    		case 58:
-    			//spawn Enderman
-    			world.spawnEntity(Loc, EntityType.ENDERMAN);
-    			break;
-    		case 59:
-    			//spawn Cavespider
-    			world.spawnEntity(Loc, EntityType.CAVE_SPIDER);
-    			break;
-    		case 60:
-    			//spawn Silverfish
-    			world.spawnEntity(Loc, EntityType.SILVERFISH);
-    			break;
-    		case 61:
-    			//spawn Blaze
-    			world.spawnEntity(Loc, EntityType.BLAZE);
-    			break;
-    		case 62:
-    			//spawn Magmacube
-    			world.spawnEntity(Loc, EntityType.MAGMA_CUBE);
-    			break;
-    		case 66:
-    			//spawn Witch
-    			world.spawnEntity(Loc, EntityType.WITCH);
-    			break;
-    		case 65:
-    			//spawn Bat
-    			world.spawnEntity(Loc, EntityType.BAT);
-    			break;
-    		case 90:
-    			//spawn Pig
-    			world.spawnEntity(Loc, EntityType.PIG);
-    			break;
-    		case 91:
-    			//spawn Sheep
-    			world.spawnEntity(Loc, EntityType.SHEEP);
-    			break;
-    		case 92:
-    			//spawn Cow
-    			world.spawnEntity(Loc, EntityType.COW);
-    			break;
-    		case 93:
-    			//spawn Chicken
-    			world.spawnEntity(Loc, EntityType.CHICKEN);
-    			break;
-    		case 94:
-    			//spawn Squid
-    			world.spawnEntity(Loc, EntityType.SQUID);
-    			break;
-    		case 95:
-    			//spawn Wolf
-    			world.spawnEntity(Loc, EntityType.WOLF);
-    			break;
-    		case 96:
-    			//spawn Mushroomcow
-    			world.spawnEntity(Loc, EntityType.MUSHROOM_COW);
-    			break;
-    		case 98:
-    			//spawn Ocelot
-    			world.spawnEntity(Loc, EntityType.OCELOT);
-    			break;
-    		case 120:
-    			//spawn Villager
-    			world.spawnEntity(Loc, EntityType.VILLAGER);
-    			break;
-    		default:
-    			plugin.logSevere("[Cannons] ID: " + data + " for Monster egg not found");
+    		world.spawnEntity(Loc, entityType);
+    	}
+    	else
+    	{
+    		plugin.logSevere("MonsterEgg ID " + data + " does not exist");
     	}
     }
     
     //####################################  makeBlockPlace ##############################
-    private void makeBlockPlace(Location impactLoc, Location Loc, FlyingProjectile cannonball)
+    private void makeBlockPlace(Location impactLoc, Location loc, FlyingProjectile cannonball)
     {
     	Projectile projectile = cannonball.getProjectile();
+
     	
-		Block block = Loc.getBlock();
+		Block block = loc.getBlock();
 		if (block.getType() == Material.AIR)
 		{
-			if (checkLineOfSight(impactLoc, Loc) == 0)
+			if (checkLineOfSight(impactLoc, loc) == 0)
 			{
 				if (projectile == null) return;
-				if (projectile.placeBlockMaterialId == 0) return;
 				
-				//check if Material is no mob egg
-				if (projectile.isMobEgg())
+				for (MaterialHolder placeBlock : projectile.getBlockPlaceList())
 				{
-					//else place mob
-					PlaceRandomMob(Loc, projectile.placeBlockMaterialData);
-				}
-				else
-				{
-					if (cannonball.getSnowball().getShooter() instanceof Player)
+					//check if Material is a mob egg
+					if (placeBlock.equals(Material.MONSTER_EGG))
 					{
-						Player player = (Player) cannonball.getSnowball().getShooter();
-						//replace air
-						block.setTypeId(projectile.placeBlockMaterialId);
-						block.setData((byte) projectile.placeBlockMaterialData);
-						BlockPlaceEvent event = new BlockPlaceEvent(block, block.getState(), block.getRelative(BlockFace.DOWN), null, player, true);
-						if (event.isCancelled())
+						//else place mob
+						PlaceRandomMob(loc, placeBlock.getData());
+					}
+					else
+					{
+						if (cannonball.getSnowball().getShooter() instanceof Player)
 						{
-							//place air again
-							block.setTypeId(0);
+							Player player = (Player) cannonball.getSnowball().getShooter();
+							//replace air
+							block.setTypeId(placeBlock.getId());
+							block.setData((byte) placeBlock.getData());
+							BlockPlaceEvent event = new BlockPlaceEvent(block, block.getState(), block.getRelative(BlockFace.DOWN), null, player, true);
+							if (event.isCancelled())
+							{
+								//place air again
+								block.setTypeId(0);
+							}
 						}
 					}
 				}
+				
+				
 			}
 	
 		}
@@ -368,10 +289,10 @@ public class CreateExplosion {
     {
     	Projectile projectile = cannonball.getProjectile();
     	
-    	if (projectile.placeBlock == true)
+    	if (projectile.doesBlockPlace() == true)
     	{
-    		double spread = projectile.placeBlockRadius;
-    		int maxPlacement = projectile.placeBlockAmount;
+    		double spread = projectile.getBlockPlaceRadius();
+    		int maxPlacement = projectile.getBlockPlaceAmount();
     		
     		Random r = new Random();
     		Location loc;
@@ -445,91 +366,43 @@ public class CreateExplosion {
     }
     
   //####################################  doPlayerDamage ##############################
-    private void doPlayerDamage(Location impactLoc, Entity next, FlyingProjectile cannonball)
+    private void applyPotionEffect(Location impactLoc, Entity next, FlyingProjectile cannonball)
     {
+    	Projectile projectile = cannonball.getProjectile();
+    
     	double dist = impactLoc.distanceSquared(next.getLocation());
+    	//if the entity is too far away, return
+    	if (dist > projectile.getPotionRange()) return;
+		
+    	// duration of the potion effect
+    	double duration = projectile.getPotionDuration()*20;
+    	
 		if (next instanceof LivingEntity)
 		{				
 			//calc damage
 			LivingEntity living = (LivingEntity) next;
-			double damage;
-			if (dist <= 16)
-			{
-				//set the damage to max if player is near to explosion (distance is squared)
-				damage = cannonball.getProjectile().player_damage;
-			}
-			else
-			{
-				//player is farer away
-				damage = Math.floor(cannonball.getProjectile().player_damage/(dist-15));	
-			}
+
 			
 			//check line of sight and reduce damage if the way is blocked
 			int blockingBlocks = checkLineOfSight(impactLoc, living.getEyeLocation());
-			damage = damage / (blockingBlocks + 1);
+			duration = duration / (blockingBlocks + 1);
 			
 			//critical
 			Random r = new Random();
 			int crit = r.nextInt(10);
-			if (crit == 0) damage *= 3; 
-			
-
-			//get shooter
-			Player shooter = null;	
-			if (config.usePlayerName == true)
-			{
-				// transmit the player for player damage. Kill can be displayed.
-				if (cannonball.getProjectile().shooter != null)
-				{
-					shooter = Bukkit.getPlayer(cannonball.getProjectile().shooter);
-				}
-				
-			}
+			if (crit == 0) duration *= 3; 
 	
-			
-			//to obtain half heart damage
-			int intDamage = (int) (damage * 2.0);
 		
-			
-			if (intDamage > 1)
+		
+			// apply potion effect if the duration is not small then 1 tick
+			if (duration >= 1)
 			{
-				//do damage
-				living.damage(intDamage, shooter);
+				int intDuration = (int) Math.floor(duration);
 				
-				//only use effects if serious damage is done
-				int amplifer = 0;
-				if (damage >= 2)
+				for (PotionEffectType potionEffect : projectile.getPotionsEffectList())
 				{
-					amplifer = 1;
-				}
-			
-				if (cannonball.getProjectile().blindness && damage >= 1)
-				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
-				}
-				if (cannonball.getProjectile().confusion && damage >= 1)
-				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
-				}
-				if (cannonball.getProjectile().hunger && damage >= 1)
-				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
-				}
-				if (cannonball.getProjectile().poison && damage >= 1)
-				{					
-					living.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int) (cannonball.getProjectile().getEffectDuration()*5), 0));
-				}
-				if (cannonball.getProjectile().slowDigging && damage >= 1)
-				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
-				}
-				if (cannonball.getProjectile().slowness && damage >= 1)
-				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
-				}
-				if (cannonball.getProjectile().weakness && damage >= 1)
-				{
-					living.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (int) (cannonball.getProjectile().getEffectDuration()*20), amplifer));
+					//maybe throw potion event
+					potionEffect.createEffect(intDuration, projectile.getPotionAmplifier()).apply(living);
 				}
 			}
 		}
@@ -538,7 +411,8 @@ public class CreateExplosion {
     //####################################  CREATE_EXPLOSION ##############################
     public void detonate(FlyingProjectile cannonball)
     {
-    	
+    	Projectile projectile = cannonball.getProjectile();
+    	Snowball snowball = cannonball.getSnowball();
     	
     	//blocks form the impact to the impactloc
     	Location impactLoc = blockBreaker(cannonball);
@@ -548,50 +422,46 @@ public class CreateExplosion {
    
     	
     	//teleport snowball to impact
-    	cannonball.getSnowball().teleport(impactLoc);
+    	snowball.teleport(impactLoc);
     	
-    	float explosion_power = (float) cannonball.getProjectile().explosion_power;
+    	float explosion_power = (float) projectile.getExplosionPower();
     	//find living entities
 		List<Entity> entity;
-		if (cannonball.getProjectile().canisterShot)
-		{
-			//canister shot - no explosion
-			entity = cannonball.getSnowball().getNearbyEntities(2, 2, 2);
+		
+
 			
-			//face explosion
-			world.createExplosion(impactLoc, 0F);
-		}
-		else 
-		{
-			//normal shot + explosion
-			entity = cannonball.getSnowball().getNearbyEntities(20, 20, 20);
-			
-			//explosion event
-	    	world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, cannonball.getProjectile().incendiary, cannonball.getProjectile().isBlockDamage());
-		}
+		//explosion event
+		boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
+		boolean blockDamage = projectile.getBlockExplosionDamage();
+	    world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
 		
 		
 		//place blocks around the impact like webs, lava, water
 		spreadBlocks(impactLoc, cannonball);
 		
+		//do potion effects
+		int effectRange = (int) projectile.getPotionRange()/2;
+		entity = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
+		
 		Iterator<Entity> it = entity.iterator();
 		while (it.hasNext())
 		{
 			Entity next = it.next();
-			doPlayerDamage(impactLoc, next, cannonball);
+			applyPotionEffect(impactLoc, next, cannonball);
 		}
 		
 		
 		//teleport to impact
-		if (cannonball.getProjectile().teleport == true)
+		if (cannonball.getProjectile().hasProperty(ProjectileProperties.TELEPORT) == true)
 		{
 			//teleport shooter to impact
-			LivingEntity shooter = cannonball.getSnowball().getShooter();
+			LivingEntity shooter = snowball.getShooter();
 			if (shooter != null) shooter.teleport(impactLoc);
 		}
 		
-		List<Entity> EntitiesAfterExplosion = cannonball.getSnowball().getNearbyEntities(20, 20, 20);
-		transmittingEntities(EntitiesAfterExplosion, cannonball.getSnowball().getShooter());
+		//check which entities are affected by the event
+		List<Entity> EntitiesAfterExplosion = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
+		transmittingEntities(EntitiesAfterExplosion, snowball.getShooter());
 		
     }
     

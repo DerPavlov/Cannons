@@ -177,12 +177,18 @@ public class FireCannon {
     		if (projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
     			snowball.setPassenger(shooter);
     		
-    		//save all data of this projectile
-    		FlyingProjectile cannonball = new FlyingProjectile();
-    		cannonball.setProjectile(projectile);
-    		cannonball.setSnowball(snowball);
+       		//calculate firing vector
+    		Vector vect = cannon.getFiringVector(config);    		
+    		snowball.setVelocity(vect);
     		
-	
+    		//create a new flying projectile container
+    		FlyingProjectile cannonball = new FlyingProjectile(projectile, snowball);   
+    		//set shooter to the cannonball
+    		if (shooter != null) 
+    		{
+    			cannonball.setShooter(shooter);
+    		}
+    		
     		//confuse shooter if he wears no helmet (only for one projectile and if its configured)
     		if ( i == 0 && config.confusesShooter > 0)
     		{
@@ -218,15 +224,7 @@ public class FireCannon {
     			}
     		}
     		
-    		//calculate firing vector
-    		Vector vect = cannon.getFiringVector(config);
-    		    		
-    		cannonball.getSnowball().setVelocity(vect);
-    		if (shooter != null) 
-    		{
-    			cannonball.getSnowball().setShooter(shooter);
-    			cannonball.setShooter(shooter.getName());
-    		}
+ 
 			flying_projectiles.add(cannonball);
 			
     		//detonate timefused projectiles
