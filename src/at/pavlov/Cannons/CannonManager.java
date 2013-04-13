@@ -203,7 +203,7 @@ public class CannonManager
 		// this block is a part of an existing cannon
 		if (cannon != null)
 		{
-
+			plugin.logDebug("found cannon in the storage");
 			// search cannon that is written on the sign
 			// Cannon cannonFromSign =
 			// getCannonFromStorage(cannon.getCannonNameFromSign(design),

@@ -430,7 +430,7 @@ public class Cannon
 		for (Location loc : design.getRedstoneWireAndRepeater(this))
 		{
 			Block block = loc.getBlock();
-			if (block.getType() == Material.REDSTONE_WIRE || block.getType() == Material.DIODE)
+			if (block.getType() == Material.REDSTONE_WIRE || block.getType() == Material.DIODE_BLOCK_ON || block.getType() == Material.DIODE_BLOCK_OFF)
 			{
 				block.breakNaturally();
 			}
