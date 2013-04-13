@@ -54,7 +54,7 @@ public class DesignStorage
 		{
 			// the folder is empty, copy defaults
 			plugin.logInfo("No cannon designs loaded - loading default designs");
-			copyDefaulsDesigns();
+			copyDefaultDesigns();
 		}
 
 		ArrayList<DesignFileName> designFileList = getDesignFiles();
@@ -121,8 +121,7 @@ public class DesignStorage
 	}
 
 	/**
-	 * loads the config of the config file
-	 * 
+	 * loads the config for one cannon from the .yml file
 	 * @param ymlPath
 	 *            of the cannon config file
 	 */
@@ -157,7 +156,7 @@ public class DesignStorage
 		cannonDesign.setSpreadOfCannon(cannonDesignConfig.getDouble("barrelProperties.spreadOfCannon", 5.0));
 
 		// timings
-		cannonDesign.setBackblastConfusion(cannonDesignConfig.getDouble("timings.backblastConfusion", 5.0));
+		cannonDesign.setBlastConfusion(cannonDesignConfig.getDouble("timings.blastConfusion", 5.0));
 		cannonDesign.setFuseBurnTime(cannonDesignConfig.getDouble("timings.fuseBurnTime", 1.0));
 		cannonDesign.setBarrelCooldownTime(cannonDesignConfig.getDouble("timings.barrelCooldownTime", 1.0));
 
@@ -172,6 +171,7 @@ public class DesignStorage
 		cannonDesign.setAngleUpdateSpeed(cannonDesignConfig.getDouble("angles.angleUpdateSpeed", 1.0));
 
 		// realisticBehaviour
+		cannonDesign.setFlintAndSteelRequired(cannonDesignConfig.getBoolean("realisticBehaviour.fireWithFlintAndSteel", false));
 		cannonDesign.setHasRecoil(cannonDesignConfig.getBoolean("realisticBehaviour.hasRecoil", false));
 		cannonDesign.setFrontloader(cannonDesignConfig.getBoolean("realisticBehaviour.isFrontloader", false));
 		cannonDesign.setRotabable(cannonDesignConfig.getBoolean("realisticBehaviour.isRotabable", false));
@@ -293,7 +293,7 @@ public class DesignStorage
 
 							plugin.logDebug("x:" + x + " y:" + y + " z:" + z + " blockType " + block.getId() + " blockData " + block.getData());
 
-							// find the min and max for muzzle blocks so the
+							// #############  find the min and max for muzzle blocks so the
 							// cannonball is fired from the middle
 							if (block.equalsFuzzy(blockMuzzle))
 							{
@@ -314,7 +314,7 @@ public class DesignStorage
 								
 							}
 							
-							// find the min and max for rotation blocks
+							// #############  find the min and max for rotation blocks
 							else if (block.equalsFuzzy(blockRotationCenter))
 							{
 								// reset for the first entry
@@ -331,34 +331,32 @@ public class DesignStorage
 								}
 							}
 
-							// firingIndicator
-							else if (block.equalsFuzzy(blockFiringIndicator))
-								cannonBlocks.getFiringIndicator().add(new Vector(x, y, z));
-							// chests and signs
+
+							// #############  chests and signs
 							else if (block.equalsFuzzy(blockChestAndSign))
 							{
-								cannonBlocks.getChestsAndSigns().add(new Vector(x, y, z));
+								// the id does not matter, but the data is important for signs
+								cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN.getId(), block.getData()));
 								// if a sign is requried the sign is a cannonblock
-								plugin.logDebug("sign required " + cannonDesign.isSignRequired());
 								if (cannonDesign.isSignRequired())
 								{
 									cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, Material.SIGN.getId(), block.getData()));
 								}
 							}
-							// redstoneTorch
+							// #############  redstoneTorch
 							else if (block.equalsFuzzy(blockRedstoneTorch))
 								cannonBlocks.getRedstoneTorches().add(new Vector(x, y, z));
-							// redstoneWire and Repeater
+							// #############  redstoneWire and Repeater
 							else if (block.equalsFuzzy(blockRedstoneWireAndRepeater))
-								cannonBlocks.getRedstoneWiresAndRepeater().add(new Vector(x, y, z));
-							// redstoneTrigger
+								cannonBlocks.getRedstoneWiresAndRepeater().add(new SimpleBlock(x, y, z, Material.DIODE.getId(), block.getData()));
+							// #############  redstoneTrigger
 							else if (block.equalsFuzzy(blockRedstoneTrigger))
 							{
 								cannonBlocks.getRedstoneTrigger().add(new Vector(x, y, z));
 								// buttons or levers are part of the cannon
 								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, replaceRedstoneTrigger));
 							}
-							// rightClickTrigger
+							// #############  rightClickTrigger
 							else if (block.equalsFuzzy(blockRightClickTrigger))
 							{
 								cannonBlocks.getRightClickTrigger().add(new Vector(x, y, z));
@@ -366,7 +364,7 @@ public class DesignStorage
 								// part of the cannon
 								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, replaceRightClickTrigger));
 							}
-							// loading Interface is a cannonblock that is non of
+							// #############  loading Interface is a cannonblock that is non of
 							// the previous blocks
 							else
 							{
@@ -376,6 +374,10 @@ public class DesignStorage
 								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, block));
 							}
 
+							// #############  firingIndicator
+							// can be everywhere on the cannon
+							if (block.equalsFuzzy(blockFiringIndicator))
+								cannonBlocks.getFiringIndicator().add(new Vector(x, y, z));
 						}
 					}
 				}
@@ -441,7 +443,10 @@ public class DesignStorage
 		return max;
 	}
 
-	private void copyDefaulsDesigns()
+	/**
+	 * copy the default designs from the .jar to the disk
+	 */
+	private void copyDefaultDesigns()
 	{
 		File classicYmlFile = new File(plugin.getDataFolder(), "designs/classic.yml");
 		File classicSchematicFile = new File(plugin.getDataFolder(), "designs/classic.schematic");
@@ -493,4 +498,5 @@ public class DesignStorage
 		}
 		return null;
 	}
+	
 }

@@ -3,12 +3,10 @@ package at.pavlov.Cannons;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -37,14 +35,20 @@ public class CannonManager
 	}
 
 
-	// ############### remove ###############################
+	/**
+	 * removes a cannon from the list
+	 * @param cannon
+	 */
 	public void removeCannon(Location loc)
 	{
-		Cannon cannon = getCannon(loc);
+		Cannon cannon = getCannon(loc, null);
 		removeCannon(cannon);
 	}
 
-	// ############### remove ###############################
+	/**
+	 * removes a cannon from the list
+	 * @param cannon
+	 */
 	public void removeCannon(Cannon cannon)
 	{
 		if (cannon != null)
@@ -89,22 +93,23 @@ public class CannonManager
 
 	/**
 	 * generates a new unique cannon name
-	 * 
 	 * @return
 	 */
 	private String newCannonName(Cannon cannon)
 	{
 		if (cannon.getOwner() == null) return "missing Owner";
-				
-				
-		String[] nameList = {cannon.getCannonName()};//{"Cannon"};// , "Artillery", "Gun"};
-
-		Random r = new Random();
-		String pre = nameList[r.nextInt(nameList.length)];
+			
+		String name;
+		CannonDesign design = cannon.getCannonDesign();
+		if (design != null)
+			name = design.getDesignName();
+		else
+			name = "cannon";
+	
 
 		for (int i = 1; i < Integer.MAX_VALUE; i++)
 		{
-			String cannonName = pre + " " + i;
+			String cannonName = name + " " + i;
 
 			if (isCannonNameUnique(cannonName, cannon.getOwner()) == true)
 			{
@@ -137,7 +142,6 @@ public class CannonManager
 
 	/**
 	 * get cannon by cannonName and Owner - used for Signs
-	 * 
 	 * @param cannonName
 	 * @return
 	 */
@@ -162,7 +166,6 @@ public class CannonManager
 	/**
 	 * Searches the storage if there is already a cannonblock on this location
 	 * and returns the cannon
-	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -177,23 +180,12 @@ public class CannonManager
 		}
 		return null;
 	}
-
-	/**
-	 * searches for a cannon
-	 * 
-	 * @param loc
-	 * @return
-	 */
-	public Cannon getCannon(Location loc)
-	{
-		return getCannon(loc, null);
-	}
-
+	
 	/**
 	 * searches for a cannon and creates a new entry if it does not exist
 	 * 
 	 * @param cannonBlock
-	 * @param player
+	 * @param owner
 	 * @return
 	 */
 	public Cannon getCannon(Location cannonBlock, String owner)
@@ -231,6 +223,12 @@ public class CannonManager
 
 	}
 
+	/**
+	 * searches if this block is part of a cannon and create a new one
+	 * @param cannonBlock
+	 * @param owner
+	 * @return
+	 */
 	public Cannon checkCannon(Location cannonBlock, String owner)
 	{
 		// get world
@@ -241,6 +239,7 @@ public class CannonManager
 		// check all cannon design if this block is part of the design
 		for (CannonDesign cannonDesign : plugin.getDesignStorage().getCannonDesignList())
 		{
+			plugin.logDebug("design " + cannonDesign.toString());
 			// check of all directions
 			BlockFace cannonDirection = BlockFace.NORTH;
 			for (int i = 0; i < 4; i++)
@@ -259,9 +258,9 @@ public class CannonManager
 						boolean isCannon = true;
 						for (SimpleBlock checkBlocks : designBlockList)
 						{
-							// plugin.logDebug("check block " +
-							// checkBlocks.getID() + " " + checkBlocks.getData()
-							// + " loc " + checkBlocks.toVector().add(offset));
+							 plugin.logDebug("check block " +
+							 checkBlocks.getID() + " " + checkBlocks.getData()
+							 + " loc " + checkBlocks.toVector().add(offset));
 							if (!checkBlocks.compareBlockFuzzy(world, offset))
 							{
 								// if the block does not match this is not the
@@ -274,21 +273,21 @@ public class CannonManager
 						// this is a cannon
 						if (isCannon == true)
 						{
-
 							// make a new cannon if there is no sign on the
 							// cannon
 							Cannon cannon = new Cannon(cannonDesign, world.getName(), offset, cannonDirection, owner);
+							cannon.setCannonName(newCannonName(cannon));
 					
 							//check the permissions for redstone
-							Player player = Bukkit.getPlayer(cannon.getOwner());
-							MessageEnum message = cannon.checkRedstonePermission(player);
+							MessageEnum message = cannon.checkRedstonePermission(owner);
 							
 							//send messages
 							userMessages.displayMessage(owner, message, cannon);
 							
 							//add cannon to the list if everything was fine and return the cannon
-							if (message == MessageEnum.CannonCreated)
+							if (message != null && message == MessageEnum.CannonCreated)
 							{
+								plugin.logDebug("create cannon");
 								createCannon(cannon);
 								return cannon;
 							}
@@ -303,17 +302,6 @@ public class CannonManager
 		}
 
 		return null;
-	}
-
-	// ############### isCannonBlock ###############################
-	public boolean isCannonBlock(Location loc)
-	{
-		if (getCannon(loc) == null)
-		{
-			// no cannon block
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -346,6 +334,15 @@ public class CannonManager
 	public List<Cannon> getCannonList()
 	{
 		return cannonList;
+	}
+	
+	/**
+	 * 
+	 * @return List of cannons
+	 */
+	public void clearCannonList()
+	{
+		cannonList.clear();
 	}
 
 	/**
@@ -390,12 +387,12 @@ public class CannonManager
 			if (player.hasPermission("cannons.player.limitB"))
 			{
 				// return the
-				return config.cannonLimitB;
+				return config.getBuildLimitB();
 			}
 			// limit B is stronger
 			else if (player.hasPermission("cannons.player.limitA"))
 			{
-				return config.cannonLimitA;
+				return config.getBuildLimitA();
 			}
 		}
 		// player implementation
@@ -579,30 +576,6 @@ public class CannonManager
 		}
 	}
 
-	// ########### SurroundingBlocks #######################################
-	public ArrayList<Block> SurroundingBlocks(Block block)
-	{
-		ArrayList<Block> Blocks = new ArrayList<Block>();
 
-		Blocks.add(block.getRelative(BlockFace.UP));
-		Blocks.add(block.getRelative(BlockFace.DOWN));
-		Blocks.add(block.getRelative(BlockFace.SOUTH));
-		Blocks.add(block.getRelative(BlockFace.WEST));
-		Blocks.add(block.getRelative(BlockFace.NORTH));
-		Blocks.add(block.getRelative(BlockFace.EAST));
-		return Blocks;
-	}
-
-	// ########### SurroundingBlocks #######################################
-	public ArrayList<Block> HorizontalSurroundingBlocks(Block block)
-	{
-		ArrayList<Block> Blocks = new ArrayList<Block>();
-
-		Blocks.add(block.getRelative(BlockFace.SOUTH));
-		Blocks.add(block.getRelative(BlockFace.WEST));
-		Blocks.add(block.getRelative(BlockFace.NORTH));
-		Blocks.add(block.getRelative(BlockFace.EAST));
-		return Blocks;
-	}
 
 }

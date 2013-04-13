@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +13,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
+
+import at.pavlov.Cannons.container.MaterialHolder;
 
 
 public class CannonsUtil
@@ -89,7 +93,7 @@ public class CannonsUtil
 	 */
 	public static String removeExtension(String str)
 	{
-		return str.substring(str.lastIndexOf('.'), str.length());
+		return str.substring(0, str.lastIndexOf('.'));
 	}
 
 	/**
@@ -159,5 +163,59 @@ public class CannonsUtil
 		return item;
 	}
 	
+	/**
+	 * returns a list of MaterialHolder
+	 * @param stringList
+	 * @return
+	 */
+	public static List<MaterialHolder> toMaterialHolderList(List<String> stringList)
+	{
+		List<MaterialHolder> materialList = new ArrayList<MaterialHolder>();
+		
+		for (String str : stringList)
+		{
+			MaterialHolder material = new MaterialHolder(str); 
+			//if id == -1 the str was invalid
+			if (material.getId() >= 0)
+				materialList.add(material);
+		}
+		
+		return materialList;
+	}
+	
+	
+	/**
+	 * get all block next to this block (UP, DOWN, SOUT, WEST, NORTH, EAST)
+	 * @param block
+	 * @return
+	 */
+	public static ArrayList<Block> SurroundingBlocks(Block block)
+	{
+		ArrayList<Block> Blocks = new ArrayList<Block>();
+
+		Blocks.add(block.getRelative(BlockFace.UP));
+		Blocks.add(block.getRelative(BlockFace.DOWN));
+		Blocks.add(block.getRelative(BlockFace.SOUTH));
+		Blocks.add(block.getRelative(BlockFace.WEST));
+		Blocks.add(block.getRelative(BlockFace.NORTH));
+		Blocks.add(block.getRelative(BlockFace.EAST));
+		return Blocks;
+	}
+
+	/**
+	 * get all block in the horizontal plane next to this block (SOUTH, WEST, NORTH, EAST)
+	 * @param block
+	 * @return
+	 */
+	public static ArrayList<Block> HorizontalSurroundingBlocks(Block block)
+	{
+		ArrayList<Block> Blocks = new ArrayList<Block>();
+
+		Blocks.add(block.getRelative(BlockFace.SOUTH));
+		Blocks.add(block.getRelative(BlockFace.WEST));
+		Blocks.add(block.getRelative(BlockFace.NORTH));
+		Blocks.add(block.getRelative(BlockFace.EAST));
+		return Blocks;
+	}
 
 }

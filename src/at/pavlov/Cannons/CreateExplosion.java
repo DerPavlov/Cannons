@@ -53,9 +53,10 @@ public class CreateExplosion {
      * @param block
      * @param blocklist
      * @param superBreaker
+     * @param blockDamage break blocks if true
      * @return true if the block can be destroyed
      */
-    private boolean breakBlock(Block block, List<Block> blocklist, Boolean superBreaker)
+    private boolean breakBlock(Block block, List<Block> blocklist, Boolean superBreaker, Boolean blockDamage)
     {    	
     	Material material = block.getType();
 				
@@ -67,7 +68,9 @@ public class CreateExplosion {
 			{
 				if (superBreaker)
 				{
-					blocklist.add(block);
+					//don't do damage to blocks if false
+					if (blockDamage)
+						blocklist.add(block);
 					// break obsidian/water/laver
 					return true;
 				}
@@ -75,11 +78,13 @@ public class CreateExplosion {
 				return false;
 			}
 			//test if water/lava blocks
-			else if ((material == Material.WATER || material == Material.LAVA))
+			else if (material == Material.WATER || material == Material.LAVA)
 			{
 				if (superBreaker)
 				{
-					blocklist.add(block);
+					//don't do damage to blocks if false
+					if (blockDamage)
+						blocklist.add(block);
 					// break water/lava
 					return true;
 				}
@@ -91,8 +96,10 @@ public class CreateExplosion {
 				//don't break bedrock
 				if (material != Material.BEDROCK)
 				{
-					//no obsidian, add block to explosion blocklist
-					blocklist.add(block);
+					//default material, add block to explosion blocklist
+					//don't do damage to blocks if false
+					if (blockDamage)
+						blocklist.add(block);
 					return true;
 				}
 				//bedrock can't be destroyed
@@ -109,8 +116,9 @@ public class CreateExplosion {
     	Projectile projectile = cannonball.getProjectile();
     	Snowball snowball = cannonball.getSnowball();
    
-    	//has this projectile the super breaker property
-    	Boolean superbreaker = cannonball.getProjectile().hasProperty(ProjectileProperties.SUPERBREAKER);
+    	//has this projectile the super breaker property and makes block damage
+    	Boolean superbreaker = projectile.hasProperty(ProjectileProperties.SUPERBREAKER);
+    	Boolean doesBlockDamage = projectile.getPenetrationDamage();
    
     	//list of destroy blocks
     	LinkedList<Block> blocklist = new LinkedList<Block>();
@@ -135,7 +143,7 @@ public class CreateExplosion {
     			if (i <= penetration)
     			{
     				// if block can be destroyed the the iterator will check the next block. Else the projectile will explode
-    				if (breakBlock(next, blocklist, superbreaker) == false)
+    				if (breakBlock(next, blocklist, superbreaker, doesBlockDamage) == false)
     				{
     					//found undestroyable block - set impactloc
     					impactLoc = next.getLocation();
@@ -154,13 +162,13 @@ public class CreateExplosion {
     	{
     		//small explosion on impact
     		Block block = impactLoc.getBlock();
-    		breakBlock(block,blocklist,superbreaker);
-    		breakBlock(block.getRelative(BlockFace.UP), blocklist, superbreaker);
-    		breakBlock(block.getRelative(BlockFace.DOWN), blocklist, superbreaker);
-    		breakBlock(block.getRelative(BlockFace.SOUTH), blocklist, superbreaker);
-    		breakBlock(block.getRelative(BlockFace.WEST), blocklist, superbreaker);
-    		breakBlock(block.getRelative(BlockFace.EAST), blocklist, superbreaker);
-    		breakBlock(block.getRelative(BlockFace.NORTH), blocklist, superbreaker);
+    		breakBlock(block, blocklist, superbreaker, doesBlockDamage);
+    		breakBlock(block.getRelative(BlockFace.UP), blocklist, superbreaker, doesBlockDamage);
+    		breakBlock(block.getRelative(BlockFace.DOWN), blocklist, superbreaker, doesBlockDamage);
+    		breakBlock(block.getRelative(BlockFace.SOUTH), blocklist, superbreaker, doesBlockDamage);
+    		breakBlock(block.getRelative(BlockFace.WEST), blocklist, superbreaker, doesBlockDamage);
+    		breakBlock(block.getRelative(BlockFace.EAST), blocklist, superbreaker, doesBlockDamage);
+    		breakBlock(block.getRelative(BlockFace.NORTH), blocklist, superbreaker, doesBlockDamage);
     	}
     	
     	//no eventhandling if the list is empty
@@ -211,13 +219,18 @@ public class CreateExplosion {
 		}
 	}
     
-    //####################################  PlaceMob ##############################
-    private void PlaceRandomMob(Location Loc, int data)
+    /**
+     * places a mob on the given location and pushes it away from the impact
+     * @param impactLoc
+     * @param Loc
+     * @param data
+     */
+    private void PlaceMob(Location impactLoc, Location loc, int data)
     {
     	//set spawnpoint to the middle
-    	Loc.add(0.5, 0, 0.5);
+    	loc.add(0.5, 0, 0.5);
     	
-    	World world = Loc.getWorld();
+    	World world = loc.getWorld();
      	Random r = new Random();
      	
      	Integer mobList[] = {50,51,52,54,55,56,57,58,59,60,61,62,65,66,90,91,92,93,94,95,96,98,120};
@@ -228,14 +241,27 @@ public class CreateExplosion {
     		data = mobList[r.nextInt(mobList.length)];
     	}
     	
+    	Entity entity;
     	EntityType entityType = EntityType.fromId(data);
     	if (entityType != null)
     	{
-    		world.spawnEntity(Loc, entityType);
+    		//spawn mob
+    		entity = world.spawnEntity(loc, entityType);
     	}
     	else
     	{
     		plugin.logSevere("MonsterEgg ID " + data + " does not exist");
+    		return;
+    	}
+    	
+    	if (entity != null)
+    	{
+    		//get distance form the center
+    		double dist = impactLoc.distance(loc);
+    		//calculate veloctiy away from the impact
+    		Vector vect = loc.clone().subtract(impactLoc).toVector().multiply(1/dist);
+    		//set the entity velocity
+    		entity.setVelocity(vect);
     	}
     }
     
@@ -258,7 +284,7 @@ public class CreateExplosion {
 					if (placeBlock.equals(Material.MONSTER_EGG))
 					{
 						//else place mob
-						PlaceRandomMob(loc, placeBlock.getData());
+						PlaceMob(impactLoc, loc, placeBlock.getData());
 					}
 					else
 					{
@@ -401,7 +427,7 @@ public class CreateExplosion {
 				
 				for (PotionEffectType potionEffect : projectile.getPotionsEffectList())
 				{
-					//maybe throw potion event
+					// apply to entity
 					potionEffect.createEffect(intDuration, projectile.getPotionAmplifier()).apply(living);
 				}
 			}
@@ -432,7 +458,7 @@ public class CreateExplosion {
 			
 		//explosion event
 		boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
-		boolean blockDamage = projectile.getBlockExplosionDamage();
+		boolean blockDamage = projectile.getExplosionDamage();
 	    world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
 		
 		

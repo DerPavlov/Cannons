@@ -31,22 +31,26 @@ public class MaterialHolder
 		//split string at :
 		String subStr[] = str.split(":");
 	
-		//get ID
-		if (subStr.length>=1)
-			id = Integer.parseInt(subStr[0]);
-		
-		//get Data
-		if (subStr.length >= 2)
+		try
 		{
-			data = Integer.parseInt(subStr[1]);
+			//get ID
+			if (subStr.length>=1)
+				id = Integer.parseInt(subStr[0]);
+			else
+				id = -1;		//invalid
+			
+			//get Data
+			if (subStr.length >= 2)
+				data = Integer.parseInt(subStr[1]);
+			else
+				data = -1;
 		}
-		else
+		catch (Exception e)
 		{
+			System.out.println("[Cannons] Can't convert " + str + " to Material");
+			id = -1;
 			data = -1;
-		}
-		
-		System.out.println("id:" + id + " data:" + data);
-		
+		}		
 	}
 	
 	public BaseBlock toBaseBlock()

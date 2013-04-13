@@ -25,7 +25,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.material.Button;
 
 import at.pavlov.Cannons.CalcAngle;
 import at.pavlov.Cannons.CannonManager;
@@ -43,6 +42,7 @@ import at.pavlov.Cannons.utils.CannonsUtil;
 
 public class PlayerListener implements Listener
 {
+	@SuppressWarnings("unused")
 	private Config config;
 	private UserMessages userMessages;
 	private Cannons plugin;
@@ -61,7 +61,7 @@ public class PlayerListener implements Listener
 		this.fireCannon = this.plugin.getFireCannon();
 		this.calcAngle = this.plugin.getCalcAngle();
 	}
-	
+
 	// ########### PlayerMove #######################################
 	@EventHandler
 	public void PlayerMove(PlayerMoveEvent event)
@@ -70,7 +70,6 @@ public class PlayerListener implements Listener
 		calcAngle.PlayerMove(event.getPlayer());
 	}
 
-
 	// ########### BlockFromTo #######################################
 	@EventHandler
 	public void BlockFromTo(BlockFromToEvent event)
@@ -78,7 +77,7 @@ public class PlayerListener implements Listener
 		Block block = event.getToBlock();
 		if (block.getType() == Material.STONE_BUTTON || block.getType() == Material.TORCH)
 		{
-			if (cannonManager.isCannonBlock(block.getLocation()))
+			if (cannonManager.getCannon(block.getLocation(), null) != null)
 			{
 				event.setCancelled(true);
 			}
@@ -94,9 +93,9 @@ public class PlayerListener implements Listener
 		for (int i = 0; i < blocks.size(); i++)
 		{
 			Block block = blocks.get(i);
-				
+
 			// if it is a cannon block
-			if (cannonManager.isCannonBlock(block.getLocation()))
+			if (cannonManager.getCannon(block.getLocation(), null) != null)
 			{
 				// get distance to the impact
 				double distance = event.getLocation().distance(block.getLocation());
@@ -110,12 +109,10 @@ public class PlayerListener implements Listener
 					// impact farther away will not destroy the cannon
 					blocks.remove(i--);
 				}
-				
+
 			}
 		}
 	}
-	
-
 
 	// ########### BlockPistonRetract #######################################
 	@EventHandler
@@ -126,7 +123,7 @@ public class PlayerListener implements Listener
 		if (event.isSticky() == true)
 		{
 			Location loc = event.getBlock().getRelative(event.getDirection(), 2).getLocation();
-			Cannon cannon = cannonManager.getCannon(loc);
+			Cannon cannon = cannonManager.getCannon(loc, null);
 			if (cannon != null)
 			{
 				cannonManager.removeCannon(cannon);
@@ -143,7 +140,7 @@ public class PlayerListener implements Listener
 		while (iter.hasNext())
 		{
 			// if moved block is cannonBlock delete cannon
-			Cannon cannon = cannonManager.getCannon(iter.next().getLocation());
+			Cannon cannon = cannonManager.getCannon(iter.next().getLocation(), null);
 			if (cannon != null)
 			{
 				cannonManager.removeCannon(cannon);
@@ -156,7 +153,7 @@ public class PlayerListener implements Listener
 	public void BlockBurn(BlockBurnEvent event)
 	{
 		// the cannon will not burn down
-		if (cannonManager.isCannonBlock(event.getBlock().getLocation()))
+		if (cannonManager.getCannon(event.getBlock().getLocation(), null) != null)
 		{
 			event.setCancelled(true);
 		}
@@ -168,85 +165,83 @@ public class PlayerListener implements Listener
 	{
 
 		// if deleted block is cannonBlock delete cannon
-		Cannon cannon = cannonManager.getCannon(event.getBlock().getLocation());
+		Cannon cannon = cannonManager.getCannon(event.getBlock().getLocation(), event.getPlayer().toString());
 		if (cannon != null)
 		{
 			cannonManager.removeCannon(cannon);
 		}
 	}
 
-	// ########### PlayerBucketEmpty #######################################
+	/**
+	 * cancels the event if the player click a cannon with water
+	 * 
+	 * @param event
+	 */
 	@EventHandler
 	public void PlayerBucketEmpty(PlayerBucketEmptyEvent event)
 	{
 		// if player loads a lava/water bucket in the cannon
-		if (config.isCannonBarrel(event.getBlockClicked()))
+		Location blockLoc = event.getBlockClicked().getLocation();
+
+		Cannon cannon = cannonManager.getCannon(blockLoc, event.getPlayer().getName());
+
+		// check if it is a cannon
+		if (cannon != null)
 		{
-			Location barrel = event.getBlockClicked().getLocation();
+			// data =-1 means no data check, all buckets are allowed
+			Projectile projectile = plugin.getProjectile(event.getBucket().getId(), -1);
+			if (projectile != null) event.setCancelled(true);
+		}
+	}
+
+	/**
+	 * Create a cannon if the building process is finished Deletes a projectile
+	 * if loaded Checks for redstone torches if built
+	 * 
+	 * @param event
+	 */
+	@EventHandler
+	public void BlockPlace(BlockPlaceEvent event)
+	{
+		Block block = event.getBlockPlaced();
+		Location blockLoc = block.getLocation();
+
+		// setup a new cannon
+		cannonManager.getCannon(blockLoc, event.getPlayer().getName());
+
+		// Checks if the cannon building is complete - Checks also for
+		// permissions redstonetorches
+		/*
+		 * if (cannon != null) { // no block place for firing the cannon if
+		 * (block.getType() == Material.TORCH || block.getType() ==
+		 * Material.STONE_BUTTON) { // change location to barrel Block
+		 * barrelBlock = event.getBlockAgainst();
+		 * 
+		 * // if placed on snow the torch must be moved one down if
+		 * (barrelBlock.
+		 * getLocation().equals(event.getBlockPlaced().getLocation())) {
+		 * barrelBlock = barrelBlock.getRelative(BlockFace.DOWN); } blockLoc =
+		 * barrelBlock.getLocation(); } //set up a new cannon
+		 * cannonManager.getCannon(blockLoc); }
+		 */
+
+		// delete placed projectile if clicked against the barrel
+		if (event.getBlockAgainst() != null)
+		{
+			Location barrel = event.getBlockAgainst().getLocation();
+
 			// check if block is cannonblock
-			if (cannonManager.isCannonBlock(barrel) == true)
+			Cannon cannon = cannonManager.getCannon(barrel, event.getPlayer().getName());
+			if (cannon != null)
 			{
 				// delete projectile
-				//if (CheckLoadedProjectile(event.getBucket().getId(), 0))
+				Projectile projectile = plugin.getProjectile(block.getTypeId(), block.getData());
+				if (projectile != null && cannon.getCannonDesign().canLoad(projectile))
 				{
 					event.setCancelled(true);
 				}
 			}
 		}
-	}
-
-	// ########### BlockPlace #######################################
-	@EventHandler
-	public void BlockPlace(BlockPlaceEvent event)
-	{
-
-		// Cannon building complete - Checks also for permissions redstonetorches
-		if (config.isCannonBlock(event.getBlockPlaced()))
-		{
-			Block block = event.getBlockPlaced();
-			Location barrel = block.getLocation();
-
-			// check cannon
-			if (block.getType() == Material.TORCH || block.getType() == Material.STONE_BUTTON)
-			{
-				// change location to barrel
-				Block barrelBlock = event.getBlockAgainst();
-
-				// if placed on snow the torch must be moved one down
-				if (barrelBlock.getLocation().equals(event.getBlockPlaced().getLocation()))
-				{
-					barrelBlock = barrelBlock.getRelative(BlockFace.DOWN);
-				}
-				barrel = barrelBlock.getLocation();
-			}
-			// will check for redstonetorches and delete them
-			cannonManager.getCannon(barrel, event.getPlayer().getName());
-		}
-
-		// delete place projectile if clicked against the barrel
-		if (event.getBlockAgainst() != null)
-		{
-			if (config.isCannonBlock(event.getBlockAgainst()))
-			{
-				Location barrel = event.getBlockAgainst().getLocation();
-				
-				// check if block is cannonblock
-				if (cannonManager.isCannonBlock(barrel) == true )// && cannonManager.isPartOfCannon(event.getBlock().getLocation()) == false)
-				{
-					// delete projectile
-					//if (CheckLoadedProjectile(event.getBlock()))
-					{
-						//event.setCancelled(true);
-					}
-				}
-			}
-			
-		}
-		
-
-		
-		
-	
 
 		// Place redstonetorch next to the cannon
 		if (event.getBlockPlaced().getType() == Material.REDSTONE_TORCH_ON || event.getBlockPlaced().getType() == Material.REDSTONE_TORCH_OFF)
@@ -255,22 +250,18 @@ public class PlayerListener implements Listener
 			if (event.getPlayer().hasPermission("cannons.player.placeRedstoneTorch") == false)
 			{
 				// check cannon
-				for (Block b : cannonManager.SurroundingBlocks(event.getBlock()))
+				for (Block b : CannonsUtil.SurroundingBlocks(event.getBlock()))
 				{
-					if (config.isCannonBarrel(b))
+					Location loc = b.getLocation();
+					if (cannonManager.getCannon(loc, event.getPlayer().getName()) != null)
 					{
-						Location loc = b.getLocation();
-						if (cannonManager.getCannon(loc, event.getPlayer().getName()) != null)
-						{
-							userMessages.displayMessage(event.getPlayer(), MessageEnum.PermissionErrorRedstone);
-							event.setCancelled(true);
-						}
-
+						userMessages.displayMessage(event.getPlayer(), MessageEnum.PermissionErrorRedstone);
+						event.setCancelled(true);
 					}
 				}
 			}
 		}
-			
+
 		// Place redstone wire next to the button
 		if (event.getBlockPlaced().getType() == Material.REDSTONE_WIRE)
 		{
@@ -278,7 +269,7 @@ public class PlayerListener implements Listener
 			if (event.getPlayer().hasPermission("cannons.player.placeRedstoneTorch") == false)
 			{
 				// check cannon
-				for (Block b : cannonManager.HorizontalSurroundingBlocks(event.getBlock()))
+				for (Block b : CannonsUtil.HorizontalSurroundingBlocks(event.getBlock()))
 				{
 					if (b.getType() == Material.STONE_BUTTON)
 					{
@@ -292,9 +283,6 @@ public class PlayerListener implements Listener
 				}
 			}
 		}
-
-
-
 
 		// cancel igniting of the cannon
 		if (event.getBlock().getType() == Material.FIRE)
@@ -308,74 +296,67 @@ public class PlayerListener implements Listener
 		}
 	}
 
-	// ########### RedstoneEvent #######################################
+	/**
+	 * handles redstone events (torch, wire, repeater, button)
+	 * 
+	 * @param event
+	 */
 	@EventHandler
 	public void RedstoneEvent(BlockRedstoneEvent event)
 	{
-		// redstone torch fire
 		Block block = event.getBlock();
+
+		// redstone torch fire
 		if (block.getType() == Material.REDSTONE_TORCH_ON)
 		{
-			for (Block b : cannonManager.SurroundingBlocks(block))
+			// go one block up and check this is a cannon
+			Cannon cannon = cannonManager.getCannon(block.getRelative(BlockFace.UP).getLocation(), null);
+
+			if (cannon != null)
 			{
-				if (config.isCannonBarrel(b))
-				{	
-					Location barrel = b.getLocation();
-					Cannon cannon = cannonManager.getCannon(barrel);
-					if (cannon != null)
-					{
-						fireCannon.prepare_fire(cannon, null, !config.redstone_autoload);
-					}
-				}
+				// there is cannon next to the torch - check if the torch is
+				// place right
+				if (cannon.isRedstoneTorchInterface(block.getLocation())) fireCannon.prepareFire(cannon, null, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
 			}
 		}
-		
+
 		// redstone wire fire
-		block = event.getBlock();
 		if (block.getType() == Material.REDSTONE_WIRE)
 		{
-			//block is powered
+			// block is powered
 			if (block.getData() == 0)
-			{	
-				for (Block b : cannonManager.HorizontalSurroundingBlocks(block))
-				{
-					if (b.getType() == Material.STONE_BUTTON)
-					{	
-						Location barrel = b.getLocation();
-						Cannon cannon = cannonManager.getCannon(barrel);
-						if (cannon != null)
-						{
-							fireCannon.prepare_fire(cannon, null, !config.redstone_autoload);
-						}
-					}
-				}
-			}	
-		}
-		
-		// fire with Button
-		if (event.getBlock().getType() == Material.STONE_BUTTON && config.fireButton == true)
-		{
-			Button button = (Button) event.getBlock().getState().getData();
-			block = block.getRelative(button.getAttachedFace());
-			if (CannonsUtil.CheckAttachedTorch(block))
 			{
-				if (config.isCannonBarrel(block))
+				// check all block next to this if there is a cannon
+				for (Block b : CannonsUtil.HorizontalSurroundingBlocks(block))
 				{
-					Location barrel = block.getLocation();
-					Cannon cannon = cannonManager.getCannon(barrel);
+					Cannon cannon = cannonManager.getCannon(b.getLocation(), null);
 					if (cannon != null)
 					{
-						fireCannon.prepare_fire(cannon, null, true);
+						// there is cannon next to the wire - check if the wire
+						// is place right
+						if (cannon.isRedstoneWireInterface(block.getLocation())) fireCannon.prepareFire(cannon, null, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
 					}
 				}
 			}
 		}
 
+		/*
+		 * // fire with Button if (event.getBlock().getType() ==
+		 * Material.STONE_BUTTON && config.fireButton == true) { Button button =
+		 * (Button) event.getBlock().getState().getData(); block =
+		 * block.getRelative(button.getAttachedFace()); if
+		 * (CannonsUtil.CheckAttachedTorch(block)) { if
+		 * (config.isCannonBarrel(block)) { Location barrel =
+		 * block.getLocation(); Cannon cannon = cannonManager.getCannon(barrel);
+		 * if (cannon != null) { fireCannon.prepare_fire(cannon, null, true); }
+		 * } } }
+		 */
+
 	}
-	
 
 	/**
 	 * Cannon snowball hits the ground
+	 * 
 	 * @param event
 	 */
 	@EventHandler
@@ -403,16 +384,19 @@ public class PlayerListener implements Listener
 		}
 	}
 
-	// #################################### Player Interact ##############################
+	/**
+	 * Handles event if player interacts with the cannon
+	 * @param event
+	 */
 	@EventHandler
-	public void PlayerInteract(PlayerInteractEvent event) 
-	{		
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) 
+	public void PlayerInteract(PlayerInteractEvent event)
+	{
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)
 		{
 			Block clickedBlock;
 			if (event.getClickedBlock() == null)
 			{
-				//no clicked block - get block player is looking at
+				// no clicked block - get block player is looking at
 
 				clickedBlock = event.getPlayer().getTargetBlock(null, 4);
 			}
@@ -420,82 +404,83 @@ public class PlayerListener implements Listener
 			{
 				clickedBlock = event.getClickedBlock();
 			}
-			// check if it is a used material
-			if (config.isCannonBlock(clickedBlock) == true) 
+			Player player = event.getPlayer();
+			Location barrel = clickedBlock.getLocation();
+
+			// find cannon or add it to the list
+			Cannon cannon = cannonManager.getCannon(barrel, player.getName());
+
+			if (cannon == null) return;
+
+			// get cannon design
+			CannonDesign design = cannon.getCannonDesign();
+
+			// prevent eggs and snowball from firing when loaded into the gun
+			Material ItemInHand = player.getItemInHand().getType();
+			if (ItemInHand == Material.EGG || ItemInHand == Material.SNOW_BALL || ItemInHand == Material.MONSTER_EGG)
 			{
-				Player player = event.getPlayer();
-				Location barrel = clickedBlock.getLocation();
-
-				// find cannon or add it to the list
-				Cannon cannon = cannonManager.getCannon(barrel, player.getName());
-				
-				if (cannon == null)
-					return;
-				
-				//get cannon design
-				CannonDesign design = cannon.getCannonDesign();
-				
-				//prevent eggs and snowball from firing when loaded into the gun
-				Material ItemInHand = player.getItemInHand().getType();
-				if (ItemInHand == Material.EGG || ItemInHand == Material.SNOW_BALL || ItemInHand == Material.MONSTER_EGG)
-				{
-					event.setCancelled(true);
-				}
-				
-
-				plugin.logDebug("interact event + is loading block " + cannon.isLoadingBlock(clickedBlock.getLocation()) + " gunpowder " + design.getGunpowderType().equalsFuzzy(event.getItem()));
-
-				// ########## Load Projectile ######################
-				Projectile projectile = plugin.getProjectile(event.getItem());
-				if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null) 
-				{
-					plugin.logDebug("load projectile");
-					//load projectile
-					MessageEnum message = cannon.loadProjectile(projectile, player);
-					//display message
-					userMessages.displayMessage(player, message, cannon);	
-				}
-
-				// ########## Barrel clicked with gunpowder ##########################
-				if (cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(event.getItem())) 
-				{
-					plugin.logDebug("load gunpowder");
-					//load gunpowder
-					MessageEnum message = cannon.loadGunpowder(player);
-					//display message
-					userMessages.displayMessage(player, message, cannon);		
-				}
-
-				// ############ Torch clicked ############################
-				if (cannon.isRightClickTrigger(clickedBlock.getLocation())) {
-					fireCannon.prepare_fire(cannon, player, true);
-				
-					return;
-				}
-				
-				// ############ Button clicked ############################
-				if (cannon.isRestoneTrigger(clickedBlock.getLocation())) {
-					fireCannon.displayPrepareFireMessage(cannon, player);
-					
-					return;
-				}
-
-				// ############ set angle ################################
-				if ((player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.WATCH) && cannon.isLoadingBlock(clickedBlock.getLocation())) {
-					calcAngle.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
-					
-					//update Signs
-					cannon.updateCannonSigns();
-					return;
-				}
-			} else {
-				// clicked Block is no cannon block
-				calcAngle.disableAimingMode(event.getPlayer());
+				event.setCancelled(true);
 			}
-		} else {
+
+			plugin.logDebug("interact event");
+			// ########## Load Projectile ######################
+			Projectile projectile = plugin.getProjectile(event.getItem());
+			if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null)
+			{
+				plugin.logDebug("load projectile");
+				// load projectile
+				MessageEnum message = cannon.loadProjectile(projectile, player);
+				// display message
+				userMessages.displayMessage(player, message, cannon);
+			}
+
+			// ########## Barrel clicked with gunpowder
+			if (cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(event.getItem()))
+			{
+				plugin.logDebug("load gunpowder");
+				// load gunpowder
+				MessageEnum message = cannon.loadGunpowder(player);
+
+				// display message
+				userMessages.displayMessage(player, message, cannon);
+			}
+
+			// ############ Torch clicked ############################
+			if (cannon.isRightClickTrigger(clickedBlock.getLocation()))
+			{
+				plugin.logDebug("fire torch");
+				MessageEnum message = fireCannon.prepareFire(cannon, player, !design.isAmmoInfiniteForPlayer());
+
+				// display message
+				userMessages.displayMessage(player, message, cannon);
+				return;
+			}
+
+			// ############ Button clicked ############################
+			if (cannon.isRestoneTrigger(clickedBlock.getLocation()))
+			{
+				plugin.logDebug("fire button");
+				//don't fire the cannon, only disply a message
+				MessageEnum message = fireCannon.getPrepareFireMessage(cannon, player);
+				userMessages.displayMessage(player, message, cannon);
+
+				return;
+			}
+
+			// ############ set angle ################################
+			if ((player.getItemInHand().getType() == Material.AIR || player.getItemInHand().getType() == Material.WATCH) && cannon.isLoadingBlock(clickedBlock.getLocation()))
+			{
+				calcAngle.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
+
+				// update Signs
+				cannon.updateCannonSigns();
+				return;
+			}
+		}
+		else
+		{
 			// all other actions will stop aiming mode
-			if (event.getAction() == Action.RIGHT_CLICK_AIR)
-			calcAngle.disableAimingMode(event.getPlayer());
+			if (event.getAction() == Action.RIGHT_CLICK_AIR) calcAngle.disableAimingMode(event.getPlayer());
 		}
 		return;
 	}

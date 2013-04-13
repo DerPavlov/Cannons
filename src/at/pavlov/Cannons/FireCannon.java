@@ -56,8 +56,13 @@ public class FireCannon {
 		return flying_projectiles;
 	}
 	
-	//################################### PREPARE_FIRE #################################
-	public MessageEnum displayPrepareFireMessage(Cannon cannon, Player player)
+	/**
+	 * checks all condition but does not fire the cannon
+	 * @param cannon
+	 * @param player
+	 * @return
+	 */
+	public MessageEnum getPrepareFireMessage(Cannon cannon, Player player)
 	{
 		CannonDesign design = cannon.getCannonDesign();
 		
@@ -65,9 +70,14 @@ public class FireCannon {
 		//check for flint and steel
 		if (player!= null)
 		{
-			if ( config.flint_and_steel==true && player.getItemInHand().getType() != Material.FLINT_AND_STEEL )
+			if ( design.isFlintAndSteelRequired() && player.getItemInHand().getType() != Material.FLINT_AND_STEEL )
 			{
 				return MessageEnum.ErrorNoFlintAndSteel;
+			}
+			//if the player has permission to fire
+			if (!player.hasPermission(design.getPermissionFire()))
+			{
+				return MessageEnum.PermissionErrorFire;
 			}
 		}
 		//check if there is some gunpowder in the barrel
@@ -79,12 +89,9 @@ public class FireCannon {
 		if(!cannon.isLoaded())
 		{
 			return MessageEnum.ErrorNoProjectile;
-		}	
-		//if the player has permission to fire
-		if (player.hasPermission(design.getPermissionFire()))
-		{
-			return MessageEnum.PermissionErrorFire;
 		}
+
+
 		//Barrel too hot
 		if (cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
 		{
@@ -94,22 +101,33 @@ public class FireCannon {
 		return MessageEnum.CannonFire;
 	}
 	
-	//################################### PREPARE_FIRE #################################
-	public boolean prepare_fire(Cannon cannon, Player player, Boolean deleteCharge)
+	/**
+	 * checks if all preconditions for firing are fulfilled and fires the cannon
+	 * @param cannon
+	 * @param player
+	 * @param deleteCharge
+	 * @return
+	 */
+	public MessageEnum prepareFire(Cannon cannon, Player player, Boolean deleteCharge)
 	{		
 		//check for all permissions
-		MessageEnum message = displayPrepareFireMessage(cannon, player);
+		MessageEnum message = getPrepareFireMessage(cannon, player);
 		
 		//return if there are permission missing
-		if (message != MessageEnum.CannonFire) return false;
+		if (message != MessageEnum.CannonFire) return message;
 		
 		//ignite the cannon
 		delayedFire(cannon, player, deleteCharge);	
 		
-		return true;
+		return message;
 	}
 	
-	//####################################  DELAYED FIRE  ##############################
+	/**
+	 * delays the firing by the fuse burn time
+	 * @param cannon
+	 * @param player
+	 * @param deleteCharge
+	 */
     private void delayedFire(Cannon cannon, Player player, Boolean deleteCharge)
     {
     	CannonDesign design = designStorage.getDesign(cannon);
@@ -130,7 +148,7 @@ public class FireCannon {
 		
 		//set up delayed task
 		Object fireTask = new FireTaskWrapper(cannon, player, deleteCharge);
-		Long delay = (long) config.ignitionDelay * 20;
+		Long fuseBurnTime = (long) design.getFuseBurnTime() * 20;
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedFireTask(fireTask) 
 		{
 			public void run(Object object) 
@@ -138,10 +156,15 @@ public class FireCannon {
 					FireTaskWrapper fireTask = (FireTaskWrapper) object;
 			    	fire(fireTask.cannon, fireTask.player, fireTask.deleteCharge);
 			    }
-		}, delay);	
+		}, fuseBurnTime);	
     }
 	
-	//####################################  FIRE  ##############################
+	/**
+	 * fires a cannon and removes the charge from the player
+	 * @param cannon
+	 * @param shooter
+	 * @param deleteCharge
+	 */
     private void fire(Cannon cannon, Player shooter, Boolean deleteCharge)
     {	
     	CannonDesign design = designStorage.getDesign(cannon);
@@ -168,7 +191,8 @@ public class FireCannon {
 		world.createExplosion(firingLoc, 0F);
 		world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 		
-		for (int i=0; i < projectile.getNumberOfBullets(); i++)
+		//for each bullet, but at least once		
+		for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
 		{
 			//one snowball for each projectile 
     		Snowball snowball = world.spawn(firingLoc, Snowball.class);
@@ -189,47 +213,21 @@ public class FireCannon {
     			cannonball.setShooter(shooter);
     		}
     		
-    		//confuse shooter if he wears no helmet (only for one projectile and if its configured)
-    		if ( i == 0 && config.confusesShooter > 0)
-    		{
-    			List<Entity> living = snowball.getNearbyEntities(10, 10, 10);
-    			Iterator<Entity> iter = living.iterator();
-    			while (iter.hasNext())
-    			{
-    				boolean harmEntity = false;
-    				Entity next = iter.next();
-    				if (next instanceof Player)
-    				{
-    					
-    					Player player = (Player) next;
-    					if ( player.isOnline() && !CheckHelmet(player) && player.getGameMode() != GameMode.CREATIVE  )
-    					{
-    						//if player has no helmet and is not in creative and there are confusion effects - harm him
-        					harmEntity = true;		
-    					}
-    				}
-    				else if (next instanceof LivingEntity)
-    				{
-    					//damage entity
-    					harmEntity = true;
-    				}
-    				if (harmEntity == true)
-    				{
-    					//damage living entities and unprotected players
-						LivingEntity livingEntity = (LivingEntity) next;
-						livingEntity.damage(1);
-						livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,(int) config.confusesShooter*20, 0));
-	
-    				}
-    			}
-    		}
-    		
  
 			flying_projectiles.add(cannonball);
 			
     		//detonate timefused projectiles
-			detonateTimefuse(cannonball);
+			detonateTimefuse(cannonball);	
+
+			//confuse all entity which wear no helmets due to the blast of the cannon
+			List<Entity> living = snowball.getNearbyEntities(10, 10, 10);
+			//do only once
+			if (snowball != null && i==0)
+			{
+				confuseShooter(living, design.getBlastConfusion());
+			}
 		}
+	
 		
 		//reset after firing
 		cannon.setLastFired(System.currentTimeMillis());
@@ -246,7 +244,7 @@ public class FireCannon {
 		else
 		{
 			//redstone autoload
-			if (config.redstone_consumption == true)
+			if (design.isAmmoInfiniteForRedstone() == false)
 			{
 				//ammo is removed form chest
 				if (cannon.removeAmmoFromChests() == false)
@@ -260,6 +258,48 @@ public class FireCannon {
 			}
 		}
     }	 
+    
+    /**
+     * confuses an entity to simulate the blast of a cannon
+     * @param living
+     * @param confuseTime
+     */
+    private void confuseShooter(List<Entity> living, double confuseTime)
+    {
+    	 //confuse shooter if he wears no helmet (only for one projectile and if its configured)
+    	if (confuseTime > 0)
+    	{
+    		Iterator<Entity> iter = living.iterator();
+    		while (iter.hasNext())
+    		{
+    			boolean harmEntity = false;
+    			Entity next = iter.next();
+    			if (next instanceof Player)
+    			{
+    				
+    				Player player = (Player) next;
+    				if ( player.isOnline() && !CheckHelmet(player) && player.getGameMode() != GameMode.CREATIVE  )
+    				{
+    					//if player has no helmet and is not in creative and there are confusion effects - harm him
+    					harmEntity = true;		
+    				}
+    			}
+    			else if (next instanceof LivingEntity)
+    			{
+    				//damage entity
+    				harmEntity = true;
+    			}
+    			if (harmEntity == true)
+    			{
+    				//damage living entities and unprotected players
+    				LivingEntity livingEntity = (LivingEntity) next;
+    				livingEntity.damage(1);
+    				livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,(int) confuseTime*20, 0));
+
+    			}
+    		}
+    	}
+    }
     
 	/**
 	 * detonate a timefused projectile mid air	

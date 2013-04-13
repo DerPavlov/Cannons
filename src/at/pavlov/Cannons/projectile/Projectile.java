@@ -28,8 +28,8 @@ public class Projectile {
 	
 	//explosion
 	private float explosionPower;
-	private boolean blockExplosionDamage;
-	private boolean blockPenetrationDamage;
+	private boolean explosionDamage;
+	private boolean penetrationDamage;
 	private double potionRange;
 	private double potionDuration;
 	private int potionAmplifier;
@@ -41,10 +41,11 @@ public class Projectile {
 	private List<MaterialHolder> blockPlaceList = new ArrayList<MaterialHolder>();
 
 	
-	private List<String> permissions = new ArrayList<String>();
+	private List<String> permissionLoad = new ArrayList<String>();
 	
-	public Projectile(){
-
+	public Projectile(String id)
+	{
+		this.projectileID = id;
 	}
 	
 	/**
@@ -98,7 +99,7 @@ public class Projectile {
 	
 	public boolean doesBlockPlace()
 	{
-		return (blockPlaceList != null && !blockPlaceList.isEmpty());
+		return (blockPlaceAmount > 0 && blockPlaceList != null && !blockPlaceList.isEmpty());
 	}
 	
 	/**
@@ -108,7 +109,7 @@ public class Projectile {
 	 */
 	public boolean hasPermission(Player player)
 	{
-		for (String perm : permissions)
+		for (String perm : permissionLoad)
 		{
 			if(!player.hasPermission(perm))
 			{
@@ -343,24 +344,34 @@ public class Projectile {
 		this.alternativeItemList = alternativeItemList;
 	}
 
-	public boolean getBlockExplosionDamage()
+	public boolean getExplosionDamage()
 	{
-		return blockExplosionDamage;
+		return explosionDamage;
 	}
 
-	public void setBlockExplosionDamage(boolean blockExplosionDamage)
+	public void setExplosionDamage(boolean explosionDamage)
 	{
-		this.blockExplosionDamage = blockExplosionDamage;
+		this.explosionDamage = explosionDamage;
 	}
 
-	public boolean getBlockPenetrationDamage()
+	public boolean getPenetrationDamage()
 	{
-		return blockPenetrationDamage;
+		return penetrationDamage;
 	}
 
-	public void setBlockPenetrationDamage(boolean blockPenetrationDamage)
+	public void setPenetrationDamage(boolean penetrationDamage)
 	{
-		this.blockPenetrationDamage = blockPenetrationDamage;
+		this.penetrationDamage = penetrationDamage;
+	}
+
+	public List<String> getPermissionLoad()
+	{
+		return permissionLoad;
+	}
+
+	public void setPermissionLoad(List<String> permissionLoad)
+	{
+		this.permissionLoad = permissionLoad;
 	}
 
 

@@ -23,6 +23,7 @@ public class PersistenceDatabase
 
 	public boolean loadCannons()
 	{
+		plugin.getCannonManager().clearCannonList();
 		// create a query that returns CannonBean
 		Query<CannonBean> query = plugin.getDatabase().find(CannonBean.class);
 		List<CannonBean> beans = query.findList();

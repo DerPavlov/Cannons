@@ -63,6 +63,10 @@ public class Cannon
 		this.cannonDirection = cannonDirection;
 		this.owner = owner;
 		this.isValid = true;
+		
+		//reset
+		loadedGunpowder = 0;
+		loadedProjectile = null;
 	}
 
 	/**
@@ -124,6 +128,8 @@ public class Cannon
 	 */
 	public MessageEnum loadProjectile(Projectile projectile, Player player)
 	{
+		if (projectile == null) return null;
+		
 		MessageEnum returnVal = CheckPermProjectile(projectile, player);
 
 		// check if loading of projectile was successful
@@ -152,7 +158,6 @@ public class Cannon
 	 */
 	private MessageEnum CheckPermGunpowder(Player player)
 	{
-
 		// already loaded
 		if (isLoaded())
 		{
@@ -272,7 +277,7 @@ public class Cannon
 	}
 
 	/**
-	 * return true if this block is a part of the loading interface - default is
+	 * return true if this block is a part of the loading interface - default is the barrel
 	 * the barrel
 	 * 
 	 * @param block
@@ -289,6 +294,7 @@ public class Cannon
 		}
 		return false;
 	}
+	
 
 	/**
 	 * return true if this is a right click trigger block
@@ -326,6 +332,47 @@ public class Cannon
 		return false;
 	}
 	
+	/**
+	 * return true if this location where the torch interacts with the cannon
+	 * @param block
+	 * @return
+	 */
+	public boolean isRedstoneTorchInterface(Location block)
+	{
+		for (Location loc : design.getRedstoneTorches(this))
+		{
+			if (loc.equals(block))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * return true if this location where the torch interacts with the cannon
+	 * @param block
+	 * @return
+	 */
+	public boolean isRedstoneWireInterface(Location block)
+	{
+		for (Location loc : design.getRedstoneWireAndRepeater(this))
+		{
+			if (loc.equals(block))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public MessageEnum checkRedstonePermission(String player)
+	{
+		Player playerBukkit = null;
+		if (player != null)
+			playerBukkit = Bukkit.getPlayer(player);
+		return checkRedstonePermission(playerBukkit);
+	}
 
 	/**
 	 * checks if the player has permission to use the cannon with redstone
@@ -488,7 +535,10 @@ public class Cannon
 				return owner;
 			case 2 :
 				// loaded Gunpowder/Projectile
-				return "p: " + loadedGunpowder + " c: " + loadedProjectile.toString();
+				if (loadedProjectile != null)
+					return "p: " + loadedGunpowder + " c: " + loadedProjectile.toString();
+				else
+					return "p: " + loadedGunpowder + " c: " + "0:0";
 			case 3 :
 				// angles
 				return horizontalAngle + "/" + verticalAngle;

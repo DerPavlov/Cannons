@@ -13,11 +13,11 @@ barrelProperties:
   multiplierVelocity: 1.0
   spreadOfCannon: 5.0
 timings:
-  backblastConfusion: 5
+  blastConfusion: 5
   fuseBurnTime: 1
   barrelCooldownTime: 3
 angles:
-  defaultHorizonatalFacing: north
+  defaultHorizonatalFacing: west
   defaultVerticalAngle: 0.0
   maxHorizontalAngle: 45.0
   minHorizontalAngle: -45.0
@@ -26,6 +26,7 @@ angles:
   angleStepSize: 1.0
   angleUpdateSpeed: 1.0
 realisticBehaviour:
+  fireWithFlintAndSteel: false
   hasRecoil: false
   isFrontloader: false
   isRotabable: false

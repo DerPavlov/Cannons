@@ -10,6 +10,7 @@ import org.bukkit.util.Vector;
 
 import at.pavlov.Cannons.container.MaterialHolder;
 import at.pavlov.Cannons.container.SimpleBlock;
+import at.pavlov.Cannons.projectile.Projectile;
 
 
 public class CannonDesign
@@ -34,7 +35,7 @@ public class CannonDesign
 	private double spreadOfCannon;
 	
 	//timings
-	private double backblastConfusion;
+	private double blastConfusion;
 	private double fuseBurnTime;
     private double barrelCooldownTime;
 	
@@ -49,6 +50,7 @@ public class CannonDesign
 	private double angleUpdateSpeed;
 
 	//realisticBehaviour
+	private boolean flintAndSteelRequired;
 	private boolean hasRecoil;
 	private boolean isFrontloader;
 	private boolean isRotabable;
@@ -247,9 +249,9 @@ public class CannonDesign
     	List<Location> locList = new ArrayList<Location>();
     	if (cannonBlocks != null)
     	{
-    		for (Vector vect : cannonBlocks.getChestsAndSigns())
+    		for (SimpleBlock block : cannonBlocks.getChestsAndSigns())
     		{
-    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    			locList.add(block.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
     		}
     	}
 		return locList;
@@ -285,14 +287,29 @@ public class CannonDesign
     	List<Location> locList = new ArrayList<Location>();
     	if (cannonBlocks != null)
     	{
-    		for (Vector vect : cannonBlocks.getRedstoneWiresAndRepeater())
+    		for (SimpleBlock block : cannonBlocks.getRedstoneWiresAndRepeater())
     		{
-    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+    			locList.add(block.add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
     		}
     	}
 		return locList;
     }
-
+    
+    /**
+     * returns true if the projectile has the same Id of a allowed projectile
+     * @param projectile
+     * @return
+     */
+    public boolean canLoad(Projectile projectile)
+    {
+    	for (String p : allowedProjectiles)
+    	{
+    		if (projectile.getProjectileID() == p)
+    			return true;
+    	}
+    	
+    	return false;
+    }
     
 	public String getDesignID()
 	{
@@ -374,13 +391,13 @@ public class CannonDesign
 	{
 		this.spreadOfCannon = spreadOfCannon;
 	}
-	public double getBackblastConfusion()
+	public double getBlastConfusion()
 	{
-		return backblastConfusion;
+		return blastConfusion;
 	}
-	public void setBackblastConfusion(double backblastConfusion)
+	public void setBlastConfusion(double blastConfusion)
 	{
-		this.backblastConfusion = backblastConfusion;
+		this.blastConfusion = blastConfusion;
 	}
 	public double getFuseBurnTime()
 	{
@@ -690,6 +707,18 @@ public class CannonDesign
 	public void setGunpowderName(String gunpowderName)
 	{
 		this.gunpowderName = gunpowderName;
+	}
+
+
+	public boolean isFlintAndSteelRequired()
+	{
+		return flintAndSteelRequired;
+	}
+
+
+	public void setFlintAndSteelRequired(boolean flintAndSteelRequired)
+	{
+		this.flintAndSteelRequired = flintAndSteelRequired;
 	}
 	
 

@@ -13,9 +13,9 @@ public class CannonBlocks
     private Vector muzzle;																//center off all muzzle blocks - spawing Vector for snowball
     private ArrayList<SimpleBlock> allCannonBlocks = new ArrayList<SimpleBlock>();
     private ArrayList<Vector> loadingInterface = new ArrayList<Vector>();
-    private ArrayList<Vector> chestsAndSigns = new ArrayList<Vector>();
+    private ArrayList<SimpleBlock> chestsAndSigns = new ArrayList<SimpleBlock>();
     private ArrayList<Vector> redstoneTorches = new ArrayList<Vector>();
-    private ArrayList<Vector> redstoneWiresAndRepeater = new ArrayList<Vector>();
+    private ArrayList<SimpleBlock> redstoneWiresAndRepeater = new ArrayList<SimpleBlock>();
     private ArrayList<Vector> redstoneTrigger = new ArrayList<Vector>();
     private ArrayList<Vector> rightClickTrigger = new ArrayList<Vector>();
     private ArrayList<Vector> firingIndicator = new ArrayList<Vector>();
@@ -110,22 +110,22 @@ public class CannonBlocks
 		this.rightClickTrigger = rightClickTrigger;
 	}
 
-	public ArrayList<Vector> getChestsAndSigns()
+	public ArrayList<SimpleBlock> getChestsAndSigns()
 	{
 		return chestsAndSigns;
 	}
 
-	public void setChestsAndSigns(ArrayList<Vector> chestsAndSigns)
+	public void setChestsAndSigns(ArrayList<SimpleBlock> chestsAndSigns)
 	{
 		this.chestsAndSigns = chestsAndSigns;
 	}
 
-	public ArrayList<Vector> getRedstoneWiresAndRepeater()
+	public ArrayList<SimpleBlock> getRedstoneWiresAndRepeater()
 	{
 		return redstoneWiresAndRepeater;
 	}
 
-	public void setRedstoneWiresAndRepeater(ArrayList<Vector> redstoneWiresAndRepeater)
+	public void setRedstoneWiresAndRepeater(ArrayList<SimpleBlock> redstoneWiresAndRepeater)
 	{
 		this.redstoneWiresAndRepeater = redstoneWiresAndRepeater;
 	}
