@@ -1,3 +1,5 @@
+general:
+  debugMode: true
 cannonLimits:
   useLimits: true
   buildLimitA: 1

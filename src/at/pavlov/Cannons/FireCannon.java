@@ -90,8 +90,6 @@ public class FireCannon {
 		{
 			return MessageEnum.ErrorNoProjectile;
 		}
-
-
 		//Barrel too hot
 		if (cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
 		{
@@ -198,9 +196,9 @@ public class FireCannon {
     		Snowball snowball = world.spawn(firingLoc, Snowball.class);
     		snowball.setFireTicks(100);
     		snowball.setTicksLived(2);
-    		if (projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
-    			snowball.setPassenger(shooter);
-    		
+        	if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
+            	snowball.setPassenger(shooter);
+	
        		//calculate firing vector
     		Vector vect = cannon.getFiringVector(config);    		
     		snowball.setVelocity(vect);

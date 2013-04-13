@@ -253,8 +253,8 @@ public class Cannons extends JavaPlugin
 
 	public void logDebug(String msg)
 	{
-		//msg = ChatColor.translateAlternateColorCodes('&', msg);
-		this.logger.info(getLogPrefix() + msg);
+		if (config.isDebugMode())
+			this.logger.info(getLogPrefix() + msg);
 	}
 
 	public void broadcast(String msg)

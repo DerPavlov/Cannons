@@ -15,8 +15,8 @@ cannonball:
     - incendiary
 explosion:
   explosionPower: 2
-  doesExplosionDamage: false
-  doesPenetrationDamage: false
+  doesExplosionDamage: true
+  doesPenetrationDamage: true
   potionRange: 5
   potionDuration: 7
   potionAmplifier: 0

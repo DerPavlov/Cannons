@@ -5,13 +5,13 @@ signs:
 ammunition:
   gunpowderName: gunpowder
   gunpowderType: '289:0'
-  ammoInfiniteForPlayer: true
-  ammoInfiniteForRedstone: true
+  ammoInfiniteForPlayer: false
+  ammoInfiniteForRedstone: false
   autoreloadRestone: true
 barrelProperties:
   maxLoadableGunpowder: 3
   multiplierVelocity: 1.0
-  spreadOfCannon: 5.0
+  spreadOfCannon: 1.0
 timings:
   blastConfusion: 5
   fuseBurnTime: 1

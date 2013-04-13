@@ -270,13 +270,18 @@ public class CreateExplosion {
     {
     	Projectile projectile = cannonball.getProjectile();
 
+
     	
 		Block block = loc.getBlock();
-		if (block.getType() == Material.AIR)
+		if (canReplaceBlock(block))
 		{
 			if (checkLineOfSight(impactLoc, loc) == 0)
 			{
-				if (projectile == null) return;
+		    	if (projectile == null)
+		    	{
+		    		plugin.logSevere("no projectile data in flyingprojectile for makeBlockPlace");
+		    		return;
+		    	}
 				
 				for (MaterialHolder placeBlock : projectile.getBlockPlaceList())
 				{
@@ -288,12 +293,14 @@ public class CreateExplosion {
 					}
 					else
 					{
+						//replace block with new block id and data
+						block.setTypeId(placeBlock.getId());
+						if (placeBlock.getData() >= 0);
+							block.setData((byte) placeBlock.getData());
 						if (cannonball.getSnowball().getShooter() instanceof Player)
 						{
+							// fire an event
 							Player player = (Player) cannonball.getSnowball().getShooter();
-							//replace air
-							block.setTypeId(placeBlock.getId());
-							block.setData((byte) placeBlock.getData());
 							BlockPlaceEvent event = new BlockPlaceEvent(block, block.getState(), block.getRelative(BlockFace.DOWN), null, player, true);
 							if (event.isCancelled())
 							{
@@ -342,15 +349,18 @@ public class CreateExplosion {
     			do 
     			{
     				iterations2 ++;
-    				if (block.getType() != Material.AIR)
+    				Block blockDown = block.getRelative(BlockFace.DOWN);
+    				//is the actual block is not air, fire, liquid means it is solid - can't replace it
+    				if (!canReplaceBlock(block))
     				{
     					//go up
     					block = block.getRelative(BlockFace.UP);
     				}
-    				else if (block.getRelative(BlockFace.DOWN).getType() == Material.AIR)
+    				//if the block below is air, fire or liquid, go down
+    				else if (canReplaceBlock(blockDown))
     				{
-    					//block below is AIR - go down
-    					block = block.getRelative(BlockFace.DOWN);
+    					//go down
+    					block = blockDown;
     				}
     				else 
     				{
@@ -358,15 +368,22 @@ public class CreateExplosion {
     					finished = true;
     				}
     			} while (finished == false && iterations2 <= spread);
-    			//if no error place the block
+    			//no problem so far
     			if (finished == true)
     			{
     				i++;
+    				//place the block
     				makeBlockPlace(impactLoc, block.getLocation(), cannonball);
     			}
-    		} while (iterations1 < maxPlacement * 2 && i < maxPlacement);
+    		} while (iterations1 < 2*maxPlacement && i < maxPlacement);
     	}  	
     }
+    
+    private boolean canReplaceBlock(Block block)
+    {
+    	return block.getType() == Material.AIR || block.getType() == Material.FIRE || block.isLiquid();
+    }
+   
     
     //####################################  checkLineOfSight ##############################
     private int checkLineOfSight(Location impact, Location target)

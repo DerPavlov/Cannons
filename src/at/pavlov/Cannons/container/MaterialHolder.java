@@ -89,11 +89,13 @@ public class MaterialHolder
 	public boolean equalsFuzzy(ItemStack item)
 	{
 		//System.out.println("id:" + item.getTypeId() + "-" + id + " data:" + item.getData().getData() + "-" + data);
-		
-		if (item.getTypeId() == id)
+		if (item != null)
 		{
-			return (item.getData().getData() == data || data == -1);
-		}
+			if (item.getTypeId() == id)
+			{
+				return (item.getData().getData() == data || data == -1);
+			}
+		}	
 		return false;
 	}
 

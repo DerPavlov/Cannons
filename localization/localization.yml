@@ -19,7 +19,7 @@ Load:
   Gunpowder: 'GOLD GUNPOWDERkg YELLOW of Gunpowder loaded.'
 Cannon:
   Fire: 'YELLOW FIRE!'
-  Created: 'GREEN You have created a cannon'
+  Created: 'GREEN You created a cannon'
   Destroyed: 'RED One of your cannons has been destroyed'
   Reseted: 'GREEN All your cannons have been deleted from the database'
 Permission:

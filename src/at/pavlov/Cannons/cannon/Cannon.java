@@ -391,6 +391,7 @@ public class Cannon
 			Material b = loc.getBlock().getType();
 			if (b == Material.REDSTONE_TORCH_ON || b == Material.REDSTONE_TORCH_OFF)
 			{
+				removeRedstone();
 				return MessageEnum.PermissionErrorRedstone;
 			}
 		}
@@ -401,12 +402,39 @@ public class Cannon
 			Material b = loc.getBlock().getType();
 			if (b == Material.REDSTONE_WIRE || b == Material.DIODE || b == Material.DIODE_BLOCK_ON || b == Material.DIODE_BLOCK_OFF)
 			{
+				removeRedstone();
 				return MessageEnum.PermissionErrorRedstone;
 			}
 		}
 
 		// no redstone wiring found
 		return MessageEnum.CannonCreated;
+	}
+	
+	/**
+	 * break all redstone connections to this cannon
+	 */
+	private void removeRedstone()
+	{
+		//torches
+		for (Location loc : design.getRedstoneTorches(this))
+		{
+			Block block = loc.getBlock();
+			if (block.getType() == Material.REDSTONE_TORCH_ON || block.getType() == Material.REDSTONE_TORCH_OFF)
+			{
+				block.breakNaturally();
+			}
+		}
+		
+		//wires and repeater
+		for (Location loc : design.getRedstoneWireAndRepeater(this))
+		{
+			Block block = loc.getBlock();
+			if (block.getType() == Material.REDSTONE_WIRE || block.getType() == Material.DIODE)
+			{
+				block.breakNaturally();
+			}
+		}
 	}
 
 	/**
@@ -456,12 +484,13 @@ public class Cannon
 	
 	/**
 	 * returns the speed of the cannonball depending on the cannon, projectile, loaded gunpowder
+	 * the dependency on the gunpowder is (1-2^(-4*loaded/max))
 	 * @return
 	 */
 	public double getCannonballVelocity()
 	{
 		if (loadedProjectile == null || design == null) return 0.0;
-		return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (loadedGunpowder / design.getMaxLoadableGunpowder());
+		return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1-Math.pow(2, -4*loadedGunpowder / design.getMaxLoadableGunpowder()));
 	}
 
 	/**

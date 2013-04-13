@@ -14,6 +14,8 @@ import at.pavlov.Cannons.container.MaterialHolder;
 
 public class Config
 {
+	//general
+	private boolean debugMode;
 	
 	//build limits
 	private boolean buildLimitEnabled;
@@ -42,11 +44,11 @@ public class Config
 	public void loadConfig()
 	{
 		plugin.reloadConfig();
-		projectileStorage.loadProjectiles();
-		designStorage.loadCannonDesigns();
-		userMessage.loadLanguage();
 		
 		//load Config
+		
+		//general
+		setDebugMode(plugin.getConfig().getBoolean("general.debugMode", false));
 		
 		//limitOfCannons
 		setBuildLimitEnabled(plugin.getConfig().getBoolean("limitOfCannons.useLimits", true));
@@ -63,6 +65,13 @@ public class Config
 		plugin.getConfig().options().copyHeader(true);
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
+		
+		
+		projectileStorage.loadProjectiles();
+		designStorage.loadCannonDesigns();
+		userMessage.loadLanguage();
+		
+
 
 	}
 
@@ -152,6 +161,16 @@ public class Config
 	public void setToolRotating(MaterialHolder toolRotating)
 	{
 		this.toolRotating = toolRotating;
+	}
+
+	public boolean isDebugMode()
+	{
+		return debugMode;
+	}
+
+	public void setDebugMode(boolean debugMode)
+	{
+		this.debugMode = debugMode;
 	}
 
 

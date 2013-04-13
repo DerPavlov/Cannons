@@ -94,7 +94,14 @@ public class PersistenceDatabase
 		// save all cannon to database
 		for (Cannon cannon : cannonList)
 		{
-			saveCannon(cannon);
+			try
+			{
+				saveCannon(cannon);
+			}
+			catch (Exception e)
+			{
+				plugin.logDebug("can't save to database. " + e);
+			}
 		}
 	}
 
@@ -107,11 +114,14 @@ public class PersistenceDatabase
 	{
 		// search if the is cannon already stored in the database
 		CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.getDatabaseId()).findUnique();
-
+		plugin.logDebug("database id " + cannon.getDatabaseId());
+		
 		if (bean == null)
 		{
+			plugin.logDebug("new bean");
 			// create a new bean that is managed by bukkit
 			bean = plugin.getDatabase().createEntityBean(CannonBean.class);
+			cannon.setDatabaseId(bean.getId());
 		}
 
 		// fill the bean with values to store

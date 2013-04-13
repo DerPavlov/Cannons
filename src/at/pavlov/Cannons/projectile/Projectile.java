@@ -79,7 +79,7 @@ public class Projectile {
 	 */
 	public String toString()
 	{
-		return loadingItem.toString();
+		return loadingItem.getId() + ":" + loadingItem.getData();
 	}
 	
 	/**
@@ -89,9 +89,9 @@ public class Projectile {
 	 */
 	public boolean hasProperty(ProjectileProperties properties)
 	{
-		for (ProjectileProperties propEnum : ProjectileProperties.values())
+		for (ProjectileProperties propEnum : this.getPropertyList())
 		{
-			if (propEnum == properties)
+			if (propEnum.equals(properties))
 				return true;
 		}
 		return false;

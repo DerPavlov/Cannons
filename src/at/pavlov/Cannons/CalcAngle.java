@@ -170,7 +170,7 @@ public class CalcAngle {
 			else
 			{
 				// down
-				if (cannon.getVerticalAngle() - design.getAngleStepSize() >= design.getMaxVerticalAngle())
+				if (cannon.getVerticalAngle() - design.getAngleStepSize() >= design.getMinVerticalAngle())
 				{
 					cannon.setVerticalAngle(cannon.getVerticalAngle() - design.getAngleStepSize());
 					hasChanged = true;

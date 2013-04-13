@@ -304,7 +304,7 @@ public class CannonDesign
     {
     	for (String p : allowedProjectiles)
     	{
-    		if (projectile.getProjectileID() == p)
+    		if (projectile.getProjectileID().equals(p))
     			return true;
     	}
     	
