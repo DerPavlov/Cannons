@@ -1,6 +1,7 @@
 package at.pavlov.Cannons.container;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import com.sk89q.worldedit.blocks.BaseBlock;
@@ -86,17 +87,62 @@ public class MaterialHolder
 		return material.getId() == id;
 	}
 	
+	/**
+	 * compares id and data, but skips data comparison if one is -1
+	 * @param item
+	 * @return
+	 */
 	public boolean equalsFuzzy(ItemStack item)
 	{
-		//System.out.println("id:" + item.getTypeId() + "-" + id + " data:" + item.getData().getData() + "-" + data);
 		if (item != null)
 		{
 			if (item.getTypeId() == id)
 			{
-				return (item.getData().getData() == data || data == -1);
+				return (item.getData().getData() == data || data == -1 || item.getData().getData() == -1);
 			}
 		}	
 		return false;
+	}
+	
+	
+	/**
+	 * compares id and data, but skips data comparison if one is -1
+	 * @param item
+	 * @return
+	 */	
+	public boolean equalsFuzzy(MaterialHolder item)
+	{
+		if (item != null)
+		{
+			if (item.getId() == id)
+			{
+				return (item.getData() == data || data == -1 || item.getData() == -1);
+			}
+		}	
+		return false;
+	}
+	
+	/**
+	 * compares id and data, but skips data comparison if one is -1
+	 * @param item
+	 * @return
+	 */
+	public boolean equalsFuzzy(Block item)
+	{
+		//System.out.println("id:" + item.getId() + "-" + id + " data:" + item.getData() + "-" + data);
+		if (item != null)
+		{
+			if (item.getTypeId() == id)
+			{
+				return (item.getData() == data || data == -1 || item.getData() == -1);
+			}
+		}	
+		return false;
+	}
+	
+	public String toString()
+	{
+		return id + ":" + data;
 	}
 
 

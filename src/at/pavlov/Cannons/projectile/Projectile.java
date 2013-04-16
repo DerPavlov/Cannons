@@ -38,6 +38,7 @@ public class Projectile {
 	//placeBlock
 	private double blockPlaceRadius;
 	private int blockPlaceAmount;
+	private double blockPlaceVelocity;
 	private List<MaterialHolder> blockPlaceList = new ArrayList<MaterialHolder>();
 
 	
@@ -372,6 +373,16 @@ public class Projectile {
 	public void setPermissionLoad(List<String> permissionLoad)
 	{
 		this.permissionLoad = permissionLoad;
+	}
+
+	public double getBlockPlaceVelocity()
+	{
+		return blockPlaceVelocity;
+	}
+
+	public void setBlockPlaceVelocity(double blockPlaceVelocity)
+	{
+		this.blockPlaceVelocity = blockPlaceVelocity;
 	}
 
 

@@ -419,14 +419,14 @@ public class Cannons extends JavaPlugin
 		this.projectileStorage = projectileStorage;
 	}
 	
-	public Projectile getProjectile(int id, int data)
+	public Projectile getProjectile(Cannon cannon, int id, int data)
 	{
-		return this.projectileStorage.getProjectile(id, data);
+		return this.projectileStorage.getProjectile(cannon, id, data);
 	}
 	
-	public Projectile getProjectile(ItemStack item)
+	public Projectile getProjectile(Cannon cannon, ItemStack item)
 	{
-		return this.projectileStorage.getProjectile(item);
+		return this.projectileStorage.getProjectile(cannon, item);
 	}
 
 	public EntityListener getEntityListener()

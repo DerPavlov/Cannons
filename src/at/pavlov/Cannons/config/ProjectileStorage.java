@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import at.pavlov.Cannons.Cannons;
+import at.pavlov.Cannons.cannon.Cannon;
 import at.pavlov.Cannons.container.MaterialHolder;
 import at.pavlov.Cannons.projectile.Projectile;
 import at.pavlov.Cannons.projectile.ProjectileProperties;
@@ -19,8 +20,6 @@ public class ProjectileStorage
 {
 	Cannons plugin;
 
-	private FileConfiguration projectileConfig = null;
-	private File projectileFile = null;
 	
 	List<Projectile> projectileList = new ArrayList<Projectile>();
 	
@@ -35,23 +34,23 @@ public class ProjectileStorage
 	 * @param item
 	 * @return
 	 */
-	public Projectile getProjectile(ItemStack item)
+	public Projectile getProjectile(Cannon cannon, ItemStack item)
 	{
 		if (item == null) return null;
-		return getProjectile(item.getTypeId(), item.getData().getData());
+		return getProjectile(cannon, item.getTypeId(), item.getData().getData());
 	}
 	
 	/**
-	 * returns the projectiles that can be loaded with this id and data. If data=-1 the data is ignored
+	 * returns the projectiles that can be loaded int the cannon with this id and data. If data=-1 the data is ignored
 	 * @param id
 	 * @param data
 	 * @return
 	 */
-	public Projectile getProjectile(int id, int data)
+	public Projectile getProjectile(Cannon cannon, int id, int data)
 	{
 		for (Projectile projectile : projectileList)
 		{
-			if (projectile.equalsFuzzy(id, data))
+			if (cannon.getCannonDesign().canLoad(projectile) && projectile.equalsFuzzy(id, data))
 				return projectile;
 		}
 		return null;
@@ -87,6 +86,8 @@ public class ProjectileStorage
 		{
 			//load .yml
 			Projectile projectile = loadYml(file);
+
+			plugin.logDebug("projectile " + file + " item " + projectile.getLoadingItem().toString());
 			// add to the list if valid
 			if (projectile != null)
 				projectileList.add(projectile);
@@ -140,11 +141,9 @@ public class ProjectileStorage
 		String id = CannonsUtil.removeExtension(ymlFile);
 		Projectile projectile = new Projectile(id);
 		// load .yml file
-		if (projectileFile == null)
-		{
-			projectileFile = new File(getPath() + ymlFile);
-		}
-		projectileConfig = YamlConfiguration.loadConfiguration(projectileFile);
+
+		File projectileFile = new File(getPath() + ymlFile);;
+		FileConfiguration projectileConfig = YamlConfiguration.loadConfiguration(projectileFile);
 		
 		//load it from the disk
 		
@@ -174,6 +173,7 @@ public class ProjectileStorage
 		//placeBlock
 		projectile.setBlockPlaceRadius(projectileConfig.getDouble("placeBlock.radius", 3.0));
 		projectile.setBlockPlaceAmount(projectileConfig.getInt("placeBlock.amount", 3));
+		projectile.setBlockPlaceVelocity(projectileConfig.getDouble("placeBlock.velocity", 0.1));
 		projectile.setBlockPlaceList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("placeBlock.material")));
 
 		//loadPermissions

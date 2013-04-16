@@ -184,7 +184,7 @@ public class PlayerListener implements Listener
 		if (cannon != null)
 		{
 			// data =-1 means no data check, all buckets are allowed
-			Projectile projectile = plugin.getProjectile(event.getBucket().getId(), -1);
+			Projectile projectile = plugin.getProjectile(cannon, event.getBucket().getId(), -1);
 			if (projectile != null) event.setCancelled(true);
 		}
 	}
@@ -220,7 +220,7 @@ public class PlayerListener implements Listener
 		 * cannonManager.getCannon(blockLoc); }
 		 */
 
-		// delete placed projectile if clicked against the barrel
+		// delete placed projectile or gunpowder if clicked against the barrel
 		if (event.getBlockAgainst() != null)
 		{
 			Location barrel = event.getBlockAgainst().getLocation();
@@ -230,8 +230,17 @@ public class PlayerListener implements Listener
 			if (cannon != null)
 			{
 				// delete projectile
-				Projectile projectile = plugin.getProjectile(block.getTypeId(), block.getData());
+				Projectile projectile = plugin.getProjectile(cannon, block.getTypeId(), block.getData());
 				if (projectile != null && cannon.getCannonDesign().canLoad(projectile))
+				{
+					// check if the placed block is not part of the cannon
+					if (!cannon.isCannonBlock(event.getBlock()))
+					{
+						event.setCancelled(true);
+					}
+				}
+				// delete gunpowder block
+				if (cannon.getCannonDesign().getGunpowderType().equalsFuzzy(event.getBlock()))
 				{
 					// check if the placed block is not part of the cannon
 					if (!cannon.isCannonBlock(event.getBlock()))
@@ -403,7 +412,7 @@ public class PlayerListener implements Listener
 
 			plugin.logDebug("interact event");
 			// ########## Load Projectile ######################
-			Projectile projectile = plugin.getProjectile(event.getItem());
+			Projectile projectile = plugin.getProjectile(cannon, event.getItem());
 			if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null)
 			{
 				plugin.logDebug("load projectile");

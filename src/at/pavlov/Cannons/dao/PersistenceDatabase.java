@@ -62,7 +62,7 @@ public class PersistenceDatabase
 					cannon.setLoadedGunpowder(bean.getGunpowder());
 					
 					//load projectile
-					cannon.setLoadedProjectile(plugin.getProjectile(bean.getProjectileID(), bean.getProjectileData()));
+					cannon.setLoadedProjectile(plugin.getProjectile(cannon, bean.getProjectileID(), bean.getProjectileData()));
 					
 					//angles
 					cannon.setHorizontalAngle(bean.getHorizontalAngle());
@@ -190,6 +190,18 @@ public class PersistenceDatabase
 				plugin.getDatabase().delete(CannonBean.class, bean.getId());
 			}
 		}
+	}
+	
+	/**
+	 * removes all cannon of this player from the database
+	 * 
+	 * @param owner
+	 */
+	public void deleteCannon(Cannon cannon)
+	{
+		// if the database id is null nothing, it is not saved in the database
+		if (cannon.getDatabaseId() >= 0)
+				plugin.getDatabase().delete(CannonBean.class, cannon.getDatabaseId());
 	}
 
 }

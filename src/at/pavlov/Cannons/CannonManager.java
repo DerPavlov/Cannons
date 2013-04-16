@@ -65,6 +65,9 @@ public class CannonManager
 			
 			if (player != null) userMessages.displayMessage(player, message, cannon);
 
+			//remove from database
+			plugin.getPersistenceDatabase().deleteCannon(cannon);
+			
 			//remove from list
 			cannonList.remove(cannon);
 		}

@@ -18,7 +18,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
@@ -110,7 +109,11 @@ public class CreateExplosion {
     	return true;
     }
     
-    //####################################  blockBreaker ##############################
+    /**
+     * breaks blocks that are on the trajectory of the projectile. The projectile is stopped by impenetratable blocks (obsidian)
+     * @param cannonball
+     * @return
+     */
     private Location blockBreaker(FlyingProjectile cannonball)
     {
     	Projectile projectile = cannonball.getProjectile();
@@ -225,12 +228,12 @@ public class CreateExplosion {
      * @param Loc
      * @param data
      */
-    private void PlaceMob(Location impactLoc, Location loc, int data)
+    private void PlaceMob(Location impactLoc, Location loc, double entityVelocity, int data)
     {
     	//set spawnpoint to the middle
     	loc.add(0.5, 0, 0.5);
     	
-    	World world = loc.getWorld();
+    	World world = impactLoc.getWorld();
      	Random r = new Random();
      	
      	Integer mobList[] = {50,51,52,54,55,56,57,58,59,60,61,62,65,66,90,91,92,93,94,95,96,98,120};
@@ -256,16 +259,44 @@ public class CreateExplosion {
     	
     	if (entity != null)
     	{
-    		//get distance form the center
-    		double dist = impactLoc.distance(loc);
+    		//get distance form the center + 1 to avoid division by zero
+    		double dist = impactLoc.distance(loc) + 1;
     		//calculate veloctiy away from the impact
-    		Vector vect = loc.clone().subtract(impactLoc).toVector().multiply(1/dist);
+    		Vector vect = loc.clone().subtract(impactLoc).toVector().multiply(entityVelocity/dist);
     		//set the entity velocity
     		entity.setVelocity(vect);
     	}
     }
     
-    //####################################  makeBlockPlace ##############################
+    /**
+     * spawns a falling block with the id and data that is slinged away from the impact
+     * @param impactLoc
+     * @param loc
+     * @param entityVelocity
+     * @param item
+     */
+    private void spawnFallingBlock(Location impactLoc, Location loc, double entityVelocity, MaterialHolder item)
+    {
+    	Entity entity = impactLoc.getWorld().spawnFallingBlock(loc, item.getId(), (byte) item.getData());
+    	
+    	//give the blocks some velocity
+    	if (entity != null)
+    	{
+    		//get distance form the center + 1, to avoid division by zero
+    		double dist = impactLoc.distance(loc) + 1;
+    		//calculate veloctiy away from the impact
+    		Vector vect = loc.clone().subtract(impactLoc).toVector().multiply(entityVelocity/dist);
+    		//set the entity velocity
+    		entity.setVelocity(vect);
+    	}
+    }
+    
+    /**
+     * performs the entity placing on the given location
+     * @param impactLoc
+     * @param loc
+     * @param cannonball
+     */
     private void makeBlockPlace(Location impactLoc, Location loc, FlyingProjectile cannonball)
     {
     	Projectile projectile = cannonball.getProjectile();
@@ -289,25 +320,11 @@ public class CreateExplosion {
 					if (placeBlock.equals(Material.MONSTER_EGG))
 					{
 						//else place mob
-						PlaceMob(impactLoc, loc, placeBlock.getData());
+						PlaceMob(impactLoc, loc, projectile.getBlockPlaceVelocity(), placeBlock.getData());
 					}
 					else
 					{
-						//replace block with new block id and data
-						block.setTypeId(placeBlock.getId());
-						if (placeBlock.getData() >= 0);
-							block.setData((byte) placeBlock.getData());
-						if (cannonball.getSnowball().getShooter() instanceof Player)
-						{
-							// fire an event
-							Player player = (Player) cannonball.getSnowball().getShooter();
-							BlockPlaceEvent event = new BlockPlaceEvent(block, block.getState(), block.getRelative(BlockFace.DOWN), null, player, true);
-							if (event.isCancelled())
-							{
-								//place air again
-								block.setTypeId(0);
-							}
-						}
+						spawnFallingBlock(impactLoc, loc, projectile.getBlockPlaceVelocity(), placeBlock);
 					}
 				}
 				

@@ -26,8 +26,6 @@ import at.pavlov.Cannons.utils.CannonsUtil;
 
 public class DesignStorage
 {
-	private FileConfiguration cannonDesignConfig = null;
-	private File cannonDesignFile = null;
 	
 	private List<CannonDesign> cannonDesignList;
 
@@ -128,11 +126,8 @@ public class DesignStorage
 	private void loadDesignYml(CannonDesign cannonDesign, String ymlFile)
 	{
 		// load .yml file
-		if (cannonDesignFile == null)
-		{
-			cannonDesignFile = new File(getPath() + ymlFile);
-		}
-		cannonDesignConfig = YamlConfiguration.loadConfiguration(cannonDesignFile);
+		File cannonDesignFile = new File(getPath() + ymlFile);
+		FileConfiguration cannonDesignConfig = YamlConfiguration.loadConfiguration(cannonDesignFile);
 
 		// load all entries of the config file
 

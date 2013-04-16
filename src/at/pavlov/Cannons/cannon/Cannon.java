@@ -22,31 +22,31 @@ import at.pavlov.Cannons.sign.CannonSign;
 
 public class Cannon
 {
-	// Database id - is 0 until stored in the database. Then it is the id in the
+	// Database id - is -1 until stored in the database. Then it is the id in the
 	// database
-	private int databaseId;
+	private int databaseId = -1;
 	private String designID;
 	private String cannonName;
-	
+
 	// direction the cannon is facing
 	private BlockFace cannonDirection;
 	// the location is describe by the offset of the cannon and the design
 	private Vector offset;
 	// world of the cannon
 	private String world;
-	
+
 	// time the cannon was last time fired
 	private long LastFired;
-	
-	//amount of loaded gunpowder
+
+	// amount of loaded gunpowder
 	private int loadedGunpowder;
-	//the loaded projectile - can be null
+	// the loaded projectile - can be null
 	private Projectile loadedProjectile;
-	
-	//angles
+
+	// angles
 	private double horizontalAngle;
 	private double verticalAngle;
-	
+
 	// player who has build this cannon
 	private String owner;
 	// designID of the cannon, for different types of cannons - not in use
@@ -56,6 +56,7 @@ public class Cannon
 
 	public Cannon(CannonDesign design, String world, Vector cannonOffset, BlockFace cannonDirection, String owner)
 	{
+		
 		this.design = design;
 		this.designID = design.getDesignID();
 		this.world = world;
@@ -63,10 +64,12 @@ public class Cannon
 		this.cannonDirection = cannonDirection;
 		this.owner = owner;
 		this.isValid = true;
+
+		// reset
+		this.loadedGunpowder = 0;
+		this.loadedProjectile = null;
 		
-		//reset
-		loadedGunpowder = 0;
-		loadedProjectile = null;
+		this.databaseId = -1;
 	}
 
 	/**
@@ -81,7 +84,7 @@ public class Cannon
 		ItemStack projectile = null;
 		if (loadedProjectile != null)
 		{
-			loadedProjectile.getLoadingItem().toItemStack(1);	
+			loadedProjectile.getLoadingItem().toItemStack(1);
 		}
 
 		// gunpowder stack
@@ -129,7 +132,7 @@ public class Cannon
 	public MessageEnum loadProjectile(Projectile projectile, Player player)
 	{
 		if (projectile == null) return null;
-		
+
 		MessageEnum returnVal = CheckPermProjectile(projectile, player);
 
 		// check if loading of projectile was successful
@@ -253,8 +256,8 @@ public class Cannon
 
 		// drop charge
 		dropCharge();
-		
-		//return message
+
+		// return message
 		return MessageEnum.CannonDestroyed;
 	}
 
@@ -277,8 +280,8 @@ public class Cannon
 	}
 
 	/**
-	 * return true if this block is a part of the loading interface - default is the barrel
-	 * the barrel
+	 * return true if this block is a part of the loading interface - default is
+	 * the barrel the barrel
 	 * 
 	 * @param block
 	 * @return
@@ -294,7 +297,6 @@ public class Cannon
 		}
 		return false;
 	}
-	
 
 	/**
 	 * return true if this is a right click trigger block
@@ -331,9 +333,10 @@ public class Cannon
 		}
 		return false;
 	}
-	
+
 	/**
 	 * return true if this location where the torch interacts with the cannon
+	 * 
 	 * @param block
 	 * @return
 	 */
@@ -348,9 +351,10 @@ public class Cannon
 		}
 		return false;
 	}
-	
+
 	/**
 	 * return true if this location where the torch interacts with the cannon
+	 * 
 	 * @param block
 	 * @return
 	 */
@@ -365,26 +369,27 @@ public class Cannon
 		}
 		return false;
 	}
-	
+
 	public MessageEnum checkRedstonePermission(String player)
 	{
 		Player playerBukkit = null;
-		if (player != null)
-			playerBukkit = Bukkit.getPlayer(player);
+		if (player != null) playerBukkit = Bukkit.getPlayer(player);
 		return checkRedstonePermission(playerBukkit);
 	}
 
 	/**
 	 * checks if the player has permission to use the cannon with redstone
+	 * 
 	 * @return
 	 */
 	public MessageEnum checkRedstonePermission(Player player)
 	{
-		//the player is null means he is offline -> automatic handling like database check
+		// the player is null means he is offline -> automatic handling like
+		// database check
 		if (player == null) return MessageEnum.CannonCreated;
-		//if the player has the permission to use redstone return 
+		// if the player has the permission to use redstone return
 		if (player.hasPermission(design.getPermissionRedstone())) return MessageEnum.CannonCreated;
-		
+
 		// torch
 		for (Location loc : design.getRedstoneTorches(this))
 		{
@@ -410,13 +415,13 @@ public class Cannon
 		// no redstone wiring found
 		return MessageEnum.CannonCreated;
 	}
-	
+
 	/**
 	 * break all redstone connections to this cannon
 	 */
 	private void removeRedstone()
 	{
-		//torches
+		// torches
 		for (Location loc : design.getRedstoneTorches(this))
 		{
 			Block block = loc.getBlock();
@@ -425,8 +430,8 @@ public class Cannon
 				block.breakNaturally();
 			}
 		}
-		
-		//wires and repeater
+
+		// wires and repeater
 		for (Location loc : design.getRedstoneWireAndRepeater(this))
 		{
 			Block block = loc.getBlock();
@@ -456,8 +461,9 @@ public class Cannon
 		double deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier();
 		double horizontal = Math.sin((horizontalAngle + deviation) * Math.PI / 180);
 
-		deviation = r.nextGaussian() * design.getSpreadOfCannon()* loadedProjectile.getSpreadMultiplier();
-		double vertical = Math.sin((verticalAngle + deviation) * Math.PI / 180);
+		deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier();
+		double vertical = Math.sin((design.getDefaultVerticalAngle() + verticalAngle + deviation) * Math.PI / 180);
+		
 
 		if (cannonDirection.equals(BlockFace.WEST))
 		{
@@ -481,16 +487,17 @@ public class Cannon
 
 		return vect.multiply(multi);
 	}
-	
+
 	/**
-	 * returns the speed of the cannonball depending on the cannon, projectile, loaded gunpowder
-	 * the dependency on the gunpowder is (1-2^(-4*loaded/max))
+	 * returns the speed of the cannonball depending on the cannon, projectile,
+	 * loaded gunpowder the dependency on the gunpowder is (1-2^(-4*loaded/max))
+	 * 
 	 * @return
 	 */
 	public double getCannonballVelocity()
 	{
 		if (loadedProjectile == null || design == null) return 0.0;
-		return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1-Math.pow(2, -4*loadedGunpowder / design.getMaxLoadableGunpowder()));
+		return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowder()));
 	}
 
 	/**
@@ -564,10 +571,8 @@ public class Cannon
 				return owner;
 			case 2 :
 				// loaded Gunpowder/Projectile
-				if (loadedProjectile != null)
-					return "p: " + loadedGunpowder + " c: " + loadedProjectile.toString();
-				else
-					return "p: " + loadedGunpowder + " c: " + "0:0";
+				if (loadedProjectile != null) return "p: " + loadedGunpowder + " c: " + loadedProjectile.toString();
+				else return "p: " + loadedGunpowder + " c: " + "0:0";
 			case 3 :
 				// angles
 				return horizontalAngle + "/" + verticalAngle;

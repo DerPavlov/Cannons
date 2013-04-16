@@ -26,8 +26,9 @@ explosion:
 placeBlock:
   radius: 3
   amount: 0
+  velocity: 0.5
   material:
-    - 383:20
+    - 383:0
 loadPermission:
   - cannons.projectile.cobblestone
 

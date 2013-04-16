@@ -1,4 +1,4 @@
-Error:
+﻿Error:
   BarrelTooHot: 'RED The barrel is too hot and must cool down.'
   NoProjectile: 'RED No projectile loaded. Load something!'
   NoGunpowder: 'RED No gunpowder. Please load the barrel with gunpowder.'
