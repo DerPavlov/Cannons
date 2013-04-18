@@ -15,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -229,10 +230,7 @@ public class CreateExplosion {
      * @param data
      */
     private void PlaceMob(Location impactLoc, Location loc, double entityVelocity, int data)
-    {
-    	//set spawnpoint to the middle
-    	loc.add(0.5, 0, 0.5);
-    	
+    {    	
     	World world = impactLoc.getWorld();
      	Random r = new Random();
      	
@@ -277,7 +275,7 @@ public class CreateExplosion {
      */
     private void spawnFallingBlock(Location impactLoc, Location loc, double entityVelocity, MaterialHolder item)
     {
-    	Entity entity = impactLoc.getWorld().spawnFallingBlock(loc, item.getId(), (byte) item.getData());
+    	FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(loc, item.getId(), (byte) item.getData());
     	
     	//give the blocks some velocity
     	if (entity != null)
@@ -288,6 +286,12 @@ public class CreateExplosion {
     		Vector vect = loc.clone().subtract(impactLoc).toVector().multiply(entityVelocity/dist);
     		//set the entity velocity
     		entity.setVelocity(vect);
+    		//set some other properties
+    		entity.setDropItem(false);
+    	}
+    	else
+    	{
+    		plugin.logSevere("Item id:" + item.getId() + " data:" + item.getData() + " can't be spawned as falling block.");
     	}
     }
     
@@ -301,10 +305,7 @@ public class CreateExplosion {
     {
     	Projectile projectile = cannonball.getProjectile();
 
-
-    	
-		Block block = loc.getBlock();
-		if (canReplaceBlock(block))
+		if (canPlaceBlock(loc.getBlock()))
 		{
 			if (checkLineOfSight(impactLoc, loc) == 0)
 			{
@@ -326,29 +327,32 @@ public class CreateExplosion {
 					{
 						spawnFallingBlock(impactLoc, loc, projectile.getBlockPlaceVelocity(), placeBlock);
 					}
-				}
-				
-				
+				}			
 			}
-	
 		}
     }
     
-	//####################################  spreadBlocks ##############################
+	/**
+	 * performs the block spawning for the given projectile
+	 * @param impactLoc
+	 * @param cannonball
+	 */
     private void spreadBlocks(Location impactLoc, FlyingProjectile cannonball)
     {
     	Projectile projectile = cannonball.getProjectile();
     	
     	if (projectile.doesBlockPlace() == true)
     	{
-    		double spread = projectile.getBlockPlaceRadius();
-    		int maxPlacement = projectile.getBlockPlaceAmount();
-    		
     		Random r = new Random();
     		Location loc;
     		
+    		double spread = projectile.getBlockPlaceRadius();
+    		//add some randomness to the amount of spawned blocks
+    		int maxPlacement = (int) (projectile.getBlockPlaceAmount() * (1+r.nextGaussian()));
+    		
+    		
     		//iterate blocks around to get a good place
-    		int i = 0;
+    		int placedBlocks = 0;
 			int iterations1 = 0;
     		do 
     		{
@@ -359,44 +363,23 @@ public class CreateExplosion {
     			loc.setX(loc.getX() + r.nextGaussian()*spread/2);
     			loc.setZ(loc.getZ() + r.nextGaussian()*spread/2);
     			
-    			//go up or down until it finds AIR and below no AIR
-    			int iterations2 = 0;
-    			Block block = loc.getBlock();
-    			boolean finished = false;
-    			do 
+    			//check a entity can spawn on this block
+    			if (canPlaceBlock(loc.getBlock()))
     			{
-    				iterations2 ++;
-    				Block blockDown = block.getRelative(BlockFace.DOWN);
-    				//is the actual block is not air, fire, liquid means it is solid - can't replace it
-    				if (!canReplaceBlock(block))
-    				{
-    					//go up
-    					block = block.getRelative(BlockFace.UP);
-    				}
-    				//if the block below is air, fire or liquid, go down
-    				else if (canReplaceBlock(blockDown))
-    				{
-    					//go down
-    					block = blockDown;
-    				}
-    				else 
-    				{
-    					//block found
-    					finished = true;
-    				}
-    			} while (finished == false && iterations2 <= spread);
-    			//no problem so far
-    			if (finished == true)
-    			{
-    				i++;
+    				placedBlocks++;
     				//place the block
-    				makeBlockPlace(impactLoc, block.getLocation(), cannonball);
+    				makeBlockPlace(impactLoc, loc, cannonball);
     			}
-    		} while (iterations1 < 2*maxPlacement && i < maxPlacement);
+    		} while (iterations1 < maxPlacement && placedBlocks < maxPlacement);
     	}  	
     }
     
-    private boolean canReplaceBlock(Block block)
+    /**
+     * returns true if an entity can be place on this block
+     * @param block
+     * @return
+     */
+    private boolean canPlaceBlock(Block block)
     {
     	return block.getType() == Material.AIR || block.getType() == Material.FIRE || block.isLiquid();
     }

@@ -63,6 +63,7 @@ public class DesignStorage
 
 		for (DesignFileName designFile : designFileList)
 		{
+			plugin.logDebug("loading cannon " + designFile.getYmlString());
 			CannonDesign cannonDesign = new CannonDesign();
 			//load .yml
 			loadDesignYml(cannonDesign, designFile.getYmlString());

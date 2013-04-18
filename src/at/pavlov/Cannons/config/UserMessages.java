@@ -81,6 +81,13 @@ public class UserMessages {
 		String entry = customLanguage.getString(key);
 		String replace = null;
 		
+		if (entry == null)
+		{
+			entry = "missing string: " + key;
+			plugin.logSevere("Missing string " + key + " in localization file: ");
+		}
+		
+		
 		//replace red color
 		replace = "&4";
 		entry = entry.replace("ChatColor.RED ", replace);

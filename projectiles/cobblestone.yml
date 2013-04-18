@@ -24,8 +24,8 @@ explosion:
     - instant_damage
     - slowness
 placeBlock:
-  radius: 3
-  amount: 0
+  radius: 4
+  amount: 5
   velocity: 0.5
   material:
     - 383:0

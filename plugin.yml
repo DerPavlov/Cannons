@@ -1,6 +1,6 @@
-﻿name: Cannons
+name: Cannons
 main: at.pavlov.Cannons.Cannons
-version: 2.0.0 A1
+version: 2.0.0 A2
 depend: [WorldEdit]
 author: DerPavlov
 description: >

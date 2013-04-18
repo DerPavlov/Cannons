@@ -87,7 +87,7 @@ public class ProjectileStorage
 			//load .yml
 			Projectile projectile = loadYml(file);
 
-			plugin.logDebug("projectile " + file + " item " + projectile.getLoadingItem().toString());
+			plugin.logDebug("load projectile " + file + " item " + projectile.getLoadingItem().toString());
 			// add to the list if valid
 			if (projectile != null)
 				projectileList.add(projectile);
