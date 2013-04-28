@@ -53,6 +53,12 @@ public class Cannon
 	private boolean isValid;
 
 	CannonDesign design;
+	
+	
+	// not saved in the database
+	// redstone handling event. Last player that pressed the firing button is saved in this list for the next redstone event
+	private String firingButtonActivator;
+	
 
 	public Cannon(CannonDesign design, String world, Vector cannonOffset, BlockFace cannonDirection, String owner)
 	{
@@ -824,5 +830,15 @@ public class Cannon
 	public void setLoadedProjectile(Projectile loadedProjectile)
 	{
 		this.loadedProjectile = loadedProjectile;
+	}
+
+	public String getFiringButtonActivator()
+	{
+		return firingButtonActivator;
+	}
+
+	public void setFiringButtonActivator(String firingButtonActivator)
+	{
+		this.firingButtonActivator = firingButtonActivator;
 	}
 }

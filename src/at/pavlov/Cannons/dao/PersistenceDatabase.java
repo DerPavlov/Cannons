@@ -94,13 +94,11 @@ public class PersistenceDatabase
 		// save all cannon to database
 		for (Cannon cannon : cannonList)
 		{
-			try
+			boolean noError = saveCannon(cannon);
+			if (noError == false)
 			{
-				saveCannon(cannon);
-			}
-			catch (Exception e)
-			{
-				plugin.logDebug("can't save to database. " + e);
+				//if a error occurs while save the cannon, stop it
+				return;
 			}
 		}
 	}
@@ -110,60 +108,71 @@ public class PersistenceDatabase
 	 * 
 	 * @param cannon
 	 */
-	private void saveCannon(Cannon cannon)
+	public boolean saveCannon(Cannon cannon)
 	{
-		// search if the is cannon already stored in the database
-		CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.getDatabaseId()).findUnique();
-		plugin.logDebug("database id " + cannon.getDatabaseId());
-		
-		if (bean == null)
+		try
 		{
-			plugin.logDebug("new bean");
-			// create a new bean that is managed by bukkit
-			bean = plugin.getDatabase().createEntityBean(CannonBean.class);
-			cannon.setDatabaseId(bean.getId());
-		}
+			// search if the is cannon already stored in the database
+			CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.getDatabaseId()).findUnique();
+			
+			if (bean == null)
+			{
+				plugin.logDebug("creating new database entry");
+				// create a new bean that is managed by bukkit
+				bean = plugin.getDatabase().createEntityBean(CannonBean.class);
+				cannon.setDatabaseId(bean.getId());
+			}
+			else
+			{
+				plugin.logDebug("saving cannons in database as id " + cannon.getDatabaseId());
+			}
 
-		// fill the bean with values to store
-		// since bukkit manages the bean, we do not need to set
-		// the ID property
-		bean.setOwner(cannon.getOwner());
-		bean.setWorld(cannon.getWorld());
-		// save offset
-		bean.setLocX(cannon.getOffset().getBlockX());
-		bean.setLocY(cannon.getOffset().getBlockY());
-		bean.setLocZ(cannon.getOffset().getBlockZ());
-		// cannon direction
-		bean.setCannonDirection(cannon.getCannonDirection().toString());
-		// name
-		bean.setName(cannon.getCannonName());
-		// amount of gunpowder
-		bean.setGunpowder(cannon.getLoadedGunpowder());
-		
-		// load projectile
-		// if no projectile is found, set it to air
-		Projectile projectile = cannon.getLoadedProjectile();
-		if (projectile != null)
+			// fill the bean with values to store
+			// since bukkit manages the bean, we do not need to set
+			// the ID property
+			bean.setOwner(cannon.getOwner());
+			bean.setWorld(cannon.getWorld());
+			// save offset
+			bean.setLocX(cannon.getOffset().getBlockX());
+			bean.setLocY(cannon.getOffset().getBlockY());
+			bean.setLocZ(cannon.getOffset().getBlockZ());
+			// cannon direction
+			bean.setCannonDirection(cannon.getCannonDirection().toString());
+			// name
+			bean.setName(cannon.getCannonName());
+			// amount of gunpowder
+			bean.setGunpowder(cannon.getLoadedGunpowder());
+			
+			// load projectile
+			// if no projectile is found, set it to air
+			Projectile projectile = cannon.getLoadedProjectile();
+			if (projectile != null)
+			{
+				bean.setProjectileID(projectile.getLoadingItem().getId());
+				bean.setProjectileData(projectile.getLoadingItem().getData());	
+			}
+			else
+			{
+				bean.setProjectileID(0);
+				bean.setProjectileData(0);	
+			}
+			// angles
+			bean.setHorizontalAngle(cannon.getHorizontalAngle());
+			bean.setVerticalAngle(cannon.getVerticalAngle());
+			// id
+			bean.setDesignId(cannon.getDesignID());
+			bean.setValid(cannon.isValid());
+
+			// store the bean
+			plugin.getDatabase().save(bean);
+			cannon.setDatabaseId(bean.getId());	
+			return true;
+		}
+		catch (Exception e)
 		{
-			bean.setProjectileID(projectile.getLoadingItem().getId());
-			bean.setProjectileData(projectile.getLoadingItem().getData());	
+			plugin.logDebug("can't save to database. " + e);
+			return false;
 		}
-		else
-		{
-			bean.setProjectileID(0);
-			bean.setProjectileData(0);	
-		}
-		// angles
-		bean.setHorizontalAngle(cannon.getHorizontalAngle());
-		bean.setVerticalAngle(cannon.getVerticalAngle());
-		// id
-		bean.setDesignId(cannon.getDesignID());
-		bean.setValid(cannon.isValid());
-
-		// store the bean
-		plugin.getDatabase().save(bean);
-		cannon.setDatabaseId(bean.getId());
-
 	}
 
 	/**

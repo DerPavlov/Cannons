@@ -110,11 +110,14 @@ public class Projectile {
 	 */
 	public boolean hasPermission(Player player)
 	{
+		if (player == null) return true;
+		
 		for (String perm : permissionLoad)
 		{
 			if(!player.hasPermission(perm))
 			{
 				//missing permission
+				System.out.println("perm " + perm);
 				return false;
 			}
 		}

@@ -1,7 +1,7 @@
 name: Cannons
 main: at.pavlov.Cannons.Cannons
-version: 2.0.0 A2
-depend: [WorldEdit]
+version: 2.0.0 A3
+softdepend: [WorldEdit]
 author: DerPavlov
 description: >
              A small plugin to fire cannons which are build out of blocks.

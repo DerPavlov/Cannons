@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -41,6 +44,7 @@ public class Cannons extends JavaPlugin
 {
 	PluginManager pm;
 	private final Logger logger = Logger.getLogger("Minecraft");
+	private ConsoleCommandSender console;
 
 	private Config config;
 	private DesignStorage designStorage;
@@ -86,10 +90,7 @@ public class Cannons extends JavaPlugin
 		this.playerListener = new PlayerListener(this);
 		this.entityListener = new EntityListener(this);
 		this.signListener = new SignListener(this);	
-		this.commands = new Commands(this);
-		
-
-
+		this.commands = new Commands(this);		
 	}
 
 	public void onDisable()
@@ -105,9 +106,24 @@ public class Cannons extends JavaPlugin
 
 	public void onEnable()
 	{
+		//load some global variables
+		pm = getServer().getPluginManager();
+		console = Bukkit.getServer().getConsoleSender();
+		
+		//inform the user if worldedit it missing
+		if (!checkWorldEdit())
+		{
+			//no worldEdit has been loaded. Disable plugin
+			console.sendMessage(ChatColor.RED + "[Cannons] Please install WorldEdit, else Cannons can't load.");
+			console.sendMessage(ChatColor.RED + "[Cannons] Plugin is now disabled.");
+			
+			pm.disablePlugin(this);
+			return;
+		}
+		
 		try
 		{
-			pm = getServer().getPluginManager();
+			
 			pm.registerEvents(playerListener, this);
 			pm.registerEvents(entityListener, this);
 			pm.registerEvents(signListener, this);
@@ -231,7 +247,7 @@ public class Cannons extends JavaPlugin
 
 	public void disablePlugin()
 	{
-		this.disablePlugin();
+		pm.disablePlugin(this);
 	}
 
 	private String getLogPrefix()
@@ -266,6 +282,22 @@ public class Cannons extends JavaPlugin
 	{
 		return this.getDescription();
 	}
+	
+	/**
+	 * checks if worldEdit is running
+	 * @return
+	 */
+	private boolean checkWorldEdit()
+	{
+		Plugin plug = pm.getPlugin("WorldEdit");
+		// CreeperHeal may not be loaded
+		if (plug == null)
+		{
+			return false;
+		}
+		return true;
+	}
+
 
 	/**
 	 * returns the creeperheal handle

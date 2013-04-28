@@ -142,8 +142,10 @@ public class CannonManager
 		if (cannon.getCannonName() ==  null || cannon.getCannonName() == "")
 			cannon.setCannonName(newCannonName(cannon));
 		
+		
 		// add cannon to the list
 		cannonList.add(cannon);
+		plugin.getPersistenceDatabase().saveCannon(cannon);
 		plugin.logDebug("added cannon to the list");
 		
 		cannon.updateCannonSigns();
@@ -201,6 +203,18 @@ public class CannonManager
 	 */
 	public Cannon getCannon(Location cannonBlock, String owner)
 	{
+		return getCannon(cannonBlock, owner, false);
+	}
+	
+	/**
+	 * searches for a cannon and creates a new entry if it does not exist
+	 * 
+	 * @param cannonBlock
+	 * @param owner
+	 * @return
+	 */
+	public Cannon getCannon(Location cannonBlock, String owner, boolean silent)
+	{
 		Cannon cannon = getCannonFromStorage(cannonBlock);
 
 		// this block is a part of an existing cannon
@@ -229,7 +243,7 @@ public class CannonManager
 		// else
 		{
 			// no existing cannon in storage -> check if there is a cannon
-			return checkCannon(cannonBlock, owner);
+			return checkCannon(cannonBlock, owner, silent);
 		}
 
 	}
@@ -240,7 +254,7 @@ public class CannonManager
 	 * @param owner
 	 * @return
 	 */
-	public Cannon checkCannon(Location cannonBlock, String owner)
+	public Cannon checkCannon(Location cannonBlock, String owner, boolean silent)
 	{
 		// get world
 		World world = cannonBlock.getWorld();
@@ -283,12 +297,17 @@ public class CannonManager
 							// make a new cannon if there is no sign on the
 							// cannon
 							Cannon cannon = new Cannon(cannonDesign, world.getName(), offset, cannonDirection, owner);
-
+							
+							//can this player can build one more cannon
+							MessageEnum	message = canBuildCannon(cannon, owner);
+							
 							//check the permissions for redstone
-							MessageEnum message = cannon.checkRedstonePermission(owner);
+							if (message == null || message == MessageEnum.CannonCreated)
+								message = cannon.checkRedstonePermission(owner);
 							
 							//send messages
-							userMessages.displayMessage(owner, message, cannon);
+							if (!silent)
+								userMessages.displayMessage(owner, message, cannon);
 							
 							//add cannon to the list if everything was fine and return the cannon
 							if (message != null && message == MessageEnum.CannonCreated)
@@ -381,7 +400,7 @@ public class CannonManager
 		}
 
 		// else check all nodes for the player
-		for (int i = 100; i > 0; i--)
+		for (int i = 100; i >= 0; i--)
 		{
 			if (player.hasPermission("cannons.player.limit." + i)) newBuiltLimit = i;
 		}
@@ -414,17 +433,22 @@ public class CannonManager
 	 * @param player
 	 * @return
 	 */
-	public MessageEnum canBuildCannon(Cannon cannon, Player player)
+	private MessageEnum canBuildCannon(Cannon cannon, String owner)
 	{
 		CannonDesign design = cannon.getCannonDesign();
-
+		
+		//get the player from the server
+		if (owner == null) return null;
+		Player player = Bukkit.getPlayer(owner);
+		if (player == null) return null;
+	
 		// check if player has permission to build
 		if (!player.hasPermission(design.getPermissionBuild()))
 		{
 			return MessageEnum.PermissionErrorBuild;
 		}
 		// player does not have too many guns
-		if (getCannonBuiltLimit(player) > getNumberOfCannons(player.getName()))
+		if (getNumberOfCannons(owner) > getCannonBuiltLimit(player))
 		{
 			return MessageEnum.ErrorCannonBuiltLimit;
 		}

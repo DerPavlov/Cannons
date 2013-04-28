@@ -65,21 +65,7 @@ public class FireCannon {
 	public MessageEnum getPrepareFireMessage(Cannon cannon, Player player)
 	{
 		CannonDesign design = cannon.getCannonDesign();
-		
-		
-		//check for flint and steel
-		if (player!= null)
-		{
-			if ( design.isFlintAndSteelRequired() && player.getItemInHand().getType() != Material.FLINT_AND_STEEL )
-			{
-				return MessageEnum.ErrorNoFlintAndSteel;
-			}
-			//if the player has permission to fire
-			if (!player.hasPermission(design.getPermissionFire()))
-			{
-				return MessageEnum.PermissionErrorFire;
-			}
-		}
+		if (design == null) return null;
 		//check if there is some gunpowder in the barrel
 		if (cannon.getLoadedGunpowder() <= 0)
 		{
@@ -95,6 +81,25 @@ public class FireCannon {
 		{
 			return MessageEnum.ErrorBarrelTooHot;
 		}	
+		if (player!= null)
+		{
+			//if the player has permission to fire
+			if (!player.hasPermission(design.getPermissionFire()))
+			{
+				return MessageEnum.PermissionErrorFire;
+			}
+			//check if the player has the permission for this projectile
+			Projectile projectile = cannon.getLoadedProjectile();
+			if(projectile != null && !projectile.hasPermission(player))
+			{
+				return MessageEnum.PermissionErrorProjectile;
+			}
+			//check for flint and steel
+			if ( design.isFlintAndSteelRequired() && player.getItemInHand().getType() != Material.FLINT_AND_STEEL )
+			{
+				return MessageEnum.ErrorNoFlintAndSteel;
+			}
+		}
 		//everything fine fire the damn cannon
 		return MessageEnum.CannonFire;
 	}
