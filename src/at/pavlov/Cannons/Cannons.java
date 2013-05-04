@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
 import com.nitnelave.CreeperHeal.CreeperHeal;
-import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
+import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
 
 import de.tyranus.minecraft.bukkit.guildawards.GuildAwardsPlugin;
 import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
