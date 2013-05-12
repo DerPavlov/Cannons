@@ -2,13 +2,64 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="884b5d4e-f677-406f-aa6d-5268c475e821" name="Default" comment="">
+      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\README.md" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\designs\classic.schematic" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\designs\classic.yml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\localization\localization.yml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\localization\localization_german.yml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\projectiles\cobblestone.yml" afterPath="" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\resources\config.yml" afterPath="$PROJECT_DIR$/src/config.yml" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\resources\designs\classic.schematic" afterPath="$PROJECT_DIR$/src/main/resources/designs/classic.schematic" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\resources\designs\classic.yml" afterPath="$PROJECT_DIR$/src/main/resources/designs/classic.yml" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\resources\localization\localization.yml" afterPath="$PROJECT_DIR$/src/main/resources/localization/localization.yml" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\resources\localization\localization_german.yml" afterPath="$PROJECT_DIR$/src/main/resources/localization/localization_german.yml" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\resources\plugin.yml" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\resources\projectiles\cobblestone.yml" afterPath="$PROJECT_DIR$/src/main/resources/projectiles/cobblestone.yml" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\Cannons.iml" afterPath="$PROJECT_DIR$/src/Cannons.iml" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\CalcAngle.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/CalcAngle.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\CannonManager.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/CannonManager.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\Cannons.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/Cannons.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\CreateExplosion.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/CreateExplosion.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\FireCannon.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/FireCannon.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\cannon\Cannon.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/cannon/Cannon.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\cannon\CannonBlocks.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/cannon/CannonBlocks.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\cannon\CannonDesign.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/cannon/CannonDesign.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\config\Config.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/config/Config.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\config\DesignStorage.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/config/DesignStorage.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\config\MessageEnum.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/config/MessageEnum.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\config\ProjectileStorage.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/config/ProjectileStorage.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\config\UserMessages.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/config/UserMessages.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\container\DesignFileName.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/container/DesignFileName.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\container\MaterialHolder.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/container/MaterialHolder.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\container\SimpleBlock.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/container/SimpleBlock.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\dao\CannonBean.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/dao/CannonBean.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\dao\MyDatabase.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/dao/MyDatabase.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\dao\PersistenceDatabase.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/dao/PersistenceDatabase.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\inventory\InventoryManagement.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/inventory/InventoryManagement.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\listener\Commands.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/listener/Commands.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\listener\EntityListener.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/listener/EntityListener.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\listener\PlayerListener.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/listener/PlayerListener.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\listener\SignListener.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/listener/SignListener.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\mcstats\Metrics.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/mcstats/Metrics.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\projectile\FlyingProjectile.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/projectile/FlyingProjectile.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\projectile\Projectile.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/projectile/Projectile.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\projectile\ProjectileProperties.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/projectile/ProjectileProperties.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\sign\CannonSign.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/sign/CannonSign.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\utils\CannonsUtil.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/utils/CannonsUtil.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\utils\DelayedFireTask.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/utils/DelayedFireTask.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\utils\DesignComparator.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/utils/DesignComparator.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\at\pavlov\Cannons\utils\FireTaskWrapper.java" afterPath="$PROJECT_DIR$/src/at/pavlov/Cannons/utils/FireTaskWrapper.java" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\config.yml" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" />
+      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\main\src\plugin.yml" afterPath="$PROJECT_DIR$/src/plugin.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CannonsIntellIj.iml" afterPath="$PROJECT_DIR$/CannonsIntellIj.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CannonsIntellIj.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368363498169" ignored="false" />
     <file path="/MaterialHolder.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368353293498" ignored="false" />
-    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368363553363" ignored="false" />
+    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368363558202" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,26 +123,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
+      <file leaf-file-name="MaterialHolder.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/container/MaterialHolder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="52" selection-start="589" selection-end="599" vertical-scroll-proportion="0.03119266">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MaterialHolder.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/container/MaterialHolder.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="105" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
+            <state line="13" column="105" selection-start="297" selection-end="297" vertical-scroll-proportion="0.4346591">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="Cannons.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/Cannons.java">
+        <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/Cannons.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="51" column="119" selection-start="1848" selection-end="1848" vertical-scroll-proportion="0.0">
               <folding />
@@ -114,8 +156,14 @@
     </option>
     <option name="SYNC_SETTING" value="DONT" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
   </component>
   <component name="GitLogSettings">
+    <option name="myStructureFilterPaths" />
     <option name="myDateState">
       <MyDateState />
     </option>
@@ -133,6 +181,8 @@
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
+        <option name="downloadDocsAutomatically" value="true" />
+        <option name="downloadSourcesAutomatically" value="true" />
         <option name="importAutomatically" value="true" />
       </MavenImportingSettings>
     </option>
@@ -185,6 +235,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -195,10 +247,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="External Libraries" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -225,16 +273,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="CannonsIntellIj" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -249,7 +287,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -263,7 +301,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -273,16 +311,14 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Global Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="options.lastSelected" value="reference.settings.project.maven.importing" />
+    <property name="options.lastSelected" value="vcs.Git" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -298,6 +334,7 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj" />
+      <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src" />
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj\main" />
     </key>
   </component>
@@ -486,14 +523,18 @@
       <created>1368363516224</created>
       <updated>1368363516224</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Cannons 2.0">
+      <created>1368363565452</created>
+      <updated>1368363565452</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32820514" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -503,19 +544,19 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32820514" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34066767" sideWeight="0.6717949" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25037935" sideWeight="0.6717949" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -628,14 +669,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/container/MaterialHolder.java">
+    <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/container/MaterialHolder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="105" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/Cannons.java">
+    <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/Cannons.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="51" column="119" selection-start="1848" selection-end="1848" vertical-scroll-proportion="0.0">
           <folding />
@@ -649,14 +690,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/container/MaterialHolder.java">
+    <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/container/MaterialHolder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="105" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/Cannons.java">
+    <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/Cannons.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="51" column="119" selection-start="1848" selection-end="1848" vertical-scroll-proportion="0.0">
           <folding />
@@ -670,14 +711,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/container/MaterialHolder.java">
+    <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/container/MaterialHolder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="105" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/Cannons.java">
+    <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/Cannons.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="51" column="119" selection-start="1848" selection-end="1848" vertical-scroll-proportion="0.0">
           <folding />
@@ -687,33 +728,25 @@
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/container/MaterialHolder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="105" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/.m2/settings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="53" selection-start="290" selection-end="290" vertical-scroll-proportion="0.15205725" />
+        <state line="5" column="53" selection-start="290" selection-end="290" vertical-scroll-proportion="0.15205725">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/profiles.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="40" selection-start="404" selection-end="404" vertical-scroll-proportion="0.3041145" />
+        <state line="10" column="40" selection-start="404" selection-end="404" vertical-scroll-proportion="0.3041145">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/src/at/pavlov/Cannons/Cannons.java">
+    <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/Cannons.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="51" column="119" selection-start="1848" selection-end="1848" vertical-scroll-proportion="0.0">
           <folding />
@@ -722,7 +755,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="52" selection-start="589" selection-end="599" vertical-scroll-proportion="0.03119266">
+        <state line="14" column="52" selection-start="589" selection-end="599" vertical-scroll-proportion="0.048295453">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/at/pavlov/Cannons/container/MaterialHolder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="105" selection-start="297" selection-end="297" vertical-scroll-proportion="0.4346591">
           <folding />
         </state>
       </provider>
