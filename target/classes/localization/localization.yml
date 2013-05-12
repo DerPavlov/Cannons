@@ -1,0 +1,37 @@
+Error:
+  BarrelTooHot: 'RED [Cannons] The barrel is too hot and must cool down.'
+  NoProjectile: 'RED [Cannons] No projectile loaded. Load something!'
+  NoGunpowder: 'RED [Cannons] No gunpowder. Please load the barrel with gunpowder.'
+  NoFlintAndSteel: 'RED [Cannons] You need flint and steel to fire.'
+  MaximumGunpowderLoaded: 'YELLOW [Cannons] Maximum gunpowder of GOLD GUNPOWDERkg YELLOW already loaded. More will destroyed the barrel.'
+  ProjectileAlreadyLoaded: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW and GOLD GUNPOWDER YELLOW gunpowder already loaded. Fire the damn gun before you blow yourself up.'
+  CannonBuiltLimit: 'RED [Cannons] You cant build more than GOLD CANNONS YELLOW guns'
+  NotTheOwner: 'RED [Cannons] This cannon is locked and can only used by its owner'
+Aiming:
+  EnableAimingMode: 'GREEN [Cannons] Entering aiming mode'
+  DisableAimingMode: 'RED  [Cannons] Leaving aiming mode'
+  SettingCombinedAngle: 'YELLOW [Cannons] New angle GOLD HDEGREE degree YELLOW horizontal and GOLD VDEGREE degree YELLOW vertical'
+  SettingVerticalAngleUp: 'YELLOW [Cannons] Setting vertical angle to GOLD VDEGREE degree'
+  SettingVerticalAngleDown: 'YELLOW [Cannons] Setting vertical angle to GOLD VDEGREE degree'
+  SettingHorizontalAngleRight: 'YELLOW [Cannons] Aiming GOLD HDEGREE degree YELLOW to the GOLD right'
+  SettingHorizontalAngleLeft: 'YELLOW [Cannons] Aiming GOLD HDEGREE degree YELLOW to the GOLD left'
+Load:  
+  Projectile: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW has been loaded. Fire the gun if ready.'
+  Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW of Gunpowder loaded.'
+Cannon:
+  Fire: 'YELLOW [Cannons] FIRE!'
+  Created: 'GREEN [Cannons] You created a cannon'
+  Destroyed: 'RED [Cannons] One of your cannons has been destroyed'
+  Reseted: 'GREEN [Cannons] All your cannons have been deleted from the database'
+Permission:
+  ErrorRedstone: 'RED [Cannons] You are not allowed to control cannons with redstone.'
+  ErrorBuild: 'RED [Cannons] You have no permission to build a cannon.'
+  ErrorFire: 'RED [Cannons] You have no idea how to fire this cannon.'
+  ErrorLoad: 'RED [Cannons] No permission to load this gun.'
+  ErrorAdjust: 'RED [Cannons] You have no idea how to adjust this cannon.'
+  ErrorProjectile: 'RED [Cannons] No permission for this projectile.'
+Help:
+  Text: 'NEWLINE RED Cannons plugin NEWLINE RED /cannons build GREEN - How to build a cannon NEWLINE RED /cannons fire GREEN - How to load and fire a cannon NEWLINE RED /cannons adjust GREEN - A small guide aim with a cannon'
+  Build: 'NEWLINE RED How to build a cannon: NEWLINE GREEN To make the barrel place 3 black wool blocks in x or z. NEWLINE GREEN Place a button on each end of the barrel NEWLINE GREEN Finish it by placing a torch on the first block of the barrel. NEWLINE GREEN To check if the cannon works right click the torch and you NEWLINE GREEN will get a message.'
+  Fire: 'NEWLINE RED How to load and fire: NEWLINE GREEN 1) Load the barrel with gunpowder by right clicking a few times with it. NEWLINE GREEN 2) Right click with a projectile block (e.g. cobblestone). NEWLINE GREEN 3) When you have done everthing right right click the torch.'
+  Adjust: 'NEWLINE RED You missed the target? Learn now how to aim: NEWLINE GREEN Right clicking with empty hands will increase the angle. NEWLINE GREEN Shift right click will decrease the angle. NEWLINE GREEN Clicking on the top of the barrel will change the vertical angle.NEWLINE GREEN Clicking on the side will change the horizontal angle.'
