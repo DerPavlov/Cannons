@@ -14,9 +14,10 @@
 
     <!-- Source code -->
     <scm>
-        <developerConnection>scm:git:git@github.com:DerPavlov/Cannons.git</developerConnection>
-        <connection>scm:git:git@github.com:DerPavlov/Cannons.git</connection>
+        <developerConnection>scm:git:git//github.com/DerPavlov/Cannons.git</developerConnection>
+        <connection>cm:git:git@github.com:DerPavlov/Cannons.git</connection>
         <url>https://github.com/DerPavlov/Cannons.git</url>
+        <tag>master</tag>
     </scm>
 
 
