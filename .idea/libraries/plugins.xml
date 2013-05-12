@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="plugins">
+    <CLASSES>
+      <root url="jar://C:/Spiele/minecraft/Server/1.4.7/plugins/WorldEdit.jar!/" />
+      <root url="jar://C:/Spiele/minecraft/Server/1.4.7/plugins/ObsidianDestroyer/ObsidianDestroyer.jar!/" />
+      <root url="jar://C:/Spiele/minecraft/Server/plugins/CreeperHeal.jar!/" />
+      <root url="jar://C:/Spiele/minecraft/Server/plugins/guildawards.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://C:/Spiele/minecraft/Server/plugins/CreeperHeal.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,110 @@
+general:
+  #name of the cannon
+  designName: Classic
+signs:
+  #this cannon needs a sign to operate. Important for moving cannons.
+  isSignRequired: false
+ammunition:
+  #what the gunpowder is called
+  gunpowderName: gunpowder
+  #what item is used as gunpowder
+  gunpowderType: '289:0'
+  #if true, no item is removed from the players inventory
+  ammoInfiniteForPlayer: false
+  #if true, the cannons does not consume ammution after firing with redstone
+  ammoInfiniteForRedstone: false
+  #whether the cannon can reload from a chest
+  autoreloadRedstone: true
+barrelProperties:
+  #maximum gunpowder that can be loaded in the cannon
+  maxLoadableGunpowder: 3
+  #how much faster the loaded projectile will fired for each gunpowder loaded
+  multiplierVelocity: 1.0
+  #the angle of which a fired projectile spreads when fired. Basically the lower this is, the more accurate the cannon is
+  spreadOfCannon: 1.0
+timings:
+  #how long anyone near the cannon without a helmet will be confused when the cannon is fired
+  blastConfusion: 5
+  #the delay in seconds between when someone fires a cannon and when the actual projectileis fired from the cannon
+  fuseBurnTime: 1
+  #the time in seconds before the cannon can be fired again
+  barrelCooldownTime: 3
+angles:
+  #used to adjust in what direction a projectile is fired from a cannon. adjust this if your cannon is firing sideways or at itself
+  defaultHorizonatalFacing: west
+  #the default angle verticle angle which the cannon aims at when built. this is good for mortars and similar upwards firing weapons
+  defaultVerticalAngle: 0.0
+  #min and max horizontal angles determin how far to the left and right the cannon can be aim
+  maxHorizontalAngle: 45.0
+  minHorizontalAngle: -45.0
+  #min and max verticle angles deterimine how far upwards or downwards the cannon can be aimed
+  maxVerticalAngle: 45.0
+  minVerticalAngle: -45.0
+  #each change of the angles will change angle by this amount
+  angleStepSize: 1.0
+  #how fast the cannons can be turned in ticks
+  angleUpdateSpeed: 5.0
+realisticBehaviour:
+  #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
+  isFiringItemRequired: false
+  #the cannon move one block back after firing (not implemented yet)
+  hasRecoil: false
+  #whether you have to load the cannon from the same place the projectile is fired (aka muzzle loading) (not implemented yet)
+  isFrontloader: false
+  #whether the whole cannon can be roated 90 degrees (not implemented yet)
+  isRotatable: false
+  #whether the cannon can be used with fire missions to bombared a certain location (not implemented yet)
+  supportsFireMission: false
+permissions:
+  #all the permissions required for a player to use certain parts of the cannon
+  build: cannon.player.build
+  load: cannons.player.load
+  fire: cannons.player.fire
+  adjust: cannons.player.adjust
+  autoaim: cannons.player.autoaim
+  targetTracking: cannons.player.tracking
+  redstone: cannons.player.redstone
+  autoreload: cannons.player.autoreload
+  #how much better the player can handle the cannon. 
+  #possible values are cannons.player.spreadmultiplier.1 - cannons.player.spreadmultiplier.10 for a multiplier of 0.1 - 1.0
+  spreadMultiplier: cannons.player.spreadmultiplier
+accessRestriction:
+  #whether only the owner of the cannon can use it or not (not implemented yet)
+  ownerOnly: false
+allowedProjectiles:
+  #these are the list of projectiles a cannon can fire. The projectiles are taken from the config files in the projectiles folder.
+  #they do not have to be named after an in-game item and can be named anything.
+  #make sure the name matches the name of the config file of the projectile you want this cannon to be able to fire. the .yml part does not need to be included
+  - cobblestone
+constructionBlocks:
+  #blocks of the cannon shematic which are ignored and not required to build the cannon. Default is sand
+  ignore: '12:0'
+  #the block which the projectle is fired from the cannon, direction can be adjusted using the defaultHorizonatalFacing property. Default is block of snow
+  muzzle: '80:0'
+  #the block used to indicate when a cannon has been fired. default is torch. Makes fancy smoke on this location
+  firingIndicator: '50:5'
+  #the block used to indicate where the player can place chests or signs on the cannon. Default is a blank wall sign
+  chestAndSign: '68:-1'
+  #indicates where redstone torches can be placed for redstone autoload and firing to work. Default is redstone torch
+  redstoneTorch: '76:5'
+  #the block used to indicate where redstone wiring needs to be placed for redstone autoloading and firing to work. Default is redstone dust
+  restoneWireAndRepeater: '93:-1'
+  #options for where a redstone signal needs to lead to in order to activate redstone autoloading and firing
+  redstoneTrigger: 
+    #the block used by the schematic to indicate where the redstone signal needs to lead to. Default is a lever
+    schematic: '69:-1'
+    #the block used in game where the redstone signal needs to lead to. Default is stone button
+    ingame: '77:-1'
+  #the blocks which a player right clicks in order to fire a cannon
+  rightClickTrigger: 
+    #the block used in the cannons schematic which is used to fire the cannon when right clicked by a player. Default is torch
+    schematic: '50:5'
+    #the block used in game to fire the cannon when right clicked by a player. Default is torch
+    ingame: '50:5'
+  #list of blocks in the shematic that will be protected from explosions (e.g. buttons, because they break easily)
+  protectedBlocks:
+    - '50:5'
+    - '69:-1'
+    - '77:-1'
+
+
