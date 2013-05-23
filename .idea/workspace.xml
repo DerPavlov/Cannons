@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="884b5d4e-f677-406f-aa6d-5268c475e821" name="Default" comment="">
+      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\settings.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CannonsIntellIj.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368389713814" ignored="false" />
     <file path="/MaterialHolder.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368392884854" ignored="false" />
-    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369305601986" ignored="false" />
+    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369305982458" ignored="false" />
     <file path="/Config.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368377071854" ignored="false" />
     <file path="/Cannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369304556291" ignored="false" />
     <file path="/fragment.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368387774289" ignored="false" />
@@ -97,15 +99,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserMessages.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="159" column="11" selection-start="4167" selection-end="4167" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Cannon.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -115,13 +108,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InventoryManagement.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="InventoryManagement.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="138" selection-start="1337" selection-end="1337" vertical-scroll-proportion="0.7103064">
+            <state line="55" column="138" selection-start="1337" selection-end="1337" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$USER_HOME$/.m2/settings.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -168,15 +170,6 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/FireCannon.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="254" column="26" selection-start="7412" selection-end="7412" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CannonBlocks.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonBlocks.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="42" column="50" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -559,7 +552,15 @@
       <created>1369305605055</created>
       <updated>1369305605055</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Cannons 2.0">
+      <created>1369305657582</created>
+      <updated>1369305657582</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Cannons 2.0">
+      <created>1369305985831</created>
+      <updated>1369305985831</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -695,20 +696,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/container/MaterialHolder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="33" selection-start="1277" selection-end="1277" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/container/SimpleBlock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="26" selection-start="8" selection-end="26" vertical-scroll-proportion="-0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/Config.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="46" column="28" selection-start="1017" selection-end="1017" vertical-scroll-proportion="0.0">
@@ -804,10 +791,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="138" selection-start="1337" selection-end="1337" vertical-scroll-proportion="0.7103064">
+        <state line="55" column="138" selection-start="1337" selection-end="1337" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.m2/settings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
