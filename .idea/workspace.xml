@@ -2,58 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="884b5d4e-f677-406f-aa6d-5268c475e821" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/Peter.xml" />
-      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\profiles.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\Cannons.iml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\config.yml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\plugin.yml" afterPath="" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\CalcAngle.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CalcAngle.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\CannonManager.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\Cannons.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/Cannons.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\CreateExplosion.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CreateExplosion.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\FireCannon.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/FireCannon.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\cannon\Cannon.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\cannon\CannonBlocks.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonBlocks.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\cannon\CannonDesign.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonDesign.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\config\Config.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/Config.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\config\DesignStorage.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\config\MessageEnum.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\config\ProjectileStorage.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/ProjectileStorage.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\config\UserMessages.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\container\DesignFileName.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/container/DesignFileName.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\container\MaterialHolder.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/container/MaterialHolder.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\container\SimpleBlock.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/container/SimpleBlock.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\dao\CannonBean.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/dao/CannonBean.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\dao\MyDatabase.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/dao/MyDatabase.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\dao\PersistenceDatabase.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/dao/PersistenceDatabase.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\inventory\InventoryManagement.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\listener\Commands.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/Commands.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\listener\EntityListener.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/EntityListener.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\listener\PlayerListener.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/PlayerListener.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\listener\SignListener.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/SignListener.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\mcstats\Metrics.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/mcstats/Metrics.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\projectile\FlyingProjectile.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/projectile/FlyingProjectile.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\projectile\Projectile.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/projectile/Projectile.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\projectile\ProjectileProperties.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/projectile/ProjectileProperties.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\sign\CannonSign.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/sign/CannonSign.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\utils\CannonsUtil.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/utils/CannonsUtil.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\utils\DelayedFireTask.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/utils/DelayedFireTask.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\utils\DesignComparator.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/utils/DesignComparator.java" />
-      <change type="MOVED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\src\at\pavlov\Cannons\utils\FireTaskWrapper.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/utils/FireTaskWrapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CannonsIntellIj.iml" afterPath="$PROJECT_DIR$/CannonsIntellIj.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/designs/classic.yml" afterPath="$PROJECT_DIR$/src/main/resources/designs/classic.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/projectiles/cobblestone.yml" afterPath="$PROJECT_DIR$/src/main/resources/projectiles/cobblestone.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/config.yml" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CannonsIntellIj.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368389713814" ignored="false" />
     <file path="/MaterialHolder.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368392884854" ignored="false" />
-    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369304575291" ignored="false" />
+    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369305601986" ignored="false" />
     <file path="/Config.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368377071854" ignored="false" />
     <file path="/Cannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369304556291" ignored="false" />
     <file path="/fragment.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368387774289" ignored="false" />
@@ -163,7 +118,7 @@
       <file leaf-file-name="InventoryManagement.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="23" selection-start="1051" selection-end="1051" vertical-scroll-proportion="0.28412256">
+            <state line="55" column="138" selection-start="1337" selection-end="1337" vertical-scroll-proportion="0.7103064">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -366,432 +321,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="projectiles" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="localization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="designs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="utils" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sign" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="projectile" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mcstats" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="listener" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inventory" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="container" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CannonsIntellIj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cannon" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -799,7 +328,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
@@ -1022,12 +551,20 @@
       <created>1368375782177</created>
       <updated>1368375782177</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Cannons 2.0">
+      <created>1369305193948</created>
+      <updated>1369305193948</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Cannons 2.0">
+      <created>1369305605055</created>
+      <updated>1369305605055</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1047,7 +584,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.10322108" sideWeight="0.6721311" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17935579" sideWeight="0.6721311" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17935579" sideWeight="0.6721311" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24963397" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1267,7 +804,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="23" selection-start="1051" selection-end="1051" vertical-scroll-proportion="0.28412256">
+        <state line="55" column="138" selection-start="1337" selection-end="1337" vertical-scroll-proportion="0.7103064">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1333,7 +870,6 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -1353,7 +889,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>Maven: com.nitnelave:CreeperHeal:6.3.3</last-edited>
+          <last-edited>Maven: org.bukkit:bukkit:1.5.2-R0.1</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
