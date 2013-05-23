@@ -11,7 +11,7 @@ tools:
   ajust: '0:0'
   #the item used to autoaim a cannon. Default is clock
   autoaim: '347:0'
-  #the item used to fire a cannon. Default is flint and steel. Not every cannon needs a FiringItem. 
+  #the item used to fire a cannon. Default is flint and steel. Not every cannon needs a FiringItem.
   firing: '259:0'
   #item used to rotate a cannon 90 degrees. Not implemented yet
   rotatingItem: '350:0'

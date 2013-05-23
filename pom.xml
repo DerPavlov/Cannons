@@ -2,10 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Project information -->
-    <groupId>at.pavlov.Cannons</groupId>
-    <artifactId>Cannons</artifactId>
-    <name>Cannons</name>
+    <groupId>at.pavlov</groupId>
+    <artifactId>cannons</artifactId>
     <version>2.0</version>
+    <packaging>jar</packaging>
+
+    <name>Cannons</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

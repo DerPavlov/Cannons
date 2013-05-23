@@ -1,7 +1,7 @@
 general:
   #the name of the projectile displayed in game
   projectileName: cannonball
-  #the name of the item to load this projectile
+  #the name of the item to load this cannons.projectile
   itemName: cobblestone
   #the item which is associated with the proectile.
   #items can be assigned to many different projectiles which are used with different cannons
@@ -17,20 +17,20 @@ cannonball:
   velocity: 3
   #how many blocks the projectile will penetrate before it explodes. If it hits something impenetrable (e.g. obsidian) it will explode instantly.
   penetration: 1
-  #whether the projectile destroyes blocks it penetrates. If false it will simple pass through them
+  #whether the .projectile destroys blocks it penetrates. If false it will simple pass through them
   doesPenetrationDamage: true
-  #how many seconds after firing the projectile will detonate if it does not hit anything
+  #how many seconds after firing the cannons.projectile will detonate if it does not hit anything
   timefuse: 0
   #how many pojectiles are fired
   numberOfBullets: 1
-  #the higher this is, the more innacurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from
+  #the higher this is, the more inaccurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from
   spreadMultiplier: 1.0
-  #different properties of the projectile. if you dont want any of these properties then just leave this all blank.
+  #different properties of the projectile. if you don't want any of these properties then just leave this all blank.
   #possible properties are: superbreaker, incendiary, teleport
   properties:
     #this means the cannonball will break through obsidian, water, and lava
     - superbreaker
-    #this propery sets the impact area on fire. range is determined by the explosion power propery
+    #this property sets the impact area on fire. range is determined by the explosion power propery
     - incendiary
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.

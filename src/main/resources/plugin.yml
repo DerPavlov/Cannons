@@ -1,10 +1,10 @@
 name: Cannons
-main: at.pavlov.Cannons.Cannons
+main: at.pavlov.cannons.Cannons
 version: 2.0.0 A3
-softdepend: [WorldEdit,ObsidianDestroyer]
+softdepend: [WorldEdit,ObsidianDestroyer,CreeperHeal]
 author: DerPavlov
-description: >
-             A small plugin to fire cannons which are build out of blocks.
+description: Fire block build cannons and smash your enemies
+
 commands:
   cannons:
     description: Info how to use/build/adjust a cannon and to reload the plugin.
