@@ -2,31 +2,42 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="884b5d4e-f677-406f-aa6d-5268c475e821" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\settings.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="DELETED" beforePath="C:\Users\Peter\workspace\CannonsIntellIj\.idea\artifacts\Cannons.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/Peter.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/Peter.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/projectile/Projectile.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/projectile/Projectile.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/SignListener.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/SignListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/localization/localization.yml" afterPath="$PROJECT_DIR$/src/main/resources/localization/localization.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/localization/localization_german.yml" afterPath="$PROJECT_DIR$/src/main/resources/localization/localization_german.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CannonsIntellIj.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368389713814" ignored="false" />
     <file path="/MaterialHolder.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368392884854" ignored="false" />
-    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369305982458" ignored="false" />
+    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369423173374" ignored="false" />
     <file path="/Config.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368377071854" ignored="false" />
-    <file path="/Cannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369304556291" ignored="false" />
-    <file path="/fragment.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368387774289" ignored="false" />
+    <file path="/Cannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369333847493" ignored="false" />
+    <file path="/fragment.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369310392097" ignored="false" />
     <file path="/CannonsUtil.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368388047434" ignored="false" />
     <file path="/CreateExplosion.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368392364866" ignored="false" />
     <file path="/CalcAngle.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368392655908" ignored="false" />
     <file path="/SimpleBlock.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368393225597" ignored="false" />
     <file path="/plugin.yml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368393716197" ignored="false" />
-    <file path="/DesignStorage.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369304450019" ignored="false" />
+    <file path="/DesignStorage.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369335163723" ignored="false" />
     <file path="/classic.yml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368398644302" ignored="false" />
-    <file path="/localization.yml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368398400411" ignored="false" />
+    <file path="/localization.yml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369332820943" ignored="false" />
     <file path="/FireCannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368532828559" ignored="false" />
-    <file path="/CannonManager.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368533033077" ignored="false" />
+    <file path="/CannonManager.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369334873554" ignored="false" />
     <file path="/ProjectileStorage.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368533503587" ignored="false" />
     <file path="/UserMessages.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368533809839" ignored="false" />
     <file path="/PersistenceDatabase.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369304574661" ignored="false" />
+    <file path="/SignListener.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369332919286" ignored="false" />
+    <file path="/MessageEnum.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369332693635" ignored="false" />
+    <file path="/localization_german.yml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369332792847" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,10 +101,64 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DesignStorage.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="DesignStorage.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="530" column="22" selection-start="20510" selection-end="20510" vertical-scroll-proportion="0.0">
+            <state line="377" column="12" selection-start="16484" selection-end="16484" vertical-scroll-proportion="0.031135531">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CannonManager.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="246" column="34" selection-start="5443" selection-end="5443" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SignListener.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/SignListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="78" column="58" selection-start="2494" selection-end="2494" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CannonSign.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/sign/CannonSign.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="21" column="42" selection-start="289" selection-end="289" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MessageEnum.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="29" selection-start="504" selection-end="515" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="localization_german.yml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/localization/localization_german.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="0" selection-start="761" selection-end="844" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="localization.yml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/localization/localization.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="66" selection-start="857" selection-end="857" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -102,74 +167,25 @@
       <file leaf-file-name="Cannon.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="649" column="4" selection-start="15909" selection-end="15909" vertical-scroll-proportion="0.0">
+            <state line="834" column="8" selection-start="19877" selection-end="19877" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InventoryManagement.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java">
+      <file leaf-file-name="UserMessages.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="138" selection-start="1337" selection-end="1337" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="settings.xml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$USER_HOME$/.m2/settings.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="33" column="24" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PersistenceDatabase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/dao/PersistenceDatabase.java">
+      <file leaf-file-name="Projectile.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/projectile/Projectile.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="98" column="4" selection-start="2514" selection-end="2514" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyDatabase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/dao/MyDatabase.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="403" column="99" selection-start="15696" selection-end="15696" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DesignFileName.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/container/DesignFileName.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="59" selection-start="312" selection-end="312" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Cannons.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/Cannons.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="466" column="23" selection-start="11094" selection-end="11094" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FireCannon.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/FireCannon.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="254" column="26" selection-start="7412" selection-end="7412" vertical-scroll-proportion="0.0">
+            <state line="120" column="41" selection-start="2916" selection-end="2916" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -205,22 +221,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/PlayerListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/SignListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/container/MaterialHolder.java" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/Config.java" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/ProjectileStorage.java" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonDesign.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonBlocks.java" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/dao/MyDatabase.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/FireCannon.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/container/DesignFileName.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/dao/PersistenceDatabase.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java" />
+        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/projectile/Projectile.java" />
+        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/sign/CannonSign.java" />
+        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/localization/localization_german.yml" />
+        <option value="$PROJECT_DIR$/src/main/resources/localization/localization.yml" />
+        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/SignListener.java" />
+        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" />
+        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java" />
       </list>
     </option>
   </component>
@@ -314,6 +330,282 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="projectiles" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="localization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="designs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cannons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cannons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sign" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cannons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="projectile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cannons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="listener" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cannons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CannonsIntellIj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cannons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cannon" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -321,7 +613,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
@@ -332,23 +624,26 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
     <property name="FullScreen" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src\main\resources\designs" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src\main\java" />
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src\main" />
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj" />
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src" />
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj\main" />
-    </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="" />
     </key>
   </component>
   <component name="RunManager">
@@ -388,19 +683,6 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -427,6 +709,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -463,6 +758,12 @@
       </option>
       <envs />
       <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="com.intellij.persistence.run.ConsoleRunConfigurationType" factoryName="Query Language Console">
+      <option name="VM_PARAMETERS" value="" />
+      <option name="USER_CFG_CLASS" />
+      <option name="CONTEXT_PROVIDER" />
       <method />
     </configuration>
     <list size="0" />
@@ -560,12 +861,16 @@
       <created>1369305985831</created>
       <updated>1369305985831</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Cannons 2.0">
+      <created>1369306933016</created>
+      <updated>1369306933016</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -578,19 +883,19 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32764506" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32786885" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.10322108" sideWeight="0.6721311" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17935579" sideWeight="0.6721311" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17935579" sideWeight="0.80655736" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24963397" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32786885" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19344263" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32935154" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3982906" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -696,111 +1001,102 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/projectiles/cobblestone.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/PlayerListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="404" column="26" selection-start="12438" selection-end="12441" vertical-scroll-proportion="-4.483871" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonBlocks.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="50" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.4516129" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/Config.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="28" selection-start="1017" selection-end="1017" vertical-scroll-proportion="0.0">
+        <state line="14" column="13" selection-start="175" selection-end="175" vertical-scroll-proportion="-2.8387096" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/ProjectileStorage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="13" selection-start="592" selection-end="592" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonDesign.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="349" column="33" selection-start="10647" selection-end="10661" vertical-scroll-proportion="-3.516129" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="24" selection-start="806" selection-end="806" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/sign/CannonSign.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="42" selection-start="289" selection-end="289" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/projectile/Projectile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="41" selection-start="2916" selection-end="2916" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="6" selection-start="985" selection-end="985" vertical-scroll-proportion="0.0">
+        <state line="13" column="29" selection-start="504" selection-end="515" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/ProjectileStorage.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/localization/localization_german.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="130" column="25" selection-start="3431" selection-end="3431" vertical-scroll-proportion="0.0">
+        <state line="9" column="0" selection-start="761" selection-end="844" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonDesign.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/localization/localization.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="7" selection-start="266" selection-end="266" vertical-scroll-proportion="0.0">
+        <state line="9" column="66" selection-start="857" selection-end="857" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/SignListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="159" column="11" selection-start="4167" selection-end="4167" vertical-scroll-proportion="0.0">
+        <state line="78" column="58" selection-start="2494" selection-end="2494" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonBlocks.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="50" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.0">
+        <state line="834" column="8" selection-start="19877" selection-end="19877" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="246" column="34" selection-start="5443" selection-end="5443" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="530" column="22" selection-start="20510" selection-end="20510" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/FireCannon.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="254" column="26" selection-start="7412" selection-end="7412" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/Cannons.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="466" column="23" selection-start="11094" selection-end="11094" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/dao/MyDatabase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="403" column="99" selection-start="15696" selection-end="15696" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/container/DesignFileName.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="59" selection-start="312" selection-end="312" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/dao/PersistenceDatabase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="4" selection-start="2514" selection-end="2514" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="649" column="4" selection-start="15909" selection-end="15909" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="138" selection-start="1337" selection-end="1337" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.m2/settings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="377" column="12" selection-start="16484" selection-end="16484" vertical-scroll-proportion="0.031135531">
           <folding />
         </state>
       </provider>
@@ -811,7 +1107,7 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>Cannons</last-edited>
+          <last-edited>CannonsToProject</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

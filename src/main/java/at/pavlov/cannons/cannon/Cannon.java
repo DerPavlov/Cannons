@@ -390,6 +390,25 @@ public class Cannon
 		return false;
 	}
 
+
+    /**
+     * return true if this location where the torch interacts with the cannon
+     *
+     * @param block
+     * @return
+     */
+    public boolean isChestAndSignInterface(Location block)
+    {
+        for (Location loc : design.getChestsAndSigns(this))
+        {
+            if (loc.equals(block))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 	/**
 	 * return true if this is a right click trigger block
 	 * 
@@ -655,6 +674,20 @@ public class Cannon
 		return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowder()));
 	}
 
+    /**
+     * @return true if the cannons has a sign
+     */
+    public boolean hasCannonSign()
+    {
+        // search all possible sign locations
+        for (Location signLoc : design.getChestsAndSigns(this))
+        {
+            if (signLoc.getBlock().getTypeId() == Material.WALL_SIGN.getId())
+                return true;
+        }
+        return false;
+    }
+
 	/**
 	 * updates all signs that are attached to a cannon
 	 */
@@ -692,7 +725,7 @@ public class Cannon
 		else
 		{
 			// Cannon name in the first line
-			sign.setLine(0, "at/pavlov/cannons/cannon");
+			sign.setLine(0, "this cannon is");
 			// Cannon owner in the second
 			sign.setLine(1, "damaged");
 			// loaded Gunpowder/Projectile
@@ -735,45 +768,8 @@ public class Cannon
 		return "missing";
 	}
 
-	/**
-	 * returns false if the name of the cannon and the name on the sign are
-	 * different
-	 * 
-	 * @return
-	 */
-	public boolean isCannonEqualSign()
-	{
-		// update all possible sign locations
-		for (Location signLoc : design.getChestsAndSigns(this))
-		{
-			// if one sign is not equal, the there is a problem
-			if (isCannonEqualThisSign(signLoc.getBlock())) return false;
-		}
 
-		return true;
-	}
 
-	/**
-	 * extracts the cannon name and owner from the sign and comperes to the
-	 * cannon
-	 * 
-	 * @param block
-	 * @return
-	 */
-	private boolean isCannonEqualThisSign(Block block)
-	{
-		if (block.getType() != Material.WALL_SIGN) return true;
-
-		Sign sign = (Sign) block.getState();
-
-		// sign is empty
-		if (sign.getLine(0) == null || sign.getLine(1) == null) return true;
-
-		// sign name and owner are the same
-		if (sign.getLine(0).equals(cannonName) && sign.getLine(1).equals(owner)) return true;
-
-		return false;
-	}
 
 	/**
 	 * returns the name of the cannon written on the sign
@@ -788,7 +784,10 @@ public class Cannon
 		{
 			lineStr = CannonSign.getLineOfThisSign(signLoc.getBlock(), line);
 			// if something is found return it
-			if (lineStr != "") return lineStr;
+			if (lineStr != null && lineStr != "")
+            {
+                return lineStr;
+            }
 		}
 
 		return lineStr;
@@ -825,6 +824,16 @@ public class Cannon
 		if (designID == cannonDesign.getDesignID()) return true;
 		return false;
 	}
+
+    /**
+     *
+     * @param cannon
+     * @return true if both cannons are equal
+     */
+    public boolean equals(Cannon cannon)
+    {
+        return (cannon.getCannonName().equals(this.cannonName) && cannon.getOwner().equals(this.owner)) ? true : false;
+    }
 
 	/**
 	 * get bukkit world

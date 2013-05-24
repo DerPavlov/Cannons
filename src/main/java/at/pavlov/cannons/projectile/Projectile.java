@@ -117,7 +117,6 @@ public class Projectile {
 			if(!player.hasPermission(perm))
 			{
 				//missing permission
-				System.out.println("perm " + perm);
 				return false;
 			}
 		}

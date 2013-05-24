@@ -229,37 +229,69 @@ public class CannonManager
 	 */
 	public Cannon getCannon(Location cannonBlock, String owner, boolean silent)
 	{
-		Cannon cannon = getCannonFromStorage(cannonBlock);
+        //check if there is a cannon at this location
+        Cannon cannon = checkCannon(cannonBlock, owner);
 
-		// this block is a part of an existing cannon
-		if (cannon != null)
-		{
-			plugin.logDebug("found cannon in the storage");
-			// search cannon that is written on the sign
-			// Cannon cannonFromSign =
-			// getCannonFromStorage(cannon.getCannonNameFromSign(design),
-			// cannon.getOwnerFromSign(design));
+        //if there is no cannon, exit
+        if (cannon == null)
+            return null;
 
-			// check if the name matches with the attached sign or if the name
-			// is not valid
-			// if (cannonFromSign == null || cannon.isCannonEqualSign(design) ==
-			// true )
-			{
-				return cannon;
-			}
-			// else
-			// {
-			// different cannon, search the database for the right entry by the
-			// cannon name from the sign
-			// return cannonFromSign;
-			// }
-		}
-		// else
-		{
-			// no existing cannon in storage -> check if there is a cannon
-			return checkCannon(cannonBlock, owner, silent);
-		}
 
+        // search cannon that is written on the sign
+        Cannon cannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
+
+        // if there is a different name on the cannon sign we use that one
+        if (cannonFromSign != null)
+        {
+            plugin.logDebug("use entry from cannon sign");
+            //update the position of the cannon
+            cannonFromSign.setCannonDirection(cannon.getCannonDirection());
+            cannonFromSign.setOffset(cannon.getOffset());
+            //use the updated object from the storage
+            cannon = cannonFromSign;
+        }
+        else
+        {
+            // this cannon has no sign, so look in the database if there is something
+            Cannon storageCannon =  getCannonFromStorage(cannonBlock);
+            if (storageCannon != null)
+            {
+                //try to find something in the storage
+                plugin.logDebug("cannon found in storage");
+                cannon = storageCannon;
+            }
+            //nothing in the storage, so we make a new entry
+            else
+            {
+                //can this player can build one more cannon
+                MessageEnum	message = canBuildCannon(cannon, owner);
+
+                //check the permissions for redstone
+                if (message == null || message == MessageEnum.CannonCreated)
+                    message = cannon.checkRedstonePermission(owner);
+
+                //if a sign is required to operate the cannon, there must be at least one sign
+                if ((message == null || message == MessageEnum.CannonCreated) && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
+                    message = MessageEnum.ErrorMissingSign;
+
+                //send messages
+                if (!silent)
+                    userMessages.displayMessage(owner, message, cannon);
+
+                //add cannon to the list if everything was fine and return the cannon
+                if (message != null && message == MessageEnum.CannonCreated)
+                {
+                    plugin.logDebug("a new cannon was create by " + owner);
+                	createCannon(cannon);
+                }
+                else
+                {
+                    plugin.logDebug("missing permission while creating a cannon: " + userMessages.toString());
+                }
+            }
+        }
+
+        return cannon;
 	}
 
 	/**
@@ -268,7 +300,7 @@ public class CannonManager
 	 * @param owner
 	 * @return
 	 */
-	public Cannon checkCannon(Location cannonBlock, String owner, boolean silent)
+	public Cannon checkCannon(Location cannonBlock, String owner)
 	{
 		// get world
 		World world = cannonBlock.getWorld();
@@ -308,27 +340,8 @@ public class CannonManager
 						// this is a cannon
 						if (isCannon == true)
 						{
-							// make a new cannon if there is no sign on the
 							// cannon
-							Cannon cannon = new Cannon(cannonDesign, world.getName(), offset, cannonDirection, owner);
-							
-							//can this player can build one more cannon
-							MessageEnum	message = canBuildCannon(cannon, owner);
-							
-							//check the permissions for redstone
-							if (message == null || message == MessageEnum.CannonCreated)
-								message = cannon.checkRedstonePermission(owner);
-							
-							//send messages
-							if (!silent)
-								userMessages.displayMessage(owner, message, cannon);
-							
-							//add cannon to the list if everything was fine and return the cannon
-							if (message != null && message == MessageEnum.CannonCreated)
-							{
-								createCannon(cannon);
-								return cannon;
-							}
+							return new Cannon(cannonDesign, world.getName(), offset, cannonDirection, owner);
 						}
 					}
 				}
@@ -424,11 +437,6 @@ public class CannonManager
 				}
 			}
 		}
-		plugin.logDebug("Build limit " + newBuiltLimit); 
-
-
-		plugin.logDebug("Build limit neu" + newBuiltLimit); 
-		
 
 
 		// config implementation

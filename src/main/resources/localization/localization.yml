@@ -7,6 +7,7 @@ Error:
   ProjectileAlreadyLoaded: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW and GOLD GUNPOWDER YELLOW gunpowder already loaded. Fire the damn gun before you blow yourself up.'
   CannonBuiltLimit: 'RED [Cannons] You cant build more than GOLD CANNONS YELLOW guns'
   NotTheOwner: 'RED [Cannons] This cannon is locked and can only used by its owner'
+  MissingSign: 'RED [Cannons] This cannon needs a sign to operate.'
 Aiming:
   EnableAimingMode: 'GREEN [Cannons] Entering aiming mode'
   DisableAimingMode: 'RED  [Cannons] Leaving aiming mode'

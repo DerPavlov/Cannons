@@ -231,23 +231,24 @@ public class DesignStorage
 	private boolean loadDesignSchematic(CannonDesign cannonDesign, String schematicFile)
 	{
 		
-		// load shematic with worldedit
+		// load schematic with worldedit
 		CuboidClipboard cc;
+        File file = new File(getPath() + schematicFile);
 		try
 		{
-			SchematicFormat schematic = SchematicFormat.getFormat(new File(getPath() + schematicFile));
-		
-			cc = schematic.load(new File(getPath() + schematicFile));
+			SchematicFormat schematic = SchematicFormat.getFormat(file);
+		    if (schematic == null) plugin.logSevere("Schematic null " + file.isFile());
+			cc = schematic.load(file);
 		}
 		catch (Exception e)
 		{
-			plugin.logSevere("Error while loading shematic " + e);
+			plugin.logSevere("Error while loading shematic " + getPath() + schematicFile + " :" + e  + " File " + file.exists());
 			return false;
 		}
 		//failed to load schematic
 		if (cc == null) 
 		{
-			plugin.logSevere("Error while loading shematic");
+			plugin.logSevere("Failed to loading shematic");
 			return false;
 		}
 		
@@ -351,14 +352,6 @@ public class DesignStorage
 									maxRotation = findMaximum(x, y, z, maxRotation);
 								}
 							}
-
-
-							// #############  chests and signs
-							else if (block.equalsFuzzy(blockChestAndSign))
-							{
-								// the id does not matter, but the data is important for signs
-								cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN.getId(), block.getData()));
-							}
 							// #############  redstoneTorch
 							else if (block.equalsFuzzy(blockRedstoneTorch))
 								cannonBlocks.getRedstoneTorches().add(new Vector(x, y, z));
@@ -379,6 +372,10 @@ public class DesignStorage
 							else if (block.equalsFuzzy(blockRightClickTrigger))
 							{
 								cannonBlocks.getRightClickTrigger().add(new Vector(x, y, z));
+                                //can be also a sign
+                                if (block.equalsFuzzy(blockChestAndSign))
+                                    // the id does not matter, but the data is important for signs
+                                    cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN.getId(), block.getData()));
 								// firing blocks are also part of the cannon are
 								// part of the cannon
 								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, replaceRightClickTrigger));
@@ -386,6 +383,12 @@ public class DesignStorage
 								if (!isInList(blockProtectedList, block))
 									cannonBlocks.getDestructibleBlocks().add(new Vector(x, y, z));
 							}
+                            // #############  chests and signs
+                            else if (block.equalsFuzzy(blockChestAndSign))
+                            {
+                                // the id does not matter, but the data is important for signs
+                                cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN.getId(), block.getData()));
+                            }
 							// #############  loading Interface is a cannonblock that is non of
 							// the previous blocks
 							else

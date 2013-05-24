@@ -66,8 +66,8 @@ public class SignListener implements Listener
 				event.setLine(1, "Player");
 			}
 
-
-			if (cannon != null)
+            //if there is a cannon and the sign is mounted on the sign interface
+			if (cannon != null && cannon.isChestAndSignInterface(block.getLocation()))
 			{
 				event.setLine(0, cannon.getSignString(0));
 				event.setLine(1, cannon.getSignString(1));

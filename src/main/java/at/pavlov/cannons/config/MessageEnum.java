@@ -11,6 +11,7 @@ public enum MessageEnum
 	ErrorProjectileAlreadyLoaded ("Error.ProjectileAlreadyLoaded"),
 	ErrorCannonBuiltLimit ("Error.CannonBuiltLimit"),
 	ErrorNotTheOwner ("Error.NotTheOwner"),
+    ErrorMissingSign ("Error.MissingSign"),
 	
 	//Aiming
 	SettingCombinedAngle ("Aiming.SettingCombinedAngle"),
@@ -28,7 +29,7 @@ public enum MessageEnum
 	//cannon
 	CannonCreated ("Cannon.Created"),
 	CannonDestroyed ("Cannon.Destroyed"),
-	CannonsReseted ("Cannon.Reseted"),
+    CannonsReseted ("Cannon.Reseted"),
 	CannonFire ("Cannon.Fire"),
 	
 	//Permission
