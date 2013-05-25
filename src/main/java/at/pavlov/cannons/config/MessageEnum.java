@@ -31,6 +31,10 @@ public enum MessageEnum
 	CannonDestroyed ("Cannon.Destroyed"),
     CannonsReseted ("Cannon.Reseted"),
 	CannonFire ("Cannon.Fire"),
+
+    //projectile
+    ProjectileExplosion ("Projectile.Explosion"),
+    ProjectileCanceled ("Projectile.Canceled"),
 	
 	//Permission
 	PermissionErrorRedstone ("Permission.ErrorRedstone"),

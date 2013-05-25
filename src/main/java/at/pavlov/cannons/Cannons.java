@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -478,6 +479,11 @@ public class Cannons extends JavaPlugin
 	{
 		this.userMessages.displayMessage(player, message, cannon);
 	}
+
+    public void displayImpactMessage(Player player, Location impact, boolean canceled)
+    {
+        this.userMessages.displayImpactMessage(player, impact, canceled);
+    }
 	
 	public void createCannon(Cannon cannon)
 	{

@@ -196,7 +196,6 @@ public class DesignStorage
 		cannonDesign.setPermissionRedstone(cannonDesignConfig.getString("permissions.redstone", "cannons.player.redstone"));
 		cannonDesign.setPermissionAutoreload(cannonDesignConfig.getString("permissions.autoreload", "cannons.player.autoreload"));
 		cannonDesign.setPermissionSpreadMultiplier(cannonDesignConfig.getString("permissions.spreadMultiplier", "cannons.player.spreadMultiplier"));
-		cannonDesign.setPermissionBuildLimit(cannonDesignConfig.getString("permissions.buildLimit", "cannons.player.buildLimit"));
 
 		// accessRestriction
 		cannonDesign.setAccessForOwnerOnly(cannonDesignConfig.getBoolean("realisticBehaviour.ownerOnly", false));

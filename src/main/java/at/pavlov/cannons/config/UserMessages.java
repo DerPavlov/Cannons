@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -57,7 +58,7 @@ public class UserMessages {
 	{
 		reloadcustomLanguage(filename);
 		customLanguage.options().copyDefaults(true);
-		savecustomLanguage();
+		saveCustomLanguage();
 		
 		//load all messages
 		for (MessageEnum keyEnum : MessageEnum.values())
@@ -139,7 +140,7 @@ public class UserMessages {
 	}
 
 
-	private void savecustomLanguage()
+	private void saveCustomLanguage()
 	{
 	    if (customLanguage == null || customLanguageFile == null) 
 	    {
@@ -197,6 +198,50 @@ public class UserMessages {
 		//send message to player
 		sendMessage(message, player);
 	}
+
+    public void displayImpactMessage(Player player, Location impact, boolean canceled)
+    {
+        //no player no message
+        if (player == null)
+            return;
+        //no permission no message
+        if (!player.hasPermission("cannons.player.impactMessage"))
+            return;
+
+        Location playerLoc = player.getLocation();
+
+        String message = null;
+        MessageEnum messageEnum = null;
+
+        if (canceled)
+        {
+            //the projectile exploded
+            messageEnum = MessageEnum.ProjectileExplosion;
+
+        }
+        else
+        {
+            //the explosion was canceled
+            messageEnum = MessageEnum.ProjectileCanceled;
+        }
+
+        message = messageMap.get(messageEnum.getString());
+
+        if (message == null)
+        {
+            plugin.logSevere("No " + messageEnum.getString() + " in localization file");
+            return;
+        }
+        //replace tags
+        message = message.replace("IMPACT_X", Integer.toString(impact.getBlockX()));
+        message = message.replace("IMPACT_Y", Integer.toString(impact.getBlockY()));
+        message = message.replace("IMPACT_Z", Integer.toString(impact.getBlockZ()));
+        message = message.replace("IMPACT_DISTANCE", Long.toString(Math.round(impact.distance(playerLoc))));
+        message = message.replace("IMPACT_YDIFF", Integer.toString(impact.getBlockY() - playerLoc.getBlockY()));
+
+        if (message != null)
+            sendMessage(message, player);
+    }
 	
 	/**
 	 * returns the message from the Map
@@ -239,6 +284,8 @@ public class UserMessages {
 		}
 		return message;
 	}
+
+
 	
 	/**
 	 * returns a message from the map

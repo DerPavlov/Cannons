@@ -47,7 +47,6 @@ public class EntityListener implements Listener
 				FlyingProjectile flying = iterator.next();
 				if (event.getEntity().equals(flying.getSnowball()))
 				{
-					//flying.setSnowball((Snowball) event.getEntity());
 					plugin.getExplosion().detonate(flying);
 					iterator.remove();
 				}

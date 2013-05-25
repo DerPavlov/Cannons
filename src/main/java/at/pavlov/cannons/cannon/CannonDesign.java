@@ -65,7 +65,6 @@ public class CannonDesign
 	private String permissionRedstone;
 	private String permissionAutoreload;
 	private String permissionSpreadMultiplier;
-	private String permissionBuildLimit;
 	
 	//accessRestriction
 	private boolean accessForOwnerOnly;
@@ -767,15 +766,4 @@ public class CannonDesign
 	}
 
 
-	public String getPermissionBuildLimit()
-	{
-		return permissionBuildLimit;
-	}
-
-
-	public void setPermissionBuildLimit(String permissionBuildLimit)
-	{
-		this.permissionBuildLimit = permissionBuildLimit;
-	}
-	
 }

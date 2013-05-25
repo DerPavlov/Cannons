@@ -305,7 +305,6 @@ public class CannonManager
 		// get world
 		World world = cannonBlock.getWorld();
 
-		plugin.logDebug("check cannon");
 
 		// check all cannon design if this block is part of the design
 		for (CannonDesign cannonDesign : plugin.getDesignStorage().getCannonDesignList())

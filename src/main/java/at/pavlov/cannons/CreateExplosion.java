@@ -454,6 +454,12 @@ public class CreateExplosion {
     {
     	Projectile projectile = cannonball.getProjectile();
     	Snowball snowball = cannonball.getSnowball();
+
+
+        LivingEntity shooter = snowball.getShooter();
+        Player player = null;
+        if (shooter instanceof Player)
+            player = (Player) shooter;
     	
     	//blocks form the impact to the impactloc
     	Location impactLoc = blockBreaker(cannonball);
@@ -474,36 +480,43 @@ public class CreateExplosion {
 		//explosion event
 		boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
 		boolean blockDamage = projectile.getExplosionDamage();
-	    world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
-		
-		
-		//place blocks around the impact like webs, lava, water
-		spreadBlocks(impactLoc, cannonball);
-		
-		//do potion effects
-		int effectRange = (int) projectile.getPotionRange()/2;
-		entity = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
-		
-		Iterator<Entity> it = entity.iterator();
-		while (it.hasNext())
-		{
-			Entity next = it.next();
-			applyPotionEffect(impactLoc, next, cannonball);
-		}
-		
-		
-		//teleport to impact
-		if (cannonball.getProjectile().hasProperty(ProjectileProperties.TELEPORT) == true)
-		{
-			//teleport shooter to impact
-			LivingEntity shooter = snowball.getShooter();
-			if (shooter != null) shooter.teleport(impactLoc);
-		}
-		
-		//check which entities are affected by the event
-		List<Entity> EntitiesAfterExplosion = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
-		transmittingEntities(EntitiesAfterExplosion, snowball.getShooter());
-		
+	    boolean canceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
+
+        //send a message about the impact
+        plugin.displayImpactMessage(player, impactLoc, canceled);
+
+		if (canceled == true)
+        {
+
+
+            //place blocks around the impact like webs, lava, water
+            spreadBlocks(impactLoc, cannonball);
+
+            //do potion effects
+            int effectRange = (int) projectile.getPotionRange()/2;
+            entity = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
+
+            Iterator<Entity> it = entity.iterator();
+            while (it.hasNext())
+            {
+                Entity next = it.next();
+                applyPotionEffect(impactLoc, next, cannonball);
+            }
+
+
+            //teleport to impact
+            if (cannonball.getProjectile().hasProperty(ProjectileProperties.TELEPORT) == true)
+            {
+                //teleport shooter to impact
+                if (shooter != null) shooter.teleport(impactLoc);
+            }
+
+            //check which entities are affected by the event
+            List<Entity> EntitiesAfterExplosion = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
+            transmittingEntities(EntitiesAfterExplosion, snowball.getShooter());//place blocks around the impact like webs, lava, water
+		    spreadBlocks(impactLoc, cannonball);
+
+        }
     }
     
 	//####################################  transmittingEntities  ##############################
