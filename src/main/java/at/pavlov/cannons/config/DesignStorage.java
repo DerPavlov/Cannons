@@ -236,18 +236,18 @@ public class DesignStorage
 		try
 		{
 			SchematicFormat schematic = SchematicFormat.getFormat(file);
-		    if (schematic == null) plugin.logSevere("Schematic null " + file.isFile());
+		    if (schematic == null) plugin.logSevere("Schematic not loadable ");
 			cc = schematic.load(file);
 		}
 		catch (Exception e)
 		{
-			plugin.logSevere("Error while loading shematic " + getPath() + schematicFile + " :" + e  + " File " + file.exists());
+			plugin.logSevere("Error while loading schematic " + getPath() + schematicFile + " :" + e  + "; does file exist: " + file.exists());
 			return false;
 		}
 		//failed to load schematic
 		if (cc == null) 
 		{
-			plugin.logSevere("Failed to loading shematic");
+			plugin.logSevere("Failed to loading schematic");
 			return false;
 		}
 		

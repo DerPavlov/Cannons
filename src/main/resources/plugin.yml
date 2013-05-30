@@ -1,6 +1,6 @@
 name: Cannons
 main: at.pavlov.cannons.Cannons
-version: 2.0.0 A3
+version: 2.0.1
 softdepend: [WorldEdit,ObsidianDestroyer,CreeperHeal]
 author: DerPavlov
 description: Fire block build cannons and smash your enemies

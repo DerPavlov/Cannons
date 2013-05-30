@@ -406,7 +406,7 @@ public class CannonManager
 	}
 
 	/**
-	 * returns the amout of cannons a player can build
+	 * returns the amount of cannons a player can build
 	 * 
 	 * @param player
 	 * @return

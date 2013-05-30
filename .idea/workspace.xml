@@ -2,23 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="884b5d4e-f677-406f-aa6d-5268c475e821" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonDesign.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonDesign.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/Cannons.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/Cannons.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CreateExplosion.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CreateExplosion.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/EntityListener.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/EntityListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/localization/localization.yml" afterPath="$PROJECT_DIR$/src/main/resources/localization/localization.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/localization/localization_german.yml" afterPath="$PROJECT_DIR$/src/main/resources/localization/localization_german.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/designs/classic.yml" afterPath="$PROJECT_DIR$/src/main/resources/designs/classic.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CannonsIntellIj.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368389713814" ignored="false" />
     <file path="/MaterialHolder.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368392884854" ignored="false" />
-    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369480067090" ignored="false" />
+    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369950891066" ignored="false" />
     <file path="/Config.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368377071854" ignored="false" />
     <file path="/Cannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369333847493" ignored="false" />
     <file path="/fragment.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369310392097" ignored="false" />
@@ -28,10 +22,10 @@
     <file path="/SimpleBlock.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368393225597" ignored="false" />
     <file path="/plugin.yml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368393716197" ignored="false" />
     <file path="/DesignStorage.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369482260613" ignored="false" />
-    <file path="/classic.yml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369482055364" ignored="false" />
+    <file path="/classic.yml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369952040580" ignored="false" />
     <file path="/localization.yml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369485396516" ignored="false" />
     <file path="/FireCannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368532828559" ignored="false" />
-    <file path="/CannonManager.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369334873554" ignored="false" />
+    <file path="/CannonManager.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369952214679" ignored="false" />
     <file path="/ProjectileStorage.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368533503587" ignored="false" />
     <file path="/UserMessages.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369485114686" ignored="false" />
     <file path="/PersistenceDatabase.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369304574661" ignored="false" />
@@ -106,28 +100,17 @@
       <file leaf-file-name="DesignStorage.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="197" column="148" selection-start="7955" selection-end="7955" vertical-scroll-proportion="0.0">
+            <state line="238" column="77" selection-start="10594" selection-end="10594" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CannonManager.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="CannonManager.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="311" column="136" selection-start="7929" selection-end="7929" vertical-scroll-proportion="-7.709677">
+            <state line="472" column="25" selection-start="11429" selection-end="11429" vertical-scroll-proportion="0.5631068">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CannonDesign.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonDesign.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="766" column="0" selection-start="20849" selection-end="20849" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -135,7 +118,7 @@
       <file leaf-file-name="Cannons.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/Cannons.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="474" column="62" selection-start="11281" selection-end="11281" vertical-scroll-proportion="-6.064516">
+            <state line="474" column="45" selection-start="11281" selection-end="11281" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -144,7 +127,7 @@
       <file leaf-file-name="UserMessages.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="210" column="139" selection-start="5429" selection-end="5429" vertical-scroll-proportion="0.0">
+            <state line="210" column="50" selection-start="5429" selection-end="5429" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -153,7 +136,16 @@
       <file leaf-file-name="classic.yml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/designs/classic.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="39" selection-start="3025" selection-end="3025" vertical-scroll-proportion="0.0">
+            <state line="59" column="16" selection-start="2773" selection-end="2773" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plugin.yml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/plugin.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="14" selection-start="60" selection-end="60" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -162,17 +154,19 @@
       <file leaf-file-name="MessageEnum.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="139" selection-start="1148" selection-end="1148" vertical-scroll-proportion="0.0">
+            <state line="31" column="38" selection-start="1148" selection-end="1148" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="localization.yml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="localization.yml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/localization/localization.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="103" selection-start="1933" selection-end="1933" vertical-scroll-proportion="0.47069597">
-              <folding />
+            <state line="25" column="81" selection-start="1933" selection-end="1933" vertical-scroll-proportion="0.0">
+              <folding>
+                <marker date="1369485398401" expanded="true" signature="1934:2169" placeholder="Projectile:" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -180,7 +174,7 @@
       <file leaf-file-name="CreateExplosion.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CreateExplosion.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="501" column="25" selection-start="15227" selection-end="15227" vertical-scroll-proportion="-1.8387097">
+            <state line="501" column="25" selection-start="15227" selection-end="15227" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -190,7 +184,9 @@
         <entry file="file://$PROJECT_DIR$/src/main/resources/localization/localization_german.yml">
           <provider selected="true" editor-type-id="text-editor">
             <state line="27" column="44" selection-start="1996" selection-end="1996" vertical-scroll-proportion="0.0">
-              <folding />
+              <folding>
+                <marker date="1369485373880" expanded="true" signature="1940:2201" placeholder="Projectile:" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -225,22 +221,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/projectile/Projectile.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/sign/CannonSign.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/SignListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/EntityListener.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/designs/classic.yml" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonDesign.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/Cannons.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CreateExplosion.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java" />
-        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java" />
         <option value="$PROJECT_DIR$/src/main/resources/localization/localization_german.yml" />
         <option value="$PROJECT_DIR$/src/main/resources/localization/localization.yml" />
+        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/designs/classic.yml" />
+        <option value="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+        <option value="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" />
       </list>
     </option>
   </component>
@@ -316,6 +312,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -672,7 +669,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -688,26 +684,26 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="options.searchVisible" value="true" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src\main\resources\designs" />
     </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src\main\resources\designs" />
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src\main\java" />
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src\main" />
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj" />
       <recent name="C:\Users\Peter\workspace\CannonsIntellIj\src" />
-      <recent name="C:\Users\Peter\workspace\CannonsIntellIj\main" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
     </key>
   </component>
   <component name="RunManager">
@@ -747,6 +743,19 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -773,19 +782,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -933,7 +929,11 @@
       <created>1369423196325</created>
       <updated>1369423196325</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Cannons 2.0">
+      <created>1369485436032</created>
+      <updated>1369485436032</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1069,20 +1069,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="834" column="8" selection-start="19877" selection-end="19877" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/utils/DelayedFireTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="36" selection-start="324" selection-end="324" vertical-scroll-proportion="0.48658317">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/FireCannon.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="32" column="13" selection-start="1056" selection-end="1056" vertical-scroll-proportion="0.0">
@@ -1099,31 +1085,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/config.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/designs/classic.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="39" selection-start="3025" selection-end="3025" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="197" column="148" selection-start="7955" selection-end="7955" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/CannonDesign.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="766" column="0" selection-start="20849" selection-end="20849" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1136,35 +1104,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/Cannons.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="474" column="62" selection-start="11281" selection-end="11281" vertical-scroll-proportion="-6.064516">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="311" column="136" selection-start="7929" selection-end="7929" vertical-scroll-proportion="-7.709677">
+        <state line="474" column="45" selection-start="11281" selection-end="11281" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CreateExplosion.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="501" column="25" selection-start="15227" selection-end="15227" vertical-scroll-proportion="-1.8387097">
+        <state line="501" column="25" selection-start="15227" selection-end="15227" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/MessageEnum.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="139" selection-start="1148" selection-end="1148" vertical-scroll-proportion="0.0">
+        <state line="31" column="38" selection-start="1148" selection-end="1148" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="210" column="139" selection-start="5429" selection-end="5429" vertical-scroll-proportion="0.0">
+        <state line="210" column="50" selection-start="5429" selection-end="5429" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1172,13 +1133,52 @@
     <entry file="file://$PROJECT_DIR$/src/main/resources/localization/localization_german.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="44" selection-start="1996" selection-end="1996" vertical-scroll-proportion="0.0">
-          <folding />
+          <folding>
+            <marker date="1369485373880" expanded="true" signature="1940:2201" placeholder="Projectile:" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/localization/localization.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="103" selection-start="1933" selection-end="1933" vertical-scroll-proportion="0.47069597">
+        <state line="25" column="81" selection-start="1933" selection-end="1933" vertical-scroll-proportion="0.0">
+          <folding>
+            <marker date="1369485398401" expanded="true" signature="1934:2169" placeholder="Projectile:" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/designs/classic.schematic">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/DesignStorage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="238" column="77" selection-start="10594" selection-end="10594" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/designs/classic.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="16" selection-start="2773" selection-end="2773" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/plugin.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="14" selection-start="60" selection-end="60" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="472" column="25" selection-start="11429" selection-end="11429" vertical-scroll-proportion="0.5631068">
           <folding />
         </state>
       </provider>

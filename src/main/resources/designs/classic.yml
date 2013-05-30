@@ -57,7 +57,7 @@ realisticBehaviour:
   supportsFireMission: false
 permissions:
   #all the permissions required for a player to use certain parts of the cannon
-  build: cannon.player.build
+  build: cannons.player.build
   load: cannons.player.load
   fire: cannons.player.fire
   adjust: cannons.player.adjust
