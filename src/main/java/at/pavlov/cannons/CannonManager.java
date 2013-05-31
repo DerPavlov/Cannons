@@ -18,6 +18,8 @@ import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.MessageEnum;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.container.SimpleBlock;
+import at.pavlov.cannons.event.CannonAfterCreateEvent;
+import at.pavlov.cannons.event.CannonBeforeCreateEvent;
 
 public class CannonManager
 {
@@ -269,7 +271,8 @@ public class CannonManager
                 //check the permissions for redstone
                 if (message == null || message == MessageEnum.CannonCreated)
                     message = cannon.checkRedstonePermission(owner);
-
+                
+                
                 //if a sign is required to operate the cannon, there must be at least one sign
                 if ((message == null || message == MessageEnum.CannonCreated) && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
                     message = MessageEnum.ErrorMissingSign;
@@ -282,7 +285,28 @@ public class CannonManager
                 if (message != null && message == MessageEnum.CannonCreated)
                 {
                     plugin.logDebug("a new cannon was create by " + owner);
+                    
+                    CannonBeforeCreateEvent cbce_event = new CannonBeforeCreateEvent(cannon, Bukkit.getPlayer(owner));
+                	Bukkit.getServer().getPluginManager().callEvent(cbce_event);
+                	 
+                	if(cbce_event.isCancelled()) {
+                		// if it is canceled, don't let it create the cannon 
+                		return null; // let's just return null - unless theres a better way to do this?
+                		
+                	}
+                	
                 	createCannon(cannon);
+                	
+                	CannonAfterCreateEvent cace_event = new CannonAfterCreateEvent(cannon, Bukkit.getPlayer(owner));
+                	Bukkit.getServer().getPluginManager().callEvent(cace_event);
+                	 
+                	if(cace_event.isCancelled()) {
+                		// XXX: Maybe this isn't required? Maybe this shouldn't be cancelable. 
+                		removeCannon(cannon);
+                		
+                		return null;
+                	}
+                	
                 }
                 else
                 {
