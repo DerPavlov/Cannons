@@ -10,13 +10,11 @@ public class CannonAfterCreateEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private Cannon cannon;
 	private Player player;
-	private boolean cancelled;
 	
 	public CannonAfterCreateEvent(Cannon cannon, Player player) {
 		
 		this.cannon = cannon;
 		this.player = player;
-		
 	}
 	
 	public HandlerList getHandlers() {
@@ -26,12 +24,12 @@ public class CannonAfterCreateEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-    
-    public boolean isCancelled() {
-        return cancelled;
+
+    public Cannon getCannon() {
+        return cannon;
     }
- 
-    public void setCancelled(boolean a) {
-        this.cancelled = a;
+
+    public Player getPlayer() {
+        return player;
     }
 }

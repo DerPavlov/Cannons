@@ -20,8 +20,8 @@ public class ProjectileStorage
 {
 	Cannons plugin;
 
-	
-	List<Projectile> projectileList = new ArrayList<Projectile>();
+
+    private static List<Projectile> projectileList = new ArrayList<Projectile>();
 	
 	public ProjectileStorage(Cannons plugin)
 	{
@@ -34,7 +34,7 @@ public class ProjectileStorage
 	 * @param item
 	 * @return
 	 */
-	public Projectile getProjectile(Cannon cannon, ItemStack item)
+	public static Projectile getProjectile(Cannon cannon, ItemStack item)
 	{
 		if (item == null) return null;
 		return getProjectile(cannon, item.getTypeId(), item.getData().getData());
@@ -46,7 +46,7 @@ public class ProjectileStorage
 	 * @param data
 	 * @return
 	 */
-	public Projectile getProjectile(Cannon cannon, int id, int data)
+	public static Projectile getProjectile(Cannon cannon, int id, int data)
 	{
 		for (Projectile projectile : projectileList)
 		{

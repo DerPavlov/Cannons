@@ -51,9 +51,9 @@ public class Config
 		setDebugMode(plugin.getConfig().getBoolean("general.debugMode", false));
 		
 		//limitOfCannons
-		setBuildLimitEnabled(plugin.getConfig().getBoolean("limitOfCannons.useLimits", true));
-		setBuildLimitA(plugin.getConfig().getInt("limitOfCannons.buildLimitA", 10));
-		setBuildLimitB(plugin.getConfig().getInt("limitOfCannons.buildLimitB", 2));
+		setBuildLimitEnabled(plugin.getConfig().getBoolean("cannonLimits.useLimits", true));
+		setBuildLimitA(plugin.getConfig().getInt("cannonLimits.buildLimitA", 10));
+		setBuildLimitB(plugin.getConfig().getInt("cannonLimits.buildLimitB", 2));
 
 		//tools
 		setToolAdjust(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "0:0")));

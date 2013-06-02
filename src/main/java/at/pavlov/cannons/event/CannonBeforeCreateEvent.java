@@ -13,11 +13,11 @@ public class CannonBeforeCreateEvent extends Event {
 	private boolean cancelled;
 	
 	public CannonBeforeCreateEvent(Cannon cannon, Player player) {
-		
-		this.cannon = cannon;
-		this.player = player;
-		
-	}
+
+        this.cannon = cannon;
+        this.player = player;
+        this.cancelled = false;
+    }
 	
 	public HandlerList getHandlers() {
 		return handlers;
@@ -33,5 +33,13 @@ public class CannonBeforeCreateEvent extends Event {
  
     public void setCancelled(boolean a) {
         this.cancelled = a;
+    }
+
+    public Cannon getCannon() {
+        return cannon;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

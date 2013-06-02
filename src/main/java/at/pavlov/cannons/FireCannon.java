@@ -117,7 +117,39 @@ public class FireCannon {
 	 * @return
 	 */
 	public MessageEnum prepareFire(Cannon cannon, Player player, boolean autoload)
-	{		
+	{
+        Projectile projectile = cannon.getLoadedProjectile();
+        //no charge no firing
+        if (cannon.getLoadedGunpowder() == 0 || projectile == null)
+        {
+            //this cannon will try to find some gunpowder and projectile in the chest
+            if (autoload)
+            {
+                boolean hasReloaded =  cannon.reloadFromChests(player);
+                if (!hasReloaded)
+                {
+                    //there is not enough gunpowder or no projectile in the chest
+                    plugin.logDebug("Can't reload cannon, because there is no valid charge in the chests");
+                    if (projectile == null)
+                        return MessageEnum.ErrorNoProjectile;
+                    return MessageEnum.ErrorNoGunpowder;
+                }
+                else
+                {
+                    plugin.logDebug("Charge loaded from chest");
+                }
+
+            }
+            else
+            {
+                //can't fire without charge
+                plugin.logDebug("Can't fire without a charge");
+                if (projectile == null)
+                    return MessageEnum.ErrorNoProjectile;
+                return MessageEnum.ErrorNoGunpowder;
+            }
+        }
+
 		//check for all permissions
 		MessageEnum message = getPrepareFireMessage(cannon, player);
 		
@@ -174,22 +206,14 @@ public class FireCannon {
 	 * @param autoload
 	 */
     private void fire(Cannon cannon, Player shooter, Boolean autoload)
-    {	
+    {
     	CannonDesign design = designStorage.getDesign(cannon);
     	Projectile projectile = cannon.getLoadedProjectile();
-    	
-    	//no projectile no firing
-    	if (projectile == null)
-    	{
-    		plugin.logInfo("Can't fire a cannon without a projectile");
-    		return;
-    	}
-    	//no gunpowder no shot
-    	if (cannon.getLoadedGunpowder() == 0)
-    	{
-    		plugin.logInfo("Can't fire a cannon without gunpowder");
-    		return;
-    	}
+
+        // no projectile no cannon firing
+        if (projectile == null) return;
+        // no gunpowder no cannon firing
+        if (cannon.getLoadedGunpowder() <= 0) return;
     	
     	
 		Location firingLoc = design.getMuzzle(cannon);
@@ -240,24 +264,13 @@ public class FireCannon {
 		//reset after firing
 		cannon.setLastFired(System.currentTimeMillis());
 
-		if (autoload == false)
+
+		//redstone or player infinite ammo will not remove the charge
+		if ((shooter == null && !design.isAmmoInfiniteForRedstone()) || (shooter != null && !design.isAmmoInfiniteForPlayer()))
 		{
-			plugin.logDebug("player operating, delete charge");
-			cannon.removeCharge();
-		}
-		else
-		{
-			//redstone autoload
-			if (!design.isAmmoInfiniteForRedstone())
-			{
-				plugin.logDebug("redstone operating, reload from chest");
-				//ammo is removed form chest, if false there is not enough ammo to reload the cannon
-				if (!cannon.removeAmmoFromChests())
-				{
-					//no more ammo in the chests - delete Charge
-					cannon.removeCharge();
-				}
-			}
+			plugin.logDebug("fire event complete, charge removed from the cannon");
+			//ammo is removed form chest, if false there is not enough ammo to reload the cannon
+            cannon.removeCharge();
 		}
     }	 
     

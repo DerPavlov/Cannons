@@ -3,7 +3,9 @@ package at.pavlov.cannons.inventory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
+import at.pavlov.cannons.projectile.Projectile;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -43,54 +45,9 @@ public class InventoryManagement
 		}
 	}
 
-	/**
-	 * removes  the given items form the given chest
-	 * @param cannon
-	 * @param gunpowder
-	 * @param projectile
-	 * @return
-	 */
-	public static boolean removeAmmoFromChest(Cannon cannon, ItemStack gunpowder, ItemStack projectile)
-	{
-		if (cannon == null) return false;
-		if (gunpowder == null) return false;
-		if (projectile == null) return false;
-		
-		//get the inventories of all attached chests
-		ArrayList<Inventory> invlist = new ArrayList<Inventory>();
-		for (Location loc : cannon.getCannonDesign().getChestsAndSigns(cannon))
-		{
-			// check if block is a chest
-			invlist = getInventories(loc.getBlock(), invlist);	
-		}
-
-		// check if one of the chests contains the projectile - if not no
-		// gunpowder is removed
-		if (containsItemInChests(invlist, projectile) == false) 
-			return false; 
-
-		// remove gunpowder
-		int startingAmount = gunpowder.getAmount();
-		gunpowder = removeItemInChests(invlist, gunpowder);
-
-		// there was not enough gunpowder in the chests, but the used gunpowder
-		// back
-		if (gunpowder.getAmount() > 0)
-		{
-			// not enough gunpowder - reset amount
-			gunpowder.setAmount(startingAmount - gunpowder.getAmount());
-			addItemInChests(invlist, gunpowder);
-			return false;
-		}
-		
-		// remove projectile
-		removeItemInChests(invlist, projectile);
-		
-		return true;
-	}
 
 	// #################################### removeAmmoFromChest ##############
-	private static ItemStack removeItemInChests(ArrayList<Inventory> invlist, ItemStack item)
+	public static ItemStack removeItemInChests(List<Inventory> invlist, ItemStack item)
 	{
 		if (item == null) return null;
 		
@@ -101,12 +58,12 @@ public class InventoryManagement
 			item = remove(next, item);
 		}
 
-		// true if all item have been removed
+        //the amount of remaining items
 		return item;
 	}
 
 	// #################################### containsItemInChests ###############
-	private static boolean containsItemInChests(ArrayList<Inventory> invlist, ItemStack item)
+	public static boolean containsItemInChests(List<Inventory> invlist, ItemStack item)
 	{
 		Iterator<Inventory> iter = invlist.iterator();
 		while (iter.hasNext())
@@ -171,12 +128,12 @@ public class InventoryManagement
 	}
 
 	/**
-	 * 
+	 * puts an itemstack in the first empty space of the given inventories
 	 * @param invlist
 	 * @param item
 	 * @return
 	 */
-	private static boolean addItemInChests(ArrayList<Inventory> invlist, ItemStack item)
+	public static boolean addItemInChests(List<Inventory> invlist, ItemStack item)
 	{
 		// return if there should be nothing removed
 		if (item == null || item.getAmount() == 0)
@@ -189,13 +146,19 @@ public class InventoryManagement
 			Inventory next = iter.next();
 			// add items and returned hashmap is zero
 			int size = next.addItem(item).size();
-			if (size == 0) { return true; }
+			if (size == 0)
+                return true;
 		}
 		return false;
 	}
 
-	// ############## getInventories ################################
-	private static ArrayList<Inventory> getInventories(Block block, ArrayList<Inventory> list)
+    /**
+     * returns the inventory of this block if valid, else null
+     * @param block
+     * @param list
+     * @return
+     */
+	public static List<Inventory> getInventories(Block block, List<Inventory> list)
 	{
 		if (list == null)
 		{

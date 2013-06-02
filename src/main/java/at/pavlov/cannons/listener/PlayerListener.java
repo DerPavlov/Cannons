@@ -290,7 +290,10 @@ public class PlayerListener implements Listener
 
 				plugin.logDebug("redstone torch");
 				if (cannon.isRedstoneTorchInterface(block.getLocation())) 
-					fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                {
+                    MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                    plugin.logDebug("fire cannon returned: " + message.getString());
+                }
 			}
 		}
 
@@ -310,8 +313,11 @@ public class PlayerListener implements Listener
 						// is place right
 
 						plugin.logDebug("redstone wire ");
-						if (cannon.isRedstoneWireInterface(block.getLocation())) 
-							fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+						if (cannon.isRedstoneWireInterface(block.getLocation()))
+                        {
+                            MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                            plugin.logDebug("fire cannon returned: " + message.getString());
+                        }
 					}
 				}
 			}
@@ -330,7 +336,11 @@ public class PlayerListener implements Listener
 					// is place right
 					plugin.logDebug("redstone repeater ");
 					if (cannon.isRedstoneRepeaterInterface(block.getLocation())) 
-						fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                    {
+                        MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                        plugin.logDebug("fire cannon returned: " + message.getString());
+                    }
+
 				}
 			}
 		}

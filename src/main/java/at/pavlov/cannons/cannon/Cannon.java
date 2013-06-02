@@ -1,7 +1,11 @@
 package at.pavlov.cannons.cannon;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
+import at.pavlov.cannons.config.ProjectileStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -54,7 +59,7 @@ public class Cannon
 	private boolean isValid;
 
 	CannonDesign design;
-	
+
 	
 	// not saved in the database
 	// redstone handling event. Last player that pressed the firing button is saved in this list for the next redstone event
@@ -84,25 +89,79 @@ public class Cannon
 	 *
 	 * @return
 	 */
-	public boolean removeAmmoFromChests()
+	public boolean reloadFromChests(Player player)
 	{
-		System.out.println("removeAmmoFromChests");
-		// create a new projectile stack with one projectile
-		ItemStack projectile = null;
-		if (loadedProjectile != null)
-		{
-			projectile = loadedProjectile.getLoadingItem().toItemStack(1);
-		} 
+        List<Inventory> invlist = getInventoryList();
 
-		// gunpowder stack
-		ItemStack powder = design.getGunpowderType().toItemStack(loadedGunpowder);
 
-		// For all possible chest locations
-		// update all possible sign locations
-		if (InventoryManagement.removeAmmoFromChest(this, powder, projectile)) 
-			return true;
+        //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
+        int toLoad = design.getMaxLoadableGunpowder() - getLoadedGunpowder();
+        ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
+        gunpowder = InventoryManagement.removeItemInChests(invlist, gunpowder);
+        if (gunpowder.getAmount() == 0)
+        {
+            //there was enough gunpowder in the chest
+            loadedGunpowder = design.getMaxLoadableGunpowder();
+        }
+        else
+        {
+            //not enough gunpowder, put it back
+            gunpowder.setAmount(toLoad) ;
+            InventoryManagement.addItemInChests(invlist, gunpowder);
+        }
+
+
+        // find a loadable projectile in the chests
+        for (Inventory inv : invlist)
+        {
+            for (ItemStack item : inv.getContents())
+            {
+                //try to load it and see what happens
+                Projectile projectile = ProjectileStorage.getProjectile(this, item);
+                if (projectile == null)
+                    continue;
+
+                MessageEnum message = CheckPermProjectile(projectile, player);
+                if (message == MessageEnum.loadProjectile)
+                {
+                    // everything went fine, so remove it from the chest remove projectile
+                    loadedProjectile = projectile;
+
+                    if (item.getAmount() == 1)
+                    {
+                        //last item removed
+                        inv.removeItem(item);
+                        break;
+                    }
+                    else
+                    {
+                        //remove one item
+                        item.setAmount(item.getAmount() - 1);
+                    }
+                    return true;
+                }
+            }
+        }
+
 		return false;
 	}
+
+
+    /**
+     *
+     * @return returns the inventories of all attached chests
+     */
+    public List<Inventory> getInventoryList()
+    {
+        //get the inventories of all attached chests
+        List<Inventory> invlist = new ArrayList<Inventory>();
+        for (Location loc : getCannonDesign().getChestsAndSigns(this))
+        {
+            // check if block is a chest
+            invlist = InventoryManagement.getInventories(loc.getBlock(), invlist);
+        }
+        return invlist;
+    }
 
 	
 	/**
@@ -242,6 +301,8 @@ public class Cannon
 	 */
 	private MessageEnum CheckPermProjectile(Projectile projectile, Player player)
 	{
+
+
 		//if the player is not the owner of this gun
 		if (player != null && !this.getOwner().equals(player.getName()))
 		{

@@ -265,6 +265,10 @@ public class CannonManager
             //nothing in the storage, so we make a new entry
             else
             {
+                //search for a player, because owner == null is not valid
+                if (owner == null) return null;
+                Player player = Bukkit.getPlayer(owner);
+
                 //can this player can build one more cannon
                 MessageEnum	message = canBuildCannon(cannon, owner);
 
@@ -281,15 +285,19 @@ public class CannonManager
                 if (!silent)
                     userMessages.displayMessage(owner, message, cannon);
 
+
+
                 //add cannon to the list if everything was fine and return the cannon
                 if (message != null && message == MessageEnum.CannonCreated)
                 {
+
+
                     plugin.logDebug("a new cannon was create by " + owner);
                     
-                    CannonBeforeCreateEvent cbce_event = new CannonBeforeCreateEvent(cannon, Bukkit.getPlayer(owner));
-                	Bukkit.getServer().getPluginManager().callEvent(cbce_event);
+                    CannonBeforeCreateEvent cbceEvent = new CannonBeforeCreateEvent(cannon, player);
+                	Bukkit.getServer().getPluginManager().callEvent(cbceEvent);
                 	 
-                	if(cbce_event.isCancelled()) {
+                	if(cbceEvent.isCancelled()) {
                 		// if it is canceled, don't let it create the cannon 
                 		return null; // let's just return null - unless theres a better way to do this?
                 		
@@ -297,20 +305,15 @@ public class CannonManager
                 	
                 	createCannon(cannon);
                 	
-                	CannonAfterCreateEvent cace_event = new CannonAfterCreateEvent(cannon, Bukkit.getPlayer(owner));
-                	Bukkit.getServer().getPluginManager().callEvent(cace_event);
-                	 
-                	if(cace_event.isCancelled()) {
-                		// XXX: Maybe this isn't required? Maybe this shouldn't be cancelable. 
-                		removeCannon(cannon);
-                		
-                		return null;
-                	}
+                	CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
+                	Bukkit.getServer().getPluginManager().callEvent(caceEvent);
+
                 	
                 }
                 else
                 {
-                    plugin.logDebug("missing permission while creating a cannon: " + userMessages.toString());
+                    plugin.logDebug("missing permission while creating a cannon: " + message);
+                    return null;
                 }
             }
         }
@@ -463,26 +466,32 @@ public class CannonManager
 
 
 		// config implementation
-		if (newBuiltLimit == -1 && config.isBuildLimitEnabled())
+		if (config.isBuildLimitEnabled())
 		{
 			if (player.hasPermission("cannons.player.limitB"))
 			{
 				// return the
+                plugin.logDebug("build limit B: " + config.getBuildLimitB());
 				return config.getBuildLimitB();
 			}
 			// limit B is stronger
 			else if (player.hasPermission("cannons.player.limitA"))
 			{
+                plugin.logDebug("build limit A: " + config.getBuildLimitA());
 				return config.getBuildLimitA();
 			}
 		}
 		// player implementation
 		else
 		{
-			plugin.logDebug("limit return: " + newBuiltLimit);
-			return newBuiltLimit;
+            if (newBuiltLimit < 0)
+            {
+                plugin.logDebug("build limit new: " + newBuiltLimit);
+                return newBuiltLimit;
+            }
 		}
-		return Integer.MAX_VALUE;
+        plugin.logDebug("no build limit found. Setting to max value.");
+        return Integer.MAX_VALUE;
 	}
 	/**
 	 * checks if the player can build a cannon (permission, builtLimit)
