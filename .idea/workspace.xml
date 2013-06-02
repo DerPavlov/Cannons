@@ -2,15 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="884b5d4e-f677-406f-aa6d-5268c475e821" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CannonsIntellIj.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368389713814" ignored="false" />
     <file path="/MaterialHolder.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368392884854" ignored="false" />
-    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1370212543087" ignored="false" />
+    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1370212577032" ignored="false" />
     <file path="/Config.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368377071854" ignored="false" />
-    <file path="/Cannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1370212485139" ignored="false" />
+    <file path="/Cannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1370212683399" ignored="false" />
     <file path="/fragment.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369310392097" ignored="false" />
     <file path="/CannonsUtil.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368388047434" ignored="false" />
     <file path="/CreateExplosion.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369483506562" ignored="false" />
@@ -110,9 +111,9 @@
       <file leaf-file-name="Cannon.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="129" column="27" selection-start="3992" selection-end="3992" vertical-scroll-proportion="0.35031846">
+            <state line="108" column="60" selection-start="3226" selection-end="3226" vertical-scroll-proportion="0.8375796">
               <folding>
-                <element signature="e#4684#4695#0" expanded="true" />
+                <element signature="e#4706#4717#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1008,7 +1009,11 @@
       <created>1370212564826</created>
       <updated>1370212564826</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Cannons 2.0">
+      <created>1370212583311</created>
+      <updated>1370212583311</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1251,9 +1256,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="129" column="27" selection-start="3992" selection-end="3992" vertical-scroll-proportion="0.35031846">
+        <state line="108" column="60" selection-start="3226" selection-end="3226" vertical-scroll-proportion="0.8375796">
           <folding>
-            <element signature="e#4684#4695#0" expanded="true" />
+            <element signature="e#4706#4717#0" expanded="true" />
           </folding>
         </state>
       </provider>
