@@ -2,28 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="884b5d4e-f677-406f-aa6d-5268c475e821" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonAfterCreateEvent.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonAfterCreateEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonBeforeCreateEvent.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonBeforeCreateEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonFireEvent.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonFireEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/CannonManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonRedstoneEvent.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonRedstoneEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonUseEvent.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/CannonUseEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/Config.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/Config.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/FireCannon.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/FireCannon.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/inventory/InventoryManagement.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/Peter.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/Peter.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/PlayerListener.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/listener/PlayerListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/ProjectileImpactEvent.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/event/ProjectileImpactEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/ProjectileStorage.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/ProjectileStorage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java" afterPath="$PROJECT_DIR$/src/main/java/at/pavlov/cannons/config/UserMessages.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CannonsIntellIj.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368389713814" ignored="false" />
     <file path="/MaterialHolder.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368392884854" ignored="false" />
-    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1370201682107" ignored="false" />
+    <file path="/Dummy.txt" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1370212543087" ignored="false" />
     <file path="/Config.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1368377071854" ignored="false" />
     <file path="/Cannon.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1370212485139" ignored="false" />
     <file path="/fragment.java" changelist="884b5d4e-f677-406f-aa6d-5268c475e821" time="1369310392097" ignored="false" />
@@ -125,7 +110,7 @@
       <file leaf-file-name="Cannon.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="125" column="54" selection-start="3821" selection-end="3821" vertical-scroll-proportion="0.13375796">
+            <state line="129" column="27" selection-start="3992" selection-end="3992" vertical-scroll-proportion="0.35031846">
               <folding>
                 <element signature="e#4684#4695#0" expanded="true" />
               </folding>
@@ -1019,7 +1004,11 @@
       <created>1370171838457</created>
       <updated>1370171838457</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Cannons 2.0">
+      <created>1370212564826</created>
+      <updated>1370212564826</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1262,7 +1251,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/at/pavlov/cannons/cannon/Cannon.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="125" column="54" selection-start="3821" selection-end="3821" vertical-scroll-proportion="0.13375796">
+        <state line="129" column="27" selection-start="3992" selection-end="3992" vertical-scroll-proportion="0.35031846">
           <folding>
             <element signature="e#4684#4695#0" expanded="true" />
           </folding>
