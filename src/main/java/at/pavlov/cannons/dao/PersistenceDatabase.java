@@ -179,8 +179,9 @@ public class PersistenceDatabase
 	 * removes all cannon of this player from the database
 	 * 
 	 * @param owner
+     * @return returns true is there is an entry of this player in the database
 	 */
-	public void deleteCannons(String owner)
+	public boolean deleteCannons(String owner)
 	{
 		// create a query that returns CannonBean
 		List<CannonBean> beans = plugin.getDatabase().find(CannonBean.class).where().eq("owner", owner).findList();
@@ -189,7 +190,7 @@ public class PersistenceDatabase
 		if (beans == null || beans.size() == 0)
 		{
 			// nothing found; list is empty
-			return;
+			return false;
 		}
 		else
 		{
@@ -198,6 +199,7 @@ public class PersistenceDatabase
 			{
 				plugin.getDatabase().delete(CannonBean.class, bean.getId());
 			}
+            return true;
 		}
 	}
 	

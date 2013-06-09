@@ -1,5 +1,7 @@
 package at.pavlov.cannons.listener;
 
+import at.pavlov.cannons.cannon.Cannon;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,72 +43,124 @@ public class Commands implements CommandExecutor
 
 		if (cmd.getName().equalsIgnoreCase("cannons"))
 		{
-			if (player == null)
+            if (args.length >= 1)
 			{
-				sender.sendMessage("this command can only be run by a player!");
+                //############## console and player commands ######################
+                //cannons reload
+                if (args[0].equalsIgnoreCase("reload") && (player == null || player.hasPermission("cannons.admin.reload")))
+                {
+                    // reload config
+                    config.loadConfig();
+                    sender.sendMessage("Cannons config loaded");
+                }
+                //cannons save
+                else if (args[0].equalsIgnoreCase("save") && (player == null || player.hasPermission("cannons.admin.reload")))
+                {
+                    // save database
+                    persistenceDatabase.saveAllCannons();
+                    sender.sendMessage("Cannons database saved ");
+                }
+                //cannons load
+                else if (args[0].equalsIgnoreCase("load") && (player == null || player.hasPermission("cannons.admin.reload")))
+                {
+                    // load database
+                    persistenceDatabase.loadCannons();
+                    sender.sendMessage("Cannons database loaded ");
+                }
+                //cannons reset
+                else if(args[0].equalsIgnoreCase("reset") && (player == null || player.hasPermission("cannons.admin.reset")))
+                {
+                    if (args.length >= 2 && args[1] != null)
+                    {
+                        // delete all cannon entries for this player
+                        if (persistenceDatabase.deleteCannons(args[1]) || plugin.getCannonManager().deleteCannons(args[1]))
+                        {
+                            //there was an entry in the list
+                            sender.sendMessage(userMessages.getMessage(MessageEnum.CannonsReseted));
+                        }
+                        else
+                        {
+                            sender.sendMessage("Player " + args[1] + " not found in the storage");
+                        }
+                    }
+                    else
+                    {
+                        sender.sendMessage("Missing player name /cannons reset NAME");
+                    }
+                }
+                //cannons list
+                else if(args[0].equalsIgnoreCase("list"))
+                {
+                    if (args.length >= 2)
+                    {
+                        //additional player name
+                        for (Cannon cannon : plugin.getCannonManager().getCannonList())
+                        {
+                            if (cannon.getOwner().equalsIgnoreCase(args[1]))
+                                sender.sendMessage("Name:" + cannon.getCannonName() + " owner:" + cannon.getOwner() + " loc:" + cannon.getOffset().toString());
+                        }
+                    }
+                    else
+                    {
+                        //plot all cannons
+                        for (Cannon cannon : plugin.getCannonManager().getCannonList())
+                        {
+                            sender.sendMessage("Name:" + cannon.getCannonName() + " owner:" + cannon.getOwner() + " loc:" + cannon.getOffset().toString());
+                        }
+                    }
+                }
+
+
+
+                //################### Player only commands #####################
+                else if (player != null)
+                {
+                    //cannons build
+                    if (args[0].equalsIgnoreCase("build") && player.hasPermission("cannons.player.command"))
+                    {
+                        // how to build a cannon
+                        userMessages.displayMessage(player, MessageEnum.HelpBuild);
+                    }
+                    //cannons fire
+                    else if (args[0].equalsIgnoreCase("fire") && player.hasPermission("cannons.player.command"))
+                    {
+                        // how to fire
+                        userMessages.displayMessage(player, MessageEnum.HelpFire);
+                    }
+                    //cannons adjust
+                    else if (args[0].equalsIgnoreCase("adjust") && player.hasPermission("cannons.player.command"))
+                    {
+                        // how to adjust
+                        userMessages.displayMessage(player, MessageEnum.HelpAdjust);
+                    }
+
+                    //cannons reset
+                    else if(args[0].equalsIgnoreCase("reset") && player.hasPermission("cannons.player.reset"))
+                    {
+                        // delete all cannon entries for this player
+                        persistenceDatabase.deleteCannons(player.getName());
+                        plugin.getCannonManager().deleteCannons(player.getName());
+                        userMessages.displayMessage(player, MessageEnum.CannonsReseted);
+                    }
+                    else
+                    {
+                        // display help
+                        userMessages.displayMessage(player, MessageEnum.HelpText);
+                    }
+                }
+                else
+                {
+                    plugin.logDebug("This command can only be used by a player");
+                    return false;
+                }
+
+
+
 			}
 			else
 			{
-				if (args.length >= 1)
-				{
-					//cannons build
-					if (args[0].equalsIgnoreCase("build") && player.hasPermission("cannons.player.command"))
-					{
-						// how to build a cannon
-						userMessages.displayMessage(player, MessageEnum.HelpBuild);
-					}
-					//cannons fire
-					else if (args[0].equalsIgnoreCase("fire") && player.hasPermission("cannons.player.command"))
-					{
-						// how to fire
-						userMessages.displayMessage(player, MessageEnum.HelpFire);
-					}
-					//cannons adjust
-					else if (args[0].equalsIgnoreCase("adjust") && player.hasPermission("cannons.player.command"))
-					{
-						// how to adjust
-						userMessages.displayMessage(player, MessageEnum.HelpAdjust);
-					}
-					//cannons reload
-					else if (args[0].equalsIgnoreCase("reload") && player.hasPermission("cannons.admin.reload"))
-					{
-						// reload config
-						config.loadConfig();
-						player.sendMessage(ChatColor.GREEN + "Cannons config loaded");
-					}
-					//cannons save
-					else if (args[0].equalsIgnoreCase("save") && player.hasPermission("cannons.admin.reload"))
-					{
-						// save database
-						persistenceDatabase.saveAllCannons();
-						player.sendMessage(ChatColor.GREEN + "Cannons database saved ");
-					}
-					//cannons load
-					else if (args[0].equalsIgnoreCase("load") && player.hasPermission("cannons.admin.reload"))
-					{
-						// load database
-						persistenceDatabase.loadCannons();
-						player.sendMessage(ChatColor.GREEN + "Cannons database loaded ");
-					}
-					//cannons reset
-					else if(args[0].equalsIgnoreCase("reset") && player.hasPermission("cannons.player.reset"))
-					{
-						// delete all cannon entries for this player
-						persistenceDatabase.deleteCannons(player.getName());
-						plugin.getCannonManager().deleteCannons(player.getName());
-						userMessages.displayMessage(player, MessageEnum.CannonsReseted);
-					}
-					else
-					{
-						// display help
-						userMessages.displayMessage(player, MessageEnum.HelpText);
-					}
-				}
-				else
-				{
 					// display help
 					userMessages.displayMessage(player, MessageEnum.HelpText);
-				}
 			}
 			return true;
 		}

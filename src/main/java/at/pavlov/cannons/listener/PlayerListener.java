@@ -372,29 +372,34 @@ public class PlayerListener implements Listener
 		 // ##########  fire with Button 
 		Cannon cannon = cannonManager.getCannon(event.getBlock().getLocation(), null);
 		if (cannon != null) 
-		{ 
-			plugin.logDebug("redfire with button");
+		{
 			//check if the button is a loading firing interface of the cannon
 			if (cannon.isRestoneTrigger(event.getBlock().getLocation()))
 			{
+
                 //get the user of the cannon
                 Player player = null;
                 if (cannon.getLastUser() != null)
                     player = Bukkit.getPlayer(cannon.getLastUser());
+                //reset user
                 cannon.setLastUser("");
                 if (player == null)
                     return;
 
+
+                plugin.logDebug("Redfire with button by " + player.getName());
+
+                //register event with bukkit
                 CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.fireButton);
                 Bukkit.getServer().getPluginManager().callEvent(useEvent);
 
                 if (useEvent.isCancelled())
                     return;
 
-                MessageEnum message =  fireCannon.prepareFire(cannon, null, false);
+                //execute event
+                boolean autoreload = player.isSneaking() && player.hasPermission(cannon.getCannonDesign().getPermissionAutoreload());
+                MessageEnum message =  fireCannon.prepareFire(cannon, player, autoreload);
                 userMessages.displayMessage(player, message, cannon);
-
-
 			}
 		}
 		 
@@ -520,7 +525,8 @@ public class PlayerListener implements Listener
                 if (useEvent.isCancelled())
                     return;
 
-                MessageEnum message = fireCannon.prepareFire(cannon, player, false);
+                boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
+                MessageEnum message = fireCannon.prepareFire(cannon, player, autoreload);
 
 				// display message
 				userMessages.displayMessage(player, message, cannon);

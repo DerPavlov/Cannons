@@ -517,20 +517,24 @@ public class CannonManager
 	 * limit
 	 * 
 	 * @param owner
+     * @return returns true if there was an entry of this player in the list
 	 */
-	public void deleteCannons(String owner)
+	public boolean deleteCannons(String owner)
 	{
 		Iterator<Cannon> iter = cannonList.iterator();
+        boolean inList = false;
 
 		while (iter.hasNext())
 		{
 			Cannon next = iter.next();
 			if (next.getOwner().equals(owner))
 			{
+                inList = true;
 				next.destroyCannon();
 				iter.remove();
 			}
 		}
+        return inList;
 	}
 
 
