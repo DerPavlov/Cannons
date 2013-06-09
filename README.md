@@ -1,18 +1,20 @@
-at.pavlov.cannons.Cannons
+Cannons
 =======
 
 by derPavlov    
-http://dev.bukkit.org/server-mods/block-cannons-v1-1/
+http://dev.bukkit.org/server-mods/cannons/
 
-How to install:
+Install:
 ---------------
 
-    Copy 'at.pavlov.cannons.Cannons.jar' into your 'plugins/' folder.
+    Copy 'Cannons.jar' into your 'plugins/' folder.
     Load your server
-    Edit the newly created 'at.pavlov.cannons.config.yml' in 'plugins/at.pavlov.cannons.Cannons/' and set your preferences
+    Edit the newly created 'config.yml' in 'plugins/Cannons/' and set your preferences
 
-How to uninstall:
+
+Uninstall:
 -----------------
 
-    Delete the folder called 'at.pavlov.cannons.Cannons' in plugins/.
-    Delete 'at.pavlov.cannons.Cannons.jar'
+    Delete the folder called 'Cannons' in plugins/.
+    Delete 'Cannons.jar'
+
