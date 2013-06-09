@@ -239,11 +239,6 @@ public class Cannons extends JavaPlugin
 		return this.isEnabled();
 	}
 
-	public final Cannons xgetPlugin()
-	{
-		return this;
-	}
-
 	public final Config getmyConfig()
 	{
 		return config;

@@ -51,21 +51,21 @@ public class Commands implements CommandExecutor
                 {
                     // reload config
                     config.loadConfig();
-                    sender.sendMessage("Cannons config loaded");
+                    sendMessage(sender, ChatColor.GREEN + "Cannons config loaded");
                 }
                 //cannons save
                 else if (args[0].equalsIgnoreCase("save") && (player == null || player.hasPermission("cannons.admin.reload")))
                 {
                     // save database
                     persistenceDatabase.saveAllCannons();
-                    sender.sendMessage("Cannons database saved ");
+                    sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
                 }
                 //cannons load
                 else if (args[0].equalsIgnoreCase("load") && (player == null || player.hasPermission("cannons.admin.reload")))
                 {
                     // load database
                     persistenceDatabase.loadCannons();
-                    sender.sendMessage("Cannons database loaded ");
+                    sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
                 }
                 //cannons reset
                 else if(args[0].equalsIgnoreCase("reset") && (player == null || player.hasPermission("cannons.admin.reset")))
@@ -76,38 +76,38 @@ public class Commands implements CommandExecutor
                         if (persistenceDatabase.deleteCannons(args[1]) || plugin.getCannonManager().deleteCannons(args[1]))
                         {
                             //there was an entry in the list
-                            sender.sendMessage(userMessages.getMessage(MessageEnum.CannonsReseted));
+                            sendMessage(sender, ChatColor.GREEN + userMessages.getMessage(MessageEnum.CannonsReseted));
                         }
                         else
                         {
-                            sender.sendMessage("Player " + args[1] + " not found in the storage");
+                            sendMessage(sender, ChatColor.GREEN + "Player " + ChatColor.GOLD + args[1] + ChatColor.GREEN + " not found in the storage");
                         }
                     }
                     else
                     {
-                        sender.sendMessage("Missing player name /cannons reset NAME");
+                        sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "/cannons reset NAME");
                     }
                 }
                 //cannons list
-                else if(args[0].equalsIgnoreCase("list") && (player == null || player.hasPermission("cannons.admin.list")))
+                else if(args[0].equalsIgnoreCase("list") && (player == null || player.hasPermission("cannons.admin.list")) )
                 {
                     if (args.length >= 2)
                     {
                         //additional player name
                         for (Cannon cannon : plugin.getCannonManager().getCannonList())
                         {
-                            sender.sendMessage("Cannon list for " + args[1] + ":");
+                            sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1]);
                             if (cannon.getOwner().equalsIgnoreCase(args[1]))
-                                sender.sendMessage("Name:" + cannon.getCannonName() + " owner:" + cannon.getOwner() + " loc:" + cannon.getOffset().toString());
+                                sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
                         }
                     }
                     else
                     {
                         //plot all cannons
-                        sender.sendMessage("List of all cannons:");
+                        sendMessage(sender, ChatColor.GREEN + "List of all cannons:");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList())
                         {
-                            sender.sendMessage("Name:" + cannon.getCannonName() + " owner:" + cannon.getOwner() + " loc:" + cannon.getOffset().toString());
+                            sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + cannon.getOwner() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
                         }
                     }
                 }
@@ -134,6 +134,17 @@ public class Commands implements CommandExecutor
                     {
                         // how to adjust
                         userMessages.displayMessage(player, MessageEnum.HelpAdjust);
+                    }
+                    //list cannons of this player name
+                    else if(args[0].equalsIgnoreCase("list") && player.hasPermission("cannons.player.list"))
+                    {
+                        for (Cannon cannon : plugin.getCannonManager().getCannonList())
+                        {
+                            player.sendMessage(ChatColor.GREEN +"Cannon list for " + args[1] + ":");
+                            if (cannon.getOwner().equalsIgnoreCase(player.getName()))
+                                player.sendMessage(ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
+                                        ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc:" + ChatColor.GOLD + cannon.getOffset().toString());
+                        }
                     }
 
                     //cannons reset
@@ -170,6 +181,14 @@ public class Commands implements CommandExecutor
 	}
 
 
+    private void sendMessage(CommandSender sender, String str)
+    {
+        //strip color of console messages
+        if (!(sender instanceof Player))
+            str = ChatColor.stripColor(str);
+
+        sender.sendMessage(str);
+    }
 
 
 }
