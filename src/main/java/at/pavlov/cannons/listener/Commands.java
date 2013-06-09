@@ -89,13 +89,14 @@ public class Commands implements CommandExecutor
                     }
                 }
                 //cannons list
-                else if(args[0].equalsIgnoreCase("list"))
+                else if(args[0].equalsIgnoreCase("list") && (player == null || player.hasPermission("cannons.admin.list")))
                 {
                     if (args.length >= 2)
                     {
                         //additional player name
                         for (Cannon cannon : plugin.getCannonManager().getCannonList())
                         {
+                            sender.sendMessage("Cannon list for " + args[1] + ":");
                             if (cannon.getOwner().equalsIgnoreCase(args[1]))
                                 sender.sendMessage("Name:" + cannon.getCannonName() + " owner:" + cannon.getOwner() + " loc:" + cannon.getOffset().toString());
                         }
@@ -103,6 +104,7 @@ public class Commands implements CommandExecutor
                     else
                     {
                         //plot all cannons
+                        sender.sendMessage("List of all cannons:");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList())
                         {
                             sender.sendMessage("Name:" + cannon.getCannonName() + " owner:" + cannon.getOwner() + " loc:" + cannon.getOffset().toString());

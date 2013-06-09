@@ -34,6 +34,8 @@ permissions:
     children:
       cannons.admin.reload: true
       cannons.admin.reset: true
+      cannons.admin.list: true
+
   cannons.player.build:
       description: Allows a player to build a cannon
       default: false
@@ -74,8 +76,11 @@ permissions:
       description: Allows a player to place redstone torch under a cannon
       default: false  
   cannons.admin.reload:
-      description: Allows a admin to reload the config
+      description: Allows an admin to reload the config
       default: op
   cannons.admin.reset:
-      description: Allows a admin to delete all cannon of a player in the config the config
+      description: Allows an admin to delete all cannon of a player in the database
+      default: op
+  cannons.admin.list:
+      description: Allows an admin to list all cannon of a player
       default: op
