@@ -2,9 +2,12 @@ package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.projectile.Projectile;
 import org.bukkit.Location;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
-public class ProjectileImpactEvent
+public class ProjectileImpactEvent extends Event
 {
+    private static final HandlerList handlers = new HandlerList();
     private Projectile projectile;
     private Location impactLocation;
     private boolean cancelled;
@@ -39,5 +42,13 @@ public class ProjectileImpactEvent
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }

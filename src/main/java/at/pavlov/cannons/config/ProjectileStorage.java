@@ -50,7 +50,7 @@ public class ProjectileStorage
 	{
 		for (Projectile projectile : projectileList)
 		{
-			if (cannon.getCannonDesign().canLoad(projectile) && projectile.equalsFuzzy(id, data))
+            if (cannon.getCannonDesign().canLoad(projectile) && projectile.equalsFuzzy(id, data))
 				return projectile;
 		}
 		return null;

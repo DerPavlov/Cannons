@@ -57,6 +57,9 @@ public class Cannon
 	private String owner;
 	// designID of the cannon, for different types of cannons - not in use
 	private boolean isValid;
+    //the player which has used the cannon last, important for firing with redstone button
+    private String lastUser;
+
 
 	CannonDesign design;
 
@@ -1070,4 +1073,12 @@ public class Cannon
 	{
 		this.lastAimed = lastAimed;
 	}
+
+    public String getLastUser() {
+        return lastUser;
+    }
+
+    public void setLastUser(String lastUser) {
+        this.lastUser = lastUser;
+    }
 }

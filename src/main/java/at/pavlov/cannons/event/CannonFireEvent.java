@@ -2,8 +2,11 @@ package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.cannon.Cannon;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
-class CannonFireEvent {
+public class CannonFireEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
     private Cannon cannon;
     private Player player;
     private boolean cancelled;
@@ -15,19 +18,27 @@ class CannonFireEvent {
         this.cancelled = false;
     }
 
-    Cannon getCannon() {
+    public Cannon getCannon() {
         return cannon;
     }
 
-    Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    boolean isCancelled() {
+    public boolean isCancelled() {
         return cancelled;
     }
 
-    void setCancelled(boolean cancelled) {
+    public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }

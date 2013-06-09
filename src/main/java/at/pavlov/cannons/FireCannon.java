@@ -4,13 +4,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import at.pavlov.cannons.event.CannonAfterCreateEvent;
+import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.utils.DelayedFireTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
-import org.bukkit.Effect;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -154,10 +152,17 @@ public class FireCannon {
 		MessageEnum message = getPrepareFireMessage(cannon, player);
 		
 		//return if there are permission missing
-		if (message != MessageEnum.CannonFire) return message;
-		
+		if (message != MessageEnum.CannonFire)
+            return message;
+
+        CannonFireEvent fireEvent = new CannonFireEvent(cannon, player);
+        Bukkit.getServer().getPluginManager().callEvent(fireEvent);
+
+        if (fireEvent.isCancelled())
+            return null;
+
 		//ignite the cannon
-		delayedFire(cannon, player, autoload);	
+		delayedFire(cannon, player);
 		
 		return message;
 	}
@@ -166,9 +171,8 @@ public class FireCannon {
 	 * delays the firing by the fuse burn time
 	 * @param cannon
 	 * @param player
-	 * @param autoload
 	 */
-    private void delayedFire(Cannon cannon, Player player, Boolean autoload)
+    private void delayedFire(Cannon cannon, Player player)
     {
     	CannonDesign design = designStorage.getDesign(cannon);
     	
@@ -187,14 +191,14 @@ public class FireCannon {
 
 		
 		//set up delayed task
-		Object fireTask = new FireTaskWrapper(cannon, player, autoload);
+		Object fireTask = new FireTaskWrapper(cannon, player);
 		Long fuseBurnTime = (long) design.getFuseBurnTime() * 20;
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedFireTask(fireTask)
 		{
 			public void run(Object object) 
 			    {			
 					FireTaskWrapper fireTask = (FireTaskWrapper) object;
-			    	fire(fireTask.cannon, fireTask.player, fireTask.deleteCharge);
+			    	fire(fireTask.getCannon(), fireTask.getPlayer());
 			    }
 		}, fuseBurnTime);	
     }
@@ -203,9 +207,8 @@ public class FireCannon {
 	 * fires a cannon and removes the charge from the player
 	 * @param cannon
 	 * @param shooter
-	 * @param autoload
 	 */
-    private void fire(Cannon cannon, Player shooter, Boolean autoload)
+    private void fire(Cannon cannon, Player shooter)
     {
     	CannonDesign design = designStorage.getDesign(cannon);
     	Projectile projectile = cannon.getLoadedProjectile();

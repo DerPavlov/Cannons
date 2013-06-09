@@ -60,7 +60,7 @@ placeBlock:
   #the blocks which will be placed. does not seem to support more tha one block type at a time. 
   #you can either spawn a block of material, or an entity by using the spawn egg id (383) and its entity id (http://www.minecraftwiki.net/wiki/Data_values#Entity_IDs)
   material:
-    #this one is a spawn-egg with its parameters set to launch a firework rocket
+    #this one is a spawn-egg with its parameters set to spawn primed tnt on impact
     - '383:20'
     #this is a cobweb to slow the enemy, will be spawned a block
     - '30:0'

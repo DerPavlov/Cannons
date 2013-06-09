@@ -1,9 +1,12 @@
 package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.cannon.Cannon;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
-public class CannonRedstoneEvent
+public class CannonRedstoneEvent extends Event
 {
+    private static final HandlerList handlers = new HandlerList();
     private Cannon cannon;
     private boolean cancelled;
 
@@ -13,7 +16,7 @@ public class CannonRedstoneEvent
         this.cancelled = false;
     }
 
-    Cannon getCannon()
+    public Cannon getCannon()
     {
         return cannon;
     }
@@ -25,5 +28,13 @@ public class CannonRedstoneEvent
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }

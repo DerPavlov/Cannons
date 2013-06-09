@@ -1,5 +1,6 @@
 package at.pavlov.cannons.event;
 
+import at.pavlov.cannons.config.MessageEnum;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -9,12 +10,14 @@ import at.pavlov.cannons.cannon.Cannon;
 public class CannonBeforeCreateEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private Cannon cannon;
+    private MessageEnum message;
 	private Player player;
 	private boolean cancelled;
 	
-	public CannonBeforeCreateEvent(Cannon cannon, Player player) {
+	public CannonBeforeCreateEvent(Cannon cannon, MessageEnum message, Player player) {
 
         this.cannon = cannon;
+        this.message = message;
         this.player = player;
         this.cancelled = false;
     }
@@ -41,5 +44,14 @@ public class CannonBeforeCreateEvent extends Event {
 
     public Player getPlayer() {
         return player;
+    }
+
+
+    public MessageEnum getMessage() {
+        return message;
+    }
+
+    public void setMessage(MessageEnum message) {
+        this.message = message;
     }
 }

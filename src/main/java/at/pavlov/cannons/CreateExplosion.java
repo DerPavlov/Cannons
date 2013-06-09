@@ -8,6 +8,8 @@ import java.util.Random;
 import java.util.UUID;
 
 
+import at.pavlov.cannons.event.ProjectileImpactEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -177,11 +179,12 @@ public class CreateExplosion {
     	if (blocklist.size() > 0) 
     	{
     	
-    		//create tnt event
+    		//create bukkit event
     		EntityExplodeEvent event = new EntityExplodeEvent(cannonball.getSnowball(), impactLoc, blocklist, 1.0f);
-    		
     		//handle with bukkit
     		plugin.getServer().getPluginManager().callEvent(event);
+
+
 		
     		//if not canceled 
     		if(!event.isCancelled() && plugin.BlockBreakPluginLoaded() == false)
@@ -452,16 +455,15 @@ public class CreateExplosion {
     //####################################  CREATE_EXPLOSION ##############################
     public void detonate(FlyingProjectile cannonball)
     {
-    	Projectile projectile = cannonball.getProjectile();
+    	Projectile projectile = cannonball.getProjectile().clone();
     	Snowball snowball = cannonball.getSnowball();
-
 
         LivingEntity shooter = snowball.getShooter();
         Player player = null;
         if (shooter instanceof Player)
             player = (Player) shooter;
     	
-    	//blocks form the impact to the impactloc
+    	//blocks from the impact of the projectile to the location of the explosion
     	Location impactLoc = blockBreaker(cannonball);
     	
     	//get world
@@ -474,13 +476,25 @@ public class CreateExplosion {
     	float explosion_power = (float) projectile.getExplosionPower();
     	//find living entities
 		List<Entity> entity;
-		
+
+        //fire impact event
+        ProjectileImpactEvent impactEvent = new ProjectileImpactEvent(projectile, impactLoc);
+        Bukkit.getServer().getPluginManager().callEvent(impactEvent);
+
+        //if canceled then exit
+        if (impactEvent.isCancelled())
+        {
+            //event canceled, make a save fake explosion
+            world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
+            return;
+        }
 
 			
 		//explosion event
 		boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
 		boolean blockDamage = projectile.getExplosionDamage();
 	    boolean canceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
+
 
         //send a message about the impact
         plugin.displayImpactMessage(player, impactLoc, canceled);

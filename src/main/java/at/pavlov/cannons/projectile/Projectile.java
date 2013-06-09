@@ -10,7 +10,7 @@ import at.pavlov.cannons.container.MaterialHolder;
 
 
 
-public class Projectile {
+public class Projectile implements Cloneable{
 	private String projectileID;
 	private String projectileName;
 	private String itemName;
@@ -58,6 +58,21 @@ public class Projectile {
 	{
 		return projectile.getProjectileID().equals(projectileID); 
 	}
+
+    @Override
+    public Projectile clone()
+    {
+        try
+        {
+            // call clone in Object.
+            return (Projectile) super.clone();
+        }
+        catch(CloneNotSupportedException e)
+        {
+            System.out.println("Cloning not allowed.");
+            return this;
+        }
+    }
 	
 	/**
 	 * returns true if both the id and data are equivalent of data == -1

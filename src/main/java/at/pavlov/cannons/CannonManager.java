@@ -285,30 +285,18 @@ public class CannonManager
                 if (!silent)
                     userMessages.displayMessage(owner, message, cannon);
 
+                CannonBeforeCreateEvent cbceEvent = new CannonBeforeCreateEvent(cannon, message, player);
+                Bukkit.getServer().getPluginManager().callEvent(cbceEvent);
 
 
                 //add cannon to the list if everything was fine and return the cannon
-                if (message != null && message == MessageEnum.CannonCreated)
+                if (!cbceEvent.isCancelled() && cbceEvent.getMessage() != null && cbceEvent.getMessage() == MessageEnum.CannonCreated)
                 {
-
-
-                    plugin.logDebug("a new cannon was create by " + owner);
-                    
-                    CannonBeforeCreateEvent cbceEvent = new CannonBeforeCreateEvent(cannon, player);
-                	Bukkit.getServer().getPluginManager().callEvent(cbceEvent);
-                	 
-                	if(cbceEvent.isCancelled()) {
-                		// if it is canceled, don't let it create the cannon 
-                		return null; // let's just return null - unless theres a better way to do this?
-                		
-                	}
-                	
-                	createCannon(cannon);
+                    plugin.logDebug("a new cannon was create by " + cannon.getOwner());
+                    createCannon(cannon);
                 	
                 	CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
                 	Bukkit.getServer().getPluginManager().callEvent(caceEvent);
-
-                	
                 }
                 else
                 {

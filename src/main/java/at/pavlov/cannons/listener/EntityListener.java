@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import at.pavlov.cannons.event.CannonFireEvent;
+import at.pavlov.cannons.event.ProjectileImpactEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,7 +50,7 @@ public class EntityListener implements Listener
 				FlyingProjectile flying = iterator.next();
 				if (event.getEntity().equals(flying.getSnowball()))
 				{
-					plugin.getExplosion().detonate(flying);
+    				plugin.getExplosion().detonate(flying);
 					iterator.remove();
 				}
 			}

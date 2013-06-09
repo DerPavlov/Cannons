@@ -6,15 +6,28 @@ import at.pavlov.cannons.cannon.Cannon;
 
 
 public class FireTaskWrapper{
-	public Cannon cannon;
-	public Player player;
-	public boolean deleteCharge;
+	private Cannon cannon;
+    private Player player;
 	
-	public FireTaskWrapper(Cannon cannon, Player player, boolean deleteCharge)
-	{
-		this.cannon = cannon;
-		this.player = player;
-		this.deleteCharge = deleteCharge;
+	public FireTaskWrapper(Cannon cannon, Player player)
+    {
+        this.cannon = cannon;
+        this.player = player;
 	}
-	
+
+    public Cannon getCannon() {
+        return cannon;
+    }
+
+    public void setCannon(Cannon cannon) {
+        this.cannon = cannon;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

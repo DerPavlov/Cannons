@@ -205,7 +205,7 @@ public class CalcAngle {
 		gunAngles returnValue = new gunAngles(0.0 ,0.0);
 		
 		//calc vertical angle difference
-		returnValue.setVertical(loc.getPitch() - (cannon.getVerticalAngle() + design.getDefaultVerticalAngle()));
+		returnValue.setVertical(-loc.getPitch() - (cannon.getVerticalAngle() + design.getDefaultVerticalAngle()));
 		
 		//get yaws of cannon and player
 		double cannonYaw = CannonsUtil.directionToYaw(cannon.getCannonDirection());

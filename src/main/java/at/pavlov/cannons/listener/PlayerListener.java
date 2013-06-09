@@ -2,6 +2,11 @@ package at.pavlov.cannons.listener;
 
 import java.util.Iterator;
 
+import at.pavlov.cannons.event.CannonFireEvent;
+import at.pavlov.cannons.event.CannonRedstoneEvent;
+import at.pavlov.cannons.event.CannonUseEvent;
+import at.pavlov.cannons.event.InteractAction;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -291,6 +296,12 @@ public class PlayerListener implements Listener
 				plugin.logDebug("redstone torch");
 				if (cannon.isRedstoneTorchInterface(block.getLocation())) 
                 {
+                    CannonRedstoneEvent redEvent = new CannonRedstoneEvent(cannon);
+                    Bukkit.getServer().getPluginManager().callEvent(redEvent);
+
+                    if (redEvent.isCancelled())
+                        return;
+
                     MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
                     plugin.logDebug("fire cannon returned: " + message.getString());
                 }
@@ -315,6 +326,12 @@ public class PlayerListener implements Listener
 						plugin.logDebug("redstone wire ");
 						if (cannon.isRedstoneWireInterface(block.getLocation()))
                         {
+                            CannonRedstoneEvent redEvent = new CannonRedstoneEvent(cannon);
+                            Bukkit.getServer().getPluginManager().callEvent(redEvent);
+
+                            if (redEvent.isCancelled())
+                                return;
+
                             MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
                             plugin.logDebug("fire cannon returned: " + message.getString());
                         }
@@ -337,6 +354,12 @@ public class PlayerListener implements Listener
 					plugin.logDebug("redstone repeater ");
 					if (cannon.isRedstoneRepeaterInterface(block.getLocation())) 
                     {
+                        CannonRedstoneEvent redEvent = new CannonRedstoneEvent(cannon);
+                        Bukkit.getServer().getPluginManager().callEvent(redEvent);
+
+                        if (redEvent.isCancelled())
+                            return;
+
                         MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
                         plugin.logDebug("fire cannon returned: " + message.getString());
                     }
@@ -353,8 +376,25 @@ public class PlayerListener implements Listener
 			plugin.logDebug("redfire with button");
 			//check if the button is a loading firing interface of the cannon
 			if (cannon.isRestoneTrigger(event.getBlock().getLocation()))
-			{ 
-				fireCannon.prepareFire(cannon, null, false); 
+			{
+                //get the user of the cannon
+                Player player = null;
+                if (cannon.getLastUser() != null)
+                    player = Bukkit.getPlayer(cannon.getLastUser());
+                cannon.setLastUser("");
+                if (player == null)
+                    return;
+
+                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.fireButton);
+                Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+                if (useEvent.isCancelled())
+                    return;
+
+                MessageEnum message =  fireCannon.prepareFire(cannon, null, false);
+                userMessages.displayMessage(player, message, cannon);
+
+
 			}
 		}
 		 
@@ -413,6 +453,14 @@ public class PlayerListener implements Listener
 			if ((config.getToolAdjust().equalsFuzzy(player.getItemInHand()) || config.getToolAutoaim().equalsFuzzy(player.getItemInHand())) && cannon.isLoadingBlock(clickedBlock.getLocation()))
 			{
 				plugin.logDebug("change cannon angle");
+
+                //fire event
+                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.adjust);
+                Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+                if (useEvent.isCancelled())
+                    return;
+
 				MessageEnum message = calcAngle.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
 
 				userMessages.displayMessage(player, message, cannon);
@@ -426,6 +474,14 @@ public class PlayerListener implements Listener
 			if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null)
 			{
 				plugin.logDebug("load projectile");
+
+                //fire event
+                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.loadProjectile);
+                Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+                if (useEvent.isCancelled())
+                    return;
+
 				// load projectile
 				MessageEnum message = cannon.loadProjectile(projectile, player);
 				// display message
@@ -436,10 +492,19 @@ public class PlayerListener implements Listener
 			if (cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(event.getItem()))
 			{
 				plugin.logDebug("load gunpowder");
-				// load gunpowder
+
+                //fire event
+                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.loadGunpowder);
+                Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+                if (useEvent.isCancelled())
+                    return;
+
+
+                // load gunpowder
 				MessageEnum message = cannon.loadGunpowder(player);
 
-				// display message
+   				// display message
 				userMessages.displayMessage(player, message, cannon);
 			}
 
@@ -447,7 +512,15 @@ public class PlayerListener implements Listener
 			if (cannon.isRightClickTrigger(clickedBlock.getLocation()))
 			{
 				plugin.logDebug("fire torch");
-				MessageEnum message = fireCannon.prepareFire(cannon, player, false);
+
+                //fire event
+                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.fireTorch);
+                Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+                if (useEvent.isCancelled())
+                    return;
+
+                MessageEnum message = fireCannon.prepareFire(cannon, player, false);
 
 				// display message
 				userMessages.displayMessage(player, message, cannon);
@@ -457,17 +530,8 @@ public class PlayerListener implements Listener
 			// ############ Button clicked ############################
 			if (cannon.isRestoneTrigger(clickedBlock.getLocation()))
 			{
-				plugin.logDebug("fire button");
-				//don't fire the cannon, only disply a message
-				MessageEnum message = fireCannon.getPrepareFireMessage(cannon, player);
-				
-				//only if the cannon is firing the name of the list
-				if (message == MessageEnum.CannonFire)
-				{
-					
-				}
-				
-				userMessages.displayMessage(player, message, cannon);
+				plugin.logDebug("interact event: fire button");
+                cannon.setLastUser(player.getName());
 
 				return;
 			}
