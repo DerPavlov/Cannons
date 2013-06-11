@@ -64,7 +64,7 @@ public class FireCannon {
 		CannonDesign design = cannon.getCannonDesign();
 		if (design == null) return null;
 		//if the player is not the owner of this gun
-		if (player != null && !cannon.getOwner().equals(player.getName()))
+		if (player != null && !cannon.getOwner().equals(player.getName())  && design.isAccessForOwnerOnly())
 		{
 			return MessageEnum.ErrorNotTheOwner;
 		}

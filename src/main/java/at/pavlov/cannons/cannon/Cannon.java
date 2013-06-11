@@ -281,7 +281,7 @@ public class Cannon
 		if (player != null)
 		{
 			//if the player is not the owner of this gun
-			if (!this.getOwner().equals(player.getName()))
+			if (!this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
 			{
 				return MessageEnum.ErrorNotTheOwner;
 			}
@@ -307,7 +307,7 @@ public class Cannon
 
 
 		//if the player is not the owner of this gun
-		if (player != null && !this.getOwner().equals(player.getName()))
+		if (player != null && !this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
 		{
 			return MessageEnum.ErrorNotTheOwner;
 		}

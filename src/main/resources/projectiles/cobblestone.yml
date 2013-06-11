@@ -66,6 +66,6 @@ placeBlock:
     - '30:0'
 loadPermission:
   #the permissions required for a player to use this projectile. There can be several permissions to load a projectile
-  - cannons.projectile.cobblestone
+  - cannons.projectile.default
 
 

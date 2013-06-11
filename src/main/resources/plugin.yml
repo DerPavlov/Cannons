@@ -19,6 +19,7 @@ permissions:
   cannons.player.*:
     description: Gives single permissions for loading, adjusting, firing and recall help with cannons
     children:
+      cannons.player.command: true
       cannons.player.build: true
       cannons.player.load: true
       cannons.player.adjust: true
@@ -30,6 +31,7 @@ permissions:
       cannons.player.reset: true
       cannons.player.redstone: true
       cannons.player.list: true
+      cannons.projectile.default: true
   cannons.admin.*:
     description: Gives all admin rights
     children:
@@ -37,6 +39,9 @@ permissions:
       cannons.admin.reset: true
       cannons.admin.list: true
 
+  cannons.player.command:
+      description: Allows a player to use the help commands
+      default: true
   cannons.player.build:
       description: Allows a player to build a cannon
       default: false
@@ -78,6 +83,9 @@ permissions:
       default: false
   cannons.player.list:
       description: Allows a player to request a list of all his cannons
+      default: false
+  cannons.projectile.default:
+      description: Allows a player to use default projectiles
       default: false
   cannons.admin.reload:
       description: Allows an admin to reload the config

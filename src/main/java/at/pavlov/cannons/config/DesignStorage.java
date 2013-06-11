@@ -45,7 +45,7 @@ public class DesignStorage
 	 */
 	public void loadCannonDesigns()
 	{
-		plugin.logInfo("loading cannon designs");
+		plugin.logInfo("Loading cannon designs");
 
 		//clear designList before loading
 		cannonDesignList.clear();

@@ -61,7 +61,7 @@ public class ProjectileStorage
 	 */
 	public void loadProjectiles()
 	{
-		plugin.logInfo("Load projectile configs");
+		plugin.logInfo("Loading projectile configs");
 		
 		//clear old list
 		this.projectileList.clear();

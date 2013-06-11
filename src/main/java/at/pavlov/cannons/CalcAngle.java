@@ -110,7 +110,7 @@ public class CalcAngle {
         if (player != null)
         {
             //if the player is not the owner of this gun
-            if (!cannon.getOwner().equals(player.getName()))
+            if (!cannon.getOwner().equals(player.getName())  && design.isAccessForOwnerOnly())
             {
                 return MessageEnum.ErrorNotTheOwner;
             }
