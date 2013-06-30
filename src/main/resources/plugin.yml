@@ -1,6 +1,6 @@
 name: Cannons
 main: at.pavlov.cannons.Cannons
-version: 2.0.1
+version: ${version}-${build.number}
 softdepend: [WorldEdit,ObsidianDestroyer,CreeperHeal]
 author: DerPavlov
 description: Fire block build cannons and smash your enemies
@@ -11,10 +11,11 @@ commands:
 
 permissions:
   cannons.*:
-    description: Gives single permissions for loading, adjusting, firing and recall help with cannons
+    description: Gives  permissions for loading, adjusting, firing and recall help with cannons
     children:
-      cannons.player.*: true
-      cannons.admin.*: true
+      cannons.player: true
+      cannons.admin: true
+    default: op
   
   cannons.player.*:
     description: Gives single permissions for loading, adjusting, firing and recall help with cannons
@@ -32,61 +33,65 @@ permissions:
       cannons.player.redstone: true
       cannons.player.list: true
       cannons.projectile.default: true
+      cannons.player.limitA: false
+      cannons.player.limitB: false
+    default: op
+
+  cannons.player.command:
+    description: Allows a player to use the help commands
+    default: true
+  cannons.player.build:
+    description: Allows a player to build a cannon
+    default: false
+  cannons.player.load:
+    description: Allows a player to load a cannon
+    default: false
+  cannons.player.fire:
+    description: Allows a player to fire a cannon
+    default: false
+  cannons.player.adjust:
+    description: Allows a player to adjust a cannon
+    default: false
+  cannons.player.autoaim:
+    description: Allows a player to autoaim with a cannon
+    default: false
+  cannons.player.redstone:
+    description: Allows a player to use redstone with a cannon
+    default: false
+  cannons.player.autoreload:
+    description: Allows a player to use autoreload on a cannon
+    default: false
+  cannons.player.limitA:
+    description: Maximum amount of cannons a player can place
+    default: false
+  cannons.player.limitB:
+    description: Maximum amount of cannons a player can place
+    default: false
+  cannons.player.help:
+    description: Allows a player to request help with a cannon
+    default: true
+  cannons.player.reset:
+    description: Allows a player to delete all of his build cannons.
+    default: false
+  cannons.player.redstone:
+    description: Allows a player to place redstone torch under a cannon
+    default: false
+  cannons.player.list:
+    description: Allows a player to request a list of all his cannons
+    default: false
+  cannons.projectile.default:
+    description: Allows a player to use default projectiles
+    default: false
+
+
   cannons.admin.*:
     description: Gives all admin rights
     children:
       cannons.admin.reload: true
       cannons.admin.reset: true
       cannons.admin.list: true
+    default: op
 
-  cannons.player.command:
-      description: Allows a player to use the help commands
-      default: true
-  cannons.player.build:
-      description: Allows a player to build a cannon
-      default: false
-  cannons.player.load:
-      description: Allows a player to load a cannon
-      default: false
-  cannons.player.fire:
-      description: Allows a player to fire a cannon
-      default: false
-  cannons.player.adjust:
-      description: Allows a player to adjust a cannon
-      default: false
-  cannons.player.autoaim:
-      description: Allows a player to autoaim with a cannon
-      default: false
-  cannons.player.redstone:
-      description: Allows a player to use redstone with a cannon
-      default: false
-  cannons.player.autoreload:
-      description: Allows a player to use autoreload on a cannon
-      default: false
-  cannons.player.limitA:
-      description: Maximum amount of cannons a player can place
-      default: false
-  cannons.player.limitB:
-      description: Maximum amount of cannons a player can place
-      default: false
-  cannons.player.limit:
-      description: Set the of cannons a player can build as number e.g. limit.5
-      default: false
-  cannons.player.help:
-      description: Allows a player to request help with a cannon
-      default: false
-  cannons.player.reset:
-      description: Allows a player to delete all of his build cannons.
-      default: false
-  cannons.player.redstone:
-      description: Allows a player to place redstone torch under a cannon
-      default: false
-  cannons.player.list:
-      description: Allows a player to request a list of all his cannons
-      default: false
-  cannons.projectile.default:
-      description: Allows a player to use default projectiles
-      default: false
   cannons.admin.reload:
       description: Allows an admin to reload the config
       default: op

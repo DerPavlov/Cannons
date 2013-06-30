@@ -21,9 +21,6 @@ import com.avaje.ebean.EbeanServer;
 import com.nitnelave.CreeperHeal.CreeperHeal;
 import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
 
-import de.tyranus.minecraft.bukkit.guildawards.GuildAwardsPlugin;
-import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
-
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
@@ -70,8 +67,6 @@ public class Cannons extends JavaPlugin
 	private CreeperHeal creeperHeal;
 	private ObsidianDestroyer obsidianDestroyer;
 
-	// cannon guild
-	private GuildAwardsPlugin guildAwards;
 
 	public Cannons()
 	{
@@ -137,9 +132,6 @@ public class Cannons extends JavaPlugin
 			// obsidian Breaker
 			creeperHeal = getCreeperHeal();
 			obsidianDestroyer = getObsidianDestroyer();
-
-			// cannon guild
-			guildAwards = getGuildAwards();
 
 			// load config
 			config.loadConfig();
@@ -355,35 +347,6 @@ public class Cannons extends JavaPlugin
 			return true;
 		return false;
 	}
-
-	/**
-	 * loads the guildawards hook
-	 * @return
-	 */
-	private GuildAwardsPlugin getGuildAwards()
-	{
-		GuildAwardsPlugin guildAwards = null;
-		Plugin plug = pm.getPlugin("GuildAwards");
-		// GuildAwards may not be loaded
-		if (plug != null)
-		{
-			guildAwards = ((GuildAwardsPlugin) plug);
-			logger.info(getLogPrefix() + "GuildAwards hook loaded");
-		}
-		return guildAwards;
-	}
-
-	/**
-	 * returns the guildAwardsConnector
-	 * @return
-	 */
-	public GunnerGuildConnector getCannonGuildHandler()
-	{
-		if (guildAwards != null) { return guildAwards.getExternalInterface().getGunnerGuildConnector(); }
-		return null;
-	}
-
-
 
 	public PersistenceDatabase getPersistenceDatabase()
 	{

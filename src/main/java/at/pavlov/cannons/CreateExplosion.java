@@ -31,7 +31,6 @@ import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
-import de.tyranus.minecraft.bukkit.guildawards.external.GunnerGuildConnector;
 
 public class CreateExplosion {
 	
@@ -536,9 +535,8 @@ public class CreateExplosion {
 	//####################################  transmittingEntities  ##############################
 	private void transmittingEntities(List<Entity> after, Entity shooter)
 	{
-		//check if GuildAwards is loaded
-		GunnerGuildConnector handler = plugin.getCannonGuildHandler();
-		if (handler == null) return;
+        //exit now
+        shooter = null;
 		
 		//check if there is a shooter, redstone cannons are not counted
 		if (shooter == null) return;
@@ -580,7 +578,7 @@ public class CreateExplosion {
 		if (killedEntities.size() > 0)
 		{
 			try {
-				handler.updateGunnerReputation((Player) shooter, killedEntities, distance);
+				//handler.updateGunnerReputation((Player) shooter, killedEntities, distance);
 			} catch (Exception e) {
 				plugin.logSevere("Error adding reputation to player");
 			}	
