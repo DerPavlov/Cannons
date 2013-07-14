@@ -461,13 +461,43 @@ public class Cannon
      * @param block
      * @return
      */
-    public boolean isChestAndSignInterface(Location block)
+    public boolean isChestInterface(Location block)
     {
         for (Location loc : design.getChestsAndSigns(this))
         {
             if (loc.equals(block))
             {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * return true if this location where the torch interacts with the cannon
+     * does not check the ID
+     *
+     * @param loc
+     * @return
+     */
+    public boolean isCannonSign(Location loc)
+    {
+        if (loc.getBlock().getType() != Material.WALL_SIGN) return false;
+
+        CannonBlocks cannonBlocks  = this.getCannonDesign().getCannonBlockMap().get(this.getCannonDirection());
+        if (cannonBlocks != null)
+        {
+            for (SimpleBlock cannonblock : cannonBlocks.getChestsAndSigns())
+            {
+                // compare location
+                if (cannonblock.toLocation(this.getWorldBukkit(),this.offset).equals(loc))
+                {
+                    Block block = loc.getBlock();
+                    //compare and data
+                    //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
+                    if (cannonblock.getData() == block.getData() || block.getData() == -1 || cannonblock.getData() == -1 )
+                        return true;
+                }
             }
         }
         return false;
@@ -760,7 +790,9 @@ public class Cannon
 		// update all possible sign locations
 		for (Location signLoc : design.getChestsAndSigns(this))
 		{
-			updateSign(signLoc.getBlock());
+            //check blocktype and orientation before updating sign.
+            if (isCannonSign(signLoc))
+			    updateSign(signLoc.getBlock());
 		}
 	}
 
@@ -771,7 +803,7 @@ public class Cannon
 	 */
 	private void updateSign(Block block)
 	{
-		if (block.getType() != Material.WALL_SIGN) return;
+
 
 		Sign sign = (Sign) block.getState();
 

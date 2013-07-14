@@ -278,7 +278,7 @@ public class CannonManager
                 
                 
                 //if a sign is required to operate the cannon, there must be at least one sign
-                if ((message == null || message == MessageEnum.CannonCreated) && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
+                if (message == MessageEnum.CannonCreated && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
                     message = MessageEnum.ErrorMissingSign;
 
                 //send messages
@@ -340,6 +340,12 @@ public class CannonManager
 
 						// check all other blocks of the cannon
 						boolean isCannon = true;
+                        //check for empty entries
+                        if (designBlockList.size() == 0)
+                        {
+                            isCannon = false;
+                            plugin.logSevere("There are empty cannon design schematics in your design folder. Please check it.");
+                        }
 						for (SimpleBlock checkBlocks : designBlockList)
 						{
 							if (!checkBlocks.compareBlockFuzzy(world, offset))
