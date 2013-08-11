@@ -480,7 +480,7 @@ public class CreateExplosion {
             float rand = r.nextFloat();
             damage *= rand + 0.5;
 
-            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + String.format("0.0", damage));
+            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + String.format("%.2f", damage));
 
             // apply damage to the player.
             if (damage >= 1)
@@ -507,7 +507,7 @@ public class CreateExplosion {
             LivingEntity living = (LivingEntity) next;
 
             double dist = impactLoc.distance((living).getEyeLocation());
-            plugin.logDebug("Distance to impact: " + dist);
+            plugin.logDebug("Distance to impact: " + String.format("%.2f", dist));
             //if the entity is too far away, return
             if (dist > 2) return;
 
@@ -523,7 +523,7 @@ public class CreateExplosion {
             float rand = r.nextFloat();
             damage *= rand + 0.5;
 
-            plugin.logDebug("DirectHitDamage done to " + living.getType()  + String.format("0.0", damage));
+            plugin.logDebug("DirectHitDamage done to " + living.getType()  + String.format("%.2f", damage));
 
             // apply damage to the player.
             if (damage >= 1)
