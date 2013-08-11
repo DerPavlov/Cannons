@@ -21,6 +21,7 @@ public enum MessageEnum
 	SettingHorizontalAngleLeft ("Aiming.SettingHorizontalAngleLeft"),
 	AimingModeEnabled ("Aiming.EnableAimingMode"),
 	AimingModeDisabled ("Aiming.DisableAimingMode"),
+    AimingModeTooFarAway ("Aiming.TooFarForAimingMode"),
 	
 	//load
 	loadProjectile ("Load.Projectile"),

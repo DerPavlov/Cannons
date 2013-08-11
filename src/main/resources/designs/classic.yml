@@ -87,7 +87,7 @@ constructionBlocks:
   chestAndSign: '68:-1'
   #indicates where redstone torches can be placed for redstone autoload and firing to work. Default is redstone torch
   redstoneTorch: '76:5'
-  #the block used to indicate where redstone wiring needs to be placed for redstone autoloading and firing to work. Default is redstone dust
+  #the block used to indicate where redstone wiring needs to be placed for redstone autoloading and firing to work. Default is redstone repeater
   restoneWireAndRepeater: '93:-1'
   #options for where a redstone signal needs to lead to in order to activate redstone autoloading and firing
   redstoneTrigger: 

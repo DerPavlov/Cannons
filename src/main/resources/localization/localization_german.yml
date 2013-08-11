@@ -11,6 +11,7 @@ Error:
 Aiming:
   EnableAimingMode: 'GREEN [Cannons] Zielmodus aktiviert'
   DisableAimingMode: 'RED [Cannons] Zielmodus deaktiviert'
+  TooFarForAimingMode: 'YELLOW [Cannons] Zu weit entfernt für den Zielmodus'
   SettingCombinedAngle: 'YELLOW [Cannons] Neuer Winkel HDEGREE° YELLOW horizontal und GOLD VDEGREE° YELLOW vertikal'
   SettingVerticalAngleUp: 'YELLOW [Cannons] Neuer vertikaler Winkel GOLD VDEGREE Grad'
   SettingVerticalAngleDown: 'YELLOW [Cannons] Neuer vertikaler Winkel GOLD VDEGREE Grad'

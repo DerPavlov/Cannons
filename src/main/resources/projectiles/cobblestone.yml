@@ -38,6 +38,12 @@ explosion:
   explosionPower: 2
   #whether the explosion will destroy blocks
   doesExplosionDamage: true
+  #if the projectile hits the player additional damage is done. Damage is in full hearts and the player has 10 hearts in vanilla minecraft.
+  directHitDamage: 5
+  #if the player is next to an explosion he will receive additional damage
+  playerDamageRange: 10
+  #the damage which the player receives when he is near an explosion. Damage is in full hearts and the player has 10 hearts in vanilla minecraft.
+  playerDamage: 3
   #the range of the potion effects specified below
   potionRange: 5
   #how long the effects will last. If the potion duration is <= 0 it will be disabled

@@ -217,7 +217,6 @@ public class UserMessages {
         {
             //the projectile exploded
             messageEnum = MessageEnum.ProjectileExplosion;
-
         }
         else
         {
@@ -230,6 +229,11 @@ public class UserMessages {
         if (message == null)
         {
             plugin.logSevere("No " + messageEnum.getString() + " in localization file");
+            return;
+        }
+        //if the message is something like this Explosion: '' it will pass quietly
+        if (message.isEmpty())
+        {
             return;
         }
         //replace tags
@@ -263,6 +267,11 @@ public class UserMessages {
 			plugin.logSevere("Message " + messageEnum.getString() + " not found.");
 			return null;
 		}
+        //if the message is something like this Explosion: '' it will pass quietly
+        if (message.isEmpty())
+        {
+            return null;
+        }
 		
 		if (cannon != null)
 		{

@@ -135,7 +135,6 @@ public class Cannons extends JavaPlugin
 
 			// load config
 			config.loadConfig();
-			logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been enabled");
 
 			// Initialize the database
 			initializeDatabase();
@@ -163,9 +162,11 @@ public class Cannons extends JavaPlugin
 			} catch (IOException e) {
 			    // Failed to submit the stats :-(
 			}
+
+            // Plugin succesfully enabled
+            logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been enabled");
 			
-			// Plugin succesfully enabled
-			//System.out.print(String.format("[%s v%s] has been succesfully enabled!", getDescription().getName(), getDescription().getVersion()));
+
 
 
 		}
@@ -341,8 +342,8 @@ public class Cannons extends JavaPlugin
 	 */
 	public boolean BlockBreakPluginLoaded()
 	{
-		if (creeperHeal != null)
-			return true;
+		//if (creeperHeal != null)
+		//	return true;
 		if (obsidianDestroyer != null)
 			return true;
 		return false;

@@ -30,6 +30,9 @@ public class Projectile implements Cloneable{
 	private float explosionPower;
 	private boolean explosionDamage;
 	private boolean penetrationDamage;
+    private double directHitDamage;
+    private double playerDamageRange;
+    private double playerDamage;
 	private double potionRange;
 	private double potionDuration;
 	private int potionAmplifier;
@@ -401,10 +404,27 @@ public class Projectile implements Cloneable{
 	{
 		this.blockPlaceVelocity = blockPlaceVelocity;
 	}
+    public double getDirectHitDamage() {
+        return directHitDamage;
+    }
 
+    public void setDirectHitDamage(double directHitDamage) {
+        this.directHitDamage = directHitDamage;
+    }
 
-	
+    public double getPlayerDamageRange() {
+        return playerDamageRange;
+    }
 
-	
+    public void setPlayerDamageRange(double playerDamageRange) {
+        this.playerDamageRange = playerDamageRange;
+    }
 
+    public double getPlayerDamage() {
+        return playerDamage;
+    }
+
+    public void setPlayerDamage(double playerDamage) {
+        this.playerDamage = playerDamage;
+    }
 }

@@ -165,6 +165,9 @@ public class ProjectileStorage
 		//explosion
 		projectile.setExplosionPower(projectileConfig.getInt("explosion.explosionPower", 2));
 		projectile.setExplosionDamage(projectileConfig.getBoolean("explosion.doesExplosionDamage", true));
+        projectile.setDirectHitDamage(projectileConfig.getDouble("explosion.directHitDamage", 5.0));
+        projectile.setPlayerDamageRange(projectileConfig.getDouble("explosion.playerDamageRange", 3.0));
+        projectile.setPlayerDamage(projectileConfig.getDouble("explosion.playerDamage", 5.0));
 		projectile.setPotionRange(projectileConfig.getDouble("explosion.potionRange", 1.0));
 		projectile.setPotionDuration(projectileConfig.getDouble("explosion.potionDuration", 1.0));
 		projectile.setPotionAmplifier(projectileConfig.getInt("explosion.potionAmplifier", 0));

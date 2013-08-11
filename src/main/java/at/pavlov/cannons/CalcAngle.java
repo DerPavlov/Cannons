@@ -295,28 +295,40 @@ public class CalcAngle {
 		
 		return new gunAngles(0.0, 0.0);
 	}
-	
+
+    /**
+     * returns the cannon of the player if he is in aiming mode
+     * @param player the player who is in aiming mode
+     * @return the cannon which is in aiming mode by the given player
+     */
+    public Cannon getCannonInAimingMode(Player player)
+    {
+        //return the cannon of the player if he is in aiming mode
+        return inAimingMode.get(player);
+    }
 
 	
 	/**
 	 * if the player is not near the cannon
 	 * @param player The player which has moved
+     * @return false if the player is too far away
 	 */
-	public void PlayerMove(Player player)
-	{		
-		if (inAimingMode.containsKey(player) == true)
-		{	
-			//check if player if far away from the cannon
-			Cannon cannon = inAimingMode.get(player);
-			CannonDesign design = plugin.getCannonDesign(cannon);
-			//go to trigger location
-			Location locCannon = design.getFiringTrigger(cannon);
-			if (player.getLocation().distance(locCannon) > 2)
-			{
-				//cancel aiming mode if too far away
-				disableAimingMode(player);
-			}
-		}		
+	public boolean distanceCheck(Player player, Cannon cannon)
+	{
+        // no cannon? then exit
+        if (cannon == null)
+            return true;
+
+        //check if player if far away from the cannon
+        CannonDesign design = plugin.getCannonDesign(cannon);
+		//go to trigger location
+		Location locCannon = design.getFiringTrigger(cannon);
+		if (player.getLocation().distance(locCannon) > 4)
+		{
+			//cancel aiming mode if too far away
+			return false;
+        }
+        return true;
 	}
 	
 	//############## updateAimingMode   ################################
@@ -338,11 +350,13 @@ public class CalcAngle {
         		else
         		{
         			//leave aiming Mode
-        			disableAimingMode(player);
+        			MessageEnum message = disableAimingMode(player);
+                    userMessages.displayMessage(player, message, cannon);
         		}
     		}	
     	}
 	}
+
 	
 	
 	//############## ToggleAimingMode   ################################
@@ -352,15 +366,25 @@ public class CalcAngle {
 		if (inAimingMode.containsKey(player) == true)
 		{
 			//player in map -> remove
-			disableAimingMode(player);
-		}
+			MessageEnum message = disableAimingMode(player);
+            userMessages.displayMessage(player, message, cannon);
+        }
 		else
 		{
 			//check if player has permission to aim
 			if (player.hasPermission("cannons.player.adjust") == true)
 			{
-				userMessages.displayMessage(player, MessageEnum.AimingModeEnabled, cannon);
-				inAimingMode.put(player, cannon);
+                //check distance before enabling the cannon
+                if (distanceCheck(player, cannon) == true)
+                {
+                    userMessages.displayMessage(player, MessageEnum.AimingModeEnabled, cannon);
+                    inAimingMode.put(player, cannon);
+                }
+                else
+                {
+                    userMessages.displayMessage(player, MessageEnum.AimingModeTooFarAway, cannon);
+                }
+
 			}
 			else
 			{
@@ -372,14 +396,15 @@ public class CalcAngle {
 	}
 	
 	//############## disableAimingMode   ################################
-	public void disableAimingMode(Player player)
+	public MessageEnum disableAimingMode(Player player)
 	{		
 		if (inAimingMode.containsKey(player) == true)
 		{
 			//player in map -> remove
-			userMessages.displayMessage(player, MessageEnum.AimingModeDisabled, null);
 			inAimingMode.remove(player);
+            return MessageEnum.AimingModeDisabled;
 		}
+        return null;
 	}
 	
 	/**

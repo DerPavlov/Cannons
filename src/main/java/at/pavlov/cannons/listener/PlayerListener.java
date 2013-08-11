@@ -62,7 +62,14 @@ public class PlayerListener implements Listener
 	public void PlayerMove(PlayerMoveEvent event)
 	{
 		// only active if the player is in aiming mode
-		calcAngle.PlayerMove(event.getPlayer());
+		if (calcAngle.distanceCheck(event.getPlayer(), calcAngle.getCannonInAimingMode(event.getPlayer())) == false)
+        {
+            userMessages.displayMessage(event.getPlayer(), MessageEnum.AimingModeTooFarAway);
+            MessageEnum message = calcAngle.disableAimingMode(event.getPlayer());
+            userMessages.displayMessage(event.getPlayer(), message);
+        }
+
+
 	}
 
 	// ########### BlockFromTo #######################################
@@ -172,7 +179,6 @@ public class PlayerListener implements Listener
 	@EventHandler
 	public void BlockPlace(BlockPlaceEvent event)
 	{
-		plugin.logDebug("BlockPlace event was fired");
 		
 		Block block = event.getBlockPlaced();
 		Location blockLoc = block.getLocation();
@@ -438,8 +444,11 @@ public class PlayerListener implements Listener
 			if (cannon == null)
 			{
 				// all other actions will stop aiming mode
-				if (event.getAction() == Action.RIGHT_CLICK_AIR) 
-					calcAngle.disableAimingMode(event.getPlayer());
+				if (event.getAction() == Action.RIGHT_CLICK_AIR)
+                {
+					MessageEnum message = calcAngle.disableAimingMode(event.getPlayer());
+                    userMessages.displayMessage(player, message);
+                }
 				return;
 			}
 

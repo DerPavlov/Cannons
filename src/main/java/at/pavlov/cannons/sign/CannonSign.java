@@ -8,12 +8,6 @@ import org.bukkit.block.Sign;
 public class CannonSign
 {
 
-	public CannonSign()
-	{
-		
-	}
-	
-
 	
 	/**
 	 * returns line written on the sign sign

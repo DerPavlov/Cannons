@@ -15,12 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
@@ -131,7 +126,9 @@ public class CreateExplosion {
     	World world = snowball.getWorld();
     	int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
     	Location impactLoc = snowballLoc.clone();
-    	
+
+        plugin.logDebug("penetration: " + penetration);
+
     	// the cannonball will only break blocks if it has penetration. 
     	if (cannonball.getProjectile().getPenetration() > 0)
     	{
@@ -185,7 +182,8 @@ public class CreateExplosion {
 
 
 		
-    		//if not canceled 
+    		//if not canceled
+            plugin.logDebug("Block penetration cancelled: " + event.isCancelled() + " BlockBreakPluignLoaded: " + plugin.BlockBreakPluginLoaded());
     		if(!event.isCancelled() && plugin.BlockBreakPluginLoaded() == false)
     		{
     			// break water, lava, obsidian if cannon projectile
@@ -407,35 +405,36 @@ public class CreateExplosion {
     	}
     	return blockingBlocks;
     }
-    
-  //####################################  doPlayerDamage ##############################
+
+    /**
+     * Gives a player next to an explosion an entity effect
+     * @param impactLoc
+     * @param next
+     * @param cannonball
+     */
     private void applyPotionEffect(Location impactLoc, Entity next, FlyingProjectile cannonball)
     {
     	Projectile projectile = cannonball.getProjectile();
-    
-    	double dist = impactLoc.distanceSquared(next.getLocation());
-    	//if the entity is too far away, return
-    	if (dist > projectile.getPotionRange()) return;
-		
-    	// duration of the potion effect
-    	double duration = projectile.getPotionDuration()*20;
-    	
-		if (next instanceof LivingEntity)
-		{				
-			//calc damage
-			LivingEntity living = (LivingEntity) next;
 
-			
+        if (next instanceof LivingEntity)
+        {
+            LivingEntity living = (LivingEntity) next;
+
+    	    double dist = impactLoc.distanceSquared(living.getEyeLocation());
+    	    //if the entity is too far away, return
+    	    if (dist > projectile.getPotionRange()) return;
+		
+    	    // duration of the potion effect
+    	    double duration = projectile.getPotionDuration()*20;
+
 			//check line of sight and reduce damage if the way is blocked
 			int blockingBlocks = checkLineOfSight(impactLoc, living.getEyeLocation());
 			duration = duration / (blockingBlocks + 1);
 			
-			//critical
+			//randomizer
 			Random r = new Random();
-			int crit = r.nextInt(10);
-			if (crit == 0) duration *= 3; 
-	
-		
+			float rand = r.nextFloat();
+			duration *= rand + 0.5;
 		
 			// apply potion effect if the duration is not small then 1 tick
 			if (duration >= 1)
@@ -450,10 +449,95 @@ public class CreateExplosion {
 			}
 		}
     }
+
+    /**
+     * Hurts a player next to an explosion
+     * @param impactLoc
+     * @param next
+     * @param cannonball
+     */
+    private void doPlayerDamage(Location impactLoc, Entity next, FlyingProjectile cannonball)
+    {
+        Projectile projectile = cannonball.getProjectile();
+
+        if (next instanceof LivingEntity)
+        {
+            LivingEntity living = (LivingEntity) next;
+
+            double dist = impactLoc.distanceSquared((living).getEyeLocation());
+            //if the entity is too far away, return
+            if (dist > projectile.getPlayerDamageRange()) return;
+
+            //given damage is in full hearts. However Minecraft used half hearts to calculate the live
+            double damage = projectile.getPlayerDamage()*2;
+
+            //check line of sight and reduce damage if the way is blocked
+            int blockingBlocks = checkLineOfSight(impactLoc, living.getEyeLocation());
+            damage = damage / (blockingBlocks + 1);
+
+            //randomizer
+            Random r = new Random();
+            float rand = r.nextFloat();
+            damage *= rand + 0.5;
+
+            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + damage);
+
+            // apply damage to the player.
+            if (damage >= 1)
+            {
+                living.damage((int) Math.floor(damage));
+            }
+        }
+    }
+
+
+    /**
+     * Hurts a player hit by a projectile
+     * @param impactLoc
+     * @param next
+     * @param cannonball
+     */
+    private void doDirectHitDamage(Location impactLoc, Entity next, FlyingProjectile cannonball)
+    {
+        Projectile projectile = cannonball.getProjectile();
+
+
+        if (next instanceof LivingEntity)
+        {
+            LivingEntity living = (LivingEntity) next;
+
+            double dist = impactLoc.distanceSquared((living).getEyeLocation());
+            plugin.logDebug("Distance to impact: " + dist);
+            //if the entity is too far away, return
+            if (dist > 4) return;
+
+            //given damage is in full hearts. However Minecraft used half hearts to calculate the live
+            double damage = projectile.getDirectHitDamage()*2;
+
+            //check line of sight and reduce damage if the way is blocked
+            int blockingBlocks = checkLineOfSight(impactLoc, living.getEyeLocation());
+            damage = damage / (blockingBlocks + 1);
+
+            //randomizer
+            Random r = new Random();
+            float rand = r.nextFloat();
+            damage *= rand + 0.5;
+
+            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + damage);
+
+            // apply damage to the player.
+            if (damage >= 1)
+            {
+                living.damage((int) Math.floor(damage));
+            }
+        }
+    }
     
     //####################################  CREATE_EXPLOSION ##############################
     public void detonate(FlyingProjectile cannonball)
     {
+        plugin.logDebug("detonate cannonball");
+
     	Projectile projectile = cannonball.getProjectile().clone();
     	Snowball snowball = cannonball.getSnowball();
 
@@ -514,6 +598,8 @@ public class CreateExplosion {
             {
                 Entity next = it.next();
                 applyPotionEffect(impactLoc, next, cannonball);
+                doPlayerDamage(impactLoc, next, cannonball);
+                doDirectHitDamage(impactLoc, next, cannonball);
             }
 
 
