@@ -420,7 +420,7 @@ public class CreateExplosion {
         {
             LivingEntity living = (LivingEntity) next;
 
-    	    double dist = impactLoc.distanceSquared(living.getEyeLocation());
+    	    double dist = impactLoc.distance(living.getEyeLocation());
     	    //if the entity is too far away, return
     	    if (dist > projectile.getPotionRange()) return;
 		
@@ -464,12 +464,12 @@ public class CreateExplosion {
         {
             LivingEntity living = (LivingEntity) next;
 
-            double dist = impactLoc.distanceSquared((living).getEyeLocation());
+            double dist = impactLoc.distance((living).getEyeLocation());
             //if the entity is too far away, return
             if (dist > projectile.getPlayerDamageRange()) return;
 
-            //given damage is in full hearts. However Minecraft used half hearts to calculate the live
-            double damage = projectile.getPlayerDamage()*2;
+            //given damage is in half hearts
+            double damage = projectile.getPlayerDamage();
 
             //check line of sight and reduce damage if the way is blocked
             int blockingBlocks = checkLineOfSight(impactLoc, living.getEyeLocation());
@@ -480,7 +480,7 @@ public class CreateExplosion {
             float rand = r.nextFloat();
             damage *= rand + 0.5;
 
-            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + damage);
+            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + String.format("0.0", damage));
 
             // apply damage to the player.
             if (damage >= 1)
@@ -506,13 +506,13 @@ public class CreateExplosion {
         {
             LivingEntity living = (LivingEntity) next;
 
-            double dist = impactLoc.distanceSquared((living).getEyeLocation());
+            double dist = impactLoc.distance((living).getEyeLocation());
             plugin.logDebug("Distance to impact: " + dist);
             //if the entity is too far away, return
-            if (dist > 4) return;
+            if (dist > 2) return;
 
-            //given damage is in full hearts. However Minecraft used half hearts to calculate the live
-            double damage = projectile.getDirectHitDamage()*2;
+            //given damage is in half hearts
+            double damage = projectile.getDirectHitDamage();
 
             //check line of sight and reduce damage if the way is blocked
             int blockingBlocks = checkLineOfSight(impactLoc, living.getEyeLocation());
@@ -523,7 +523,7 @@ public class CreateExplosion {
             float rand = r.nextFloat();
             damage *= rand + 0.5;
 
-            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + damage);
+            plugin.logDebug("DirectHitDamage done to " + living.getType()  + String.format("0.0", damage));
 
             // apply damage to the player.
             if (damage >= 1)
