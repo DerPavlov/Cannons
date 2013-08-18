@@ -290,65 +290,6 @@ public class Cannons extends JavaPlugin
 		return true;
 	}
 
-
-	/**
-	 * returns the creeperheal handle
-	 * @return
-	 */
-	private CreeperHeal getCreeperHeal()
-	{
-		CreeperHeal creeperHeal = null;
-		Plugin plug = pm.getPlugin("CreeperHeal");
-		// CreeperHeal may not be loaded
-		if (plug != null)
-		{
-			creeperHeal = ((CreeperHeal) plug);
-			logger.info(getLogPrefix() + "CreeperHeal hook loaded");
-		}
-		return creeperHeal;
-	}
-
-	/**
-	 * returns true if creeperHeal is loaded
-	 * @return
-	 */
-	public boolean isCreeperHealLoaded()
-	{
-		if (creeperHeal != null) { return true; }
-
-		return false;
-	}
-
-	/**
-	 * returns the handle of obsidianDestroyer
-	 * @return
-	 */
-	private ObsidianDestroyer getObsidianDestroyer()
-	{
-		ObsidianDestroyer obsidianDestroyer = null;
-		Plugin plug = pm.getPlugin("ObsidianDestroyer");
-		// ObsidianDestroyer may not be loaded
-		if (plug != null)
-		{
-			obsidianDestroyer = ((ObsidianDestroyer) plug);
-			logger.info(getLogPrefix() + "ObsidianDestroyer hook loaded");
-		}
-		return obsidianDestroyer;
-	}
-
-	/**
-	 * return true if creeperHeal or obsidianDestroyer is loaded
-	 * @return
-	 */
-	public boolean BlockBreakPluginLoaded()
-	{
-		//if (creeperHeal != null)
-		//	return true;
-		if (obsidianDestroyer != null)
-			return true;
-		return false;
-	}
-
 	public PersistenceDatabase getPersistenceDatabase()
 	{
 		return persistenceDatabase;

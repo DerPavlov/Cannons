@@ -408,6 +408,23 @@ public class CannonsUtil
         return reduction*4/100;
     }
 
+    public static void reduceArmorDurability(Player player)
+    {
+        org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+        if (inv == null) return;
+
+        for(ItemStack item : inv.getArmorContents())
+        {
+            if(item != null)
+            {
+                short newDurabiltiy = (short) (item.getDurability() + 1);
+                System.out.println("new Dura: " + newDurabiltiy);
+                item.setDurability(newDurabiltiy);
+            }
+
+        }
+    }
+
 
 
 }

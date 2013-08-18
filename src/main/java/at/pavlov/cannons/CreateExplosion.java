@@ -184,8 +184,7 @@ public class CreateExplosion {
 
 		
     		//if not canceled
-            plugin.logDebug("Block penetration cancelled: " + event.isCancelled() + " BlockBreakPluignLoaded: " + plugin.BlockBreakPluginLoaded());
-    		if(!event.isCancelled() && plugin.BlockBreakPluginLoaded() == false)
+    		if(!event.isCancelled());// && plugin.BlockBreakPluginLoaded() == false)
     		{
     			// break water, lava, obsidian if cannon projectile
     			for (int i = 0; i < event.blockList().size(); i++)
@@ -490,14 +489,22 @@ public class CreateExplosion {
                 reduction *= (1-CannonsUtil.getArmorDamageReduced(player)) * (1-CannonsUtil.getBlastProtection(player));
             }
 
-            plugin.logDebug("PlayerDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " reduction: " + String.format("%.2f", reduction));
+            plugin.logDebug("PlayerDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " armor reduction factor: " + String.format("%.2f", reduction));
 
             damage = damage * reduction;
 
-            // apply damage to the player.
+            // apply damage to the entity.
             if (damage >= 1)
             {
+                //damage entity
                 living.damage((int) Math.floor(damage));
+
+                //if player wears armor reduce damage
+                if (living instanceof Player)
+                {
+                    Player player = (Player) living;
+                    CannonsUtil.reduceArmorDurability(player);
+                }
             }
         }
     }
@@ -542,13 +549,21 @@ public class CreateExplosion {
                 reduction *= (1-CannonsUtil.getArmorDamageReduced(player)) * (1-CannonsUtil.getProjectileProtection(player));
             }
 
-            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " armor reduction: " + String.format("%.2f", reduction));
+            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " armor reduction factor: " + String.format("%.2f", reduction));
 
             damage = damage * reduction;
-            // apply damage to the player.
+            // apply damage to the entity.
             if (damage >= 1)
             {
+                //damage entity
                 living.damage((int) Math.floor(damage));
+
+                //if player wears armor reduce damage
+                if (living instanceof Player)
+                {
+                    Player player = (Player) living;
+                    CannonsUtil.reduceArmorDurability(player);
+                }
             }
         }
     }
@@ -565,21 +580,33 @@ public class CreateExplosion {
         Player player = null;
         if (shooter instanceof Player)
             player = (Player) shooter;
+
+        //do no underwater damage if disabled (explosion but no damage)
+        boolean isUnderwater = false;
+        if ( snowball.getLocation().clone().subtract(snowball.getVelocity().normalize().multiply(2)).getBlock().isLiquid())
+        {
+            isUnderwater = true;
+        }
+        plugin.logDebug("Explosion is underwater: " + isUnderwater);
     	
-    	//blocks from the impact of the projectile to the location of the explosion
+    	//breaks blocks from the impact of the projectile to the location of the explosion
     	Location impactLoc = blockBreaker(cannonball);
     	
     	//get world
     	World world = impactLoc.getWorld();      	
-   
-    	
+
     	//teleport snowball to impact
     	snowball.teleport(impactLoc);
     	
     	float explosion_power = (float) projectile.getExplosionPower();
-        //do no underwater damage if disabled (explosion but no damage)
-        if (projectile.isUnderwaterDamage() == false && impactLoc.getBlock().isLiquid())
+
+        //reset explosion power if it is underwater and not allowed
+        if (projectile.isUnderwaterDamage() == false && isUnderwater)
+        {
+            plugin.logDebug("Underwater explosion power set to zero");
             explosion_power = 0;
+        }
+
     	//find living entities
 		List<Entity> entity;
 
@@ -594,7 +621,6 @@ public class CreateExplosion {
             world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
             return;
         }
-
 			
 		//explosion event
 		boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
@@ -603,6 +629,7 @@ public class CreateExplosion {
 
 
         //send a message about the impact (only if the projetile has enabled this feature)
+        plugin.logDebug("displayImpact Messages: " + projectile.isImpactMessage());
         if (projectile.isImpactMessage())
             plugin.displayImpactMessage(player, impactLoc, canceled);
 

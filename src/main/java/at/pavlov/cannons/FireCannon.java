@@ -142,7 +142,7 @@ public class FireCannon {
             {
                 //can't fire without charge
                 plugin.logDebug("Can't fire without a charge");
-                if (projectile == null)
+                if (cannon.getLoadedGunpowder() > 0)
                     return MessageEnum.ErrorNoProjectile;
                 return MessageEnum.ErrorNoGunpowder;
             }
