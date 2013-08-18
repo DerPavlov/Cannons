@@ -765,5 +765,4 @@ public class CannonDesign
 		this.permissionSpreadMultiplier = permissionSpreadMultiplier;
 	}
 
-
 }

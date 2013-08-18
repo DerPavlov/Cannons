@@ -9,6 +9,7 @@ import java.util.UUID;
 
 
 import at.pavlov.cannons.event.ProjectileImpactEvent;
+import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -434,7 +435,7 @@ public class CreateExplosion {
 			//randomizer
 			Random r = new Random();
 			float rand = r.nextFloat();
-			duration *= rand + 0.5;
+			duration *= rand/2 + 0.5;
 		
 			// apply potion effect if the duration is not small then 1 tick
 			if (duration >= 1)
@@ -465,6 +466,7 @@ public class CreateExplosion {
             LivingEntity living = (LivingEntity) next;
 
             double dist = impactLoc.distance((living).getEyeLocation());
+            plugin.logDebug("Distance to impact: " + String.format("%.2f", dist));
             //if the entity is too far away, return
             if (dist > projectile.getPlayerDamageRange()) return;
 
@@ -478,9 +480,19 @@ public class CreateExplosion {
             //randomizer
             Random r = new Random();
             float rand = r.nextFloat();
-            damage *= rand + 0.5;
+            damage *= rand/2 + 0.5;
 
-            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + String.format("%.2f", damage));
+            //calculate the armor reduction
+            double reduction = 1.0;
+            if (living instanceof Player)
+            {
+                Player player = (Player) living;
+                reduction *= (1-CannonsUtil.getArmorDamageReduced(player)) * (1-CannonsUtil.getBlastProtection(player));
+            }
+
+            plugin.logDebug("PlayerDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " reduction: " + String.format("%.2f", reduction));
+
+            damage = damage * reduction;
 
             // apply damage to the player.
             if (damage >= 1)
@@ -507,7 +519,6 @@ public class CreateExplosion {
             LivingEntity living = (LivingEntity) next;
 
             double dist = impactLoc.distance((living).getEyeLocation());
-            plugin.logDebug("Distance to impact: " + String.format("%.2f", dist));
             //if the entity is too far away, return
             if (dist > 2) return;
 
@@ -521,10 +532,19 @@ public class CreateExplosion {
             //randomizer
             Random r = new Random();
             float rand = r.nextFloat();
-            damage *= rand + 0.5;
+            damage *= rand/2 + 0.5;
 
-            plugin.logDebug("DirectHitDamage done to " + living.getType()  + String.format("%.2f", damage));
+            //calculate the armor reduction
+            double reduction = 1.0;
+            if (living instanceof Player)
+            {
+                Player player = (Player) living;
+                reduction *= (1-CannonsUtil.getArmorDamageReduced(player)) * (1-CannonsUtil.getProjectileProtection(player));
+            }
 
+            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " armor reduction: " + String.format("%.2f", reduction));
+
+            damage = damage * reduction;
             // apply damage to the player.
             if (damage >= 1)
             {
@@ -579,8 +599,9 @@ public class CreateExplosion {
 	    boolean canceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
 
 
-        //send a message about the impact
-        plugin.displayImpactMessage(player, impactLoc, canceled);
+        //send a message about the impact (only if the projetile has enabled this feature)
+        if (projectile.isImpactMessage())
+            plugin.displayImpactMessage(player, impactLoc, canceled);
 
 		if (canceled == true)
         {

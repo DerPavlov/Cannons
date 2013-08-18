@@ -44,7 +44,10 @@ public class Projectile implements Cloneable{
 	private double blockPlaceVelocity;
 	private List<MaterialHolder> blockPlaceList = new ArrayList<MaterialHolder>();
 
-	
+    //messages
+    private boolean impactMessage;
+
+	//permissions
 	private List<String> permissionLoad = new ArrayList<String>();
 	
 	public Projectile(String id)
@@ -426,5 +429,13 @@ public class Projectile implements Cloneable{
 
     public void setPlayerDamage(double playerDamage) {
         this.playerDamage = playerDamage;
+    }
+
+    public boolean isImpactMessage() {
+        return impactMessage;
+    }
+
+    public void setImpactMessage(boolean impactMessage) {
+        this.impactMessage = impactMessage;
     }
 }

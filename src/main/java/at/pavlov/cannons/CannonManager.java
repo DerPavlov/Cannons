@@ -478,7 +478,7 @@ public class CannonManager
 		// player implementation
 		else
 		{
-            if (newBuiltLimit < 0)
+            if (newBuiltLimit > 0)
             {
                 plugin.logDebug("build limit new: " + newBuiltLimit);
                 return newBuiltLimit;

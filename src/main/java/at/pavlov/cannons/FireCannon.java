@@ -255,7 +255,7 @@ public class FireCannon {
 			detonateTimefuse(cannonball);	
 
 			//confuse all entity which wear no helmets due to the blast of the cannon
-			List<Entity> living = snowball.getNearbyEntities(10, 10, 10);
+			List<Entity> living = snowball.getNearbyEntities(5, 5, 5);
 			//do only once
 			if (snowball != null && i==0)
 			{

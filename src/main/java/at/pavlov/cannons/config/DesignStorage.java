@@ -198,7 +198,7 @@ public class DesignStorage
 		cannonDesign.setPermissionSpreadMultiplier(cannonDesignConfig.getString("permissions.spreadMultiplier", "cannons.player.spreadMultiplier"));
 
 		// accessRestriction
-		cannonDesign.setAccessForOwnerOnly(cannonDesignConfig.getBoolean("realisticBehaviour.ownerOnly", false));
+		cannonDesign.setAccessForOwnerOnly(cannonDesignConfig.getBoolean("accessRestriction.ownerOnly", false));
 
 		// allowedProjectiles
 		cannonDesign.setAllowedProjectiles(cannonDesignConfig.getStringList("allowedProjectiles"));

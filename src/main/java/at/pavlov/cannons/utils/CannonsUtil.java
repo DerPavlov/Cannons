@@ -6,11 +6,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import at.pavlov.cannons.container.MaterialHolder;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
@@ -138,7 +141,7 @@ public class CannonsUtil
 	
 	
 	/**
-	 * rotates the direction by 90�	
+	 * rotates the direction by 90°
 	 * @param face
 	 * @return
 	 */
@@ -238,5 +241,173 @@ public class CannonsUtil
             default: return 0;
         }
     }
+
+    /**
+     * Armor would reduce the damage the player receives
+     * @param player
+     * @return
+     */
+    public static double getArmorDamageReduced(Player player)
+    {
+        // http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
+
+        if (player == null) return 0.0;
+
+        org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+        if (inv == null) return 0.0;
+
+        ItemStack boots = inv.getBoots();
+        ItemStack helmet = inv.getHelmet();
+        ItemStack chest = inv.getChestplate();
+        ItemStack pants = inv.getLeggings();
+        double red = 0.0;
+        if (helmet != null)
+        {
+            if(helmet.getType() == Material.LEATHER_HELMET)red = red + 0.04;
+            else if(helmet.getType() == Material.GOLD_HELMET)red = red + 0.08;
+            else if(helmet.getType() == Material.CHAINMAIL_HELMET)red = red + 0.08;
+            else if(helmet.getType() == Material.IRON_HELMET)red = red + 0.08;
+            else if(helmet.getType() == Material.DIAMOND_HELMET)red = red + 0.12;
+        }
+        //
+        if (boots != null)
+        {
+            if(boots.getType() == Material.LEATHER_BOOTS)red = red + 0.04;
+            else if(boots.getType() == Material.GOLD_BOOTS)red = red + 0.04;
+            else if(boots.getType() == Material.CHAINMAIL_BOOTS)red = red + 0.04;
+            else if(boots.getType() == Material.IRON_BOOTS)red = red + 0.08;
+            else if(boots.getType() == Material.DIAMOND_BOOTS)red = red + 0.12;
+        }
+        //
+        if (pants != null)
+        {
+            if(pants.getType() == Material.LEATHER_LEGGINGS)red = red + 0.08;
+            else if(pants.getType() == Material.GOLD_LEGGINGS)red = red + 0.12;
+            else if(pants.getType() == Material.CHAINMAIL_LEGGINGS)red = red + 0.16;
+            else if(pants.getType() == Material.IRON_LEGGINGS)red = red + 0.20;
+            else if(pants.getType() == Material.DIAMOND_LEGGINGS)red = red + 0.24;
+        }
+        //
+        if (chest != null)
+        {
+            if(chest.getType() == Material.LEATHER_CHESTPLATE)red = red + 0.12;
+            else if(chest.getType() == Material.GOLD_CHESTPLATE)red = red + 0.20;
+            else if(chest.getType() == Material.CHAINMAIL_CHESTPLATE)red = red + 0.20;
+            else if(chest.getType() == Material.IRON_CHESTPLATE)red = red + 0.24;
+            else if(chest.getType() == Material.DIAMOND_CHESTPLATE)red = red + 0.32;
+        }
+        return red;
+    }
+
+    public static double getBlastProtection(Player player)
+    {
+        //http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
+
+        if (player == null) return 0.0;
+
+        org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+        if (inv == null) return 0.0;
+
+        ItemStack boots = inv.getBoots();
+        ItemStack helmet = inv.getHelmet();
+        ItemStack chest = inv.getChestplate();
+        ItemStack pants = inv.getLeggings();
+
+        int lvl = 0;
+        double reduction = 0.0;
+
+        if (boots != null)
+        {
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+        }
+        if (helmet != null)
+        {
+            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+        }
+        if (chest != null)
+        {
+            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+        }
+        if (pants != null)
+        {
+            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+        }
+        //cap it to 25
+        if (reduction > 25) reduction = 25;
+
+        //give it some randomness
+        Random r = new Random();
+        reduction = reduction * (r.nextFloat()/2 + 0.5);
+
+        //cap it to 20
+        if (reduction > 20) reduction = 20;
+
+        //1 point is 4%
+        return reduction*4/100;
+    }
+
+    public static double getProjectileProtection(Player player)
+    {
+        //http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
+
+        if (player == null) return 0.0;
+
+        org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+        if (inv == null) return 0.0;
+        ItemStack boots = inv.getBoots();
+        ItemStack helmet = inv.getHelmet();
+        ItemStack chest = inv.getChestplate();
+        ItemStack pants = inv.getLeggings();
+
+        int lvl = 1;
+        double reduction = 0;
+
+        if (boots != null)
+        {
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+        }
+        if (helmet != null)
+        {
+            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+        }
+        if (chest != null)
+        {
+            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+        }
+        if (pants != null)
+        {
+            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+        }
+        //cap it to 25
+        if (reduction > 25) reduction = 25;
+
+        //give it some randomness
+        Random r = new Random();
+        reduction = reduction * (r.nextFloat()/2 + 0.5);
+
+        //cap it to 20
+        if (reduction > 20) reduction = 20;
+
+        //1 point is 4%
+        return reduction*4/100;
+    }
+
+
 
 }

@@ -179,6 +179,9 @@ public class ProjectileStorage
 		projectile.setBlockPlaceVelocity(projectileConfig.getDouble("placeBlock.velocity", 0.1));
 		projectile.setBlockPlaceList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("placeBlock.material")));
 
+        //loadPermissions
+        projectile.setImpactMessage(projectileConfig.getBoolean("message.hasImpactMessage", false));
+
 		//loadPermissions
 		projectile.setPermissionLoad(projectileConfig.getStringList("loadPermission"));
 		
