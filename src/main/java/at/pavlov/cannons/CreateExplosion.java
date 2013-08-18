@@ -52,54 +52,50 @@ public class CreateExplosion {
      * @return true if the block can be destroyed
      */
     private boolean breakBlock(Block block, List<Block> blocklist, Boolean superBreaker, Boolean blockDamage)
-    {    	
-    	Material material = block.getType();
+    {
+        MaterialHolder destroyedBlock = new MaterialHolder(block.getTypeId(), block.getData());
 				
-		//register explosion event
-		if (material != Material.AIR)
+		//air is not an block to break, so ignor it
+		if (!destroyedBlock.equals(Material.AIR))
 		{
-			//test if obsidian
-			if ((material == Material.OBSIDIAN))
-			{
-				if (superBreaker)
-				{
-					//don't do damage to blocks if false
-					if (blockDamage)
-						blocklist.add(block);
-					// break obsidian/water/laver
-					return true;
-				}
-				//can't break it
-				return false;
-			}
-			//test if water/lava blocks
-			else if (block.isLiquid())
-			{
-				if (superBreaker)
-				{
-					//don't do damage to blocks if false
-					if (blockDamage)
-						blocklist.add(block);
-					// break water/lava
-					return true;
-				}
-				//can't break it but the projectile can pass this block
-				return true;
-			}
-			else
-			{
-				//don't break bedrock
-				if (material != Material.BEDROCK)
-				{
-					//default material, add block to explosion blocklist
-					//don't do damage to blocks if false
-					if (blockDamage)
-						blocklist.add(block);
-					return true;
-				}
-				//bedrock can't be destroyed
-				return false;
-			}
+            //if it is unbreakable, ignore it
+            for (MaterialHolder unbreakableBlock: plugin.getmyConfig().getUnbreakableBlocks())
+            {
+                if (unbreakableBlock.equalsFuzzy(destroyedBlock))
+                {
+                    //this block is protected and impenetrable
+                    return false;
+                }
+            }
+
+			//test if it needs superbreaker
+            for (MaterialHolder superbreakerBlock : plugin.getmyConfig().getSuperbreakerBlocks())
+            {
+                if ((superbreakerBlock.equalsFuzzy(destroyedBlock)))
+                {
+                    if (superBreaker)
+                    {
+                        //this projectile has superbreaker and can destroy this block
+
+                        //don't do damage to blocks if false. But it will penetrate the blocks
+                        if (blockDamage)
+                            blocklist.add(block);
+                        // break it
+                        return true;
+                    }
+                    else
+                    {
+                        //it has not the superbreaker ability and this block is therefore impenetrable
+                        return false;
+                    }
+                }
+            }
+
+            //so it is not protected and not a superbreaker block. So break it
+            if (blockDamage)
+                blocklist.add(block);
+            return true;
+
 		}  
 		// air can be destroyed
     	return true;

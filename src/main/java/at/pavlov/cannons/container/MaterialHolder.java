@@ -91,7 +91,12 @@ public class MaterialHolder
 	{
 		this.data = data;
 	}
-	
+
+    /**
+     * compares the id of two Materials
+     * @param material
+     * @return
+     */
 	public boolean equals(Material material)
 	{
 		if (material == null) return false;

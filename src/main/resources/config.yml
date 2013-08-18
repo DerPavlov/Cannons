@@ -15,6 +15,29 @@ tools:
   firing: '259:0'
   #item used to rotate a cannon 90 degrees. Not implemented yet
   rotatingItem: '350:0'
+#enter here the blocks which require the superbreaker ability to destroy.
+#e.g. if you enter here the enchantment table it requires a projectile with superbreaker to be destroyed.
+#else it can be destroyed by normal explosions
+superbreakerBlocks:
+  #water
+  - 8
+  - 9
+  #lava
+  - 10
+  - 11
+  #obsidian
+  - 49
+  #enchantmenttable
+  - 116
+  #enderchest
+  - 130
+  #anvil
+  - 145
+#blocks which can't be destroyed by penetration of the projectile.
+#normal minecraft explosions are not affected by this option.
+unbreakableBlocks:
+  # bedrock
+  - 7
 database:
   #database implementation. Default is SQLite, can be changed to MySql if you change the driver.  
   username: bukkit

@@ -3,6 +3,10 @@ package at.pavlov.cannons.config;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.utils.CannonsUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -26,10 +30,15 @@ public class Config
 	private MaterialHolder toolAutoaim = new MaterialHolder(347, 0);
 	private MaterialHolder toolFiring = new MaterialHolder(259, 0);
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
-	
-	
 
-	private UserMessages userMessage;
+    //superbreakerBlocks
+    private List<MaterialHolder> superbreakerBlocks = new ArrayList<MaterialHolder>();
+
+    //unbreakableBlocks
+    private List<MaterialHolder> unbreakableBlocks = new ArrayList<MaterialHolder>();
+
+
+    private UserMessages userMessage;
 	private Cannons plugin;
 	private DesignStorage designStorage;
 	private ProjectileStorage projectileStorage;
@@ -60,7 +69,21 @@ public class Config
 		setToolAutoaim(new MaterialHolder(plugin.getConfig().getString("tools.autoaim", "347:0")));
 		setToolFiring(new MaterialHolder(plugin.getConfig().getString("tools.firing", "259:0")));
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
-		
+
+        //superbreakerBlocks
+        setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
+        //if this list is empty add some blocks
+        if (superbreakerBlocks.size() == 0)
+        {
+            plugin.logInfo("superbreakerBlock list is empty, adding some default blocks");
+        }
+
+        //unbreakableBlocks
+        setUnbreakableBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("unbreakableBlocks")));
+        if (unbreakableBlocks.size() == 0)
+        {
+            plugin.logInfo("unbreakableBlocks list is empty, adding some default blocks");
+        }
 	
 		//load other configs	
 		projectileStorage.loadProjectiles();
@@ -70,9 +93,6 @@ public class Config
 
 
 	}
-
-
-
 	
 
 	/**
@@ -180,7 +200,19 @@ public class Config
 	}
 
 
-	
-	
+    public List<MaterialHolder> getSuperbreakerBlocks() {
+        return superbreakerBlocks;
+    }
 
+    public void setSuperbreakerBlocks(List<MaterialHolder> superbreakerBlocks) {
+        this.superbreakerBlocks = superbreakerBlocks;
+    }
+
+    public List<MaterialHolder> getUnbreakableBlocks() {
+        return unbreakableBlocks;
+    }
+
+    public void setUnbreakableBlocks(List<MaterialHolder> unbreakableBlocks) {
+        this.unbreakableBlocks = unbreakableBlocks;
+    }
 }
