@@ -129,10 +129,6 @@ public class Cannons extends JavaPlugin
 			//call command executer
 			getCommand("cannons").setExecutor(commands);
 
-			// obsidian Breaker
-			creeperHeal = getCreeperHeal();
-			obsidianDestroyer = getObsidianDestroyer();
-
 			// load config
 			config.loadConfig();
 
