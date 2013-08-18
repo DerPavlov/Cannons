@@ -29,6 +29,7 @@ public class Projectile implements Cloneable{
 	//explosion
 	private float explosionPower;
 	private boolean explosionDamage;
+    private boolean underwaterDamage;
 	private boolean penetrationDamage;
     private double directHitDamage;
     private double playerDamageRange;
@@ -437,5 +438,13 @@ public class Projectile implements Cloneable{
 
     public void setImpactMessage(boolean impactMessage) {
         this.impactMessage = impactMessage;
+    }
+
+    public boolean isUnderwaterDamage() {
+        return underwaterDamage;
+    }
+
+    public void setUnderwaterDamage(boolean underwaterDamage) {
+        this.underwaterDamage = underwaterDamage;
     }
 }

@@ -165,6 +165,7 @@ public class ProjectileStorage
 		//explosion
 		projectile.setExplosionPower(projectileConfig.getInt("explosion.explosionPower", 2));
 		projectile.setExplosionDamage(projectileConfig.getBoolean("explosion.doesExplosionDamage", true));
+        projectile.setUnderwaterDamage(projectileConfig.getBoolean("explosion.doesUnderwaterExplosion", false));
         projectile.setDirectHitDamage(projectileConfig.getDouble("explosion.directHitDamage", 5.0));
         projectile.setPlayerDamageRange(projectileConfig.getDouble("explosion.playerDamageRange", 3.0));
         projectile.setPlayerDamage(projectileConfig.getDouble("explosion.playerDamage", 5.0));

@@ -577,6 +577,9 @@ public class CreateExplosion {
     	snowball.teleport(impactLoc);
     	
     	float explosion_power = (float) projectile.getExplosionPower();
+        //do no underwater damage if disabled (explosion but no damage)
+        if (projectile.isUnderwaterDamage() == false && impactLoc.getBlock().isLiquid())
+            explosion_power = 0;
     	//find living entities
 		List<Entity> entity;
 
