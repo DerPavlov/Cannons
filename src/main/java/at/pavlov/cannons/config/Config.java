@@ -75,14 +75,14 @@ public class Config
         //if this list is empty add some blocks
         if (superbreakerBlocks.size() == 0)
         {
-            plugin.logInfo("superbreakerBlock list is empty, adding some default blocks");
+            plugin.logInfo("superbreakerBlock list is empty");
         }
 
         //unbreakableBlocks
         setUnbreakableBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("unbreakableBlocks")));
         if (unbreakableBlocks.size() == 0)
         {
-            plugin.logInfo("unbreakableBlocks list is empty, adding some default blocks");
+            plugin.logInfo("unbreakableBlocks list is empty");
         }
 	
 		//load other configs	

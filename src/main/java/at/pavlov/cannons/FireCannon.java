@@ -98,7 +98,7 @@ public class FireCannon {
 				return MessageEnum.PermissionErrorProjectile;
 			}
 			//check for flint and steel
-			if ( design.isFiringItemRequired() && !config.getToolFiring().equalsFuzzy(player.getItemInHand()) )
+           if ( design.isFiringItemRequired() && !config.getToolFiring().equalsFuzzy(player.getItemInHand()) )
 			{
 				return MessageEnum.ErrorNoFlintAndSteel;
 			}
