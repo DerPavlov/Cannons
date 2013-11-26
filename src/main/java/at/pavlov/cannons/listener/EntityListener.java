@@ -5,10 +5,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -71,6 +74,8 @@ public class EntityListener implements Listener
 		
 		List<Block> blocks = event.blockList();
 
+
+
 		// first search if a barrel block was destroyed. 
 		for (int i = 0; i < blocks.size(); i++)
 		{
@@ -105,6 +110,28 @@ public class EntityListener implements Listener
 				}
 			}
 		}
+
+        //cannons event - remove unbreakable blocks
+        if (event.getEntity() == null)
+        {
+            plugin.logDebug("snowball event");
+            for (int i = 0; i < blocks.size(); i++)
+            {
+                Block block = blocks.get(i);
+
+                for (MaterialHolder unbreakableBlock : plugin.getmyConfig().getUnbreakableBlocks())
+                {
+                    plugin.logDebug("unbreakable: " + unbreakableBlock.getId());
+                    if (unbreakableBlock.equalsFuzzy(block))
+                    {
+                        plugin.logDebug("blocked");
+                        blocks.remove(i--);
+                    }
+                }
+            }
+        }
+
+
 		
 		//now remove all invalid cannons
 		plugin.getCannonManager().removeInvalidCannons();

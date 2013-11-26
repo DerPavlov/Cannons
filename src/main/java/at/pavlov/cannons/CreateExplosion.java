@@ -55,11 +55,11 @@ public class CreateExplosion {
     {
         MaterialHolder destroyedBlock = new MaterialHolder(block.getTypeId(), block.getData());
 				
-		//air is not an block to break, so ignor it
+		//air is not an block to break, so ignore it
 		if (!destroyedBlock.equals(Material.AIR))
 		{
             //if it is unbreakable, ignore it
-            for (MaterialHolder unbreakableBlock: plugin.getmyConfig().getUnbreakableBlocks())
+            for (MaterialHolder unbreakableBlock : plugin.getmyConfig().getUnbreakableBlocks())
             {
                 if (unbreakableBlock.equalsFuzzy(destroyedBlock))
                 {
@@ -173,10 +173,9 @@ public class CreateExplosion {
     	{
     	
     		//create bukkit event
-    		EntityExplodeEvent event = new EntityExplodeEvent(cannonball.getSnowball(), impactLoc, blocklist, 1.0f);
+    		EntityExplodeEvent event = new EntityExplodeEvent(null, impactLoc, blocklist, 1.0f);
     		//handle with bukkit
     		plugin.getServer().getPluginManager().callEvent(event);
-
 
 		
     		//if not canceled
@@ -191,7 +190,7 @@ public class CreateExplosion {
     					block =  event.blockList().get(i);
 					
     					// break the block, no matter what it is
-    					BlockBreak(block,event.getYield());
+                        BreakBreakNaturally(block,event.getYield());
     				}
     			}
     		}
@@ -204,7 +203,7 @@ public class CreateExplosion {
      * @param block
      * @param yield
      */
-	private void BlockBreak(Block block, float yield)
+	private void BreakBreakNaturally(Block block, float yield)
 	{
 		Random r = new Random();
 		if (r.nextFloat() > yield) 
@@ -621,15 +620,15 @@ public class CreateExplosion {
 		//explosion event
 		boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
 		boolean blockDamage = projectile.getExplosionDamage();
-	    boolean canceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
+	    boolean notCanceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
 
 
         //send a message about the impact (only if the projetile has enabled this feature)
         plugin.logDebug("displayImpact Messages: " + projectile.isImpactMessage());
         if (projectile.isImpactMessage())
-            plugin.displayImpactMessage(player, impactLoc, canceled);
+            plugin.displayImpactMessage(player, impactLoc, notCanceled);
 
-		if (canceled == true)
+		if (notCanceled == true)
         {
 
 
