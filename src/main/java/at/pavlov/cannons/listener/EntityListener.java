@@ -8,6 +8,7 @@ import java.util.List;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
+import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -29,7 +30,6 @@ public class EntityListener implements Listener
 	{
 		this.plugin = plugin;
 	}
-	
 
 	/**
 	 * Cannon snowball hits the ground

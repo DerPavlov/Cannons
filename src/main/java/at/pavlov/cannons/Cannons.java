@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,7 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
 import com.nitnelave.CreeperHeal.CreeperHeal;
-import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
 
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;

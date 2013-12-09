@@ -9,6 +9,7 @@ import java.util.UUID;
 
 
 import at.pavlov.cannons.event.ProjectileImpactEvent;
+import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,7 +39,6 @@ public class CreateExplosion {
 	public CreateExplosion (Cannons plugin, Config config)
 	{
 		this.plugin = plugin;
-        Config config1 = config;
 		transmittedEntities = new LinkedList<UUID>();
 	}
 
@@ -181,6 +181,10 @@ public class CreateExplosion {
     		//if not canceled
     		if(!event.isCancelled());// && plugin.BlockBreakPluginLoaded() == false)
     		{
+                //fire custom piercing event to notify other plugins
+                ProjectilePiercingEvent impactEvent = new ProjectilePiercingEvent(projectile, impactLoc, blocklist);
+                Bukkit.getServer().getPluginManager().callEvent(impactEvent);
+
     			// break water, lava, obsidian if cannon projectile
     			for (int i = 0; i < event.blockList().size(); i++)
     			{
@@ -212,7 +216,7 @@ public class CreateExplosion {
 		}
 		else
 		{
-			block.setTypeId(0);
+			block.setType(Material.AIR);
 		}
 	}
     
@@ -623,15 +627,12 @@ public class CreateExplosion {
 	    boolean notCanceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
 
 
-        //send a message about the impact (only if the projetile has enabled this feature)
-        plugin.logDebug("displayImpact Messages: " + projectile.isImpactMessage());
+        //send a message about the impact (only if the projectile has enabled this feature)
         if (projectile.isImpactMessage())
             plugin.displayImpactMessage(player, impactLoc, notCanceled);
 
 		if (notCanceled == true)
         {
-
-
             //place blocks around the impact like webs, lava, water
             spreadBlocks(impactLoc, cannonball);
 

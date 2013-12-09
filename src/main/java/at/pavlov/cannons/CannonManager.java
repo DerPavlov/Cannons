@@ -476,13 +476,10 @@ public class CannonManager
 			}
 		}
 		// player implementation
-		else
-		{
-            if (newBuiltLimit > 0)
-            {
-                plugin.logDebug("build limit new: " + newBuiltLimit);
-                return newBuiltLimit;
-            }
+		else if (newBuiltLimit > 0)
+        {
+            plugin.logDebug("build limit new: " + newBuiltLimit);
+            return newBuiltLimit;
 		}
         plugin.logDebug("no build limit found. Setting to max value.");
         return Integer.MAX_VALUE;
