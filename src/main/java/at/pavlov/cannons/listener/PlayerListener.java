@@ -2,7 +2,6 @@ package at.pavlov.cannons.listener;
 
 import java.util.Iterator;
 
-import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.event.CannonRedstoneEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.event.InteractAction;
@@ -26,7 +25,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import at.pavlov.cannons.CalcAngle;
+import at.pavlov.cannons.scheduler.CalcAngle;
 import at.pavlov.cannons.CannonManager;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.FireCannon;
@@ -285,7 +284,7 @@ public class PlayerListener implements Listener
 		Block block = event.getBlock();
 		if (block == null) return;
 		
-		plugin.logDebug("Redstone event was fired by " + block.getTypeId() + ":" + block.getData());
+		plugin.logDebug("Redstone event was fired by " + block.getType());
 
 		// ##########  redstone torch fire
 		// off because it turn form off to on
@@ -427,7 +426,6 @@ public class PlayerListener implements Listener
 			if (event.getClickedBlock() == null)
 			{
 				// no clicked block - get block player is looking at
-
 				clickedBlock = event.getPlayer().getTargetBlock(null, 4);
 			}
 			else

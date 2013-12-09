@@ -1,8 +1,9 @@
-package at.pavlov.cannons;
+package at.pavlov.cannons.scheduler;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;

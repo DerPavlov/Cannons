@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import at.pavlov.cannons.scheduler.CalcAngle;
+import at.pavlov.cannons.scheduler.Teleporter;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -52,6 +54,7 @@ public class Cannons extends JavaPlugin
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
 	private CalcAngle calcAngle;
+    private Teleporter teleporter;
 	private Commands commands;
 	
 	//Events
@@ -112,6 +115,7 @@ public class Cannons extends JavaPlugin
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, explosion);
 		this.calcAngle = new CalcAngle(this, userMessages, config);
+        this.teleporter = new Teleporter(this);
 		
 		this.persistenceDatabase = new PersistenceDatabase(this);
 
@@ -140,6 +144,8 @@ public class Cannons extends JavaPlugin
 
 			// setting up Aiming Mode Task
 			calcAngle.initAimingMode();
+            // setting up the Teleporter
+            teleporter.setupScheduler();
 
 			// save cannons
 			//.Formatter:off
@@ -386,4 +392,11 @@ public class Cannons extends JavaPlugin
 		this.getCannonManager().createCannon(cannon);
 	}
 
+    public Teleporter getTeleporter() {
+        return teleporter;
+    }
+
+    public void setTeleporter(Teleporter teleporter) {
+        this.teleporter = teleporter;
+    }
 }
