@@ -418,7 +418,6 @@ public class CannonsUtil
             if(item != null)
             {
                 short newDurabiltiy = (short) (item.getDurability() + 1);
-                System.out.println("new Dura: " + newDurabiltiy);
                 item.setDurability(newDurabiltiy);
             }
 

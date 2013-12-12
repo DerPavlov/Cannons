@@ -26,7 +26,7 @@ Cannon:
   Destroyed: 'RED [Cannons] Eine deiner Kanonen wurde zerstört.'
   Reseted: 'GREEN [Cannons] Alle deine Kanonen wurden aus der Datenbank entfernt.'
 Projectile:
-  Explosion: 'YELLOW [Cannons] Einschlag war in einer Entfernung von GOLD IMPACT_DISTANCEm YELLOW und GOLD IMPACT_Ym YELLOW Höhe'
+  Explosion: 'YELLOW [Cannons] Einschlag war in einer Entfernung von GOLD IMPACT_DISTANCEm YELLOW und GOLD IMPACT_Ym YELLOW GREEN Höhe'
   Canceled: 'YELLOW [Cannons] Einschlag war bei GOLD IMPACT_X, IMPACT_Y, IMPACT_Z YELLOW aber das Gebiet ist geschützt'
 Permission:
   ErrorRedstone: 'RED [Cannons] Du kannst diese Kanone nicht mit Redstone bedienen.'

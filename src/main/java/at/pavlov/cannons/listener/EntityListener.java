@@ -114,17 +114,15 @@ public class EntityListener implements Listener
         //cannons event - remove unbreakable blocks
         if (event.getEntity() == null)
         {
-            plugin.logDebug("snowball event");
+            plugin.logDebug("cannonball event");
             for (int i = 0; i < blocks.size(); i++)
             {
                 Block block = blocks.get(i);
 
                 for (MaterialHolder unbreakableBlock : plugin.getmyConfig().getUnbreakableBlocks())
                 {
-                    plugin.logDebug("unbreakable: " + unbreakableBlock.getId());
                     if (unbreakableBlock.equalsFuzzy(block))
                     {
-                        plugin.logDebug("blocked");
                         blocks.remove(i--);
                     }
                 }

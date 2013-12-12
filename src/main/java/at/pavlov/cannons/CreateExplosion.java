@@ -124,7 +124,7 @@ public class CreateExplosion {
     	int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
     	Location impactLoc = snowballLoc.clone();
 
-        plugin.logDebug("penetration: " + penetration);
+        plugin.logDebug("piercing some blocks at: " + penetration);
 
     	// the cannonball will only break blocks if it has penetration. 
     	if (cannonball.getProjectile().getPenetration() > 0)
@@ -647,14 +647,6 @@ public class CreateExplosion {
                 applyPotionEffect(impactLoc, next, cannonball);
                 doPlayerDamage(impactLoc, next, cannonball);
                 doDirectHitDamage(impactLoc, next, cannonball);
-            }
-
-
-            //teleport to impact
-            if (cannonball.getProjectile().hasProperty(ProjectileProperties.TELEPORT) == true)
-            {
-                //teleport shooter to impact
-                if (shooter != null) shooter.teleport(impactLoc);
             }
 
             //check which entities are affected by the event

@@ -5,9 +5,11 @@ import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -49,11 +51,24 @@ public class Teleporter {
                     continue;
 
                 Snowball ball = fproj.getSnowball();
-                shooter.teleport(ball.getLocation().subtract(ball.getVelocity().multiply(-3)));
+                //set some distance to the snowball to prevent a collision
+                Location optiLoc = ball.getLocation().clone().subtract(ball.getVelocity().normalize().multiply(10.0));
 
-                shooter.setVelocity(ball.getVelocity());
+
+                if (ball.getLocation().distance(shooter.getLocation())<20.0)
+                {
+                    Vector distToOptimum = optiLoc.toVector().subtract(shooter.getLocation().toVector());
+                    shooter.setVelocity(ball.getVelocity().add(distToOptimum.multiply(0.1)));
+                }
+
+                //teleport if there is a larger distance
+                if (ball.getLocation().distance(shooter.getLocation())>20.0)
+                {
+                    optiLoc.setYaw(shooter.getLocation().getYaw());
+                    optiLoc.setPitch(shooter.getLocation().getPitch());
+                    shooter.teleport(optiLoc);
+                }
             }
-
         }
     }
 

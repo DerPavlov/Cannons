@@ -196,12 +196,17 @@ public class ProjectileStorage
 	private void copyDefaultProjectiles()
 	{
 		File cobblestoneYmlFile = new File(plugin.getDataFolder(), "projectiles/cobblestone.yml");
-
 		if (!cobblestoneYmlFile.exists())
 		{
 			cobblestoneYmlFile.getParentFile().mkdirs();
 			CannonsUtil.copyFile(plugin.getResource("projectiles/cobblestone.yml"), cobblestoneYmlFile);
 		}
+        File enderpearlYmlFile = new File(plugin.getDataFolder(), "projectiles/enderpearl.yml");
+        if (!enderpearlYmlFile.exists())
+        {
+            enderpearlYmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("projectiles/enderpearl.yml"), enderpearlYmlFile);
+        }
 	}
 	
 	
