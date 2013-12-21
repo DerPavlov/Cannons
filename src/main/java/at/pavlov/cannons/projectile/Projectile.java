@@ -43,6 +43,7 @@ public class Projectile implements Cloneable{
 	private double blockPlaceRadius;
 	private int blockPlaceAmount;
 	private double blockPlaceVelocity;
+    private double tntFuseTime;
 	private List<MaterialHolder> blockPlaceList = new ArrayList<MaterialHolder>();
 
     //messages
@@ -446,5 +447,13 @@ public class Projectile implements Cloneable{
 
     public void setUnderwaterDamage(boolean underwaterDamage) {
         this.underwaterDamage = underwaterDamage;
+    }
+
+    public double getTntFuseTime() {
+        return tntFuseTime;
+    }
+
+    public void setTntFuseTime(double tntFuseTime) {
+        this.tntFuseTime = tntFuseTime;
     }
 }

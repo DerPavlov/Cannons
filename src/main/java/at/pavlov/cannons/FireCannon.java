@@ -136,7 +136,6 @@ public class FireCannon {
                 {
                     plugin.logDebug("Charge loaded from chest");
                 }
-
             }
             else
             {

@@ -226,7 +226,7 @@ public class CreateExplosion {
      * @param loc
      * @param data
      */
-    private void PlaceMob(Location impactLoc, Location loc, double entityVelocity, int data)
+    private void PlaceMob(Location impactLoc, Location loc, double entityVelocity, int data, double tntFuse)
     {    	
     	World world = impactLoc.getWorld();
      	Random r = new Random();
@@ -260,6 +260,12 @@ public class CreateExplosion {
     		Vector vect = loc.clone().subtract(impactLoc).toVector().multiply(entityVelocity/dist);
     		//set the entity velocity
     		entity.setVelocity(vect);
+            //for TNT only
+            if (entity instanceof TNTPrimed)
+            {
+                TNTPrimed tnt = (TNTPrimed) entity;
+                tnt.setFuseTicks((int) tntFuse*20);
+            }
     	}
     }
     
@@ -318,7 +324,7 @@ public class CreateExplosion {
 					if (placeBlock.equals(Material.MONSTER_EGG))
 					{
 						//else place mob
-						PlaceMob(impactLoc, loc, projectile.getBlockPlaceVelocity(), placeBlock.getData());
+						PlaceMob(impactLoc, loc, projectile.getBlockPlaceVelocity(), placeBlock.getData(),projectile.getTntFuseTime());
 					}
 					else
 					{

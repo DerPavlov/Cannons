@@ -69,7 +69,8 @@ permissions:
   #if a player has no permission for redstone, it is not possible to wire a cannon with redstone or uses torches.
   #firing a prewired cannon however is possible.
   redstone: cannons.player.redstone
-  #cannon will autoreload if this player. The ammunition comes from the chest next to the cannon.
+  #cannon will autoreload if the player is sneaking and fires the cannon.
+  #The ammunition comes from the chest next to the cannon
   autoreload: cannons.player.autoreload
   #how much better the player can handle the cannon.
   #possible values are cannons.player.spreadmultiplier.1 - cannons.player.spreadmultiplier.10 for a multiplier of 0.1 - 1.0

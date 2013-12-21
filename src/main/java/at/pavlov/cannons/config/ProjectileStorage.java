@@ -178,6 +178,7 @@ public class ProjectileStorage
 		projectile.setBlockPlaceRadius(projectileConfig.getDouble("placeBlock.radius", 3.0));
 		projectile.setBlockPlaceAmount(projectileConfig.getInt("placeBlock.amount", 3));
 		projectile.setBlockPlaceVelocity(projectileConfig.getDouble("placeBlock.velocity", 0.1));
+        projectile.setTntFuseTime(projectileConfig.getDouble("placeBlock.tntFuseTime", 3));
 		projectile.setBlockPlaceList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("placeBlock.material")));
 
         //messages

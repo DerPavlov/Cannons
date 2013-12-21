@@ -701,7 +701,6 @@ public class Cannon
 
 		deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
 		double vertical = Math.sin((design.getDefaultVerticalAngle() + verticalAngle + deviation) * Math.PI / 180);
-		
 
 		if (cannonDirection.equals(BlockFace.WEST))
 		{
@@ -736,7 +735,7 @@ public class Cannon
 		if (player == null) return 1.0;
 		
 		
-		// only if the permissions system is enabled. If there are no permissions everything is true.
+		// only if the permissions system is enabled. If there are no permissions, everything is true.
 		if (!player.hasPermission( this.getCannonDesign().getPermissionSpreadMultiplier() + "." + Integer.MAX_VALUE))
 		{
 			// search if there is a valid entry 

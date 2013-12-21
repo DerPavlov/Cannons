@@ -465,20 +465,20 @@ public class CannonManager
 			if (player.hasPermission("cannons.player.limitB"))
 			{
 				// return the
-                plugin.logDebug("build limit B: " + config.getBuildLimitB());
+                plugin.logDebug("build limitB sets the number of cannons to: " + config.getBuildLimitB());
 				return config.getBuildLimitB();
 			}
 			// limit B is stronger
 			else if (player.hasPermission("cannons.player.limitA"))
 			{
-                plugin.logDebug("build limit A: " + config.getBuildLimitA());
+                plugin.logDebug("build limitA sets the number of cannons to: " + config.getBuildLimitA());
 				return config.getBuildLimitA();
 			}
 		}
 		// player implementation
-		else if (newBuiltLimit > 0)
+		if (newBuiltLimit >= 0)
         {
-            plugin.logDebug("build limit new: " + newBuiltLimit);
+            plugin.logDebug("permission build limit sets the maximum number of cannons to: " + newBuiltLimit);
             return newBuiltLimit;
 		}
         plugin.logDebug("no build limit found. Setting to max value.");
