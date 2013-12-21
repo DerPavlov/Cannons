@@ -54,12 +54,16 @@ public class Teleporter {
                 //set some distance to the snowball to prevent a collision
                 Location optiLoc = ball.getLocation().clone().subtract(ball.getVelocity().normalize().multiply(10.0));
 
-
-                if (ball.getLocation().distance(shooter.getLocation())<20.0)
-                {
-                    Vector distToOptimum = optiLoc.toVector().subtract(shooter.getLocation().toVector());
-                    shooter.setVelocity(ball.getVelocity().add(distToOptimum.multiply(0.1)));
-                }
+                Vector distToOptimum = optiLoc.toVector().subtract(shooter.getLocation().toVector());
+                Vector playerVel = ball.getVelocity().add(distToOptimum.multiply(0.1));
+                //cap for maximum speed
+                if (playerVel.getX() > 5.0)
+                    playerVel.setX(5.0);
+                if (playerVel.getY() > 5.0)
+                    playerVel.setY(5.0);
+                if (playerVel.getZ() > 5.0)
+                    playerVel.setZ(5.0);
+                shooter.setVelocity(playerVel);
 
                 //teleport if there is a larger distance
                 if (ball.getLocation().distance(shooter.getLocation())>20.0)

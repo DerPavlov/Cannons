@@ -155,7 +155,8 @@ public class Commands implements CommandExecutor
                         plugin.getCannonManager().deleteCannons(player.getName());
                         userMessages.displayMessage(player, MessageEnum.CannonsReseted);
                     }
-                    else
+                    //no help message if it is forbidden for this player
+                    else if (player.hasPermission("cannons.player.command"))
                     {
                         // display help
                         userMessages.displayMessage(player, MessageEnum.HelpText);
@@ -170,11 +171,28 @@ public class Commands implements CommandExecutor
 
 
 			}
-			else
-			{
-					// display help
-					userMessages.displayMessage(player, MessageEnum.HelpText);
-			}
+            //console command
+            else
+            {
+                //no help message if it is forbidden for this player
+                if(player != null)
+                {
+                    if(player.hasPermission("cannons.player.command"))
+                    {
+                        // display help
+                        userMessages.displayMessage(player, MessageEnum.HelpText);
+                    }
+                    else
+                    {
+                        plugin.logInfo("Player has no permission: cannons.player.command");
+                    }
+
+                }
+                else
+                {
+                    plugin.logInfo("Cannons plugin v" + plugin.getPluginDescription().getVersion() + " is running");
+                }
+            }
 			return true;
 		}
 		return false;
