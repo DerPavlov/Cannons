@@ -462,14 +462,14 @@ public class CannonManager
 		// config implementation
 		if (config.isBuildLimitEnabled())
 		{
-			if (player.hasPermission("cannons.player.limitB"))
+			if (player.hasPermission("cannons.player.limitB") && (newBuiltLimit > config.getBuildLimitB()))
 			{
 				// return the
                 plugin.logDebug("build limitB sets the number of cannons to: " + config.getBuildLimitB());
 				return config.getBuildLimitB();
 			}
 			// limit B is stronger
-			else if (player.hasPermission("cannons.player.limitA"))
+			else if (player.hasPermission("cannons.player.limitA") && (newBuiltLimit > config.getBuildLimitA()))
 			{
                 plugin.logDebug("build limitA sets the number of cannons to: " + config.getBuildLimitA());
 				return config.getBuildLimitA();

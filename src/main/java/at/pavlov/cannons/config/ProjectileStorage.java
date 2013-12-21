@@ -208,6 +208,12 @@ public class ProjectileStorage
             enderpearlYmlFile.getParentFile().mkdirs();
             CannonsUtil.copyFile(plugin.getResource("projectiles/enderpearl.yml"), enderpearlYmlFile);
         }
+        File tntYmlFile = new File(plugin.getDataFolder(), "projectiles/tnt.yml");
+        if (!tntYmlFile.exists())
+        {
+            tntYmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("projectiles/tnt.yml"), tntYmlFile);
+        }
 	}
 	
 	

@@ -65,7 +65,7 @@ placeBlock:
   amount: 0
   #the velocity of blocks/entities are slinged away from the impact
   velocity: 2.0
-  #the fuse time of primed TNT. You can spawn primed TNT with '383:20'
+  #the fuse time in seconds of primed TNT. You can spawn primed TNT with '383:20'
   tntFuseTime: 1.0
   #the blocks which will be placed. does not seem to support more tha one block type at a time. 
   #you can either spawn a block of material, or an entity by using the spawn egg id (383) and its entity id (http://www.minecraftwiki.net/wiki/Data_values#Entity_IDs)
