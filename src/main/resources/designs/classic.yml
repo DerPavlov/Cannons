@@ -84,6 +84,7 @@ allowedProjectiles:
   #make sure the name matches the name of the config file of the projectile you want this cannon to be able to fire. the .yml part does not need to be included
   - cobblestone
   - enderpearl
+  - tnt
 constructionBlocks:
   #blocks of the cannon schematic which are ignored and not required to build the cannon. Default is sand
   ignore: '12:0'

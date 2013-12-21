@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import at.pavlov.cannons.scheduler.CalcAngle;
 import at.pavlov.cannons.scheduler.Teleporter;
-import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,7 +20,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
-import com.nitnelave.CreeperHeal.CreeperHeal;
 
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
@@ -67,8 +65,8 @@ public class Cannons extends JavaPlugin
 	private MyDatabase database;
 
 	// creeperHeal to restore blocks
-	private CreeperHeal creeperHeal;
-	private ObsidianDestroyer obsidianDestroyer;
+	//private CreeperHeal creeperHeal;
+	//private ObsidianDestroyer obsidianDestroyer;
 
 
 	public Cannons()

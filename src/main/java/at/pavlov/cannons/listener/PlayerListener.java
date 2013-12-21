@@ -455,7 +455,7 @@ public class PlayerListener implements Listener
 
 			// prevent eggs and snowball from firing when loaded into the gun
 			Material ItemInHand = player.getItemInHand().getType();
-			if (ItemInHand == Material.EGG || ItemInHand == Material.SNOW_BALL || ItemInHand == Material.MONSTER_EGG)
+			if (ItemInHand == Material.EGG || ItemInHand == Material.SNOW_BALL || ItemInHand == Material.MONSTER_EGG || ItemInHand == Material.ENDER_PEARL)
 			{
 				event.setCancelled(true);
 			}

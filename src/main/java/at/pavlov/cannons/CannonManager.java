@@ -1,5 +1,6 @@
 package at.pavlov.cannons;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -231,6 +232,8 @@ public class CannonManager
 	 */
 	public Cannon getCannon(Location cannonBlock, String owner, boolean silent)
 	{
+        long startTime = System.nanoTime();
+
         //check if there is a cannon at this location
         Cannon cannon = checkCannon(cannonBlock, owner);
 
@@ -305,6 +308,9 @@ public class CannonManager
                 }
             }
         }
+
+        long elapsed = System.nanoTime() - startTime;
+        plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format(elapsed/1000000.0));
 
         return cannon;
 	}
