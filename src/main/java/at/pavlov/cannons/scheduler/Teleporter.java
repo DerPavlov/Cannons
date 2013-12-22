@@ -65,8 +65,8 @@ public class Teleporter {
                     playerVel.setZ(5.0);
                 shooter.setVelocity(playerVel);
 
-                //teleport if there is a larger distance
-                if (ball.getLocation().distance(shooter.getLocation())>20.0)
+                //teleport every 20 ticks to prevent a kick because of floating
+                if (shooter.getWorld().getFullTime() % 20 == 0)
                 {
                     optiLoc.setYaw(shooter.getLocation().getYaw());
                     optiLoc.setPitch(shooter.getLocation().getPitch());
