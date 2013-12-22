@@ -699,27 +699,33 @@ public class Cannon
 		
 		double playerSpreadMultiplier = getPlayerSpreadMultiplier(player);
 
-		double deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
-		double horizontal = Math.sin((horizontalAngle + deviation) * Math.PI / 180);
+        double deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
+        double azi = (horizontalAngle + deviation) * Math.PI / 180;
 
-		deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
-		double vertical = Math.sin((design.getDefaultVerticalAngle() + verticalAngle + deviation) * Math.PI / 180);
+        deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
+        double polar = (-design.getDefaultVerticalAngle() - verticalAngle + 90.0 + deviation)* Math.PI / 180;
+
+        double hx = Math.sin(polar)*Math.sin(azi);
+        double hy = Math.sin(polar)*Math.cos(azi);
+        double hz = Math.cos(polar);
+
+        System.out.println("azi " + horizontalAngle + " polar " + (-design.getDefaultVerticalAngle() - verticalAngle + 90.0) + " hx " + hx +  " hy " + hy +" hz " + hz);
 
 		if (cannonDirection.equals(BlockFace.WEST))
 		{
-			vect = new Vector(-1.0f, vertical, -horizontal);
+			vect = new Vector(-hy, hz, -hx);
 		}
 		else if (cannonDirection.equals(BlockFace.NORTH))
 		{
-			vect = new Vector(horizontal, vertical, -1.0f);
+			vect = new Vector(hx, hz, -hy);
 		}
 		else if (cannonDirection.equals(BlockFace.EAST))
 		{
-			vect = new Vector(1.0f, vertical, horizontal);
+			vect = new Vector(hy, hz, hx);
 		}
 		else if (cannonDirection.equals(BlockFace.SOUTH))
 		{
-			vect = new Vector(-horizontal, vertical, 1.0f);
+			vect = new Vector(-hx, hz, hy);
 		}
 
 		double multi = getCannonballVelocity();

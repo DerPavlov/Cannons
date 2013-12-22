@@ -656,6 +656,16 @@ public class CreateExplosion {
                 doDirectHitDamage(impactLoc, next, cannonball);
             }
 
+            //teleport to impact and reset speed - make a soft landing
+            if (projectile.hasProperty(ProjectileProperties.TELEPORT))
+            {
+                Location teleLoc = impactLoc.clone();
+                teleLoc.setYaw(player.getLocation().getYaw());
+                teleLoc.setPitch(player.getLocation().getPitch());
+                player.teleport(teleLoc);
+                player.setVelocity(new Vector(0,0,0));
+            }
+
             //check which entities are affected by the event
             List<Entity> EntitiesAfterExplosion = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
             transmittingEntities(EntitiesAfterExplosion, snowball.getShooter());//place blocks around the impact like webs, lava, water
