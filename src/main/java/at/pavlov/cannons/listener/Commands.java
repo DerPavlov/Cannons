@@ -57,14 +57,14 @@ public class Commands implements CommandExecutor
                 else if (args[0].equalsIgnoreCase("save") && (player == null || player.hasPermission("cannons.admin.reload")))
                 {
                     // save database
-                    persistenceDatabase.saveAllCannons();
+                    persistenceDatabase.saveAllCannonsAsync();
                     sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
                 }
                 //cannons load
                 else if (args[0].equalsIgnoreCase("load") && (player == null || player.hasPermission("cannons.admin.reload")))
                 {
                     // load database
-                    persistenceDatabase.loadCannons();
+                    persistenceDatabase.loadCannonsAsync();
                     sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
                 }
                 //cannons reset
@@ -151,7 +151,7 @@ public class Commands implements CommandExecutor
                     else if(args[0].equalsIgnoreCase("reset") && player.hasPermission("cannons.player.reset"))
                     {
                         // delete all cannon entries for this player
-                        persistenceDatabase.deleteCannons(player.getName());
+                        persistenceDatabase.deleteCannonsAsync(player.getName());
                         plugin.getCannonManager().deleteCannons(player.getName());
                         userMessages.displayMessage(player, MessageEnum.CannonsReseted);
                     }

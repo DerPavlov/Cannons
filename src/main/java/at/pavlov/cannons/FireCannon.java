@@ -6,7 +6,7 @@ import java.util.List;
 
 import at.pavlov.cannons.event.CannonAfterCreateEvent;
 import at.pavlov.cannons.event.CannonFireEvent;
-import at.pavlov.cannons.utils.DelayedFireTask;
+import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
@@ -192,7 +192,7 @@ public class FireCannon {
 		//set up delayed task
 		Object fireTask = new FireTaskWrapper(cannon, player);
 		Long fuseBurnTime = (long) design.getFuseBurnTime() * 20;
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedFireTask(fireTask)
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
 		{
 			public void run(Object object) 
 			    {			

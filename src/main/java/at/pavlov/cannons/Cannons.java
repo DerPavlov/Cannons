@@ -138,7 +138,7 @@ public class Cannons extends JavaPlugin
 			initializeDatabase();
 
 			// load cannons from database
-			persistenceDatabase.loadCannons();
+			persistenceDatabase.loadCannonsAsync();
 
 			// setting up Aiming Mode Task
 			calcAngle.initAimingMode();
@@ -151,7 +151,7 @@ public class Cannons extends JavaPlugin
 			{
 				public void run()
 				{
-					persistenceDatabase.saveAllCannons();
+					persistenceDatabase.saveAllCannonsAsync();
 				}
 			}, 6000L, 6000L);
 			//.Formatter:on

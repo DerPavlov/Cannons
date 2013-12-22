@@ -84,7 +84,7 @@ public class CannonManager
 			if (player != null) userMessages.displayMessage(player, message, cannon);
 
 			//remove from database
-			plugin.getPersistenceDatabase().deleteCannon(cannon);
+			plugin.getPersistenceDatabase().deleteCannonAsync(cannon);
 			
 			//remove from list
 			cannonList.remove(cannon);
@@ -148,7 +148,7 @@ public class CannonManager
 	 */
 	public void createCannon(Cannon cannon)
 	{
-		//the owner can't be null
+        //the owner can't be null
 		if (cannon.getOwner() == null) 
 		{
 			plugin.logInfo("can't save a cannon when the owner is null");
@@ -162,12 +162,13 @@ public class CannonManager
 		
 		// add cannon to the list
 		cannonList.add(cannon);
-		plugin.getPersistenceDatabase().saveCannon(cannon);
-		plugin.logDebug("added cannon to the list");
+
+        plugin.getPersistenceDatabase().saveCannonAsync(cannon);
+        plugin.logDebug("added cannon to the list");
 		
 		cannon.updateCannonSigns();
-		
-		return ;
+
+        return ;
 	}
 
 	/**
@@ -232,7 +233,7 @@ public class CannonManager
 	 */
 	public Cannon getCannon(Location cannonBlock, String owner, boolean silent)
 	{
-        long startTime = System.nanoTime();
+        //long startTime = System.nanoTime();
 
         //check if there is a cannon at this location
         Cannon cannon = checkCannon(cannonBlock, owner);
@@ -240,7 +241,6 @@ public class CannonManager
         //if there is no cannon, exit
         if (cannon == null)
             return null;
-
 
         // search cannon that is written on the sign
         Cannon cannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
@@ -278,8 +278,7 @@ public class CannonManager
                 //check the permissions for redstone
                 if (message == null || message == MessageEnum.CannonCreated)
                     message = cannon.checkRedstonePermission(owner);
-                
-                
+
                 //if a sign is required to operate the cannon, there must be at least one sign
                 if (message == MessageEnum.CannonCreated && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
                     message = MessageEnum.ErrorMissingSign;
@@ -295,12 +294,13 @@ public class CannonManager
                 //add cannon to the list if everything was fine and return the cannon
                 if (!cbceEvent.isCancelled() && cbceEvent.getMessage() != null && cbceEvent.getMessage() == MessageEnum.CannonCreated)
                 {
+
                     plugin.logDebug("a new cannon was create by " + cannon.getOwner());
                     createCannon(cannon);
-                	
-                	CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
+
+                    CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
                 	Bukkit.getServer().getPluginManager().callEvent(caceEvent);
-                }
+               }
                 else
                 {
                     plugin.logDebug("missing permission while creating a cannon: " + message);
@@ -309,8 +309,7 @@ public class CannonManager
             }
         }
 
-        long elapsed = System.nanoTime() - startTime;
-        plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format(elapsed/1000000.0));
+        //plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
 
         return cannon;
 	}
@@ -366,7 +365,7 @@ public class CannonManager
 						// this is a cannon
 						if (isCannon == true)
 						{
-							// cannon
+                           // cannon
 							return new Cannon(cannonDesign, world.getName(), offset, cannonDirection, owner);
 						}
 					}

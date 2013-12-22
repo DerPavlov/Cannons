@@ -1,9 +1,9 @@
 package at.pavlov.cannons.utils;
 
-public abstract class DelayedFireTask implements Runnable{
+public abstract class DelayedTask implements Runnable{
 	Object wrapper;
-	
-    public DelayedFireTask(Object wrapper) {
+
+    public DelayedTask(Object wrapper) {
         this.wrapper = wrapper;
     }
    

@@ -2,6 +2,8 @@ package at.pavlov.cannons.dao;
 
 import java.util.List;
 
+import at.pavlov.cannons.utils.DelayedTask;
+import at.pavlov.cannons.utils.FireTaskWrapper;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
 
@@ -21,6 +23,23 @@ public class PersistenceDatabase
 		plugin = _plugin;
 	}
 
+    /**
+     * loads all cannons from the database
+     */
+    public void loadCannonsAsync()
+    {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            public void run() {
+                loadCannons();
+            }
+        });
+    }
+
+    /**
+     * loads all cannons from the database
+     *
+     * @return true if loading was successful
+     */
 	public boolean loadCannons()
 	{
 		plugin.getCannonManager().clearCannonList();
@@ -82,6 +101,19 @@ public class PersistenceDatabase
 		}
 	}
 
+    /**
+     * save all cannons in the database
+     */
+    public void saveAllCannonsAsync()
+    {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            public void run() {
+                saveAllCannons();
+            }
+        });
+    }
+
+
 	/**
 	 * save all cannons in the database
 	 */
@@ -102,6 +134,21 @@ public class PersistenceDatabase
 			}
 		}
 	}
+
+    /**
+     * saves this cannon in the database
+     *
+     * @param cannon
+     */
+    public void saveCannonAsync(Cannon cannon)
+    {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new DelayedTask(cannon) {
+            public void run(Object object) {
+                Cannon cannon = (Cannon) object;
+                saveCannon(cannon);
+            }
+        });
+    }
 
 	/**
 	 * saves this cannon in the database
@@ -175,6 +222,22 @@ public class PersistenceDatabase
 		}
 	}
 
+    /**
+     * removes all cannon of this player from the database
+     *
+     * @param owner
+     *
+     */
+    public void deleteCannonsAsync(String owner)
+    {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new DelayedTask(owner) {
+            public void run(Object object) {
+                String owner = (String) object;
+                deleteCannons(owner);
+            }
+        });
+    }
+
 	/**
 	 * removes all cannon of this player from the database
 	 * 
@@ -202,9 +265,24 @@ public class PersistenceDatabase
             return true;
 		}
 	}
+
+    /**
+     * removes this cannon from the database
+     *
+     * @param cannon
+     */
+    public void deleteCannonAsync(Cannon cannon)
+    {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new DelayedTask(cannon) {
+            public void run(Object object) {
+                Cannon cannon = (Cannon) object;
+                deleteCannon(cannon);
+            }
+        });
+    }
 	
 	/**
-	 * removes all cannon of this player from the database
+	 * removes this cannon from the database
 	 * 
 	 * @param cannon
 	 */
