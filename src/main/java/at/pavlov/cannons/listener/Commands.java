@@ -73,7 +73,8 @@ public class Commands implements CommandExecutor
                     if (args.length >= 2 && args[1] != null)
                     {
                         // delete all cannon entries for this player
-                        if (persistenceDatabase.deleteCannons(args[1]) || plugin.getCannonManager().deleteCannons(args[1]))
+                        boolean b1 = plugin.getCannonManager().deleteCannons(args[1]);
+                        if (persistenceDatabase.deleteCannons(args[1]) || b1)
                         {
                             //there was an entry in the list
                             sendMessage(sender, ChatColor.GREEN + userMessages.getMessage(MessageEnum.CannonsReseted));

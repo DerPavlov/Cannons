@@ -264,7 +264,8 @@ public class CreateExplosion {
             if (entity instanceof TNTPrimed)
             {
                 TNTPrimed tnt = (TNTPrimed) entity;
-                tnt.setFuseTicks((int) tntFuse*20);
+                plugin.logDebug("set TNT fuse ticks to: " + (int)(tntFuse*20.0));
+                tnt.setFuseTicks((int)(tntFuse*20.0));
             }
     	}
     }

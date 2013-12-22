@@ -80,6 +80,9 @@ public class Cannon
 		this.owner = owner;
 		this.isValid = true;
 
+        this.horizontalAngle = (design.getMaxHorizontalAngle()+design.getMinHorizontalAngle())/2.0;
+        this.verticalAngle = (design.getMaxVerticalAngle()+design.getMinVerticalAngle())/2.0;
+
 		// reset
 		this.loadedGunpowder = 0;
 		this.loadedProjectile = null;

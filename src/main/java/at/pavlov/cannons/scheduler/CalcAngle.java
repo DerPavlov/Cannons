@@ -135,16 +135,19 @@ public class CalcAngle {
 			angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking());
 			combine = false;
 		}
-		
+
 		//Check angles
-		if (Math.abs(angles.getHorizontal()) >= design.getAngleStepSize())
+		if (Math.abs(angles.getHorizontal()) >= 1.0)
 		{
 			if (angles.getHorizontal() >= 0)
 			{
 				// right 
 				if (cannon.getHorizontalAngle() + design.getAngleStepSize() <= design.getMaxHorizontalAngle())
 				{
-					cannon.setHorizontalAngle(cannon.getHorizontalAngle() + design.getAngleStepSize());
+                    //if smaller than minimum -> set to minimum
+                    if (cannon.getHorizontalAngle() < design.getMinHorizontalAngle())
+                        cannon.setHorizontalAngle(design.getMinHorizontalAngle());
+                    cannon.setHorizontalAngle(cannon.getHorizontalAngle() + design.getAngleStepSize());
 					hasChanged = true;
 					message = setMessageHorizontal(cannon, combine);
 				}
@@ -154,6 +157,9 @@ public class CalcAngle {
 				// left 
 				if (cannon.getHorizontalAngle() - design.getAngleStepSize() >= design.getMinHorizontalAngle())
 				{
+                    //if smaller than maximum -> set to maximum
+                    if (cannon.getHorizontalAngle() > design.getMaxHorizontalAngle())
+                        cannon.setHorizontalAngle(design.getMaxHorizontalAngle());
 					cannon.setHorizontalAngle(cannon.getHorizontalAngle() - design.getAngleStepSize());
 					hasChanged = true;
 					message = setMessageHorizontal(cannon, combine);
@@ -168,6 +174,9 @@ public class CalcAngle {
 				// up
 				if (cannon.getVerticalAngle() + design.getAngleStepSize() <= design.getMaxVerticalAngle())
 				{
+                    //if smaller than minimum -> set to minimum
+                    if (cannon.getVerticalAngle() < design.getMinVerticalAngle())
+                        cannon.setVerticalAngle(design.getMinVerticalAngle());
 					cannon.setVerticalAngle(cannon.getVerticalAngle() + design.getAngleStepSize());
 					hasChanged = true;
 					message = setMessageVertical(cannon, combine);
@@ -178,6 +187,8 @@ public class CalcAngle {
 				// down
 				if (cannon.getVerticalAngle() - design.getAngleStepSize() >= design.getMinVerticalAngle())
 				{
+                    if (cannon.getVerticalAngle() > design.getMaxVerticalAngle())
+                        cannon.setVerticalAngle(design.getMaxVerticalAngle());
 					cannon.setVerticalAngle(cannon.getVerticalAngle() - design.getAngleStepSize());
 					hasChanged = true;
 					message = setMessageVertical(cannon, combine);

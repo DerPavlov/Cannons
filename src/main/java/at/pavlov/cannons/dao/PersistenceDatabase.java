@@ -55,6 +55,7 @@ public class PersistenceDatabase
 		}
 		else
 		{
+            int i = 0;
 			// found cannons - load them
 			for (CannonBean bean : beans)
 			{
@@ -93,10 +94,12 @@ public class PersistenceDatabase
 					plugin.createCannon(cannon);
 					
 					// update sign
-					cannon.updateCannonSigns();	
+					cannon.updateCannonSigns();
+                    i++;
 				}
 
 			}
+            plugin.logDebug(i + " cannons loaded from the database");
 			return true;
 		}
 	}
