@@ -240,7 +240,7 @@ public class FireCannon {
     		snowball.setVelocity(vect);
     		
     		//create a new flying projectile container
-    		FlyingProjectile cannonball = new FlyingProjectile(projectile, snowball);   
+    		FlyingProjectile cannonball = new FlyingProjectile(projectile, snowball, shooter.getLocation());
     		//set shooter to the cannonball
     		if (shooter != null) 
     		{

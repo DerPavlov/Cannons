@@ -59,7 +59,7 @@ public class CreateExplosion {
 		if (!destroyedBlock.equals(Material.AIR))
 		{
             //if it is unbreakable, ignore it
-            for (MaterialHolder unbreakableBlock : plugin.getmyConfig().getUnbreakableBlocks())
+            for (MaterialHolder unbreakableBlock : plugin.getMyConfig().getUnbreakableBlocks())
             {
                 if (unbreakableBlock.equalsFuzzy(destroyedBlock))
                 {
@@ -69,7 +69,7 @@ public class CreateExplosion {
             }
 
 			//test if it needs superbreaker
-            for (MaterialHolder superbreakerBlock : plugin.getmyConfig().getSuperbreakerBlocks())
+            for (MaterialHolder superbreakerBlock : plugin.getMyConfig().getSuperbreakerBlocks())
             {
                 if ((superbreakerBlock.equalsFuzzy(destroyedBlock)))
                 {

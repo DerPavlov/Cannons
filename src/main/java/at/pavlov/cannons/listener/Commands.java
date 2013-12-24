@@ -25,8 +25,8 @@ public class Commands implements CommandExecutor
 	public Commands(Cannons plugin)
 	{
 		this.plugin = plugin;
-		config = this.plugin.getmyConfig();
-		userMessages = this.plugin.getmyConfig().getUserMessages();
+		config = this.plugin.getMyConfig();
+		userMessages = this.plugin.getMyConfig().getUserMessages();
 		persistenceDatabase = this.plugin.getPersistenceDatabase();
 	}
 
@@ -64,7 +64,7 @@ public class Commands implements CommandExecutor
                 else if (args[0].equalsIgnoreCase("load") && (player == null || player.hasPermission("cannons.admin.reload")))
                 {
                     // load database
-                    persistenceDatabase.loadCannonsAsync();
+                    persistenceDatabase.loadCannons();
                     sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
                 }
                 //cannons reset

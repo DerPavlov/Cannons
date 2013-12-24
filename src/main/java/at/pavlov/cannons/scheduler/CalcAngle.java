@@ -55,11 +55,11 @@ public class CalcAngle {
 	
 	
 	//##################### Constructor ##############################
-	public CalcAngle(Cannons plugin, UserMessages userMessages, Config config)
+	public CalcAngle(Cannons plugin)
 	{
 		this.plugin = plugin;
-		this.userMessages = userMessages;
-		this.config = config;
+		this.config = plugin.getMyConfig();
+        this.userMessages = plugin.getMyConfig().getUserMessages();
 		
 		inAimingMode = new HashMap<Player, Cannon>();
 
@@ -98,7 +98,7 @@ public class CalcAngle {
 	//################# DisplayAngle #######################################################
 	private MessageEnum DisplayAngle(Cannon cannon, BlockFace clickedFace, Player player)
 	{
-		CannonDesign design = plugin.getDesignStorage().getDesign(cannon);
+		CannonDesign design = cannon.getCannonDesign();
 		
 		gunAngles angles = new gunAngles(0.0, 0.0);
 		//both horizontal and vertical angle will be displayed in one message

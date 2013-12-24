@@ -709,9 +709,7 @@ public class Cannon
         double hy = Math.sin(polar)*Math.cos(azi);
         double hz = Math.cos(polar);
 
-        System.out.println("azi " + horizontalAngle + " polar " + (-design.getDefaultVerticalAngle() - verticalAngle + 90.0) + " hx " + hx +  " hy " + hy +" hz " + hz);
-
-		if (cannonDirection.equals(BlockFace.WEST))
+        if (cannonDirection.equals(BlockFace.WEST))
 		{
 			vect = new Vector(-hy, hz, -hx);
 		}

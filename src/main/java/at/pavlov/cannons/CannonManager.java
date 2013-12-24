@@ -545,6 +545,17 @@ public class CannonManager
         return inList;
 	}
 
+    /**
+     * reloads designs from the design list and updates all entries in the cannon
+     */
+    public void updateCannonDesigns()
+    {
+        for (Cannon cannon : cannonList)
+        {
+            cannon.setCannonDesign(plugin.getCannonDesign(cannon));
+        }
+    }
+
 
 
 }

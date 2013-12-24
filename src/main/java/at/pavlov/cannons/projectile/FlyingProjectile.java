@@ -1,5 +1,6 @@
 package at.pavlov.cannons.projectile;
 
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -12,11 +13,13 @@ public class FlyingProjectile
 	
 	private Snowball snowball;
 	private Projectile projectile;
+    private Location firingLocation;
 	
-	public FlyingProjectile(Projectile projectile, Snowball snowball)
+	public FlyingProjectile(Projectile projectile, Snowball snowball, Location firingLoc)
 	{
 		this.snowball = snowball;
 		this.projectile = projectile;
+        this.firingLocation = firingLoc;
 		this.spawnTime = System.currentTimeMillis();
 	}
 	
@@ -54,4 +57,12 @@ public class FlyingProjectile
 	{
 		this.spawnTime = spawnTime;
 	}
+
+    public Location getFiringLocation() {
+        return firingLocation;
+    }
+
+    public void setFiringLocation(Location firingLocation) {
+        this.firingLocation = firingLocation;
+    }
 }

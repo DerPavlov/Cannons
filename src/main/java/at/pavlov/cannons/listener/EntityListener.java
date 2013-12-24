@@ -119,7 +119,7 @@ public class EntityListener implements Listener
             {
                 Block block = blocks.get(i);
 
-                for (MaterialHolder unbreakableBlock : plugin.getmyConfig().getUnbreakableBlocks())
+                for (MaterialHolder unbreakableBlock : plugin.getMyConfig().getUnbreakableBlocks())
                 {
                     if (unbreakableBlock.equalsFuzzy(block))
                     {

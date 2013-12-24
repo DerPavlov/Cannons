@@ -45,10 +45,6 @@ public class Cannons extends JavaPlugin
 	private ConsoleCommandSender console;
 
 	private Config config;
-	private DesignStorage designStorage;
-	private ProjectileStorage projectileStorage;
-	private UserMessages userMessages;
-	private CannonManager cannonManager;
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
 	private CalcAngle calcAngle;
@@ -105,14 +101,10 @@ public class Cannons extends JavaPlugin
 		
 		//setup all classes
 		this.config = new Config(this);
-		this.designStorage = this.config.getDesignStorage();
-		this.projectileStorage = this.config.getProjectileStorage();
-		this.userMessages = this.config.getUserMessages();
-		
-		this.cannonManager = new CannonManager(this, userMessages, config);
+
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, explosion);
-		this.calcAngle = new CalcAngle(this, userMessages, config);
+		this.calcAngle = new CalcAngle(this);
         this.teleporter = new Teleporter(this);
 		
 		this.persistenceDatabase = new PersistenceDatabase(this);
@@ -138,7 +130,7 @@ public class Cannons extends JavaPlugin
 			initializeDatabase();
 
 			// load cannons from database
-			persistenceDatabase.loadCannonsAsync();
+			persistenceDatabase.loadCannons();
 
 			// setting up Aiming Mode Task
 			calcAngle.initAimingMode();
@@ -232,7 +224,7 @@ public class Cannons extends JavaPlugin
 		return this.isEnabled();
 	}
 
-	public final Config getmyConfig()
+	public final Config getMyConfig()
 	{
 		return config;
 	}
@@ -297,7 +289,7 @@ public class Cannons extends JavaPlugin
 
 	public CannonManager getCannonManager()
 	{
-		return cannonManager;
+		return this.config.getCannonManager();
 	}
 
 	public FireCannon getFireCannon()
@@ -327,42 +319,32 @@ public class Cannons extends JavaPlugin
 
 	public DesignStorage getDesignStorage()
 	{
-		return designStorage;
-	}
-
-	public void setDesignStorage(DesignStorage designStorage)
-	{
-		this.designStorage = designStorage;
+		return this.config.getDesignStorage();
 	}
 	
 	public CannonDesign getCannonDesign(Cannon cannon)
 	{
-		return designStorage.getDesign(cannon);
+		return getDesignStorage().getDesign(cannon);
 	}
 	
 	public CannonDesign getCannonDesign(String designId)
 	{
-		return designStorage.getDesign(designId);
+		return getDesignStorage().getDesign(designId);
 	}
 
 	public ProjectileStorage getProjectileStorage()
 	{
-		return projectileStorage;
+		return this.config.getProjectileStorage();
 	}
 
-	public void setProjectileStorage(ProjectileStorage projectileStorage)
-	{
-		this.projectileStorage = projectileStorage;
-	}
-	
 	public Projectile getProjectile(Cannon cannon, int id, int data)
 	{
-		return this.projectileStorage.getProjectile(cannon, id, data);
+		return this.getProjectileStorage().getProjectile(cannon, id, data);
 	}
 	
 	public Projectile getProjectile(Cannon cannon, ItemStack item)
 	{
-		return this.projectileStorage.getProjectile(cannon, item);
+		return this.getProjectileStorage().getProjectile(cannon, item);
 	}
 
 	public EntityListener getEntityListener()
@@ -377,12 +359,12 @@ public class Cannons extends JavaPlugin
 	
 	public void displayMessage(Player player, MessageEnum message, Cannon cannon)
 	{
-		this.userMessages.displayMessage(player, message, cannon);
+		this.config.getUserMessages().displayMessage(player, message, cannon);
 	}
 
     public void displayImpactMessage(Player player, Location impact, boolean canceled)
     {
-        this.userMessages.displayImpactMessage(player, impact, canceled);
+        this.config.getUserMessages().displayImpactMessage(player, impact, canceled);
     }
 	
 	public void createCannon(Cannon cannon)

@@ -28,8 +28,8 @@ public class SignListener implements Listener
 	public SignListener(Cannons plugin)
 	{
 		this.plugin = plugin;
-		this.config = this.plugin.getmyConfig();
-		this.userMessages = this.plugin.getmyConfig().getUserMessages();
+		this.config = this.plugin.getMyConfig();
+		this.userMessages = this.plugin.getMyConfig().getUserMessages();
 		this.cannonManager = this.plugin.getCannonManager();
 	}
 	

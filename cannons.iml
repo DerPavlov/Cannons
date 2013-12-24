@@ -19,19 +19,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://C:/Spiele/minecraft/Server/plugins/CreeperHeal.jar!/" />
-          <root url="jar://C:/Spiele/minecraft/Server/plugins/ObsidianDestroyer.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://C:/Spiele/minecraft/Server/plugins/CreeperHeal.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="Maven: org.bukkit:bukkit:1.6.4-R2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.bukkit:bukkit:1.7.2-R0.2" level="project" />
   </component>
 </module>
 

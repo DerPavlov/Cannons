@@ -49,8 +49,8 @@ public class PlayerListener implements Listener
 	public PlayerListener(Cannons plugin)
 	{
 		this.plugin = plugin;
-		this.config = this.plugin.getmyConfig();
-		this.userMessages = this.plugin.getmyConfig().getUserMessages();
+		this.config = this.plugin.getMyConfig();
+		this.userMessages = this.plugin.getMyConfig().getUserMessages();
 		this.cannonManager = this.plugin.getCannonManager();
 		this.fireCannon = this.plugin.getFireCannon();
 		this.calcAngle = this.plugin.getCalcAngle();
