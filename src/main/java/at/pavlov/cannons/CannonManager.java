@@ -303,7 +303,7 @@ public class CannonManager
                }
                 else
                 {
-                    plugin.logDebug("missing permission while creating a cannon: " + message);
+                    plugin.logDebug("Creating a cannon event was canceled by a plugin: " + message);
                     return null;
                 }
             }
