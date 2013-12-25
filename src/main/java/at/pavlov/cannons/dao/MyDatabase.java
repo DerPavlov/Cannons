@@ -75,7 +75,6 @@ public abstract class MyDatabase {
     public void initializeDatabase(String driver, String url, String username, String password, String isolation, boolean logging, boolean rebuild) {
         //Logging needs to be set back to the original level, no matter what happens
         try {
-            System.out.println("0");
             //Disable all logging
             disableDatabaseLogging(logging);
             //Prepare the database

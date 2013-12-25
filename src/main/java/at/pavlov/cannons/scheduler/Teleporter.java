@@ -44,7 +44,7 @@ public class Teleporter {
         {
             //if projectile has teleporter - update player position
             Projectile projectile = fproj.getProjectile();
-            if (projectile.hasProperty(ProjectileProperties.TELEPORT))
+            if (projectile.hasProperty(ProjectileProperties.TELEPORT) || projectile.hasProperty(ProjectileProperties.OBSERVER))
             {
                 LivingEntity shooter = fproj.getShooter();
                 if(shooter == null)
@@ -71,6 +71,7 @@ public class Teleporter {
                     optiLoc.setYaw(shooter.getLocation().getYaw());
                     optiLoc.setPitch(shooter.getLocation().getPitch());
                     shooter.teleport(optiLoc);
+                    shooter.setFallDistance(0.0f);
                 }
             }
         }
