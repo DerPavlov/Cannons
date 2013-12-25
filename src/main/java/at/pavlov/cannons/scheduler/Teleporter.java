@@ -40,7 +40,7 @@ public class Teleporter {
     public void updateTeleporter()
     {
         //get projectiles
-        for (FlyingProjectile fproj : plugin.getFireCannon().flying_projectiles)
+        for (FlyingProjectile fproj : plugin.getProjectileManager().getFlyingProjectiles())
         {
             //if projectile has teleporter - update player position
             Projectile projectile = fproj.getProjectile();
@@ -52,7 +52,7 @@ public class Teleporter {
 
                 Snowball ball = fproj.getSnowball();
                 //set some distance to the snowball to prevent a collision
-                Location optiLoc = ball.getLocation().clone().subtract(ball.getVelocity().normalize().multiply(10.0));
+                Location optiLoc = ball.getLocation().clone().subtract(ball.getVelocity().normalize().multiply(20.0));
 
                 Vector distToOptimum = optiLoc.toVector().subtract(shooter.getLocation().toVector());
                 Vector playerVel = ball.getVelocity().add(distToOptimum.multiply(0.1));
@@ -64,14 +64,14 @@ public class Teleporter {
                 if (playerVel.getZ() > 5.0)
                     playerVel.setZ(5.0);
                 shooter.setVelocity(playerVel);
+                shooter.setFallDistance(0.0f);
 
-                //teleport every 20 ticks to prevent a kick because of floating
-                if (shooter.getWorld().getFullTime() % 20 == 0)
+                //teleport if the player is behind
+                if (distToOptimum.distance(new Vector(0,0,0)) > 30)
                 {
                     optiLoc.setYaw(shooter.getLocation().getYaw());
                     optiLoc.setPitch(shooter.getLocation().getPitch());
                     shooter.teleport(optiLoc);
-                    shooter.setFallDistance(0.0f);
                 }
             }
         }

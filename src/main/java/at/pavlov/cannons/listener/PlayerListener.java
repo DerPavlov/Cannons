@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import at.pavlov.cannons.scheduler.CalcAngle;
-import at.pavlov.cannons.CannonManager;
+import at.pavlov.cannons.config.CannonManager;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.FireCannon;
 import at.pavlov.cannons.cannon.Cannon;

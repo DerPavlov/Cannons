@@ -13,13 +13,17 @@ public class FlyingProjectile
 	
 	private Snowball snowball;
 	private Projectile projectile;
+    //location of the shooter before firing - important for teleporting the player back - observer property
     private Location firingLocation;
+    //if the player has already fly mode on - important for teleport/observer property
+    private boolean hasFlyModeON;
 	
-	public FlyingProjectile(Projectile projectile, Snowball snowball, Location firingLoc)
+	public FlyingProjectile(Projectile projectile, Snowball snowball, Player shooter)
 	{
 		this.snowball = snowball;
 		this.projectile = projectile;
-        this.firingLocation = firingLoc;
+        this.firingLocation = shooter.getLocation();
+        this.hasFlyModeON = shooter.isFlying();
 		this.spawnTime = System.currentTimeMillis();
 	}
 	

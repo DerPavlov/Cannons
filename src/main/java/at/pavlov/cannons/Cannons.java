@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import at.pavlov.cannons.config.*;
 import at.pavlov.cannons.scheduler.CalcAngle;
 import at.pavlov.cannons.scheduler.Teleporter;
 import org.bukkit.Bukkit;
@@ -23,11 +24,6 @@ import com.avaje.ebean.EbeanServer;
 
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
-import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.config.DesignStorage;
-import at.pavlov.cannons.config.MessageEnum;
-import at.pavlov.cannons.config.ProjectileStorage;
-import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.dao.CannonBean;
 import at.pavlov.cannons.dao.MyDatabase;
 import at.pavlov.cannons.dao.PersistenceDatabase;
@@ -378,5 +374,9 @@ public class Cannons extends JavaPlugin
 
     public void setTeleporter(Teleporter teleporter) {
         this.teleporter = teleporter;
+    }
+
+    public ProjectileManager getProjectileManager(){
+        return this.config.getProjectileManager();
     }
 }

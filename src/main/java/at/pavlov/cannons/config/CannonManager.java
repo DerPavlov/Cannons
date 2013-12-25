@@ -1,10 +1,11 @@
-package at.pavlov.cannons;
+package at.pavlov.cannons.config;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

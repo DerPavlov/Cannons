@@ -34,9 +34,7 @@ public class FireCannon {
 	private final DesignStorage designStorage;
 	private final Cannons plugin;
 	private final CreateExplosion explosion;
-	
-	public LinkedList<FlyingProjectile> flying_projectiles = new LinkedList<FlyingProjectile>();
-	 
+
 	
 	
 	
@@ -47,11 +45,7 @@ public class FireCannon {
 		this.designStorage = plugin.getDesignStorage();
 		this.explosion = explosion;
 	}
-	
-	public LinkedList<FlyingProjectile> getProjectiles ()
-	{
-		return flying_projectiles;
-	}
+
 	
 	/**
 	 * checks all condition but does not fire the cannon
@@ -228,30 +222,11 @@ public class FireCannon {
 		//for each bullet, but at least once		
 		for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
 		{
-			//one snowball for each projectile
-    		Snowball snowball = world.spawn(firingLoc, Snowball.class);
-    		snowball.setFireTicks(100);
-    		snowball.setTicksLived(2);
-        	if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
-            	snowball.setPassenger(shooter);
-	
-       		//calculate firing vector
-    		Vector vect = cannon.getFiringVector(shooter);    		
-    		snowball.setVelocity(vect);
-    		
-    		//create a new flying projectile container
-    		FlyingProjectile cannonball = new FlyingProjectile(projectile, snowball, shooter.getLocation());
-    		//set shooter to the cannonball
-    		if (shooter != null) 
-    		{
-    			cannonball.setShooter(shooter);
-    		}
-    		
- 
-			flying_projectiles.add(cannonball);
-			
-    		//detonate timefused projectiles
-			detonateTimefuse(cannonball);	
+            Vector vect = cannon.getFiringVector(shooter);
+            Snowball snowball = plugin.getProjectileManager().spawnProjectile(projectile, shooter, firingLoc, vect);
+
+            if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
+                snowball.setPassenger(shooter);
 
 			//confuse all entity which wear no helmets due to the blast of the cannon
 			List<Entity> living = snowball.getNearbyEntities(5, 5, 5);
@@ -261,11 +236,9 @@ public class FireCannon {
 				confuseShooter(living, design.getBlastConfusion());
 			}
 		}
-	
-		
+
 		//reset after firing
 		cannon.setLastFired(System.currentTimeMillis());
-
 
 		//redstone or player infinite ammo will not remove the charge
 		if ((shooter == null && !design.isAmmoInfiniteForRedstone()) || (shooter != null && !design.isAmmoInfiniteForPlayer()))
@@ -318,45 +291,7 @@ public class FireCannon {
     	}
     }
     
-	/**
-	 * detonate a timefused projectile mid air
-	 * @param cannonball
-	 */
-    private void detonateTimefuse(FlyingProjectile cannonball)
-    {
-		if (cannonball.getProjectile().getTimefuse() > 0)
-		{
-			
-			//Delayed Task
-			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() 
-			{
-			    public void run() {
-			    	
-			    	//check is list is not empty
-			    	if (!flying_projectiles.isEmpty())
-			    	{
-						Iterator<FlyingProjectile> iterator = flying_projectiles.iterator();	       			    		  
-						while( iterator.hasNext())
-						{
-							FlyingProjectile flying = iterator.next();	
-							Projectile proj = flying.getProjectile();
-							Snowball snow = flying.getSnowball();
-							if (flying.getSnowball() != null)
-							{
-	   							if (flying.getSnowball().getTicksLived() > proj.getTimefuse()*20 - 5 && proj.getTimefuse() > 0)
-	   	   			    		{
-	   	   			    			//detonate timefuse
-	   	   			    			explosion.detonate(flying);
-	   	   			    			snow.remove();
-	   	   			    			iterator.remove();
-	   	   			    		}	
-							}
-						}
-					}
-			    }}, (long) (cannonball.getProjectile().getTimefuse()*20));
-			
-		}
-	}
+
 		
 		
     //############## CheckHelmet   ################################
@@ -369,23 +304,4 @@ public class FireCannon {
 		}
 		return false;
 	}
-	
-
-	
-	//############## deleteOldSnowballs  ################################
-	public void deleteOldSnowballs()
-	{
-		   //delete really old snowballs
-		   Iterator<FlyingProjectile> flying = flying_projectiles.iterator();
-		   while (flying.hasNext())
-		   {
-			   FlyingProjectile next = flying.next();
-			   if(next.getSnowball().getTicksLived() > 10000)
-			   {
-				   next.getSnowball().remove();
-				   flying.remove();
-			   }
-		   }
-	}
-	   
 }

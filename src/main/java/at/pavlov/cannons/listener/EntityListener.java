@@ -39,25 +39,7 @@ public class EntityListener implements Listener
 	@EventHandler
 	public void ProjectileHit(ProjectileHitEvent event)
 	{
-
-		// get FlyingProjectiles
-		LinkedList<FlyingProjectile> flying_projectiles = plugin.getFireCannon().getProjectiles();
-
-		// iterate the list
-		if (!flying_projectiles.isEmpty())
-		{
-			Iterator<FlyingProjectile> iterator = flying_projectiles.iterator();
-
-			while (iterator.hasNext())
-			{
-				FlyingProjectile flying = iterator.next();
-				if (event.getEntity().equals(flying.getSnowball()))
-				{
-    				plugin.getExplosion().detonate(flying);
-					iterator.remove();
-				}
-			}
-		}
+        plugin.getProjectileManager().detonateProjectile(event.getEntity());
 	}
 	
 	/**

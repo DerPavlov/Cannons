@@ -1,7 +1,6 @@
 package at.pavlov.cannons.config;
 
 
-import at.pavlov.cannons.CannonManager;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.utils.CannonsUtil;
@@ -44,6 +43,7 @@ public class Config
 	private DesignStorage designStorage;
 	private ProjectileStorage projectileStorage;
     private CannonManager cannonManager;
+    private ProjectileManager projectileManager;
 
 	public Config(Cannons plugin)
 	{
@@ -52,6 +52,7 @@ public class Config
 		designStorage = new DesignStorage(this.plugin);
 		projectileStorage = new ProjectileStorage(this.plugin);
         cannonManager = new CannonManager(plugin, userMessage, this);
+        projectileManager = new ProjectileManager(plugin);
 	}
 
 	public void loadConfig()
@@ -93,6 +94,7 @@ public class Config
 		designStorage.loadCannonDesigns();
         cannonManager.updateCannonDesigns();
 		userMessage.loadLanguage();
+
 		
 
 
@@ -226,5 +228,13 @@ public class Config
 
     public void setCannonManager(CannonManager cannonManager) {
         this.cannonManager = cannonManager;
+    }
+
+    public ProjectileManager getProjectileManager() {
+        return projectileManager;
+    }
+
+    public void setProjectileManager(ProjectileManager projectileManager) {
+        this.projectileManager = projectileManager;
     }
 }
