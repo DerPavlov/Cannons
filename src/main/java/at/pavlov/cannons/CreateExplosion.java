@@ -656,10 +656,20 @@ public class CreateExplosion {
                 doDirectHitDamage(impactLoc, next, cannonball);
             }
 
+            Location teleLoc = null;
             //teleport to impact and reset speed - make a soft landing
             if (projectile.hasProperty(ProjectileProperties.TELEPORT))
             {
-                Location teleLoc = impactLoc.clone();
+                teleLoc = impactLoc.clone();
+            }
+            //teleport the player back to the location before firing
+            else if(projectile.hasProperty(ProjectileProperties.OBSERVER))
+            {
+                 teleLoc = cannonball.getFiringLocation();
+            }
+            //teleport to this location
+            if (teleLoc != null)
+            {
                 teleLoc.setYaw(player.getLocation().getYaw());
                 teleLoc.setPitch(player.getLocation().getPitch());
                 player.teleport(teleLoc);

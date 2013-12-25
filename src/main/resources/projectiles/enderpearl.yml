@@ -25,8 +25,8 @@ cannonball:
   numberOfBullets: 1
   #the higher this is, the more inaccurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from
   spreadMultiplier: 1.0
-  #different properties of the projectile. if you don't want any of these properties then just leave this all blank.
-  #possible properties are: superbreaker, incendiary, teleport
+  #different properties of the projectile. If you don't want any of these properties then just leave this all blank.
+  #possible properties are: superbreaker, incendiary, teleport, observer
   properties:
     #the player is tied to the projectile and will follow its path to the target
     - teleport
