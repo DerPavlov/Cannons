@@ -74,6 +74,22 @@ placeBlock:
 #spawning the same projectile more than once results in the endless loop
 spawnProjectiles:
   - cobblestone
+spawnFireworks:
+  #if the firework flickers or not
+  flicker: false
+  #effect type of the fireworks: BALL, BALL_LARGE, BURST, CREEPER, STAR,
+  type: BALL
+  #main colors (RGB in hex notation)
+  #if there are no color, than there will be no fireworks
+  colors:
+    #red
+    - 'FF0000'
+    #white
+    - 'FFFFFF'
+  #fade colors in RGB hex notation
+  fadeColors:
+    #white
+    - 'FFFFFF'
 messages:
   #if this projectile can send a message of the impact location.
   hasImpactMessage: true

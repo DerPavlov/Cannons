@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -184,6 +186,12 @@ public class ProjectileStorage
         //spawnProjectiles
         projectile.setSpawnProjectiles(projectileConfig.getStringList("spawnProjectiles"));
 
+        //spawnFireworks
+        projectile.setFireworksFlicker(projectileConfig.getBoolean("spawnFireworks.flicker",false));
+        projectile.setFireworksType(getFireworksType(projectileConfig.getString("spawnFireworks.type", "BALL")));
+        projectile.setFireworksColors(toColor(projectileConfig.getStringList("spawnFireworks.colors")));
+        projectile.setFireworksFadeColors(toColor(projectileConfig.getStringList("spawnFireworks.fadeColors")));
+
         //messages
         projectile.setImpactMessage(projectileConfig.getBoolean("messages.hasImpactMessage", false));
 
@@ -272,24 +280,27 @@ public class ProjectileStorage
 	}
 
     /**
-     * return List of Projectiles
+     * returns a list of colors in RGB integer format from a list of strings in hex format
      * @param stringList
      * @return
      */
-    private List<Projectile> toProjectiles(List<String> stringList)
+    private List<Integer> toColor(List<String> stringList)
     {
-        List<Projectile> projectileList = new ArrayList<Projectile>();
+        List<Integer> colorList = new ArrayList<Integer>();
 
         for (String str : stringList)
         {
-            Projectile projectile = plugin.getProjectileStorage().getByName(str);
-            if (projectile != null)
-                projectileList.add(projectile);
-            else
-                plugin.logSevere("Can't use spawnProjectile " + str + " because Projectile does not exist");
-
+            try
+            {
+                Integer color = Integer.parseInt(str,16);
+                colorList.add(color);
+            }
+            catch (Exception ex)
+            {
+                plugin.logSevere(str + " is not a hexadecimal number");
+            }
         }
-        return projectileList;
+        return colorList;
     }
 
     /**
@@ -305,6 +316,19 @@ public class ProjectileStorage
                 return projectile;
         }
         return null;
+    }
+
+    public FireworkEffect.Type getFireworksType(String str)
+    {
+        try
+        {
+            return FireworkEffect.Type.valueOf(str);
+        }
+        catch(Exception ex)
+        {
+            plugin.logDebug(str + " is not a valid fireworks type. BALL was used instead.");
+            return FireworkEffect.Type.BALL;
+        }
     }
 
 }

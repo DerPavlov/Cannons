@@ -3,6 +3,7 @@ package at.pavlov.cannons.projectile;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -48,6 +49,12 @@ public class Projectile implements Cloneable{
 
     //spawnProjectile
     private List<String> spawnProjectiles;
+
+    //spawn Fireworks
+    private boolean fireworksFlicker;
+    private FireworkEffect.Type fireworksType;
+    private List<Integer> fireworksColors;
+    private List<Integer> fireworksFadeColors;
 
     //messages
     private boolean impactMessage;
@@ -466,5 +473,37 @@ public class Projectile implements Cloneable{
 
     public void setSpawnProjectiles(List<String> spawnProjectiles) {
         this.spawnProjectiles = spawnProjectiles;
+    }
+
+    public boolean isFireworksFlicker() {
+        return fireworksFlicker;
+    }
+
+    public void setFireworksFlicker(boolean fireworksFlicker) {
+        this.fireworksFlicker = fireworksFlicker;
+    }
+
+    public FireworkEffect.Type getFireworksType() {
+        return fireworksType;
+    }
+
+    public void setFireworksType(FireworkEffect.Type fireworksType) {
+        this.fireworksType = fireworksType;
+    }
+
+    public List<Integer> getFireworksColors() {
+        return fireworksColors;
+    }
+
+    public void setFireworksColors(List<Integer> fireworksColors) {
+        this.fireworksColors = fireworksColors;
+    }
+
+    public List<Integer> getFireworksFadeColors() {
+        return fireworksFadeColors;
+    }
+
+    public void setFireworksFadeColors(List<Integer> fireworksFadeColors) {
+        this.fireworksFadeColors = fireworksFadeColors;
     }
 }

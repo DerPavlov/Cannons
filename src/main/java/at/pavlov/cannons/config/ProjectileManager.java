@@ -41,7 +41,6 @@ public class ProjectileManager
 
 
         //calculate firing vector
-        plugin.logDebug("cannonball velocity: "  + velocity + " length " + velocity.length());
         snowball.setVelocity(velocity);
 
         //create a new flying projectile container

@@ -77,23 +77,18 @@ placeBlock:
 #spawns a new projectiles after the explosion of this projectile with the given name (file name)
 #spawning the same projectile more than once results in the endless loop
 spawnProjectiles:
-spawnfireworks:
-  #the size of the fireworks
-  power: 2
+spawnFireworks:
   #if the firework flickers or not
-  flicker: true
+  flicker: false
   #effect type of the fireworks: BALL, BALL_LARGE, BURST, CREEPER, STAR,
-  type: ball
-  #colors (RGB in hex notation)
+  type: BALL
+  #main colors (RGB in hex notation)
+  #if there are no color, than there will be no fireworks
   colors:
-    #red
-    -FF0000
-    #blue
-    -0000FF
   #fade colors in RGB hex notation
   fadeColors:
-    #green
-    -00FF00
+    #white
+    - 'FFFFFF'
 messages:
   #if this projectile can send a message of the impact location.
   hasImpactMessage: true
