@@ -11,14 +11,13 @@ import java.util.UUID;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import at.pavlov.cannons.utils.DelayedTask;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
@@ -643,6 +642,19 @@ public class CreateExplosion {
             //place blocks around the impact like webs, lava, water
             spreadBlocks(impactLoc, cannonball);
 
+            //spawns additional projectiles after the explosion
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(cannonball)
+            {
+                public void run(Object object) {
+                    FlyingProjectile flying = (FlyingProjectile) object;
+                    spawnProjectiles(flying);
+                }
+            }, 1L);
+
+            //spawn fireworks
+            spawnFireworks(cannonball);
+
+
             //do potion effects
             int effectRange = (int) projectile.getPotionRange()/2;
             entity = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
@@ -683,8 +695,63 @@ public class CreateExplosion {
 
         }
     }
-    
-	//####################################  transmittingEntities  ##############################
+
+    /**
+     * spawns fireworks after the explosion
+     * @param cannonball
+     */
+    private void spawnFireworks(FlyingProjectile cannonball)
+    {
+        World world = cannonball.getSnowball().getWorld();
+
+        final Firework fw = (Firework) world.spawnEntity(cannonball.getSnowball().getLocation(), EntityType.FIREWORK);
+        FireworkMeta meta = fw.getFireworkMeta();
+
+        meta.addEffect(FireworkEffect.builder().withColor(Color.BLUE).withColor(Color.WHITE).withFade(Color.WHITE).build());
+
+        fw.setFireworkMeta(meta);
+
+        fw.detonate();
+    }
+
+    /**
+     * spawns Projectiles given in the spawnProjectile property
+     * @param cannonball
+     */
+    private void spawnProjectiles(FlyingProjectile cannonball)
+    {
+        Projectile projectile = cannonball.getProjectile();
+        LivingEntity shooter = cannonball.getShooter();
+        Player player = (Player) shooter;
+        Location impactLoc = cannonball.getSnowball().getLocation();
+
+
+        Random r = new Random();
+
+        for (String strProj : projectile.getSpawnProjectiles())
+        {
+            Projectile newProjectiles = plugin.getProjectileStorage().getByName(strProj);
+            if (newProjectiles == null)
+            {
+                plugin.logSevere("Can't use spawnProjectile " + strProj + " because Projectile does not exist");
+                continue;
+            }
+
+            for (int i=0; i<newProjectiles.getNumberOfBullets(); i++)
+            {
+                Vector vect = new Vector(r.nextDouble()-0.5, r.nextDouble()-0.5, r.nextDouble()-0.5);
+                vect = vect.normalize().multiply(newProjectiles.getVelocity());
+
+                //don't spawn the projectile in the center
+                Location spawnLoc = impactLoc.clone().add(vect.clone().multiply(r.nextDouble()).multiply(projectile.getExplosionPower()));
+                plugin.getProjectileManager().spawnProjectile(newProjectiles, player, spawnLoc, vect);
+            }
+        }
+    }
+
+    /**
+     * event for all entities which died in the explosion
+     */
 	private void transmittingEntities(List<Entity> after, Entity shooter)
 	{
         //exit now

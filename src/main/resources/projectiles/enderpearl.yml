@@ -72,6 +72,9 @@ placeBlock:
     - '383:20'
     #this is a cobweb to slow the enemy, will be spawned a block
     - '30:0'
+#spawns a new projectiles after the explosion of this projectile with the given name (file name)
+#spawning the same projectile more than once results in the endless loop
+spawnProjectiles:
 messages:
   #if this projectile can send a message of the impact location.
   hasImpactMessage: true

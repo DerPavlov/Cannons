@@ -18,13 +18,18 @@ public class Teleporter {
     Cannons plugin;
 
 
-    //##################### Constructor ##############################
+    /**
+     * Constructor
+     * @param plugin
+     */
     public Teleporter(Cannons plugin)
     {
         this.plugin = plugin;
     }
 
-    //##################### InitAimingMode ##############################
+    /**
+     * starts the scheduler of the teleporter
+     */
     public void setupScheduler()
     {
         //changing angles for aiming mode
@@ -37,6 +42,9 @@ public class Teleporter {
         }, 1L, 1L);
     }
 
+    /**
+     * teleports the player to new position
+     */
     public void updateTeleporter()
     {
         //get projectiles
@@ -67,7 +75,7 @@ public class Teleporter {
                 shooter.setFallDistance(0.0f);
 
                 //teleport if the player is behind
-                if (distToOptimum.distance(new Vector(0,0,0)) > 30)
+                if (distToOptimum.length() > 30)
                 {
                     optiLoc.setYaw(shooter.getLocation().getYaw());
                     optiLoc.setPitch(shooter.getLocation().getPitch());

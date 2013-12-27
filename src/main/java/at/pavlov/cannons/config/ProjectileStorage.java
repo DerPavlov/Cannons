@@ -181,6 +181,9 @@ public class ProjectileStorage
         projectile.setTntFuseTime(projectileConfig.getDouble("placeBlock.tntFuseTime", 3));
 		projectile.setBlockPlaceList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("placeBlock.material")));
 
+        //spawnProjectiles
+        projectile.setSpawnProjectiles(projectileConfig.getStringList("spawnProjectiles"));
+
         //messages
         projectile.setImpactMessage(projectileConfig.getBoolean("messages.hasImpactMessage", false));
 
@@ -242,6 +245,8 @@ public class ProjectileStorage
 			PotionEffectType effect = PotionEffectType.getByName(str);
 			if (effect != null)
 				effectList.add(effect);
+            else
+                plugin.logSevere("No potion effect found with the name: " + str);
 		}
 		return effectList;
 	}
@@ -254,14 +259,52 @@ public class ProjectileStorage
 	private List<ProjectileProperties> toProperties(List<String> stringList)
 	{
 		List<ProjectileProperties> projectileList = new ArrayList<ProjectileProperties>();
-		
+
 		for (String str : stringList)
 		{
 			ProjectileProperties projectile = ProjectileProperties.getByName(str);
 			if (projectile != null)
 				projectileList.add(projectile);
+            else
+                plugin.logSevere("No projectile property with the name: " + str + " found");
 		}
 		return projectileList;
 	}
+
+    /**
+     * return List of Projectiles
+     * @param stringList
+     * @return
+     */
+    private List<Projectile> toProjectiles(List<String> stringList)
+    {
+        List<Projectile> projectileList = new ArrayList<Projectile>();
+
+        for (String str : stringList)
+        {
+            Projectile projectile = plugin.getProjectileStorage().getByName(str);
+            if (projectile != null)
+                projectileList.add(projectile);
+            else
+                plugin.logSevere("Can't use spawnProjectile " + str + " because Projectile does not exist");
+
+        }
+        return projectileList;
+    }
+
+    /**
+     * returns the projectile with the matching ID
+     * @param str
+     * @return
+     */
+    public Projectile getByName(String str)
+    {
+        for (Projectile projectile : projectileList)
+        {
+            if (projectile.getProjectileID().equalsIgnoreCase(str))
+                return projectile;
+        }
+        return null;
+    }
 
 }

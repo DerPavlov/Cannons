@@ -74,6 +74,26 @@ placeBlock:
     - '383:20'
     #this is a cobweb to slow the enemy, will be spawned a block
     - '30:0'
+#spawns a new projectiles after the explosion of this projectile with the given name (file name)
+#spawning the same projectile more than once results in the endless loop
+spawnProjectiles:
+spawnfireworks:
+  #the size of the fireworks
+  power: 2
+  #if the firework flickers or not
+  flicker: true
+  #effect type of the fireworks: BALL, BALL_LARGE, BURST, CREEPER, STAR,
+  type: ball
+  #colors (RGB in hex notation)
+  colors:
+    #red
+    -FF0000
+    #blue
+    -0000FF
+  #fade colors in RGB hex notation
+  fadeColors:
+    #green
+    -00FF00
 messages:
   #if this projectile can send a message of the impact location.
   hasImpactMessage: true

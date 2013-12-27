@@ -46,6 +46,9 @@ public class Projectile implements Cloneable{
     private double tntFuseTime;
 	private List<MaterialHolder> blockPlaceList = new ArrayList<MaterialHolder>();
 
+    //spawnProjectile
+    private List<String> spawnProjectiles;
+
     //messages
     private boolean impactMessage;
 
@@ -455,5 +458,13 @@ public class Projectile implements Cloneable{
 
     public void setTntFuseTime(double tntFuseTime) {
         this.tntFuseTime = tntFuseTime;
+    }
+
+    public List<String> getSpawnProjectiles() {
+        return spawnProjectiles;
+    }
+
+    public void setSpawnProjectiles(List<String> spawnProjectiles) {
+        this.spawnProjectiles = spawnProjectiles;
     }
 }

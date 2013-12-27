@@ -30,7 +30,7 @@ public class ProjectileManager
         this.plugin = plugin;
     }
 
-    public Snowball spawnProjectile(Projectile projectile, Player shooter, Location spawnLoc, Vector direction)
+    public Snowball spawnProjectile(Projectile projectile, Player shooter, Location spawnLoc, Vector velocity)
     {
         World world = spawnLoc.getWorld();
 
@@ -41,7 +41,8 @@ public class ProjectileManager
 
 
         //calculate firing vector
-        snowball.setVelocity(direction);
+        plugin.logDebug("cannonball velocity: "  + velocity + " length " + velocity.length());
+        snowball.setVelocity(velocity);
 
         //create a new flying projectile container
         FlyingProjectile cannonball = new FlyingProjectile(projectile, snowball, shooter);
@@ -51,7 +52,6 @@ public class ProjectileManager
             cannonball.setShooter(shooter);
         }
 
-
         flying_projectiles.add(cannonball);
 
         //detonate timefused projectiles
@@ -59,6 +59,7 @@ public class ProjectileManager
 
         return snowball;
     }
+
 
 
     /**
@@ -83,14 +84,13 @@ public class ProjectileManager
                         {
                             FlyingProjectile flying = iterator.next();
                             Projectile proj = flying.getProjectile();
-                            Snowball snow = flying.getSnowball();
                             if (flying.getSnowball() != null)
                             {
                                 if (flying.getSnowball().getTicksLived() > proj.getTimefuse()*20 - 5 && proj.getTimefuse() > 0)
                                 {
                                     //detonate timefuse
                                     plugin.getExplosion().detonate(flying);
-                                    snow.remove();
+                                    flying.getSnowball().remove();
                                     iterator.remove();
                                 }
                             }
