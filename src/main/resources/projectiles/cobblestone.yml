@@ -80,6 +80,8 @@ spawnProjectiles:
 spawnFireworks:
   #if the firework flickers or not
   flicker: false
+  #if the firework has a trail
+  trail: true
   #effect type of the fireworks: BALL, BALL_LARGE, BURST, CREEPER, STAR,
   type: BALL
   #main colors (RGB in hex notation)

@@ -188,6 +188,7 @@ public class ProjectileStorage
 
         //spawnFireworks
         projectile.setFireworksFlicker(projectileConfig.getBoolean("spawnFireworks.flicker",false));
+        projectile.setFireworksTrail(projectileConfig.getBoolean("spawnFireworks.trail",false));
         projectile.setFireworksType(getFireworksType(projectileConfig.getString("spawnFireworks.type", "BALL")));
         projectile.setFireworksColors(toColor(projectileConfig.getStringList("spawnFireworks.colors")));
         projectile.setFireworksFadeColors(toColor(projectileConfig.getStringList("spawnFireworks.fadeColors")));

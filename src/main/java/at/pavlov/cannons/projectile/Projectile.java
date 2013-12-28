@@ -52,6 +52,7 @@ public class Projectile implements Cloneable{
 
     //spawn Fireworks
     private boolean fireworksFlicker;
+    private boolean fireworksTrail;
     private FireworkEffect.Type fireworksType;
     private List<Integer> fireworksColors;
     private List<Integer> fireworksFadeColors;
@@ -505,5 +506,13 @@ public class Projectile implements Cloneable{
 
     public void setFireworksFadeColors(List<Integer> fireworksFadeColors) {
         this.fireworksFadeColors = fireworksFadeColors;
+    }
+
+    public boolean isFireworksTrail() {
+        return fireworksTrail;
+    }
+
+    public void setFireworksTrail(boolean fireworksTrail) {
+        this.fireworksTrail = fireworksTrail;
     }
 }

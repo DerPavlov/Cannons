@@ -726,7 +726,7 @@ public class CreateExplosion {
         FireworkMeta meta = fw.getFireworkMeta();
 
         meta.addEffect(fwb.build());
-        meta.setPower(10);
+        meta.setPower(100);
         fw.setFireworkMeta(meta);
 
         fw.detonate();
