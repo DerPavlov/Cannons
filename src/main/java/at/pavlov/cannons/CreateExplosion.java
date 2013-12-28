@@ -709,7 +709,7 @@ public class CreateExplosion {
         if (projectile.getFireworksColors().size() == 0) return;
 
         //building the fireworks effect
-        FireworkEffect.Builder fwb = FireworkEffect.builder().flicker(projectile.isFireworksFlicker()).with(projectile.getFireworksType());
+        FireworkEffect.Builder fwb = FireworkEffect.builder().flicker(projectile.isFireworksFlicker()).trail(projectile.isFireworksTrail()).with(projectile.getFireworksType());
         //setting colors
         for (Integer color : projectile.getFireworksColors())
         {
@@ -726,10 +726,17 @@ public class CreateExplosion {
         FireworkMeta meta = fw.getFireworkMeta();
 
         meta.addEffect(fwb.build());
-        meta.setPower(100);
+        meta.setPower(0);
         fw.setFireworkMeta(meta);
 
-        fw.detonate();
+        //detonate firework after 1tick. This seems to works much better than detonating instantaneously
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fw)
+        {
+            public void run(Object object) {
+                Firework fw = (Firework) object;
+                fw.detonate();
+            }
+        }, 1L);
     }
 
     /**
@@ -761,7 +768,7 @@ public class CreateExplosion {
                 vect = vect.normalize().multiply(newProjectiles.getVelocity());
 
                 //don't spawn the projectile in the center
-                Location spawnLoc = impactLoc.clone().add(vect.clone().multiply(r.nextDouble()).multiply(projectile.getExplosionPower()));
+                Location spawnLoc = impactLoc.clone().add(vect.clone().normalize().multiply(3.0));
                 plugin.getProjectileManager().spawnProjectile(newProjectiles, player, spawnLoc, vect);
             }
         }

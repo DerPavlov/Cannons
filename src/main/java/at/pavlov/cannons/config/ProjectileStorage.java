@@ -226,6 +226,24 @@ public class ProjectileStorage
             tntYmlFile.getParentFile().mkdirs();
             CannonsUtil.copyFile(plugin.getResource("projectiles/tnt.yml"), tntYmlFile);
         }
+        File firework1YmlFile = new File(plugin.getDataFolder(), "projectiles/firework1.yml");
+        if (!firework1YmlFile.exists())
+        {
+            firework1YmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("projectiles/firework1.yml"), firework1YmlFile);
+        }
+        File firework2YmlFile = new File(plugin.getDataFolder(), "projectiles/firework2.yml");
+        if (!firework2YmlFile.exists())
+        {
+            firework2YmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("projectiles/firework2.yml"), firework2YmlFile);
+        }
+        File firework3YmlFile = new File(plugin.getDataFolder(), "projectiles/firework3.yml");
+        if (!firework3YmlFile.exists())
+        {
+            firework3YmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("projectiles/firework3.yml"), firework3YmlFile);
+        }
 	}
 	
 	

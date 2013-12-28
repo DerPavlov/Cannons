@@ -75,7 +75,7 @@ placeBlock:
     #this is a cobweb to slow the enemy, will be spawned a block
     - '30:0'
 #spawns a new projectiles after the explosion of this projectile with the given name (file name)
-#spawning the same projectile more than once results in the endless loop
+#spawning the same projectile more than once results in a endless loop
 spawnProjectiles:
 spawnFireworks:
   #if the firework flickers or not
