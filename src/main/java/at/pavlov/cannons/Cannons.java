@@ -293,6 +293,18 @@ public class Cannons extends JavaPlugin
 		return fireCannon;
 	}
 
+    /**
+     * fires the given cannon if the player has enough permissions
+     * @param cannon - the cannon to fire
+     * @param player - the player how is firing the cannon
+     * @param autoreload - if the cannon will autoreload from a chest after firing
+     * @return returns a MessagesEnum if the firing was successful or not
+     */
+    public MessageEnum fireCannon(Cannon cannon, Player player, boolean autoreload)
+    {
+        return fireCannon.prepareFire(cannon, player, autoreload);
+    }
+
 	public CreateExplosion getExplosion()
 	{
 		return explosion;
