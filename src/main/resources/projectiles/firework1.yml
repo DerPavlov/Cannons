@@ -20,7 +20,7 @@ cannonball:
   #whether the .projectile destroys blocks it penetrates. If false it will explode if it hits something impenetrable.
   doesPenetrationDamage: true
   #how many seconds after firing the projectile will detonate if it does not hit anything
-  timefuse: 0
+  timefuse: 1.0
   #how many projectiles are fired
   numberOfBullets: 1
   #the higher this is, the more inaccurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from
@@ -28,8 +28,6 @@ cannonball:
   #different properties of the projectile. If you don't want any of these properties then just leave this all blank.
   #possible properties are: superbreaker, incendiary, teleport, observer
   properties:
-    #this means the cannonball will break through obsidian, water, and lava
-    - superbreaker
     #this property sets the impact area on fire. range is determined by the explosion power property
     - incendiary
 explosion:

@@ -31,7 +31,7 @@ timings:
   barrelCooldownTime: 3
 angles:
   #used to adjust in what direction a projectile is fired from a cannon. adjust this if your cannon is firing sideways or at itself
-  defaultHorizonatalFacing: west
+  defaultHorizonatalFacing: north
   #the default angle vertical angle which the cannon aims at when built. this is good for mortars and similar upwards firing weapons
   defaultVerticalAngle: 0.0
   #min and max horizontal angles determine how far to the left and right the cannon can be aim

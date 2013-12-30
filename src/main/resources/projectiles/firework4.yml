@@ -86,11 +86,11 @@ spawnFireworks:
   #if there are no color, than there will be no fireworks
   colors:
       #white
-      - 'FF0000'
+      - 'FFFFFF'
   #fade colors in RGB hex notation
   fadeColors:
     #white
-    - 'FFFFFF'
+    - 'FF0000'
 messages:
   #if this projectile can send a message of the impact location.
   hasImpactMessage: false

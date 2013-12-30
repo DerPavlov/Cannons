@@ -170,31 +170,26 @@ public class CreateExplosion {
     	//no eventhandling if the list is empty
     	if (blocklist.size() > 0) 
     	{
-    	
-    		//create bukkit event
-    		EntityExplodeEvent event = new EntityExplodeEvent(null, impactLoc, blocklist, 1.0f);
+            //fire custom piercing event to notify other plugins (blocks can be removed)
+            ProjectilePiercingEvent piercingEvent = new ProjectilePiercingEvent(projectile, impactLoc, blocklist);
+            plugin.getServer().getPluginManager().callEvent(piercingEvent);
+
+            //create bukkit event
+    		EntityExplodeEvent event = new EntityExplodeEvent(null, impactLoc, piercingEvent.getBlockList(), 1.0f);
     		//handle with bukkit
     		plugin.getServer().getPluginManager().callEvent(event);
 
-		
+		    //plugin.logDebug("explode event: " + event.isCancelled());
     		//if not canceled
-    		if(!event.isCancelled());// && plugin.BlockBreakPluginLoaded() == false)
-    		{
-                //fire custom piercing event to notify other plugins
-                ProjectilePiercingEvent impactEvent = new ProjectilePiercingEvent(projectile, impactLoc, blocklist);
-                Bukkit.getServer().getPluginManager().callEvent(impactEvent);
 
+    		if(!event.isCancelled());
+    		{
     			// break water, lava, obsidian if cannon projectile
     			for (int i = 0; i < event.blockList().size(); i++)
     			{
-    				Block block =  event.blockList().get(i);
-    				if (event.getEntity() != null)
-    				{
-    					block =  event.blockList().get(i);
-					
-    					// break the block, no matter what it is
-                        BreakBreakNaturally(block,event.getYield());
-    				}
+    				Block pBlock =  event.blockList().get(i);
+    				// break the block, no matter what it is
+                    BreakBreakNaturally(pBlock,event.getYield());
     			}
     		}
     	}

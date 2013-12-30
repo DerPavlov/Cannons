@@ -22,8 +22,10 @@ public class FlyingProjectile
 	{
 		this.snowball = snowball;
 		this.projectile = projectile;
-        this.firingLocation = shooter.getLocation();
-        this.hasFlyModeON = shooter.isFlying();
+        if (shooter != null)
+            this.firingLocation = shooter.getLocation();
+        else
+            this.firingLocation = snowball.getLocation();
 		this.spawnTime = System.currentTimeMillis();
 	}
 	

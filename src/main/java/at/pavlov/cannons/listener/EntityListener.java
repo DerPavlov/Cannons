@@ -31,6 +31,7 @@ public class EntityListener implements Listener
 		this.plugin = plugin;
 	}
 
+
 	/**
 	 * Cannon snowball hits the ground
 	 * 

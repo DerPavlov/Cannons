@@ -1,6 +1,6 @@
 general:
   #name of the cannon
-  designName: Classic
+  designName: Mortar
 signs:
   #this cannon needs a sign to operate. Important for moving cannons.
   isSignRequired: false
@@ -17,7 +17,7 @@ ammunition:
   autoreloadRedstone: true
 barrelProperties:
   #maximum gunpowder that can be loaded in the cannon
-  maxLoadableGunpowder: 3
+  maxLoadableGunpowder: 2
   #how much faster the loaded projectile will fired for each gunpowder loaded
   multiplierVelocity: 1.0
   #the angle of which a fired projectile spreads when fired. Basically the lower this is, the more accurate the cannon is
@@ -31,15 +31,15 @@ timings:
   barrelCooldownTime: 3
 angles:
   #used to adjust in what direction a projectile is fired from a cannon. adjust this if your cannon is firing sideways or at itself
-  defaultHorizonatalFacing: west
+  defaultHorizonatalFacing: NORTH
   #the default angle vertical angle which the cannon aims at when built. this is good for mortars and similar upwards firing weapons
-  defaultVerticalAngle: 0.0
+  defaultVerticalAngle: 70.0
   #min and max horizontal angles determine how far to the left and right the cannon can be aim
   maxHorizontalAngle: 45.0
   minHorizontalAngle: -45.0
   #min and max vertical angles determine how far upwards or downwards the cannon can be aimed
-  maxVerticalAngle: 45.0
-  minVerticalAngle: -45.0
+  maxVerticalAngle: 20.0
+  minVerticalAngle: -20.0
   #each change of the angles will change angle by this amount
   angleStepSize: 1.0
   #how fast the cannons can be turned in ticks
@@ -92,7 +92,7 @@ constructionBlocks:
   #the block which the projectile is fired from the cannon, direction can be adjusted using the defaultHorizontalFacing property. Default is block of snow
   muzzle: '80:0'
   #the block used to indicate when a cannon has been fired. default is torch. Makes fancy smoke on this location
-  firingIndicator: '50:5'
+  firingIndicator: '50:3'
   #the block used to indicate where the player can place chests or signs on the cannon. Default is a blank wall sign
   chestAndSign: '68:-1'
   #indicates where redstone torches can be placed for redstone autoload and firing to work. Default is redstone torch
@@ -108,13 +108,12 @@ constructionBlocks:
   #the blocks which a player right clicks in order to fire a cannon
   rightClickTrigger: 
     #the block used in the cannons schematic which is used to fire the cannon when right clicked by a player. Default is torch
-    schematic: '50:5'
+    schematic: '50:3'
     #the block used in game to fire the cannon when right clicked by a player. Default is torch
-    ingame: '50:5'
+    ingame: '50:3'
   #list of blocks in the schematic that will be protected from explosions (e.g. buttons, because they break easily)
   protectedBlocks:
-    - '50:5'
-    - '69:-1'
-    - '77:-1'
+    - '50:3'
+    - '148:0'
 
 

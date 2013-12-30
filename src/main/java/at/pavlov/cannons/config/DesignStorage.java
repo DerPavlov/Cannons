@@ -482,7 +482,6 @@ public class DesignStorage
 	{
 		File classicYmlFile = new File(plugin.getDataFolder(), "designs/classic.yml");
 		File classicSchematicFile = new File(plugin.getDataFolder(), "designs/classic.schematic");
-
 		if (!classicYmlFile.exists())
 		{
 			classicYmlFile.getParentFile().mkdirs();
@@ -493,6 +492,32 @@ public class DesignStorage
 			classicSchematicFile.getParentFile().mkdirs();
 			CannonsUtil.copyFile(plugin.getResource("designs/classic.schematic"), classicSchematicFile);
 		}
+
+        File mortarYmlFile = new File(plugin.getDataFolder(), "designs/mortar.yml");
+        File mortarSchematicFile = new File(plugin.getDataFolder(), "designs/mortar.schematic");
+        if (!mortarYmlFile.exists())
+        {
+            mortarYmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("designs/mortar.yml"), mortarYmlFile);
+        }
+        if (!mortarSchematicFile.exists())
+        {
+            mortarSchematicFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("designs/mortar.schematic"), mortarSchematicFile);
+        }
+
+        File ironCannonYmlFile = new File(plugin.getDataFolder(), "designs/ironCannon.yml");
+        File ironCannonSchematicFile = new File(plugin.getDataFolder(), "designs/ironCannon.schematic");
+        if (!ironCannonYmlFile.exists())
+        {
+            ironCannonYmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("designs/ironCannon.yml"), ironCannonYmlFile);
+        }
+        if (!ironCannonSchematicFile.exists())
+        {
+            ironCannonSchematicFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("designs/ironCannon.schematic"), ironCannonSchematicFile);
+        }
 	}
 	
 	private boolean isInList(List<BaseBlock> list, BaseBlock block)

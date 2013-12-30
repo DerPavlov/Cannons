@@ -207,44 +207,31 @@ public class ProjectileStorage
 	 * copys the default designs from the .jar to the disk
 	 */
 	private void copyDefaultProjectiles()
-	{
-		File cobblestoneYmlFile = new File(plugin.getDataFolder(), "projectiles/cobblestone.yml");
-		if (!cobblestoneYmlFile.exists())
-		{
-			cobblestoneYmlFile.getParentFile().mkdirs();
-			CannonsUtil.copyFile(plugin.getResource("projectiles/cobblestone.yml"), cobblestoneYmlFile);
-		}
-        File enderpearlYmlFile = new File(plugin.getDataFolder(), "projectiles/enderpearl.yml");
-        if (!enderpearlYmlFile.exists())
-        {
-            enderpearlYmlFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("projectiles/enderpearl.yml"), enderpearlYmlFile);
-        }
-        File tntYmlFile = new File(plugin.getDataFolder(), "projectiles/tnt.yml");
-        if (!tntYmlFile.exists())
-        {
-            tntYmlFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("projectiles/tnt.yml"), tntYmlFile);
-        }
-        File firework1YmlFile = new File(plugin.getDataFolder(), "projectiles/firework1.yml");
-        if (!firework1YmlFile.exists())
-        {
-            firework1YmlFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("projectiles/firework1.yml"), firework1YmlFile);
-        }
-        File firework2YmlFile = new File(plugin.getDataFolder(), "projectiles/firework2.yml");
-        if (!firework2YmlFile.exists())
-        {
-            firework2YmlFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("projectiles/firework2.yml"), firework2YmlFile);
-        }
-        File firework3YmlFile = new File(plugin.getDataFolder(), "projectiles/firework3.yml");
-        if (!firework3YmlFile.exists())
-        {
-            firework3YmlFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("projectiles/firework3.yml"), firework3YmlFile);
-        }
+    {
+        copyFile("tnt");
+        copyFile("cobblestone");
+
+        copyFile("enderpearl");
+
+        copyFile("firework1");
+        copyFile("firework2");
+        copyFile("firework3");
+        copyFile("firework4");
 	}
+
+    /**
+     * copies the yml file from the .jar to the projectile folder
+     * @param filename - name of the .yml file
+     */
+    private void copyFile(String filename)
+    {
+        File YmlFile = new File(plugin.getDataFolder(), "projectiles/" + filename + ".yml");
+        if (!YmlFile.exists())
+        {
+            YmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("projectiles/" + filename + ".yml"), YmlFile);
+        }
+    }
 	
 	
 	/**

@@ -297,11 +297,11 @@ public class CalcAngle {
 		{
 			if (isSneaking == true)
 			{
-				return new gunAngles(-1.0, 0.0);
+				return new gunAngles(0.0, -1.0);
 			}
 			else
 			{
-				return new gunAngles(1.0, 0.0);
+				return new gunAngles(0.0, 1.0);
 			}
 		}
 		
