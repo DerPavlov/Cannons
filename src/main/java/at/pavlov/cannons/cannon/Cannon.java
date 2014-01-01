@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import at.pavlov.cannons.config.ProjectileStorage;
+import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -602,6 +603,16 @@ public class Cannon
     	return false;
 	}
 
+    /**
+     * returns the first block of the cannon
+     * @return - first block of the cannon
+     */
+    public Location getFirstCannonBlock()
+    {
+        return design.getAllCannonBlocks(cannonDirection).get(0).toLocation(getWorldBukkit(), offset);
+
+    }
+
 	/**
 	 * returns true if the player has the permission to place redstone near a cannon.
 	 * player = null will also return true
@@ -679,6 +690,42 @@ public class Cannon
 			}
 		}
 	}
+
+    /**
+     * updates the location of the cannon
+     * @param moved - how far the cannon has been moved
+     */
+    public void updateCannonPostion(Vector moved)
+    {
+        offset.add(moved);
+    }
+
+    /**
+     * updates the rotation of the cannon
+     * @param center - center of the rotation
+     * @param angle - how far the cannon is rotated in degree (90, 180, 270, -90)
+     */
+    public void updateCannonRotation(Vector center, int angle)
+    {
+        while (angle < 0)
+        {
+            angle += 360;
+        }
+        angle %= 360;
+
+        System.out.println("updateCannonRotation new angle: " + angle);
+        Vector diff = offset.clone().subtract(center);
+        double newX = diff.getX()*Math.cos(angle) - diff.getZ()*Math.sin(angle);
+        double newZ = diff.getX()*Math.sin(angle) + diff.getZ()*Math.cos(angle);
+
+        offset.setX(newX);
+        offset.setZ(newZ);
+
+        for (int i = 0; i<angle%90; i++)
+        {
+            cannonDirection = CannonsUtil.roatateFace(cannonDirection);
+        }
+    }
 
 	/**
 	 * return the firing vector of the cannon. The spread depends on the cannon, the projectile and the player
@@ -1023,9 +1070,18 @@ public class Cannon
 		return horizontalAngle;
 	}
 
+    /**
+     * sets a new horizontal angle of the cannon. The angle is limited by the design
+     * @param horizontalAngle - new vertical angle
+     */
 	public void setHorizontalAngle(double horizontalAngle)
 	{
 		this.horizontalAngle = horizontalAngle;
+        //the angle should not exceed the limits
+        if (this.horizontalAngle > design.getMaxHorizontalAngle())
+            this.horizontalAngle = design.getMaxHorizontalAngle();
+        if (this.horizontalAngle < design.getMinHorizontalAngle())
+            this.horizontalAngle = design.getMinHorizontalAngle();
 	}
 
 	public double getVerticalAngle()
@@ -1033,9 +1089,18 @@ public class Cannon
 		return verticalAngle;
 	}
 
+    /**
+     * sets a new vertical angle of the cannon. The angle is limited by the design
+     * @param verticalAngle - new vertical angle
+     */
 	public void setVerticalAngle(double verticalAngle)
 	{
 		this.verticalAngle = verticalAngle;
+        //the angle should not exceed the limits
+        if (this.verticalAngle > design.getMaxVerticalAngle())
+            this.verticalAngle = design.getMaxVerticalAngle();
+        if (this.verticalAngle < design.getMinVerticalAngle())
+            this.verticalAngle = design.getMinVerticalAngle();
 	}
 
 	public String getOwner()

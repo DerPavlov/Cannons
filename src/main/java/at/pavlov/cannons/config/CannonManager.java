@@ -177,6 +177,25 @@ public class CannonManager
         return ;
 	}
 
+    /**
+     * returns all known cannon in a sphere around the given location
+     * @param center - center of the box
+     * @param sphereRadius - radius of the sphere in blocks
+     * @return - list of all cannons in this sphere
+     */
+    public List<Cannon> getCannons(Location center, double sphereRadius)
+    {
+        ArrayList<Cannon> cannonList = new ArrayList<Cannon>();
+
+        for (Cannon cannon : plugin.getCannonManager().getCannonList())
+        {
+            Location newLoc = cannon.getCannonDesign().getMuzzle(cannon);
+            if (newLoc.distance(center) < sphereRadius)
+                cannonList.add(cannon);
+        }
+        return cannonList;
+    }
+
 	/**
 	 * get cannon by cannonName and Owner - used for Signs
 	 * @param cannonName

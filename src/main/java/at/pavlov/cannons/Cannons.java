@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import at.pavlov.cannons.API.CannonsAPI;
 import at.pavlov.cannons.config.*;
 import at.pavlov.cannons.scheduler.CalcAngle;
 import at.pavlov.cannons.scheduler.Teleporter;
@@ -46,8 +47,10 @@ public class Cannons extends JavaPlugin
 	private CalcAngle calcAngle;
     private Teleporter teleporter;
 	private Commands commands;
+
+    private CannonsAPI cannonsAPI;
 	
-	//Events
+	//Listener
 	private PlayerListener playerListener;
 	private EntityListener entityListener;
 	private SignListener signListener;
@@ -56,9 +59,6 @@ public class Cannons extends JavaPlugin
 	private PersistenceDatabase persistenceDatabase;
 	private MyDatabase database;
 
-	// creeperHeal to restore blocks
-	//private CreeperHeal creeperHeal;
-	//private ObsidianDestroyer obsidianDestroyer;
 
 
 	public Cannons()
@@ -102,6 +102,7 @@ public class Cannons extends JavaPlugin
 		this.fireCannon = new FireCannon(this, config, explosion);
 		this.calcAngle = new CalcAngle(this);
         this.teleporter = new Teleporter(this);
+        this.cannonsAPI = new CannonsAPI(this);
 		
 		this.persistenceDatabase = new PersistenceDatabase(this);
 
@@ -380,5 +381,9 @@ public class Cannons extends JavaPlugin
 
     public ProjectileManager getProjectileManager(){
         return this.config.getProjectileManager();
+    }
+
+    public CannonsAPI getCannonsAPI() {
+        return cannonsAPI;
     }
 }

@@ -75,7 +75,7 @@ public class CannonDesign
 	//constructionblocks:
 	private MaterialHolder schematicBlockTypeIgnore;     				//this block this is ignored in the schematic file
     private MaterialHolder schematicBlockTypeMuzzle;					//location of the muzzle
-    private MaterialHolder schematicBlockTypeRotationCenter;			//location of the muzzle
+    private MaterialHolder schematicBlockTypeRotationCenter;			//location of the roatation
     private MaterialHolder schematicBlockTypeChestAndSign;				//locations of the chest and sign
     private MaterialHolder schematicBlockTypeRedstoneTorch;				//locations of the redstone torches
     private MaterialHolder schematicBlockTypeRedstoneWireAndRepeater;	//locations of the redstone wires and repeaters
@@ -159,7 +159,7 @@ public class CannonDesign
     	
     	return new ArrayList<SimpleBlock>();
     }
-    
+
     /**
      * returns a list of all destructible blocks
      * @param cannon
