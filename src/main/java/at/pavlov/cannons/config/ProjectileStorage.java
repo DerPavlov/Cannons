@@ -160,6 +160,8 @@ public class ProjectileStorage
 		projectile.setPenetration(projectileConfig.getDouble("cannonball.penetration", 0.0));
 		projectile.setPenetrationDamage(projectileConfig.getBoolean("cannonball.doesPenetrationDamage", true));
 		projectile.setTimefuse(projectileConfig.getDouble("cannonball.timefuse", 0.0));
+        projectile.setAutomaticFiringDelay(projectileConfig.getDouble("cannonball.automaticFiringDelay", 1.0));
+        projectile.setAutomaticFiringMagazineSize(projectileConfig.getInt("cannonball.automaticFiringMagazineSize", 1));
 		projectile.setNumberOfBullets(projectileConfig.getInt("cannonball.numberOfBullets", 1));
 		projectile.setSpreadMultiplier(projectileConfig.getDouble("cannonball.spreadMultiplier", 1.0));
 		projectile.setPropertyList(toProperties(projectileConfig.getStringList("cannonball.properties")));

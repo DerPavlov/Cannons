@@ -73,7 +73,7 @@ public class FireCannon {
 			return MessageEnum.ErrorNoProjectile;
 		}
 		//Barrel too hot
-		if (cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
+		if (cannon.isFiring() || (cannon.getLastFired() + design.getBarrelCooldownTime())*1000 >= System.currentTimeMillis())
 		{
 			return MessageEnum.ErrorBarrelTooHot;
 		}	
@@ -168,6 +168,7 @@ public class FireCannon {
     private void delayedFire(Cannon cannon, Player player)
     {
     	CannonDesign design = designStorage.getDesign(cannon);
+        Projectile projectile = cannon.getLoadedProjectile();
     	
 		//reset after firing
 		cannon.setLastFired(System.currentTimeMillis());
@@ -182,72 +183,87 @@ public class FireCannon {
 			torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 1,1);
 		}
 
+        //this cannon is now firing
+        cannon.setFiring(true);
 		
-		//set up delayed task
-		Object fireTask = new FireTaskWrapper(cannon, player);
-		Long fuseBurnTime = (long) design.getFuseBurnTime() * 20;
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
-		{
-			public void run(Object object) 
-			    {			
-					FireTaskWrapper fireTask = (FireTaskWrapper) object;
-			    	fire(fireTask.getCannon(), fireTask.getPlayer());
-			    }
-		}, fuseBurnTime);	
+		//set up delayed task with automatic firing. Several bullets with time delay for one loaded projectile
+        for(int i=0; i < projectile.getAutomaticFiringMagazineSize(); i++)
+        {
+            Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
+            Object fireTask = new FireTaskWrapper(cannon, player, (i+1)==projectile.getAutomaticFiringMagazineSize());
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
+            {
+                public void run(Object object)
+                    {
+                        FireTaskWrapper fireTask = (FireTaskWrapper) object;
+                        fire(fireTask.getCannon(), fireTask.getPlayer(), fireTask.isRemoveCharge());
+                    }
+            }, delayTime);
+        }
     }
 	
 	/**
 	 * fires a cannon and removes the charge from the player
-	 * @param cannon
-	 * @param shooter
+	 * @param cannon - the fired cannon
+     * @param shooter - the player firing the cannon
+     * @param removeCharge - if the charge is removed after firing
 	 */
-    private void fire(Cannon cannon, Player shooter)
+    private void fire(Cannon cannon, Player shooter, boolean removeCharge)
     {
-    	CannonDesign design = designStorage.getDesign(cannon);
-    	Projectile projectile = cannon.getLoadedProjectile();
+        CannonDesign design = cannon.getCannonDesign();
+        Projectile projectile = cannon.getLoadedProjectile();
 
         // no projectile no cannon firing
         if (projectile == null) return;
         // no gunpowder no cannon firing
         if (cannon.getLoadedGunpowder() <= 0) return;
-    	
-    	
-		Location firingLoc = design.getMuzzle(cannon);
-		World world = cannon.getWorldBukkit();
-    	
-		//Muzzle flash + Muzzle_displ
-		world.createExplosion(firingLoc, 0F);
-		world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
-		
-		//for each bullet, but at least once		
-		for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
-		{
+
+
+        Location firingLoc = design.getMuzzle(cannon);
+        World world = cannon.getWorldBukkit();
+
+        //Muzzle flash + Muzzle_displ
+        world.createExplosion(firingLoc, 0F);
+        world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
+
+        //for each bullet, but at least once
+        for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
+        {
             Vector vect = cannon.getFiringVector(shooter);
             Snowball snowball = plugin.getProjectileManager().spawnProjectile(projectile, shooter, firingLoc, vect);
 
             if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
                 snowball.setPassenger(shooter);
 
-			//confuse all entity which wear no helmets due to the blast of the cannon
-			List<Entity> living = snowball.getNearbyEntities(5, 5, 5);
-			//do only once
-			if (snowball != null && i==0)
-			{
-				confuseShooter(living, design.getBlastConfusion());
-			}
-		}
+            //confuse all entity which wear no helmets due to the blast of the cannon
+            List<Entity> living = snowball.getNearbyEntities(5, 5, 5);
+            //do only once
+            if (snowball != null && i==0)
+            {
+                confuseShooter(living, design.getBlastConfusion());
+            }
+        }
 
-		//reset after firing
-		cannon.setLastFired(System.currentTimeMillis());
+        //reset after firing
+        cannon.setLastFired(System.currentTimeMillis());
 
-		//redstone or player infinite ammo will not remove the charge
-		if ((shooter == null && !design.isAmmoInfiniteForRedstone()) || (shooter != null && !design.isAmmoInfiniteForPlayer()))
-		{
-			plugin.logDebug("fire event complete, charge removed from the cannon");
-			//ammo is removed form chest, if false there is not enough ammo to reload the cannon
-            cannon.removeCharge();
-		}
-    }	 
+        if (removeCharge == true)
+        {
+            //finished firing
+            cannon.setFiring(false);
+
+            //redstone or player infinite ammo will not remove the charge
+            if ((shooter == null && !cannon.getCannonDesign().isAmmoInfiniteForRedstone()) || (shooter != null && !cannon.getCannonDesign().isAmmoInfiniteForPlayer()))
+            {
+                plugin.logDebug("fire event complete, charge removed from the cannon");
+                //removes the gunpowder and projectile loaded in the cannon
+                cannon.removeCharge();
+            }
+        }
+
+    }
+
+
     
     /**
      * confuses an entity to simulate the blast of a cannon

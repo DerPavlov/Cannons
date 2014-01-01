@@ -21,6 +21,10 @@ cannonball:
   doesPenetrationDamage: true
   #how many seconds after firing the projectile will detonate if it does not hit anything
   timefuse: 0.5
+  #the delay in seconds between two fired cannonball in the automatic firing mode.
+  automaticFiringDelay: 1
+  #a cannon can fire several times with a single projectile - like a magazine in a automatic firearm
+  automaticFiringMagazineSize: 1
   #how many projectiles are fired
   numberOfBullets: 5
   #the higher this is, the more inaccurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from

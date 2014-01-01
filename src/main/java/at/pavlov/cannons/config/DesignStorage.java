@@ -480,45 +480,30 @@ public class DesignStorage
 	 */
 	private void copyDefaultDesigns()
 	{
-		File classicYmlFile = new File(plugin.getDataFolder(), "designs/classic.yml");
-		File classicSchematicFile = new File(plugin.getDataFolder(), "designs/classic.schematic");
-		if (!classicYmlFile.exists())
-		{
-			classicYmlFile.getParentFile().mkdirs();
-			CannonsUtil.copyFile(plugin.getResource("designs/classic.yml"), classicYmlFile);
-		}
-		if (!classicSchematicFile.exists())
-		{
-			classicSchematicFile.getParentFile().mkdirs();
-			CannonsUtil.copyFile(plugin.getResource("designs/classic.schematic"), classicSchematicFile);
-		}
-
-        File mortarYmlFile = new File(plugin.getDataFolder(), "designs/mortar.yml");
-        File mortarSchematicFile = new File(plugin.getDataFolder(), "designs/mortar.schematic");
-        if (!mortarYmlFile.exists())
-        {
-            mortarYmlFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("designs/mortar.yml"), mortarYmlFile);
-        }
-        if (!mortarSchematicFile.exists())
-        {
-            mortarSchematicFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("designs/mortar.schematic"), mortarSchematicFile);
-        }
-
-        File ironCannonYmlFile = new File(plugin.getDataFolder(), "designs/ironCannon.yml");
-        File ironCannonSchematicFile = new File(plugin.getDataFolder(), "designs/ironCannon.schematic");
-        if (!ironCannonYmlFile.exists())
-        {
-            ironCannonYmlFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("designs/ironCannon.yml"), ironCannonYmlFile);
-        }
-        if (!ironCannonSchematicFile.exists())
-        {
-            ironCannonSchematicFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("designs/ironCannon.schematic"), ironCannonSchematicFile);
-        }
+		copyFile("classic");
+        copyFile("mortar");
+        copyFile("ironCannon");
 	}
+
+    /**
+     * Copys the given .yml and .schematic from the .jar to the disk
+     * @param fileName - name of the design file
+     */
+    private void copyFile(String fileName)
+    {
+        File YmlFile = new File(plugin.getDataFolder(), "designs/" + fileName + ".yml");
+        File SchematicFile = new File(plugin.getDataFolder(), "designs/" + fileName + ".schematic");
+        if (!YmlFile.exists())
+        {
+            YmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("designs/" + fileName + ".yml"), YmlFile);
+        }
+        if (!SchematicFile.exists())
+        {
+            SchematicFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("designs/" + fileName + ".schematic"), SchematicFile);
+        }
+    }
 	
 	private boolean isInList(List<BaseBlock> list, BaseBlock block)
 	{

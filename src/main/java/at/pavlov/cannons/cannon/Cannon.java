@@ -57,6 +57,8 @@ public class Cannon
 	private String owner;
 	// designID of the cannon, for different types of cannons - not in use
 	private boolean isValid;
+    // true if the cannon if firing
+    private boolean isFiring;
     //the player which has used the cannon last, important for firing with redstone button
     private String lastUser;
 
@@ -92,8 +94,7 @@ public class Cannon
 
 	/**
 	 * removes the loaded charge form the chest attached to the cannon, returns true if the ammo was found in the chest
-	 *
-	 * @return
+	 * @return - true if the cannon has been reloaded. False if there is not enough ammunition
 	 */
 	public boolean reloadFromChests(Player player)
 	{
@@ -154,8 +155,8 @@ public class Cannon
 
 
     /**
-     *
-     * @return returns the inventories of all attached chests
+     * returns the inventories of all attached chests
+     * @return - list of inventory
      */
     public List<Inventory> getInventoryList()
     {
@@ -172,7 +173,7 @@ public class Cannon
 	
 	/**
 	 * loads Gunpowder in a cannon
-	 * @param amountToLoad number of items which are loaded into the cannon
+	 * @param amountToLoad - number of items which are loaded into the cannon
 	 */
 	public MessageEnum loadGunpowder(int amountToLoad)
 	{
@@ -203,7 +204,7 @@ public class Cannon
 	
 	/**
 	 * checks the permission of a player before loading gunpowder in the cannon
-	 * @param player
+	 * @param player - the player which is loading the cannon
 	 */
 	public MessageEnum loadGunpowder(Player player)
 	{
@@ -246,8 +247,8 @@ public class Cannon
 	/**
 	 * load the projectile in the cannon and checks permissions
 	 * 
-	 * @param player
-	 * @return
+	 * @param player - who is loading the cannon
+	 * @return - a message which can be displayed
 	 */
 	public MessageEnum loadProjectile(Projectile projectile, Player player)
 	{
@@ -274,9 +275,8 @@ public class Cannon
 	/**
 	 * Check if cannons can be loaded with gunpowder by the player
 	 * 
-	 * @param player
-	 *            check permissions of this player
-	 * @return true if the cannon can be loaded
+	 * @param player - check permissions of this player
+	 * @return - true if the cannon can be loaded
 	 */
 	private MessageEnum CheckPermGunpowder(Player player)
 	{
@@ -301,14 +301,11 @@ public class Cannon
 	/**
 	 * Check the if the cannons can be loaded
 	 * 
-	 * @param player
-	 *            whose permissions are checked
+	 * @param player - whose permissions are checked
 	 * @return true if the player and cannons can load the projectile
 	 */
 	private MessageEnum CheckPermProjectile(Projectile projectile, Player player)
 	{
-
-
 		//if the player is not the owner of this gun
 		if (player != null && !this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
 		{
@@ -344,7 +341,7 @@ public class Cannon
 	/**
 	 * is cannon loaded return true
 	 * 
-	 * @return
+	 * @return - true if there is a projectile in the cannon
 	 */
 	public boolean isLoaded()
 	{
@@ -352,8 +349,7 @@ public class Cannon
 	}
 
 	/**
-	 * removes gunpowder and the projectile. Items are drop at the cannonball
-	 * exit point
+	 * removes gunpowder and the projectile. Items are drop at the cannonball firing point
 	 */
 	private void dropCharge()
 	{
@@ -1118,5 +1114,13 @@ public class Cannon
 
     public void setLastUser(String lastUser) {
         this.lastUser = lastUser;
+    }
+
+    public boolean isFiring() {
+        return isFiring;
+    }
+
+    public void setFiring(boolean firing) {
+        isFiring = firing;
     }
 }

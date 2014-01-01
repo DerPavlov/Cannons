@@ -23,6 +23,8 @@ public class Projectile implements Cloneable{
 	private double velocity;	
 	private double penetration;
 	private double timefuse;
+    private double automaticFiringDelay;
+    private int automaticFiringMagazineSize;
 	private int numberOfBullets;
 	private double spreadMultiplier;
 	private List<ProjectileProperties> propertyList = new ArrayList<ProjectileProperties>();
@@ -514,5 +516,21 @@ public class Projectile implements Cloneable{
 
     public void setFireworksTrail(boolean fireworksTrail) {
         this.fireworksTrail = fireworksTrail;
+    }
+
+    public double getAutomaticFiringDelay() {
+        return automaticFiringDelay;
+    }
+
+    public void setAutomaticFiringDelay(double automaticFiringDelay) {
+        this.automaticFiringDelay = automaticFiringDelay;
+    }
+
+    public int getAutomaticFiringMagazineSize() {
+        return automaticFiringMagazineSize;
+    }
+
+    public void setAutomaticFiringMagazineSize(int automaticFiringMagazineSize) {
+        this.automaticFiringMagazineSize = automaticFiringMagazineSize;
     }
 }

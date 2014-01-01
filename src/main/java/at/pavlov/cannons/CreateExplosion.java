@@ -465,7 +465,7 @@ public class CreateExplosion {
             LivingEntity living = (LivingEntity) next;
 
             double dist = impactLoc.distance((living).getEyeLocation());
-            plugin.logDebug("Distance to impact: " + String.format("%.2f", dist));
+            plugin.logDebug("Distance of " + living.getType() + " to impact: " + String.format("%.2f", dist));
             //if the entity is too far away, return
             if (dist > projectile.getPlayerDamageRange()) return;
 
@@ -497,7 +497,7 @@ public class CreateExplosion {
             if (damage >= 1)
             {
                 //damage entity
-                living.damage((int) Math.floor(damage));
+                living.damage(damage);
 
                 //if player wears armor reduce damage
                 if (living instanceof Player)
@@ -556,7 +556,7 @@ public class CreateExplosion {
             if (damage >= 1)
             {
                 //damage entity
-                living.damage((int) Math.floor(damage));
+                living.damage(damage);
 
                 //if player wears armor reduce damage
                 if (living instanceof Player)

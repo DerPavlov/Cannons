@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -78,6 +79,10 @@ public class CannonManager
 			{
 				player = Bukkit.getPlayer(cannon.getOwner());
 			}
+
+            //fire and an event that this cannon is destroyed
+            CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon);
+            Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
 
 			// destroy cannon (drops items, edit sign)
 			MessageEnum message = cannon.destroyCannon();
@@ -216,8 +221,8 @@ public class CannonManager
 	/**
 	 * searches for a cannon and creates a new entry if it does not exist
 	 * 
-	 * @param cannonBlock
-	 * @param owner
+	 * @param cannonBlock - one block of the cannon
+	 * @param owner - the owner of the cannon (important for message notification). Can't be null
 	 * @return
 	 */
 	public Cannon getCannon(Location cannonBlock, String owner)
@@ -228,8 +233,8 @@ public class CannonManager
 	/**
 	 * searches for a cannon and creates a new entry if it does not exist
 	 * 
-	 * @param cannonBlock
-	 * @param owner
+	 * @param cannonBlock - one block of the cannon
+	 * @param owner - the owner of the cannon (important for message notification). Can't be null
 	 * @return
 	 */
 	public Cannon getCannon(Location cannonBlock, String owner, boolean silent)
