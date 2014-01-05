@@ -486,7 +486,8 @@ public class CreateExplosion {
             if (living instanceof Player)
             {
                 Player player = (Player) living;
-                reduction *= (1-CannonsUtil.getArmorDamageReduced(player)) * (1-CannonsUtil.getBlastProtection(player));
+                double armorPiercing = Math.max(projectile.getPenetration(),0);
+                reduction *= (1-CannonsUtil.getArmorDamageReduced(player)/(armorPiercing+1)) * (1-CannonsUtil.getBlastProtection(player));
             }
 
             plugin.logDebug("PlayerDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " armor reduction factor: " + String.format("%.2f", reduction));
@@ -626,7 +627,6 @@ public class CreateExplosion {
 		boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
 		boolean blockDamage = projectile.getExplosionDamage();
 	    boolean notCanceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
-
 
         //send a message about the impact (only if the projectile has enabled this feature)
         if (projectile.isImpactMessage())

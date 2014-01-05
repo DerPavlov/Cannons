@@ -1,4 +1,4 @@
-package at.pavlov.cannons.config;
+package at.pavlov.cannons.projectile;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.projectile.FlyingProjectile;

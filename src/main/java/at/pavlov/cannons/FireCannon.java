@@ -1,10 +1,8 @@
 package at.pavlov.cannons;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
-import at.pavlov.cannons.event.CannonAfterCreateEvent;
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
@@ -22,9 +20,8 @@ import org.bukkit.util.Vector;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.config.DesignStorage;
+import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.config.MessageEnum;
-import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
 
@@ -73,7 +70,8 @@ public class FireCannon {
 			return MessageEnum.ErrorNoProjectile;
 		}
 		//Barrel too hot
-		if (cannon.isFiring() || (cannon.getLastFired() + design.getBarrelCooldownTime())*1000 >= System.currentTimeMillis())
+        plugin.logDebug("is firing: " + cannon.isFiring() + " last fired " + ((cannon.getLastFired() + design.getBarrelCooldownTime())*1000 <= System.currentTimeMillis()));
+		if (cannon.isFiring() || cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
 		{
 			return MessageEnum.ErrorBarrelTooHot;
 		}	
@@ -190,7 +188,7 @@ public class FireCannon {
         for(int i=0; i < projectile.getAutomaticFiringMagazineSize(); i++)
         {
             Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
-            Object fireTask = new FireTaskWrapper(cannon, player, (i+1)==projectile.getAutomaticFiringMagazineSize());
+            Object fireTask = new FireTaskWrapper(cannon, player, i==(projectile.getAutomaticFiringMagazineSize()-1));
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
             {
                 public void run(Object object)
@@ -236,11 +234,11 @@ public class FireCannon {
                 snowball.setPassenger(shooter);
 
             //confuse all entity which wear no helmets due to the blast of the cannon
-            List<Entity> living = snowball.getNearbyEntities(5, 5, 5);
+            List<Entity> living = snowball.getNearbyEntities(8, 8, 8);
             //do only once
             if (snowball != null && i==0)
             {
-                confuseShooter(living, design.getBlastConfusion());
+                confuseShooter(living, firingLoc, design.getBlastConfusion());
             }
         }
 
@@ -270,7 +268,7 @@ public class FireCannon {
      * @param living
      * @param confuseTime
      */
-    private void confuseShooter(List<Entity> living, double confuseTime)
+    private void confuseShooter(List<Entity> living, Location firingLoc, double confuseTime)
     {
     	 //confuse shooter if he wears no helmet (only for one projectile and if its configured)
     	if (confuseTime > 0)
@@ -299,7 +297,8 @@ public class FireCannon {
     			{
     				//damage living entities and unprotected players
     				LivingEntity livingEntity = (LivingEntity) next;
-    				livingEntity.damage(1);
+                    if (livingEntity.getLocation().distance(firingLoc) < 5.0)
+    				    livingEntity.damage(1);
     				livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,(int) confuseTime*20, 0));
 
     			}

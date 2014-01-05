@@ -1,4 +1,4 @@
-package at.pavlov.cannons.config;
+package at.pavlov.cannons.projectile;
 
 import java.io.File;
 import java.util.ArrayList;

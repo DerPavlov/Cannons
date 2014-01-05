@@ -1,4 +1,4 @@
-package at.pavlov.cannons.config;
+package at.pavlov.cannons.cannon;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 general:
   #name of the cannon
-  designName: Mortar
+  designName: mortar
 signs:
   #this cannon needs a sign to operate. Important for moving cannons.
   isSignRequired: false

@@ -1,11 +1,10 @@
 package at.pavlov.cannons.cannon;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import at.pavlov.cannons.config.ProjectileStorage;
+import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

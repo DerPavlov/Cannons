@@ -1,6 +1,6 @@
 general:
   #name of the cannon
-  designName: Classic
+  designName: ironCannon
 signs:
   #this cannon needs a sign to operate. Important for moving cannons.
   isSignRequired: false

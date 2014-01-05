@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import at.pavlov.cannons.API.CannonsAPI;
+import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.config.*;
+import at.pavlov.cannons.projectile.ProjectileManager;
+import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.CalcAngle;
 import at.pavlov.cannons.scheduler.Teleporter;
 import org.bukkit.Bukkit;
@@ -361,9 +365,9 @@ public class Cannons extends JavaPlugin
 		this.config.getUserMessages().displayMessage(player, message, cannon);
 	}
 
-    public void displayImpactMessage(Player player, Location impact, boolean canceled)
+    public void displayImpactMessage(Player player, Location impact, boolean notCanceled)
     {
-        this.config.getUserMessages().displayImpactMessage(player, impact, canceled);
+        this.config.getUserMessages().displayImpactMessage(player, impact, notCanceled);
     }
 	
 	public void createCannon(Cannon cannon)
