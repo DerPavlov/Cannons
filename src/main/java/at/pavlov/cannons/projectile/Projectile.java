@@ -53,6 +53,7 @@ public class Projectile implements Cloneable{
     private List<String> spawnProjectiles;
 
     //spawn Fireworks
+    private boolean fireworksEnabled;
     private boolean fireworksFlicker;
     private boolean fireworksTrail;
     private FireworkEffect.Type fireworksType;
@@ -532,5 +533,13 @@ public class Projectile implements Cloneable{
 
     public void setAutomaticFiringMagazineSize(int automaticFiringMagazineSize) {
         this.automaticFiringMagazineSize = automaticFiringMagazineSize;
+    }
+
+    public boolean isFireworksEnabled() {
+        return fireworksEnabled;
+    }
+
+    public void setFireworksEnabled(boolean fireworksEnabled) {
+        this.fireworksEnabled = fireworksEnabled;
     }
 }

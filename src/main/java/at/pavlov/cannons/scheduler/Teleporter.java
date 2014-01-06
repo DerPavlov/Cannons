@@ -58,7 +58,7 @@ public class Teleporter {
                 if(shooter == null)
                     continue;
 
-                Snowball ball = fproj.getSnowball();
+                org.bukkit.entity.Projectile ball = fproj.getProjectileEntity();
                 //set some distance to the snowball to prevent a collision
                 Location optiLoc = ball.getLocation().clone().subtract(ball.getVelocity().normalize().multiply(20.0));
 

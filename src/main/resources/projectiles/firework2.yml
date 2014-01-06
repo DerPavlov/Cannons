@@ -87,6 +87,8 @@ spawnProjectiles:
   - firework4
 
 spawnFireworks:
+  #if true fireworks will be spawned
+  enable: true
   #if the firework flickers or not
   flicker: true
   #if the firework has a trail

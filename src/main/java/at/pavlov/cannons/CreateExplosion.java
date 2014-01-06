@@ -108,7 +108,7 @@ public class CreateExplosion {
     private Location blockBreaker(FlyingProjectile cannonball)
     {
     	Projectile projectile = cannonball.getProjectile();
-    	Snowball snowball = cannonball.getSnowball();
+    	org.bukkit.entity.Projectile projectile_entity = cannonball.getProjectileEntity();
    
     	//has this projectile the super breaker property and makes block damage
     	Boolean superbreaker = projectile.hasProperty(ProjectileProperties.SUPERBREAKER);
@@ -117,9 +117,9 @@ public class CreateExplosion {
     	//list of destroy blocks
     	LinkedList<Block> blocklist = new LinkedList<Block>();
     	
-    	Vector vel = snowball.getVelocity();
-    	Location snowballLoc = snowball.getLocation();
-    	World world = snowball.getWorld();
+    	Vector vel = projectile_entity.getVelocity();
+    	Location snowballLoc = projectile_entity.getLocation();
+    	World world = projectile_entity.getWorld();
     	int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
     	Location impactLoc = snowballLoc.clone();
 
@@ -451,12 +451,13 @@ public class CreateExplosion {
     }
 
     /**
-     * Hurts a player next to an explosion
+     * Returns the amount of damage the livingEntity receives due to explosion of the projectile
      * @param impactLoc
      * @param next
      * @param cannonball
+     * @return - damage done to the entity
      */
-    private void doPlayerDamage(Location impactLoc, Entity next, FlyingProjectile cannonball)
+    private double getPlayerDamage(Location impactLoc, Entity next, FlyingProjectile cannonball)
     {
         Projectile projectile = cannonball.getProjectile();
 
@@ -467,7 +468,7 @@ public class CreateExplosion {
             double dist = impactLoc.distance((living).getEyeLocation());
             plugin.logDebug("Distance of " + living.getType() + " to impact: " + String.format("%.2f", dist));
             //if the entity is too far away, return
-            if (dist > projectile.getPlayerDamageRange()) return;
+            if (dist > projectile.getPlayerDamageRange()) return 0.0;
 
             //given damage is in half hearts
             double damage = projectile.getPlayerDamage();
@@ -494,30 +495,21 @@ public class CreateExplosion {
 
             damage = damage * reduction;
 
-            // apply damage to the entity.
-            if (damage >= 1)
-            {
-                //damage entity
-                living.damage(damage);
-
-                //if player wears armor reduce damage
-                if (living instanceof Player)
-                {
-                    Player player = (Player) living;
-                    CannonsUtil.reduceArmorDurability(player);
-                }
-            }
+            return damage;
         }
+        //if the entity is not alive
+        return 0.0;
     }
 
 
     /**
-     * Hurts a player hit by a projectile
+     * Returns the amount of damage dealt to an entity by the projectile
      * @param impactLoc
      * @param next
      * @param cannonball
+     * @return return the amount of damage done to the living entity
      */
-    private void doDirectHitDamage(Location impactLoc, Entity next, FlyingProjectile cannonball)
+    private double getDirectHitDamage(Location impactLoc, Entity next, FlyingProjectile cannonball)
     {
         Projectile projectile = cannonball.getProjectile();
 
@@ -528,7 +520,7 @@ public class CreateExplosion {
 
             double dist = impactLoc.distance((living).getEyeLocation());
             //if the entity is too far away, return
-            if (dist > 2) return;
+            if (dist > 2) return 0.0;
 
             //given damage is in half hearts
             double damage = projectile.getDirectHitDamage();
@@ -547,26 +539,15 @@ public class CreateExplosion {
             if (living instanceof Player)
             {
                 Player player = (Player) living;
-                reduction *= (1-CannonsUtil.getArmorDamageReduced(player)) * (1-CannonsUtil.getProjectileProtection(player));
+                double armorPiercing = Math.max(projectile.getPenetration(),0);
+                reduction *= (1-CannonsUtil.getArmorDamageReduced(player)/(armorPiercing+1)) * (1-CannonsUtil.getProjectileProtection(player)/(armorPiercing+1));
             }
 
             plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " armor reduction factor: " + String.format("%.2f", reduction));
-
-            damage = damage * reduction;
-            // apply damage to the entity.
-            if (damage >= 1)
-            {
-                //damage entity
-                living.damage(damage);
-
-                //if player wears armor reduce damage
-                if (living instanceof Player)
-                {
-                    Player player = (Player) living;
-                    CannonsUtil.reduceArmorDurability(player);
-                }
-            }
+            return damage * reduction;
         }
+        //if the entity is not living
+        return 0.0;
     }
     
     //####################################  CREATE_EXPLOSION ##############################
@@ -575,16 +556,16 @@ public class CreateExplosion {
         plugin.logDebug("detonate cannonball");
 
     	Projectile projectile = cannonball.getProjectile().clone();
-    	Snowball snowball = cannonball.getSnowball();
+    	org.bukkit.entity.Projectile projectile_entity = cannonball.getProjectileEntity();
 
-        LivingEntity shooter = snowball.getShooter();
+        LivingEntity shooter = projectile_entity.getShooter();
         Player player = null;
         if (shooter instanceof Player)
             player = (Player) shooter;
 
         //do no underwater damage if disabled (explosion but no damage)
         boolean isUnderwater = false;
-        if ( snowball.getLocation().clone().subtract(snowball.getVelocity().normalize().multiply(2)).getBlock().isLiquid())
+        if ( projectile_entity.getLocation().clone().subtract(projectile_entity.getVelocity().normalize().multiply(2)).getBlock().isLiquid())
         {
             isUnderwater = true;
         }
@@ -597,7 +578,7 @@ public class CreateExplosion {
     	World world = impactLoc.getWorld();      	
 
     	//teleport snowball to impact
-    	snowball.teleport(impactLoc);
+        projectile_entity.teleport(impactLoc);
     	
     	float explosion_power = (float) projectile.getExplosionPower();
 
@@ -652,15 +633,26 @@ public class CreateExplosion {
 
             //do potion effects
             int effectRange = (int) projectile.getPotionRange()/2;
-            entity = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
+            entity = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
 
             Iterator<Entity> it = entity.iterator();
             while (it.hasNext())
             {
                 Entity next = it.next();
                 applyPotionEffect(impactLoc, next, cannonball);
-                doPlayerDamage(impactLoc, next, cannonball);
-                doDirectHitDamage(impactLoc, next, cannonball);
+
+                double damage = 0.0;
+                damage += getPlayerDamage(impactLoc, next, cannonball);
+                damage += getDirectHitDamage(impactLoc, next, cannonball);
+                // apply damage to the entity.
+                if (damage >= 1 && next instanceof LivingEntity)
+                {
+                    LivingEntity living = (LivingEntity) next;
+                    living.damage(damage);
+                    //if player wears armor reduce damage
+                    if (living instanceof Player)
+                        CannonsUtil.reduceArmorDurability((Player) living);
+                }
             }
 
             Location teleLoc = null;
@@ -684,8 +676,8 @@ public class CreateExplosion {
             }
 
             //check which entities are affected by the event
-            List<Entity> EntitiesAfterExplosion = snowball.getNearbyEntities(effectRange, effectRange, effectRange);
-            transmittingEntities(EntitiesAfterExplosion, snowball.getShooter());//place blocks around the impact like webs, lava, water
+            List<Entity> EntitiesAfterExplosion = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
+            transmittingEntities(EntitiesAfterExplosion, projectile_entity.getShooter());//place blocks around the impact like webs, lava, water
 		    spreadBlocks(impactLoc, cannonball);
 
         }
@@ -697,7 +689,7 @@ public class CreateExplosion {
      */
     private void spawnFireworks(FlyingProjectile cannonball)
     {
-        World world = cannonball.getSnowball().getWorld();
+        World world = cannonball.getProjectileEntity().getWorld();
         Projectile projectile = cannonball.getProjectile();
 
         //a fireworks needs some colors
@@ -717,7 +709,7 @@ public class CreateExplosion {
 
 
         //apply to rocket
-        final Firework fw = (Firework) world.spawnEntity(cannonball.getSnowball().getLocation(), EntityType.FIREWORK);
+        final Firework fw = (Firework) world.spawnEntity(cannonball.getProjectileEntity().getLocation(), EntityType.FIREWORK);
         FireworkMeta meta = fw.getFireworkMeta();
 
         meta.addEffect(fwb.build());
@@ -743,7 +735,7 @@ public class CreateExplosion {
         Projectile projectile = cannonball.getProjectile();
         LivingEntity shooter = cannonball.getShooter();
         Player player = (Player) shooter;
-        Location impactLoc = cannonball.getSnowball().getLocation();
+        Location impactLoc = cannonball.getProjectileEntity().getLocation();
 
 
         Random r = new Random();

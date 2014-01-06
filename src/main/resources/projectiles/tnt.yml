@@ -84,6 +84,8 @@ spawnProjectiles:
   - cobblestone
 
 spawnFireworks:
+  #if true fireworks will be spawned
+  enable: false
   #if the firework flickers or not
   flicker: false
   #if the firework has a trail

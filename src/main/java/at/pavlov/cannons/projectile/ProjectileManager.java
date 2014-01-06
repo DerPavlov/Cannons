@@ -83,13 +83,13 @@ public class ProjectileManager
                         {
                             FlyingProjectile flying = iterator.next();
                             Projectile proj = flying.getProjectile();
-                            if (flying.getSnowball() != null)
+                            if (flying.getProjectileEntity() != null)
                             {
-                                if (flying.getSnowball().getTicksLived() > proj.getTimefuse()*20 - 5 && proj.getTimefuse() > 0)
+                                if (flying.getProjectileEntity().getTicksLived() > proj.getTimefuse()*20 - 5 && proj.getTimefuse() > 0)
                                 {
                                     //detonate timefuse
                                     plugin.getExplosion().detonate(flying);
-                                    flying.getSnowball().remove();
+                                    flying.getProjectileEntity().remove();
                                     iterator.remove();
                                 }
                             }
@@ -116,7 +116,7 @@ public class ProjectileManager
             while (iterator.hasNext())
             {
                 FlyingProjectile flying = iterator.next();
-                if (entity.equals(flying.getSnowball()))
+                if (entity.equals(flying.getProjectileEntity()))
                 {
                     plugin.getExplosion().detonate(flying);
                     iterator.remove();
