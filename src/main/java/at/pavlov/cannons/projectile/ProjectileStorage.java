@@ -189,6 +189,7 @@ public class ProjectileStorage
         projectile.setSpawnProjectiles(projectileConfig.getStringList("spawnProjectiles"));
 
         //spawnFireworks
+        projectile.setFireworksEnabled(projectileConfig.getBoolean("spawnFireworks.enabled",false));
         projectile.setFireworksFlicker(projectileConfig.getBoolean("spawnFireworks.flicker",false));
         projectile.setFireworksTrail(projectileConfig.getBoolean("spawnFireworks.trail",false));
         projectile.setFireworksType(getFireworksType(projectileConfig.getString("spawnFireworks.type", "BALL")));
