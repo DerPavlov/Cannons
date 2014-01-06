@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.FireworkEffect;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -20,6 +21,8 @@ public class Projectile implements Cloneable{
 	private List<MaterialHolder> alternativeItemList = new ArrayList<MaterialHolder>();
 	
 	//properties of the cannonball
+    private EntityType projectileEntity;
+    private boolean projectileOnFire;
 	private double velocity;	
 	private double penetration;
 	private double timefuse;
@@ -541,5 +544,21 @@ public class Projectile implements Cloneable{
 
     public void setFireworksEnabled(boolean fireworksEnabled) {
         this.fireworksEnabled = fireworksEnabled;
+    }
+
+    public EntityType getProjectileEntity() {
+        return projectileEntity;
+    }
+
+    public void setProjectileEntity(EntityType projectileEntity) {
+        this.projectileEntity = projectileEntity;
+    }
+
+    public boolean isProjectileOnFire() {
+        return projectileOnFire;
+    }
+
+    public void setProjectileOnFire(boolean projectileOnFire) {
+        this.projectileOnFire = projectileOnFire;
     }
 }

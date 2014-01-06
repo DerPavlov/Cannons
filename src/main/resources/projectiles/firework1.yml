@@ -14,6 +14,11 @@ general:
     - '1:0'
 
 cannonball:
+  #the type of the projectile entity
+  #Arrow, Egg, EnderPearl, Fireball, Fish, LargeFireball, SmallFireball, Snowball, ThrownExpBottle, ThrownPotion, WitherSkull
+  entityType: snowball
+  #set to true if you want to have a burning projectile
+  isOnFire: false
   #the velocity of the projectile.
   velocity: 3
   #how many blocks the projectile will penetrate before it explodes. If it hits something impenetrable (e.g. obsidian) it will explode instantly.

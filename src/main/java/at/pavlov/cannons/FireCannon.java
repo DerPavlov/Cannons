@@ -8,10 +8,7 @@ import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -220,23 +217,26 @@ public class FireCannon {
         Location firingLoc = design.getMuzzle(cannon);
         World world = cannon.getWorldBukkit();
 
-        //Muzzle flash + Muzzle_displ
-        world.createExplosion(firingLoc, 0F);
+        //Muzzle flash + effects
+        if (projectile.getProjectileEntity().equals(EntityType.ARROW))
+            world.playEffect(firingLoc, Effect.BOW_FIRE, 10);
+        else
+            world.createExplosion(firingLoc, 0F);
         world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 
         //for each bullet, but at least once
         for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
         {
             Vector vect = cannon.getFiringVector(shooter);
-            Snowball snowball = plugin.getProjectileManager().spawnProjectile(projectile, shooter, firingLoc, vect);
+            org.bukkit.entity.Projectile projectileEntity = plugin.getProjectileManager().spawnProjectile(projectile, shooter, firingLoc, vect);
 
             if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
-                snowball.setPassenger(shooter);
+                projectileEntity.setPassenger(shooter);
 
             //confuse all entity which wear no helmets due to the blast of the cannon
-            List<Entity> living = snowball.getNearbyEntities(8, 8, 8);
+            List<Entity> living = projectileEntity.getNearbyEntities(8, 8, 8);
             //do only once
-            if (snowball != null && i==0)
+            if (projectileEntity != null && i==0)
             {
                 confuseShooter(living, firingLoc, design.getBlastConfusion());
             }

@@ -8,6 +8,7 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
@@ -156,6 +157,8 @@ public class ProjectileStorage
 		projectile.setAlternativeItemList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("general.alternativeId")));
 		
 		//cannonball
+        projectile.setProjectileEntity(getProjectileEntity(projectileConfig.getString("cannonball.entityType", "SNOWBALL")));
+        projectile.setProjectileOnFire(projectileConfig.getBoolean("cannonball.isOnFire", false));
 		projectile.setVelocity(projectileConfig.getDouble("cannonball.velocity", 1.0));
 		projectile.setPenetration(projectileConfig.getDouble("cannonball.penetration", 0.0));
 		projectile.setPenetrationDamage(projectileConfig.getBoolean("cannonball.doesPenetrationDamage", true));
@@ -189,7 +192,7 @@ public class ProjectileStorage
         projectile.setSpawnProjectiles(projectileConfig.getStringList("spawnProjectiles"));
 
         //spawnFireworks
-        projectile.setFireworksEnabled(projectileConfig.getBoolean("spawnFireworks.enabled",false));
+        projectile.setFireworksEnabled(projectileConfig.getBoolean("spawnFireworks.enabled", false));
         projectile.setFireworksFlicker(projectileConfig.getBoolean("spawnFireworks.flicker",false));
         projectile.setFireworksTrail(projectileConfig.getBoolean("spawnFireworks.trail",false));
         projectile.setFireworksType(getFireworksType(projectileConfig.getString("spawnFireworks.type", "BALL")));
@@ -288,6 +291,8 @@ public class ProjectileStorage
 		return projectileList;
 	}
 
+
+
     /**
      * returns a list of colors in RGB integer format from a list of strings in hex format
      * @param stringList
@@ -327,6 +332,11 @@ public class ProjectileStorage
         return null;
     }
 
+    /**
+     * converts a string into a firework effect
+     * @param str - name of the effect
+     * @return fittiong firework effect
+     */
     public FireworkEffect.Type getFireworksType(String str)
     {
         try
@@ -337,6 +347,24 @@ public class ProjectileStorage
         {
             plugin.logDebug(str + " is not a valid fireworks type. BALL was used instead.");
             return FireworkEffect.Type.BALL;
+        }
+    }
+
+    /**
+     * returns converts a string into a firework effect
+     * @param str - name of the effect
+     * @return fittiong firework effect
+     */
+    public EntityType getProjectileEntity(String str)
+    {
+        try
+        {
+            return EntityType.valueOf(str.toUpperCase());
+        }
+        catch(Exception ex)
+        {
+            plugin.logSevere(str + " is not a valid entity type. SNOWBALL was used instead.");
+            return EntityType.SNOWBALL;
         }
     }
 

@@ -6,9 +6,7 @@ import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
 import java.util.Iterator;
@@ -30,21 +28,38 @@ public class ProjectileManager
         this.plugin = plugin;
     }
 
-    public Snowball spawnProjectile(Projectile projectile, Player shooter, Location spawnLoc, Vector velocity)
+    public org.bukkit.entity.Projectile spawnProjectile(Projectile projectile, Player shooter, Location spawnLoc, Vector velocity)
     {
         World world = spawnLoc.getWorld();
 
-        //one snowball for each projectile
-        Snowball snowball = world.spawn(spawnLoc, Snowball.class);
-        snowball.setFireTicks(100);
-        snowball.setTicksLived(2);
+        //set yaw, pitch for fireballs
+        double v = velocity.length();
+        spawnLoc.setPitch((float) (Math.acos(velocity.getY()/v)*180.0/Math.PI - 90));
+        spawnLoc.setYaw((float) (Math.atan2(velocity.getZ(),velocity.getX())*180.0/Math.PI - 90));
 
+        plugin.logDebug("yaw: " + spawnLoc.getYaw() + " pitch " + spawnLoc.getPitch());
+
+        Entity pEntity = world.spawnEntity(spawnLoc, projectile.getProjectileEntity());;
+        org.bukkit.entity.Projectile projectileEntity;
+        try
+        {
+            projectileEntity = (org.bukkit.entity.Projectile) pEntity;
+        }
+        catch(Exception e)
+        {
+            plugin.logSevere("Can't convert EntityType " + pEntity.getType() + " to projectile. Using Snowball");
+            projectileEntity = (org.bukkit.entity.Projectile) world.spawnEntity(spawnLoc, EntityType.SNOWBALL);
+        }
+
+        if (projectile.isProjectileOnFire())
+            projectileEntity.setFireTicks(100);
+        //projectileEntity.setTicksLived(2);
 
         //calculate firing vector
-        snowball.setVelocity(velocity);
+        projectileEntity.setVelocity(velocity);
 
         //create a new flying projectile container
-        FlyingProjectile cannonball = new FlyingProjectile(projectile, snowball, shooter);
+        FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter);
         //set shooter to the cannonball
         if (shooter != null)
         {
@@ -56,7 +71,7 @@ public class ProjectileManager
         //detonate timefused projectiles
         detonateTimefuse(cannonball);
 
-        return snowball;
+        return projectileEntity;
     }
 
 
