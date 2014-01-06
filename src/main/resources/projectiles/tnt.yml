@@ -12,6 +12,7 @@ general:
   #if you load the dust, type in the wire id and data, else there is a wire on the cannon.
   alternativeId:
     - '1:0'
+
 cannonball:
   #the velocity of the projectile.
   velocity: 3
@@ -34,6 +35,7 @@ cannonball:
   properties:
     #this property sets the impact area on fire. range is determined by the explosion power property
     - incendiary
+
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
   #for comparison, the explosion power of a creeper is 3. anything above 50 will cause lag on smaller servers
@@ -59,6 +61,7 @@ explosion:
   potionEffects:
    - harm
    - slow
+
 #options which determine whether blocks are spawned around the impact area. Works with spawn eggs and blocks
 placeBlock:
   #the radius where blocks will be placed. If the radius is too small there might be no air gap to spawn a block.
@@ -74,10 +77,12 @@ placeBlock:
   material:
     #this one is a spawn-egg with its parameters set to spawn primed tnt on impact
     - '383:20'
+
 #spawns a new projectiles after the explosion of this projectile with the given name (file name)
 #spawning the same projectile more than once results in a endless loop
 spawnProjectiles:
   - cobblestone
+
 spawnFireworks:
   #if the firework flickers or not
   flicker: false
@@ -96,9 +101,11 @@ spawnFireworks:
   fadeColors:
     #white
     - 'FFFFFF'
+
 messages:
   #if this projectile can send a message of the impact location.
   hasImpactMessage: true
+
 loadPermission:
   #the permissions required for a player to use this projectile. There can be several permissions to load a projectile
   - cannons.projectile.default

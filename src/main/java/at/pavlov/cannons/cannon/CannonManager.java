@@ -320,7 +320,7 @@ public class CannonManager
                 if (!cbceEvent.isCancelled() && cbceEvent.getMessage() != null && cbceEvent.getMessage() == MessageEnum.CannonCreated)
                 {
 
-                    plugin.logDebug("a new cannon was create by " + cannon.getOwner());
+                    plugin.logDebug("a new cannon was created by " + cannon.getOwner());
                     createCannon(cannon);
 
                     CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
