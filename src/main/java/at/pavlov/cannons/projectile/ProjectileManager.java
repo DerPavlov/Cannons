@@ -37,8 +37,6 @@ public class ProjectileManager
         spawnLoc.setPitch((float) (Math.acos(velocity.getY()/v)*180.0/Math.PI - 90));
         spawnLoc.setYaw((float) (Math.atan2(velocity.getZ(),velocity.getX())*180.0/Math.PI - 90));
 
-        plugin.logDebug("yaw: " + spawnLoc.getYaw() + " pitch " + spawnLoc.getPitch());
-
         Entity pEntity = world.spawnEntity(spawnLoc, projectile.getProjectileEntity());;
         org.bukkit.entity.Projectile projectileEntity;
         try
@@ -134,6 +132,7 @@ public class ProjectileManager
                 if (entity.equals(flying.getProjectileEntity()))
                 {
                     plugin.getExplosion().detonate(flying);
+                    flying.getProjectileEntity().remove();
                     iterator.remove();
                 }
             }

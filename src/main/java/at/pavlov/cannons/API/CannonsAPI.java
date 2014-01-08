@@ -23,11 +23,12 @@ public class CannonsAPI {
      * @param cannon - the cannon to fire
      * @param player - the player how is firing the cannon
      * @param autoreload - if the cannon will autoreload from a chest after firing
+     * @param consumesAmmo - if true the cannon will remove ammo from attached chests
      * @return returns a MessagesEnum if the firing was successful or not
      */
-    public MessageEnum fireCannon(Cannon cannon, Player player, boolean autoreload)
+    public MessageEnum fireCannon(Cannon cannon, Player player, boolean autoreload, boolean consumesAmmo)
     {
-        return plugin.getFireCannon().prepareFire(cannon, player, autoreload);
+        return plugin.getFireCannon().prepareFire(cannon, player, autoreload, consumesAmmo);
     }
 
 

@@ -9,6 +9,10 @@ ammunition:
   gunpowderName: gunpowder
   #what item is used as gunpowder
   gunpowderType: '289:0'
+  #gunpowder will be removed from inventories. If false you have to click the cannon until it is reloaded
+  gunpowderConsumption: true
+  #if false the cannons will not remove the projectile form the inventory but you still need a projectile
+  projectileConsumption: true
   #if true, no item is removed from the players inventory
   ammoInfiniteForPlayer: false
   #if true, the cannons does not consume ammunition after firing with redstone

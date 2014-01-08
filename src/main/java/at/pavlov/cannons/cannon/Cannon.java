@@ -94,28 +94,40 @@ public class Cannon
 
 	/**
 	 * removes the loaded charge form the chest attached to the cannon, returns true if the ammo was found in the chest
+     * @param player - player operating the cannon
+     * @param consumesAmmo - if true ammo will be removed from chest inventories
 	 * @return - true if the cannon has been reloaded. False if there is not enough ammunition
 	 */
-	public boolean reloadFromChests(Player player)
+	public boolean reloadFromChests(Player player, boolean consumesAmmo)
 	{
         List<Inventory> invlist = getInventoryList();
 
-
-        //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
-        int toLoad = design.getMaxLoadableGunpowder() - getLoadedGunpowder();
-        ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
-        gunpowder = InventoryManagement.removeItemInChests(invlist, gunpowder);
-        if (gunpowder.getAmount() == 0)
+        //load gunpowder
+        if (design.isGunpowderConsumption()&&consumesAmmo)
         {
-            //there was enough gunpowder in the chest
-            loadedGunpowder = design.getMaxLoadableGunpowder();
+            //gunpowder will be consumed from the inventory
+            //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
+            int toLoad = design.getMaxLoadableGunpowder() - getLoadedGunpowder();
+            ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
+            gunpowder = InventoryManagement.removeItemInChests(invlist, gunpowder);
+            if (gunpowder.getAmount() == 0)
+            {
+                //there was enough gunpowder in the chest
+                loadedGunpowder = design.getMaxLoadableGunpowder();
+            }
+            else
+            {
+                //not enough gunpowder, put it back
+                gunpowder.setAmount(toLoad-gunpowder.getAmount()) ;
+                InventoryManagement.addItemInChests(invlist, gunpowder);
+            }
         }
         else
         {
-            //not enough gunpowder, put it back
-            gunpowder.setAmount(toLoad-gunpowder.getAmount()) ;
-            InventoryManagement.addItemInChests(invlist, gunpowder);
+            loadedGunpowder = design.getMaxLoadableGunpowder();
         }
+
+
 
 
         // find a loadable projectile in the chests
@@ -134,16 +146,19 @@ public class Cannon
                     // everything went fine, so remove it from the chest remove projectile
                     loadedProjectile = projectile;
 
-                    if (item.getAmount() == 1)
+                    if(design.isProjectileConsumption()&&consumesAmmo)
                     {
-                        //last item removed
-                        inv.removeItem(item);
-                        break;
-                    }
-                    else
-                    {
-                        //remove one item
-                        item.setAmount(item.getAmount() - 1);
+                        if (item.getAmount() == 1)
+                        {
+                            //last item removed
+                            inv.removeItem(item);
+                            break;
+                        }
+                        else
+                        {
+                            //remove one item
+                            item.setAmount(item.getAmount() - 1);
+                        }
                     }
                     return true;
                 }
@@ -203,7 +218,7 @@ public class Cannon
 	
 	
 	/**
-	 * checks the permission of a player before loading gunpowder in the cannon
+	 * checks the permission of a player before loading gunpowder in the cannon. Designed for player operation
 	 * @param player - the player which is loading the cannon
 	 */
 	public MessageEnum loadGunpowder(Player player)
@@ -237,7 +252,7 @@ public class Cannon
 		if (returnVal.equals(MessageEnum.loadGunpowder))
 		{
 			// take item from the player
-			if (!design.isAmmoInfiniteForPlayer()) 
+			if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
 				InventoryManagement.TakeFromPlayerInventory(player, gunpowder);
 		}
 		return returnVal;
@@ -245,8 +260,7 @@ public class Cannon
 	}
 
 	/**
-	 * load the projectile in the cannon and checks permissions
-	 * 
+	 * load the projectile in the cannon and checks permissions. Designed for player operation
 	 * @param player - who is loading the cannon
 	 * @return - a message which can be displayed
 	 */
@@ -263,7 +277,7 @@ public class Cannon
 			loadedProjectile = projectile;
 
 			// remove from player
-			if (!design.isAmmoInfiniteForPlayer()) 
+			if (design.isProjectileConsumption()&&!design.isAmmoInfiniteForPlayer())
 				InventoryManagement.TakeFromPlayerInventory(player,1);
 
 			// update Signs

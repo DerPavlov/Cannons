@@ -129,7 +129,8 @@ public class CreateExplosion {
     	if (cannonball.getProjectile().getPenetration() > 0)
     	{
     		BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
-    		
+
+            Random r = new Random();
     		int i=0;
     		while (iter.hasNext() && i <= penetration + 1)
     		{

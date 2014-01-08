@@ -307,7 +307,7 @@ public class PlayerListener implements Listener
                     if (redEvent.isCancelled())
                         return;
 
-                    MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                    MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
                     plugin.logDebug("fire cannon returned: " + message.getString());
                 }
 			}
@@ -337,7 +337,7 @@ public class PlayerListener implements Listener
                             if (redEvent.isCancelled())
                                 return;
 
-                            MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                            MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
                             plugin.logDebug("fire cannon returned: " + message.getString());
                         }
 					}
@@ -346,7 +346,7 @@ public class PlayerListener implements Listener
 		}
 		
 		// ##########  redstone repeater and comparator fire
-		if (block.getType() == Material.DIODE_BLOCK_OFF || block.getTypeId() == 149)
+		if (block.getType() == Material.DIODE_BLOCK_OFF || block.getType() == Material.REDSTONE_COMPARATOR_OFF)
 		{
 			// check all block next to this if there is a cannon
 			for (Block b : CannonsUtil.HorizontalSurroundingBlocks(block))
@@ -365,7 +365,7 @@ public class PlayerListener implements Listener
                         if (redEvent.isCancelled())
                             return;
 
-                        MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                        MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
                         plugin.logDebug("fire cannon returned: " + message.getString());
                     }
 
@@ -403,7 +403,7 @@ public class PlayerListener implements Listener
 
                 //execute event
                 boolean autoreload = player.isSneaking() && player.hasPermission(cannon.getCannonDesign().getPermissionAutoreload());
-                MessageEnum message =  fireCannon.prepareFire(cannon, player, autoreload);
+                MessageEnum message =  fireCannon.prepareFire(cannon, player, autoreload, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
                 userMessages.displayMessage(player, message, cannon);
 			}
 		}
@@ -533,7 +533,7 @@ public class PlayerListener implements Listener
                     return;
 
                 boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
-                MessageEnum message = fireCannon.prepareFire(cannon, player, autoreload);
+                MessageEnum message = fireCannon.prepareFire(cannon, player, autoreload, !design.isAmmoInfiniteForPlayer());
 
 				// display message
 				userMessages.displayMessage(player, message, cannon);

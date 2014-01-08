@@ -157,8 +157,10 @@ public class DesignStorage
 		// ammunition
 		cannonDesign.setGunpowderName(cannonDesignConfig.getString("ammunition.gunpowderName", "gunpowder"));
 		cannonDesign.setGunpowderType(new MaterialHolder(cannonDesignConfig.getString("ammunition.gunpowderType", "0:0")));
+        cannonDesign.setGunpowderConsumption(cannonDesignConfig.getBoolean("ammunition.gunpowderConsumption", true));
+        cannonDesign.setProjectileConsumption(cannonDesignConfig.getBoolean("ammunition.projectileConsumption", true));
 		cannonDesign.setAmmoInfiniteForPlayer(cannonDesignConfig.getBoolean("ammunition.ammoInfiniteForPlayer", false));
-		cannonDesign.setAmmoInfiniteForRedstone(cannonDesignConfig.getBoolean("ammunition.setAmmoInfiniteForRedstone", false));
+		cannonDesign.setAmmoInfiniteForRedstone(cannonDesignConfig.getBoolean("ammunition.ammoInfiniteForRedstone", false));
 		cannonDesign.setAutoreloadRedstone(cannonDesignConfig.getBoolean("ammunition.autoreloadRedstone", false));
 
 		// barrelProperties

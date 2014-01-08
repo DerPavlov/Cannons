@@ -25,6 +25,8 @@ public class CannonDesign
 	//ammunition_consumption
 	private String gunpowderName;
 	private MaterialHolder gunpowderType;
+    private boolean gunpowderConsumption;
+    private boolean projectileConsumption;
 	private boolean ammoInfiniteForPlayer;
     private boolean ammoInfiniteForRedstone;
     private boolean autoreloadRedstone;
@@ -765,4 +767,19 @@ public class CannonDesign
 		this.permissionSpreadMultiplier = permissionSpreadMultiplier;
 	}
 
+    public boolean isGunpowderConsumption() {
+        return gunpowderConsumption;
+    }
+
+    public void setGunpowderConsumption(boolean gunpowderConsumption) {
+        this.gunpowderConsumption = gunpowderConsumption;
+    }
+
+    public boolean isProjectileConsumption() {
+        return projectileConsumption;
+    }
+
+    public void setProjectileConsumption(boolean projectileConsumption) {
+        this.projectileConsumption = projectileConsumption;
+    }
 }

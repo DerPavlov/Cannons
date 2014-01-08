@@ -98,12 +98,13 @@ public class FireCannon {
 	
 	/**
 	 * checks if all preconditions for firing are fulfilled and fires the cannon
-	 * @param cannon
-	 * @param player
-	 * @param autoload
+	 * @param cannon - the cannon which is fired
+	 * @param player - player operating the cannon
+	 * @param autoload - the cannon will autoreload before firing
+     * @param consumesAmmo - if true ammo will be removed from chest inventories
 	 * @return
 	 */
-	public MessageEnum prepareFire(Cannon cannon, Player player, boolean autoload)
+	public MessageEnum prepareFire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo)
 	{
         Projectile projectile = cannon.getLoadedProjectile();
         //no charge no firing
@@ -112,12 +113,12 @@ public class FireCannon {
             //this cannon will try to find some gunpowder and projectile in the chest
             if (autoload)
             {
-                boolean hasReloaded =  cannon.reloadFromChests(player);
+                boolean hasReloaded =  cannon.reloadFromChests(player, consumesAmmo);
                 if (!hasReloaded)
                 {
                     //there is not enough gunpowder or no projectile in the chest
                     plugin.logDebug("Can't reload cannon, because there is no valid charge in the chests");
-                    if (projectile == null)
+                    if (cannon.getLoadedGunpowder() > 0)
                         return MessageEnum.ErrorNoProjectile;
                     return MessageEnum.ErrorNoGunpowder;
                 }
@@ -251,12 +252,12 @@ public class FireCannon {
             cannon.setFiring(false);
 
             //redstone or player infinite ammo will not remove the charge
-            if ((shooter == null && !cannon.getCannonDesign().isAmmoInfiniteForRedstone()) || (shooter != null && !cannon.getCannonDesign().isAmmoInfiniteForPlayer()))
-            {
-                plugin.logDebug("fire event complete, charge removed from the cannon");
-                //removes the gunpowder and projectile loaded in the cannon
-                cannon.removeCharge();
-            }
+            //if ((shooter == null && !cannon.getCannonDesign().isAmmoInfiniteForRedstone()))
+            //{
+            plugin.logDebug("fire event complete, charge removed from the cannon");
+            //removes the gunpowder and projectile loaded in the cannon
+            cannon.removeCharge();
+            //}
         }
 
     }
