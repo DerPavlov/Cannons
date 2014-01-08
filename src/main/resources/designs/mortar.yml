@@ -59,6 +59,8 @@ realisticBehaviour:
   isRotatable: false
   #whether the cannon can be used with fire missions to bombarded a certain location (not implemented yet)
   supportsFireMission: false
+  #the mass in kilogram of a cannon is important for moving objects e.g. ships
+  massOfCannon: 2000.0
 permissions:
   #all the permissions required for a player to use certain parts of the cannon
   #more information can be found here: http://dev.bukkit.org/bukkit-plugins/cannons/pages/installation-and-configuration/cannons-2-0-and-up/permissions/

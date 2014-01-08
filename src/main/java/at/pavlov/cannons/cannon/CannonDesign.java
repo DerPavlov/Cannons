@@ -56,6 +56,7 @@ public class CannonDesign
 	private boolean hasRecoil;
 	private boolean isFrontloader;
 	private boolean isRotatable;
+    private double massOfCannon;
 	
 	//permissions
 	private String permissionBuild;
@@ -781,5 +782,13 @@ public class CannonDesign
 
     public void setProjectileConsumption(boolean projectileConsumption) {
         this.projectileConsumption = projectileConsumption;
+    }
+
+    public double getMassOfCannon() {
+        return massOfCannon;
+    }
+
+    public void setMassOfCannon(double massOfCannon) {
+        this.massOfCannon = massOfCannon;
     }
 }
