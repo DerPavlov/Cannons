@@ -22,7 +22,10 @@
     </scm>
 
     <repositories>
-        <!-- Bukkit can be found at the following repository -->
+        <repository>
+            <id>sk89q-repo</id>
+            <url>http://maven.sk89q.com/repo/</url>
+        </repository>
         <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public/</url>
@@ -77,7 +80,13 @@
     </build>
 
     <dependencies>
-        <!-- Dependency information -->
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldedit</artifactId>
+            <version>5.5.8</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
