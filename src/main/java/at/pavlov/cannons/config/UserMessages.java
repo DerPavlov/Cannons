@@ -199,7 +199,7 @@ public class UserMessages {
 		sendMessage(message, player);
 	}
 
-    public void displayImpactMessage(Player player, Location impact, boolean canceled)
+    public void displayImpactMessage(Player player, Location impact, boolean notCanceled)
     {
         //no player no message
         if (player == null)
@@ -213,7 +213,7 @@ public class UserMessages {
         String message = null;
         MessageEnum messageEnum = null;
 
-        if (canceled)
+        if (notCanceled)
         {
             //the projectile exploded
             messageEnum = MessageEnum.ProjectileExplosion;

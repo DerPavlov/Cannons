@@ -1,4 +1,4 @@
-package at.pavlov.cannons.config;
+package at.pavlov.cannons.cannon;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -157,8 +157,10 @@ public class DesignStorage
 		// ammunition
 		cannonDesign.setGunpowderName(cannonDesignConfig.getString("ammunition.gunpowderName", "gunpowder"));
 		cannonDesign.setGunpowderType(new MaterialHolder(cannonDesignConfig.getString("ammunition.gunpowderType", "0:0")));
+        cannonDesign.setGunpowderConsumption(cannonDesignConfig.getBoolean("ammunition.gunpowderConsumption", true));
+        cannonDesign.setProjectileConsumption(cannonDesignConfig.getBoolean("ammunition.projectileConsumption", true));
 		cannonDesign.setAmmoInfiniteForPlayer(cannonDesignConfig.getBoolean("ammunition.ammoInfiniteForPlayer", false));
-		cannonDesign.setAmmoInfiniteForRedstone(cannonDesignConfig.getBoolean("ammunition.setAmmoInfiniteForRedstone", false));
+		cannonDesign.setAmmoInfiniteForRedstone(cannonDesignConfig.getBoolean("ammunition.ammoInfiniteForRedstone", false));
 		cannonDesign.setAutoreloadRedstone(cannonDesignConfig.getBoolean("ammunition.autoreloadRedstone", false));
 
 		// barrelProperties
@@ -392,8 +394,7 @@ public class DesignStorage
 							// the previous blocks
 							else
 							{
-								// all remaining blocks are loading interface or
-								// cannonBlocks
+								// all remaining blocks are loading interface or cannonBlocks
 								cannonBlocks.getLoadingInterface().add(new Vector(x, y, z));
 								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, block));
 								// this can be a destructible block
@@ -480,20 +481,30 @@ public class DesignStorage
 	 */
 	private void copyDefaultDesigns()
 	{
-		File classicYmlFile = new File(plugin.getDataFolder(), "designs/classic.yml");
-		File classicSchematicFile = new File(plugin.getDataFolder(), "designs/classic.schematic");
-
-		if (!classicYmlFile.exists())
-		{
-			classicYmlFile.getParentFile().mkdirs();
-			CannonsUtil.copyFile(plugin.getResource("designs/classic.yml"), classicYmlFile);
-		}
-		if (!classicSchematicFile.exists())
-		{
-			classicSchematicFile.getParentFile().mkdirs();
-			CannonsUtil.copyFile(plugin.getResource("designs/classic.schematic"), classicSchematicFile);
-		}
+		copyFile("classic");
+        copyFile("mortar");
+        copyFile("ironCannon");
 	}
+
+    /**
+     * Copys the given .yml and .schematic from the .jar to the disk
+     * @param fileName - name of the design file
+     */
+    private void copyFile(String fileName)
+    {
+        File YmlFile = new File(plugin.getDataFolder(), "designs/" + fileName + ".yml");
+        File SchematicFile = new File(plugin.getDataFolder(), "designs/" + fileName + ".schematic");
+        if (!YmlFile.exists())
+        {
+            YmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("designs/" + fileName + ".yml"), YmlFile);
+        }
+        if (!SchematicFile.exists())
+        {
+            SchematicFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("designs/" + fileName + ".schematic"), SchematicFile);
+        }
+    }
 	
 	private boolean isInList(List<BaseBlock> list, BaseBlock block)
 	{

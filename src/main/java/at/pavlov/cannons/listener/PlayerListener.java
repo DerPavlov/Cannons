@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import at.pavlov.cannons.scheduler.CalcAngle;
-import at.pavlov.cannons.CannonManager;
+import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.FireCannon;
 import at.pavlov.cannons.cannon.Cannon;
@@ -49,8 +49,8 @@ public class PlayerListener implements Listener
 	public PlayerListener(Cannons plugin)
 	{
 		this.plugin = plugin;
-		this.config = this.plugin.getmyConfig();
-		this.userMessages = this.plugin.getmyConfig().getUserMessages();
+		this.config = this.plugin.getMyConfig();
+		this.userMessages = this.plugin.getMyConfig().getUserMessages();
 		this.cannonManager = this.plugin.getCannonManager();
 		this.fireCannon = this.plugin.getFireCannon();
 		this.calcAngle = this.plugin.getCalcAngle();
@@ -307,7 +307,7 @@ public class PlayerListener implements Listener
                     if (redEvent.isCancelled())
                         return;
 
-                    MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                    MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
                     plugin.logDebug("fire cannon returned: " + message.getString());
                 }
 			}
@@ -337,7 +337,7 @@ public class PlayerListener implements Listener
                             if (redEvent.isCancelled())
                                 return;
 
-                            MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                            MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
                             plugin.logDebug("fire cannon returned: " + message.getString());
                         }
 					}
@@ -346,7 +346,7 @@ public class PlayerListener implements Listener
 		}
 		
 		// ##########  redstone repeater and comparator fire
-		if (block.getType() == Material.DIODE_BLOCK_OFF || block.getTypeId() == 149)
+		if (block.getType() == Material.DIODE_BLOCK_OFF || block.getType() == Material.REDSTONE_COMPARATOR_OFF)
 		{
 			// check all block next to this if there is a cannon
 			for (Block b : CannonsUtil.HorizontalSurroundingBlocks(block))
@@ -365,7 +365,7 @@ public class PlayerListener implements Listener
                         if (redEvent.isCancelled())
                             return;
 
-                        MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone());
+                        MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
                         plugin.logDebug("fire cannon returned: " + message.getString());
                     }
 
@@ -403,7 +403,7 @@ public class PlayerListener implements Listener
 
                 //execute event
                 boolean autoreload = player.isSneaking() && player.hasPermission(cannon.getCannonDesign().getPermissionAutoreload());
-                MessageEnum message =  fireCannon.prepareFire(cannon, player, autoreload);
+                MessageEnum message =  fireCannon.prepareFire(cannon, player, autoreload, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
                 userMessages.displayMessage(player, message, cannon);
 			}
 		}
@@ -455,7 +455,7 @@ public class PlayerListener implements Listener
 
 			// prevent eggs and snowball from firing when loaded into the gun
 			Material ItemInHand = player.getItemInHand().getType();
-			if (ItemInHand == Material.EGG || ItemInHand == Material.SNOW_BALL || ItemInHand == Material.MONSTER_EGG || ItemInHand == Material.ENDER_PEARL)
+			if (ItemInHand == Material.EGG || ItemInHand == Material.SNOW_BALL || ItemInHand == Material.MONSTER_EGG || ItemInHand == Material.ENDER_PEARL || ItemInHand == Material.FIREWORK)
 			{
 				event.setCancelled(true);
 			}
@@ -533,7 +533,7 @@ public class PlayerListener implements Listener
                     return;
 
                 boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
-                MessageEnum message = fireCannon.prepareFire(cannon, player, autoreload);
+                MessageEnum message = fireCannon.prepareFire(cannon, player, autoreload, !design.isAmmoInfiniteForPlayer());
 
 				// display message
 				userMessages.displayMessage(player, message, cannon);

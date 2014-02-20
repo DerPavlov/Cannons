@@ -1,11 +1,11 @@
 package at.pavlov.cannons.cannon;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import at.pavlov.cannons.config.ProjectileStorage;
+import at.pavlov.cannons.projectile.ProjectileStorage;
+import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -57,12 +57,10 @@ public class Cannon
 	private String owner;
 	// designID of the cannon, for different types of cannons - not in use
 	private boolean isValid;
+    // true if the cannon if firing
+    private boolean isFiring;
     //the player which has used the cannon last, important for firing with redstone button
     private String lastUser;
-
-    //temperature of the cannon
-    private double tempValue;
-    private long tempTimeStamp;
 
 
 	CannonDesign design;
@@ -96,29 +94,40 @@ public class Cannon
 
 	/**
 	 * removes the loaded charge form the chest attached to the cannon, returns true if the ammo was found in the chest
-	 *
-	 * @return
+     * @param player - player operating the cannon
+     * @param consumesAmmo - if true ammo will be removed from chest inventories
+	 * @return - true if the cannon has been reloaded. False if there is not enough ammunition
 	 */
-	public boolean reloadFromChests(Player player)
+	public boolean reloadFromChests(Player player, boolean consumesAmmo)
 	{
         List<Inventory> invlist = getInventoryList();
 
-
-        //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
-        int toLoad = design.getMaxLoadableGunpowder() - getLoadedGunpowder();
-        ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
-        gunpowder = InventoryManagement.removeItemInChests(invlist, gunpowder);
-        if (gunpowder.getAmount() == 0)
+        //load gunpowder
+        if (design.isGunpowderConsumption()&&consumesAmmo)
         {
-            //there was enough gunpowder in the chest
-            loadedGunpowder = design.getMaxLoadableGunpowder();
+            //gunpowder will be consumed from the inventory
+            //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
+            int toLoad = design.getMaxLoadableGunpowder() - getLoadedGunpowder();
+            ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
+            gunpowder = InventoryManagement.removeItemInChests(invlist, gunpowder);
+            if (gunpowder.getAmount() == 0)
+            {
+                //there was enough gunpowder in the chest
+                loadedGunpowder = design.getMaxLoadableGunpowder();
+            }
+            else
+            {
+                //not enough gunpowder, put it back
+                gunpowder.setAmount(toLoad-gunpowder.getAmount()) ;
+                InventoryManagement.addItemInChests(invlist, gunpowder);
+            }
         }
         else
         {
-            //not enough gunpowder, put it back
-            gunpowder.setAmount(toLoad-gunpowder.getAmount()) ;
-            InventoryManagement.addItemInChests(invlist, gunpowder);
+            loadedGunpowder = design.getMaxLoadableGunpowder();
         }
+
+
 
 
         // find a loadable projectile in the chests
@@ -137,16 +146,19 @@ public class Cannon
                     // everything went fine, so remove it from the chest remove projectile
                     loadedProjectile = projectile;
 
-                    if (item.getAmount() == 1)
+                    if(design.isProjectileConsumption()&&consumesAmmo)
                     {
-                        //last item removed
-                        inv.removeItem(item);
-                        break;
-                    }
-                    else
-                    {
-                        //remove one item
-                        item.setAmount(item.getAmount() - 1);
+                        if (item.getAmount() == 1)
+                        {
+                            //last item removed
+                            inv.removeItem(item);
+                            break;
+                        }
+                        else
+                        {
+                            //remove one item
+                            item.setAmount(item.getAmount() - 1);
+                        }
                     }
                     return true;
                 }
@@ -158,8 +170,8 @@ public class Cannon
 
 
     /**
-     *
-     * @return returns the inventories of all attached chests
+     * returns the inventories of all attached chests
+     * @return - list of inventory
      */
     public List<Inventory> getInventoryList()
     {
@@ -176,7 +188,7 @@ public class Cannon
 	
 	/**
 	 * loads Gunpowder in a cannon
-	 * @param amountToLoad number of items which are loaded into the cannon
+	 * @param amountToLoad - number of items which are loaded into the cannon
 	 */
 	public MessageEnum loadGunpowder(int amountToLoad)
 	{
@@ -206,8 +218,8 @@ public class Cannon
 	
 	
 	/**
-	 * checks the permission of a player before loading gunpowder in the cannon
-	 * @param player
+	 * checks the permission of a player before loading gunpowder in the cannon. Designed for player operation
+	 * @param player - the player which is loading the cannon
 	 */
 	public MessageEnum loadGunpowder(Player player)
 	{
@@ -240,7 +252,7 @@ public class Cannon
 		if (returnVal.equals(MessageEnum.loadGunpowder))
 		{
 			// take item from the player
-			if (!design.isAmmoInfiniteForPlayer()) 
+			if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
 				InventoryManagement.TakeFromPlayerInventory(player, gunpowder);
 		}
 		return returnVal;
@@ -248,10 +260,9 @@ public class Cannon
 	}
 
 	/**
-	 * load the projectile in the cannon and checks permissions
-	 * 
-	 * @param player
-	 * @return
+	 * load the projectile in the cannon and checks permissions. Designed for player operation
+	 * @param player - who is loading the cannon
+	 * @return - a message which can be displayed
 	 */
 	public MessageEnum loadProjectile(Projectile projectile, Player player)
 	{
@@ -266,7 +277,7 @@ public class Cannon
 			loadedProjectile = projectile;
 
 			// remove from player
-			if (!design.isAmmoInfiniteForPlayer()) 
+			if (design.isProjectileConsumption()&&!design.isAmmoInfiniteForPlayer())
 				InventoryManagement.TakeFromPlayerInventory(player,1);
 
 			// update Signs
@@ -278,9 +289,8 @@ public class Cannon
 	/**
 	 * Check if cannons can be loaded with gunpowder by the player
 	 * 
-	 * @param player
-	 *            check permissions of this player
-	 * @return true if the cannon can be loaded
+	 * @param player - check permissions of this player
+	 * @return - true if the cannon can be loaded
 	 */
 	private MessageEnum CheckPermGunpowder(Player player)
 	{
@@ -305,14 +315,11 @@ public class Cannon
 	/**
 	 * Check the if the cannons can be loaded
 	 * 
-	 * @param player
-	 *            whose permissions are checked
+	 * @param player - whose permissions are checked
 	 * @return true if the player and cannons can load the projectile
 	 */
 	private MessageEnum CheckPermProjectile(Projectile projectile, Player player)
 	{
-
-
 		//if the player is not the owner of this gun
 		if (player != null && !this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
 		{
@@ -348,7 +355,7 @@ public class Cannon
 	/**
 	 * is cannon loaded return true
 	 * 
-	 * @return
+	 * @return - true if there is a projectile in the cannon
 	 */
 	public boolean isLoaded()
 	{
@@ -356,8 +363,7 @@ public class Cannon
 	}
 
 	/**
-	 * removes gunpowder and the projectile. Items are drop at the cannonball
-	 * exit point
+	 * removes gunpowder and the projectile. Items are drop at the cannonball firing point
 	 */
 	private void dropCharge()
 	{
@@ -610,6 +616,16 @@ public class Cannon
     	return false;
 	}
 
+    /**
+     * returns the first block of the cannon
+     * @return - first block of the cannon
+     */
+    public Location getFirstCannonBlock()
+    {
+        return design.getAllCannonBlocks(cannonDirection).get(0).toLocation(getWorldBukkit(), offset);
+
+    }
+
 	/**
 	 * returns true if the player has the permission to place redstone near a cannon.
 	 * player = null will also return true
@@ -688,6 +704,42 @@ public class Cannon
 		}
 	}
 
+    /**
+     * updates the location of the cannon
+     * @param moved - how far the cannon has been moved
+     */
+    public void updateCannonPostion(Vector moved)
+    {
+        offset.add(moved);
+    }
+
+    /**
+     * updates the rotation of the cannon
+     * @param center - center of the rotation
+     * @param angle - how far the cannon is rotated in degree (90, 180, 270, -90)
+     */
+    public void updateCannonRotation(Vector center, int angle)
+    {
+        while (angle < 0)
+        {
+            angle += 360;
+        }
+        angle %= 360;
+
+        System.out.println("updateCannonRotation new angle: " + angle);
+        Vector diff = offset.clone().subtract(center);
+        double newX = diff.getX()*Math.cos(angle) - diff.getZ()*Math.sin(angle);
+        double newZ = diff.getX()*Math.sin(angle) + diff.getZ()*Math.cos(angle);
+
+        offset.setX(newX);
+        offset.setZ(newZ);
+
+        for (int i = 0; i<angle%90; i++)
+        {
+            cannonDirection = CannonsUtil.roatateFace(cannonDirection);
+        }
+    }
+
 	/**
 	 * return the firing vector of the cannon. The spread depends on the cannon, the projectile and the player
 	 * 
@@ -713,9 +765,7 @@ public class Cannon
         double hy = Math.sin(polar)*Math.cos(azi);
         double hz = Math.cos(polar);
 
-        System.out.println("azi " + horizontalAngle + " polar " + (-design.getDefaultVerticalAngle() - verticalAngle + 90.0) + " hx " + hx +  " hy " + hy +" hz " + hz);
-
-		if (cannonDirection.equals(BlockFace.WEST))
+        if (cannonDirection.equals(BlockFace.WEST))
 		{
 			vect = new Vector(-hy, hz, -hx);
 		}
@@ -1033,9 +1083,18 @@ public class Cannon
 		return horizontalAngle;
 	}
 
+    /**
+     * sets a new horizontal angle of the cannon. The angle is limited by the design
+     * @param horizontalAngle - new vertical angle
+     */
 	public void setHorizontalAngle(double horizontalAngle)
 	{
 		this.horizontalAngle = horizontalAngle;
+        //the angle should not exceed the limits
+        if (this.horizontalAngle > design.getMaxHorizontalAngle())
+            this.horizontalAngle = design.getMaxHorizontalAngle();
+        if (this.horizontalAngle < design.getMinHorizontalAngle())
+            this.horizontalAngle = design.getMinHorizontalAngle();
 	}
 
 	public double getVerticalAngle()
@@ -1043,9 +1102,18 @@ public class Cannon
 		return verticalAngle;
 	}
 
+    /**
+     * sets a new vertical angle of the cannon. The angle is limited by the design
+     * @param verticalAngle - new vertical angle
+     */
 	public void setVerticalAngle(double verticalAngle)
 	{
 		this.verticalAngle = verticalAngle;
+        //the angle should not exceed the limits
+        if (this.verticalAngle > design.getMaxVerticalAngle())
+            this.verticalAngle = design.getMaxVerticalAngle();
+        if (this.verticalAngle < design.getMinVerticalAngle())
+            this.verticalAngle = design.getMinVerticalAngle();
 	}
 
 	public String getOwner()
@@ -1126,19 +1194,11 @@ public class Cannon
         this.lastUser = lastUser;
     }
 
-    public double getTempValue() {
-        return tempValue;
+    public boolean isFiring() {
+        return isFiring;
     }
 
-    public void setTempValue(double tempValue) {
-        this.tempValue = tempValue;
-    }
-
-    public long getTempTimeStamp() {
-        return tempTimeStamp;
-    }
-
-    public void setTempTimeStamp(long tempTimeStamp) {
-        this.tempTimeStamp = tempTimeStamp;
+    public void setFiring(boolean firing) {
+        isFiring = firing;
     }
 }

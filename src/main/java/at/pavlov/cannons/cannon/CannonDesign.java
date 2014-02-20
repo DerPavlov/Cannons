@@ -25,6 +25,8 @@ public class CannonDesign
 	//ammunition_consumption
 	private String gunpowderName;
 	private MaterialHolder gunpowderType;
+    private boolean gunpowderConsumption;
+    private boolean projectileConsumption;
 	private boolean ammoInfiniteForPlayer;
     private boolean ammoInfiniteForRedstone;
     private boolean autoreloadRedstone;
@@ -75,7 +77,7 @@ public class CannonDesign
 	//constructionblocks:
 	private MaterialHolder schematicBlockTypeIgnore;     				//this block this is ignored in the schematic file
     private MaterialHolder schematicBlockTypeMuzzle;					//location of the muzzle
-    private MaterialHolder schematicBlockTypeRotationCenter;			//location of the muzzle
+    private MaterialHolder schematicBlockTypeRotationCenter;			//location of the roatation
     private MaterialHolder schematicBlockTypeChestAndSign;				//locations of the chest and sign
     private MaterialHolder schematicBlockTypeRedstoneTorch;				//locations of the redstone torches
     private MaterialHolder schematicBlockTypeRedstoneWireAndRepeater;	//locations of the redstone wires and repeaters
@@ -159,7 +161,7 @@ public class CannonDesign
     	
     	return new ArrayList<SimpleBlock>();
     }
-    
+
     /**
      * returns a list of all destructible blocks
      * @param cannon
@@ -765,4 +767,19 @@ public class CannonDesign
 		this.permissionSpreadMultiplier = permissionSpreadMultiplier;
 	}
 
+    public boolean isGunpowderConsumption() {
+        return gunpowderConsumption;
+    }
+
+    public void setGunpowderConsumption(boolean gunpowderConsumption) {
+        this.gunpowderConsumption = gunpowderConsumption;
+    }
+
+    public boolean isProjectileConsumption() {
+        return projectileConsumption;
+    }
+
+    public void setProjectileConsumption(boolean projectileConsumption) {
+        this.projectileConsumption = projectileConsumption;
+    }
 }

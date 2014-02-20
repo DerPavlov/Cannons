@@ -31,6 +31,7 @@ public class EntityListener implements Listener
 		this.plugin = plugin;
 	}
 
+
 	/**
 	 * Cannon snowball hits the ground
 	 * 
@@ -39,25 +40,7 @@ public class EntityListener implements Listener
 	@EventHandler
 	public void ProjectileHit(ProjectileHitEvent event)
 	{
-
-		// get FlyingProjectiles
-		LinkedList<FlyingProjectile> flying_projectiles = plugin.getFireCannon().getProjectiles();
-
-		// iterate the list
-		if (!flying_projectiles.isEmpty())
-		{
-			Iterator<FlyingProjectile> iterator = flying_projectiles.iterator();
-
-			while (iterator.hasNext())
-			{
-				FlyingProjectile flying = iterator.next();
-				if (event.getEntity().equals(flying.getSnowball()))
-				{
-    				plugin.getExplosion().detonate(flying);
-					iterator.remove();
-				}
-			}
-		}
+        plugin.getProjectileManager().detonateProjectile(event.getEntity());
 	}
 	
 	/**
@@ -119,7 +102,7 @@ public class EntityListener implements Listener
             {
                 Block block = blocks.get(i);
 
-                for (MaterialHolder unbreakableBlock : plugin.getmyConfig().getUnbreakableBlocks())
+                for (MaterialHolder unbreakableBlock : plugin.getMyConfig().getUnbreakableBlocks())
                 {
                     if (unbreakableBlock.equalsFuzzy(block))
                     {

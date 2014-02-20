@@ -244,8 +244,8 @@ public class CannonsUtil
 
     /**
      * Armor would reduce the damage the player receives
-     * @param player
-     * @return
+     * @param player - the affected player
+     * @return - how much the damage is reduced by the armor
      */
     public static double getArmorDamageReduced(Player player)
     {
@@ -299,6 +299,10 @@ public class CannonsUtil
         return red;
     }
 
+    /**
+     * returns the total blast protection of the player
+     * @param player - the affected player
+     */
     public static double getBlastProtection(Player player)
     {
         //http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
@@ -321,24 +325,36 @@ public class CannonsUtil
             lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (helmet != null)
         {
             lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (chest != null)
         {
             lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (pants != null)
         {
             lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         //cap it to 25
         if (reduction > 25) reduction = 25;
@@ -354,6 +370,10 @@ public class CannonsUtil
         return reduction*4/100;
     }
 
+    /**
+     * returns the total projectile protection of the player
+     * @param player - the affected player
+     */
     public static double getProjectileProtection(Player player)
     {
         //http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
@@ -375,24 +395,36 @@ public class CannonsUtil
             lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (helmet != null)
         {
             lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (chest != null)
         {
             lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (pants != null)
         {
             lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            if (lvl > 0)
+                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         //cap it to 25
         if (reduction > 25) reduction = 25;
@@ -408,21 +440,34 @@ public class CannonsUtil
         return reduction*4/100;
     }
 
+    /**
+     * reduces the durability of the player's armor
+     * @param player - the affected player
+     */
     public static void reduceArmorDurability(Player player)
     {
         org.bukkit.inventory.PlayerInventory inv = player.getInventory();
         if (inv == null) return;
 
+        Random r = new Random();
+
         for(ItemStack item : inv.getArmorContents())
         {
             if(item != null)
             {
-                short newDurabiltiy = (short) (item.getDurability() + 1);
-                item.setDurability(newDurabiltiy);
-            }
+                int lvl = item.getEnchantmentLevel(Enchantment.DURABILITY);
+                //chance of breaking in 0-1
+                double breakingChance = 0.6+0.4/(lvl+1);
 
+                if (r.nextDouble() < breakingChance)
+                {
+                    short newDurabiltiy = (short) (item.getDurability() + 1);
+                    item.setDurability(newDurabiltiy);
+                }
+            }
         }
     }
+
 
 
 

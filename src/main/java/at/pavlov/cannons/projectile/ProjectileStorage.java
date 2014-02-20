@@ -1,11 +1,14 @@
-package at.pavlov.cannons.config;
+package at.pavlov.cannons.projectile;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
@@ -154,10 +157,14 @@ public class ProjectileStorage
 		projectile.setAlternativeItemList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("general.alternativeId")));
 		
 		//cannonball
+        projectile.setProjectileEntity(getProjectileEntity(projectileConfig.getString("cannonball.entityType", "SNOWBALL")));
+        projectile.setProjectileOnFire(projectileConfig.getBoolean("cannonball.isOnFire", false));
 		projectile.setVelocity(projectileConfig.getDouble("cannonball.velocity", 1.0));
 		projectile.setPenetration(projectileConfig.getDouble("cannonball.penetration", 0.0));
 		projectile.setPenetrationDamage(projectileConfig.getBoolean("cannonball.doesPenetrationDamage", true));
 		projectile.setTimefuse(projectileConfig.getDouble("cannonball.timefuse", 0.0));
+        projectile.setAutomaticFiringDelay(projectileConfig.getDouble("cannonball.automaticFiringDelay", 1.0));
+        projectile.setAutomaticFiringMagazineSize(projectileConfig.getInt("cannonball.automaticFiringMagazineSize", 1));
 		projectile.setNumberOfBullets(projectileConfig.getInt("cannonball.numberOfBullets", 1));
 		projectile.setSpreadMultiplier(projectileConfig.getDouble("cannonball.spreadMultiplier", 1.0));
 		projectile.setPropertyList(toProperties(projectileConfig.getStringList("cannonball.properties")));
@@ -181,6 +188,17 @@ public class ProjectileStorage
         projectile.setTntFuseTime(projectileConfig.getDouble("placeBlock.tntFuseTime", 3));
 		projectile.setBlockPlaceList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("placeBlock.material")));
 
+        //spawnProjectiles
+        projectile.setSpawnProjectiles(projectileConfig.getStringList("spawnProjectiles"));
+
+        //spawnFireworks
+        projectile.setFireworksEnabled(projectileConfig.getBoolean("spawnFireworks.enabled", false));
+        projectile.setFireworksFlicker(projectileConfig.getBoolean("spawnFireworks.flicker",false));
+        projectile.setFireworksTrail(projectileConfig.getBoolean("spawnFireworks.trail",false));
+        projectile.setFireworksType(getFireworksType(projectileConfig.getString("spawnFireworks.type", "BALL")));
+        projectile.setFireworksColors(toColor(projectileConfig.getStringList("spawnFireworks.colors")));
+        projectile.setFireworksFadeColors(toColor(projectileConfig.getStringList("spawnFireworks.fadeColors")));
+
         //messages
         projectile.setImpactMessage(projectileConfig.getBoolean("messages.hasImpactMessage", false));
 
@@ -195,26 +213,31 @@ public class ProjectileStorage
 	 * copys the default designs from the .jar to the disk
 	 */
 	private void copyDefaultProjectiles()
-	{
-		File cobblestoneYmlFile = new File(plugin.getDataFolder(), "projectiles/cobblestone.yml");
-		if (!cobblestoneYmlFile.exists())
-		{
-			cobblestoneYmlFile.getParentFile().mkdirs();
-			CannonsUtil.copyFile(plugin.getResource("projectiles/cobblestone.yml"), cobblestoneYmlFile);
-		}
-        File enderpearlYmlFile = new File(plugin.getDataFolder(), "projectiles/enderpearl.yml");
-        if (!enderpearlYmlFile.exists())
-        {
-            enderpearlYmlFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("projectiles/enderpearl.yml"), enderpearlYmlFile);
-        }
-        File tntYmlFile = new File(plugin.getDataFolder(), "projectiles/tnt.yml");
-        if (!tntYmlFile.exists())
-        {
-            tntYmlFile.getParentFile().mkdirs();
-            CannonsUtil.copyFile(plugin.getResource("projectiles/tnt.yml"), tntYmlFile);
-        }
+    {
+        copyFile("tnt");
+        copyFile("cobblestone");
+
+        copyFile("enderpearl");
+
+        copyFile("firework1");
+        copyFile("firework2");
+        copyFile("firework3");
+        copyFile("firework4");
 	}
+
+    /**
+     * copies the yml file from the .jar to the projectile folder
+     * @param filename - name of the .yml file
+     */
+    private void copyFile(String filename)
+    {
+        File YmlFile = new File(plugin.getDataFolder(), "projectiles/" + filename + ".yml");
+        if (!YmlFile.exists())
+        {
+            YmlFile.getParentFile().mkdirs();
+            CannonsUtil.copyFile(plugin.getResource("projectiles/" + filename + ".yml"), YmlFile);
+        }
+    }
 	
 	
 	/**
@@ -242,6 +265,8 @@ public class ProjectileStorage
 			PotionEffectType effect = PotionEffectType.getByName(str);
 			if (effect != null)
 				effectList.add(effect);
+            else
+                plugin.logSevere("No potion effect found with the name: " + str);
 		}
 		return effectList;
 	}
@@ -254,14 +279,93 @@ public class ProjectileStorage
 	private List<ProjectileProperties> toProperties(List<String> stringList)
 	{
 		List<ProjectileProperties> projectileList = new ArrayList<ProjectileProperties>();
-		
+
 		for (String str : stringList)
 		{
 			ProjectileProperties projectile = ProjectileProperties.getByName(str);
 			if (projectile != null)
 				projectileList.add(projectile);
+            else
+                plugin.logSevere("No projectile property with the name: " + str + " found");
 		}
 		return projectileList;
 	}
+
+
+
+    /**
+     * returns a list of colors in RGB integer format from a list of strings in hex format
+     * @param stringList
+     * @return
+     */
+    private List<Integer> toColor(List<String> stringList)
+    {
+        List<Integer> colorList = new ArrayList<Integer>();
+
+        for (String str : stringList)
+        {
+            try
+            {
+                Integer color = Integer.parseInt(str,16);
+                colorList.add(color);
+            }
+            catch (Exception ex)
+            {
+                plugin.logSevere(str + " is not a hexadecimal number");
+            }
+        }
+        return colorList;
+    }
+
+    /**
+     * returns the projectile with the matching ID
+     * @param str
+     * @return
+     */
+    public Projectile getByName(String str)
+    {
+        for (Projectile projectile : projectileList)
+        {
+            if (projectile.getProjectileID().equalsIgnoreCase(str))
+                return projectile;
+        }
+        return null;
+    }
+
+    /**
+     * converts a string into a firework effect
+     * @param str - name of the effect
+     * @return fittiong firework effect
+     */
+    public FireworkEffect.Type getFireworksType(String str)
+    {
+        try
+        {
+            return FireworkEffect.Type.valueOf(str);
+        }
+        catch(Exception ex)
+        {
+            plugin.logDebug(str + " is not a valid fireworks type. BALL was used instead.");
+            return FireworkEffect.Type.BALL;
+        }
+    }
+
+    /**
+     * returns converts a string into a firework effect
+     * @param str - name of the effect
+     * @return fittiong firework effect
+     */
+    public EntityType getProjectileEntity(String str)
+    {
+        try
+        {
+            return EntityType.valueOf(str.toUpperCase());
+        }
+        catch(Exception ex)
+        {
+            plugin.logSevere(str + " is not a valid entity type. SNOWBALL was used instead.");
+            return EntityType.SNOWBALL;
+        }
+    }
 
 }

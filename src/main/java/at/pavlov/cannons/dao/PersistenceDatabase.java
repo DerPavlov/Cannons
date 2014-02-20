@@ -23,17 +23,6 @@ public class PersistenceDatabase
 		plugin = _plugin;
 	}
 
-    /**
-     * loads all cannons from the database
-     */
-    public void loadCannonsAsync()
-    {
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-            public void run() {
-                loadCannons();
-            }
-        });
-    }
 
     /**
      * loads all cannons from the database

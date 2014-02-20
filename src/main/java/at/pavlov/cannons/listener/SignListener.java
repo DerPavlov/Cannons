@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
-import at.pavlov.cannons.CannonManager;
+import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.config.Config;
@@ -28,8 +28,8 @@ public class SignListener implements Listener
 	public SignListener(Cannons plugin)
 	{
 		this.plugin = plugin;
-		this.config = this.plugin.getmyConfig();
-		this.userMessages = this.plugin.getmyConfig().getUserMessages();
+		this.config = this.plugin.getMyConfig();
+		this.userMessages = this.plugin.getMyConfig().getUserMessages();
 		this.cannonManager = this.plugin.getCannonManager();
 	}
 	

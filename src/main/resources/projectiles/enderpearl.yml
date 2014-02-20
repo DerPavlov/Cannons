@@ -12,7 +12,13 @@ general:
   #if you load the dust, type in the wire id and data, else there is a wire on the cannon.
   alternativeId:
     - '1:0'
+
 cannonball:
+  #the type of the projectile entity
+  #Arrow, Egg, EnderPearl, Fireball, Fish, LargeFireball, SmallFireball, Snowball, ThrownExpBottle, ThrownPotion, WitherSkull
+  entityType: snowball
+  #set to true if you want to have a burning projectile
+  isOnFire: false
   #the velocity of the projectile.
   velocity: 6
   #how many blocks the projectile will penetrate before it explodes. If it hits something impenetrable (e.g. obsidian) it will explode instantly.
@@ -21,15 +27,20 @@ cannonball:
   doesPenetrationDamage: false
   #how many seconds after firing the projectile will detonate if it does not hit anything
   timefuse: 0
+  #the delay in seconds between two fired cannonball in the automatic firing mode.
+  automaticFiringDelay: 1
+  #a cannon can fire several times with a single projectile - like a magazine in a automatic firearm
+  automaticFiringMagazineSize: 1
   #how many projectiles are fired
   numberOfBullets: 1
   #the higher this is, the more inaccurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from
   spreadMultiplier: 1.0
-  #different properties of the projectile. if you don't want any of these properties then just leave this all blank.
-  #possible properties are: superbreaker, incendiary, teleport
+  #different properties of the projectile. If you don't want any of these properties then just leave this all blank.
+  #possible properties are: superbreaker, incendiary, teleport, observer
   properties:
     #the player is tied to the projectile and will follow its path to the target
     - teleport
+
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
   #for comparison, the explosion power of a creeper is 3. anything above 50 will cause lag on smaller servers
@@ -55,6 +66,7 @@ explosion:
   potionEffects:
    - harm
    - slow
+
 #options which determine whether blocks are spawned around the impact area. Works with spawn eggs and blocks
 placeBlock:
   #the radius where blocks will be placed. If the radius is too small there might be no air gap to spawn a block.
@@ -72,9 +84,36 @@ placeBlock:
     - '383:20'
     #this is a cobweb to slow the enemy, will be spawned a block
     - '30:0'
+
+#spawns a new projectiles after the explosion of this projectile with the given name (file name)
+#spawning the same projectile more than once results in a endless loop
+spawnProjectiles:
+
+spawnFireworks:
+  #if true fireworks will be spawned
+  enabled: false
+  #if the firework flickers or not
+  flicker: false
+  #if the firework has a trail
+  trail: true
+  #effect type of the fireworks: BALL, BALL_LARGE, BURST, CREEPER, STAR,
+  type: BALL
+  #main colors (RGB in hex notation)
+  #if there are no color, than there will be no fireworks
+  colors:
+    #red
+    - 'FF0000'
+    #white
+    - 'FFFFFF'
+  #fade colors in RGB hex notation
+  fadeColors:
+    #white
+    - 'FFFFFF'
+
 messages:
   #if this projectile can send a message of the impact location.
   hasImpactMessage: true
+
 loadPermission:
   #the permissions required for a player to use this projectile. There can be several permissions to load a projectile
   - cannons.projectile.default

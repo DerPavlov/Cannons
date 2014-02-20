@@ -1,38 +1,38 @@
 general:
   #the name of the projectile displayed in game
-  projectileName: clusterbomb
+  projectileName: fireworks
   #the name of the item to load this projectile
-  itemName: TNT
+  itemName: firework rocket
   #the item which is associated with the projectile.
   #items can be assigned to many different projectiles which are used with different cannons
   #example: one cannon can be loaded with stone but will fire an armor piercing round, while a different cannon
   #can be loaded with stone and it will fire an explosive projectile
-  loadingItem: '46:0'
+  loadingItem: '500:0'
   #some item create a block when placed e.g. redstone dust makes a wire if placed on ground. 
   #if you load the dust, type in the wire id and data, else there is a wire on the cannon.
   alternativeId:
     - '1:0'
 
 cannonball:
-  #type of the projectile entity
+  #the type of the projectile entity
   #Arrow, Egg, EnderPearl, Fireball, Fish, LargeFireball, SmallFireball, Snowball, ThrownExpBottle, ThrownPotion, WitherSkull
   entityType: snowball
   #set to true if you want to have a burning projectile
   isOnFire: false
   #the velocity of the projectile.
-  velocity: 3
+  velocity: 1
   #how many blocks the projectile will penetrate before it explodes. If it hits something impenetrable (e.g. obsidian) it will explode instantly.
   penetration: 1
   #whether the .projectile destroys blocks it penetrates. If false it will explode if it hits something impenetrable.
   doesPenetrationDamage: true
   #how many seconds after firing the projectile will detonate if it does not hit anything
-  timefuse: 0
+  timefuse: 0.5
   #the delay in seconds between two fired cannonball in the automatic firing mode.
   automaticFiringDelay: 1
   #a cannon can fire several times with a single projectile - like a magazine in a automatic firearm
   automaticFiringMagazineSize: 1
   #how many projectiles are fired
-  numberOfBullets: 1
+  numberOfBullets: 2
   #the higher this is, the more inaccurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from
   spreadMultiplier: 1.0
   #different properties of the projectile. If you don't want any of these properties then just leave this all blank.
@@ -44,7 +44,7 @@ cannonball:
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
   #for comparison, the explosion power of a creeper is 3. anything above 50 will cause lag on smaller servers
-  explosionPower: 2
+  explosionPower: 0
   #whether the explosion will destroy blocks
   doesExplosionDamage: true
   #the explosion power is set to zero if the explosion is underwater (superbreaker will still do damage)
@@ -72,7 +72,7 @@ placeBlock:
   #the radius where blocks will be placed. If the radius is too small there might be no air gap to spawn a block.
   radius: 3
   #the maximum amount of blocks placed. To disable this feature set the amount to 0.
-  amount: 3
+  amount: 0
   #the velocity of blocks/entities are slinged away from the impact
   velocity: 2.0
   #the fuse time in seconds of primed TNT. You can spawn primed TNT with '383:20'
@@ -82,28 +82,27 @@ placeBlock:
   material:
     #this one is a spawn-egg with its parameters set to spawn primed tnt on impact
     - '383:20'
+    #this is a cobweb to slow the enemy, will be spawned a block
+    - '30:0'
 
 #spawns a new projectiles after the explosion of this projectile with the given name (file name)
 #spawning the same projectile more than once results in a endless loop
 spawnProjectiles:
-  - cobblestone
 
 spawnFireworks:
   #if true fireworks will be spawned
-  enabled: false
+  enabled: true
   #if the firework flickers or not
   flicker: false
   #if the firework has a trail
-  trail: true
+  trail: false
   #effect type of the fireworks: BALL, BALL_LARGE, BURST, CREEPER, STAR,
-  type: BALL
+  type: BURST
   #main colors (RGB in hex notation)
   #if there are no color, than there will be no fireworks
   colors:
-    #red
-    - 'FF0000'
-    #white
-    - 'FFFFFF'
+      #white
+      - 'FF0000'
   #fade colors in RGB hex notation
   fadeColors:
     #white
@@ -111,7 +110,7 @@ spawnFireworks:
 
 messages:
   #if this projectile can send a message of the impact location.
-  hasImpactMessage: true
+  hasImpactMessage: false
 
 loadPermission:
   #the permissions required for a player to use this projectile. There can be several permissions to load a projectile

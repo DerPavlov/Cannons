@@ -1,5 +1,6 @@
 package at.pavlov.cannons.projectile;
 
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -10,33 +11,41 @@ public class FlyingProjectile
 {
 	private long spawnTime;
 	
-	private Snowball snowball;
+	private org.bukkit.entity.Projectile projectile_entity;
 	private Projectile projectile;
+    //location of the shooter before firing - important for teleporting the player back - observer property
+    private Location firingLocation;
+    //if the player has already fly mode on - important for teleport/observer property
+    private boolean hasFlyModeON;
 	
-	public FlyingProjectile(Projectile projectile, Snowball snowball)
+	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, Player shooter)
 	{
-		this.snowball = snowball;
+		this.projectile_entity = projectile_entity;
 		this.projectile = projectile;
+        if (shooter != null)
+            this.firingLocation = shooter.getLocation();
+        else
+            this.firingLocation = projectile_entity.getLocation();
 		this.spawnTime = System.currentTimeMillis();
 	}
 	
 	public LivingEntity getShooter()
 	{
-		if (this.snowball != null)
-			return this.snowball.getShooter();
+		if (this.projectile_entity != null)
+			return this.projectile_entity.getShooter();
 		return null;
 	}
 	public void setShooter(Player shooter)
 	{
-		this.snowball.setShooter(shooter);
+		this.projectile_entity.setShooter(shooter);
 	}
-	public Snowball getSnowball()
+	public org.bukkit.entity.Projectile getProjectileEntity()
 	{
-		return snowball;
+		return projectile_entity;
 	}
-	public void setSnowball(Snowball snowball)
+	public void setProjectileEntity(org.bukkit.entity.Projectile projectile_entity)
 	{
-		this.snowball = snowball;
+		this.projectile_entity = projectile_entity;
 	}
 	public Projectile getProjectile()
 	{
@@ -54,4 +63,12 @@ public class FlyingProjectile
 	{
 		this.spawnTime = spawnTime;
 	}
+
+    public Location getFiringLocation() {
+        return firingLocation;
+    }
+
+    public void setFiringLocation(Location firingLocation) {
+        this.firingLocation = firingLocation;
+    }
 }

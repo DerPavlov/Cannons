@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import at.pavlov.cannons.API.CannonsAPI;
+import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.cannon.DesignStorage;
+import at.pavlov.cannons.config.*;
+import at.pavlov.cannons.projectile.ProjectileManager;
+import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.CalcAngle;
 import at.pavlov.cannons.scheduler.Teleporter;
 import org.bukkit.Bukkit;
@@ -23,11 +29,6 @@ import com.avaje.ebean.EbeanServer;
 
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
-import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.config.DesignStorage;
-import at.pavlov.cannons.config.MessageEnum;
-import at.pavlov.cannons.config.ProjectileStorage;
-import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.dao.CannonBean;
 import at.pavlov.cannons.dao.MyDatabase;
 import at.pavlov.cannons.dao.PersistenceDatabase;
@@ -45,17 +46,15 @@ public class Cannons extends JavaPlugin
 	private ConsoleCommandSender console;
 
 	private Config config;
-	private DesignStorage designStorage;
-	private ProjectileStorage projectileStorage;
-	private UserMessages userMessages;
-	private CannonManager cannonManager;
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
 	private CalcAngle calcAngle;
     private Teleporter teleporter;
 	private Commands commands;
+
+    private CannonsAPI cannonsAPI;
 	
-	//Events
+	//Listener
 	private PlayerListener playerListener;
 	private EntityListener entityListener;
 	private SignListener signListener;
@@ -64,9 +63,6 @@ public class Cannons extends JavaPlugin
 	private PersistenceDatabase persistenceDatabase;
 	private MyDatabase database;
 
-	// creeperHeal to restore blocks
-	//private CreeperHeal creeperHeal;
-	//private ObsidianDestroyer obsidianDestroyer;
 
 
 	public Cannons()
@@ -105,15 +101,12 @@ public class Cannons extends JavaPlugin
 		
 		//setup all classes
 		this.config = new Config(this);
-		this.designStorage = this.config.getDesignStorage();
-		this.projectileStorage = this.config.getProjectileStorage();
-		this.userMessages = this.config.getUserMessages();
-		
-		this.cannonManager = new CannonManager(this, userMessages, config);
+
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, explosion);
-		this.calcAngle = new CalcAngle(this, userMessages, config);
+		this.calcAngle = new CalcAngle(this);
         this.teleporter = new Teleporter(this);
+        this.cannonsAPI = new CannonsAPI(this);
 		
 		this.persistenceDatabase = new PersistenceDatabase(this);
 
@@ -138,7 +131,7 @@ public class Cannons extends JavaPlugin
 			initializeDatabase();
 
 			// load cannons from database
-			persistenceDatabase.loadCannonsAsync();
+			persistenceDatabase.loadCannons();
 
 			// setting up Aiming Mode Task
 			calcAngle.initAimingMode();
@@ -232,7 +225,7 @@ public class Cannons extends JavaPlugin
 		return this.isEnabled();
 	}
 
-	public final Config getmyConfig()
+	public final Config getMyConfig()
 	{
 		return config;
 	}
@@ -297,13 +290,15 @@ public class Cannons extends JavaPlugin
 
 	public CannonManager getCannonManager()
 	{
-		return cannonManager;
+		return this.config.getCannonManager();
 	}
 
 	public FireCannon getFireCannon()
 	{
 		return fireCannon;
 	}
+
+
 
 	public CreateExplosion getExplosion()
 	{
@@ -327,42 +322,32 @@ public class Cannons extends JavaPlugin
 
 	public DesignStorage getDesignStorage()
 	{
-		return designStorage;
-	}
-
-	public void setDesignStorage(DesignStorage designStorage)
-	{
-		this.designStorage = designStorage;
+		return this.config.getDesignStorage();
 	}
 	
 	public CannonDesign getCannonDesign(Cannon cannon)
 	{
-		return designStorage.getDesign(cannon);
+		return getDesignStorage().getDesign(cannon);
 	}
 	
 	public CannonDesign getCannonDesign(String designId)
 	{
-		return designStorage.getDesign(designId);
+		return getDesignStorage().getDesign(designId);
 	}
 
 	public ProjectileStorage getProjectileStorage()
 	{
-		return projectileStorage;
+		return this.config.getProjectileStorage();
 	}
 
-	public void setProjectileStorage(ProjectileStorage projectileStorage)
-	{
-		this.projectileStorage = projectileStorage;
-	}
-	
 	public Projectile getProjectile(Cannon cannon, int id, int data)
 	{
-		return this.projectileStorage.getProjectile(cannon, id, data);
+		return this.getProjectileStorage().getProjectile(cannon, id, data);
 	}
 	
 	public Projectile getProjectile(Cannon cannon, ItemStack item)
 	{
-		return this.projectileStorage.getProjectile(cannon, item);
+		return this.getProjectileStorage().getProjectile(cannon, item);
 	}
 
 	public EntityListener getEntityListener()
@@ -377,12 +362,12 @@ public class Cannons extends JavaPlugin
 	
 	public void displayMessage(Player player, MessageEnum message, Cannon cannon)
 	{
-		this.userMessages.displayMessage(player, message, cannon);
+		this.config.getUserMessages().displayMessage(player, message, cannon);
 	}
 
-    public void displayImpactMessage(Player player, Location impact, boolean canceled)
+    public void displayImpactMessage(Player player, Location impact, boolean notCanceled)
     {
-        this.userMessages.displayImpactMessage(player, impact, canceled);
+        this.config.getUserMessages().displayImpactMessage(player, impact, notCanceled);
     }
 	
 	public void createCannon(Cannon cannon)
@@ -396,5 +381,13 @@ public class Cannons extends JavaPlugin
 
     public void setTeleporter(Teleporter teleporter) {
         this.teleporter = teleporter;
+    }
+
+    public ProjectileManager getProjectileManager(){
+        return this.config.getProjectileManager();
+    }
+
+    public CannonsAPI getCannonsAPI() {
+        return cannonsAPI;
     }
 }

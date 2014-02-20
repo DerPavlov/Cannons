@@ -74,10 +74,9 @@ public abstract class MyDatabase {
      */
     public void initializeDatabase(String driver, String url, String username, String password, String isolation, boolean logging, boolean rebuild) {
         //Logging needs to be set back to the original level, no matter what happens
-        try {            
+        try {
             //Disable all logging
             disableDatabaseLogging(logging);
-
             //Prepare the database
             prepareDatabase(driver, url, username, password, isolation);
 
@@ -88,7 +87,7 @@ public abstract class MyDatabase {
             installDatabase(rebuild);
         }
         catch(Exception ex) {
-            throw new RuntimeException("An exception has occured while initializing the database", ex);
+            throw new RuntimeException("An exception has occurred while initializing the database", ex);
         }
         finally {
             //Enable all logging

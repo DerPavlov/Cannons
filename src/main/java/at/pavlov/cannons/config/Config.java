@@ -2,7 +2,11 @@ package at.pavlov.cannons.config;
 
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.projectile.ProjectileManager;
+import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 
 import java.util.ArrayList;
@@ -42,6 +46,8 @@ public class Config
 	private Cannons plugin;
 	private DesignStorage designStorage;
 	private ProjectileStorage projectileStorage;
+    private CannonManager cannonManager;
+    private ProjectileManager projectileManager;
 
 	public Config(Cannons plugin)
 	{
@@ -49,6 +55,8 @@ public class Config
 		userMessage = new UserMessages(this.plugin);
 		designStorage = new DesignStorage(this.plugin);
 		projectileStorage = new ProjectileStorage(this.plugin);
+        cannonManager = new CannonManager(plugin, userMessage, this);
+        projectileManager = new ProjectileManager(plugin);
 	}
 
 	public void loadConfig()
@@ -88,7 +96,9 @@ public class Config
 		//load other configs	
 		projectileStorage.loadProjectiles();
 		designStorage.loadCannonDesigns();
+        cannonManager.updateCannonDesigns();
 		userMessage.loadLanguage();
+
 		
 
 
@@ -214,5 +224,21 @@ public class Config
 
     public void setUnbreakableBlocks(List<MaterialHolder> unbreakableBlocks) {
         this.unbreakableBlocks = unbreakableBlocks;
+    }
+
+    public CannonManager getCannonManager() {
+        return cannonManager;
+    }
+
+    public void setCannonManager(CannonManager cannonManager) {
+        this.cannonManager = cannonManager;
+    }
+
+    public ProjectileManager getProjectileManager() {
+        return projectileManager;
+    }
+
+    public void setProjectileManager(ProjectileManager projectileManager) {
+        this.projectileManager = projectileManager;
     }
 }
