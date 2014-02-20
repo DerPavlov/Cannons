@@ -60,6 +60,10 @@ public class Cannon
     //the player which has used the cannon last, important for firing with redstone button
     private String lastUser;
 
+    //temperature of the cannon
+    private double tempValue;
+    private long tempTimeStamp;
+
 
 	CannonDesign design;
 
@@ -1120,5 +1124,21 @@ public class Cannon
 
     public void setLastUser(String lastUser) {
         this.lastUser = lastUser;
+    }
+
+    public double getTempValue() {
+        return tempValue;
+    }
+
+    public void setTempValue(double tempValue) {
+        this.tempValue = tempValue;
+    }
+
+    public long getTempTimeStamp() {
+        return tempTimeStamp;
+    }
+
+    public void setTempTimeStamp(long tempTimeStamp) {
+        this.tempTimeStamp = tempTimeStamp;
     }
 }
