@@ -91,7 +91,7 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <!-- Bukkit API Version, change if necessary -->
-            <version>1.7.2-R0.2</version>
+            <version>1.7.2-R0.3</version>
         </dependency>
     </dependencies>
 </project>
