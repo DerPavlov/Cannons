@@ -39,15 +39,16 @@ public class CannonManager
 
 	/**
 	 * removes a cannons from the list that are not valid
+     * @param cause - the reason why the cannon is removed
 	 */
-	public void removeInvalidCannons()
+	public void removeInvalidCannons(BreakCause cause)
 	{
 		for (int i=0; i < cannonList.size(); i++)
 		{
 			Cannon cannon = cannonList.get(i);
 			if (!cannon.isValid())
 			{
-				removeCannon(cannon, false, BreakCause.Other);
+				removeCannon(cannon, false, cause);
 				i--;
 			}
 		}

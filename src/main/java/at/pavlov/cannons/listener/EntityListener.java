@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
@@ -115,7 +116,7 @@ public class EntityListener implements Listener
 
 		
 		//now remove all invalid cannons
-		plugin.getCannonManager().removeInvalidCannons();
+		plugin.getCannonManager().removeInvalidCannons(BreakCause.Explosion);
 	
 	}		
 
