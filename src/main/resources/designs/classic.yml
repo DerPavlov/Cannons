@@ -1,9 +1,13 @@
 general:
   #name of the cannon
   designName: Classic
+
+
 signs:
   #this cannon needs a sign to operate. Important for moving cannons.
   isSignRequired: false
+
+
 ammunition:
   #what the gunpowder is called
   gunpowderName: gunpowder
@@ -19,6 +23,8 @@ ammunition:
   ammoInfiniteForRedstone: false
   #whether the cannon can reload from a chest
   autoreloadRedstone: true
+
+
 barrelProperties:
   #maximum gunpowder that can be loaded in the cannon
   maxLoadableGunpowder: 3
@@ -26,6 +32,8 @@ barrelProperties:
   multiplierVelocity: 1.0
   #the angle of which a fired projectile spreads when fired. Basically the lower this is, the more accurate the cannon is
   spreadOfCannon: 1.0
+
+
 timings:
   #how long anyone near the cannon without a helmet will be confused when the cannon is fired
   blastConfusion: 5
@@ -33,6 +41,8 @@ timings:
   fuseBurnTime: 1
   #the time in seconds before the cannon can be fired again
   barrelCooldownTime: 2
+
+
 angles:
   #used to adjust in what direction a projectile is fired from a cannon. adjust this if your cannon is firing sideways or at itself
   defaultHorizonatalFacing: west
@@ -48,6 +58,8 @@ angles:
   angleStepSize: 1.0
   #how fast the cannons can be turned in ticks
   angleUpdateSpeed: 5.0
+
+
 heatManagement:
   #if heat management is used or not
   enabled: True
@@ -59,6 +71,8 @@ heatManagement:
   warningTemperature: 700
   #if the cannon exceeds this temperature it will explode
   maximumTemperature: 1000
+
+
 realisticBehaviour:
   #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
   isFiringItemRequired: false
@@ -72,6 +86,8 @@ realisticBehaviour:
   supportsFireMission: false
   #the mass in kilogram of a cannon is important for moving objects e.g. ships
   massOfCannon: 1000.0
+
+
 permissions:
   #all the permissions required for a player to use certain parts of the cannon
   #more information can be found here: http://dev.bukkit.org/bukkit-plugins/cannons/pages/installation-and-configuration/cannons-2-0-and-up/permissions/
@@ -92,9 +108,13 @@ permissions:
   #how much better the player can handle the cannon.
   #possible values are cannons.player.spreadmultiplier.1 - cannons.player.spreadmultiplier.10 for a multiplier of 0.1 - 1.0
   spreadMultiplier: cannons.player.spreadmultiplier
+
+
 accessRestriction:
   #whether only the owner of the cannon can use it or not (not implemented yet)
   ownerOnly: false
+
+
 allowedProjectiles:
   #these are the list of projectiles a cannon can fire. The projectiles are taken from the config files in the projectiles folder.
   #they do not have to be named after an in-game item and can be named anything.
@@ -103,6 +123,8 @@ allowedProjectiles:
   - enderpearl
   - tnt
   - firework1
+
+
 constructionBlocks:
   #blocks of the cannon schematic which are ignored and not required to build the cannon. Default is sand
   ignore: '12:0'
