@@ -36,6 +36,11 @@ public enum MessageEnum
     //projectile
     ProjectileExplosion ("Projectile.Explosion"),
     ProjectileCanceled ("Projectile.Canceled"),
+
+    //heatManagement
+    HeatManagementInfo ("HeatManagement.Info"),
+    HeatManagementWarning ("HeatManagement.Warning"),
+    HeatManagementOverheated ("HeatManagement.Overheated"),
 	
 	//Permission
 	PermissionErrorRedstone ("Permission.ErrorRedstone"),

@@ -1204,4 +1204,17 @@ public class Cannon
     public void setFiring(boolean firing) {
         isFiring = firing;
     }
+
+    public double getTempValue() {
+        //barrel temperature - minus ambient temperature + exponential decay
+        System.out.println("[Cannons] ambient temperature: " + this.design.getMuzzle(this).getBlock().getTemperature());
+        tempValue = (tempValue - this.design.getMuzzle(this).getBlock().getTemperature())* StrictMath.exp(-(System.currentTimeMillis() - this.tempTimestamp)*this.design.getCoolingCoefficient());
+        this.tempTimestamp = System.currentTimeMillis();
+        return tempValue;
+    }
+
+    public void setTempValue(double tempValue) {
+        this.tempTimestamp = System.currentTimeMillis();
+        this.tempValue = tempValue;
+    }
 }

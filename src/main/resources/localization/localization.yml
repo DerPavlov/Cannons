@@ -28,6 +28,10 @@ Cannon:
 Projectile:
   Explosion: 'GREEN [Cannons] Impact was in a distance of GOLD IMPACT_DISTANCEm GREEN and GOLD IMPACT_Ym GREEN height'
   Canceled: 'YELLOW [Cannons] Impact was at GOLD IMPACT_X, IMPACT_Y, IMPACT_Z YELLOW but the area is protected'
+HeatManagement:
+  Info: 'GREEN [Cannons] Cannon temperature is TEMP/MAXTEMP'
+  Warning: 'YELLOW [Cannons] Cannon temperature TEMP/MAXTEMP critical'
+  Overheated: 'RED [Cannons] The cannon exploded due to overheating'
 Permission:
   ErrorRedstone: 'RED [Cannons] You are not allowed to control cannons with redstone.'
   ErrorBuild: 'RED [Cannons] You have no permission to build a cannon.'
