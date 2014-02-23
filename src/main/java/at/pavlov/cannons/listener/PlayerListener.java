@@ -5,9 +5,7 @@ import java.util.Iterator;
 import at.pavlov.cannons.event.CannonRedstoneEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.event.InteractAction;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -36,6 +34,8 @@ import at.pavlov.cannons.config.MessageEnum;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener
 {
@@ -317,7 +317,7 @@ public class PlayerListener implements Listener
 		if (block.getType() == Material.REDSTONE_WIRE)
 		{
 			// block is powered
-			if (block.getData() == 0)
+			if (block.isBlockPowered())
 			{
 				// check all block next to this if there is a cannon
 				for (Block b : CannonsUtil.HorizontalSurroundingBlocks(block))
@@ -460,7 +460,32 @@ public class PlayerListener implements Listener
 				event.setCancelled(true);
 			}
 
+
 			plugin.logDebug("player interact event fired");
+
+            // ############ touching a hot cannon will burn you ####################
+            if (cannon.getTemperature() > design.getWarningTemperature())
+            {
+                plugin.logDebug("someone touched a hot cannon");
+                userMessages.displayMessage(player, MessageEnum.HeatManagementBurn);
+                if (design.getBurnDamage() > 0)
+                    player.damage(design.getBurnDamage()*2);
+                if (design.getBurnSlowing() > 0)
+                    PotionEffectType.SLOW.createEffect((int) (design.getBurnSlowing()*20.0), 0).apply(player);
+                Location effectLoc = event.getClickedBlock().getRelative(event.getBlockFace()).getLocation();
+                effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, event.getBlockFace());
+                effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+            }
+
+
+            // ############ temperature measurement ################################
+            if (config.getToolThermometer().equalsFuzzy(player.getItemInHand()))
+            {
+                plugin.logDebug("measure temperature");
+                userMessages.displayMessage(player, MessageEnum.HeatManagementInfo);
+            }
+
+
 			// ############ set angle ################################
 			if ((config.getToolAdjust().equalsFuzzy(player.getItemInHand()) || config.getToolAutoaim().equalsFuzzy(player.getItemInHand())) && cannon.isLoadingBlock(clickedBlock.getLocation()))
 			{
@@ -481,6 +506,8 @@ public class PlayerListener implements Listener
 				cannon.updateCannonSigns();
 				return;
 			}
+
+
 			// ########## Load Projectile ######################
 			Projectile projectile = plugin.getProjectile(cannon, event.getItem());
 			if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null)
@@ -499,6 +526,7 @@ public class PlayerListener implements Listener
 				// display message
 				userMessages.displayMessage(player, message, cannon);
 			}
+
 
 			// ########## Barrel clicked with gunpowder
 			if (cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(event.getItem()))
@@ -520,6 +548,7 @@ public class PlayerListener implements Listener
 				userMessages.displayMessage(player, message, cannon);
 			}
 
+
 			// ############ Torch clicked ############################
 			if (cannon.isRightClickTrigger(clickedBlock.getLocation()))
 			{
@@ -539,6 +568,7 @@ public class PlayerListener implements Listener
 				userMessages.displayMessage(player, message, cannon);
 				return;
 			}
+
 
 			// ############ Button clicked ############################
 			if (cannon.isRestoneTrigger(clickedBlock.getLocation()))

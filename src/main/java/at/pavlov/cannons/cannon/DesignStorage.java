@@ -185,10 +185,11 @@ public class DesignStorage
 
         //heatManagement
         cannonDesign.setHeatManagementEnabled(cannonDesignConfig.getBoolean("heatManagement.enabled", false));
-        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.heatIncreasePerGunpowder", 40.0));
-        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.coolingCoefficient", 2.0));
-        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.warningTemperature", 500.0));
-        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.maximumTemperature", 800.0));
+        cannonDesign.setBurnDamage(cannonDesignConfig.getDouble("heatManagement.burnDamage", 0.5));
+        cannonDesign.setBurnSlowing(cannonDesignConfig.getDouble("heatManagement.burnSlowing", 5.0));
+        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.coolingTimeCoefficient", 160.0));
+        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.warningTemperature", 100.0));
+        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.maximumTemperature", 200.0));
 
 		// realisticBehaviour
 		cannonDesign.setFiringItemRequired(cannonDesignConfig.getBoolean("realisticBehaviour.isFiringItemRequired", false));
@@ -403,7 +404,7 @@ public class DesignStorage
 							else
 							{
 								// all remaining blocks are loading interface or cannonBlocks
-								cannonBlocks.getLoadingInterface().add(new Vector(x, y, z));
+								cannonBlocks.getBarrelBlocks().add(new Vector(x, y, z));
 								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, block));
 								// this can be a destructible block
 								if (!isInList(blockProtectedList, block))

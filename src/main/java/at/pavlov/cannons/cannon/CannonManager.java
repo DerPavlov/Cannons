@@ -85,7 +85,7 @@ public class CannonManager
             Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
 
 			// destroy cannon (drops items, edit sign)
-			MessageEnum message = cannon.destroyCannon();
+			MessageEnum message = cannon.destroyCannon(false);
 			
 			if (player != null) userMessages.displayMessage(player, message, cannon);
 
@@ -563,7 +563,7 @@ public class CannonManager
 			if (next.getOwner().equals(owner))
 			{
                 inList = true;
-				next.destroyCannon();
+				next.destroyCannon(false);
 				iter.remove();
 			}
 		}

@@ -34,6 +34,7 @@ public class Config
 	private MaterialHolder toolAutoaim = new MaterialHolder(347, 0);
 	private MaterialHolder toolFiring = new MaterialHolder(259, 0);
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
+    private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
 
     //superbreakerBlocks
     private List<MaterialHolder> superbreakerBlocks = new ArrayList<MaterialHolder>();
@@ -240,5 +241,13 @@ public class Config
 
     public void setProjectileManager(ProjectileManager projectileManager) {
         this.projectileManager = projectileManager;
+    }
+
+    public MaterialHolder getToolThermometer() {
+        return toolThermometer;
+    }
+
+    public void setToolThermometer(MaterialHolder toolThermometer) {
+        this.toolThermometer = toolThermometer;
     }
 }

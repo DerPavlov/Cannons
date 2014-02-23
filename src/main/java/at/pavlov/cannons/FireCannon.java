@@ -2,6 +2,7 @@ package at.pavlov.cannons;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.utils.DelayedTask;
@@ -176,7 +177,7 @@ public class FireCannon {
 			torchLoc.setY(torchLoc.getY() + 1);
 			torchLoc.setZ(torchLoc.getZ() + 0.5);
 			torchLoc.getWorld().playEffect(torchLoc, Effect.SMOKE, BlockFace.UP);
-			torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 1,1);
+			torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 5, 1);
 		}
 
         //this cannon is now firing
@@ -222,8 +223,11 @@ public class FireCannon {
         if (projectile.getProjectileEntity().equals(EntityType.ARROW))
             world.playEffect(firingLoc, Effect.BOW_FIRE, 10);
         else
-            world.createExplosion(firingLoc, 0F);
+            world.createExplosion(firingLoc, 0F, false);
         world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
+
+        //increase heat of the cannon
+        cannon.setTemperature(cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
 
         //for each bullet, but at least once
         for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
@@ -246,6 +250,7 @@ public class FireCannon {
         //reset after firing
         cannon.setLastFired(System.currentTimeMillis());
 
+
         if (removeCharge == true)
         {
             //finished firing
@@ -260,7 +265,14 @@ public class FireCannon {
             //}
         }
 
+
+        boolean isDestroyed = cannon.checkHeatManagement();
+        if (isDestroyed)
+        {
+            cannon.destroyCannon(true);
+        }
     }
+
 
 
     

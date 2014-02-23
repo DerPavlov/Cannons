@@ -53,6 +53,8 @@ public class CannonDesign
 
     //heatManagment
     private boolean heatManagementEnabled;
+    private double burnDamage;
+    private double burnSlowing;
     private double heatIncreasePerGunpowder;
     private double coolingCoefficient;
     private double warningTemperature;
@@ -156,7 +158,7 @@ public class CannonDesign
     
     /**
      * returns a list of all cannonBlocks
-     * @param cannonDirection
+     * @param cannonDirection - the direction the cannon is facing
      * @return
      */
     public List<SimpleBlock> getAllCannonBlocks(BlockFace cannonDirection)
@@ -168,6 +170,27 @@ public class CannonDesign
     	}
     	
     	return new ArrayList<SimpleBlock>();
+    }
+
+
+    /**
+     * returns a list of all cannonBlocks
+     * @param cannon
+     * @return
+     */
+    public List<Location> getAllCannonBlocks(Cannon cannon)
+    {
+        CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+        List<Location> locList = new ArrayList<Location>();
+        if (cannonBlocks != null)
+        {
+            for (SimpleBlock block : cannonBlocks.getAllCannonBlocks())
+            {
+                Vector vect = block.toVector();
+                locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+            }
+        }
+        return locList;
     }
 
     /**
@@ -216,16 +239,35 @@ public class CannonDesign
      */
     public List<Location> getLoadingInterface(Cannon cannon)
     {
-     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
-    	List<Location> locList = new ArrayList<Location>();
-    	if (cannonBlocks != null)
-    	{
-    		for (Vector vect : cannonBlocks.getLoadingInterface())
-    		{
-    			locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
-    		}
-    	}
-		return locList;
+        CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+        List<Location> locList = new ArrayList<Location>();
+        if (cannonBlocks != null)
+        {
+            for (Vector vect : cannonBlocks.getBarrelBlocks())
+            {
+                locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+            }
+        }
+        return locList;
+    }
+
+    /**
+     * returns a list of all barrel blocks
+     * @param cannon
+     * @return
+     */
+    public List<Location> getBarrelBlocks(Cannon cannon)
+    {
+        CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
+        List<Location> locList = new ArrayList<Location>();
+        if (cannonBlocks != null)
+        {
+            for (Vector vect : cannonBlocks.getBarrelBlocks())
+            {
+                locList.add(vect.clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit()));
+            }
+        }
+        return locList;
     }
     
     /**
@@ -837,5 +879,21 @@ public class CannonDesign
 
     public void setMaximumTemperature(double maximumTemperature) {
         this.maximumTemperature = maximumTemperature;
+    }
+
+    public double getBurnSlowing() {
+        return burnSlowing;
+    }
+
+    public void setBurnSlowing(double burnSlowing) {
+        this.burnSlowing = burnSlowing;
+    }
+
+    public double getBurnDamage() {
+        return burnDamage;
+    }
+
+    public void setBurnDamage(double burnDamage) {
+        this.burnDamage = burnDamage;
     }
 }

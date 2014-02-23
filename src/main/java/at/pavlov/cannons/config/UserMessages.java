@@ -285,7 +285,7 @@ public class UserMessages {
 			//replace the vertical angle
 			message = message.replace("VDEGREE", Double.toString(cannon.getVerticalAngle()));
             //replace cannon temperature
-            message = message.replace("TEMP", Double.toString(cannon.getTempValue()));
+            message = message.replace("TEMP", Double.toString(cannon.getTemperature()));
 		}
 
 		if (player != null)

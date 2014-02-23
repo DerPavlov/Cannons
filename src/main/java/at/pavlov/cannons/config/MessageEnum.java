@@ -38,6 +38,7 @@ public enum MessageEnum
     ProjectileCanceled ("Projectile.Canceled"),
 
     //heatManagement
+    HeatManagementBurn ("HeatManagement.Burn"),
     HeatManagementInfo ("HeatManagement.Info"),
     HeatManagementWarning ("HeatManagement.Warning"),
     HeatManagementOverheated ("HeatManagement.Overheated"),

@@ -16,6 +16,8 @@ tools:
   firing: '259:-1'
   #item used to rotate a cannon 90 degrees. Not implemented yet
   rotatingItem: '350:0'
+  #item to measure the cannon temperature. Default is a gold nugget
+  thermometer: '371:0'
 #enter here the blocks which require the superbreaker ability to destroy.
 #e.g. if you enter here the enchantment table it requires a projectile with superbreaker to be destroyed.
 #else it can be destroyed by normal explosions

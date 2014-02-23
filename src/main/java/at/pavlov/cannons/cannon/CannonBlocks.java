@@ -12,7 +12,7 @@ public class CannonBlocks
 	private Vector rotationCenter;														//center off all rotation blocks
     private Vector muzzle;																//center off all muzzle blocks - spawing Vector for snowball
     private ArrayList<SimpleBlock> allCannonBlocks = new ArrayList<SimpleBlock>();
-    private ArrayList<Vector> loadingInterface = new ArrayList<Vector>();
+    private ArrayList<Vector> barrelBlocks = new ArrayList<Vector>();
     private ArrayList<SimpleBlock> chestsAndSigns = new ArrayList<SimpleBlock>();
     private ArrayList<Vector> redstoneTorches = new ArrayList<Vector>();
     private ArrayList<SimpleBlock> redstoneWiresAndRepeater = new ArrayList<SimpleBlock>();
@@ -29,7 +29,7 @@ public class CannonBlocks
      */
     public boolean isLoadingInterface(Vector loc)
     {
-    	for (Vector loadingBlock : loadingInterface)
+    	for (Vector loadingBlock : barrelBlocks)
     	{
     		if (loc.equals(loadingBlock))
     		{
@@ -77,13 +77,13 @@ public class CannonBlocks
 	{
 		this.allCannonBlocks = allCannonBlocks;
 	}
-	public ArrayList<Vector> getLoadingInterface()
+	public ArrayList<Vector> getBarrelBlocks()
 	{
-		return loadingInterface;
+		return barrelBlocks;
 	}
-	public void setLoadingInterface(ArrayList<Vector> loadingInterface)
+	public void setBarrel (ArrayList<Vector> barrelBlocks)
 	{
-		this.loadingInterface = loadingInterface;
+		this.barrelBlocks = barrelBlocks;
 	}
 	public ArrayList<Vector> getRedstoneTorches()
 	{

@@ -6,10 +6,7 @@ import java.util.Random;
 
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -94,6 +91,7 @@ public class Cannon
 		
 		this.databaseId = -1;
 	}
+
 
 	/**
 	 * removes the loaded charge form the chest attached to the cannon, returns true if the ammo was found in the chest
@@ -382,6 +380,7 @@ public class Cannon
 		{
 			getWorldBukkit().dropItemNaturally(design.getMuzzle(this), loadedProjectile.getLoadingItem().toItemStack(1));
 		}
+        removeCharge();
 
 	}
 	
@@ -401,7 +400,7 @@ public class Cannon
 	/**
 	 * removes the sign text and charge of the cannon after destruction
 	 */
-	public MessageEnum destroyCannon()
+	public MessageEnum destroyCannon(boolean breakBlocks)
 	{
 		// update cannon signs the last time
 		isValid = false;
@@ -410,9 +409,27 @@ public class Cannon
 		// drop charge
 		dropCharge();
 
+        if (breakBlocks)
+            breakAllCannonBlocks();
+
 		// return message
 		return MessageEnum.CannonDestroyed;
 	}
+
+    /**
+     * breaks all cannon blocks of the cannon
+     */
+    public void breakAllCannonBlocks()
+    {
+        List<Location> locList = design.getAllCannonBlocks(this);
+        Random r = new Random();
+
+        Bukkit.getWorld(world).createExplosion(locList.get(r.nextInt(locList.size())),getLoadedGunpowder()/design.getMaxLoadableGunpowder()*4,true);
+        for (Location loc : locList)
+        {
+            loc.getBlock().breakNaturally();
+        }
+    }
 
 	/**
 	 * returns true if this block is a block of the cannon
@@ -740,6 +757,54 @@ public class Cannon
         for (int i = 0; i<angle%90; i++)
         {
             cannonDirection = CannonsUtil.roatateFace(cannonDirection);
+        }
+    }
+
+    /**
+     * Checks the cannon if the actual temperature might destroy the cannon
+     * @return true if the cannon will explode
+     */
+    public boolean checkHeatManagement()
+    {
+        double tempCannon = this.getTemperature();
+        double tempWarning = design.getWarningTemperature();
+        double tempMax = design.getMaximumTemperature();
+        double explodingProbability = 0.0;
+
+        if (tempCannon > tempWarning)
+        {
+            //no exploding chance for temperature < warning, 95% chance for > maximum
+            explodingProbability = 1-Math.exp(-3*(tempCannon-tempWarning)/(tempMax-tempWarning));
+            //play some effects for a hot barrel
+            this.playBarrelSmokeEffect((int)(explodingProbability*10.0));
+        }
+
+        Random r = new Random();
+        return r.nextDouble()<explodingProbability;
+    }
+
+    /**
+     * plays the given effect on random locations of the barrel
+     * @param amount - number of effects
+     */
+    public void playBarrelSmokeEffect(int amount)
+    {
+        Random r = new Random();
+        List<Location> barrelList = design.getLoadingInterface(this);
+
+        //if the barrel list is 0 something is completely odd
+        int max = barrelList.size();
+        if (max < 0)
+            return;
+
+        World world = barrelList.get(0).getWorld();
+        for (int i=0; i<amount; i++)
+        {
+            //grab a random block
+            BlockFace face = CannonsUtil.randomBlockFace();
+            Location effectLoc = barrelList.get(r.nextInt(max)).getBlock().getRelative(face).getLocation();
+            effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, face);
+            effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
         }
     }
 
@@ -1205,16 +1270,24 @@ public class Cannon
         isFiring = firing;
     }
 
-    public double getTempValue() {
+    /**
+     * returns the temperature of the cannon
+     * @return cannon temperature
+     */
+    public double getTemperature() {
         //barrel temperature - minus ambient temperature + exponential decay
         System.out.println("[Cannons] ambient temperature: " + this.design.getMuzzle(this).getBlock().getTemperature());
-        tempValue = (tempValue - this.design.getMuzzle(this).getBlock().getTemperature())* StrictMath.exp(-(System.currentTimeMillis() - this.tempTimestamp)*this.design.getCoolingCoefficient());
+        tempValue = (tempValue - this.design.getMuzzle(this).getBlock().getTemperature())* Math.exp(-(System.currentTimeMillis() - this.tempTimestamp)/this.design.getCoolingCoefficient());
         this.tempTimestamp = System.currentTimeMillis();
         return tempValue;
     }
 
-    public void setTempValue(double tempValue) {
+    /**
+     * sets the temperature of the cannon to the given value
+     * @param temperature - temperature of the cannon
+     */
+    public void setTemperature(double temperature) {
         this.tempTimestamp = System.currentTimeMillis();
-        this.tempValue = tempValue;
+        this.tempValue = temperature;
     }
 }
