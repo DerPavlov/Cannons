@@ -1,5 +1,6 @@
 package at.pavlov.cannons.projectile;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ public class FlyingProjectile
 	private long spawnTime;
 	
 	private org.bukkit.entity.Projectile projectile_entity;
+    private String shooter;
 	private Projectile projectile;
     //location of the shooter before firing - important for teleporting the player back - observer property
     private Location firingLocation;
@@ -22,6 +24,7 @@ public class FlyingProjectile
 	{
 		this.projectile_entity = projectile_entity;
 		this.projectile = projectile;
+        this.shooter = shooter.getName();
         if (shooter != null)
             this.firingLocation = shooter.getLocation();
         else
@@ -29,11 +32,9 @@ public class FlyingProjectile
 		this.spawnTime = System.currentTimeMillis();
 	}
 	
-	public LivingEntity getShooter()
+	public Player getShooter()
 	{
-		if (this.projectile_entity != null)
-			return this.projectile_entity.getShooter();
-		return null;
+		return Bukkit.getPlayer(shooter);
 	}
 	public void setShooter(Player shooter)
 	{

@@ -559,7 +559,7 @@ public class CreateExplosion {
     	Projectile projectile = cannonball.getProjectile().clone();
     	org.bukkit.entity.Projectile projectile_entity = cannonball.getProjectileEntity();
 
-        LivingEntity shooter = projectile_entity.getShooter();
+        LivingEntity shooter = cannonball.getShooter();
         Player player = null;
         if (shooter instanceof Player)
             player = (Player) shooter;
@@ -678,7 +678,7 @@ public class CreateExplosion {
 
             //check which entities are affected by the event
             List<Entity> EntitiesAfterExplosion = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
-            transmittingEntities(EntitiesAfterExplosion, projectile_entity.getShooter());//place blocks around the impact like webs, lava, water
+            transmittingEntities(EntitiesAfterExplosion, cannonball.getShooter());//place blocks around the impact like webs, lava, water
 		    spreadBlocks(impactLoc, cannonball);
 
         }
