@@ -315,6 +315,7 @@ public class UserMessages {
 	{
 		if (string == null) return;
 		if (player == null) return;
+        if (string.equals(" "))  return;
 		
 		String[] message = string.split("\n "); // Split everytime the "\n" into a new array value
 

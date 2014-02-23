@@ -180,11 +180,11 @@ public class CreateExplosion {
     		//handle with bukkit
     		plugin.getServer().getPluginManager().callEvent(event);
 
-		    //plugin.logDebug("explode event: " + event.isCancelled());
-    		//if not canceled
-
-    		if(!event.isCancelled());
+		    plugin.logDebug("explode event canceled: " + event.isCancelled());
+    		//if not canceled break all given blocks
+    		if(!event.isCancelled())
     		{
+                plugin.logDebug("breaking block for penetration event");
     			// break water, lava, obsidian if cannon projectile
     			for (int i = 0; i < event.blockList().size(); i++)
     			{

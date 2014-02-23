@@ -50,7 +50,7 @@ public class EntityListener implements Listener
 	@EventHandler
 	public void EntityExplode(EntityExplodeEvent event)
 	{
-		plugin.logDebug("explode event");
+		plugin.logDebug("Explode event listener called");
 		
 		//do nothing if it is cancelled
 		if (event.isCancelled()) return;
@@ -97,7 +97,7 @@ public class EntityListener implements Listener
         //cannons event - remove unbreakable blocks
         if (event.getEntity() == null)
         {
-            plugin.logDebug("cannonball event");
+            plugin.logDebug("cannonball hit event");
             for (int i = 0; i < blocks.size(); i++)
             {
                 Block block = blocks.get(i);

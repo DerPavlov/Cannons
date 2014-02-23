@@ -51,6 +51,13 @@ public class CannonDesign
 	private double angleStepSize;
 	private double angleUpdateSpeed;
 
+    //heatManagment
+    private boolean heatManagementEnabled;
+    private double heatIncreasePerGunpowder;
+    private double coolingCoefficient;
+    private double warningTemperature;
+    private double maximumTemperature;
+
 	//realisticBehaviour
 	private boolean FiringItemRequired;
 	private boolean hasRecoil;
@@ -790,5 +797,45 @@ public class CannonDesign
 
     public void setMassOfCannon(double massOfCannon) {
         this.massOfCannon = massOfCannon;
+    }
+
+    public boolean isHeatManagementEnabled() {
+        return heatManagementEnabled;
+    }
+
+    public void setHeatManagementEnabled(boolean heatManagementEnabled) {
+        this.heatManagementEnabled = heatManagementEnabled;
+    }
+
+    public double getHeatIncreasePerGunpowder() {
+        return heatIncreasePerGunpowder;
+    }
+
+    public void setHeatIncreasePerGunpowder(double heatIncreasePerGunpowder) {
+        this.heatIncreasePerGunpowder = heatIncreasePerGunpowder;
+    }
+
+    public double getCoolingCoefficient() {
+        return coolingCoefficient;
+    }
+
+    public void setCoolingCoefficient(double coolingCoefficient) {
+        this.coolingCoefficient = coolingCoefficient;
+    }
+
+    public double getWarningTemperature() {
+        return warningTemperature;
+    }
+
+    public void setWarningTemperature(double warningTemperature) {
+        this.warningTemperature = warningTemperature;
+    }
+
+    public double getMaximumTemperature() {
+        return maximumTemperature;
+    }
+
+    public void setMaximumTemperature(double maximumTemperature) {
+        this.maximumTemperature = maximumTemperature;
     }
 }

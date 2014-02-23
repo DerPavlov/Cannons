@@ -32,7 +32,7 @@ timings:
   #the delay in seconds between when someone fires a cannon and when the actual projectiles fired from the cannon
   fuseBurnTime: 1
   #the time in seconds before the cannon can be fired again
-  barrelCooldownTime: 3
+  barrelCooldownTime: 2
 angles:
   #used to adjust in what direction a projectile is fired from a cannon. adjust this if your cannon is firing sideways or at itself
   defaultHorizonatalFacing: west
@@ -48,6 +48,17 @@ angles:
   angleStepSize: 1.0
   #how fast the cannons can be turned in ticks
   angleUpdateSpeed: 5.0
+heatManagement:
+  #if heat management is used or not
+  enabled: True
+  #how much firing one gunpowder will increase the temperature of the barrel
+  heatIncreasePerGunpowder: 50.0
+  #heat dissipation time coefficient. Larger means it cools down faster
+  coolingCoefficient: 1.0
+  #the cannon will display warnings if you exceed this temperature
+  warningTemperature: 700
+  #if the cannon exceeds this temperature it will explode
+  maximumTemperature: 1000
 realisticBehaviour:
   #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
   isFiringItemRequired: false
