@@ -1,7 +1,6 @@
 package at.pavlov.cannons.listener;
 
 import at.pavlov.cannons.cannon.Cannon;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.config.MessageEnum;
+import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.dao.PersistenceDatabase;
 

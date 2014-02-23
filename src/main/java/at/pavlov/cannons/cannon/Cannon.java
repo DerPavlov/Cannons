@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.*;
@@ -15,7 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import at.pavlov.cannons.config.MessageEnum;
+import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.inventory.InventoryManagement;
 import at.pavlov.cannons.projectile.Projectile;
@@ -59,7 +60,7 @@ public class Cannon
     //the player which has used the cannon last, important for firing with redstone button
     private String lastUser;
 
-    //cannon temperatur
+    //cannon temperature
     private double tempValue;
     private long tempTimestamp;
 
@@ -400,7 +401,7 @@ public class Cannon
 	/**
 	 * removes the sign text and charge of the cannon after destruction
 	 */
-	public MessageEnum destroyCannon(boolean breakBlocks)
+	public MessageEnum destroyCannon(boolean breakBlocks, BreakCause cause)
 	{
 		// update cannon signs the last time
 		isValid = false;
@@ -413,7 +414,15 @@ public class Cannon
             breakAllCannonBlocks();
 
 		// return message
-		return MessageEnum.CannonDestroyed;
+        switch (cause)
+        {
+            case Overheating:
+                return MessageEnum.HeatManagementOverheated;
+            case Other:
+                return null;
+            default:
+                return MessageEnum.CannonDestroyed;
+        }
 	}
 
     /**
@@ -424,7 +433,8 @@ public class Cannon
         List<Location> locList = design.getAllCannonBlocks(this);
         Random r = new Random();
 
-        Bukkit.getWorld(world).createExplosion(locList.get(r.nextInt(locList.size())),getLoadedGunpowder()/design.getMaxLoadableGunpowder()*4,true);
+        Bukkit.getWorld(world).createExplosion(locList.get(0), 2);
+        //Bukkit.getWorld(world).createExplosion(locList.get(r.nextInt(locList.size())),getLoadedGunpowder()/design.getMaxLoadableGunpowder()*4,true);
         for (Location loc : locList)
         {
             loc.getBlock().breakNaturally();
@@ -767,16 +777,16 @@ public class Cannon
     public boolean checkHeatManagement()
     {
         double tempCannon = this.getTemperature();
-        double tempWarning = design.getWarningTemperature();
+        double tempCritical = design.getCriticalTemperature();
         double tempMax = design.getMaximumTemperature();
         double explodingProbability = 0.0;
 
-        if (tempCannon > tempWarning)
+        if (tempCannon > tempCritical)
         {
             //no exploding chance for temperature < warning, 95% chance for > maximum
-            explodingProbability = 1-Math.exp(-3*(tempCannon-tempWarning)/(tempMax-tempWarning));
+            explodingProbability = 1-Math.exp(-3*(tempCannon-tempCritical)/(tempMax-tempCritical));
             //play some effects for a hot barrel
-            this.playBarrelSmokeEffect((int)(explodingProbability*10.0));
+            this.playBarrelSmokeEffect((int)(explodingProbability*20.0));
         }
 
         Random r = new Random();
@@ -1276,9 +1286,12 @@ public class Cannon
      */
     public double getTemperature() {
         //barrel temperature - minus ambient temperature + exponential decay
-        System.out.println("[Cannons] ambient temperature: " + this.design.getMuzzle(this).getBlock().getTemperature());
-        tempValue = (tempValue - this.design.getMuzzle(this).getBlock().getTemperature())* Math.exp(-(System.currentTimeMillis() - this.tempTimestamp)/this.design.getCoolingCoefficient());
+        double ambient = this.design.getMuzzle(this).getBlock().getTemperature();
+        double timePassed = (System.currentTimeMillis() - this.tempTimestamp)/1000.0;
+        double decay = Math.exp(-timePassed/design.getCoolingCoefficient());
+        tempValue = ambient + (tempValue - ambient)*decay;
         this.tempTimestamp = System.currentTimeMillis();
+
         return tempValue;
     }
 

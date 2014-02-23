@@ -2,8 +2,8 @@ package at.pavlov.cannons;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
+import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
@@ -19,7 +19,7 @@ import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.cannon.DesignStorage;
-import at.pavlov.cannons.config.MessageEnum;
+import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
 
@@ -227,6 +227,7 @@ public class FireCannon {
         world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 
         //increase heat of the cannon
+        plugin.logDebug("new Temp: " + cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
         cannon.setTemperature(cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
 
         //for each bullet, but at least once
@@ -250,6 +251,14 @@ public class FireCannon {
         //reset after firing
         cannon.setLastFired(System.currentTimeMillis());
 
+        //check if the temperature exceeds the limit
+        boolean isDestroyed = cannon.checkHeatManagement();
+        if (isDestroyed)
+        {
+            plugin.getCannonManager().removeCannon(cannon, true, BreakCause.Overheating);
+            return;
+        }
+
 
         if (removeCharge == true)
         {
@@ -263,13 +272,6 @@ public class FireCannon {
             //removes the gunpowder and projectile loaded in the cannon
             cannon.removeCharge();
             //}
-        }
-
-
-        boolean isDestroyed = cannon.checkHeatManagement();
-        if (isDestroyed)
-        {
-            cannon.destroyCannon(true);
         }
     }
 

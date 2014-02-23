@@ -1,4 +1,4 @@
-package at.pavlov.cannons.config;
+package at.pavlov.cannons.Enum;
 
 public enum MessageEnum
 {
@@ -40,7 +40,7 @@ public enum MessageEnum
     //heatManagement
     HeatManagementBurn ("HeatManagement.Burn"),
     HeatManagementInfo ("HeatManagement.Info"),
-    HeatManagementWarning ("HeatManagement.Warning"),
+    HeatManagementCritical ("HeatManagement.Critical"),
     HeatManagementOverheated ("HeatManagement.Overheated"),
 	
 	//Permission

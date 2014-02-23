@@ -68,13 +68,15 @@ heatManagement:
   #touching a hot cannon will slow you (in seconds)
   burnSlowing: 10
   #how much firing one gunpowder will increase the temperature of the barrel
-  heatIncreasePerGunpowder: 50.0
+  heatIncreasePerGunpowder: 5.0
   #heat dissipation time coefficient. Smaller time coefficient means it cools down faster
-  coolingTimeCoefficient: 180.0
-  #the cannon will display warnings if you exceed this temperature
-  warningTemperature: 100.0
+  coolingTimeCoefficient: 10.0
+  #the barrel is hot and you will notice this effect
+  warningTemperature: 50.0
+  #the barrel damage is critical and the cannon can explode
+  criticalTemperature: 150.0
   #if the cannon exceeds this temperature it will explode
-  maximumTemperature: 200.0
+  maximumTemperature: 300.0
 
 
 realisticBehaviour:

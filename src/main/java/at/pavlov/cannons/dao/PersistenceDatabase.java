@@ -76,6 +76,9 @@ public class PersistenceDatabase
 					//angles
 					cannon.setHorizontalAngle(bean.getHorizontalAngle());
 					cannon.setVerticalAngle(bean.getVerticalAngle());
+
+                    //temperature
+                    cannon.setTemperature(bean.getCannonTemperature());
 					
 					cannon.setValid(bean.isValid());
 
@@ -200,6 +203,10 @@ public class PersistenceDatabase
 			bean.setVerticalAngle(cannon.getVerticalAngle());
 			// id
 			bean.setDesignId(cannon.getDesignID());
+            //temperature
+            bean.setCannonTemperature(cannon.getTemperature());
+
+
 			bean.setValid(cannon.isValid());
 
 			// store the bean

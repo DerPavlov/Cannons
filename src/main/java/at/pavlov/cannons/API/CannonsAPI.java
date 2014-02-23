@@ -2,11 +2,10 @@ package at.pavlov.cannons.API;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.config.MessageEnum;
+import at.pavlov.cannons.Enum.MessageEnum;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CannonsAPI {

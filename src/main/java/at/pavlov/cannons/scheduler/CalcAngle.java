@@ -13,7 +13,7 @@ import org.bukkit.event.block.Action;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.config.MessageEnum;
+import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.config.UserMessages;
 
 
@@ -357,13 +357,13 @@ public class CalcAngle {
     			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && player.isOnline() == true && cannon.isValid() == true)
         		{
             		MessageEnum message = DisplayAngle(cannon, null, player);
-            		userMessages.displayMessage(player, message, cannon);
+            		userMessages.displayMessage(player, cannon, message);
         		}		
         		else
         		{
         			//leave aiming Mode
         			MessageEnum message = disableAimingMode(player);
-                    userMessages.displayMessage(player, message, cannon);
+                    userMessages.displayMessage(player, cannon, message);
         		}
     		}	
     	}
@@ -379,7 +379,7 @@ public class CalcAngle {
 		{
 			//player in map -> remove
 			MessageEnum message = disableAimingMode(player);
-            userMessages.displayMessage(player, message, cannon);
+            userMessages.displayMessage(player, cannon, message);
         }
 		else
 		{
@@ -389,19 +389,19 @@ public class CalcAngle {
                 //check distance before enabling the cannon
                 if (distanceCheck(player, cannon) == true)
                 {
-                    userMessages.displayMessage(player, MessageEnum.AimingModeEnabled, cannon);
+                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeEnabled);
                     inAimingMode.put(player, cannon);
                 }
                 else
                 {
-                    userMessages.displayMessage(player, MessageEnum.AimingModeTooFarAway, cannon);
+                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeTooFarAway);
                 }
 
 			}
 			else
 			{
 				//no Permission to aim
-				userMessages.displayMessage(player, MessageEnum.PermissionErrorAdjust, cannon);
+				userMessages.displayMessage(player, cannon, MessageEnum.PermissionErrorAdjust);
 				return;
 			}
 		}

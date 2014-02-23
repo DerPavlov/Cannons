@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import at.pavlov.cannons.API.CannonsAPI;
+import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.config.*;
@@ -360,9 +361,9 @@ public class Cannons extends JavaPlugin
 		this.entityListener = entityListener;
 	}
 	
-	public void displayMessage(Player player, MessageEnum message, Cannon cannon)
+	public void displayMessage(Player player, Cannon cannon, MessageEnum message)
 	{
-		this.config.getUserMessages().displayMessage(player, message, cannon);
+		this.config.getUserMessages().displayMessage(player, cannon, message);
 	}
 
     public void displayImpactMessage(Player player, Location impact, boolean notCanceled)

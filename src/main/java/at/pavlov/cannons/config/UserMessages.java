@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import at.pavlov.cannons.Enum.MessageEnum;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -166,7 +167,7 @@ public class UserMessages {
 		//no player no message
 		if (player != null)
 		{
-			displayMessage(Bukkit.getPlayer(player), messageEnum, cannon);
+			displayMessage(Bukkit.getPlayer(player), cannon, messageEnum);
 		}
 	}
 	
@@ -177,7 +178,7 @@ public class UserMessages {
 	 */
 	public void displayMessage(Player player, MessageEnum messageEnum)
 	{
-		displayMessage(player, messageEnum, null);
+		displayMessage(player, null, messageEnum);
 	}
 	
 	/**
@@ -186,7 +187,7 @@ public class UserMessages {
 	 * @param messageEnum
 	 * @param cannon
 	 */
-	public void displayMessage(Player player, MessageEnum messageEnum, Cannon cannon)
+	public void displayMessage(Player player, Cannon cannon, MessageEnum messageEnum)
 	{
 		//no player no message
 		if (player == null) return;
@@ -281,11 +282,12 @@ public class UserMessages {
 			if (cannon.getLoadedProjectile()!=null)
 				message = message.replace("PROJECTILE", cannon.getLoadedProjectile().getProjectileName());
 			//replace the horizontal angle
-			message = message.replace("HDEGREE", Double.toString(cannon.getHorizontalAngle()));			
+			message = message.replace("HDEGREE", String.format("%.2f", cannon.getHorizontalAngle()));
 			//replace the vertical angle
-			message = message.replace("VDEGREE", Double.toString(cannon.getVerticalAngle()));
+			message = message.replace("VDEGREE", String.format("%.2f", cannon.getVerticalAngle()));
             //replace cannon temperature
-            message = message.replace("TEMP", Double.toString(cannon.getTemperature()));
+            message = message.replace("CTEMP", String.format("%.2f", cannon.getTemperature()));
+            message = message.replace("MAXTEMP", String.format("%.2f", cannon.getCannonDesign().getMaximumTemperature()));
 		}
 
 		if (player != null)

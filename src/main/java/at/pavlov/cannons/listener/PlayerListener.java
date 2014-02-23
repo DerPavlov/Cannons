@@ -2,6 +2,7 @@ package at.pavlov.cannons.listener;
 
 import java.util.Iterator;
 
+import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.event.CannonRedstoneEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.event.InteractAction;
@@ -30,11 +31,10 @@ import at.pavlov.cannons.FireCannon;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.config.MessageEnum;
+import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener
@@ -99,7 +99,7 @@ public class PlayerListener implements Listener
 			Cannon cannon = cannonManager.getCannon(loc, null);
 			if (cannon != null)
 			{
-				cannonManager.removeCannon(cannon);
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -116,7 +116,7 @@ public class PlayerListener implements Listener
 			Cannon cannon = cannonManager.getCannon(iter.next().getLocation(), null);
 			if (cannon != null)
 			{
-				cannonManager.removeCannon(cannon);
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -143,7 +143,7 @@ public class PlayerListener implements Listener
 		Cannon cannon = cannonManager.getCannon(event.getBlock().getLocation(), null);
 		if (cannon != null)
 		{
-			cannonManager.removeCannon(cannon);
+			cannonManager.removeCannon(cannon, false, BreakCause.PlayerBreak);
 		}
 	}
 
@@ -404,7 +404,7 @@ public class PlayerListener implements Listener
                 //execute event
                 boolean autoreload = player.isSneaking() && player.hasPermission(cannon.getCannonDesign().getPermissionAutoreload());
                 MessageEnum message =  fireCannon.prepareFire(cannon, player, autoreload, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
-                userMessages.displayMessage(player, message, cannon);
+                userMessages.displayMessage(player, cannon, message);
 			}
 		}
 		 
@@ -467,7 +467,7 @@ public class PlayerListener implements Listener
             if (cannon.getTemperature() > design.getWarningTemperature())
             {
                 plugin.logDebug("someone touched a hot cannon");
-                userMessages.displayMessage(player, MessageEnum.HeatManagementBurn);
+                userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementBurn);
                 if (design.getBurnDamage() > 0)
                     player.damage(design.getBurnDamage()*2);
                 if (design.getBurnSlowing() > 0)
@@ -482,7 +482,7 @@ public class PlayerListener implements Listener
             if (config.getToolThermometer().equalsFuzzy(player.getItemInHand()))
             {
                 plugin.logDebug("measure temperature");
-                userMessages.displayMessage(player, MessageEnum.HeatManagementInfo);
+                userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementInfo);
             }
 
 
@@ -500,7 +500,7 @@ public class PlayerListener implements Listener
 
 				MessageEnum message = calcAngle.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
 
-				userMessages.displayMessage(player, message, cannon);
+				userMessages.displayMessage(player, cannon, message);
 				
 				// update Signs
 				cannon.updateCannonSigns();
@@ -524,7 +524,7 @@ public class PlayerListener implements Listener
 				// load projectile
 				MessageEnum message = cannon.loadProjectile(projectile, player);
 				// display message
-				userMessages.displayMessage(player, message, cannon);
+				userMessages.displayMessage(player, cannon, message);
 			}
 
 
@@ -545,7 +545,7 @@ public class PlayerListener implements Listener
 				MessageEnum message = cannon.loadGunpowder(player);
 
    				// display message
-				userMessages.displayMessage(player, message, cannon);
+				userMessages.displayMessage(player, cannon, message);
 			}
 
 
@@ -565,7 +565,7 @@ public class PlayerListener implements Listener
                 MessageEnum message = fireCannon.prepareFire(cannon, player, autoreload, !design.isAmmoInfiniteForPlayer());
 
 				// display message
-				userMessages.displayMessage(player, message, cannon);
+				userMessages.displayMessage(player, cannon, message);
 				return;
 			}
 

@@ -58,6 +58,7 @@ public class CannonDesign
     private double heatIncreasePerGunpowder;
     private double coolingCoefficient;
     private double warningTemperature;
+    private double criticalTemperature;
     private double maximumTemperature;
 
 	//realisticBehaviour
@@ -895,5 +896,13 @@ public class CannonDesign
 
     public void setBurnDamage(double burnDamage) {
         this.burnDamage = burnDamage;
+    }
+
+    public double getCriticalTemperature() {
+        return criticalTemperature;
+    }
+
+    public void setCriticalTemperature(double criticalTemperature) {
+        this.criticalTemperature = criticalTemperature;
     }
 }

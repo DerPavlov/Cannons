@@ -470,27 +470,26 @@ public class CannonsUtil
 
     /**
      * returns a random block face
+     * @param avoidFace - this face and its opposite should not be used
      * @return - random BlockFace
      */
     public static BlockFace randomBlockFace()
     {
         Random r = new Random();
-        switch (r.nextInt(6))
+        switch (r.nextInt(5))
         {
             case 0:
                 return BlockFace.UP;
             case 1:
-                return BlockFace.DOWN;
-            case 2:
                 return BlockFace.EAST;
-            case 3:
+            case 2:
                 return BlockFace.SOUTH;
-            case 4:
+            case 3:
                 return BlockFace.WEST;
-            case 5:
+            case 4:
                 return BlockFace.NORTH;
             default:
-                return BlockFace.UP;
+                return BlockFace.SELF;
         }
 
     }

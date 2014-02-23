@@ -1,8 +1,6 @@
 package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.config.MessageEnum;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

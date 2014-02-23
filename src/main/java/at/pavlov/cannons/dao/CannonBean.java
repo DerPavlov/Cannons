@@ -8,7 +8,7 @@ import com.avaje.ebean.validation.NotEmpty;
 
 
 @Entity
-@Table(name ="cannonlist_2")
+@Table(name ="cannonlist_2_2")
 public class CannonBean
 {
 	@Id 
@@ -27,6 +27,7 @@ public class CannonBean
 	private int gunpowder;
 	private int projectileID;
 	private int projectileData;
+    private double cannonTemperature;
 	private double horizontalAngle;
 	private double verticalAngle;
 	private String designId;
@@ -155,7 +156,13 @@ public class CannonBean
 	{
 		this.designId = designId;
 	}
-	
-	
-	
+
+
+    public double getCannonTemperature() {
+        return cannonTemperature;
+    }
+
+    public void setCannonTemperature(double cannonTemperature) {
+        this.cannonTemperature = cannonTemperature;
+    }
 }

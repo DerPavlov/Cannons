@@ -8,6 +8,8 @@ Error:
   CannonBuiltLimit: 'RED [Cannons] You cant build more than GOLD CANNONS YELLOW guns'
   NotTheOwner: 'RED [Cannons] This cannon is locked and can only used by its owner'
   MissingSign: 'RED [Cannons] This cannon needs a sign to operate.'
+
+
 Aiming:
   EnableAimingMode: 'GREEN [Cannons] Entering aiming mode'
   DisableAimingMode: 'RED [Cannons] Leaving aiming mode'
@@ -17,22 +19,32 @@ Aiming:
   SettingVerticalAngleDown: 'YELLOW [Cannons] Setting vertical angle to GOLD VDEGREE degree'
   SettingHorizontalAngleRight: 'YELLOW [Cannons] Aiming GOLD HDEGREE degree YELLOW to the GOLD right'
   SettingHorizontalAngleLeft: 'YELLOW [Cannons] Aiming GOLD HDEGREE degree YELLOW to the GOLD left'
+
+
 Load:  
   Projectile: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW has been loaded. Fire the gun if ready.'
   Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW of Gunpowder loaded.'
+
+
 Cannon:
   Fire: 'YELLOW [Cannons] FIRE!'
   Created: 'GREEN [Cannons] You created a cannon'
   Destroyed: 'RED [Cannons] One of your cannons has been destroyed'
   Reseted: 'GREEN [Cannons] All your cannons have been deleted from the database'
+
+
 Projectile:
   Explosion: 'GREEN [Cannons] Impact was in a distance of GOLD IMPACT_DISTANCEm GREEN and GOLD IMPACT_Ym GREEN height'
   Canceled: 'YELLOW [Cannons] Impact was at GOLD IMPACT_X, IMPACT_Y, IMPACT_Z YELLOW but the area is protected'
+
+
 HeatManagement:
   Burn: 'YELLOW [Cannons] You touched a hot cannon and burned your fingers'
-  Info: 'GREEN [Cannons] Cannon temperature is TEMP/MAXTEMP'
-  Warning: 'YELLOW [Cannons] Cannon temperature TEMP/MAXTEMP critical'
+  Info: 'GREEN [Cannons] Cannon temperature is CTEMP / MAXTEMP degegree Celsius'
+  Critical: 'YELLOW [Cannons] Cannon temperature of CTEMPC is critical'
   Overheated: 'RED [Cannons] The cannon exploded due to overheating'
+
+
 Permission:
   ErrorRedstone: 'RED [Cannons] You are not allowed to control cannons with redstone.'
   ErrorBuild: 'RED [Cannons] You have no permission to build a cannon.'
@@ -40,6 +52,8 @@ Permission:
   ErrorLoad: 'RED [Cannons] No permission to load this gun.'
   ErrorAdjust: 'RED [Cannons] You have no idea how to adjust this cannon.'
   ErrorProjectile: 'RED [Cannons] No permission for this projectile.'
+
+
 Help:
   Text: 'NEWLINE RED Cannons plugin NEWLINE RED /cannons build GREEN - How to build a cannon NEWLINE RED /cannons fire GREEN - How to load and fire a cannon NEWLINE RED /cannons adjust GREEN - A small guide aim with a cannon'
   Build: 'NEWLINE RED How to build a cannon: NEWLINE GREEN To make the barrel place 3 black wool blocks in x or z. NEWLINE GREEN Place a button on each end of the barrel NEWLINE GREEN Finish it by placing a torch on the first block of the barrel. NEWLINE GREEN To check if the cannon works right click the torch and you NEWLINE GREEN will get a message.'

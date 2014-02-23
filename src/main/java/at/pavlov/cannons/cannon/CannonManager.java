@@ -1,11 +1,11 @@
 package at.pavlov.cannons.cannon;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
@@ -15,10 +15,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.config.MessageEnum;
+import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.event.CannonAfterCreateEvent;
@@ -49,7 +47,7 @@ public class CannonManager
 			Cannon cannon = cannonList.get(i);
 			if (!cannon.isValid())
 			{
-				removeCannon(cannon);
+				removeCannon(cannon, false, BreakCause.Other);
 				i--;
 			}
 		}
@@ -57,19 +55,23 @@ public class CannonManager
 
 	/**
 	 * removes a cannon from the list
-	 * @param loc
+	 * @param loc - location of the cannon
+     * @param breakCannon - the cannon will explode and all cannon blocks will drop
+     * @param cause - the reason way the cannon was broken
 	 */
-	public void removeCannon(Location loc)
+	public void removeCannon(Location loc, boolean breakCannon, BreakCause cause)
 	{
 		Cannon cannon = getCannon(loc, null);
-		removeCannon(cannon);
+		removeCannon(cannon, breakCannon, cause);
 	}
 
 	/**
 	 * removes a cannon from the list
 	 * @param cannon
+     * @param breakCannon - the cannon will explode and all cannon blocks will drop
+     * @param cause - the reason way the cannon was broken
 	 */
-	public void removeCannon(Cannon cannon)
+	public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause)
 	{
 		if (cannon != null)
 		{
@@ -85,9 +87,9 @@ public class CannonManager
             Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
 
 			// destroy cannon (drops items, edit sign)
-			MessageEnum message = cannon.destroyCannon(false);
+			MessageEnum message = cannon.destroyCannon(breakCannon, cause);
 			
-			if (player != null) userMessages.displayMessage(player, message, cannon);
+			if (player != null) userMessages.displayMessage(player, cannon, message);
 
 			//remove from database
 			plugin.getPersistenceDatabase().deleteCannonAsync(cannon);
@@ -563,7 +565,7 @@ public class CannonManager
 			if (next.getOwner().equals(owner))
 			{
                 inList = true;
-				next.destroyCannon(false);
+				next.destroyCannon(false, BreakCause.Other);
 				iter.remove();
 			}
 		}

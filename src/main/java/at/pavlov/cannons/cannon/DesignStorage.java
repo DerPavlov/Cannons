@@ -187,9 +187,11 @@ public class DesignStorage
         cannonDesign.setHeatManagementEnabled(cannonDesignConfig.getBoolean("heatManagement.enabled", false));
         cannonDesign.setBurnDamage(cannonDesignConfig.getDouble("heatManagement.burnDamage", 0.5));
         cannonDesign.setBurnSlowing(cannonDesignConfig.getDouble("heatManagement.burnSlowing", 5.0));
-        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.coolingTimeCoefficient", 160.0));
-        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.warningTemperature", 100.0));
-        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.maximumTemperature", 200.0));
+        cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.heatIncreasePerGunpowder", 10.0));
+        cannonDesign.setCoolingCoefficient(cannonDesignConfig.getDouble("heatManagement.coolingTimeCoefficient", 160.0));
+        cannonDesign.setWarningTemperature(cannonDesignConfig.getDouble("heatManagement.warningTemperature", 100.0));
+        cannonDesign.setCriticalTemperature(cannonDesignConfig.getDouble("heatManagement.criticalTemperature", 150.0));
+        cannonDesign.setMaximumTemperature(cannonDesignConfig.getDouble("heatManagement.maximumTemperature", 200.0));
 
 		// realisticBehaviour
 		cannonDesign.setFiringItemRequired(cannonDesignConfig.getBoolean("realisticBehaviour.isFiringItemRequired", false));
