@@ -50,7 +50,6 @@
         </resources>
         <!-- Plugins -->
         <plugins>
-            <!-- Compile plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -70,7 +69,6 @@
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
-            <!-- JAR creation plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

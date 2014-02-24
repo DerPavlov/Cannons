@@ -1,4 +1,5 @@
 Error:
+  FiringInProgress: 'RED [Cannons] Cannon is firing. Step back.'
   BarrelTooHot: 'RED [Cannons] The barrel is too hot and must cool down.'
   NoProjectile: 'RED [Cannons] No projectile loaded. Load something!'
   NoGunpowder: 'RED [Cannons] No gunpowder. Please load the barrel with gunpowder.'
@@ -40,8 +41,8 @@ Projectile:
 
 HeatManagement:
   Burn: 'YELLOW [Cannons] You touched a hot cannon and burned your fingers'
-  Info: 'GREEN [Cannons] Cannon temperature is CTEMP / MAXTEMP degegree Celsius'
-  Critical: 'YELLOW [Cannons] Cannon temperature of CTEMPC is critical'
+  Info: 'GREEN [Cannons] Cannon temperature is CANNON_TEMP / MAX_TEMP degree Celsius'
+  Critical: 'YELLOW [Cannons] Cannon temperature of CANNON_TEMPC is critical'
   Overheated: 'RED [Cannons] The cannon exploded due to overheating'
 
 

@@ -286,8 +286,10 @@ public class UserMessages {
 			//replace the vertical angle
 			message = message.replace("VDEGREE", String.format("%.2f", cannon.getVerticalAngle()));
             //replace cannon temperature
-            message = message.replace("CTEMP", String.format("%.2f", cannon.getTemperature()));
-            message = message.replace("MAXTEMP", String.format("%.2f", cannon.getCannonDesign().getMaximumTemperature()));
+            message = message.replace("CANNON_TEMP", String.format("%.2f", cannon.getTemperature()));
+            message = message.replace("MAX_TEMP", String.format("%.2f", cannon.getCannonDesign().getMaximumTemperature()));
+            message = message.replace("CRIT_TEMP", String.format("%.2f", cannon.getCannonDesign().getCriticalTemperature()));
+            message = message.replace("WARN_TEMP", String.format("%.2f", cannon.getCannonDesign().getWarningTemperature()));
 		}
 
 		if (player != null)

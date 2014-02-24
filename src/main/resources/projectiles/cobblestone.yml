@@ -30,7 +30,7 @@ cannonball:
   #the delay in seconds between two fired cannonball in the automatic firing mode.
   automaticFiringDelay: 1
   #a cannon can fire several times with a single projectile - like a magazine in a automatic firearm
-  automaticFiringMagazineSize: 5
+  automaticFiringMagazineSize: 1
   #how many projectiles are fired with a single shoot
   numberOfBullets: 1
   #the higher this is, the more inaccurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from
@@ -52,11 +52,11 @@ explosion:
   #the explosion power is set to zero if the explosion is underwater (superbreaker will still do damage)
   doesUnderwaterExplosion: false
   #if the projectile hits the player additional damage is done. Damage is in half hearts and the player has 20 half hearts in vanilla minecraft.
-  directHitDamage: 10
+  directHitDamage: 20
   #if the player is next to an explosion he will receive additional damage
   playerDamageRange: 5
   #the damage which the player receives when he is near an explosion. Damage is in half hearts and the player has 20 half hearts in vanilla minecraft.
-  playerDamage: 5
+  playerDamage: 10
   #the range of the potion effects specified below
   potionRange: 5
   #how long the effects will last. If the potion duration is <= 0 it will be disabled

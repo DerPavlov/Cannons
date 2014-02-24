@@ -13,6 +13,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import at.pavlov.cannons.cannon.Cannon;
@@ -164,17 +165,11 @@ public class InventoryManagement
 		{
 			list = new ArrayList<Inventory>();
 		}
-		if (block.getType() == Material.CHEST)
-		{
-			Chest chest = (Chest) block.getState();
-			list.add(chest.getInventory());
-
-			Chest other = attached(block);
-			if (other != null)
-			{
-				list.add(other.getInventory());
-			}
-		}
+        if(block.getState() instanceof InventoryHolder)
+        {
+            InventoryHolder ih = (InventoryHolder)block.getState();
+            list.add(ih.getInventory());
+        }
 		return list;
 	}
 

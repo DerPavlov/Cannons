@@ -67,9 +67,13 @@ public class FireCannon {
 		{
 			return MessageEnum.ErrorNoProjectile;
 		}
+        //Firing in progress
+        if (cannon.isFiring())
+        {
+            return MessageEnum.ErrorFiringInProgress;
+        }
 		//Barrel too hot
-        plugin.logDebug("is firing: " + cannon.isFiring() + " last fired " + ((cannon.getLastFired() + design.getBarrelCooldownTime())*1000 <= System.currentTimeMillis()));
-		if (cannon.isFiring() || cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
+        if(cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
 		{
 			return MessageEnum.ErrorBarrelTooHot;
 		}	

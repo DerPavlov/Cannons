@@ -39,8 +39,8 @@ timings:
   blastConfusion: 5
   #the delay in seconds between when someone fires a cannon and when the actual projectiles fired from the cannon
   fuseBurnTime: 1
-  #the time in seconds before the cannon can be fired again
-  barrelCooldownTime: 2
+  #the time in seconds before the cannon can be fired again. Outdated due to heat management
+  barrelCooldownTime: 0
 
 
 angles:

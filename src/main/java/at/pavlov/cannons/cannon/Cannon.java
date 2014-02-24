@@ -783,8 +783,8 @@ public class Cannon
 
         if (tempCannon > tempCritical)
         {
-            //no exploding chance for temperature < warning, 95% chance for > maximum
-            explodingProbability = 1-Math.exp(-3*(tempCannon-tempCritical)/(tempMax-tempCritical));
+            //no exploding chance for temperature < critical, 100% chance for > maximum
+            explodingProbability = Math.pow((tempCannon-tempCritical)/(tempMax-tempCritical),3);
             //play some effects for a hot barrel
             this.playBarrelSmokeEffect((int)(explodingProbability*20.0));
         }
@@ -1286,7 +1286,8 @@ public class Cannon
      */
     public double getTemperature() {
         //barrel temperature - minus ambient temperature + exponential decay
-        double ambient = this.design.getMuzzle(this).getBlock().getTemperature();
+        double ambient = this.design.getMuzzle(this).getBlock().getTemperature()*50;
+        System.out.println("ambient: " + this.design.getMuzzle(this).getBlock().getTemperature());
         double timePassed = (System.currentTimeMillis() - this.tempTimestamp)/1000.0;
         double decay = Math.exp(-timePassed/design.getCoolingCoefficient());
         tempValue = ambient + (tempValue - ambient)*decay;

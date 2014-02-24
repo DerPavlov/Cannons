@@ -35,6 +35,8 @@ public class Config
 	private MaterialHolder toolFiring = new MaterialHolder(259, 0);
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
     private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
+    private List<MaterialHolder> toolCooling = new ArrayList<MaterialHolder>();
+    private List<MaterialHolder> toolCoolingUsed = new ArrayList<MaterialHolder>();
 
     //superbreakerBlocks
     private List<MaterialHolder> superbreakerBlocks = new ArrayList<MaterialHolder>();
@@ -78,6 +80,8 @@ public class Config
 		setToolAutoaim(new MaterialHolder(plugin.getConfig().getString("tools.autoaim", "347:0")));
 		setToolFiring(new MaterialHolder(plugin.getConfig().getString("tools.firing", "259:0")));
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
+        setToolCooling(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("tools.coolingItems")));
+        setToolCoolingUsed(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("tools.coolingItemsUsed")));
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -249,5 +253,21 @@ public class Config
 
     public void setToolThermometer(MaterialHolder toolThermometer) {
         this.toolThermometer = toolThermometer;
+    }
+
+    public List<MaterialHolder> getToolCooling() {
+        return toolCooling;
+    }
+
+    public void setToolCooling(List<MaterialHolder> toolCooling) {
+        this.toolCooling = toolCooling;
+    }
+
+    public List<MaterialHolder> getToolCoolingUsed() {
+        return toolCoolingUsed;
+    }
+
+    public void setToolCoolingUsed(List<MaterialHolder> toolCoolingUsed) {
+        this.toolCoolingUsed = toolCoolingUsed;
     }
 }

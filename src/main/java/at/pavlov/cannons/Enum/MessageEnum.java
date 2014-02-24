@@ -3,6 +3,7 @@ package at.pavlov.cannons.Enum;
 public enum MessageEnum
 {
 	//Error Messages
+    ErrorFiringInProgress ("Error.FiringInProgress"),
 	ErrorBarrelTooHot ("Error.BarrelTooHot"),
 	ErrorNoProjectile ("Error.NoProjectile"),
 	ErrorNoGunpowder ("Error.NoGunpowder"),
