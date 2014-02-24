@@ -1286,7 +1286,8 @@ public class Cannon
      */
     public double getTemperature() {
         //barrel temperature - minus ambient temperature + exponential decay
-        double ambient = (this.design.getMuzzle(this).getBlock().getTemperature()-0.2)*30;
+        double ambient = (Math.sqrt(this.design.getMuzzle(this).getBlock().getTemperature())-0.5)*60;
+        System.out.println("ambient: " + ambient);
         double timePassed = (System.currentTimeMillis() - this.tempTimestamp)/1000.0;
         double decay = Math.exp(-timePassed/design.getCoolingCoefficient());
         tempValue = ambient + (tempValue - ambient)*decay;
