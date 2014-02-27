@@ -8,8 +8,8 @@ import at.pavlov.cannons.cannon.Cannon;
 
 public class CannonAfterCreateEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
-	private Cannon cannon;
-	private Player player;
+	private final Cannon cannon;
+	private final Player player;
 	
 	public CannonAfterCreateEvent(Cannon cannon, Player player) {
 		

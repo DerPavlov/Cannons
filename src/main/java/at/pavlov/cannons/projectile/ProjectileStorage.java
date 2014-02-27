@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,13 +14,11 @@ import org.bukkit.potion.PotionEffectType;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.container.MaterialHolder;
-import at.pavlov.cannons.projectile.Projectile;
-import at.pavlov.cannons.projectile.ProjectileProperties;
 import at.pavlov.cannons.utils.CannonsUtil;
 
 public class ProjectileStorage
 {
-	Cannons plugin;
+	private final Cannons plugin;
 
 
     private static List<Projectile> projectileList = new ArrayList<Projectile>();
@@ -67,7 +64,7 @@ public class ProjectileStorage
 		plugin.logInfo("Loading projectile configs");
 		
 		//clear old list
-		this.projectileList.clear();
+		projectileList.clear();
 		
 		//load defaults if there no projectile folder
 		// check if design folder is empty or does not exist
@@ -112,6 +109,11 @@ public class ProjectileStorage
 			File folder = new File(getPath());
 
 			File[] listOfFiles = folder.listFiles();
+            if (listOfFiles == null)
+            {
+                plugin.logSevere("Projectile folder empty");
+                return projectileList;
+            }
 
 			for (int i = 0; i < listOfFiles.length; i++)
 			{
@@ -145,8 +147,8 @@ public class ProjectileStorage
 		Projectile projectile = new Projectile(id);
 		// load .yml file
 
-		File projectileFile = new File(getPath() + ymlFile);;
-		FileConfiguration projectileConfig = YamlConfiguration.loadConfiguration(projectileFile);
+		File projectileFile = new File(getPath() + ymlFile);
+        FileConfiguration projectileConfig = YamlConfiguration.loadConfiguration(projectileFile);
 		
 		//load it from the disk
 		
@@ -232,9 +234,10 @@ public class ProjectileStorage
     private void copyFile(String filename)
     {
         File YmlFile = new File(plugin.getDataFolder(), "projectiles/" + filename + ".yml");
+
+        YmlFile.getParentFile().mkdirs();
         if (!YmlFile.exists())
         {
-            YmlFile.getParentFile().mkdirs();
             CannonsUtil.copyFile(plugin.getResource("projectiles/" + filename + ".yml"), YmlFile);
         }
     }
@@ -244,7 +247,7 @@ public class ProjectileStorage
 	 * returns the path of the projectiles folder
 	 * @return
 	 */
-	private String getPath()
+	final String getPath()
 	{
 		// Directory path here
 		return "plugins/Cannons/projectiles/";
@@ -337,7 +340,7 @@ public class ProjectileStorage
      * @param str - name of the effect
      * @return fittiong firework effect
      */
-    public FireworkEffect.Type getFireworksType(String str)
+    FireworkEffect.Type getFireworksType(String str)
     {
         try
         {
@@ -355,7 +358,7 @@ public class ProjectileStorage
      * @param str - name of the effect
      * @return fittiong firework effect
      */
-    public EntityType getProjectileEntity(String str)
+    EntityType getProjectileEntity(String str)
     {
         try
         {

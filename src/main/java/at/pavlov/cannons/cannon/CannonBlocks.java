@@ -7,7 +7,7 @@ import org.bukkit.util.Vector;
 import at.pavlov.cannons.container.SimpleBlock;
 
 
-public class CannonBlocks
+class CannonBlocks
 {
 	private Vector rotationCenter;														//center off all rotation blocks
     private Vector muzzle;																//center off all muzzle blocks - spawing Vector for snowball

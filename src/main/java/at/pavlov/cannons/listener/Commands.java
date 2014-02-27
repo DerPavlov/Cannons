@@ -16,10 +16,10 @@ import at.pavlov.cannons.dao.PersistenceDatabase;
 
 public class Commands implements CommandExecutor
 {
-	Cannons plugin;
-	Config config;
-	UserMessages userMessages;
-	PersistenceDatabase persistenceDatabase;
+	private final Cannons plugin;
+	private final Config config;
+	private final UserMessages userMessages;
+	private final PersistenceDatabase persistenceDatabase;
 	
 	public Commands(Cannons plugin)
 	{

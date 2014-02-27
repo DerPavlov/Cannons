@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 
 public class CannonDestroyedEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
-	private Cannon cannon;
+	private final Cannon cannon;
 
 	public CannonDestroyedEvent(Cannon cannon) {
 

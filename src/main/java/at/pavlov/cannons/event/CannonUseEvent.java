@@ -9,9 +9,9 @@ import org.bukkit.event.HandlerList;
 public class CannonUseEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
-    private Cannon cannon;
-    private Player player;
-    private InteractAction action;
+    private final Cannon cannon;
+    private final Player player;
+    private final InteractAction action;
     private boolean cancelled;
 
     public CannonUseEvent(Cannon cannon, Player player, InteractAction action)

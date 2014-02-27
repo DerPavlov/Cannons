@@ -30,9 +30,9 @@ import at.pavlov.cannons.projectile.ProjectileProperties;
 
 public class CreateExplosion {
 	
-	private Cannons plugin;
+	private final Cannons plugin;
 
-    LinkedList<UUID> transmittedEntities = new LinkedList<UUID>();
+    private LinkedList<UUID> transmittedEntities = new LinkedList<UUID>();
 	
 	//################### Constructor ############################################
 	public CreateExplosion (Cannons plugin, Config config)
@@ -130,7 +130,6 @@ public class CreateExplosion {
     	{
     		BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
 
-            Random r = new Random();
     		int i=0;
     		while (iter.hasNext() && i <= penetration + 1)
     		{
@@ -140,7 +139,7 @@ public class CreateExplosion {
     			if (i <= penetration)
     			{
     				// if block can be destroyed the the iterator will check the next block. Else the projectile will explode
-    				if (breakBlock(next, blocklist, superbreaker, doesBlockDamage) == false)
+    				if (!breakBlock(next, blocklist, superbreaker, doesBlockDamage))
     				{
     					//found undestroyable block - set impactloc
     					impactLoc = next.getLocation();
@@ -340,7 +339,7 @@ public class CreateExplosion {
     {
     	Projectile projectile = cannonball.getProjectile();
     	
-    	if (projectile.doesBlockPlace() == true)
+    	if (projectile.doesBlockPlace())
     	{
     		Random r = new Random();
     		Location loc;
@@ -581,10 +580,10 @@ public class CreateExplosion {
     	//teleport snowball to impact
         projectile_entity.teleport(impactLoc);
     	
-    	float explosion_power = (float) projectile.getExplosionPower();
+    	float explosion_power = projectile.getExplosionPower();
 
         //reset explosion power if it is underwater and not allowed
-        if (projectile.isUnderwaterDamage() == false && isUnderwater)
+        if (!projectile.isUnderwaterDamage() && isUnderwater)
         {
             plugin.logDebug("Underwater explosion power set to zero");
             explosion_power = 0;
@@ -614,7 +613,7 @@ public class CreateExplosion {
         if (projectile.isImpactMessage())
             plugin.displayImpactMessage(player, impactLoc, notCanceled);
 
-		if (notCanceled == true)
+		if (notCanceled)
         {
             //place blocks around the impact like webs, lava, water
             spreadBlocks(impactLoc, cannonball);
@@ -789,11 +788,11 @@ public class CreateExplosion {
 			if (entity instanceof LivingEntity)
 			{
 				// killed by the explosion
-				if (entity.isDead() == true)
+				if (entity.isDead())
 				{	
 					LivingEntity LivEntity = (LivingEntity) entity;
 					//check if the entity has not been transmitted
-					if(hasBeenTransmitted(LivEntity.getUniqueId()) == false)
+					if(!hasBeenTransmitted(LivEntity.getUniqueId()))
 					{
 						//calculate distance form the shooter location to the first monster
 						distance = shooter.getLocation().distance(LivEntity.getLocation());	

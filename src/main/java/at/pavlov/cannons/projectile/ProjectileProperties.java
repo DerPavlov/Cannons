@@ -8,14 +8,14 @@ public enum ProjectileProperties
 	TELEPORT("TELEPORT"),
     OBSERVER("OBSERVER");
 
-	String string;
+	private final String string;
 
 	ProjectileProperties(String str)
 	{
 		this.string = str;
 	}
 
-	public String getString()
+	String getString()
 	{
 		return string;
 	}

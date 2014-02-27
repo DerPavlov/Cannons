@@ -66,7 +66,7 @@ public class FireCannon {
 	 * @param player
 	 * @return
 	 */
-	public MessageEnum getPrepareFireMessage(Cannon cannon, Player player)
+    MessageEnum getPrepareFireMessage(Cannon cannon, Player player)
 	{
 		CannonDesign design = cannon.getCannonDesign();
 		if (design == null) return null;
@@ -264,7 +264,7 @@ public class FireCannon {
             //confuse all entity which wear no helmets due to the blast of the cannon
             List<Entity> living = projectileEntity.getNearbyEntities(8, 8, 8);
             //do only once
-            if (projectileEntity != null && i==0)
+            if (i == 0)
             {
                 confuseShooter(living, firingLoc, design.getBlastConfusion());
             }
@@ -282,7 +282,7 @@ public class FireCannon {
         }
 
 
-        if (removeCharge == true)
+        if (removeCharge)
         {
             //finished firing
             cannon.setFiring(false);
@@ -330,7 +330,7 @@ public class FireCannon {
     				//damage entity
     				harmEntity = true;
     			}
-    			if (harmEntity == true)
+    			if (harmEntity)
     			{
     				//damage living entities and unprotected players
     				LivingEntity livingEntity = (LivingEntity) next;
@@ -350,10 +350,6 @@ public class FireCannon {
 	private boolean CheckHelmet(Player player)
 	{
 		ItemStack helmet = player.getInventory().getHelmet();
-		if (helmet != null)
-		{
-			return true;
-		}
-		return false;
-	}
+        return helmet != null;
+    }
 }

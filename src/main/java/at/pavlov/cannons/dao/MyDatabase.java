@@ -31,7 +31,7 @@ import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
  */
 
 public abstract class MyDatabase {
-    private JavaPlugin javaPlugin;
+    private final JavaPlugin javaPlugin;
     private ClassLoader classLoader;
     private Level loggerLevel;
     private boolean usingSQLite;
@@ -187,7 +187,7 @@ public abstract class MyDatabase {
         }
     }
 
-    public void installDatabase(boolean rebuild) {
+    void installDatabase(boolean rebuild) {
          //Check if the database already (partially) exists
         boolean databaseExists = false;
 
@@ -387,12 +387,12 @@ public abstract class MyDatabase {
     /**
      * Method called before the loaded database is being dropped
      */
-    protected void beforeDropDatabase() {}
+    void beforeDropDatabase() {}
 
     /**
      * Method called after the loaded database has been created
      */
-    protected void afterCreateDatabase() {}
+    void afterCreateDatabase() {}
 
     /**
      * Method called near the end of prepareDatabase, before the dataSourceConfig is attached to the serverConfig.
@@ -400,7 +400,7 @@ public abstract class MyDatabase {
      * @param dataSourceConfig
      * @param serverConfig
      */
-    protected void prepareDatabaseAdditionalConfig(DataSourceConfig dataSourceConfig, ServerConfig serverConfig) {}
+    void prepareDatabaseAdditionalConfig(DataSourceConfig dataSourceConfig, ServerConfig serverConfig) {}
 
     /**
      * Get the instance of the EbeanServer

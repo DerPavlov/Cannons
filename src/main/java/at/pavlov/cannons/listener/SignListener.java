@@ -21,8 +21,8 @@ public class SignListener implements Listener
 	private Config config;
 	@SuppressWarnings("unused")
 	private UserMessages userMessages;
-	private Cannons plugin;
-	private CannonManager cannonManager;
+	private final Cannons plugin;
+	private final CannonManager cannonManager;
 
 	
 	public SignListener(Cannons plugin)

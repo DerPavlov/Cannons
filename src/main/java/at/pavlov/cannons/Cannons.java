@@ -10,9 +10,10 @@ import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.config.*;
+import at.pavlov.cannons.listener.*;
 import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
-import at.pavlov.cannons.scheduler.CalcAngle;
+import at.pavlov.cannons.scheduler.Aiming;
 import at.pavlov.cannons.scheduler.Teleporter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,29 +34,25 @@ import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.dao.CannonBean;
 import at.pavlov.cannons.dao.MyDatabase;
 import at.pavlov.cannons.dao.PersistenceDatabase;
-import at.pavlov.cannons.listener.Commands;
-import at.pavlov.cannons.listener.EntityListener;
-import at.pavlov.cannons.listener.PlayerListener;
-import at.pavlov.cannons.listener.SignListener;
 import at.pavlov.cannons.mcstats.Metrics;
 import at.pavlov.cannons.projectile.Projectile;
 
 public class Cannons extends JavaPlugin
 {
-	PluginManager pm;
+	private PluginManager pm;
 	private final Logger logger = Logger.getLogger("Minecraft");
-	private ConsoleCommandSender console;
 
-	private Config config;
+    private Config config;
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
-	private CalcAngle calcAngle;
+	private Aiming aiming;
     private Teleporter teleporter;
 	private Commands commands;
 
     private CannonsAPI cannonsAPI;
 	
 	//Listener
+    private BlockListener blockListener;
 	private PlayerListener playerListener;
 	private EntityListener entityListener;
 	private SignListener signListener;
@@ -87,7 +84,7 @@ public class Cannons extends JavaPlugin
 	{
 		//load some global variables
 		pm = getServer().getPluginManager();
-		console = Bukkit.getServer().getConsoleSender();
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 		
 		//inform the user if worldedit it missing
 		if (!checkWorldEdit())
@@ -105,12 +102,13 @@ public class Cannons extends JavaPlugin
 
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, explosion);
-		this.calcAngle = new CalcAngle(this);
+		this.aiming = new Aiming(this);
         this.teleporter = new Teleporter(this);
         this.cannonsAPI = new CannonsAPI(this);
 		
 		this.persistenceDatabase = new PersistenceDatabase(this);
 
+        this.blockListener = new BlockListener(this);
 		this.playerListener = new PlayerListener(this);
 		this.entityListener = new EntityListener(this);
 		this.signListener = new SignListener(this);	
@@ -118,7 +116,7 @@ public class Cannons extends JavaPlugin
 		
 		try
 		{
-			
+			pm.registerEvents(blockListener, this);
 			pm.registerEvents(playerListener, this);
 			pm.registerEvents(entityListener, this);
 			pm.registerEvents(signListener, this);
@@ -135,7 +133,7 @@ public class Cannons extends JavaPlugin
 			persistenceDatabase.loadCannons();
 
 			// setting up Aiming Mode Task
-			calcAngle.initAimingMode();
+			aiming.initAimingMode();
             // setting up the Teleporter
             teleporter.setupScheduler();
 
@@ -198,8 +196,8 @@ public class Cannons extends JavaPlugin
 				list.add(CannonBean.class);
 
 				return list;
-			};
-		};
+			}
+        };
 		//.Formatter:off
 		database.initializeDatabase(config.getString("database.driver", "org.sqlite.JDBC"),
 				config.getString("database.url", "jdbc:sqlite:{DIR}{NAME}.db"), 
@@ -277,12 +275,8 @@ public class Cannons extends JavaPlugin
 	{
 		Plugin plug = pm.getPlugin("WorldEdit");
 		// CreeperHeal may not be loaded
-		if (plug == null)
-		{
-			return false;
-		}
-		return true;
-	}
+        return plug != null;
+    }
 
 	public PersistenceDatabase getPersistenceDatabase()
 	{
@@ -306,9 +300,9 @@ public class Cannons extends JavaPlugin
 		return explosion;
 	}
 
-	public CalcAngle getCalcAngle()
+	public Aiming getAiming()
 	{
-		return calcAngle;
+		return aiming;
 	}
 
 	public PlayerListener getPlayerListener()
@@ -390,5 +384,13 @@ public class Cannons extends JavaPlugin
 
     public CannonsAPI getCannonsAPI() {
         return cannonsAPI;
+    }
+
+    public BlockListener getBlockListener() {
+        return blockListener;
+    }
+
+    public void setBlockListener(BlockListener blockListener) {
+        this.blockListener = blockListener;
     }
 }

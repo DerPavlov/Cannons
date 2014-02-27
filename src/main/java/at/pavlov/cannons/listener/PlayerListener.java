@@ -1,8 +1,5 @@
 package at.pavlov.cannons.listener;
 
-import java.util.Iterator;
-
-import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.event.CannonRedstoneEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
@@ -13,18 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import at.pavlov.cannons.scheduler.CalcAngle;
+import at.pavlov.cannons.scheduler.Aiming;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.FireCannon;
@@ -35,16 +27,17 @@ import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener
 {
-	private Config config;
-	private UserMessages userMessages;
-	private Cannons plugin;
-	private CannonManager cannonManager;
-	private FireCannon fireCannon;
-	private CalcAngle calcAngle;
+	private final Config config;
+	private final UserMessages userMessages;
+	private final Cannons plugin;
+	private final CannonManager cannonManager;
+	private final FireCannon fireCannon;
+	private final Aiming aiming;
 
 	public PlayerListener(Cannons plugin)
 	{
@@ -53,104 +46,40 @@ public class PlayerListener implements Listener
 		this.userMessages = this.plugin.getMyConfig().getUserMessages();
 		this.cannonManager = this.plugin.getCannonManager();
 		this.fireCannon = this.plugin.getFireCannon();
-		this.calcAngle = this.plugin.getCalcAngle();
+		this.aiming = this.plugin.getAiming();
 	}
 
-	// ########### PlayerMove #######################################
+    /**
+     * the distance of the player to the cannon is measured for the auto aiming event.
+     * Stops auto aiming mode if the player too far away
+     * @param event - PlayerMoveEvent
+     */
 	@EventHandler
 	public void PlayerMove(PlayerMoveEvent event)
 	{
 		// only active if the player is in aiming mode
-		if (calcAngle.distanceCheck(event.getPlayer(), calcAngle.getCannonInAimingMode(event.getPlayer())) == false)
+		if (!aiming.distanceCheck(event.getPlayer(), aiming.getCannonInAimingMode(event.getPlayer())))
         {
             userMessages.displayMessage(event.getPlayer(), MessageEnum.AimingModeTooFarAway);
-            MessageEnum message = calcAngle.disableAimingMode(event.getPlayer());
+            MessageEnum message = aiming.disableAimingMode(event.getPlayer());
             userMessages.displayMessage(event.getPlayer(), message);
         }
 
 
 	}
-
-	// ########### BlockFromTo #######################################
-	@EventHandler
-	public void BlockFromTo(BlockFromToEvent event)
-	{
-		Block block = event.getToBlock();
-		if (block.getType() == Material.STONE_BUTTON || block.getType() == Material.TORCH)
-		{
-			if (cannonManager.getCannon(block.getLocation(), null) != null)
-			{
-				event.setCancelled(true);
-			}
-		}
-	}
-
-	
-
-	// ########### BlockPistonRetract #######################################
-	@EventHandler
-	public void BlockPistonRetract(BlockPistonRetractEvent event)
-	{
-		// when piston is sticky and has a cannon block attached delete the
-		// cannon
-		if (event.isSticky() == true)
-		{
-			Location loc = event.getBlock().getRelative(event.getDirection(), 2).getLocation();
-			Cannon cannon = cannonManager.getCannon(loc, null);
-			if (cannon != null)
-			{
-				event.setCancelled(true);
-			}
-		}
-	}
-
-	// ########### BlockPistonExtend #######################################
-	@EventHandler
-	public void BlockPistonExtend(BlockPistonExtendEvent event)
-	{
-		// when the moved block is a cannonblock
-		Iterator<Block> iter = event.getBlocks().iterator();
-		while (iter.hasNext())
-		{
-			// if moved block is cannonBlock delete cannon
-			Cannon cannon = cannonManager.getCannon(iter.next().getLocation(), null);
-			if (cannon != null)
-			{
-				event.setCancelled(true);
-			}
-		}
-	}
-
-	// ########### BlockBurn #######################################
-	@EventHandler
-	public void BlockBurn(BlockBurnEvent event)
-	{
-		// the cannon will not burn down
-		if (cannonManager.getCannon(event.getBlock().getLocation(), null) != null)
-		{
-			event.setCancelled(true);
-		}
-	}
-
-	/**
-	 * if one block of the cannon is destroyed, it is removed from the list of cannons
-	 * @param event
-	 */
-	@EventHandler
-	public void BlockBreak(BlockBreakEvent event)
-	{
-		// if deleted block is cannonBlock delete cannon
-		Cannon cannon = cannonManager.getCannon(event.getBlock().getLocation(), null);
-		if (cannon != null)
-		{
-			cannonManager.removeCannon(cannon, false, BreakCause.PlayerBreak);
-		}
-	}
+    /*
+    * remove Player from auto aiming list
+    * @param event - PlayerQuitEvent
+    */
+    @EventHandler
+    public void LogoutEvent(PlayerQuitEvent event)
+    {
+        aiming.disableAimingMode(event.getPlayer());
+    }
 
 	/**
 	 * cancels the event if the player click a cannon with water
-	 * 
-	 * @param event
+	 * @param event - PlayerBucketEmptyEvent
 	 */
 	@EventHandler
 	public void PlayerBucketEmpty(PlayerBucketEmptyEvent event)
@@ -225,7 +154,7 @@ public class PlayerListener implements Listener
 			if (cannon != null)
 			{
 				// check permissions
-				if (event.getPlayer().hasPermission(cannon.getCannonDesign().getPermissionRedstone()) == false)
+				if (!event.getPlayer().hasPermission(cannon.getCannonDesign().getPermissionRedstone()))
 				{
 					//check if the placed block is in the redstone torch interface
 					if (cannon.isRedstoneTorchInterface(event.getBlock().getLocation()))
@@ -248,7 +177,7 @@ public class PlayerListener implements Listener
 				if (cannon != null)
 				{
 					// check permissions
-					if (event.getPlayer().hasPermission(cannon.getCannonDesign().getPermissionRedstone()) == false)
+					if (!event.getPlayer().hasPermission(cannon.getCannonDesign().getPermissionRedstone()))
 					{	
 						//check if the placed block is in the redstone wire interface
 						if (cannon.isRedstoneWireInterface(event.getBlock().getLocation()))
@@ -435,7 +364,7 @@ public class PlayerListener implements Listener
 				// all other actions will stop aiming mode
 				if (event.getAction() == Action.RIGHT_CLICK_AIR)
                 {
-                    calcAngle.ToggleAimingMode(event.getPlayer(), null);
+                    aiming.ToggleAimingMode(event.getPlayer(), null);
                 }
 				return;
 			}
@@ -488,7 +417,7 @@ public class PlayerListener implements Listener
                 if (useEvent.isCancelled())
                     return;
 
-				MessageEnum message = calcAngle.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
+				MessageEnum message = aiming.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
 
 				userMessages.displayMessage(player, cannon, message);
 				

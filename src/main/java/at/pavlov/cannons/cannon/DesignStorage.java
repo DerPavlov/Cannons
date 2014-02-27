@@ -30,9 +30,9 @@ import at.pavlov.cannons.utils.DesignComparator;
 public class DesignStorage
 {
 	
-	private List<CannonDesign> cannonDesignList;
+	private final List<CannonDesign> cannonDesignList;
 
-	Cannons plugin;
+	private final Cannons plugin;
 
 	public DesignStorage(Cannons cannons)
 	{
@@ -71,7 +71,7 @@ public class DesignStorage
 			//load .yml
 			loadDesignYml(cannonDesign, designFile.getYmlString());
 			//load .shematic and add to list if valid
-			if (loadDesignSchematic(cannonDesign, designFile.getSchematicString()) == true) 
+			if (loadDesignSchematic(cannonDesign, designFile.getSchematicString()))
 				cannonDesignList.add(cannonDesign);
 		}
 		
@@ -103,6 +103,12 @@ public class DesignStorage
 			File folder = new File(getPath());
 
 			File[] listOfFiles = folder.listFiles();
+            if (listOfFiles == null)
+            {
+                plugin.logSevere("Design folder empty");
+                return designList;
+            }
+
 
 			for (int i = 0; i < listOfFiles.length; i++)
 			{
@@ -332,7 +338,7 @@ public class DesignStorage
 							if (block.equalsFuzzy(blockMuzzle))
 							{
 								// reset for the first entry
-								if (firstEntryMuzzle == true)
+								if (firstEntryMuzzle)
 								{
 									firstEntryMuzzle = false;
 									minMuzzle = new Vector(x, y, z);
@@ -352,7 +358,7 @@ public class DesignStorage
 							else if (block.equalsFuzzy(blockRotationCenter))
 							{
 								// reset for the first entry
-								if (firstEntryRotation == true)
+								if (firstEntryRotation)
 								{
 									firstEntryRotation = false;
 									minRotation = new Vector(x, y, z);
@@ -505,14 +511,14 @@ public class DesignStorage
     {
         File YmlFile = new File(plugin.getDataFolder(), "designs/" + fileName + ".yml");
         File SchematicFile = new File(plugin.getDataFolder(), "designs/" + fileName + ".schematic");
+
+        SchematicFile.getParentFile().mkdirs();
         if (!YmlFile.exists())
         {
-            YmlFile.getParentFile().mkdirs();
             CannonsUtil.copyFile(plugin.getResource("designs/" + fileName + ".yml"), YmlFile);
         }
         if (!SchematicFile.exists())
         {
-            SchematicFile.getParentFile().mkdirs();
             CannonsUtil.copyFile(plugin.getResource("designs/" + fileName + ".schematic"), SchematicFile);
         }
     }
@@ -529,7 +535,7 @@ public class DesignStorage
 		return false;
 	}
 	
-	private String getPath()
+	private final String getPath()
 	{
 		// Directory path here
 		return "plugins/Cannons/designs/";

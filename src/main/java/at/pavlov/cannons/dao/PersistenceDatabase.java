@@ -3,7 +3,6 @@ package at.pavlov.cannons.dao;
 import java.util.List;
 
 import at.pavlov.cannons.utils.DelayedTask;
-import at.pavlov.cannons.utils.FireTaskWrapper;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
 
@@ -150,7 +149,7 @@ public class PersistenceDatabase
 	 * 
 	 * @param cannon
 	 */
-	public boolean saveCannon(Cannon cannon)
+    boolean saveCannon(Cannon cannon)
 	{
 		try
 		{
@@ -285,7 +284,7 @@ public class PersistenceDatabase
 	 * 
 	 * @param cannon
 	 */
-	public void deleteCannon(Cannon cannon)
+    void deleteCannon(Cannon cannon)
 	{
 		// if the database id is null nothing, it is not saved in the database
 		if (cannon.getDatabaseId() >= 0)

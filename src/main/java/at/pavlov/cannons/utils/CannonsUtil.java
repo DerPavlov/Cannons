@@ -163,8 +163,7 @@ public class CannonsUtil
 	 */
 	public static ItemStack newItemStack(int id, int data, int amount)
 	{
-		ItemStack item = new ItemStack(id, amount, (short) data);
-		return item;
+		return new ItemStack(id, amount, (short) data);
 	}
 	
 	/**
@@ -334,7 +333,7 @@ public class CannonsUtil
             lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
@@ -343,7 +342,7 @@ public class CannonsUtil
             lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
@@ -352,7 +351,7 @@ public class CannonsUtil
             lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
@@ -404,7 +403,7 @@ public class CannonsUtil
             lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
@@ -413,7 +412,7 @@ public class CannonsUtil
             lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
@@ -422,7 +421,7 @@ public class CannonsUtil
             lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
@@ -470,7 +469,6 @@ public class CannonsUtil
 
     /**
      * returns a random block face
-     * @param avoidFace - this face and its opposite should not be used
      * @return - random BlockFace
      */
     public static BlockFace randomBlockFace()

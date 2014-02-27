@@ -1,9 +1,6 @@
 package at.pavlov.cannons.projectile;
 
 import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.projectile.FlyingProjectile;
-import at.pavlov.cannons.projectile.Projectile;
-import at.pavlov.cannons.projectile.ProjectileProperties;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -16,12 +13,12 @@ import java.util.List;
 public class ProjectileManager
 {
 
-    Cannons plugin;
-    private LinkedList<FlyingProjectile> flying_projectiles = new LinkedList<FlyingProjectile>();
+    private final Cannons plugin;
+    private final LinkedList<FlyingProjectile> flying_projectiles = new LinkedList<FlyingProjectile>();
 
     /**
      * ProjectileManager
-     * @param plugin
+     * @param plugin - Cannons instance
      */
     public ProjectileManager(Cannons plugin)
     {
@@ -37,7 +34,7 @@ public class ProjectileManager
         spawnLoc.setPitch((float) (Math.acos(velocity.getY()/v)*180.0/Math.PI - 90));
         spawnLoc.setYaw((float) (Math.atan2(velocity.getZ(),velocity.getX())*180.0/Math.PI - 90));
 
-        Entity pEntity = world.spawnEntity(spawnLoc, projectile.getProjectileEntity());;
+        Entity pEntity = world.spawnEntity(spawnLoc, projectile.getProjectileEntity());
         org.bukkit.entity.Projectile projectileEntity;
         try
         {
@@ -76,7 +73,7 @@ public class ProjectileManager
 
     /**
      * detonate a timefused projectile mid air
-     * @param cannonball
+     * @param cannonball - the cannonball to detonate
      */
     private void detonateTimefuse(FlyingProjectile cannonball)
     {
@@ -115,7 +112,7 @@ public class ProjectileManager
 
     /**
      * detonates the given projectile entity
-     * @param entity
+     * @param entity - the projectile with this entity
      */
     public void detonateProjectile(Entity entity)
     {
@@ -141,7 +138,7 @@ public class ProjectileManager
 
     /**
      * returns the list of all flying projectiles
-     * @return
+     * @return - the list of all flying projectiles
      */
     public List<FlyingProjectile> getFlyingProjectiles()
     {

@@ -7,6 +7,6 @@ public enum InteractAction
     fireAutoaim,
     fireButton,
     fireTorch,
-    adjust;
+    adjust
 
 }

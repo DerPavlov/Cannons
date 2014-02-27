@@ -48,7 +48,7 @@ public class SimpleBlock
 		this.data = data;
 	}
 	
-	public SimpleBlock(Vector vect, int id, int data)
+	private SimpleBlock(Vector vect, int id, int data)
 	{
 		locX = vect.getBlockX();
 		locY = vect.getBlockY();
@@ -148,7 +148,7 @@ public class SimpleBlock
 	 * @param block
 	 * @return
 	 */
-	public boolean compareBlock(Block block)
+    boolean compareBlock(Block block)
 	{
 		if (block.getTypeId() == id)
 		{
@@ -252,7 +252,7 @@ public class SimpleBlock
 		return new Vector(locX, locY, locZ);
 	}
 	
-	public int getLocX()
+	int getLocX()
 	{
 		return locX;
 	}
@@ -262,7 +262,7 @@ public class SimpleBlock
 		this.locX = locX;
 	}
 
-	public int getLocY()
+	int getLocY()
 	{
 		return locY;
 	}
@@ -272,7 +272,7 @@ public class SimpleBlock
 		this.locY = locY;
 	}
 
-	public int getLocZ()
+	int getLocZ()
 	{
 		return locZ;
 	}
@@ -282,7 +282,7 @@ public class SimpleBlock
 		this.locZ = locZ;
 	}
 
-	public int getID()
+	int getID()
 	{
 		return id;
 	}

@@ -66,7 +66,7 @@ public class Cannon
     private double tempValue;
     private long tempTimestamp;
 
-	CannonDesign design;
+	private CannonDesign design;
 
 	
 	// not saved in the database
@@ -177,7 +177,7 @@ public class Cannon
      * returns the inventories of all attached chests
      * @return - list of inventory
      */
-    public List<Inventory> getInventoryList()
+    List<Inventory> getInventoryList()
     {
         //get the inventories of all attached chests
         List<Inventory> invlist = new ArrayList<Inventory>();
@@ -194,7 +194,7 @@ public class Cannon
 	 * loads Gunpowder in a cannon
 	 * @param amountToLoad - number of items which are loaded into the cannon
 	 */
-	public MessageEnum loadGunpowder(int amountToLoad)
+    MessageEnum loadGunpowder(int amountToLoad)
 	{
 		// projectile already loaded
 		if (isLoaded())
@@ -316,7 +316,7 @@ public class Cannon
 				return MessageEnum.ErrorNotTheOwner;
 			}
 			// player can't load cannon
-			if (player.hasPermission(design.getPermissionLoad()) == false)
+			if (!player.hasPermission(design.getPermissionLoad()))
 			{
 				return MessageEnum.PermissionErrorLoad;
 			}
@@ -351,7 +351,7 @@ public class Cannon
 		if (player != null)
 		{
 			// no permission to load
-			if (player.hasPermission(design.getPermissionLoad()) == false)
+			if (!player.hasPermission(design.getPermissionLoad()))
 			{
 				return MessageEnum.PermissionErrorLoad;
 			}			
@@ -439,10 +439,9 @@ public class Cannon
     /**
      * breaks all cannon blocks of the cannon
      */
-    public void breakAllCannonBlocks()
+    void breakAllCannonBlocks()
     {
         List<Location> locList = design.getAllCannonBlocks(this);
-        Random r = new Random();
 
         Bukkit.getWorld(world).createExplosion(locList.get(0), 2);
         //Bukkit.getWorld(world).createExplosion(locList.get(r.nextInt(locList.size())),getLoadedGunpowder()/design.getMaxLoadableGunpowder()*4,true);
@@ -472,10 +471,8 @@ public class Cannon
 
 	/**
 	 * return true if this block can be destroyed, false if it is protected
-	 * the barrel the barrel
-	 * 
-	 * @param block
-	 * @return
+	 * @param block - location of the block
+	 * @return - true if the block can be destroyed
 	 */
 	public boolean isDestructibleBlock(Location block)
 	{
@@ -685,7 +682,7 @@ public class Cannon
 	 * 
 	 * @return
 	 */
-	public MessageEnum checkRedstonePermission(Player player)
+    MessageEnum checkRedstonePermission(Player player)
 	{
 		// the player is null means he is offline -> automatic handling like
 		// database check
@@ -808,7 +805,7 @@ public class Cannon
      * plays the given effect on random locations of the barrel
      * @param amount - number of effects
      */
-    public void playBarrelSmokeEffect(int amount)
+    void playBarrelSmokeEffect(int amount)
     {
         Random r = new Random();
         List<Location> barrelList = design.getLoadingInterface(this);
@@ -818,7 +815,6 @@ public class Cannon
         if (max < 0)
             return;
 
-        World world = barrelList.get(0).getWorld();
         for (int i=0; i<amount; i++)
         {
             //grab a random block
@@ -913,7 +909,7 @@ public class Cannon
 	 * 
 	 * @return
 	 */
-	public double getCannonballVelocity()
+    double getCannonballVelocity()
 	{
 		if (loadedProjectile == null || design == null) return 0.0;
 		return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowder()));
@@ -958,7 +954,7 @@ public class Cannon
 
 		Sign sign = (Sign) block.getState();
 
-		if (isValid == true)
+		if (isValid)
 		{
 			// Cannon name in the first line
 			sign.setLine(0, getSignString(0));
@@ -1031,7 +1027,7 @@ public class Cannon
 		{
 			lineStr = CannonSign.getLineOfThisSign(signLoc.getBlock(), line);
 			// if something is found return it
-			if (lineStr != null && lineStr != "")
+			if (lineStr != null && !lineStr.equals(""))
             {
                 return lineStr;
             }
@@ -1068,7 +1064,7 @@ public class Cannon
 	 */
 	public boolean equals(CannonDesign cannonDesign)
 	{
-		if (designID == cannonDesign.getDesignID()) return true;
+		if (designID.equals(cannonDesign.getDesignID())) return true;
 		return false;
 	}
 
@@ -1079,7 +1075,7 @@ public class Cannon
      */
     public boolean equals(Cannon cannon)
     {
-        return (cannon.getCannonName().equals(this.cannonName) && cannon.getOwner().equals(this.owner)) ? true : false;
+        return (cannon.getCannonName().equals(this.cannonName) && cannon.getOwner().equals(this.owner));
     }
 
 	/**

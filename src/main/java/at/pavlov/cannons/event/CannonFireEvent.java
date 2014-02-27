@@ -7,8 +7,8 @@ import org.bukkit.event.HandlerList;
 
 public class CannonFireEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-    private Cannon cannon;
-    private Player player;
+    private final Cannon cannon;
+    private final Player player;
     private boolean cancelled;
 
     public CannonFireEvent(Cannon cannon, Player player)

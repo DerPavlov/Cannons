@@ -2,9 +2,7 @@ package at.pavlov.cannons.projectile;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
 
 
 
@@ -13,12 +11,10 @@ public class FlyingProjectile
 	private long spawnTime;
 	
 	private org.bukkit.entity.Projectile projectile_entity;
-    private String shooter;
+    private final String shooter;
 	private Projectile projectile;
     //location of the shooter before firing - important for teleporting the player back - observer property
     private Location firingLocation;
-    //if the player has already fly mode on - important for teleport/observer property
-    private boolean hasFlyModeON;
 	
 	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, Player shooter)
 	{

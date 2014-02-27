@@ -85,8 +85,7 @@ public class Projectile implements Cloneable{
 	}
 
     @Override
-    public Projectile clone()
-    {
+    public Projectile clone(){
         try
         {
             // call clone in Object.
@@ -107,12 +106,8 @@ public class Projectile implements Cloneable{
 	 */
 	public boolean equalsFuzzy(int id, int data)
 	{
-		if (id == loadingItem.getId())
-		{
-			return (data == loadingItem.getData() || data == -1 || loadingItem.getData() == -1);
-		}
-		return false;
-	}
+        return id == loadingItem.getId() && (data == loadingItem.getData() || data == -1 || loadingItem.getData() == -1);
+    }
 	
 
 	/**
@@ -250,7 +245,7 @@ public class Projectile implements Cloneable{
 	}
 
 
-	public List<ProjectileProperties> getPropertyList()
+	List<ProjectileProperties> getPropertyList()
 	{
 		return propertyList;
 	}

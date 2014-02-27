@@ -24,11 +24,11 @@ import at.pavlov.cannons.event.CannonBeforeCreateEvent;
 
 public class CannonManager
 {
-	private ArrayList<Cannon> cannonList = new ArrayList<Cannon>();
+	private final ArrayList<Cannon> cannonList = new ArrayList<Cannon>();
 
-	private Cannons plugin;
-	private UserMessages userMessages;
-	private Config config;
+	private final Cannons plugin;
+	private final UserMessages userMessages;
+	private final Config config;
 
 	public CannonManager(Cannons cannons, UserMessages userMessages, Config config)
 	{
@@ -110,7 +110,7 @@ public class CannonManager
 	{
 		for (Cannon cannon : cannonList)
 		{
-			if (cannon.getCannonName() != null && name != null)
+			if (cannon.getCannonName() != null && name != null && cannon.getOwner() != null && cannon.getOwner().equals(owner))
 			{
 				if (cannon.getCannonName().equals(name))
 				{
@@ -142,7 +142,7 @@ public class CannonManager
 		{
 			String cannonName = name + " " + i;
 
-			if (isCannonNameUnique(cannonName, cannon.getOwner()) == true)
+			if (isCannonNameUnique(cannonName, cannon.getOwner()))
 			{
 				return cannonName;
 			}
@@ -165,7 +165,7 @@ public class CannonManager
 		}
 		
 		//if the cannonName is empty make a new one
-		if (cannon.getCannonName() ==  null || cannon.getCannonName() == "")
+		if (cannon.getCannonName() ==  null || cannon.getCannonName().equals(""))
 			cannon.setCannonName(newCannonName(cannon));
 		
 		
@@ -348,7 +348,7 @@ public class CannonManager
 	 * @param owner
 	 * @return
 	 */
-	public Cannon checkCannon(Location cannonBlock, String owner)
+    Cannon checkCannon(Location cannonBlock, String owner)
 	{
 		// get world
 		World world = cannonBlock.getWorld();
@@ -391,7 +391,7 @@ public class CannonManager
 						}
 
 						// this is a cannon
-						if (isCannon == true)
+						if (isCannon)
 						{
                            // cannon
 							return new Cannon(cannonDesign, world.getName(), offset, cannonDirection, owner);
@@ -465,7 +465,7 @@ public class CannonManager
 	 * @param player
 	 * @return
 	 */
-	public int getCannonBuiltLimit(Player player)
+    int getCannonBuiltLimit(Player player)
 	{
 		// the player is not valid - no limit check
 		if (player == null) return Integer.MAX_VALUE;

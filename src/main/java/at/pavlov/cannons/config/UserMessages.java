@@ -22,10 +22,10 @@ public class UserMessages {
 	private File customLanguageFile = null;
 	
 	
-	private HashMap<String, String> messageMap = new HashMap<String, String>();
+	private final HashMap<String, String> messageMap = new HashMap<String, String>();
 
 
-	private Cannons plugin;
+	private final Cannons plugin;
 	
 	public UserMessages(Cannons plugin){
 		this.plugin = plugin;
@@ -37,23 +37,23 @@ public class UserMessages {
 		
 		//copy german language
 		File localizationGerman = new File(plugin.getDataFolder(), "localization/localization_german.yml");
+
+        localizationGerman.getParentFile().mkdirs();
 		if (!localizationGerman.exists())
 		{
-			localizationGerman.getParentFile().mkdirs();
 			CannonsUtil.copyFile(plugin.getResource("localization/localization_german.yml"), localizationGerman);
 		}
 		//copy english language
 		File localizationEnglish = new File(plugin.getDataFolder(), "localization/localization_english.yml");
 		if (!localizationEnglish.exists())
 		{
-			localizationEnglish.getParentFile().mkdirs();
 			CannonsUtil.copyFile(plugin.getResource("localization/localization.yml"), localizationEnglish);
 		}
 	}
 		
 	/**
 	 * load the localization file from the disk
-	 * @param filename
+	 * @param filename - name of the file
 	 */
 	private void loadCustom(String filename)
 	{
@@ -66,7 +66,7 @@ public class UserMessages {
 		{
 			String key = keyEnum.getString();
 			String entry = getEntry(key);
-			if (entry != null && entry != "")
+			if (entry != null && !entry.equals(""))
 			{
 				messageMap.put(key, entry);
 			}
@@ -78,10 +78,10 @@ public class UserMessages {
 		}
 	}
 		
-	public String getEntry(String key)
+	String getEntry(String key)
 	{
 		String entry = customLanguage.getString(key);
-		String replace = null;
+		String replace;
 		
 		if (entry == null)
 		{
@@ -135,7 +135,7 @@ public class UserMessages {
 	}
 
 
-	private String getDataFolder() 
+	private final String getDataFolder()
 	{
 		return "plugins/Cannons/localization/";
 	}
@@ -211,8 +211,8 @@ public class UserMessages {
 
         Location playerLoc = player.getLocation();
 
-        String message = null;
-        MessageEnum messageEnum = null;
+        String message;
+        MessageEnum messageEnum;
 
         if (notCanceled)
         {
@@ -255,7 +255,7 @@ public class UserMessages {
 	 * @param player
 	 * @return
 	 */
-	public String getMessage(MessageEnum messageEnum, Cannon cannon, Player player)
+    String getMessage(MessageEnum messageEnum, Cannon cannon, Player player)
 	{
 		//no message
 		if (messageEnum == null) return null;

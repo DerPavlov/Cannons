@@ -9,9 +9,9 @@ import at.pavlov.cannons.cannon.Cannon;
 
 public class CannonBeforeCreateEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
-	private Cannon cannon;
+	private final Cannon cannon;
     private MessageEnum message;
-	private Player player;
+	private final Player player;
 	private boolean cancelled;
 	
 	public CannonBeforeCreateEvent(Cannon cannon, MessageEnum message, Player player) {

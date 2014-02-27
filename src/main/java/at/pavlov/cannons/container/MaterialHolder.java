@@ -99,9 +99,8 @@ public class MaterialHolder
      */
 	public boolean equals(Material material)
 	{
-		if (material == null) return false;
-		return material.getId() == id;
-	}
+        return material != null && material.getId() == id;
+    }
 	
 	/**
 	 * compares id and data, but skips data comparison if one is -1

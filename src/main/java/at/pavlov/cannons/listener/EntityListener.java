@@ -1,19 +1,10 @@
 package at.pavlov.cannons.listener;
 
-
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
-import at.pavlov.cannons.event.CannonFireEvent;
-import at.pavlov.cannons.event.ProjectileImpactEvent;
-import at.pavlov.cannons.event.ProjectilePiercingEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -21,11 +12,10 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.projectile.FlyingProjectile;
 
 public class EntityListener implements Listener
 {
-	Cannons plugin;
+	private final Cannons plugin;
 	
 	public EntityListener(Cannons plugin)
 	{

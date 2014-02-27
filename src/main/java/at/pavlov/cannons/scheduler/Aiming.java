@@ -1,10 +1,12 @@
 package at.pavlov.cannons.scheduler;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.InteractAction;
+import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.cannon.Cannon;
+import at.pavlov.cannons.cannon.CannonDesign;
+import at.pavlov.cannons.config.Config;
+import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,26 +14,23 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
-import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.cannon.CannonDesign;
-import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.Enum.MessageEnum;
-import at.pavlov.cannons.config.UserMessages;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class CalcAngle {
-	
-	Cannons plugin;
-	UserMessages userMessages;
-	Config config;
-	
-	HashMap<String, Cannon> inAimingMode = new HashMap<String, Cannon>();
-	
+public class Aiming {
+
+	private final Cannons plugin;
+	private final UserMessages userMessages;
+	private final Config config;
+
+	private HashMap<String, Cannon> inAimingMode = new HashMap<String, Cannon>();
+
 	private class gunAngles
 	{
 		private double horizontal;
 		private double vertical;
-		
+
 		public gunAngles(double horizontal, double vertical)
 		{
 			this.setHorizontal(horizontal);
@@ -54,10 +53,10 @@ public class CalcAngle {
 			this.vertical = vertical;
 		}
 	}
-	
-	
+
+
 	//##################### Constructor ##############################
-	public CalcAngle(Cannons plugin)
+	public Aiming(Cannons plugin)
 	{
 		this.plugin = plugin;
 		this.config = plugin.getMyConfig();
@@ -101,8 +100,7 @@ public class CalcAngle {
 	private MessageEnum DisplayAngle(Cannon cannon, BlockFace clickedFace, Player player)
 	{
 		CannonDesign design = cannon.getCannonDesign();
-		
-		gunAngles angles = new gunAngles(0.0, 0.0);
+
 		//both horizontal and vertical angle will be displayed in one message
 		boolean combine;
 		//angle changed
@@ -118,11 +116,13 @@ public class CalcAngle {
                 return MessageEnum.ErrorNotTheOwner;
             }
             //if the player has the permission to adjust this gun
-            if (player.hasPermission("cannons.player.adjust") == false)
+            if (!player.hasPermission("cannons.player.adjust"))
             {
                 return  MessageEnum.PermissionErrorAdjust;
             }
         }
+
+        gunAngles angles;
 
 		//barrel clicked to change angle
 		if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
@@ -250,12 +250,12 @@ public class CalcAngle {
      * @param isSneaking - is the player sneaking (will revert all options)
      * @return - angle to change
      */
-	public gunAngles CheckBlockFace(BlockFace clickedFace, BlockFace cannonDirection, boolean isSneaking)
+    private gunAngles CheckBlockFace(BlockFace clickedFace, BlockFace cannonDirection, boolean isSneaking)
 	{	
 		//check up or down
 		if (clickedFace.equals(BlockFace.DOWN)) 
 		{
-			if (isSneaking == true)
+			if (isSneaking)
 			{
 				return new gunAngles(0.0, 1.0);
 			}
@@ -266,7 +266,7 @@ public class CalcAngle {
 		}
 		if (clickedFace.equals(BlockFace.UP)) 
 		{
-			if (isSneaking == true)
+			if (isSneaking)
 			{
 				return new gunAngles(0.0, -1.0);
 			}
@@ -279,7 +279,7 @@ public class CalcAngle {
 		BlockFace rightFace = CannonsUtil.roatateFace(cannonDirection);
 		if (clickedFace.equals(rightFace.getOppositeFace())) 
 		{
-			if (isSneaking == true)
+			if (isSneaking)
 			{
 				return new gunAngles(1.0, 0.0);
 			}
@@ -291,7 +291,7 @@ public class CalcAngle {
 		//check right
 		if (clickedFace.equals(rightFace)) 
 		{
-			if (isSneaking == true)
+			if (isSneaking)
 			{
 				return new gunAngles(-1.0, 0.0);
 			}
@@ -303,7 +303,7 @@ public class CalcAngle {
 		//check front or back
 		if (clickedFace.equals(cannonDirection) || clickedFace.equals(cannonDirection.getOppositeFace()) ) 
 		{
-			if (isSneaking == true)
+			if (isSneaking)
 			{
 				return new gunAngles(0.0, -1.0);
 			}
@@ -343,16 +343,11 @@ public class CalcAngle {
         CannonDesign design = plugin.getCannonDesign(cannon);
 		//go to trigger location
 		Location locCannon = design.getFiringTrigger(cannon);
-		if (player.getLocation().distance(locCannon) > 4)
-		{
-			//cancel aiming mode if too far away
-			return false;
-        }
-        return true;
-	}
+        return player.getLocation().distance(locCannon) <= 4;
+    }
 	
 	//############## updateAimingMode   ################################
-	public void updateAimingMode()
+    void updateAimingMode()
 	{
 		//player in map change the angle to the angle the player is looking
     	for(Map.Entry<String, Cannon> entry : inAimingMode.entrySet()){
@@ -362,7 +357,7 @@ public class CalcAngle {
     		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()*50 )
     		{
     			// autoaming or fineadjusting
-    			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && player.isOnline() == true && cannon.isValid() == true)
+    			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && player.isOnline() && cannon.isValid())
         		{
             		MessageEnum message = DisplayAngle(cannon, null, player);
             		userMessages.displayMessage(player, cannon, message);
@@ -386,7 +381,7 @@ public class CalcAngle {
 	public void ToggleAimingMode(Player player, Cannon cannon)
 	{
         plugin.logDebug("toggle aiming mode 1");
-		if (inAimingMode.containsKey(player.getName()) == true)
+		if (inAimingMode.containsKey(player.getName()))
 		{
             plugin.logDebug("toggle aiming mode 2");
             if (cannon == null)
@@ -413,7 +408,7 @@ public class CalcAngle {
 			if (player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
 			{
                 //check distance before enabling the cannon
-                if (distanceCheck(player, cannon) == true)
+                if (distanceCheck(player, cannon))
                 {
                     userMessages.displayMessage(player, cannon, MessageEnum.AimingModeEnabled);
                     inAimingMode.put(player.getName(), cannon);
@@ -440,7 +435,7 @@ public class CalcAngle {
      */
 	public MessageEnum disableAimingMode(Player player)
 	{		
-		if (inAimingMode.containsKey(player.getName()) == true)
+		if (inAimingMode.containsKey(player.getName()))
 		{
 			//player in map -> remove
 			inAimingMode.remove(player.getName());
@@ -454,7 +449,7 @@ public class CalcAngle {
 	 * @param cannon
 	 * @return
 	 */
-	public MessageEnum setMessageHorizontal(Cannon cannon, boolean combinedAngle)
+    MessageEnum setMessageHorizontal(Cannon cannon, boolean combinedAngle)
 	{
 		if (combinedAngle)
 			return MessageEnum.SettingCombinedAngle;
@@ -476,7 +471,7 @@ public class CalcAngle {
 	 * @param cannon
 	 * @return
 	 */
-	public MessageEnum setMessageVertical(Cannon cannon, boolean combinedAngle)
+    MessageEnum setMessageVertical(Cannon cannon, boolean combinedAngle)
 	{
 		if (combinedAngle)
 			return MessageEnum.SettingCombinedAngle;

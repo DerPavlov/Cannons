@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CannonsAPI {
 
-    Cannons plugin;
+    private final Cannons plugin;
 
     public CannonsAPI(Cannons cannons)
     {

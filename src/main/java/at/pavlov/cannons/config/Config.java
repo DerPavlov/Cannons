@@ -45,9 +45,9 @@ public class Config
     private List<MaterialHolder> unbreakableBlocks = new ArrayList<MaterialHolder>();
 
 
-    private UserMessages userMessage;
-	private Cannons plugin;
-	private DesignStorage designStorage;
+    private final UserMessages userMessage;
+	private final Cannons plugin;
+	private final DesignStorage designStorage;
 	private ProjectileStorage projectileStorage;
     private CannonManager cannonManager;
     private ProjectileManager projectileManager;
@@ -139,7 +139,7 @@ public class Config
 		return buildLimitEnabled;
 	}
 
-	public void setBuildLimitEnabled(boolean buildLimitEnabled)
+	void setBuildLimitEnabled(boolean buildLimitEnabled)
 	{
 		this.buildLimitEnabled = buildLimitEnabled;
 	}
@@ -149,7 +149,7 @@ public class Config
 		return buildLimitA;
 	}
 
-	public void setBuildLimitA(int buildLimitA)
+	void setBuildLimitA(int buildLimitA)
 	{
 		this.buildLimitA = buildLimitA;
 	}
@@ -159,7 +159,7 @@ public class Config
 		return buildLimitB;
 	}
 
-	public void setBuildLimitB(int buildLimitB)
+	void setBuildLimitB(int buildLimitB)
 	{
 		this.buildLimitB = buildLimitB;
 	}
@@ -169,7 +169,7 @@ public class Config
 		return toolAdjust;
 	}
 
-	public void setToolAdjust(MaterialHolder toolAdjust)
+	void setToolAdjust(MaterialHolder toolAdjust)
 	{
 		this.toolAdjust = toolAdjust;
 	}
@@ -179,7 +179,7 @@ public class Config
 		return toolAutoaim;
 	}
 
-	public void setToolAutoaim(MaterialHolder toolAutoaim)
+	void setToolAutoaim(MaterialHolder toolAutoaim)
 	{
 		this.toolAutoaim = toolAutoaim;
 	}
@@ -189,7 +189,7 @@ public class Config
 		return toolRotating;
 	}
 
-	public void setToolRotating(MaterialHolder toolRotating)
+	void setToolRotating(MaterialHolder toolRotating)
 	{
 		this.toolRotating = toolRotating;
 	}
@@ -199,7 +199,7 @@ public class Config
 		return debugMode;
 	}
 
-	public void setDebugMode(boolean debugMode)
+	void setDebugMode(boolean debugMode)
 	{
 		this.debugMode = debugMode;
 	}
@@ -209,7 +209,7 @@ public class Config
 		return toolFiring;
 	}
 
-	public void setToolFiring(MaterialHolder toolFiring)
+	void setToolFiring(MaterialHolder toolFiring)
 	{
 		this.toolFiring = toolFiring;
 	}
@@ -219,7 +219,7 @@ public class Config
         return superbreakerBlocks;
     }
 
-    public void setSuperbreakerBlocks(List<MaterialHolder> superbreakerBlocks) {
+    void setSuperbreakerBlocks(List<MaterialHolder> superbreakerBlocks) {
         this.superbreakerBlocks = superbreakerBlocks;
     }
 
@@ -227,7 +227,7 @@ public class Config
         return unbreakableBlocks;
     }
 
-    public void setUnbreakableBlocks(List<MaterialHolder> unbreakableBlocks) {
+    void setUnbreakableBlocks(List<MaterialHolder> unbreakableBlocks) {
         this.unbreakableBlocks = unbreakableBlocks;
     }
 
@@ -259,7 +259,7 @@ public class Config
         return toolCooling;
     }
 
-    public void setToolCooling(List<MaterialHolder> toolCooling) {
+    void setToolCooling(List<MaterialHolder> toolCooling) {
         this.toolCooling = toolCooling;
     }
 
@@ -267,7 +267,7 @@ public class Config
         return toolCoolingUsed;
     }
 
-    public void setToolCoolingUsed(List<MaterialHolder> toolCoolingUsed) {
+    void setToolCoolingUsed(List<MaterialHolder> toolCoolingUsed) {
         this.toolCoolingUsed = toolCoolingUsed;
     }
 }

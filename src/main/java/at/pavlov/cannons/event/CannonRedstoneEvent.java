@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 public class CannonRedstoneEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
-    private Cannon cannon;
+    private final Cannon cannon;
     private boolean cancelled;
 
     public CannonRedstoneEvent(Cannon cannon)

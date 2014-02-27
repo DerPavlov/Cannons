@@ -1,26 +1,21 @@
 package at.pavlov.cannons.scheduler;
 
 import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Teleporter {
-    Cannons plugin;
+    private final Cannons plugin;
 
 
     /**
      * Constructor
-     * @param plugin
+     * @param plugin - Cannons instance
      */
     public Teleporter(Cannons plugin)
     {
@@ -45,7 +40,7 @@ public class Teleporter {
     /**
      * teleports the player to new position
      */
-    public void updateTeleporter()
+    void updateTeleporter()
     {
         //get projectiles
         for (FlyingProjectile fproj : plugin.getProjectileManager().getFlyingProjectiles())
