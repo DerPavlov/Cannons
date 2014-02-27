@@ -4,7 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.avaje.ebean.validation.Length;
 import com.avaje.ebean.validation.NotEmpty;
+import org.bukkit.block.BlockFace;
 
 
 @Entity
@@ -14,13 +16,17 @@ public class CannonBean
 	@Id 
 	private int id;
 
+    @Length(max=20)
 	private String name;
-	
+
+    @Length(max=20)
 	private String owner;
 
 	@NotEmpty
+    @Length(max=20)
 	private String world;
-	private String cannonDirection;
+
+	private BlockFace cannonDirection;
 	private int locX;
 	private int locY;
 	private int locZ;
@@ -30,6 +36,8 @@ public class CannonBean
     private double cannonTemperature;
 	private double horizontalAngle;
 	private double verticalAngle;
+
+    @Length(max=20)
 	private String designId;
 	private boolean Valid;
 	
@@ -140,11 +148,11 @@ public class CannonBean
 	{
 		this.owner = owner;
 	}
-	public String getCannonDirection()
+	public BlockFace getCannonDirection()
 	{
 		return cannonDirection;
 	}
-	public void setCannonDirection(String cannonDirection)
+	public void setCannonDirection(BlockFace cannonDirection)
 	{
 		this.cannonDirection = cannonDirection;
 	}

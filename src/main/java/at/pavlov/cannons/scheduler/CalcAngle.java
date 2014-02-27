@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.utils.CannonsUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -23,7 +25,7 @@ public class CalcAngle {
 	UserMessages userMessages;
 	Config config;
 	
-	HashMap<Player, Cannon> inAimingMode = new HashMap<Player, Cannon>();
+	HashMap<String, Cannon> inAimingMode = new HashMap<String, Cannon>();
 	
 	private class gunAngles
 	{
@@ -61,7 +63,7 @@ public class CalcAngle {
 		this.config = plugin.getMyConfig();
         this.userMessages = plugin.getMyConfig().getUserMessages();
 		
-		inAimingMode = new HashMap<Player, Cannon>();
+		inAimingMode = new HashMap<String, Cannon>();
 
 	}
 	
@@ -236,12 +238,18 @@ public class CalcAngle {
 	}
 	
 
-	
-	//############## CheckBlockFace   ################################
-	//0 - right
-	//1 - left
-	//2 - up
-	//3 - down
+
+    /**
+     * returns the angle to change by the given block face
+     * 0 - right
+     * 1 - left
+     * 2 - up
+     * 3 - down
+     * @param clickedFace - click block face on the cannon
+     * @param cannonDirection - direction the cannon is facing
+     * @param isSneaking - is the player sneaking (will revert all options)
+     * @return - angle to change
+     */
 	public gunAngles CheckBlockFace(BlockFace clickedFace, BlockFace cannonDirection, boolean isSneaking)
 	{	
 		//check up or down
@@ -316,7 +324,7 @@ public class CalcAngle {
     public Cannon getCannonInAimingMode(Player player)
     {
         //return the cannon of the player if he is in aiming mode
-        return inAimingMode.get(player);
+        return inAimingMode.get(player.getName());
     }
 
 	
@@ -347,8 +355,8 @@ public class CalcAngle {
 	public void updateAimingMode()
 	{
 		//player in map change the angle to the angle the player is looking
-    	for(Map.Entry<Player, Cannon> entry : inAimingMode.entrySet()){
-    		Player player = entry.getKey();
+    	for(Map.Entry<String, Cannon> entry : inAimingMode.entrySet()){
+    		Player player = Bukkit.getPlayer(entry.getKey());
     		Cannon cannon = entry.getValue();
     		// only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
     		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()*50 )
@@ -369,28 +377,46 @@ public class CalcAngle {
     	}
 	}
 
-	
-	
-	//############## ToggleAimingMode   ################################
+
+    /**
+     * switches aming mode for this cannon
+     * @param player - player in aiming mode
+     * @param cannon - operated cannon
+     */
 	public void ToggleAimingMode(Player player, Cannon cannon)
 	{
-		
-		if (inAimingMode.containsKey(player) == true)
+        plugin.logDebug("toggle aiming mode 1");
+		if (inAimingMode.containsKey(player.getName()) == true)
 		{
-			//player in map -> remove
-			MessageEnum message = disableAimingMode(player);
-            userMessages.displayMessage(player, cannon, message);
+            plugin.logDebug("toggle aiming mode 2");
+            if (cannon == null)
+                cannon = inAimingMode.get(player.getName());
+
+            plugin.logDebug("toggle aiming mode 3");
+            //this player is already in aiming mode, he might fire the cannon or turn the aiming mode of
+		    if (player.isSneaking())
+            {   plugin.logDebug("toggle aiming mode4");
+                MessageEnum message = plugin.getFireCannon().fireCannonAndEvents(cannon, player, InteractAction.fireAutoaim);
+                userMessages.displayMessage(player, cannon, message);
+            }
+            else
+            {
+                plugin.logDebug("toggle aiming mode 5");
+                //turn off the aiming mode
+                MessageEnum message = disableAimingMode(player);
+                userMessages.displayMessage(player, cannon, message);
+            }
         }
-		else
+		else if(cannon != null)
 		{
 			//check if player has permission to aim
-			if (player.hasPermission("cannons.player.adjust") == true)
+			if (player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
 			{
                 //check distance before enabling the cannon
                 if (distanceCheck(player, cannon) == true)
                 {
                     userMessages.displayMessage(player, cannon, MessageEnum.AimingModeEnabled);
-                    inAimingMode.put(player, cannon);
+                    inAimingMode.put(player.getName(), cannon);
                 }
                 else
                 {
@@ -406,14 +432,18 @@ public class CalcAngle {
 			}
 		}
 	}
-	
-	//############## disableAimingMode   ################################
+
+    /**
+     * disables the aiming mode for this player
+     * @param player - player in aiming mode
+     * @return message for the player
+     */
 	public MessageEnum disableAimingMode(Player player)
 	{		
-		if (inAimingMode.containsKey(player) == true)
+		if (inAimingMode.containsKey(player.getName()) == true)
 		{
 			//player in map -> remove
-			inAimingMode.remove(player);
+			inAimingMode.remove(player.getName());
             return MessageEnum.AimingModeDisabled;
 		}
         return null;

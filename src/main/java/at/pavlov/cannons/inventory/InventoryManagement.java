@@ -63,38 +63,6 @@ public class InventoryManagement
 		return item;
 	}
 
-	// #################################### containsItemInChests ###############
-	public static boolean containsItemInChests(List<Inventory> invlist, ItemStack item)
-	{
-		Iterator<Inventory> iter = invlist.iterator();
-		while (iter.hasNext())
-		{
-			if (contains(iter.next(), item)) { return true; }
-		}
-		return false;
-	}
-
-	/**
-	 * returns true if the item is in the inventory. If datavalue < 0 it is not
-	 * compared
-	 * 
-	 * @param inv
-	 * @param item
-	 * @return
-	 */
-	private static boolean contains(Inventory inv, ItemStack item)
-	{
-		if (inv == null)
-			return false;
-
-		for (ItemStack invItem : inv.getContents())
-		{
-			if (invItem != null && invItem.getTypeId() == item.getTypeId() && invItem.getData().getData() == item.getData().getData())
-				return true;
-		}
-
-		return false;
-	}
 
 	/**
 	 * removes item from in the inventory. If datavalue < 0 it is not compared
@@ -171,28 +139,6 @@ public class InventoryManagement
             list.add(ih.getInventory());
         }
 		return list;
-	}
-
-	// ############## attached ################################
-	private static Chest attached(Block block)
-	{
-		// Find the first adjacent chest. Note: hacking of various sorts/degrees
-		// and/or
-		// other plugins might allow multiple chests to be adjacent. Deal with
-		// that later
-		// if it really becomes necessary (and at all possible to detect).
-		BlockFace[] FACES = {BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST};
-		for (BlockFace face : FACES)
-		{
-			Block other = block.getRelative(face);
-			if (other.getType() == Material.CHEST) 
-			{ 
-				// Found it.
-				return (Chest) other.getState();
-			
-			}
-		}
-		return null; // No other adjacent chest.
 	}
 
 }

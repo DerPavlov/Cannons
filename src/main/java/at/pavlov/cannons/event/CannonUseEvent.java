@@ -1,10 +1,10 @@
 package at.pavlov.cannons.event;
 
+import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.cannon.Cannon;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.block.Action;
 
 public class CannonUseEvent extends Event
 {

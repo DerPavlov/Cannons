@@ -60,7 +60,7 @@ public class PersistenceDatabase
 					//load values for the cannon
 					String world = bean.getWorld();
 					Vector offset = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
-					BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
+					BlockFace cannonDirection = bean.getCannonDirection();
 					String owner = bean.getOwner();
 					
 					//make a cannon
@@ -179,7 +179,7 @@ public class PersistenceDatabase
 			bean.setLocY(cannon.getOffset().getBlockY());
 			bean.setLocZ(cannon.getOffset().getBlockZ());
 			// cannon direction
-			bean.setCannonDirection(cannon.getCannonDirection().toString());
+			bean.setCannonDirection(cannon.getCannonDirection());
 			// name
 			bean.setName(cannon.getCannonName());
 			// amount of gunpowder

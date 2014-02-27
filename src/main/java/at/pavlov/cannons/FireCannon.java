@@ -5,6 +5,8 @@ import java.util.List;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.event.CannonFireEvent;
+import at.pavlov.cannons.event.CannonUseEvent;
+import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
 import org.bukkit.*;
@@ -40,6 +42,22 @@ public class FireCannon {
 		this.designStorage = plugin.getDesignStorage();
 		this.explosion = explosion;
 	}
+
+    public MessageEnum fireCannonAndEvents(Cannon cannon, Player player, InteractAction action)
+    {
+        CannonDesign design = cannon.getCannonDesign();
+
+        //fire event
+        CannonUseEvent useEvent = new CannonUseEvent(cannon, player, action);
+        Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+        if (useEvent.isCancelled())
+            return null;
+
+        boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
+
+        return this.prepareFire(cannon, player, autoreload, !design.isAmmoInfiniteForPlayer());
+    }
 
 	
 	/**

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import at.pavlov.cannons.Enum.BreakCause;
+import at.pavlov.cannons.event.CannonUseEvent;
+import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.*;
@@ -225,6 +227,15 @@ public class Cannon
 	 */
 	public MessageEnum loadGunpowder(Player player)
 	{
+
+        //fire event
+        CannonUseEvent useEvent = new CannonUseEvent(this, player, InteractAction.loadGunpowder);
+        Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+        if (useEvent.isCancelled())
+            return null;
+
+
 		//save the amount of gunpowder we loaded in the cannnon
 		int gunpowder = 0;
 		int maximumLoadable = design.getMaxLoadableGunpowder() - getLoadedGunpowder();
@@ -1287,7 +1298,6 @@ public class Cannon
     public double getTemperature() {
         //barrel temperature - minus ambient temperature + exponential decay
         double ambient = (Math.sqrt(this.design.getMuzzle(this).getBlock().getTemperature())-0.5)*60;
-        System.out.println("ambient: " + ambient);
         double timePassed = (System.currentTimeMillis() - this.tempTimestamp)/1000.0;
         double decay = Math.exp(-timePassed/design.getCoolingCoefficient());
         tempValue = ambient + (tempValue - ambient)*decay;

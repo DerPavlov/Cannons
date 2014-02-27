@@ -5,7 +5,7 @@ import java.util.Iterator;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.event.CannonRedstoneEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
-import at.pavlov.cannons.event.InteractAction;
+import at.pavlov.cannons.Enum.InteractAction;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -394,16 +394,7 @@ public class PlayerListener implements Listener
 
                 plugin.logDebug("Redfire with button by " + player.getName());
 
-                //register event with bukkit
-                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.fireButton);
-                Bukkit.getServer().getPluginManager().callEvent(useEvent);
-
-                if (useEvent.isCancelled())
-                    return;
-
-                //execute event
-                boolean autoreload = player.isSneaking() && player.hasPermission(cannon.getCannonDesign().getPermissionAutoreload());
-                MessageEnum message =  fireCannon.prepareFire(cannon, player, autoreload, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
+                MessageEnum message = fireCannon.fireCannonAndEvents(cannon, player, InteractAction.fireButton);
                 userMessages.displayMessage(player, cannon, message);
 			}
 		}
@@ -444,8 +435,7 @@ public class PlayerListener implements Listener
 				// all other actions will stop aiming mode
 				if (event.getAction() == Action.RIGHT_CLICK_AIR)
                 {
-					MessageEnum message = calcAngle.disableAimingMode(event.getPlayer());
-                    userMessages.displayMessage(player, message);
+                    calcAngle.ToggleAimingMode(event.getPlayer(), null);
                 }
 				return;
 			}
@@ -533,14 +523,6 @@ public class PlayerListener implements Listener
 			{
 				plugin.logDebug("load gunpowder");
 
-                //fire event
-                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.loadGunpowder);
-                Bukkit.getServer().getPluginManager().callEvent(useEvent);
-
-                if (useEvent.isCancelled())
-                    return;
-
-
                 // load gunpowder
 				MessageEnum message = cannon.loadGunpowder(player);
 
@@ -554,17 +536,9 @@ public class PlayerListener implements Listener
 			{
 				plugin.logDebug("fire torch");
 
-                //fire event
-                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.fireTorch);
-                Bukkit.getServer().getPluginManager().callEvent(useEvent);
+                MessageEnum message = fireCannon.fireCannonAndEvents(cannon, player, InteractAction.fireTorch);
 
-                if (useEvent.isCancelled())
-                    return;
-
-                boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
-                MessageEnum message = fireCannon.prepareFire(cannon, player, autoreload, !design.isAmmoInfiniteForPlayer());
-
-				// display message
+  				// display message
 				userMessages.displayMessage(player, cannon, message);
 				return;
 			}
@@ -578,8 +552,6 @@ public class PlayerListener implements Listener
 
 				return;
 			}
-
-
 		}
 		return;
 	}
