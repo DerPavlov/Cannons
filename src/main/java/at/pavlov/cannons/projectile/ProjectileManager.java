@@ -121,9 +121,7 @@ public class ProjectileManager
         // iterate the list
         if (!flying_projectiles.isEmpty())
         {
-            Iterator<FlyingProjectile> iterator = flying_projectiles.iterator();
-
-            while (iterator.hasNext())
+            for (Iterator<FlyingProjectile> iterator = flying_projectiles.iterator(); iterator.hasNext();)
             {
                 FlyingProjectile flying = iterator.next();
                 if (entity.equals(flying.getProjectileEntity()))

@@ -125,7 +125,7 @@ public class FireCannon {
 	 * @param player - player operating the cannon
 	 * @param autoload - the cannon will autoreload before firing
      * @param consumesAmmo - if true ammo will be removed from chest inventories
-	 * @return
+	 * @return - message for the player
 	 */
 	public MessageEnum prepareFire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo)
 	{

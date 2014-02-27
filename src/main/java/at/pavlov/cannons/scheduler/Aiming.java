@@ -382,23 +382,19 @@ public class Aiming {
      */
 	public void ToggleAimingMode(Player player, Cannon cannon)
 	{
-        plugin.logDebug("toggle aiming mode 1");
 		if (inAimingMode.containsKey(player.getName()))
 		{
-            plugin.logDebug("toggle aiming mode 2");
             if (cannon == null)
                 cannon = inAimingMode.get(player.getName());
 
-            plugin.logDebug("toggle aiming mode 3");
             //this player is already in aiming mode, he might fire the cannon or turn the aiming mode of
 		    if (player.isSneaking())
-            {   plugin.logDebug("toggle aiming mode4");
+            {
                 MessageEnum message = plugin.getFireCannon().fireCannonAndEvents(cannon, player, InteractAction.fireAutoaim);
                 userMessages.displayMessage(player, cannon, message);
             }
             else
             {
-                plugin.logDebug("toggle aiming mode 5");
                 //turn off the aiming mode
                 MessageEnum message = disableAimingMode(player);
                 userMessages.displayMessage(player, cannon, message);

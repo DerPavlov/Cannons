@@ -11,7 +11,7 @@ public class FlyingProjectile
 	private long spawnTime;
 	
 	private org.bukkit.entity.Projectile projectile_entity;
-    private final String shooter;
+    private String shooter;
 	private Projectile projectile;
     //location of the shooter before firing - important for teleporting the player back - observer property
     private Location firingLocation;
@@ -20,17 +20,24 @@ public class FlyingProjectile
 	{
 		this.projectile_entity = projectile_entity;
 		this.projectile = projectile;
-        this.shooter = shooter.getName();
         if (shooter != null)
+        {
+            this.shooter = shooter.getName();
             this.firingLocation = shooter.getLocation();
+        }
         else
+        {
             this.firingLocation = projectile_entity.getLocation();
+        }
 		this.spawnTime = System.currentTimeMillis();
 	}
 	
 	public Player getShooter()
 	{
-		return Bukkit.getPlayer(shooter);
+        if (shooter != null)
+		    return Bukkit.getPlayer(shooter);
+        else
+            return null;
 	}
 	public void setShooter(Player shooter)
 	{

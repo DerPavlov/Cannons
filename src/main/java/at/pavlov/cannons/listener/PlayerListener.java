@@ -3,6 +3,7 @@ package at.pavlov.cannons.listener;
 import at.pavlov.cannons.event.CannonRedstoneEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
+import at.pavlov.cannons.inventory.InventoryManagement;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -28,6 +29,7 @@ import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener
@@ -203,9 +205,8 @@ public class PlayerListener implements Listener
 	}
 
 	/**
-	 * handles redstone events (torch, wire, repeater, button)
-	 * 
-	 * @param event
+	 * handles redstone events (torch, wire, repeater, button
+	 * @param event - BlockRedstoneEvent
 	 */
 	@EventHandler
 	public void RedstoneEvent(BlockRedstoneEvent event)
@@ -381,6 +382,33 @@ public class PlayerListener implements Listener
 
 
 			plugin.logDebug("player interact event fired");
+
+            // ############ cooling a hot cannon ####################
+            if (config.isCoolingTool(player.getItemInHand()))
+            {
+                plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
+                userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementCooling);
+
+                event.setCancelled(true);
+
+                cannon.setTemperature(cannon.getTemperature()-design.getCoolingAmount());
+
+                ItemStack newItem = config.getCoolingToolUsed(player.getItemInHand());
+                //remove only one item if the material is AIR
+                if (newItem.getType().equals(Material.AIR))
+                    InventoryManagement.TakeFromPlayerInventory(player, 1);
+                else
+                    player.setItemInHand(newItem);
+
+
+                if (cannon.getTemperature() > design.getWarningTemperature())
+                {
+                    Location effectLoc = event.getClickedBlock().getRelative(event.getBlockFace()).getLocation();
+                    effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, event.getBlockFace());
+                    effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+                }
+                return;
+            }
 
             // ############ touching a hot cannon will burn you ####################
             if (cannon.getTemperature() > design.getWarningTemperature())

@@ -5,9 +5,12 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.inventory.InventoryManagement;
 import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +83,11 @@ public class Config
 		setToolAutoaim(new MaterialHolder(plugin.getConfig().getString("tools.autoaim", "347:0")));
 		setToolFiring(new MaterialHolder(plugin.getConfig().getString("tools.firing", "259:0")));
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
+
         setToolCooling(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("tools.coolingItems")));
         setToolCoolingUsed(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("tools.coolingItemsUsed")));
+        if (getToolCooling().size() != getToolCoolingUsed().size())
+           plugin.logSevere("CoolingToolUsed and CoolingTool lists must have the same size. Check if both lists have the same number of entries");
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -269,5 +275,37 @@ public class Config
 
     void setToolCoolingUsed(List<MaterialHolder> toolCoolingUsed) {
         this.toolCoolingUsed = toolCoolingUsed;
+    }
+
+    /**
+     * is this Item a cooling tool to cool down a cannon
+     * @param item - item to check
+     * @return - true if this item is in the list of cooling items
+     */
+    public boolean isCoolingTool(ItemStack item)
+    {
+        for (MaterialHolder mat : toolCooling)
+        {
+            if (mat.equalsFuzzy(item))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * returns the used used item. E.g. a water bucket will be an empty bucket.
+     * @param item - the item used for the event
+     * @return the new item which replaces the old one
+     */
+    public ItemStack getCoolingToolUsed(ItemStack item)
+    {
+        for (int i=0; i < toolCooling.size(); i++)
+        {
+            if (toolCooling.get(i).equalsFuzzy(item))
+            {
+                return toolCoolingUsed.get(i).toItemStack(item.getAmount());
+            }
+        }
+        return null;
     }
 }

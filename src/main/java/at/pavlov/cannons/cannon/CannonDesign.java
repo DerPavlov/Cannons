@@ -57,6 +57,7 @@ public class CannonDesign
     private double burnSlowing;
     private double heatIncreasePerGunpowder;
     private double coolingCoefficient;
+    private double coolingAmount;
     private double warningTemperature;
     private double criticalTemperature;
     private double maximumTemperature;
@@ -904,5 +905,13 @@ public class CannonDesign
 
     public void setCriticalTemperature(double criticalTemperature) {
         this.criticalTemperature = criticalTemperature;
+    }
+
+    public double getCoolingAmount() {
+        return coolingAmount;
+    }
+
+    public void setCoolingAmount(double coolingAmount) {
+        this.coolingAmount = coolingAmount;
     }
 }

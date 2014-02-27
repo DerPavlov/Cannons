@@ -40,6 +40,7 @@ public enum MessageEnum
 
     //heatManagement
     HeatManagementBurn ("HeatManagement.Burn"),
+    HeatManagementCooling ("HeatManagement.Cooling"),
     HeatManagementInfo ("HeatManagement.Info"),
     HeatManagementCritical ("HeatManagement.Critical"),
     HeatManagementOverheated ("HeatManagement.Overheated"),

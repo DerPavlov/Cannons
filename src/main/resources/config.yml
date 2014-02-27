@@ -24,8 +24,9 @@ tools:
     - '79:0'
     - '80:0'
   #items which are returned after cooling the cannon. The order is the same like above.
+  #setting a item to AIR (0:0) means it will only remove one item instead of replacing the item
   coolingItemsUsed:
-    - '326:0'
+    - '325:0'
     - '0:0'
     - '0:0'
 #enter here the blocks which require the superbreaker ability to destroy.
