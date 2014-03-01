@@ -79,48 +79,35 @@ public class FireCannon {
 		if (design == null) return null;
 		//if the player is not the owner of this gun
 		if (player != null && !cannon.getOwner().equals(player.getName())  && design.isAccessForOwnerOnly())
-		{
 			return MessageEnum.ErrorNotTheOwner;
-		}
 		//check if there is some gunpowder in the barrel
 		if (cannon.getLoadedGunpowder() <= 0)
-		{
-			return MessageEnum.ErrorNoGunpowder;
-		}
-		//is there a projectile
+			return MessageEnum.ErrorNoGunpowder;//is there a projectile
 		if(!cannon.isLoaded())
-		{
-			return MessageEnum.ErrorNoProjectile;
-		}
+            return MessageEnum.ErrorNoProjectile;
         //Firing in progress
         if (cannon.isFiring())
-        {
             return MessageEnum.ErrorFiringInProgress;
-        }
 		//Barrel too hot
         if(cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
-		{
 			return MessageEnum.ErrorBarrelTooHot;
-		}	
+        //automatic temperature control, prevents overheating of the cannon
+        if(design.isAutomaticTemperatureControl() && cannon.getTemperature() + design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder() > design.getCriticalTemperature())
+            return MessageEnum.ErrorBarrelTooHot;
 		if (player!= null)
 		{
 		
 			//if the player has permission to fire
 			if (!player.hasPermission(design.getPermissionFire()))
-			{
 				return MessageEnum.PermissionErrorFire;
-			}
+
 			//check if the player has the permission for this projectile
 			Projectile projectile = cannon.getLoadedProjectile();
 			if(projectile != null && !projectile.hasPermission(player))
-			{
 				return MessageEnum.PermissionErrorProjectile;
-			}
 			//check for flint and steel
-           if ( design.isFiringItemRequired() && !config.getToolFiring().equalsFuzzy(player.getItemInHand()) )
-			{
+           if (design.isFiringItemRequired() && !config.getToolFiring().equalsFuzzy(player.getItemInHand()) )
 				return MessageEnum.ErrorNoFlintAndSteel;
-			}
 		}
 		//everything fine fire the damn cannon
 		return MessageEnum.CannonFire;
@@ -259,7 +246,7 @@ public class FireCannon {
         cannon.setTemperature(cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
         //automatic cool down
         if (design.isAutomaticCooling())
-            cannon.automaticCoolingFromChest(shooter,config);
+            cannon.automaticCoolingFromChest(shooter);
 
         //for each bullet, but at least once
         for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)

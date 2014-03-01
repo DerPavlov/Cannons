@@ -63,6 +63,8 @@ angles:
 heatManagement:
   #if heat management is used or not
   enabled: true
+  #if true the cannon will refuse to fire if the cannon temperature after firing would be higher than critical
+  automaticTemperatureControl: true
   #touching a hot cannon will hurt (in full hearts)
   burnDamage: 0.0
   #touching a hot cannon will slow you (in seconds)

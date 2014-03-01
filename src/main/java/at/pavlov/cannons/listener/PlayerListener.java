@@ -384,7 +384,7 @@ public class PlayerListener implements Listener
 			plugin.logDebug("player interact event fired");
 
             // ############ cooling a hot cannon ####################
-            if (config.isCoolingTool(player.getItemInHand()))
+            if (design.isCoolingTool(player.getItemInHand()))
             {
                 plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
                 userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementCooling);
@@ -393,7 +393,7 @@ public class PlayerListener implements Listener
 
                 cannon.setTemperature(cannon.getTemperature()-design.getCoolingAmount());
 
-                ItemStack newItem = config.getCoolingToolUsed(player.getItemInHand());
+                ItemStack newItem = design.getCoolingToolUsed(player.getItemInHand());
                 //remove only one item if the material is AIR
                 if (newItem.getType().equals(Material.AIR))
                     InventoryManagement.TakeFromPlayerInventory(player, 1);

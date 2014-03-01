@@ -48,9 +48,28 @@ public class CannonsAPI {
      * @param sphereRadius - radius of the sphere in blocks
      * @return - list of all cannons in this sphere
      */
-    public List<Cannon> getCannons(Location center, double sphereRadius)
+    public List<Cannon> getCannonsInSphere(Location center, double sphereRadius)
     {
-        return plugin.getCannonManager().getCannons(center, sphereRadius);
+        return plugin.getCannonManager().getCannonsinSphere(center, sphereRadius);
+    }
+
+    /**
+     * returns all known cannon in a box around the given location
+     * @param center - center of the box
+     * @param lengthX - box length in X
+     * @param lengthY - box length in Y
+     * @param lengthZ - box length in Z
+     * @return - list of all cannons in this sphere
+     */
+    public List<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
+    {
+        return plugin.getCannonManager().getCannonsInBox(center, lengthX, lengthY, lengthZ);
+    }
+
+
+    public void setCannonAngle(Cannon cannon, double horizontal, double vertical)
+    {
+        //plugin.getAiming().
     }
 
 

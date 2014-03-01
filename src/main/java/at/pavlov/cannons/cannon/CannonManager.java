@@ -186,14 +186,36 @@ public class CannonManager
      * @param sphereRadius - radius of the sphere in blocks
      * @return - list of all cannons in this sphere
      */
-    public List<Cannon> getCannons(Location center, double sphereRadius)
+    public List<Cannon> getCannonsinSphere(Location center, double sphereRadius)
     {
         ArrayList<Cannon> cannonList = new ArrayList<Cannon>();
 
-        for (Cannon cannon : plugin.getCannonManager().getCannonList())
+        for (Cannon cannon : getCannonList())
         {
             Location newLoc = cannon.getCannonDesign().getMuzzle(cannon);
             if (newLoc.distance(center) < sphereRadius)
+                cannonList.add(cannon);
+        }
+        return cannonList;
+    }
+
+    /**
+     * returns all known cannon in a box around the given location
+     * @param center - center of the box
+     * @param lengthX - box length in X
+     * @param lengthY - box length in Y
+     * @param lengthZ - box length in Z
+     * @return - list of all cannons in this sphere
+     */
+    public List<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
+    {
+        ArrayList<Cannon> cannonList = new ArrayList<Cannon>();
+
+        for (Cannon cannon : getCannonList())
+        {
+            Location newLoc = cannon.getCannonDesign().getMuzzle(cannon);
+            Vector box = newLoc.subtract(center).toVector();
+            if (Math.abs(box.getX())<lengthX/2 && Math.abs(box.getY())<lengthY/2 && Math.abs(box.getZ())<lengthZ/2)
                 cannonList.add(cannon);
         }
         return cannonList;

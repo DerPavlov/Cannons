@@ -54,6 +54,7 @@ public class CannonDesign
 
     //heatManagment
     private boolean heatManagementEnabled;
+    private boolean automaticTemperatureControl;
     private double burnDamage;
     private double burnSlowing;
     private double heatIncreasePerGunpowder;
@@ -973,5 +974,13 @@ public class CannonDesign
             }
         }
         return null;
+    }
+
+    public boolean isAutomaticTemperatureControl() {
+        return automaticTemperatureControl;
+    }
+
+    public void setAutomaticTemperatureControl(boolean automaticTemperatureControl) {
+        this.automaticTemperatureControl = automaticTemperatureControl;
     }
 }

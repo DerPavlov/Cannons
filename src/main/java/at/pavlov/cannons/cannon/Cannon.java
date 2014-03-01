@@ -177,10 +177,9 @@ public class Cannon
     /**
      * removes cooling item form the chest attached to the cannon, returns true if it was enough to cool down the cannon
      * @param player - player operating the cannon
-     * @param config - the Cannons config to get the CoolingTools
      * @return - true if the cannon has been cooled down
      */
-    public boolean automaticCoolingFromChest(Player player, Config config)
+    public boolean automaticCoolingFromChest(Player player)
     {
 
         List<Inventory> invlist = getInventoryList();
@@ -193,7 +192,7 @@ public class Cannon
             return true;
 
         //do this for every cooling item
-        for (MaterialHolder mat : config.getToolCooling())
+        for (MaterialHolder mat : design.getItemCooling())
         {
             item = mat.toItemStack(item.getAmount());
             item = InventoryManagement.removeItemInChests(invlist, item);
@@ -203,7 +202,7 @@ public class Cannon
             this.setTemperature(this.getTemperature()-usedItems*design.getCoolingAmount());
 
             //put used items back to the chest (not if the item is AIR)
-            ItemStack itemUsed = config.getCoolingToolUsed(item);
+            ItemStack itemUsed = design.getCoolingToolUsed(item);
             itemUsed.setAmount(usedItems);
             if (!itemUsed.getType().equals(Material.AIR))
                 InventoryManagement.addItemInChests(invlist, itemUsed);

@@ -191,6 +191,7 @@ public class DesignStorage
 
         //heatManagement
         cannonDesign.setHeatManagementEnabled(cannonDesignConfig.getBoolean("heatManagement.enabled", false));
+        cannonDesign.setAutomaticTemperatureControl(cannonDesignConfig.getBoolean("heatManagement.automaticTemperatureControl", false));
         cannonDesign.setBurnDamage(cannonDesignConfig.getDouble("heatManagement.burnDamage", 0.5));
         cannonDesign.setBurnSlowing(cannonDesignConfig.getDouble("heatManagement.burnSlowing", 5.0));
         cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.heatIncreasePerGunpowder", 10.0));
