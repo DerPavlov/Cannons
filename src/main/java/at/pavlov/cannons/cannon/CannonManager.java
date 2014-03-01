@@ -1,6 +1,8 @@
 package at.pavlov.cannons.cannon;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -181,26 +183,26 @@ public class CannonManager
 	}
 
     /**
-     * returns all known cannon in a sphere around the given location
+     * returns all known cannons in a sphere around the given location
      * @param center - center of the box
      * @param sphereRadius - radius of the sphere in blocks
      * @return - list of all cannons in this sphere
      */
-    public List<Cannon> getCannonsinSphere(Location center, double sphereRadius)
+    public List<Cannon> getCannonsInSphere(Location center, double sphereRadius)
     {
-        ArrayList<Cannon> cannonList = new ArrayList<Cannon>();
+        ArrayList<Cannon> newCannonList = new ArrayList<Cannon>();
 
         for (Cannon cannon : getCannonList())
         {
-            Location newLoc = cannon.getCannonDesign().getMuzzle(cannon);
+            Location newLoc = cannon.getCannonDesign().getFiringTrigger(cannon);
             if (newLoc.distance(center) < sphereRadius)
-                cannonList.add(cannon);
+                newCannonList.add(cannon);
         }
-        return cannonList;
+        return newCannonList;
     }
 
     /**
-     * returns all known cannon in a box around the given location
+     * returns all known cannons in a box around the given location
      * @param center - center of the box
      * @param lengthX - box length in X
      * @param lengthY - box length in Y
@@ -209,16 +211,59 @@ public class CannonManager
      */
     public List<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
     {
-        ArrayList<Cannon> cannonList = new ArrayList<Cannon>();
+        ArrayList<Cannon> newCannonList = new ArrayList<Cannon>();
 
         for (Cannon cannon : getCannonList())
         {
-            Location newLoc = cannon.getCannonDesign().getMuzzle(cannon);
+            Location newLoc = cannon.getCannonDesign().getFiringTrigger(cannon);
             Vector box = newLoc.subtract(center).toVector();
             if (Math.abs(box.getX())<lengthX/2 && Math.abs(box.getY())<lengthY/2 && Math.abs(box.getZ())<lengthZ/2)
-                cannonList.add(cannon);
+                newCannonList.add(cannon);
         }
-        return cannonList;
+        return newCannonList;
+    }
+
+    /**
+     * returns all cannons for a list of locations
+     * @param locations - a list of location to search for cannons
+     * @return - list of all cannons in this sphere
+     */
+    public HashSet<Cannon> getCannonsByLocations(List<Location> locations)
+    {
+        HashSet<Cannon> newCannonList = new HashSet<Cannon>();
+        for (Cannon cannon : getCannonList())
+        {
+            for (Location loc : locations)
+            {
+                if (cannon.isCannonLocation(loc))
+                    newCannonList.add(cannon);
+            }
+
+        }
+
+        return newCannonList;
+    }
+
+    /**
+     * returns all cannons for a list of locations - this will update all locations
+     * @param locations - a list of location to search for cannons
+     * @param player - player which operates the cannon
+     * @param silent - no messages will be displayed if silent is true
+     * @return - list of all cannons in this sphere
+     */
+    public HashSet<Cannon> getCannons(List<Location> locations, String player, boolean silent)
+    {
+        HashSet<Cannon> newCannonList = new HashSet<Cannon>();
+        for (Location loc : locations)
+        {
+            Cannon newCannon = getCannon(loc, player, silent);
+            if (newCannon != null)
+            {
+                newCannonList.add(newCannon);
+            }
+        }
+
+        return newCannonList;
     }
 
 	/**
@@ -283,7 +328,7 @@ public class CannonManager
 	 */
 	public Cannon getCannon(Location cannonBlock, String owner, boolean silent)
 	{
-        //long startTime = System.nanoTime();
+        long startTime = System.nanoTime();
 
         //check if there is a cannon at this location
         Cannon cannon = checkCannon(cannonBlock, owner);
@@ -359,7 +404,7 @@ public class CannonManager
             }
         }
 
-        //plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+        plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
 
         return cannon;
 	}
@@ -374,7 +419,6 @@ public class CannonManager
 	{
 		// get world
 		World world = cannonBlock.getWorld();
-
 
 		// check all cannon design if this block is part of the design
 		for (CannonDesign cannonDesign : plugin.getDesignStorage().getCannonDesignList())

@@ -6,6 +6,7 @@ import at.pavlov.cannons.Enum.MessageEnum;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class CannonsAPI {
@@ -50,7 +51,7 @@ public class CannonsAPI {
      */
     public List<Cannon> getCannonsInSphere(Location center, double sphereRadius)
     {
-        return plugin.getCannonManager().getCannonsinSphere(center, sphereRadius);
+        return plugin.getCannonManager().getCannonsInSphere(center, sphereRadius);
     }
 
     /**
@@ -64,6 +65,29 @@ public class CannonsAPI {
     public List<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
     {
         return plugin.getCannonManager().getCannonsInBox(center, lengthX, lengthY, lengthZ);
+    }
+
+    /**
+     * returns all cannons for a list of locations - this will update all cannon locations
+     * @param locations - a list of location to search for cannons
+     * @param player - player which operates the cannon
+     * @param silent - no messages will be displayed if silent is true
+     * @return - list of all cannons in this sphere
+     */
+    public HashSet<Cannon> getCannons(List<Location> locations, Player player, boolean silent)
+    {
+        return plugin.getCannonManager().getCannons(locations, player.getName(), silent);
+    }
+
+    /**
+     * returns all cannons for a list of locations - this will update all cannon locations
+     * @param locations - a list of location to search for cannons
+     * @param player - player which operates the cannon
+     * @return - list of all cannons in this sphere
+     */
+    public HashSet<Cannon> getCannons(List<Location> locations, Player player)
+    {
+        return plugin.getCannonManager().getCannons(locations, player.getName(), true);
     }
 
 

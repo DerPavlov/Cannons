@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import at.pavlov.cannons.Enum.BreakCause;
-import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
@@ -495,21 +494,36 @@ public class Cannon
 
 	/**
 	 * returns true if this block is a block of the cannon
-	 * 
-	 * @param block
-	 * @return
+	 * @param location - location to check
+	 * @return - true if it is part of this cannon
 	 */
-	public boolean isCannonBlock(Block block)
+	public boolean isCannonLocation(Location location)
 	{
-		for (SimpleBlock designBlock : design.getAllCannonBlocks(cannonDirection))
-		{
-			if (designBlock.compareBlockAndLocFuzzy(block, offset))
-			{
-				return true;
-			}
-		}
-		return false;
+        for (SimpleBlock designBlock : design.getAllCannonBlocks(cannonDirection))
+        {
+            if(designBlock.toLocation(Bukkit.getWorld(world), offset).equals(location))
+                return true;
+
+        }
+        return false;
 	}
+
+    /**
+     * returns true if this block is a block of the cannon
+     * @param block - block to check
+     * @return - true if it is part of this cannon
+     */
+    public boolean isCannonBlock(Block block)
+    {
+        for (SimpleBlock designBlock : design.getAllCannonBlocks(cannonDirection))
+        {
+            if (designBlock.compareBlockAndLocFuzzy(block, offset))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	/**
 	 * return true if this block can be destroyed, false if it is protected
@@ -1125,12 +1139,18 @@ public class Cannon
 
     /**
      *
-     * @param cannon
+     * @param obj - object to compare
      * @return true if both cannons are equal
      */
-    public boolean equals(Cannon cannon)
+    public boolean equals(Object obj)
     {
+        Cannon cannon = (Cannon) obj;
         return (cannon.getCannonName().equals(this.cannonName) && cannon.getOwner().equals(this.owner));
+    }
+
+    public int hashCode()
+    {
+        return (cannonName + owner).hashCode();
     }
 
 	/**

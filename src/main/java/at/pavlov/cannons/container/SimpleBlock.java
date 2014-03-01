@@ -120,7 +120,8 @@ public class SimpleBlock
 	{		
 		if (toVector().add(offset).equals(block.getLocation().toVector()))
 		{
-			if (compareBlock(block)) return true;
+			if (compareBlock(block))
+                return true;
 		}
 		return false;
 	}
