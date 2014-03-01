@@ -97,6 +97,16 @@ public class Cannon
 	}
 
 
+    /**
+     * returns the location of the location of the cannon
+     * @return location of the cannon
+     */
+    public Location getLocation()
+    {
+        return design.getAllCannonBlocks(this).get(0);
+    }
+
+
 	/**
 	 * removes the loaded charge form the chest attached to the cannon, returns true if the ammo was found in the chest
      * @param player - player operating the cannon
@@ -492,21 +502,6 @@ public class Cannon
         }
     }
 
-	/**
-	 * returns true if this block is a block of the cannon
-	 * @param location - location to check
-	 * @return - true if it is part of this cannon
-	 */
-	public boolean isCannonLocation(Location location)
-	{
-        for (SimpleBlock designBlock : design.getAllCannonBlocks(cannonDirection))
-        {
-            if(designBlock.toLocation(Bukkit.getWorld(world), offset).equals(location))
-                return true;
-
-        }
-        return false;
-	}
 
     /**
      * returns true if this block is a block of the cannon

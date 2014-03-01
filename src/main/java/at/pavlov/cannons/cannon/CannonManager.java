@@ -130,14 +130,15 @@ public class CannonManager
 	private String newCannonName(Cannon cannon)
 	{		
 		//check if this cannon has a owner
-		if (cannon.getOwner() == null) return "missing Owner";
+		if (cannon.getOwner() == null)
+            return "missing Owner";
 			
 		String name;
 		CannonDesign design = cannon.getCannonDesign();
 		if (design != null)
 			name = design.getDesignName();
 		else
-			name = "at/pavlov/cannons/cannon";
+			name = "cannon";
 	
 
 		for (int i = 1; i < Integer.MAX_VALUE; i++)
@@ -235,7 +236,7 @@ public class CannonManager
         {
             for (Location loc : locations)
             {
-                if (cannon.isCannonLocation(loc))
+                if (cannon.isCannonBlock(loc.getBlock()))
                     newCannonList.add(cannon);
             }
 
