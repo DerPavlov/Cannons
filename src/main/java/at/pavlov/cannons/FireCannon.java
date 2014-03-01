@@ -43,6 +43,13 @@ public class FireCannon {
 		this.explosion = explosion;
 	}
 
+    /**
+     * fires additionally the cannon fire event when the cannon is fired
+     * @param cannon - cannon to fire
+     * @param player - operator of the cannon
+     * @param action - how has the player/plugin interacted with the cannon
+     * @return - message for the player
+     */
     public MessageEnum fireCannonAndEvents(Cannon cannon, Player player, InteractAction action)
     {
         CannonDesign design = cannon.getCannonDesign();
@@ -249,8 +256,10 @@ public class FireCannon {
         world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 
         //increase heat of the cannon
-        plugin.logDebug("new Temp: " + cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
         cannon.setTemperature(cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
+        //automatic cool down
+        if (design.isAutomaticCooling())
+            cannon.automaticCoolingFromChest(shooter,config);
 
         //for each bullet, but at least once
         for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)

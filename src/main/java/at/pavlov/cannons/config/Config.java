@@ -38,8 +38,6 @@ public class Config
 	private MaterialHolder toolFiring = new MaterialHolder(259, 0);
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
     private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
-    private List<MaterialHolder> toolCooling = new ArrayList<MaterialHolder>();
-    private List<MaterialHolder> toolCoolingUsed = new ArrayList<MaterialHolder>();
 
     //superbreakerBlocks
     private List<MaterialHolder> superbreakerBlocks = new ArrayList<MaterialHolder>();
@@ -83,11 +81,6 @@ public class Config
 		setToolAutoaim(new MaterialHolder(plugin.getConfig().getString("tools.autoaim", "347:0")));
 		setToolFiring(new MaterialHolder(plugin.getConfig().getString("tools.firing", "259:0")));
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
-
-        setToolCooling(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("tools.coolingItems")));
-        setToolCoolingUsed(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("tools.coolingItemsUsed")));
-        if (getToolCooling().size() != getToolCoolingUsed().size())
-           plugin.logSevere("CoolingToolUsed and CoolingTool lists must have the same size. Check if both lists have the same number of entries");
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -261,51 +254,4 @@ public class Config
         this.toolThermometer = toolThermometer;
     }
 
-    public List<MaterialHolder> getToolCooling() {
-        return toolCooling;
-    }
-
-    void setToolCooling(List<MaterialHolder> toolCooling) {
-        this.toolCooling = toolCooling;
-    }
-
-    public List<MaterialHolder> getToolCoolingUsed() {
-        return toolCoolingUsed;
-    }
-
-    void setToolCoolingUsed(List<MaterialHolder> toolCoolingUsed) {
-        this.toolCoolingUsed = toolCoolingUsed;
-    }
-
-    /**
-     * is this Item a cooling tool to cool down a cannon
-     * @param item - item to check
-     * @return - true if this item is in the list of cooling items
-     */
-    public boolean isCoolingTool(ItemStack item)
-    {
-        for (MaterialHolder mat : toolCooling)
-        {
-            if (mat.equalsFuzzy(item))
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * returns the used used item. E.g. a water bucket will be an empty bucket.
-     * @param item - the item used for the event
-     * @return the new item which replaces the old one
-     */
-    public ItemStack getCoolingToolUsed(ItemStack item)
-    {
-        for (int i=0; i < toolCooling.size(); i++)
-        {
-            if (toolCooling.get(i).equalsFuzzy(item))
-            {
-                return toolCoolingUsed.get(i).toItemStack(item.getAmount());
-            }
-        }
-        return null;
-    }
 }

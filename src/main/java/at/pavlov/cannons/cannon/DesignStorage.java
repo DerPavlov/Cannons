@@ -196,11 +196,17 @@ public class DesignStorage
         cannonDesign.setHeatIncreasePerGunpowder(cannonDesignConfig.getDouble("heatManagement.heatIncreasePerGunpowder", 10.0));
         cannonDesign.setCoolingCoefficient(cannonDesignConfig.getDouble("heatManagement.coolingTimeCoefficient", 160.0));
         cannonDesign.setCoolingAmount(cannonDesignConfig.getDouble("heatManagement.coolingAmount", 50.0));
+        cannonDesign.setAutomaticCooling(cannonDesignConfig.getBoolean("heatManagement.automaticCooling", false));
         cannonDesign.setWarningTemperature(cannonDesignConfig.getDouble("heatManagement.warningTemperature", 100.0));
         cannonDesign.setCriticalTemperature(cannonDesignConfig.getDouble("heatManagement.criticalTemperature", 150.0));
         cannonDesign.setMaximumTemperature(cannonDesignConfig.getDouble("heatManagement.maximumTemperature", 200.0));
+        cannonDesign.setItemCooling(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("heatManagement.coolingItems")));
+        cannonDesign.setItemCoolingUsed(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("heatManagement.coolingItemsUsed")));
+        if (cannonDesign.getItemCooling().size() != cannonDesign.getItemCoolingUsed().size())
+            plugin.logSevere("CoolingItemsUsed and CoolingItems lists must have the same size. Check if both lists have the same number of entries");
 
-		// realisticBehaviour
+
+        // realisticBehaviour
 		cannonDesign.setFiringItemRequired(cannonDesignConfig.getBoolean("realisticBehaviour.isFiringItemRequired", false));
 		cannonDesign.setHasRecoil(cannonDesignConfig.getBoolean("realisticBehaviour.hasRecoil", false));
 		cannonDesign.setFrontloader(cannonDesignConfig.getBoolean("realisticBehaviour.isFrontloader", false));

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import at.pavlov.cannons.container.MaterialHolder;
@@ -58,9 +59,12 @@ public class CannonDesign
     private double heatIncreasePerGunpowder;
     private double coolingCoefficient;
     private double coolingAmount;
+    private boolean automaticCooling;
     private double warningTemperature;
     private double criticalTemperature;
     private double maximumTemperature;
+    private List<MaterialHolder> itemCooling = new ArrayList<MaterialHolder>();
+    private List<MaterialHolder> itemCoolingUsed = new ArrayList<MaterialHolder>();
 
 	//realisticBehaviour
 	private boolean FiringItemRequired;
@@ -913,5 +917,61 @@ public class CannonDesign
 
     public void setCoolingAmount(double coolingAmount) {
         this.coolingAmount = coolingAmount;
+    }
+
+    public boolean isAutomaticCooling() {
+        return automaticCooling;
+    }
+
+    public void setAutomaticCooling(boolean automaticCooling) {
+        this.automaticCooling = automaticCooling;
+    }
+
+    public List<MaterialHolder> getItemCooling() {
+        return itemCooling;
+    }
+
+    public void setItemCooling(List<MaterialHolder> itemCooling) {
+        this.itemCooling = itemCooling;
+    }
+
+    public List<MaterialHolder> getItemCoolingUsed() {
+        return itemCoolingUsed;
+    }
+
+    public void setItemCoolingUsed(List<MaterialHolder> itemCoolingUsed) {
+        this.itemCoolingUsed = itemCoolingUsed;
+    }
+
+    /**
+     * is this Item a cooling tool to cool down a cannon
+     * @param item - item to check
+     * @return - true if this item is in the list of cooling items
+     */
+    public boolean isCoolingTool(ItemStack item)
+    {
+        for (MaterialHolder mat : itemCooling)
+        {
+            if (mat.equalsFuzzy(item))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * returns the used used item. E.g. a water bucket will be an empty bucket.
+     * @param item - the item used for the event
+     * @return the new item which replaces the old one
+     */
+    public ItemStack getCoolingToolUsed(ItemStack item)
+    {
+        for (int i=0; i < itemCooling.size(); i++)
+        {
+            if (itemCooling.get(i).equalsFuzzy(item))
+            {
+                return itemCoolingUsed.get(i).toItemStack(item.getAmount());
+            }
+        }
+        return null;
     }
 }

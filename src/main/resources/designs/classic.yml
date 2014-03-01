@@ -62,7 +62,7 @@ angles:
 
 heatManagement:
   #if heat management is used or not
-  enabled: True
+  enabled: true
   #touching a hot cannon will hurt (in full hearts)
   burnDamage: 0.0
   #touching a hot cannon will slow you (in seconds)
@@ -73,12 +73,25 @@ heatManagement:
   coolingTimeCoefficient: 10.0
   #how much cooling with the cooling item (config.yml e.g. water bucket) will cool the cannon
   coolingAmount: 50.0
+  #searchs for cooling items in chests and cools the cannon if the cannon temperature above the warning temperature
+  automaticCooling: true
   #the barrel is hot and you will notice this effect
   warningTemperature: 50.0
   #the barrel damage is critical and the cannon can explode
   criticalTemperature: 150.0
   #if the cannon exceeds this temperature it will explode
   maximumTemperature: 300.0
+  #items to cool down a cannon
+  coolingItems:
+    - '326:0'
+    - '79:0'
+    - '80:0'
+  #items which are returned after cooling the cannon. The order is the same like above.
+  #setting a item to AIR (0:0) means it will only remove one item instead of replacing the item
+  coolingItemsUsed:
+    - '325:0'
+    - '0:0'
+    - '0:0'
 
 
 realisticBehaviour:
@@ -110,6 +123,8 @@ permissions:
   #if a player has no permission for redstone, it is not possible to wire a cannon with redstone or uses torches.
   #firing a prewired cannon however is possible.
   redstone: cannons.player.redstone
+  #this player can use a thermometer to measure the temperature of a cannon (default item for thermometer is a gold nugget)
+  redstone: cannons.player.thermometer
   #cannon will autoreload if the player is sneaking and fires the cannon.
   #The ammunition comes from the chest next to the cannon
   autoreload: cannons.player.autoreload

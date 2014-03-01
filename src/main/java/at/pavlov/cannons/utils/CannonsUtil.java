@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import at.pavlov.cannons.container.MaterialHolder;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
-
+import org.bukkit.util.Vector;
 
 
 public class CannonsUtil
@@ -471,7 +472,7 @@ public class CannonsUtil
      * returns a random block face
      * @return - random BlockFace
      */
-    public static BlockFace randomBlockFace()
+    public static BlockFace randomBlockFaceNoDown()
     {
         Random r = new Random();
         switch (r.nextInt(5))
@@ -489,7 +490,26 @@ public class CannonsUtil
             default:
                 return BlockFace.SELF;
         }
+    }
 
+    /**
+     * adds a little bit random to the location so the effects don't spawn at the same point.
+     * @return - randomized location
+     */
+    public static Location randomLocationOrthogonal(Location loc, BlockFace face)
+    {
+        Random r = new Random();
+
+        //this is the direction we want to avoid
+        Vector vect = new Vector(face.getModX(),face.getModY(),face.getModZ());
+        //orthogonal vector - somehow
+        vect = vect.multiply(vect).subtract(new Vector(1,1,1));
+
+        loc.setX(loc.getX()+vect.getX()*(r.nextDouble()-0.5));
+        loc.setY(loc.getY()+vect.getY()*(r.nextDouble()-0.5));
+        loc.setZ(loc.getZ()+vect.getZ()*(r.nextDouble()-0.5));
+
+        return loc;
     }
 
 

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import at.pavlov.cannons.Enum.BreakCause;
+import at.pavlov.cannons.config.Config;
+import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.projectile.ProjectileStorage;
@@ -171,6 +173,47 @@ public class Cannon
 
 		return false;
 	}
+
+    /**
+     * removes cooling item form the chest attached to the cannon, returns true if it was enough to cool down the cannon
+     * @param player - player operating the cannon
+     * @param config - the Cannons config to get the CoolingTools
+     * @return - true if the cannon has been cooled down
+     */
+    public boolean automaticCoolingFromChest(Player player, Config config)
+    {
+
+        List<Inventory> invlist = getInventoryList();
+
+        //cooling items will be consumed from the inventory
+        int toCool = (int) ((this.getTemperature() - design.getWarningTemperature())/design.getCoolingAmount());
+        ItemStack item = new ItemStack(Material.AIR, toCool);
+
+        if (toCool <= 0)
+            return true;
+
+        //do this for every cooling item
+        for (MaterialHolder mat : config.getToolCooling())
+        {
+            item = mat.toItemStack(item.getAmount());
+            item = InventoryManagement.removeItemInChests(invlist, item);
+
+
+            int usedItems= toCool - item.getAmount();
+            this.setTemperature(this.getTemperature()-usedItems*design.getCoolingAmount());
+
+            //put used items back to the chest (not if the item is AIR)
+            ItemStack itemUsed = config.getCoolingToolUsed(item);
+            itemUsed.setAmount(usedItems);
+            if (!itemUsed.getType().equals(Material.AIR))
+                InventoryManagement.addItemInChests(invlist, itemUsed);
+
+            //if all items have been removed we are done
+            if (item.getAmount() == 0)
+                return true;
+        }
+        return false;
+    }
 
 
     /**
@@ -794,7 +837,7 @@ public class Cannon
             //no exploding chance for temperature < critical, 100% chance for > maximum
             explodingProbability = Math.pow((tempCannon-tempCritical)/(tempMax-tempCritical),3);
             //play some effects for a hot barrel
-            this.playBarrelSmokeEffect((int)(explodingProbability*20.0));
+            this.playBarrelSmokeEffect((int)(explodingProbability*20.0+1));
         }
 
         Random r = new Random();
@@ -807,23 +850,36 @@ public class Cannon
      */
     void playBarrelSmokeEffect(int amount)
     {
+        if (amount <= 0)
+            return;
+
         Random r = new Random();
-        List<Location> barrelList = design.getLoadingInterface(this);
+        List<Location> barrelList = design.getBarrelBlocks(this);
 
         //if the barrel list is 0 something is completely odd
         int max = barrelList.size();
         if (max < 0)
             return;
 
+        Location effectLoc;
+        BlockFace face;
+
         for (int i=0; i<amount; i++)
         {
-            //grab a random block
-            BlockFace face = CannonsUtil.randomBlockFace();
-            Location effectLoc = barrelList.get(r.nextInt(max)).getBlock().getRelative(face).getLocation();
+            //grab a random face and find a block for them the adjacent block is AIR
+            face = CannonsUtil.randomBlockFaceNoDown();
+            int j = 0;
+            do
+            {
+                i++;
+                effectLoc = barrelList.get(r.nextInt(max)).getBlock().getRelative(face).getLocation();
+            } while (i<4 && effectLoc.getBlock().getType() != Material.AIR);
+
             effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, face);
             effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
         }
     }
+
 
 	/**
 	 * return the firing vector of the cannon. The spread depends on the cannon, the projectile and the player
@@ -1310,4 +1366,6 @@ public class Cannon
         this.tempTimestamp = System.currentTimeMillis();
         this.tempValue = temperature;
     }
+
+
 }

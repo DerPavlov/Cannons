@@ -403,7 +403,7 @@ public class PlayerListener implements Listener
 
                 if (cannon.getTemperature() > design.getWarningTemperature())
                 {
-                    Location effectLoc = event.getClickedBlock().getRelative(event.getBlockFace()).getLocation();
+                    Location effectLoc = clickedBlock.getRelative(event.getBlockFace()).getLocation();
                     effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, event.getBlockFace());
                     effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
                 }
@@ -419,8 +419,11 @@ public class PlayerListener implements Listener
                     player.damage(design.getBurnDamage()*2);
                 if (design.getBurnSlowing() > 0)
                     PotionEffectType.SLOW.createEffect((int) (design.getBurnSlowing()*20.0), 0).apply(player);
-                Location effectLoc = event.getClickedBlock().getRelative(event.getBlockFace()).getLocation();
-                effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, event.getBlockFace());
+
+                BlockFace clickedFace = event.getBlockFace();
+
+                Location effectLoc = clickedBlock.getRelative(clickedFace).getLocation();
+                effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
                 effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
             }
 

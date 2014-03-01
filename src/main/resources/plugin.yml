@@ -28,6 +28,7 @@ permissions:
       cannons.player.autoaim: true
       cannons.player.tracking: true
       cannons.player.autoreload: true
+      cannons.player.thermometer: true
       cannons.player.help: true
       cannons.player.reset: true
       cannons.player.redstone: true
@@ -57,6 +58,9 @@ permissions:
     default: false
   cannons.player.redstone:
     description: Allows a player to use redstone with a cannon
+    default: false
+  cannons.player.thermometer:
+    description: Allows a player to measure the temperature of a cannon with the thermometer item
     default: false
   cannons.player.autoreload:
     description: Allows a player to use autoreload on a cannon

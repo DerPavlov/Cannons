@@ -18,17 +18,6 @@ tools:
   rotatingItem: '350:0'
   #item to measure the cannon temperature. Default is a gold nugget
   thermometer: '371:0'
-  #items to cool down a cannon
-  coolingItems:
-    - '326:0'
-    - '79:0'
-    - '80:0'
-  #items which are returned after cooling the cannon. The order is the same like above.
-  #setting a item to AIR (0:0) means it will only remove one item instead of replacing the item
-  coolingItemsUsed:
-    - '325:0'
-    - '0:0'
-    - '0:0'
 #enter here the blocks which require the superbreaker ability to destroy.
 #e.g. if you enter here the enchantment table it requires a projectile with superbreaker to be destroyed.
 #else it can be destroyed by normal explosions
