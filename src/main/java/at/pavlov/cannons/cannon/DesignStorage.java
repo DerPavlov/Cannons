@@ -443,6 +443,13 @@ public class DesignStorage
 			maxRotation.add(new Vector(1, 1, 1));
 			cannonBlocks.setRotationCenter(maxRotation.add(maxRotation).multiply(0.5));
 
+            //set the muzzle location
+            /*Vector compensation = cannonBlocks.getMuzzle();
+            for (int k=0; k<cannonBlocks.getAllCannonBlocks().size(); k++)
+            {
+                cannonBlocks.getAllCannonBlocks().get(k).subtract(compensation);
+            } */
+
 			//plugin.logDebug("rotation loc " + cannonBlocks.getRotationCenter());
 
 			// add blocks to the HashMap
