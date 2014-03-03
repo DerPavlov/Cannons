@@ -282,14 +282,14 @@ public class UserMessages {
 			if (cannon.getLoadedProjectile()!=null)
 				message = message.replace("PROJECTILE", cannon.getLoadedProjectile().getProjectileName());
 			//replace the horizontal angle
-			message = message.replace("HDEGREE", String.format("%.2f", cannon.getHorizontalAngle()));
+			message = message.replace("HDEGREE", String.format("%.1f", cannon.getHorizontalAngle()));
 			//replace the vertical angle
-			message = message.replace("VDEGREE", String.format("%.2f", cannon.getVerticalAngle()));
+			message = message.replace("VDEGREE", String.format("%.1f", cannon.getVerticalAngle()));
             //replace cannon temperature
-            message = message.replace("CANNON_TEMP", String.format("%.2f", cannon.getTemperature()));
-            message = message.replace("MAX_TEMP", String.format("%.2f", cannon.getCannonDesign().getMaximumTemperature()));
-            message = message.replace("CRIT_TEMP", String.format("%.2f", cannon.getCannonDesign().getCriticalTemperature()));
-            message = message.replace("WARN_TEMP", String.format("%.2f", cannon.getCannonDesign().getWarningTemperature()));
+            message = message.replace("CANNON_TEMP", String.format("%.1f", cannon.getTemperature()));
+            message = message.replace("MAX_TEMP", String.format("%.1f", cannon.getCannonDesign().getMaximumTemperature()));
+            message = message.replace("CRIT_TEMP", String.format("%.1f", cannon.getCannonDesign().getCriticalTemperature()));
+            message = message.replace("WARN_TEMP", String.format("%.1f", cannon.getCannonDesign().getWarningTemperature()));
 		}
 
 		if (player != null)

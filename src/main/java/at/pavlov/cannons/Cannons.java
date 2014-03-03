@@ -274,7 +274,6 @@ public class Cannons extends JavaPlugin
 	private boolean checkWorldEdit()
 	{
 		Plugin plug = pm.getPlugin("WorldEdit");
-		// CreeperHeal may not be loaded
         return plug != null;
     }
 
@@ -292,8 +291,6 @@ public class Cannons extends JavaPlugin
 	{
 		return fireCannon;
 	}
-
-
 
 	public CreateExplosion getExplosion()
 	{

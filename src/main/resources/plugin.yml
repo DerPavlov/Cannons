@@ -9,6 +9,7 @@ commands:
   cannons:
     description: Info how to use/build/adjust a cannon and to reload the plugin.
 
+
 permissions:
   cannons.*:
     description: Gives  permissions for loading, adjusting, firing and recall help with cannons

@@ -488,6 +488,33 @@ public class Cannon
 	}
 
     /**
+     * this will force the cannon to show up at this location - all block will be overwritten
+     */
+    public void show()
+    {
+        for (SimpleBlock cBlock : design.getAllCannonBlocks(this.getCannonDirection()))
+        {
+            Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
+            wBlock.setType(cBlock.getMaterial());
+            wBlock.setData((byte) cBlock.getData());
+        }
+    }
+
+    /**
+     * this will force the cannon blocks to become AIR
+     */
+    public void hide()
+    {
+        for (SimpleBlock cBlock : design.getAllCannonBlocks(this.getCannonDirection()))
+        {
+            Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
+            wBlock.setType(Material.AIR);
+            wBlock.setData((byte) 0);
+        }
+    }
+
+
+    /**
      * breaks all cannon blocks of the cannon
      */
     void breakAllCannonBlocks()
@@ -797,7 +824,7 @@ public class Cannon
      * updates the location of the cannon
      * @param moved - how far the cannon has been moved
      */
-    public void updateCannonPostion(Vector moved)
+    public void move(Vector moved)
     {
         offset.add(moved);
     }
@@ -807,26 +834,61 @@ public class Cannon
      * @param center - center of the rotation
      * @param angle - how far the cannon is rotated in degree (90, 180, 270, -90)
      */
-    public void updateCannonRotation(Vector center, int angle)
+    public void rotate(Vector center, int angle)
     {
         while (angle < 0)
         {
             angle += 360;
         }
         angle %= 360;
+        angle = Math.round(angle);
+        double dAngle =  angle*Math.PI/180;
 
-        System.out.println("updateCannonRotation new angle: " + angle);
-        Vector diff = offset.clone().subtract(center);
-        double newX = diff.getX()*Math.cos(angle) - diff.getZ()*Math.sin(angle);
-        double newZ = diff.getX()*Math.sin(angle) + diff.getZ()*Math.cos(angle);
+        Vector oldOffset = offset.clone();
+        Vector diffToCenter = design.getMuzzle(this).toVector().clone().subtract(center);
 
-        offset.setX(newX);
-        offset.setZ(newZ);
+        //Vector diff = offset.clone().subtract(center);
+        double newX = diffToCenter.getX()*Math.cos(dAngle) - diffToCenter.getZ()*Math.sin(dAngle);
+        double newZ = diffToCenter.getX()*Math.sin(dAngle) + diffToCenter.getZ()*Math.cos(dAngle);
 
-        for (int i = 0; i<angle%90; i++)
-        {
+        Vector newMuzzleLoc = new Vector(center.getX()+newX, offset.getY(), center.getZ()+newZ);
+
+        //rotate blockface
+        for (int i = 0; i<=angle%90; i++)
             cannonDirection = CannonsUtil.roatateFace(cannonDirection);
-        }
+
+        //set a new offset
+        offset = offset.clone().add(newMuzzleLoc).subtract(design.getMuzzle(this).toVector().clone());
+        offset.setX(Math.round(offset.getX()));
+        offset.setY(oldOffset.getY());
+        offset.setZ(Math.round(offset.getZ()));
+    }
+
+    /**
+     * updates the rotation of the cannon by rotating it 90 to the right
+     * @param center - center of the rotation
+     */
+    public void rotateRight(Vector center)
+    {
+        this.rotate(center, 90);
+    }
+
+    /**
+     * updates the rotation of the cannon by rotating it 90 to the left
+     * @param center - center of the rotation
+     */
+    public void rotateLeft(Vector center)
+    {
+        this.rotate(center, -90);
+    }
+
+    /**
+     * updates the rotation of the cannon by rotating it 180
+     * @param center - center of the rotation
+     */
+    public void rotateFlip(Vector center)
+    {
+        this.rotate(center, 180);
     }
 
     /**
@@ -1157,6 +1219,9 @@ public class Cannon
 	{
 		if (this.world != null)
 		{
+            World bukkitWorld = Bukkit.getWorld(this.world);
+            if (bukkitWorld == null)
+                System.out.println("[Cannons] Can't find world: " + world);
 			return Bukkit.getWorld(this.world);
 			// return new Location(bukkitWorld, )
 		}

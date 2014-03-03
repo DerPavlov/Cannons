@@ -2,6 +2,7 @@ package at.pavlov.cannons.container;
 
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
@@ -283,10 +284,15 @@ public class SimpleBlock
 		this.locZ = locZ;
 	}
 
-	int getID()
+	public int getID()
 	{
 		return id;
 	}
+
+    public Material getMaterial()
+    {
+        return Material.getMaterial(id);
+    }
 
 	public void setID(int id)
 	{

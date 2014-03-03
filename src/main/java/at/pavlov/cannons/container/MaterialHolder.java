@@ -57,7 +57,7 @@ public class MaterialHolder
 			System.out.println("[Cannons] Can't convert " + str + ". Check the formating ('35:1').");
 			id = -1;
 			data = -1;
-		}	
+		}
 		//check if some formatting didn't work and give the user a hint
 		if ((id > 500 && id <2200) || id > 2300)
 		{
@@ -161,7 +161,7 @@ public class MaterialHolder
 	}
 
 
-	
+
 
 
 }

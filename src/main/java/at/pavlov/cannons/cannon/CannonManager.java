@@ -218,7 +218,7 @@ public class CannonManager
         {
             Location newLoc = cannon.getCannonDesign().getFiringTrigger(cannon);
             Vector box = newLoc.subtract(center).toVector();
-            if (Math.abs(box.getX())<lengthX/2 && Math.abs(box.getY())<lengthY/2 && Math.abs(box.getZ())<lengthZ/2)
+            if (cannon.getWorld().equals(center.getWorld().getName()) && Math.abs(box.getX())<lengthX/2 && Math.abs(box.getY())<lengthY/2 && Math.abs(box.getZ())<lengthZ/2)
                 newCannonList.add(cannon);
         }
         return newCannonList;
