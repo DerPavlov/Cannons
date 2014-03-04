@@ -3,6 +3,7 @@ package at.pavlov.cannons.cannon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
@@ -29,7 +30,8 @@ public class Cannon
 {
 	// Database id - is -1 until stored in the database. Then it is the id in the
 	// database
-	private int databaseId = -1;
+	private UUID databaseId;
+
 	private String designID;
 	private String cannonName;
 
@@ -92,8 +94,8 @@ public class Cannon
 		// reset
 		this.loadedGunpowder = 0;
 		this.loadedProjectile = null;
-		
-		this.databaseId = -1;
+
+		this.databaseId = null;
 	}
 
 
@@ -194,7 +196,7 @@ public class Cannon
         List<Inventory> invlist = getInventoryList();
 
         //cooling items will be consumed from the inventory
-        int toCool = (int) ((this.getTemperature() - design.getWarningTemperature())/design.getCoolingAmount());
+        int toCool = (int) Math.ceil((this.getTemperature() - design.getWarningTemperature())/design.getCoolingAmount());
         ItemStack item = new ItemStack(Material.AIR, toCool);
 
         if (toCool <= 0)
@@ -862,6 +864,8 @@ public class Cannon
         offset.setX(Math.round(offset.getX()));
         offset.setY(oldOffset.getY());
         offset.setZ(Math.round(offset.getZ()));
+
+        System.out.println("new cannon:" + offset);
     }
 
     /**
@@ -1201,13 +1205,12 @@ public class Cannon
      */
     public boolean equals(Object obj)
     {
-        Cannon cannon = (Cannon) obj;
-        return (cannon.getCannonName().equals(this.cannonName) && cannon.getOwner().equals(this.owner));
+        return this.getID().equals(((Cannon) obj).getID());
     }
 
     public int hashCode()
     {
-        return (cannonName + owner).hashCode();
+        return databaseId.hashCode();
     }
 
 	/**
@@ -1228,14 +1231,14 @@ public class Cannon
 		return null;
 	}
 
-	public int getDatabaseId()
+	public UUID getID()
 	{
 		return databaseId;
 	}
 
-	public void setDatabaseId(int databaseId)
+	public void setID(UUID ID)
 	{
-		this.databaseId = databaseId;
+		this.databaseId = ID;
 	}
 
 	public String getDesignID()
@@ -1445,6 +1448,5 @@ public class Cannon
         this.tempTimestamp = System.currentTimeMillis();
         this.tempValue = temperature;
     }
-
 
 }

@@ -52,6 +52,8 @@ public enum MessageEnum
 	PermissionErrorLoad ("Permission.ErrorLoad"),
 	PermissionErrorAdjust ("Permission.ErrorAdjust"),
 	PermissionErrorProjectile ("Permission.ErrorProjectile"),
+    PermissionErrorThermometer ("Permission.ErrorThermometer"),
+    PermissionErrorRamrod ("Permission.ErrorRamrod"),
 	
 	//Help
 	HelpText ("Help.Text"),

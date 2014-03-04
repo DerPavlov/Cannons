@@ -14,6 +14,8 @@ tools:
   #the item used to fire a cannon. Default is flint and steel. Not every cannon needs a FiringItem.
   #a data value of -1 means that every durability is accepted for flint and steel
   firing: '259:-1'
+  #required for cleaning a cannon after firing and pushing a projectile against the gunpowder
+  ramrod: '280:0'
   #item used to rotate a cannon 90 degrees. Not implemented yet
   rotatingItem: '350:0'
   #item to measure the cannon temperature. Default is a gold nugget

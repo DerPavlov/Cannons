@@ -383,6 +383,25 @@ public class PlayerListener implements Listener
 
 			plugin.logDebug("player interact event fired");
 
+
+            // ############ touching a hot cannon will burn you ####################
+            if (cannon.getTemperature() > design.getWarningTemperature())
+            {
+                plugin.logDebug("someone touched a hot cannon");
+                userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementBurn);
+                if (design.getBurnDamage() > 0)
+                    player.damage(design.getBurnDamage()*2);
+                if (design.getBurnSlowing() > 0)
+                    PotionEffectType.SLOW.createEffect((int) (design.getBurnSlowing()*20.0), 0).apply(player);
+
+                BlockFace clickedFace = event.getBlockFace();
+
+                Location effectLoc = clickedBlock.getRelative(clickedFace).getLocation();
+                effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
+                effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+            }
+
+
             // ############ cooling a hot cannon ####################
             if (design.isCoolingTool(player.getItemInHand()))
             {
@@ -410,29 +429,19 @@ public class PlayerListener implements Listener
                 return;
             }
 
-            // ############ touching a hot cannon will burn you ####################
-            if (cannon.getTemperature() > design.getWarningTemperature())
-            {
-                plugin.logDebug("someone touched a hot cannon");
-                userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementBurn);
-                if (design.getBurnDamage() > 0)
-                    player.damage(design.getBurnDamage()*2);
-                if (design.getBurnSlowing() > 0)
-                    PotionEffectType.SLOW.createEffect((int) (design.getBurnSlowing()*20.0), 0).apply(player);
-
-                BlockFace clickedFace = event.getBlockFace();
-
-                Location effectLoc = clickedBlock.getRelative(clickedFace).getLocation();
-                effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
-                effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
-            }
-
 
             // ############ temperature measurement ################################
             if (config.getToolThermometer().equalsFuzzy(player.getItemInHand()))
             {
-                plugin.logDebug("measure temperature");
-                userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementInfo);
+                if (player.hasPermission(design.getPermissionThermometer()))
+                {
+                    plugin.logDebug("measure temperature");
+                    userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementInfo);
+                }
+                else
+                {
+                    plugin.logDebug("Player " + player.getName() + " has no permission " + design.getPermissionThermometer());
+                }
             }
 
 

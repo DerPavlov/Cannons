@@ -36,6 +36,7 @@ public class Config
 	private MaterialHolder toolAdjust = new MaterialHolder(0, 0);
 	private MaterialHolder toolAutoaim = new MaterialHolder(347, 0);
 	private MaterialHolder toolFiring = new MaterialHolder(259, 0);
+    private MaterialHolder toolRamrod = new MaterialHolder(280, 0);
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
     private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
 
@@ -80,6 +81,7 @@ public class Config
 		setToolAdjust(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "0:0")));
 		setToolAutoaim(new MaterialHolder(plugin.getConfig().getString("tools.autoaim", "347:0")));
 		setToolFiring(new MaterialHolder(plugin.getConfig().getString("tools.firing", "259:0")));
+        setToolRamrod(new MaterialHolder(plugin.getConfig().getString("tools.ramrod", "280:0")));
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
 
         //superbreakerBlocks
@@ -254,4 +256,11 @@ public class Config
         this.toolThermometer = toolThermometer;
     }
 
+    public MaterialHolder getToolRamrod() {
+        return toolRamrod;
+    }
+
+    public void setToolRamrod(MaterialHolder toolRamrod) {
+        this.toolRamrod = toolRamrod;
+    }
 }

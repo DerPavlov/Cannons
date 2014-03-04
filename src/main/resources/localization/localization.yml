@@ -54,6 +54,8 @@ Permission:
   ErrorLoad: 'RED [Cannons] No permission to load this gun.'
   ErrorAdjust: 'RED [Cannons] You have no idea how to adjust this cannon.'
   ErrorProjectile: 'RED [Cannons] No permission for this projectile.'
+  ErrorThermometer: 'RED [Cannons] No permission to use the thermometer.'
+  ErrorRamrod: 'RED [Cannons] No permission for the ramrod.'
 
 
 Help:

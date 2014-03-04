@@ -99,6 +99,10 @@ heatManagement:
 realisticBehaviour:
   #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
   isFiringItemRequired: false
+  #how often a cannon needs to be cleaned with the ramrod (stick) before any charge can be loaded
+  cleaningAfterFiring: 3
+  #after loading a projectile it is necessary to push the projectile against the gunpowder
+  pushingProjectileRequired: true
   #the cannon move one block back after firing (not implemented yet)
   hasRecoil: false
   #whether you have to load the cannon from the same place the projectile is fired (aka muzzle loading) (not implemented yet)
@@ -126,7 +130,9 @@ permissions:
   #firing a prewired cannon however is possible.
   redstone: cannons.player.redstone
   #this player can use a thermometer to measure the temperature of a cannon (default item for thermometer is a gold nugget)
-  redstone: cannons.player.thermometer
+  thermometer: cannons.player.thermometer
+  #used to clean a cannon after firing and pushing a projectile into the barrel
+  ramrod: cannons.player.ramrod
   #cannon will autoreload if the player is sneaking and fires the cannon.
   #The ammunition comes from the chest next to the cannon
   autoreload: cannons.player.autoreload

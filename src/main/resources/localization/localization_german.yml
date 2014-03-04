@@ -8,6 +8,8 @@ Error:
   CannonBuiltLimit: 'RED [Cannons] Du darfst nicht mehr als GOLD CANNONS Kanone(n) YELLOW bauen.'
   NotTheOwner: 'RED [Cannons] Diese Kanone kann nur vom Besitzer benutzt werden.'
   MissingSign: 'RED [Cannons] Diese Kanone benötigt ein Sign um zu funktioinieren.'
+
+
 Aiming:
   EnableAimingMode: 'GREEN [Cannons] Zielmodus aktiviert'
   DisableAimingMode: 'RED [Cannons] Zielmodus deaktiviert'
@@ -17,17 +19,33 @@ Aiming:
   SettingVerticalAngleDown: 'YELLOW [Cannons] Neuer vertikaler Winkel GOLD VDEGREE Grad'
   SettingHorizontalAngleRight: 'YELLOW [Cannons] Neuer horizontaler Winkel GOLD HDEGREE Grad YELLOW nach GOLD rechts'
   SettingHorizontalAngleLeft: 'YELLOW [Cannons] Neuer horizontaler Winkel GOLD HDEGREE Grad YELLOW nach GOLD links'
+
+
 Load:  
   Projectile: 'YELLOW [Cannons] Projektil GOLD PROJECTILE YELLOW wurde geladen. Feuere wenn du bereit bist.'
   Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW Schwarzpulver geladen.'
+
+
 Cannon:
   Fire: 'YELLOW [Cannons] FEUER!'
   Created: 'GREEN [Cannons] Eine Kanone wurde erstellt.'
   Destroyed: 'RED [Cannons] Eine deiner Kanonen wurde zerstört.'
   Reseted: 'GREEN [Cannons] Alle deine Kanonen wurden aus der Datenbank entfernt.'
+
+
 Projectile:
   Explosion: 'YELLOW [Cannons] Einschlag war in einer Entfernung von GOLD IMPACT_DISTANCEm YELLOW und GOLD IMPACT_Ym YELLOW GREEN Höhe'
   Canceled: 'YELLOW [Cannons] Einschlag war bei GOLD IMPACT_X, IMPACT_Y, IMPACT_Z YELLOW aber das Gebiet ist geschützt'
+
+
+HeatManagement:
+  Burn: 'YELLOW [Cannons] Du hast dir die Finger an der Kanone verbrannt'
+  Cooling: 'GREEN [Cannons] Die Kanone kühlt sich ab'
+  Info: 'GREEN [Cannons] Die Kanone hat CANNON_TEMP von MAX_TEMP Grad'
+  Critical: 'YELLOW [Cannons] Kritische Temperatur von CANNON_TEMPC'
+  Overheated: 'RED [Cannons] Die Kanone explodierte durch Überhitzung'
+
+
 Permission:
   ErrorRedstone: 'RED [Cannons] Du kannst diese Kanone nicht mit Redstone bedienen.'
   ErrorBuild: 'RED [Cannons] Du darfst diese Kanone nicht bauen.'
@@ -35,6 +53,10 @@ Permission:
   ErrorLoad: 'RED [Cannons] Keine Berechtigung um die Kanone zu laden.'
   ErrorAdjust: 'RED [Cannons] Dir fehlt die Berechtigung zum Zielen.'
   ErrorProjectile: 'RED [Cannons] Keine Erlaubnis für dieses Projektil.'
+  ErrorThermometer: 'RED [Cannons] Du hast keine Ahnung wie man das Thermometer bedient.'
+  ErrorRamrod: 'RED [Cannons] Du würdest dich nur selbst verletzen.'
+
+
 Help:
   Text: 'NEWLINE RED Cannons plugin NEWLINE RED /cannons build GREEN - Wie man eine Kanone baut NEWLINE RED /cannons fire GREEN - Wie man eine Kanone abfeuert NEWLINE RED /cannons adjust GREEN - Wie man mit Kanonen zielt'
   Build: 'NEWLINE RED Wie baut man eine Kanone? NEWLINE GREEN Plaziere 3 Block schwarze Wolle hintereinander für das Kanonenrohr. NEWLINE GREEN Auf jeder Seite des Rohrs ein Knopf. NEWLINE GREEN Zum Abschluss noch eine Fackel auf den ersten Block des Rohrs. NEWLINE GREEN Jetzt sollte eine Meldung erschienen sein.'

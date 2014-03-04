@@ -8,13 +8,15 @@ import com.avaje.ebean.validation.Length;
 import com.avaje.ebean.validation.NotEmpty;
 import org.bukkit.block.BlockFace;
 
+import java.util.UUID;
+
 
 @Entity
 @Table(name ="cannonlist_2_2")
 public class CannonBean
 {
-	@Id 
-	private int id;
+	@Id
+	private UUID id;
 
     @Length(max=20)
 	private String name;
@@ -43,11 +45,11 @@ public class CannonBean
 	
 	
 	
-	public int getId()
+	public UUID getId()
 	{
 		return id;
 	}
-	public void setId(int id)
+	public void setId(UUID id)
 	{
 		this.id = id;
 	}

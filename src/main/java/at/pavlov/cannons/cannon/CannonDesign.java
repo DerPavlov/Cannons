@@ -69,6 +69,8 @@ public class CannonDesign
 
 	//realisticBehaviour
 	private boolean FiringItemRequired;
+    private int cleaningAfterFiring;
+    private boolean pushingProjectileRequired;
 	private boolean hasRecoil;
 	private boolean isFrontloader;
 	private boolean isRotatable;
@@ -82,6 +84,8 @@ public class CannonDesign
 	private String permissionAutoaim;
 	private String permissionTargetTracking;
 	private String permissionRedstone;
+    private String permissionThermometer;
+    private String permissionRamrod;
 	private String permissionAutoreload;
 	private String permissionSpreadMultiplier;
 	
@@ -982,5 +986,37 @@ public class CannonDesign
 
     public void setAutomaticTemperatureControl(boolean automaticTemperatureControl) {
         this.automaticTemperatureControl = automaticTemperatureControl;
+    }
+
+    public int getCleaningAfterFiring() {
+        return cleaningAfterFiring;
+    }
+
+    public void setCleaningAfterFiring(int cleaningAfterFiring) {
+        this.cleaningAfterFiring = cleaningAfterFiring;
+    }
+
+    public boolean isPushingProjectileRequired() {
+        return pushingProjectileRequired;
+    }
+
+    public void setPushingProjectileRequired(boolean pushingProjectileRequired) {
+        this.pushingProjectileRequired = pushingProjectileRequired;
+    }
+
+    public String getPermissionThermometer() {
+        return permissionThermometer;
+    }
+
+    public void setPermissionThermometer(String permissionThermometer) {
+        this.permissionThermometer = permissionThermometer;
+    }
+
+    public String getPermissionRamrod() {
+        return permissionRamrod;
+    }
+
+    public void setPermissionRamrod(String permissionRamrod) {
+        this.permissionRamrod = permissionRamrod;
     }
 }

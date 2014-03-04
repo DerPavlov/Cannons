@@ -65,7 +65,7 @@ public class PersistenceDatabase
 					//make a cannon
 					Cannon cannon = new Cannon(design, world, offset, cannonDirection, owner);
 					// cannon created - load properties
-					cannon.setDatabaseId(bean.getId());
+					cannon.setID(bean.getId());
 					cannon.setCannonName(bean.getName());
 					cannon.setLoadedGunpowder(bean.getGunpowder());
 					
@@ -154,18 +154,18 @@ public class PersistenceDatabase
 		try
 		{
 			// search if the is cannon already stored in the database
-			CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.getDatabaseId()).findUnique();
+			CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.getID()).findUnique();
 			
 			if (bean == null)
 			{
 				plugin.logDebug("creating new database entry");
 				// create a new bean that is managed by bukkit
 				bean = plugin.getDatabase().createEntityBean(CannonBean.class);
-				cannon.setDatabaseId(bean.getId());
+				cannon.setID(bean.getId());
 			}
 			else
 			{
-				plugin.logDebug("saving cannons in database as id " + cannon.getDatabaseId());
+				plugin.logDebug("saving cannons in database as id " + cannon.getID());
 			}
 
 			// fill the bean with values to store
@@ -210,7 +210,7 @@ public class PersistenceDatabase
 
 			// store the bean
 			plugin.getDatabase().save(bean);
-			cannon.setDatabaseId(bean.getId());	
+			cannon.setID(bean.getId());
 			return true;
 		}
 		catch (Exception e)
@@ -286,9 +286,9 @@ public class PersistenceDatabase
 	 */
     void deleteCannon(Cannon cannon)
 	{
-		// if the database id is null nothing, it is not saved in the database
-		if (cannon.getDatabaseId() >= 0)
-				plugin.getDatabase().delete(CannonBean.class, cannon.getDatabaseId());
+		// if the database id is null, it is not saved in the database
+		if (cannon.getID() == null)
+				plugin.getDatabase().delete(CannonBean.class, cannon.getID());
 	}
 
 }
