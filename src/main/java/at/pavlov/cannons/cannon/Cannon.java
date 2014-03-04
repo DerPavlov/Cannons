@@ -52,6 +52,11 @@ public class Cannon
 	// the loaded projectile - can be null
 	private Projectile loadedProjectile;
 
+    // cleaning after firing (clicking with the stick several times
+    private int toClean;
+    // pushing a projectile into the barrel after loading the projectile
+    private boolean isProjectilePushed;
+
 	// angles
 	private double horizontalAngle;
 	private double verticalAngle;
@@ -92,8 +97,10 @@ public class Cannon
         this.verticalAngle = (design.getMaxVerticalAngle()+design.getMinVerticalAngle())/2.0;
 
 		// reset
-		this.loadedGunpowder = 0;
-		this.loadedProjectile = null;
+		this.setLoadedGunpowder(0);
+		this.setLoadedProjectile(null);
+        this.setToClean(design.getCleaningAfterFiring());
+        this.setProjectilePushed(!design.isPushingProjectileRequired());
 
 		this.databaseId = null;
 	}
@@ -249,16 +256,15 @@ public class Cannon
 	 */
     MessageEnum loadGunpowder(int amountToLoad)
 	{
+        // this cannon needs to be cleaned first
+        if (!isCleaned())
+            return MessageEnum.ErrorNotCleaned;
 		// projectile already loaded
 		if (isLoaded())
-		{
 			return MessageEnum.ErrorProjectileAlreadyLoaded;
-		}
 		// maximum gunpowder already loaded
 		if (getLoadedGunpowder() >= design.getMaxLoadableGunpowder())
-		{
 			return MessageEnum.ErrorMaximumGunpowderLoaded;
-		}
 		
 		//load the maximum gunpowder
 		for (int i = 0; i < amountToLoad; i++)
@@ -365,14 +371,10 @@ public class Cannon
 		{
 			//if the player is not the owner of this gun
 			if (!this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
-			{
 				return MessageEnum.ErrorNotTheOwner;
-			}
 			// player can't load cannon
 			if (!player.hasPermission(design.getPermissionLoad()))
-			{
 				return MessageEnum.PermissionErrorLoad;
-			}
 		}
 		// loading successful
 		return MessageEnum.loadGunpowder;
@@ -417,6 +419,40 @@ public class Cannon
 		// loading successful
 		return MessageEnum.loadProjectile;
 	}
+
+    /**
+     * a ramrod is used to clean the barrel before loading gunpowder and to push the projectile into the barrel
+     * @param player player using the ramrod tool (null will bypass permission check)
+     * @return message for the player
+     */
+    public MessageEnum useRamRod(Player player)
+    {
+        //no permission to use this tool
+        if (player!=null && !player.hasPermission(design.getPermissionRamrod()))
+            return MessageEnum.PermissionErrorRamrod;
+        //if the player is not the owner of this gun
+        if (player!=null &&!this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
+            return MessageEnum.ErrorNotTheOwner;
+        //if the barrel id dirty clean it
+        if (toClean>0)
+        {
+            toClean--;
+            if (toClean == 0)
+                return MessageEnum.RamrodCleaningDone;
+            else
+                return MessageEnum.RamrodCleaning;
+        }
+
+        //if the projectile is loaded
+        if (isLoaded() && !isProjectilePushed())
+        {
+            setProjectilePushed(true);
+            return MessageEnum.RamrodPushingProjectile;
+        }
+
+        //no matching case found
+        return null;
+    }
 
 	/**
 	 * is cannon loaded return true
@@ -1449,4 +1485,24 @@ public class Cannon
         this.tempValue = temperature;
     }
 
+    public int getToClean() {
+        return toClean;
+    }
+
+    public void setToClean(int toClean) {
+        this.toClean = toClean;
+    }
+
+    public boolean isProjectilePushed() {
+        return isProjectilePushed;
+    }
+
+    public void setProjectilePushed(boolean projectilePushed) {
+        isProjectilePushed = projectilePushed;
+    }
+
+    public boolean isCleaned()
+    {
+        return toClean==0;
+    }
 }

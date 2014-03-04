@@ -43,48 +43,32 @@ public class FireCannon {
 		this.explosion = explosion;
 	}
 
-    /**
-     * fires additionally the cannon fire event when the cannon is fired
-     * @param cannon - cannon to fire
-     * @param player - operator of the cannon
-     * @param action - how has the player/plugin interacted with the cannon
-     * @return - message for the player
-     */
-    public MessageEnum fireCannonAndEvents(Cannon cannon, Player player, InteractAction action)
-    {
-        CannonDesign design = cannon.getCannonDesign();
-
-        //fire event
-        CannonUseEvent useEvent = new CannonUseEvent(cannon, player, action);
-        Bukkit.getServer().getPluginManager().callEvent(useEvent);
-
-        if (useEvent.isCancelled())
-            return null;
-
-        boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
-
-        return this.prepareFire(cannon, player, autoreload, !design.isAmmoInfiniteForPlayer());
-    }
-
 	
 	/**
 	 * checks all condition but does not fire the cannon
-	 * @param cannon
-	 * @param player
-	 * @return
+	 * @param cannon cannon which is fired
+	 * @param player operator of the cannon
+	 * @return message for the player
 	 */
-    MessageEnum getPrepareFireMessage(Cannon cannon, Player player)
+    private MessageEnum getPrepareFireMessage(Cannon cannon, Player player)
 	{
 		CannonDesign design = cannon.getCannonDesign();
 		if (design == null) return null;
 		//if the player is not the owner of this gun
 		if (player != null && !cannon.getOwner().equals(player.getName())  && design.isAccessForOwnerOnly())
 			return MessageEnum.ErrorNotTheOwner;
+        // is the cannon already cleaned?
+        if (!cannon.isCleaned())
+            return MessageEnum.ErrorNotCleaned;
 		//check if there is some gunpowder in the barrel
 		if (cannon.getLoadedGunpowder() <= 0)
 			return MessageEnum.ErrorNoGunpowder;//is there a projectile
-		if(!cannon.isLoaded())
+        // is there a projectile in the cannon?
+		if (!cannon.isLoaded())
             return MessageEnum.ErrorNoProjectile;
+        // after cleaning the projectile needs to pushed in the barrel
+        if (!cannon.isProjectilePushed())
+            return MessageEnum.ErrorNotPushed;
         //Firing in progress
         if (cannon.isFiring())
             return MessageEnum.ErrorFiringInProgress;
@@ -112,17 +96,57 @@ public class FireCannon {
 		//everything fine fire the damn cannon
 		return MessageEnum.CannonFire;
 	}
+
+    /**
+     * checks if all preconditions for firing are fulfilled and fires the cannon
+     * Default fire event for players
+     * @param cannon - cannon to fire
+     * @param action - how has the player/plugin interacted with the cannon
+     * @return - message for the player
+     */
+    public MessageEnum redstoneFiring(Cannon cannon, InteractAction action)
+    {
+
+        CannonDesign design = cannon.getCannonDesign();
+        return this.fire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !design.isAmmoInfiniteForRedstone(), action);
+    }
+
+    /**
+     * checks if all preconditions for firing are fulfilled and fires the cannon
+     * Default fire event for players
+     * @param cannon - cannon to fire
+     * @param player - operator of the cannon
+     * @param action - how has the player/plugin interacted with the cannon
+     * @return - message for the player
+     */
+    public MessageEnum playerFiring(Cannon cannon, Player player, InteractAction action)
+    {
+
+        CannonDesign design = cannon.getCannonDesign();
+        boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
+
+        return this.fire(cannon, player, autoreload, !design.isAmmoInfiniteForPlayer(), action);
+    }
 	
 	/**
 	 * checks if all preconditions for firing are fulfilled and fires the cannon
-	 * @param cannon - the cannon which is fired
-	 * @param player - player operating the cannon
-	 * @param autoload - the cannon will autoreload before firing
-     * @param consumesAmmo - if true ammo will be removed from chest inventories
-	 * @return - message for the player
+	 * @param cannon the cannon which is fired
+	 * @param player player operating the cannon
+	 * @param autoload the cannon will autoreload before firing
+     * @param consumesAmmo if true ammo will be removed from chest inventories
+	 * @return message for the player
 	 */
-	public MessageEnum prepareFire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo)
+	public MessageEnum fire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo, InteractAction action)
 	{
+        //fire event
+        CannonUseEvent useEvent = new CannonUseEvent(cannon, player, action);
+        Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+        if (useEvent.isCancelled())
+            return null;
+
+
+
         Projectile projectile = cannon.getLoadedProjectile();
         //no charge no firing
         if (cannon.getLoadedGunpowder() == 0 || projectile == null)
@@ -209,7 +233,7 @@ public class FireCannon {
                 public void run(Object object)
                     {
                         FireTaskWrapper fireTask = (FireTaskWrapper) object;
-                        fire(fireTask.getCannon(), fireTask.getPlayer(), fireTask.isRemoveCharge());
+                        fireTask(fireTask.getCannon(), fireTask.getPlayer(), fireTask.isRemoveCharge());
                     }
             }, delayTime);
         }
@@ -221,7 +245,7 @@ public class FireCannon {
      * @param shooter - the player firing the cannon
      * @param removeCharge - if the charge is removed after firing
 	 */
-    private void fire(Cannon cannon, Player shooter, boolean removeCharge)
+    private void fireTask(Cannon cannon, Player shooter, boolean removeCharge)
     {
         CannonDesign design = cannon.getCannonDesign();
         Projectile projectile = cannon.getLoadedProjectile();
@@ -268,6 +292,8 @@ public class FireCannon {
 
         //reset after firing
         cannon.setLastFired(System.currentTimeMillis());
+        cannon.setToClean(design.getCleaningAfterFiring());
+        cannon.setProjectilePushed(!design.isPushingProjectileRequired());
 
         //check if the temperature exceeds the limit
         boolean isDestroyed = cannon.checkHeatManagement();

@@ -1,7 +1,9 @@
 Error:
   BarrelTooHot: 'RED [Cannons] Das Rohr ist zu heiss'
-  NoProjectile: 'RED [Cannons] Kein Kanonenkugel im Rohr. Lade einen Block!'
+  NotCleaned: 'RED [Cannons] Das Rohr muss noch geputzt werden.'
   NoGunpowder: 'RED [Cannons] Kein Schwarzpulver. Lade zuerst die Treibladung!'
+  NoProjectile: 'RED [Cannons] Kein Kanonenkugel im Rohr. Lade einen Block!'
+  NotPushed: 'RED [Cannons] Die Kanone muss noch gestopft werden.'
   NoFlintAndSteel: 'RED [Cannons] Du brauchst ein Feuerzeug zum Feuern.'
   MaximumGunpowderLoaded: 'YELLOW [Cannons] Du hast bereits GOLD GUNPOWDERkg YELLOW Schwarzpulver geladen.'
   ProjectileAlreadyLoaded: 'YELLOW [Cannons] Es wurde bereits eine Kanonenkugel aus GOLD PROJECTILE YELLOW mit GOLD GUNPOWDERkg YELLOW Pulver geladen. Feuere die Kanone endlich ab!'
@@ -22,7 +24,7 @@ Aiming:
 
 
 Load:  
-  Projectile: 'YELLOW [Cannons] Projektil GOLD PROJECTILE YELLOW wurde geladen. Feuere wenn du bereit bist.'
+  Projectile: 'YELLOW [Cannons] Projektil GOLD PROJECTILE YELLOW wurde geladen.'
   Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW Schwarzpulver geladen.'
 
 
@@ -44,6 +46,12 @@ HeatManagement:
   Info: 'GREEN [Cannons] Die Kanone hat CANNON_TEMP von MAX_TEMP Grad'
   Critical: 'YELLOW [Cannons] Kritische Temperatur von CANNON_TEMPC'
   Overheated: 'RED [Cannons] Die Kanone explodierte durch Überhitzung'
+
+
+Ramrod:
+  Cleaning: 'YELLOW [Cannons] Das Rohr is noch nicht sauber genug.'
+  CleaningDone: 'GREEN [Cannons] Die Kanone is jetzt bereit zum Laden.'
+  PushingProjectile: 'GREEN [Cannons] Projektil fixiert. Kanone ist jetzt bereit.'
 
 
 Permission:

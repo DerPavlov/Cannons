@@ -1,9 +1,11 @@
 Error:
   FiringInProgress: 'RED [Cannons] Cannon is firing. Step back.'
   BarrelTooHot: 'RED [Cannons] The barrel is too hot and must cool down.'
-  NoProjectile: 'RED [Cannons] No projectile loaded. Load something!'
+  NotCleaned: 'RED [Cannons] The barrel must be cleaned before firing.'
   NoGunpowder: 'RED [Cannons] No gunpowder. Please load the barrel with gunpowder.'
+  NoProjectile: 'RED [Cannons] No projectile loaded. Load something!'
   NoFlintAndSteel: 'RED [Cannons] You need flint and steel to fire.'
+  NotPushed: 'RED [Cannons] Push the projectile with a stick before firing.'
   MaximumGunpowderLoaded: 'YELLOW [Cannons] Maximum gunpowder of GOLD GUNPOWDERkg YELLOW already loaded. More will destroyed the barrel.'
   ProjectileAlreadyLoaded: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW and GOLD GUNPOWDER YELLOW gunpowder already loaded. Fire the damn gun before you blow yourself up.'
   CannonBuiltLimit: 'RED [Cannons] You cant build more than GOLD CANNONS YELLOW guns'
@@ -23,7 +25,7 @@ Aiming:
 
 
 Load:  
-  Projectile: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW has been loaded. Fire the gun if ready.'
+  Projectile: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW has been loaded.'
   Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW of Gunpowder loaded.'
 
 
@@ -45,6 +47,11 @@ HeatManagement:
   Info: 'GREEN [Cannons] Cannon temperature is CANNON_TEMP / MAX_TEMP degree Celsius'
   Critical: 'YELLOW [Cannons] Cannon temperature of CANNON_TEMPC is critical'
   Overheated: 'RED [Cannons] The cannon exploded due to overheating'
+
+Ramrod:
+  Cleaning: 'YELLOW [Cannons] Scouring cannon.'
+  CleaningDone: 'GREEN [Cannons] The barrel is cleang enough.'
+  PushingProjectile: 'GREEN [Cannons] Pushed projectile. Cannon is ready to fire'
 
 
 Permission:

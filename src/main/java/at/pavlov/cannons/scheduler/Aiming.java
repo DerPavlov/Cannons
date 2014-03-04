@@ -390,7 +390,7 @@ public class Aiming {
             //this player is already in aiming mode, he might fire the cannon or turn the aiming mode of
 		    if (player.isSneaking())
             {
-                MessageEnum message = plugin.getFireCannon().fireCannonAndEvents(cannon, player, InteractAction.fireAutoaim);
+                MessageEnum message = plugin.getFireCannon().playerFiring(cannon, player, InteractAction.fireAutoaim);
                 userMessages.displayMessage(player, cannon, message);
             }
             else

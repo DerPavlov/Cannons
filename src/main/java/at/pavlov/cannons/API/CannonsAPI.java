@@ -1,6 +1,7 @@
 package at.pavlov.cannons.API;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.Enum.MessageEnum;
 import org.bukkit.Location;
@@ -19,17 +20,40 @@ public class CannonsAPI {
     }
 
     /**
-     * fires the given cannon if the player has enough permissions
-     * @param cannon - the cannon to fire
-     * @param player - the player how is firing the cannon
-     * @param autoreload - if the cannon will autoreload from a chest after firing
-     * @param consumesAmmo - if true the cannon will remove ammo from attached chests
+     * fires the given cannon
+     * @param cannon the cannon to fire
+     * @param player the player how is firing the cannon. Player:null will skip permission check.
+     * @param autoreload if the cannon will autoreload from a chest after firing
+     * @param consumesAmmo if true the cannon will remove ammo from attached chests
      * @return returns a MessagesEnum if the firing was successful or not
      */
-    public MessageEnum fireCannon(Cannon cannon, Player player, boolean autoreload, boolean consumesAmmo)
+    public MessageEnum fireCannon(Cannon cannon, Player player, boolean autoreload, boolean consumesAmmo, InteractAction interaction)
     {
-        return plugin.getFireCannon().prepareFire(cannon, player, autoreload, consumesAmmo);
+        return plugin.getFireCannon().fire(cannon, player, autoreload, consumesAmmo, interaction);
     }
+
+    /**
+     * fires the given cannon. Default cannon design settings for players are used.
+     * @param cannon the cannon to fire
+     * @param player the player how is firing the cannon
+     * @return returns a MessagesEnum if the firing was successful or not
+     */
+    public MessageEnum playerFiring(Cannon cannon, Player player, InteractAction interaction)
+    {
+        return plugin.getFireCannon().playerFiring(cannon, player, interaction);
+    }
+
+    /**
+     * fires the given cannon. Default cannon design settings for redstone are used.
+     * @param cannon the cannon to fire
+     * @return returns a MessagesEnum if the firing was successful or not
+     */
+    public MessageEnum redstoneFiring(Cannon cannon, InteractAction interaction)
+    {
+        return plugin.getFireCannon().redstoneFiring(cannon, interaction);
+    }
+
+
 
 
     /**

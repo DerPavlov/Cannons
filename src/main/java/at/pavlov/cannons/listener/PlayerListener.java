@@ -231,13 +231,7 @@ public class PlayerListener implements Listener
 				plugin.logDebug("redstone torch");
 				if (cannon.isRedstoneTorchInterface(block.getLocation())) 
                 {
-                    CannonRedstoneEvent redEvent = new CannonRedstoneEvent(cannon);
-                    Bukkit.getServer().getPluginManager().callEvent(redEvent);
-
-                    if (redEvent.isCancelled())
-                        return;
-
-                    MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
+                    MessageEnum message = fireCannon.redstoneFiring(cannon, InteractAction.fireRedstone);
                     plugin.logDebug("fire cannon returned: " + message.getString());
                 }
 			}
@@ -261,13 +255,7 @@ public class PlayerListener implements Listener
 						plugin.logDebug("redstone wire ");
 						if (cannon.isRedstoneWireInterface(block.getLocation()))
                         {
-                            CannonRedstoneEvent redEvent = new CannonRedstoneEvent(cannon);
-                            Bukkit.getServer().getPluginManager().callEvent(redEvent);
-
-                            if (redEvent.isCancelled())
-                                return;
-
-                            MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
+                            MessageEnum message = fireCannon.redstoneFiring(cannon, InteractAction.fireRedstone);
                             plugin.logDebug("fire cannon returned: " + message.getString());
                         }
 					}
@@ -289,13 +277,7 @@ public class PlayerListener implements Listener
 					plugin.logDebug("redstone repeater ");
 					if (cannon.isRedstoneRepeaterInterface(block.getLocation())) 
                     {
-                        CannonRedstoneEvent redEvent = new CannonRedstoneEvent(cannon);
-                        Bukkit.getServer().getPluginManager().callEvent(redEvent);
-
-                        if (redEvent.isCancelled())
-                            return;
-
-                        MessageEnum message = fireCannon.prepareFire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
+                        MessageEnum message = fireCannon.redstoneFiring(cannon, InteractAction.fireRedstone);
                         plugin.logDebug("fire cannon returned: " + message.getString());
                     }
 
@@ -321,10 +303,9 @@ public class PlayerListener implements Listener
                 if (player == null)
                     return;
 
-
                 plugin.logDebug("Redfire with button by " + player.getName());
 
-                MessageEnum message = fireCannon.fireCannonAndEvents(cannon, player, InteractAction.fireButton);
+                MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireButton);
                 userMessages.displayMessage(player, cannon, message);
 			}
 		}
@@ -467,6 +448,18 @@ public class PlayerListener implements Listener
 			}
 
 
+
+
+            // ########## Ramrod ###############################
+            if (ItemInHand.equals(config.getToolRamrod()))
+            {
+                MessageEnum message = cannon.useRamRod(player);
+                userMessages.displayMessage(player, cannon, message);
+
+                return;
+            }
+
+
 			// ########## Load Projectile ######################
 			Projectile projectile = plugin.getProjectile(cannon, event.getItem());
 			if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null)
@@ -505,7 +498,7 @@ public class PlayerListener implements Listener
 			{
 				plugin.logDebug("fire torch");
 
-                MessageEnum message = fireCannon.fireCannonAndEvents(cannon, player, InteractAction.fireTorch);
+                MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireTorch);
 
   				// display message
 				userMessages.displayMessage(player, cannon, message);

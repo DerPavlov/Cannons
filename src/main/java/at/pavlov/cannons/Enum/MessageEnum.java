@@ -5,8 +5,10 @@ public enum MessageEnum
 	//Error Messages
     ErrorFiringInProgress ("Error.FiringInProgress"),
 	ErrorBarrelTooHot ("Error.BarrelTooHot"),
-	ErrorNoProjectile ("Error.NoProjectile"),
+    ErrorNotCleaned ("Error.NotCleaned"),
 	ErrorNoGunpowder ("Error.NoGunpowder"),
+    ErrorNoProjectile ("Error.NoProjectile"),
+    ErrorNotPushed ("Error.NotPushed"),
 	ErrorNoFlintAndSteel ("Error.NoFlintAndSteel"),
 	ErrorMaximumGunpowderLoaded ("Error.MaximumGunpowderLoaded"),
 	ErrorProjectileAlreadyLoaded ("Error.ProjectileAlreadyLoaded"),
@@ -44,6 +46,12 @@ public enum MessageEnum
     HeatManagementInfo ("HeatManagement.Info"),
     HeatManagementCritical ("HeatManagement.Critical"),
     HeatManagementOverheated ("HeatManagement.Overheated"),
+
+    //ramrod
+    RamrodCleaning ("Ramrod.Cleaning"),
+    RamrodCleaningDone ("Ramrod.CleaningDone"),
+    RamrodPushingProjectile ("Ramrod.PushingProjectile"),
+
 	
 	//Permission
 	PermissionErrorRedstone ("Permission.ErrorRedstone"),
