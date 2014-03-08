@@ -68,13 +68,13 @@ public class PersistenceDatabase
 					// cannon created - load properties
 					cannon.setID(bean.getId());
 					cannon.setCannonName(bean.getName());
-                    cannon.setToClean(bean.getToClean());
+                    cannon.setSoot(bean.getSoot());
 					cannon.setLoadedGunpowder(bean.getGunpowder());
 					
 					//load projectile
 					cannon.setLoadedProjectile(plugin.getProjectile(cannon, bean.getProjectileID(), bean.getProjectileData()));
 
-                    cannon.setProjectilePushed(bean.isProjectilePushed());
+                    cannon.setProjectilePushed(bean.getProjectilePushed());
 
 					//angles
 					cannon.setHorizontalAngle(bean.getHorizontalAngle());
@@ -188,7 +188,7 @@ public class PersistenceDatabase
 			// name
 			bean.setName(cannon.getCannonName());
             // must the barrel be clean with the ramrod
-            bean.setToClean(cannon.getToClean());
+            bean.setSoot(cannon.getSoot());
 			// amount of gunpowder
 			bean.setGunpowder(cannon.getLoadedGunpowder());
 			
@@ -206,7 +206,7 @@ public class PersistenceDatabase
 				bean.setProjectileData(0);	
 			}
             //is the projectile already pushed in the barrel
-            bean.setProjectilePushed(cannon.isProjectilePushed());
+            bean.setProjectilePushed(cannon.getProjectilePushed());
 
 			// angles
 			bean.setHorizontalAngle(cannon.getHorizontalAngle());
