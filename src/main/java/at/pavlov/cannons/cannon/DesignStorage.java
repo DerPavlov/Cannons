@@ -212,8 +212,8 @@ public class DesignStorage
 
         // realisticBehaviour
 		cannonDesign.setFiringItemRequired(cannonDesignConfig.getBoolean("realisticBehaviour.isFiringItemRequired", false));
-        cannonDesign.setCleaningAfterFiring(cannonDesignConfig.getInt("realisticBehaviour.cleaningAfterFiring", 0));
-        cannonDesign.setPushingProjectileRequired(cannonDesignConfig.getBoolean("realisticBehaviour.pushingProjectileRequired", false));
+        cannonDesign.setSootPerGunpowder(cannonDesignConfig.getDouble("realisticBehaviour.sootPerGunpowder", 0.0));
+        cannonDesign.setProjectilePushing(cannonDesignConfig.getInt("realisticBehaviour.projectilePushing", 0));
 		cannonDesign.setHasRecoil(cannonDesignConfig.getBoolean("realisticBehaviour.hasRecoil", false));
 		cannonDesign.setFrontloader(cannonDesignConfig.getBoolean("realisticBehaviour.isFrontloader", false));
 		cannonDesign.setRotatable(cannonDesignConfig.getBoolean("realisticBehaviour.isRotatable", false));

@@ -102,10 +102,10 @@ heatManagement:
 realisticBehaviour:
   #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
   isFiringItemRequired: false
-  #how often a cannon needs to be cleaned with the ramrod (stick) before any charge can be loaded
-  cleaningAfterFiring: 3
+  #firing a cannon produced soot (dirt) which needs to be cleaned. Cleaning is necessary if soot>=1
+  sootPerGunpowder: 0.1
   #after loading a projectile it is necessary to push the projectile against the gunpowder
-  pushingProjectileRequired: true
+  projectilePushing: 2
   #the cannon move one block back after firing (not implemented yet)
   hasRecoil: false
   #whether you have to load the cannon from the same place the projectile is fired (aka muzzle loading) (not implemented yet)

@@ -54,9 +54,9 @@ public class Cannon
 	private Projectile loadedProjectile;
 
     // cleaning after firing (clicking with the stick several times
-    private int toClean;
+    private double soot;
     // pushing a projectile into the barrel after loading the projectile
-    private boolean isProjectilePushed;
+    private int projectilePushed;
 
 	// angles
 	private double horizontalAngle;
@@ -100,8 +100,8 @@ public class Cannon
 		// reset
 		this.setLoadedGunpowder(0);
 		this.setLoadedProjectile(null);
-        this.setToClean(0);
-        this.setProjectilePushed(!design.isPushingProjectileRequired());
+        this.setSoot(0.0);
+        this.setProjectilePushed(design.getProjectilePushing());
 
 		this.databaseId = UUID.randomUUID();
 	}
@@ -128,7 +128,7 @@ public class Cannon
         List<Inventory> invlist = getInventoryList();
 
         //clean the cannon
-        setToClean(0);
+        //setSoot(0.0);
 
         //load gunpowder
         if (design.isGunpowderConsumption()&&consumesAmmo)
@@ -192,7 +192,7 @@ public class Cannon
                     }
 
                     //push projectile and done
-                    setProjectilePushed(true);
+                    setProjectilePushed(0);
                     return true;
                 }
             }
@@ -266,7 +266,7 @@ public class Cannon
     MessageEnum loadGunpowder(int amountToLoad)
 	{
         // this cannon needs to be cleaned first
-        if (!isCleaned())
+        if (!isClean())
             return MessageEnum.ErrorNotCleaned;
 		// projectile already loaded
 		if (isLoaded())
@@ -411,7 +411,7 @@ public class Cannon
 		if (isLoaded())
 			return MessageEnum.ErrorProjectileAlreadyLoaded;
         // is cannon cleaned with ramrod?
-        if (!isCleaned())
+        if (!isClean())
             return MessageEnum.ErrorNotCleaned;
 		// no gunpowder loaded
 		if (getLoadedGunpowder() == 0)
@@ -443,21 +443,32 @@ public class Cannon
         if (player!=null &&!this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
             return MessageEnum.ErrorNotTheOwner;
         //if the barrel id dirty clean it
-        if (toClean>0)
+        if (!isClean())
         {
-            toClean--;
-            if (toClean == 0)
+            cleanCannon(1);
+            if (isClean())
                 return MessageEnum.RamrodCleaningDone;
             else
                 return MessageEnum.RamrodCleaning;
         }
 
+        //if clean load the gunpowder
+        if (isClean())
+            return MessageEnum.loadGunpowder;
+
         //if the projectile is loaded
         if (isLoaded() && !isProjectilePushed())
         {
-            setProjectilePushed(true);
-            return MessageEnum.RamrodPushingProjectile;
+            pushProjectile(1);
+            if (isProjectilePushed())
+                return MessageEnum.RamrodPushingProjectile;
+            else
+                return MessageEnum.RamrodPushingProjectileDone;
         }
+
+        //if projectile is in place
+        if (isLoaded() && isProjectilePushed())
+            return MessageEnum.ErrorProjectileAlreadyLoaded;
 
         //no matching case found
         return null;
@@ -1550,29 +1561,55 @@ public class Cannon
         this.tempValue = temperature;
     }
 
-    public int getToClean() {
-        return toClean;
-    }
-
-    public void setToClean(int toClean) {
-        this.toClean = toClean;
-    }
-
-    public boolean isProjectilePushed() {
-        return isProjectilePushed;
-    }
-
-    public void setProjectilePushed(boolean projectilePushed) {
-        isProjectilePushed = projectilePushed;
-    }
-
-    public boolean isCleaned()
+    public boolean isClean()
     {
-        return toClean==0;
+        return getSoot()<1;
     }
 
     public boolean isLoadedWithGunpowder()
     {
         return loadedGunpowder!=0;
     }
+
+    public double getSoot() {
+        return soot;
+    }
+
+    public void setSoot(double soot) {
+        this.soot = (soot>0)?soot:0;
+    }
+
+    /**
+     * reduces the soot of the cannon by the given amount
+     * @param amount soot to reduce
+     */
+    public void cleanCannon(int amount){
+        setSoot(getSoot()-amount);
+    }
+
+    public int getProjectilePushed() {
+        return projectilePushed;
+    }
+
+    public void setProjectilePushed(int projectilePushed) {
+        this.projectilePushed = (projectilePushed>0)?projectilePushed:0;
+    }
+
+    /**
+     * is the Projectile in place and done
+     * @return if the projectile is ready to fire
+     */
+    public boolean isProjectilePushed(){
+        return (getProjectilePushed() == 0);
+    }
+
+    /**
+     * pushes the projectile to the gunpowder
+     * @param amount how often the projectile is pushed
+     */
+    public void pushProjectile(int amount){
+        setProjectilePushed(getProjectilePushed()-amount);
+    }
+
+
 }

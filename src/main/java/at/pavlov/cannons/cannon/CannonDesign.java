@@ -71,8 +71,8 @@ public class CannonDesign
 
 	//realisticBehaviour
 	private boolean FiringItemRequired;
-    private int cleaningAfterFiring;
-    private boolean pushingProjectileRequired;
+    private double sootPerGunpowder;
+    private int projectilePushing;
 	private boolean hasRecoil;
 	private boolean isFrontloader;
 	private boolean isRotatable;
@@ -990,22 +990,6 @@ public class CannonDesign
         this.automaticTemperatureControl = automaticTemperatureControl;
     }
 
-    public int getCleaningAfterFiring() {
-        return cleaningAfterFiring;
-    }
-
-    public void setCleaningAfterFiring(int cleaningAfterFiring) {
-        this.cleaningAfterFiring = cleaningAfterFiring;
-    }
-
-    public boolean isPushingProjectileRequired() {
-        return pushingProjectileRequired;
-    }
-
-    public void setPushingProjectileRequired(boolean pushingProjectileRequired) {
-        this.pushingProjectileRequired = pushingProjectileRequired;
-    }
-
     public String getPermissionThermometer() {
         return permissionThermometer;
     }
@@ -1036,5 +1020,21 @@ public class CannonDesign
 
     public void setMessageName(String messageName) {
         this.messageName = messageName;
+    }
+
+    public double getSootPerGunpowder() {
+        return sootPerGunpowder;
+    }
+
+    public void setSootPerGunpowder(double sootPerGunpowder) {
+        this.sootPerGunpowder = sootPerGunpowder;
+    }
+
+    public int getProjectilePushing() {
+        return projectilePushing;
+    }
+
+    public void setProjectilePushing(int projectilePushing) {
+        this.projectilePushing = projectilePushing;
     }
 }

@@ -51,14 +51,15 @@ HeatManagement:
 Ramrod:
   Cleaning: 'YELLOW [Cannons] Das Rohr is noch nicht sauber genug.'
   CleaningDone: 'GREEN [Cannons] Die CANNON is jetzt bereit zum Laden.'
-  PushingProjectile: 'GREEN [Cannons] Projektil fixiert. CANNON ist jetzt bereit.'
+  PushingProjectile: 'YELLOW [Cannons] Projectile in das Rohr gedrückt. Es ist noch nicht fixiert.'
+  PushingProjectileDone: 'GREEN [Cannons] Projectile fixiert. CANNON bereit.'
 
 
 Permission:
   ErrorRedstone: 'RED [Cannons] Du kannst diese CANNON nicht mit Redstone bedienen.'
   ErrorBuild: 'RED [Cannons] Du darfst diese CANNON nicht bauen.'
   ErrorFire: 'RED [Cannons] Du weisst nicht wie du diese CANNON abfeuerst.'
-  ErrorLoad: 'RED [Cannons] Keine Berechtigung um die CANNON zu laden.'
+  ErrorLoad: 'RED [Cannons] Keine Berechtigung um die Kanone zu laden.'
   ErrorAdjust: 'RED [Cannons] Dir fehlt die Berechtigung zum Zielen.'
   ErrorProjectile: 'RED [Cannons] Keine Erlaubnis für dieses Projektil.'
   ErrorThermometer: 'RED [Cannons] Du hast keine Ahnung wie man das Thermometer bedient.'

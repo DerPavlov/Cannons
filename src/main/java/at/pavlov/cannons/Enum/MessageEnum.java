@@ -51,6 +51,7 @@ public enum MessageEnum
     RamrodCleaning ("Ramrod.Cleaning"),
     RamrodCleaningDone ("Ramrod.CleaningDone"),
     RamrodPushingProjectile ("Ramrod.PushingProjectile"),
+    RamrodPushingProjectileDone ("Ramrod.PushingProjectileDone"),
 
 	
 	//Permission
