@@ -290,6 +290,8 @@ public class UserMessages {
             message = message.replace("MAX_TEMP", String.format("%.1f", cannon.getCannonDesign().getMaximumTemperature()));
             message = message.replace("CRIT_TEMP", String.format("%.1f", cannon.getCannonDesign().getCriticalTemperature()));
             message = message.replace("WARN_TEMP", String.format("%.1f", cannon.getCannonDesign().getWarningTemperature()));
+            //cannon message name
+            message = message.replace("CANNON", cannon.getCannonDesign().getMessageName());
 		}
 
 		if (player != null)

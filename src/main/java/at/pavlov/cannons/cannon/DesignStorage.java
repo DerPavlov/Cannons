@@ -155,7 +155,9 @@ public class DesignStorage
 
 		// general
 		cannonDesign.setDesignID(CannonsUtil.removeExtension(ymlFile));
-		cannonDesign.setDesignName(cannonDesignConfig.getString("general.designName", "noCannonName"));
+        cannonDesign.setDesignName(cannonDesignConfig.getString("general.designName", "no cannonName"));
+        cannonDesign.setMessageName(cannonDesignConfig.getString("general.messageName", "no messageName"));
+        cannonDesign.setDescription(cannonDesignConfig.getString("general.description", "no description for this cannon"));
 
 		// sign
 		cannonDesign.setSignRequired(cannonDesignConfig.getBoolean("signs.isSignRequired", false));

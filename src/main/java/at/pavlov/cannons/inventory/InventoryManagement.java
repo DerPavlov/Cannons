@@ -49,7 +49,7 @@ public class InventoryManagement
 		}
         return numberOfItems-1-i;   */
         int amount = player.getInventory().getItemInHand().getAmount();
-        if (numberOfItems > amount)
+        if (numberOfItems >= amount)
         {
             //there are more items to remove than available - remove itemstack and return number of not removed items
             player.getInventory().setItemInHand(new ItemStack(Material.AIR));

@@ -19,6 +19,8 @@ public class CannonDesign
 	//general
 	private String designID;
 	private String designName;
+    private String messageName;
+    private String description;
 	
 	//sign
 	private boolean isSignRequired; 
@@ -1018,5 +1020,21 @@ public class CannonDesign
 
     public void setPermissionRamrod(String permissionRamrod) {
         this.permissionRamrod = permissionRamrod;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getMessageName() {
+        return messageName;
+    }
+
+    public void setMessageName(String messageName) {
+        this.messageName = messageName;
     }
 }

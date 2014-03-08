@@ -1,6 +1,10 @@
 general:
-  #name of the cannon
+  #name of the cannon. This will show of on the cannon sign - therefore keep it short
   designName: Classic
+  #This will be used for messages. (e.g. You created a classic cannon)
+  messageName: classic cannon
+  #a short description of the cannon
+  description: "A small cheap cannon - nothing fancy. Will break very easily since it is made out of wool."
 
 
 signs:
@@ -112,7 +116,7 @@ realisticBehaviour:
   #whether the cannon can be used with fire missions to bombarded a certain location (not implemented yet)
   supportsFireMission: false
   #the mass in kilogram of a cannon is important for moving objects e.g. ships
-  massOfCannon: 1000.0
+  massOfCannon: 100.0
 
 
 permissions:

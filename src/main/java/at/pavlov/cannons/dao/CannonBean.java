@@ -28,7 +28,8 @@ public class CannonBean
     @Length(max=20)
 	private String world;
 
-	private BlockFace cannonDirection;
+    @Length(max=20)
+	private String cannonDirection;
 	private int locX;
 	private int locY;
 	private int locZ;
@@ -152,11 +153,11 @@ public class CannonBean
 	{
 		this.owner = owner;
 	}
-	public BlockFace getCannonDirection()
+	public String getCannonDirection()
 	{
 		return cannonDirection;
 	}
-	public void setCannonDirection(BlockFace cannonDirection)
+	public void setCannonDirection(String cannonDirection)
 	{
 		this.cannonDirection = cannonDirection;
 	}

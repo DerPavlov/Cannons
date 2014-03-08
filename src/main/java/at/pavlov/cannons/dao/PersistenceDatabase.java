@@ -60,7 +60,7 @@ public class PersistenceDatabase
 					//load values for the cannon
 					String world = bean.getWorld();
 					Vector offset = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
-					BlockFace cannonDirection = bean.getCannonDirection();
+					BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
 					String owner = bean.getOwner();
 					
 					//make a cannon
@@ -168,12 +168,10 @@ public class PersistenceDatabase
 				bean = plugin.getDatabase().createEntityBean(CannonBean.class);
 
 				bean.setId(cannon.getID());
-                plugin.logDebug("bean id:" + bean.getId());
-
 			}
 			else
 			{
-				plugin.logDebug("saving cannons in database. ID: " + cannon.getID());
+				plugin.logDebug("saving cannon. ID: " + cannon.getID());
 			}
 
 			// fill the bean with values to store
@@ -186,7 +184,7 @@ public class PersistenceDatabase
 			bean.setLocY(cannon.getOffset().getBlockY());
 			bean.setLocZ(cannon.getOffset().getBlockZ());
 			// cannon direction
-			bean.setCannonDirection(cannon.getCannonDirection());
+			bean.setCannonDirection(cannon.getCannonDirection().toString());
 			// name
 			bean.setName(cannon.getCannonName());
             // must the barrel be clean with the ramrod

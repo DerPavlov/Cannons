@@ -1,5 +1,5 @@
 Error:
-  FiringInProgress: 'RED [Cannons] Cannon is firing. Step back.'
+  FiringInProgress: 'RED [Cannons] CANNON is firing. Step back.'
   BarrelTooHot: 'RED [Cannons] The barrel is too hot and must cool down.'
   NotCleaned: 'RED [Cannons] The barrel must be cleaned before firing.'
   NoGunpowder: 'RED [Cannons] No gunpowder. Please load the barrel with gunpowder.'
@@ -9,14 +9,14 @@ Error:
   MaximumGunpowderLoaded: 'YELLOW [Cannons] Maximum gunpowder of GOLD GUNPOWDERkg YELLOW already loaded. More will destroyed the barrel.'
   ProjectileAlreadyLoaded: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW and GOLD GUNPOWDER YELLOW gunpowder already loaded. Fire the damn gun before you blow yourself up.'
   CannonBuiltLimit: 'RED [Cannons] You cant build more than GOLD CANNONS YELLOW guns'
-  NotTheOwner: 'RED [Cannons] This cannon is locked and can only used by its owner'
-  MissingSign: 'RED [Cannons] This cannon needs a sign to operate.'
+  NotTheOwner: 'RED [Cannons] This CANNON is locked and can only used by its owner'
+  MissingSign: 'RED [Cannons] This CANNON needs a sign to operate.'
 
 
 Aiming:
   EnableAimingMode: 'GREEN [Cannons] Entering aiming mode'
   DisableAimingMode: 'RED [Cannons] Leaving aiming mode'
-  TooFarForAimingMode: 'YELLOW [Cannons] You need to be closer to the cannon for the aiming mode'
+  TooFarForAimingMode: 'YELLOW [Cannons] You need to be closer to the CANNON for the aiming mode'
   SettingCombinedAngle: 'YELLOW [Cannons] New angle GOLD HDEGREE degree YELLOW horizontal and GOLD VDEGREE degree YELLOW vertical'
   SettingVerticalAngleUp: 'YELLOW [Cannons] Setting vertical angle to GOLD VDEGREE degree'
   SettingVerticalAngleDown: 'YELLOW [Cannons] Setting vertical angle to GOLD VDEGREE degree'
@@ -31,7 +31,7 @@ Load:
 
 Cannon:
   Fire: 'YELLOW [Cannons] FIRE!'
-  Created: 'GREEN [Cannons] You created a cannon'
+  Created: 'GREEN [Cannons] You created a CANNON'
   Destroyed: 'RED [Cannons] One of your cannons has been destroyed'
   Reseted: 'GREEN [Cannons] All cannons of PLAYER have been deleted from the database'
 
@@ -42,24 +42,24 @@ Projectile:
 
 
 HeatManagement:
-  Burn: 'YELLOW [Cannons] You touched a hot cannon and burned your fingers'
-  Cooling: 'GREEN [Cannons] The cannon cools down'
-  Info: 'GREEN [Cannons] Cannon temperature is CANNON_TEMP / MAX_TEMP degree Celsius'
-  Critical: 'YELLOW [Cannons] Cannon temperature of CANNON_TEMPC is critical'
-  Overheated: 'RED [Cannons] The cannon exploded due to overheating'
+  Burn: 'YELLOW [Cannons] You touched a hot CANNON and burned your fingers'
+  Cooling: 'GREEN [Cannons] The CANNON cools down'
+  Info: 'GREEN [Cannons] CANNON temperature is CANNON_TEMP / MAX_TEMP degree Celsius'
+  Critical: 'YELLOW [Cannons] CANNON temperature of CANNON_TEMPC is critical'
+  Overheated: 'RED [Cannons] The CANNON exploded due to overheating'
 
 Ramrod:
   Cleaning: 'YELLOW [Cannons] Scouring cannon.'
   CleaningDone: 'GREEN [Cannons] The barrel is cleang enough.'
-  PushingProjectile: 'GREEN [Cannons] Pushed projectile. Cannon is ready to fire'
+  PushingProjectile: 'GREEN [Cannons] Pushed projectile. CANNON is ready to fire'
 
 
 Permission:
-  ErrorRedstone: 'RED [Cannons] You are not allowed to control cannons with redstone.'
-  ErrorBuild: 'RED [Cannons] You have no permission to build a cannon.'
-  ErrorFire: 'RED [Cannons] You have no idea how to fire this cannon.'
-  ErrorLoad: 'RED [Cannons] No permission to load this gun.'
-  ErrorAdjust: 'RED [Cannons] You have no idea how to adjust this cannon.'
+  ErrorRedstone: 'RED [Cannons] You are not allowed to control this with redstone.'
+  ErrorBuild: 'RED [Cannons] You have no permission to build a CANNON.'
+  ErrorFire: 'RED [Cannons] You have no idea how to fire this CANNON.'
+  ErrorLoad: 'RED [Cannons] No permission to load this CANNON.'
+  ErrorAdjust: 'RED [Cannons] You have no idea how to adjust this CANNON.'
   ErrorProjectile: 'RED [Cannons] No permission for this projectile.'
   ErrorThermometer: 'RED [Cannons] No permission to use the thermometer.'
   ErrorRamrod: 'RED [Cannons] No permission for the ramrod.'

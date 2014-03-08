@@ -99,7 +99,7 @@ public class Cannon
 		// reset
 		this.setLoadedGunpowder(0);
 		this.setLoadedProjectile(null);
-        this.setToClean(design.getCleaningAfterFiring());
+        this.setToClean(0);
         this.setProjectilePushed(!design.isPushingProjectileRequired());
 
 		this.databaseId = UUID.randomUUID();
@@ -405,32 +405,25 @@ public class Cannon
 	{
 		//if the player is not the owner of this gun
 		if (player != null && !this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
-		{
 			return MessageEnum.ErrorNotTheOwner;
-		}
 		// already loaded with a projectile
 		if (isLoaded())
-		{
 			return MessageEnum.ErrorProjectileAlreadyLoaded;
-		}
+        // is cannon cleaned with ramrod?
+        if (!isCleaned())
+            return MessageEnum.ErrorNotCleaned;
 		// no gunpowder loaded
 		if (getLoadedGunpowder() == 0)
-		{
 			return MessageEnum.ErrorNoGunpowder;
-		}
 		if (player != null)
 		{
 			// no permission to load
 			if (!player.hasPermission(design.getPermissionLoad()))
-			{
 				return MessageEnum.PermissionErrorLoad;
-			}			
 		}
 		// no permission for this projectile
 		if (!projectile.hasPermission(player))
-		{
 			return MessageEnum.PermissionErrorProjectile;
-		}
 		// loading successful
 		return MessageEnum.loadProjectile;
 	}
@@ -541,7 +534,7 @@ public class Cannon
 	}
 
     /**
-     * this will force the cannon to show up at this location - all block will be overwritten
+     * this will force the cannon to show up at this location - all blocks will be overwritten
      */
     public void show()
     {
@@ -798,7 +791,7 @@ public class Cannon
 	/**
 	 * returns true if the player has the permission to place redstone near a cannon.
 	 * player = null will also return true
-	 * @param player
+	 * @param player player operating the cannon
 	 * @return
 	 */
 	public MessageEnum checkRedstonePermission(String player)
@@ -810,8 +803,7 @@ public class Cannon
 
 	/**
 	 * checks if the player has permission to use the cannon with redstone
-	 * 
-	 * @return
+	 * @return message for the player
 	 */
     MessageEnum checkRedstonePermission(Player player)
 	{
@@ -1575,5 +1567,10 @@ public class Cannon
     public boolean isCleaned()
     {
         return toClean==0;
+    }
+
+    public boolean isLoadedWithGunpowder()
+    {
+        return loadedGunpowder!=0;
     }
 }

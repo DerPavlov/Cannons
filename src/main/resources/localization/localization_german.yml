@@ -3,13 +3,13 @@ Error:
   NotCleaned: 'RED [Cannons] Das Rohr muss noch geputzt werden.'
   NoGunpowder: 'RED [Cannons] Kein Schwarzpulver. Lade zuerst die Treibladung!'
   NoProjectile: 'RED [Cannons] Kein Kanonenkugel im Rohr. Lade einen Block!'
-  NotPushed: 'RED [Cannons] Die Kanone muss noch gestopft werden.'
+  NotPushed: 'RED [Cannons] Die CANNON muss noch gestopft werden.'
   NoFlintAndSteel: 'RED [Cannons] Du brauchst ein Feuerzeug zum Feuern.'
   MaximumGunpowderLoaded: 'YELLOW [Cannons] Du hast bereits GOLD GUNPOWDERkg YELLOW Schwarzpulver geladen.'
   ProjectileAlreadyLoaded: 'YELLOW [Cannons] Es wurde bereits eine Kanonenkugel aus GOLD PROJECTILE YELLOW mit GOLD GUNPOWDERkg YELLOW Pulver geladen. Feuere die Kanone endlich ab!'
   CannonBuiltLimit: 'RED [Cannons] Du darfst nicht mehr als GOLD CANNONS Kanone(n) YELLOW bauen.'
-  NotTheOwner: 'RED [Cannons] Diese Kanone kann nur vom Besitzer benutzt werden.'
-  MissingSign: 'RED [Cannons] Diese Kanone benötigt ein Sign um zu funktioinieren.'
+  NotTheOwner: 'RED [Cannons] Diese CANNON kann nur vom Besitzer benutzt werden.'
+  MissingSign: 'RED [Cannons] Diese CANNON benötigt ein Sign um zu funktioinieren.'
 
 
 Aiming:
@@ -30,7 +30,7 @@ Load:
 
 Cannon:
   Fire: 'YELLOW [Cannons] FEUER!'
-  Created: 'GREEN [Cannons] Eine Kanone wurde erstellt.'
+  Created: 'GREEN [Cannons] Eine CANNON wurde erstellt.'
   Destroyed: 'RED [Cannons] Eine deiner Kanonen wurde zerstört.'
   Reseted: 'GREEN [Cannons] Alle Kanonen von PLAYER wurden aus der Datenbank entfernt.'
 
@@ -42,23 +42,23 @@ Projectile:
 
 HeatManagement:
   Burn: 'YELLOW [Cannons] Du hast dir die Finger an der Kanone verbrannt'
-  Cooling: 'GREEN [Cannons] Die Kanone kühlt sich ab'
-  Info: 'GREEN [Cannons] Die Kanone hat CANNON_TEMP von MAX_TEMP Grad'
+  Cooling: 'GREEN [Cannons] Die CANNON kühlt sich ab'
+  Info: 'GREEN [Cannons] Die CANNON hat CANNON_TEMP von MAX_TEMP Grad'
   Critical: 'YELLOW [Cannons] Kritische Temperatur von CANNON_TEMPC'
-  Overheated: 'RED [Cannons] Die Kanone explodierte durch Überhitzung'
+  Overheated: 'RED [Cannons] Die CANNON explodierte durch Überhitzung'
 
 
 Ramrod:
   Cleaning: 'YELLOW [Cannons] Das Rohr is noch nicht sauber genug.'
-  CleaningDone: 'GREEN [Cannons] Die Kanone is jetzt bereit zum Laden.'
-  PushingProjectile: 'GREEN [Cannons] Projektil fixiert. Kanone ist jetzt bereit.'
+  CleaningDone: 'GREEN [Cannons] Die CANNON is jetzt bereit zum Laden.'
+  PushingProjectile: 'GREEN [Cannons] Projektil fixiert. CANNON ist jetzt bereit.'
 
 
 Permission:
-  ErrorRedstone: 'RED [Cannons] Du kannst diese Kanone nicht mit Redstone bedienen.'
-  ErrorBuild: 'RED [Cannons] Du darfst diese Kanone nicht bauen.'
-  ErrorFire: 'RED [Cannons] Du weisst nicht wie du diese Kanone abfeuerst.'
-  ErrorLoad: 'RED [Cannons] Keine Berechtigung um die Kanone zu laden.'
+  ErrorRedstone: 'RED [Cannons] Du kannst diese CANNON nicht mit Redstone bedienen.'
+  ErrorBuild: 'RED [Cannons] Du darfst diese CANNON nicht bauen.'
+  ErrorFire: 'RED [Cannons] Du weisst nicht wie du diese CANNON abfeuerst.'
+  ErrorLoad: 'RED [Cannons] Keine Berechtigung um die CANNON zu laden.'
   ErrorAdjust: 'RED [Cannons] Dir fehlt die Berechtigung zum Zielen.'
   ErrorProjectile: 'RED [Cannons] Keine Erlaubnis für dieses Projektil.'
   ErrorThermometer: 'RED [Cannons] Du hast keine Ahnung wie man das Thermometer bedient.'
