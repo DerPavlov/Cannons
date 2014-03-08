@@ -424,18 +424,6 @@ public class PlayerListener implements Listener
 				    return;
 			}
 
-
-            // ########## Ramrod ###############################
-            if (config.getToolRamrod().equalsFuzzy(player.getItemInHand()))
-            {
-                plugin.logDebug("Ramrod used");
-                MessageEnum message = cannon.useRamRod(player);
-                userMessages.displayMessage(player, cannon, message);
-                if (message!=null)
-                    return;
-            }
-
-
 			// ########## Load Projectile ######################
 			Projectile projectile = plugin.getProjectile(cannon, event.getItem());
 			if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null)
@@ -491,6 +479,17 @@ public class PlayerListener implements Listener
 
                 return;
 			}
+
+
+            // ########## Ramrod ###############################
+            if (config.getToolRamrod().equalsFuzzy(player.getItemInHand()) && cannon.isLoadingBlock(clickedBlock.getLocation()))
+            {
+                plugin.logDebug("Ramrod used");
+                MessageEnum message = cannon.useRamRod(player);
+                userMessages.displayMessage(player, cannon, message);
+                if (message!=null)
+                    return;
+            }
 		}
 		return;
 	}

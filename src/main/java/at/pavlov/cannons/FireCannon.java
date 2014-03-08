@@ -199,8 +199,8 @@ public class FireCannon {
 	
 	/**
 	 * delays the firing by the fuse burn time
-	 * @param cannon
-	 * @param player
+	 * @param cannon cannon to be fired
+	 * @param player player operating the cannon
 	 */
     private void delayedFire(Cannon cannon, Player player)
     {
@@ -292,7 +292,7 @@ public class FireCannon {
 
         //reset after firing
         cannon.setLastFired(System.currentTimeMillis());
-        cannon.setSoot(design.getSootPerGunpowder()*cannon.getLoadedGunpowder());
+        cannon.setSoot(cannon.getSoot() + design.getSootPerGunpowder()*cannon.getLoadedGunpowder());
         cannon.setProjectilePushed(design.getProjectilePushing());
 
         //check if the temperature exceeds the limit
@@ -332,11 +332,9 @@ public class FireCannon {
     	 //confuse shooter if he wears no helmet (only for one projectile and if its configured)
     	if (confuseTime > 0)
     	{
-    		Iterator<Entity> iter = living.iterator();
-    		while (iter.hasNext())
+    		for (Entity next : living)
     		{
     			boolean harmEntity = false;
-    			Entity next = iter.next();
     			if (next instanceof Player)
     			{
     				

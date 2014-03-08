@@ -268,8 +268,11 @@ public class Cannon
         // this cannon needs to be cleaned first
         if (!isClean())
             return MessageEnum.ErrorNotCleaned;
+        //projectile pushing necessary
+        if (isLoaded()&&!isProjectilePushed())
+            return MessageEnum.ErrorNotPushed;
 		// projectile already loaded
-		if (isLoaded())
+		if (isLoaded()&&isProjectilePushed())
 			return MessageEnum.ErrorProjectileAlreadyLoaded;
 		// maximum gunpowder already loaded
 		if (getLoadedGunpowder() >= design.getMaxLoadableGunpowder())
@@ -353,7 +356,6 @@ public class Cannon
         if (useEvent.isCancelled())
             return null;
 
-
 		if (projectile == null) return null;
 
 		MessageEnum returnVal = CheckPermProjectile(projectile, player);
@@ -361,6 +363,19 @@ public class Cannon
 		// check if loading of projectile was successful
 		if (returnVal.equals(MessageEnum.loadProjectile))
 		{
+            //if the player is not the owner of this gun
+            if (player != null && !this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
+                return MessageEnum.ErrorNotTheOwner;
+            // already loaded with a projectile
+            if (isLoaded())
+                return MessageEnum.ErrorProjectileAlreadyLoaded;
+            // is cannon cleaned with ramrod?
+            if (!isClean())
+                return MessageEnum.ErrorNotCleaned;
+            // no gunpowder loaded
+            if (getLoadedGunpowder() == 0)
+                return MessageEnum.ErrorNoGunpowder;
+
 			// load projectile
 			loadedProjectile = projectile;
 
@@ -404,18 +419,6 @@ public class Cannon
 	 */
 	private MessageEnum CheckPermProjectile(Projectile projectile, Player player)
 	{
-		//if the player is not the owner of this gun
-		if (player != null && !this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
-			return MessageEnum.ErrorNotTheOwner;
-		// already loaded with a projectile
-		if (isLoaded())
-			return MessageEnum.ErrorProjectileAlreadyLoaded;
-        // is cannon cleaned with ramrod?
-        if (!isClean())
-            return MessageEnum.ErrorNotCleaned;
-		// no gunpowder loaded
-		if (getLoadedGunpowder() == 0)
-			return MessageEnum.ErrorNoGunpowder;
 		if (player != null)
 		{
 			// no permission to load
@@ -451,21 +454,21 @@ public class Cannon
             else
                 return MessageEnum.RamrodCleaning;
         }
-
         //if clean load the gunpowder
-        if (isClean())
-            return MessageEnum.loadGunpowder;
-
+        if (isClean()&&!isLoadedWithGunpowder())
+            return MessageEnum.ErrorNoGunpowder;
+        //if no projectile
+        if (isLoadedWithGunpowder()&&!isLoaded())
+            return MessageEnum.ErrorNoProjectile;
         //if the projectile is loaded
         if (isLoaded() && !isProjectilePushed())
         {
             pushProjectile(1);
             if (isProjectilePushed())
-                return MessageEnum.RamrodPushingProjectile;
-            else
                 return MessageEnum.RamrodPushingProjectileDone;
+            else
+                return MessageEnum.RamrodPushingProjectile;
         }
-
         //if projectile is in place
         if (isLoaded() && isProjectilePushed())
             return MessageEnum.ErrorProjectileAlreadyLoaded;
