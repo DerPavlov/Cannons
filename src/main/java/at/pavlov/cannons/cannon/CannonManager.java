@@ -416,7 +416,7 @@ public class CannonManager
 	 * @param owner
 	 * @return
 	 */
-    Cannon checkCannon(Location cannonBlock, String owner)
+    private Cannon checkCannon(Location cannonBlock, String owner)
 	{
 		// get world
 		World world = cannonBlock.getWorld();

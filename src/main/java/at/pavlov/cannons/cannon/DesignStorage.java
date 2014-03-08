@@ -1,6 +1,7 @@
 package at.pavlov.cannons.cannon;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -262,6 +263,7 @@ public class DesignStorage
 	 */
 	private boolean loadDesignSchematic(CannonDesign cannonDesign, String schematicFile)
 	{
+        long startTime = System.nanoTime();
 		
 		// load schematic with worldedit
 		CuboidClipboard cc;
@@ -450,11 +452,28 @@ public class DesignStorage
 			cannonBlocks.setRotationCenter(maxRotation.add(maxRotation).multiply(0.5));
 
             //set the muzzle location
-            /*Vector compensation = cannonBlocks.getMuzzle();
-            for (int k=0; k<cannonBlocks.getAllCannonBlocks().size(); k++)
-            {
-                cannonBlocks.getAllCannonBlocks().get(k).subtract(compensation);
-            } */
+            Vector compensation = new Vector(cannonBlocks.getMuzzle().getBlockX(), cannonBlocks.getMuzzle().getBlockY(), cannonBlocks.getMuzzle().getBlockZ());
+
+            for (SimpleBlock block : cannonBlocks.getAllCannonBlocks())
+                block.subtract_noCopy(compensation);
+            for (Vector block : cannonBlocks.getBarrelBlocks())
+                block.subtract(compensation);
+            for (SimpleBlock block : cannonBlocks.getChestsAndSigns())
+                block.subtract_noCopy(compensation);
+            for (Vector block : cannonBlocks.getRedstoneTorches())
+                block.subtract(compensation);
+            for (SimpleBlock block : cannonBlocks.getRedstoneWiresAndRepeater())
+                block.subtract_noCopy(compensation);
+            for (Vector block : cannonBlocks.getRedstoneTrigger())
+                block.subtract(compensation);
+            for (Vector block : cannonBlocks.getRightClickTrigger())
+                block.subtract(compensation);
+            for (Vector block : cannonBlocks.getFiringIndicator())
+                block.subtract(compensation);
+            for (Vector block : cannonBlocks.getDestructibleBlocks())
+                block.subtract(compensation);
+            cannonBlocks.getMuzzle().subtract(compensation);
+            cannonBlocks.getRotationCenter().subtract(compensation);
 
 			//plugin.logDebug("rotation loc " + cannonBlocks.getRotationCenter());
 
@@ -487,7 +506,10 @@ public class DesignStorage
 			
 
 		}
-		return true;
+        plugin.logDebug("Time to load designs: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+
+
+        return true;
 	}
 
 	private Vector findMinimum(int x, int y, int z, Vector min)

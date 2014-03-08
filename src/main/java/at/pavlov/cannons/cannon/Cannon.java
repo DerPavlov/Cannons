@@ -18,6 +18,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Attachable;
 import org.bukkit.util.Vector;
 
 import at.pavlov.cannons.Enum.MessageEnum;
@@ -538,10 +539,21 @@ public class Cannon
      */
     public void show()
     {
+        List<SimpleBlock> attachable = new ArrayList<SimpleBlock>();
         for (SimpleBlock cBlock : design.getAllCannonBlocks(this.getCannonDirection()))
         {
             Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
             wBlock.setType(cBlock.getMaterial());
+            //if the block is a button we have to set the data after all other blocks are set
+            if (wBlock instanceof Attachable)
+                attachable.add(cBlock);
+            else
+                wBlock.setData((byte) cBlock.getData());
+        }
+        //set again the buttons
+        for (SimpleBlock cBlock : attachable)
+        {
+            Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
             wBlock.setData((byte) cBlock.getData());
         }
     }
@@ -889,26 +901,16 @@ public class Cannon
         angle = Math.round(angle);
         double dAngle =  angle*Math.PI/180;
 
-        Vector oldOffset = offset.clone();
-        Vector diffToCenter = design.getMuzzle(this).toVector().clone().subtract(center);
+        Vector diffToCenter = offset.clone().subtract(center);
 
-        //Vector diff = offset.clone().subtract(center);
         double newX = diffToCenter.getX()*Math.cos(dAngle) - diffToCenter.getZ()*Math.sin(dAngle);
         double newZ = diffToCenter.getX()*Math.sin(dAngle) + diffToCenter.getZ()*Math.cos(dAngle);
 
-        Vector newMuzzleLoc = new Vector(center.getX()+newX, offset.getY(), center.getZ()+newZ);
+        offset = new Vector(Math.round(center.getX()+newX), offset.getBlockY(), Math.round(center.getZ()+newZ));
 
         //rotate blockface
         for (int i = 0; i<=angle%90; i++)
             cannonDirection = CannonsUtil.roatateFace(cannonDirection);
-
-        //set a new offset
-        offset = offset.clone().add(newMuzzleLoc).subtract(design.getMuzzle(this).toVector().clone());
-        offset.setX(Math.round(offset.getX()));
-        offset.setY(oldOffset.getY());
-        offset.setZ(Math.round(offset.getZ()));
-
-        System.out.println("new cannon:" + offset);
     }
 
     /**

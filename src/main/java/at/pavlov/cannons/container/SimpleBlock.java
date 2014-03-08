@@ -216,12 +216,25 @@ public class SimpleBlock
 	/** 
 	 * shifts the location of the block without comparing the id
 	 * @param vect vector to subtract
-	 * @return new block with new substracted location
+	 * @return new block with new subtracted location
 	 */
 	public SimpleBlock subtract(Vector vect)
 	{
 		return new SimpleBlock(vect.getBlockX() - locX, vect.getBlockY() - locY, vect.getBlockZ() - locZ, id, data);
 	}
+
+    /**
+     * shifts the location of the block without comparing the id
+     * @param vect vector to subtract
+     * @return new block with new subtracted location
+     */
+    public SimpleBlock subtract_noCopy(Vector vect)
+    {
+        locX -= vect.getBlockX();
+        locY -= vect.getBlockY();
+        locZ -= vect.getBlockZ();
+        return this;
+    }
 	
 	/** 
 	 * shifts the location of the block without comparing the id

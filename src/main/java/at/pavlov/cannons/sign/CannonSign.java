@@ -15,6 +15,7 @@ public class CannonSign
 	 */
 	public static String getLineOfThisSign(Block block, int line)
 	{
+        if (block == null) return null;
 		if (block.getType() != Material.WALL_SIGN) return null;
 		
 		Sign sign = (Sign) block.getState();

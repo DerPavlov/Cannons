@@ -171,9 +171,9 @@ constructionBlocks:
   #options for where a redstone signal needs to lead to in order to activate redstone autoloading and firing
   redstoneTrigger: 
     #the block used by the schematic to indicate where the redstone signal needs to lead to. Default is a lever
-    schematic: '69:-1'
+    schematic: '69:3'
     #the block used in game where the redstone signal needs to lead to. Default is stone button
-    ingame: '77:-1'
+    ingame: '77:3'
   #the blocks which a player right clicks in order to fire a cannon
   rightClickTrigger: 
     #the block used in the cannons schematic which is used to fire the cannon when right clicked by a player. Default is torch

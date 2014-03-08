@@ -171,7 +171,7 @@ public class PersistenceDatabase
 			}
 			else
 			{
-				plugin.logDebug("saving cannon. ID: " + cannon.getID());
+				plugin.logDebug("saving cannon: " + cannon.getID());
 			}
 
 			// fill the bean with values to store
