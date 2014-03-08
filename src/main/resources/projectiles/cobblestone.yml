@@ -1,6 +1,8 @@
 general:
   #the name of the projectile displayed in game
   projectileName: cannonball
+  #a short description of the projectile
+  description: "A cheap and simple cannonball."
   #the name of the item to load this projectile
   itemName: cobblestone
   #the item which is associated with the projectile.

@@ -15,6 +15,7 @@ import at.pavlov.cannons.container.MaterialHolder;
 public class Projectile implements Cloneable{
 	private String projectileID;
 	private String projectileName;
+    private String description;
 	private String itemName;
 	private MaterialHolder loadingItem;
 	//list of items or blocks that can represent this this (e.g. redstone dust may for wire when you click a block)
@@ -555,5 +556,13 @@ public class Projectile implements Cloneable{
 
     public void setProjectileOnFire(boolean projectileOnFire) {
         this.projectileOnFire = projectileOnFire;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

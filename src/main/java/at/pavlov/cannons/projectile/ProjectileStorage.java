@@ -154,6 +154,7 @@ public class ProjectileStorage
 		
 		//general
 		projectile.setProjectileName(projectileConfig.getString("general.projectileName", "noProjectileName"));
+        projectile.setDescription(projectileConfig.getString("general.description", "no description for this projectile"));
 		projectile.setItemName(projectileConfig.getString("general.itemName", "noItemName"));
 		projectile.setLoadingItem(new MaterialHolder(projectileConfig.getString("general.loadingItem", "1:0")));	
 		projectile.setAlternativeItemList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("general.alternativeId")));

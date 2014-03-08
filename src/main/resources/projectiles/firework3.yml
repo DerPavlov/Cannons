@@ -1,6 +1,8 @@
 general:
   #the name of the projectile displayed in game
   projectileName: fireworks
+  #a short description of the projectile
+  description: "Third stage of the fireworks."
   #the name of the item to load this projectile
   itemName: firework rocket
   #the item which is associated with the projectile.

@@ -1,6 +1,8 @@
 general:
   #the name of the projectile displayed in game
   projectileName: Teleporter projectile
+  #a short description of the projectile
+  description: "This cannonball will teleport you to the impact location."
   #the name of the item to load this projectile
   itemName: ender pearl
   #the item which is associated with the projectile.

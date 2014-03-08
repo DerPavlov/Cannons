@@ -1,6 +1,8 @@
 general:
   #the name of the projectile displayed in game
   projectileName: clusterbomb
+  #a short description of the projectile
+  description: "Spawn primed TNT on impact."
   #the name of the item to load this projectile
   itemName: TNT
   #the item which is associated with the projectile.
