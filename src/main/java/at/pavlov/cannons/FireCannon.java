@@ -58,7 +58,7 @@ public class FireCannon {
 		if (player != null && !cannon.getOwner().equals(player.getName())  && design.isAccessForOwnerOnly())
 			return MessageEnum.ErrorNotTheOwner;
         // is the cannon already cleaned?
-        if (!cannon.isCleaned())
+        if (!cannon.isClean())
             return MessageEnum.ErrorNotCleaned;
 		//check if there is some gunpowder in the barrel
 		if (cannon.getLoadedGunpowder() <= 0)
@@ -292,8 +292,8 @@ public class FireCannon {
 
         //reset after firing
         cannon.setLastFired(System.currentTimeMillis());
-        cannon.setToClean(design.getCleaningAfterFiring());
-        cannon.setProjectilePushed(!design.isPushingProjectileRequired());
+        cannon.setSoot(design.getSootPerGunpowder()*cannon.getLoadedGunpowder());
+        cannon.setProjectilePushed(design.getProjectilePushing());
 
         //check if the temperature exceeds the limit
         boolean isDestroyed = cannon.checkHeatManagement();

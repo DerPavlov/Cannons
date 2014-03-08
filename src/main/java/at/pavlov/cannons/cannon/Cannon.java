@@ -556,17 +556,18 @@ public class Cannon
             Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
             wBlock.setType(cBlock.getMaterial());
             //if the block is a button we have to set the data after all other blocks are set
-            if (wBlock instanceof Attachable)
-                attachable.add(cBlock);
-            else
-                wBlock.setData((byte) cBlock.getData());
+            //if (wBlock instanceof Attachable)
+            //    attachable.add(cBlock);
+            //else
+            wBlock.setData((byte) cBlock.getData());
         }
+        /*
         //set again the buttons
         for (SimpleBlock cBlock : attachable)
         {
             Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
             wBlock.setData((byte) cBlock.getData());
-        }
+        }  */
     }
 
     /**
@@ -914,8 +915,8 @@ public class Cannon
 
         Vector diffToCenter = offset.clone().subtract(center);
 
-        double newX = diffToCenter.getX()*Math.cos(dAngle) - diffToCenter.getZ()*Math.sin(dAngle);
-        double newZ = diffToCenter.getX()*Math.sin(dAngle) + diffToCenter.getZ()*Math.cos(dAngle);
+        double newX = diffToCenter.getBlockX()*Math.cos(dAngle) - diffToCenter.getBlockZ()*Math.sin(dAngle);
+        double newZ = diffToCenter.getBlockX()*Math.sin(dAngle) + diffToCenter.getBlockZ()*Math.cos(dAngle);
 
         offset = new Vector(Math.round(center.getX()+newX), offset.getBlockY(), Math.round(center.getZ()+newZ));
 
