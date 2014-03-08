@@ -24,18 +24,21 @@ public class InventoryManagement
 
 	/**
 	 * removes the given number of items from the players hand
-	 * @param player
-	 * @param numberOfItems
+	 * @param player the item in hand of this player
+	 * @param numberOfItems how many items will be removed
+     * @return the number of items which could not be removed
 	 */
-	public static void TakeFromPlayerInventory(Player player, int numberOfItems)
-	{
-		for (int i = 0; i < numberOfItems; i ++)
+	public static int takeFromPlayerHand(Player player, int numberOfItems)
+	{   /*
+        int i;
+		for (i=0; i < numberOfItems; i ++)
 		{
 			int amount = player.getInventory().getItemInHand().getAmount();
 			if (amount == 1)
 			{
 				//last item removed
-				player.getInventory().removeItem(player.getInventory().getItemInHand());
+				player.getInventory().setItemInHand(new ItemStack(Material.AIR));
+                i++;
 				break;
 			}
 			else
@@ -44,11 +47,29 @@ public class InventoryManagement
 				player.getInventory().getItemInHand().setAmount(amount - 1);
 			}
 		}
+        return numberOfItems-1-i;   */
+        int amount = player.getInventory().getItemInHand().getAmount();
+        if (numberOfItems > amount)
+        {
+            //there are more items to remove than available - remove itemstack and return number of not removed items
+            player.getInventory().setItemInHand(new ItemStack(Material.AIR));
+            return numberOfItems-amount;
+        }
+        else
+        {
+            player.getInventory().getItemInHand().setAmount(amount - 1);
+            return 0;
+        }
 	}
 
 
-	// #################################### removeAmmoFromChest ##############
-	public static ItemStack removeItemInChests(List<Inventory> invlist, ItemStack item)
+    /**
+     * removes Items from a list of given inventories
+     * @param invlist list of inventories
+     * @param item itemstack to remove
+     * @return not removed items
+     */
+	public static ItemStack removeItem(List<Inventory> invlist, ItemStack item)
 	{
 		if (item == null) return null;
 		
@@ -56,7 +77,7 @@ public class InventoryManagement
 		while (iter.hasNext() && item.getAmount() > 0)
 		{
 			Inventory next = iter.next();
-			item = remove(next, item);
+			item = removeItem(next, item);
 		}
 
         //the amount of remaining items
@@ -66,12 +87,11 @@ public class InventoryManagement
 
 	/**
 	 * removes item from in the inventory. If datavalue < 0 it is not compared
-	 * 
-	 * @param inv
-	 * @param item
+	 * @param inv the inventory to search for the item
+	 * @param item the item to remove
 	 * @return the amount of not removed items
 	 */
-	private static ItemStack remove(Inventory inv, ItemStack item)
+	private static ItemStack removeItem(Inventory inv, ItemStack item)
 	{
 		if (inv == null || item == null)
 			return item;

@@ -76,7 +76,7 @@ public class Commands implements CommandExecutor
                         if (persistenceDatabase.deleteCannons(args[1]) || b1)
                         {
                             //there was an entry in the list
-                            sendMessage(sender, ChatColor.GREEN + userMessages.getMessage(MessageEnum.CannonsReseted));
+                            sendMessage(sender, ChatColor.GREEN + userMessages.getMessage(MessageEnum.CannonsReseted).replace("PLAYER", args[1]));
                         }
                         else
                         {
@@ -85,7 +85,7 @@ public class Commands implements CommandExecutor
                     }
                     else
                     {
-                        sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "/cannons reset NAME");
+                        sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "/cannons reset <NAME>");
                     }
                 }
                 //cannons list

@@ -46,6 +46,9 @@ public class Config
     //unbreakableBlocks
     private List<MaterialHolder> unbreakableBlocks = new ArrayList<MaterialHolder>();
 
+    //cancelEventForLoadingItem
+    private List<MaterialHolder> cancelItems = new ArrayList<MaterialHolder>();
+
 
     private final UserMessages userMessage;
 	private final Cannons plugin;
@@ -98,6 +101,9 @@ public class Config
         {
             plugin.logInfo("unbreakableBlocks list is empty");
         }
+
+        //cancelEventForLoadingItem
+        setCancelItems(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("cancelEventForLoadingItem")));
 	
 		//load other configs	
 		projectileStorage.loadProjectiles();
@@ -262,5 +268,23 @@ public class Config
 
     public void setToolRamrod(MaterialHolder toolRamrod) {
         this.toolRamrod = toolRamrod;
+    }
+
+    public List<MaterialHolder> getCancelItems() {
+        return cancelItems;
+    }
+
+    public void setCancelItems(List<MaterialHolder> cancelItems) {
+        this.cancelItems = cancelItems;
+    }
+
+    public boolean isCancelItem(ItemStack item)
+    {
+        for (MaterialHolder item2 : getCancelItems())
+        {
+            if (item2.equalsFuzzy(item))
+                return true;
+        }
+        return false;
     }
 }

@@ -32,9 +32,11 @@ public class CannonBean
 	private int locX;
 	private int locY;
 	private int locZ;
+    private int toClean;
 	private int gunpowder;
 	private int projectileID;
 	private int projectileData;
+    private boolean isProjectilePushed;
     private double cannonTemperature;
 	private double horizontalAngle;
 	private double verticalAngle;
@@ -166,13 +168,22 @@ public class CannonBean
 	{
 		this.designId = designId;
 	}
-
-
     public double getCannonTemperature() {
         return cannonTemperature;
     }
-
     public void setCannonTemperature(double cannonTemperature) {
         this.cannonTemperature = cannonTemperature;
+    }
+    public int getToClean() {
+        return toClean;
+    }
+    public void setToClean(int toClean) {
+        this.toClean = toClean;
+    }
+    public boolean isProjectilePushed() {
+        return isProjectilePushed;
+    }
+    public void setProjectilePushed(boolean projectilePushed) {
+        isProjectilePushed = projectilePushed;
     }
 }

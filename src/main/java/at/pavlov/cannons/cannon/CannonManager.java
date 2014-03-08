@@ -95,7 +95,7 @@ public class CannonManager
 			if (player != null) userMessages.displayMessage(player, cannon, message);
 
 			//remove from database
-			plugin.getPersistenceDatabase().deleteCannonAsync(cannon);
+			plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getID());
 			
 			//remove from list
 			cannonList.remove(cannon);

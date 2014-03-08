@@ -102,7 +102,7 @@ public class Cannon
         this.setToClean(design.getCleaningAfterFiring());
         this.setProjectilePushed(!design.isPushingProjectileRequired());
 
-		this.databaseId = null;
+		this.databaseId = UUID.randomUUID();
 	}
 
 
@@ -126,14 +126,18 @@ public class Cannon
 	{
         List<Inventory> invlist = getInventoryList();
 
+        //clean the cannon
+        setToClean(0);
+
         //load gunpowder
         if (design.isGunpowderConsumption()&&consumesAmmo)
         {
+
             //gunpowder will be consumed from the inventory
             //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
             int toLoad = design.getMaxLoadableGunpowder() - getLoadedGunpowder();
             ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
-            gunpowder = InventoryManagement.removeItemInChests(invlist, gunpowder);
+            gunpowder = InventoryManagement.removeItem(invlist, gunpowder);
             if (gunpowder.getAmount() == 0)
             {
                 //there was enough gunpowder in the chest
@@ -145,6 +149,7 @@ public class Cannon
                 gunpowder.setAmount(toLoad-gunpowder.getAmount()) ;
                 InventoryManagement.addItemInChests(invlist, gunpowder);
             }
+
         }
         else
         {
@@ -184,6 +189,9 @@ public class Cannon
                             item.setAmount(item.getAmount() - 1);
                         }
                     }
+
+                    //push projectile and done
+                    setProjectilePushed(true);
                     return true;
                 }
             }
@@ -213,7 +221,7 @@ public class Cannon
         for (MaterialHolder mat : design.getItemCooling())
         {
             item = mat.toItemStack(item.getAmount());
-            item = InventoryManagement.removeItemInChests(invlist, item);
+            item = InventoryManagement.removeItem(invlist, item);
 
 
             int usedItems= toCool - item.getAmount();
@@ -267,11 +275,10 @@ public class Cannon
 			return MessageEnum.ErrorMaximumGunpowderLoaded;
 		
 		//load the maximum gunpowder
-		for (int i = 0; i < amountToLoad; i++)
-		{
-			if (getLoadedGunpowder() < design.getMaxLoadableGunpowder())
-				loadedGunpowder += 1;
-		}
+		setLoadedGunpowder(getLoadedGunpowder() + amountToLoad);
+
+        if (getLoadedGunpowder() > design.getMaxLoadableGunpowder())
+            setLoadedGunpowder(design.getMaxLoadableGunpowder());
 		
 		// update Signs
 		updateCannonSigns();
@@ -295,7 +302,7 @@ public class Cannon
             return null;
 
 
-		//save the amount of gunpowder we loaded in the cannnon
+		//save the amount of gunpowder we loaded in the cannon
 		int gunpowder = 0;
 		int maximumLoadable = design.getMaxLoadableGunpowder() - getLoadedGunpowder();
 		
@@ -325,7 +332,7 @@ public class Cannon
 		{
 			// take item from the player
 			if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
-				InventoryManagement.TakeFromPlayerInventory(player, gunpowder);
+				InventoryManagement.takeFromPlayerHand(player, gunpowder);
 		}
 		return returnVal;
 
@@ -338,6 +345,14 @@ public class Cannon
 	 */
 	public MessageEnum loadProjectile(Projectile projectile, Player player)
 	{
+        //fire event
+        CannonUseEvent useEvent = new CannonUseEvent(this, player, InteractAction.loadProjectile);
+        Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+        if (useEvent.isCancelled())
+            return null;
+
+
 		if (projectile == null) return null;
 
 		MessageEnum returnVal = CheckPermProjectile(projectile, player);
@@ -350,7 +365,7 @@ public class Cannon
 
 			// remove from player
 			if (design.isProjectileConsumption()&&!design.isAmmoInfiniteForPlayer())
-				InventoryManagement.TakeFromPlayerInventory(player,1);
+				InventoryManagement.takeFromPlayerHand(player,1);
 
 			// update Signs
 			updateCannonSigns();
@@ -990,6 +1005,53 @@ public class Cannon
         }
     }
 
+    /**
+     * cools down a cannon by using the item in hand of a player
+     * @param player player using the cannon
+     */
+    public void coolCannon(Player player)
+    {
+        int toCool = (int) Math.ceil((this.getTemperature() - design.getWarningTemperature())/design.getCoolingAmount());
+
+        //if the player is sneaking the maximum gunpowder is loaded, but at least 1
+        int amount = 1;
+        if (player.isSneaking())
+        {
+            //get the amount of gunpowder that can be maximal loaded
+            amount = player.getItemInHand().getAmount();
+            if (amount > toCool)
+                amount = toCool;
+        }
+
+        setTemperature(getTemperature()-design.getCoolingAmount()*amount);
+
+        ItemStack newItem = design.getCoolingToolUsed(player.getItemInHand());
+        //remove only one item if the material is AIR else replace the item (e.g. water bucket with a bucket)
+        if (newItem.getType().equals(Material.AIR))
+            InventoryManagement.takeFromPlayerHand(player, 1);
+        else
+            player.setItemInHand(newItem);
+
+        return;
+    }
+
+    /**
+     * cools down a cannon by using the item in hand of a player
+     * @param player player using the cannon
+     * @param effectLoc location of the smoke effects
+     */
+    public void coolCannon(Player player, Location effectLoc)
+    {
+        coolCannon(player);
+
+        if (effectLoc !=null && getTemperature() > design.getWarningTemperature())
+        {
+            effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
+            effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+        }
+        return;
+    }
+
 
 	/**
 	 * return the firing vector of the cannon. The spread depends on the cannon, the projectile and the player
@@ -1462,14 +1524,23 @@ public class Cannon
     }
 
     /**
+     * returns the ambient temperature for the cannon in celsius
+     * @return ambient temperature for the cannon in celsius
+     */
+    public double getAmbientTemperature()
+    {
+        return (Math.sqrt(this.design.getMuzzle(this).getBlock().getTemperature())-0.5)*60;
+    }
+
+    /**
      * returns the temperature of the cannon
      * @return cannon temperature
      */
     public double getTemperature() {
         //barrel temperature - minus ambient temperature + exponential decay
-        double ambient = (Math.sqrt(this.design.getMuzzle(this).getBlock().getTemperature())-0.5)*60;
         double timePassed = (System.currentTimeMillis() - this.tempTimestamp)/1000.0;
         double decay = Math.exp(-timePassed/design.getCoolingCoefficient());
+        double ambient = getAmbientTemperature();
         tempValue = ambient + (tempValue - ambient)*decay;
         this.tempTimestamp = System.currentTimeMillis();
 

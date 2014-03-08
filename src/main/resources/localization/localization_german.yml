@@ -32,7 +32,7 @@ Cannon:
   Fire: 'YELLOW [Cannons] FEUER!'
   Created: 'GREEN [Cannons] Eine Kanone wurde erstellt.'
   Destroyed: 'RED [Cannons] Eine deiner Kanonen wurde zerstört.'
-  Reseted: 'GREEN [Cannons] Alle deine Kanonen wurden aus der Datenbank entfernt.'
+  Reseted: 'GREEN [Cannons] Alle Kanonen von PLAYER wurden aus der Datenbank entfernt.'
 
 
 Projectile:

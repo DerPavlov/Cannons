@@ -77,7 +77,7 @@ heatManagement:
   #searchs for cooling items in chests and cools the cannon if the cannon temperature above the warning temperature
   automaticCooling: true
   #the barrel is hot and you will notice this effect
-  warningTemperature: 50.0
+  warningTemperature: 60.0
   #the barrel damage is critical and the cannon can explode
   criticalTemperature: 150.0
   #if the cannon exceeds this temperature it will explode

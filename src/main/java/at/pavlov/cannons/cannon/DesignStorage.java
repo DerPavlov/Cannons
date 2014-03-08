@@ -162,7 +162,7 @@ public class DesignStorage
 
 		// ammunition
 		cannonDesign.setGunpowderName(cannonDesignConfig.getString("ammunition.gunpowderName", "gunpowder"));
-		cannonDesign.setGunpowderType(new MaterialHolder(cannonDesignConfig.getString("ammunition.gunpowderType", "0:0")));
+		cannonDesign.setGunpowderType(new MaterialHolder(cannonDesignConfig.getString("ammunition.gunpowderType", "289:0")));
         cannonDesign.setGunpowderConsumption(cannonDesignConfig.getBoolean("ammunition.gunpowderConsumption", true));
         cannonDesign.setProjectileConsumption(cannonDesignConfig.getBoolean("ammunition.projectileConsumption", true));
 		cannonDesign.setAmmoInfiniteForPlayer(cannonDesignConfig.getBoolean("ammunition.ammoInfiniteForPlayer", false));
@@ -201,15 +201,15 @@ public class DesignStorage
         cannonDesign.setWarningTemperature(cannonDesignConfig.getDouble("heatManagement.warningTemperature", 100.0));
         cannonDesign.setCriticalTemperature(cannonDesignConfig.getDouble("heatManagement.criticalTemperature", 150.0));
         cannonDesign.setMaximumTemperature(cannonDesignConfig.getDouble("heatManagement.maximumTemperature", 200.0));
-        cannonDesign.setItemCooling(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("heatManagement.coolingItems")));
-        cannonDesign.setItemCoolingUsed(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("heatManagement.coolingItemsUsed")));
+        cannonDesign.setItemCooling(CannonsUtil.toMaterialHolderList(cannonDesignConfig.getStringList("heatManagement.coolingItems")));
+        cannonDesign.setItemCoolingUsed(CannonsUtil.toMaterialHolderList(cannonDesignConfig.getStringList("heatManagement.coolingItemsUsed")));
         if (cannonDesign.getItemCooling().size() != cannonDesign.getItemCoolingUsed().size())
             plugin.logSevere("CoolingItemsUsed and CoolingItems lists must have the same size. Check if both lists have the same number of entries");
 
 
         // realisticBehaviour
 		cannonDesign.setFiringItemRequired(cannonDesignConfig.getBoolean("realisticBehaviour.isFiringItemRequired", false));
-        cannonDesign.setCleaningAfterFiring(cannonDesignConfig.getInt("realisticBehaviour.cleaningAfterFiring", 2));
+        cannonDesign.setCleaningAfterFiring(cannonDesignConfig.getInt("realisticBehaviour.cleaningAfterFiring", 0));
         cannonDesign.setPushingProjectileRequired(cannonDesignConfig.getBoolean("realisticBehaviour.pushingProjectileRequired", false));
 		cannonDesign.setHasRecoil(cannonDesignConfig.getBoolean("realisticBehaviour.hasRecoil", false));
 		cannonDesign.setFrontloader(cannonDesignConfig.getBoolean("realisticBehaviour.isFrontloader", false));

@@ -43,6 +43,20 @@ superbreakerBlocks:
 unbreakableBlocks:
   # bedrock
   - 7
+#some items will consumed when used as projectile (e.g. a egg will be thrown) and the event has to be canceled, else the item can't be used as projectile
+cancelEventForLoadingItem:
+  #EGG
+  - 344
+  #SNOW_BALL
+  - 332
+  #SPAWN_EGG
+  - 383
+  #ENDER_PEARL
+  - 368
+  #FIREWORK
+  - 401
+  #REDSTONE
+  - 331
 database:
   #database implementation. Default is SQLite, can be changed to MySql if you change the driver.  
   username: bukkit

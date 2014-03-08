@@ -204,7 +204,7 @@ public class Cannons extends JavaPlugin
 				config.getString("database.username", "bukkit"), 
 				config.getString("database.password", "walrus"),
 				config.getString("database.isolation", "SERIALIZABLE"), 
-				config.getBoolean("database.logging", false),
+				getMyConfig().isDebugMode(),
 				false//config.getBoolean("database.rebuild", false)
 				);
 		//.Formatter:on

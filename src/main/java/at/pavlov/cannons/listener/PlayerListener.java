@@ -355,8 +355,7 @@ public class PlayerListener implements Listener
 			CannonDesign design = cannon.getCannonDesign();
 
 			// prevent eggs and snowball from firing when loaded into the gun
-			Material ItemInHand = player.getItemInHand().getType();
-			if (ItemInHand == Material.EGG || ItemInHand == Material.SNOW_BALL || ItemInHand == Material.MONSTER_EGG || ItemInHand == Material.ENDER_PEARL || ItemInHand == Material.FIREWORK)
+			if (config.isCancelItem(player.getItemInHand()))
 			{
 				event.setCancelled(true);
 			}
@@ -389,25 +388,9 @@ public class PlayerListener implements Listener
                 plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
                 userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementCooling);
 
+                cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation());
+
                 event.setCancelled(true);
-
-                cannon.setTemperature(cannon.getTemperature()-design.getCoolingAmount());
-
-                ItemStack newItem = design.getCoolingToolUsed(player.getItemInHand());
-                //remove only one item if the material is AIR
-                if (newItem.getType().equals(Material.AIR))
-                    InventoryManagement.TakeFromPlayerInventory(player, 1);
-                else
-                    player.setItemInHand(newItem);
-
-
-                if (cannon.getTemperature() > design.getWarningTemperature())
-                {
-                    Location effectLoc = clickedBlock.getRelative(event.getBlockFace()).getLocation();
-                    effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, event.getBlockFace());
-                    effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
-                }
-                return;
             }
 
 
@@ -431,32 +414,25 @@ public class PlayerListener implements Listener
 			{
 				plugin.logDebug("change cannon angle");
 
-                //fire event
-                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.adjust);
-                Bukkit.getServer().getPluginManager().callEvent(useEvent);
-
-                if (useEvent.isCancelled())
-                    return;
 
 				MessageEnum message = aiming.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
-
 				userMessages.displayMessage(player, cannon, message);
 				
 				// update Signs
 				cannon.updateCannonSigns();
-				return;
+                if (message!=null)
+				    return;
 			}
 
 
-
-
             // ########## Ramrod ###############################
-            if (ItemInHand.equals(config.getToolRamrod()))
+            if (config.getToolRamrod().equalsFuzzy(player.getItemInHand()))
             {
+                plugin.logDebug("Ramrod used");
                 MessageEnum message = cannon.useRamRod(player);
                 userMessages.displayMessage(player, cannon, message);
-
-                return;
+                if (message!=null)
+                    return;
             }
 
 
@@ -466,17 +442,13 @@ public class PlayerListener implements Listener
 			{
 				plugin.logDebug("load projectile");
 
-                //fire event
-                CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.loadProjectile);
-                Bukkit.getServer().getPluginManager().callEvent(useEvent);
-
-                if (useEvent.isCancelled())
-                    return;
-
 				// load projectile
 				MessageEnum message = cannon.loadProjectile(projectile, player);
 				// display message
 				userMessages.displayMessage(player, cannon, message);
+
+                if(message!=null)
+                    return;
 			}
 
 
@@ -490,6 +462,9 @@ public class PlayerListener implements Listener
 
    				// display message
 				userMessages.displayMessage(player, cannon, message);
+
+                if(message!=null)
+                    return;
 			}
 
 
@@ -502,7 +477,9 @@ public class PlayerListener implements Listener
 
   				// display message
 				userMessages.displayMessage(player, cannon, message);
-				return;
+
+                if(message!=null)
+                    return;
 			}
 
 
@@ -512,7 +489,7 @@ public class PlayerListener implements Listener
 				plugin.logDebug("interact event: fire button");
                 cannon.setLastUser(player.getName());
 
-				return;
+                return;
 			}
 		}
 		return;

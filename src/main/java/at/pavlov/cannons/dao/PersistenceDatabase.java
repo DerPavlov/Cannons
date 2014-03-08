@@ -1,6 +1,7 @@
 package at.pavlov.cannons.dao;
 
 import java.util.List;
+import java.util.UUID;
 
 import at.pavlov.cannons.utils.DelayedTask;
 import org.bukkit.block.BlockFace;
@@ -67,11 +68,14 @@ public class PersistenceDatabase
 					// cannon created - load properties
 					cannon.setID(bean.getId());
 					cannon.setCannonName(bean.getName());
+                    cannon.setToClean(bean.getToClean());
 					cannon.setLoadedGunpowder(bean.getGunpowder());
 					
 					//load projectile
 					cannon.setLoadedProjectile(plugin.getProjectile(cannon, bean.getProjectileID(), bean.getProjectileData()));
-					
+
+                    cannon.setProjectilePushed(bean.isProjectilePushed());
+
 					//angles
 					cannon.setHorizontalAngle(bean.getHorizontalAngle());
 					cannon.setVerticalAngle(bean.getVerticalAngle());
@@ -154,18 +158,22 @@ public class PersistenceDatabase
 		try
 		{
 			// search if the is cannon already stored in the database
-			CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.getID()).findUnique();
+			//CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.getID()).findUnique();
+            CannonBean bean = plugin.getDatabase().find(CannonBean.class, cannon.getID());
 			
 			if (bean == null)
 			{
 				plugin.logDebug("creating new database entry");
 				// create a new bean that is managed by bukkit
 				bean = plugin.getDatabase().createEntityBean(CannonBean.class);
-				cannon.setID(bean.getId());
+
+				bean.setId(cannon.getID());
+                plugin.logDebug("bean id:" + bean.getId());
+
 			}
 			else
 			{
-				plugin.logDebug("saving cannons in database as id " + cannon.getID());
+				plugin.logDebug("saving cannons in database. ID: " + cannon.getID());
 			}
 
 			// fill the bean with values to store
@@ -181,6 +189,8 @@ public class PersistenceDatabase
 			bean.setCannonDirection(cannon.getCannonDirection());
 			// name
 			bean.setName(cannon.getCannonName());
+            // must the barrel be clean with the ramrod
+            bean.setToClean(cannon.getToClean());
 			// amount of gunpowder
 			bean.setGunpowder(cannon.getLoadedGunpowder());
 			
@@ -197,6 +207,9 @@ public class PersistenceDatabase
 				bean.setProjectileID(0);
 				bean.setProjectileData(0);	
 			}
+            //is the projectile already pushed in the barrel
+            bean.setProjectilePushed(cannon.isProjectilePushed());
+
 			// angles
 			bean.setHorizontalAngle(cannon.getHorizontalAngle());
 			bean.setVerticalAngle(cannon.getVerticalAngle());
@@ -210,7 +223,7 @@ public class PersistenceDatabase
 
 			// store the bean
 			plugin.getDatabase().save(bean);
-			cannon.setID(bean.getId());
+			//cannon.setID(bean.getId());
 			return true;
 		}
 		catch (Exception e)
@@ -266,29 +279,31 @@ public class PersistenceDatabase
 
     /**
      * removes this cannon from the database
-     *
-     * @param cannon
+     * @param cannonID ID of the cannon to delete
      */
-    public void deleteCannonAsync(Cannon cannon)
+    public void deleteCannonAsync(UUID cannonID)
     {
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new DelayedTask(cannon) {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new DelayedTask(cannonID) {
             public void run(Object object) {
-                Cannon cannon = (Cannon) object;
-                deleteCannon(cannon);
+                UUID cannonID = (UUID) object;
+                deleteCannon(cannonID);
             }
         });
     }
 	
 	/**
 	 * removes this cannon from the database
-	 * 
-	 * @param cannon
+	 * @param cannonID id of the cannon to delete
 	 */
-    void deleteCannon(Cannon cannon)
+    void deleteCannon(UUID cannonID)
 	{
+        CannonBean bean = plugin.getDatabase().find(CannonBean.class, cannonID);
 		// if the database id is null, it is not saved in the database
-		if (cannon.getID() == null)
-				plugin.getDatabase().delete(CannonBean.class, cannon.getID());
+		if (bean != null)
+        {
+            plugin.logDebug("removing cannon " + cannonID.toString());
+            plugin.getDatabase().delete(bean);
+        }
 	}
 
 }

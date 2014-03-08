@@ -7,6 +7,7 @@ import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
+import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -80,17 +81,25 @@ public class Aiming {
 	}
 	
 	//################# ChangeAngle #######################################################
-	public MessageEnum ChangeAngle(Cannon cannon_loc, Action action, BlockFace clickedFace, Player player){
+	public MessageEnum ChangeAngle(Cannon cannon, Action action, BlockFace clickedFace, Player player){
+        //fire event
+        CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.adjust);
+        Bukkit.getServer().getPluginManager().callEvent(useEvent);
+
+        if (useEvent.isCancelled())
+            return null;
+
+
 		if (action.equals(Action.RIGHT_CLICK_BLOCK )){
 			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
 			{
 				//aiming mode
-				ToggleAimingMode(player, cannon_loc);
+				ToggleAimingMode(player, cannon);
 			}
 			else
 			{
 				//barrel clicked to change angle
-				return DisplayAngle(cannon_loc, clickedFace, player);
+				return DisplayAngle(cannon, clickedFace, player);
 			}
 		}
 		return null;
