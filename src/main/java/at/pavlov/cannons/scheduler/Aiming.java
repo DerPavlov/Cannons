@@ -83,7 +83,7 @@ public class Aiming {
 	//################# ChangeAngle #######################################################
 	public MessageEnum ChangeAngle(Cannon cannon, Action action, BlockFace clickedFace, Player player){
         //fire event
-        CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.adjust);
+        CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.adjustPlayer);
         Bukkit.getServer().getPluginManager().callEvent(useEvent);
 
         if (useEvent.isCancelled())

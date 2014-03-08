@@ -1,6 +1,7 @@
 package at.pavlov.cannons;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -82,6 +83,8 @@ public class Cannons extends JavaPlugin
 
 	public void onEnable()
 	{
+        long startTime = System.nanoTime();
+
 		//load some global variables
 		pm = getServer().getPluginManager();
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -155,6 +158,8 @@ public class Cannons extends JavaPlugin
 			    // Failed to submit the stats :-(
 			}
 
+            logDebug("Time to enable cannons: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+
             // Plugin succesfully enabled
             logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been enabled");
 			
@@ -181,7 +186,7 @@ public class Cannons extends JavaPlugin
 			}
 		}
 
-	}
+    }
 
 	// set up ebean database
 	private void initializeDatabase()

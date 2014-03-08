@@ -553,24 +553,12 @@ public class Cannon
      */
     public void show()
     {
-        List<SimpleBlock> attachable = new ArrayList<SimpleBlock>();
         for (SimpleBlock cBlock : design.getAllCannonBlocks(this.getCannonDirection()))
         {
             Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
             wBlock.setType(cBlock.getMaterial());
-            //if the block is a button we have to set the data after all other blocks are set
-            //if (wBlock instanceof Attachable)
-            //    attachable.add(cBlock);
-            //else
             wBlock.setData((byte) cBlock.getData());
         }
-        /*
-        //set again the buttons
-        for (SimpleBlock cBlock : attachable)
-        {
-            Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
-            wBlock.setData((byte) cBlock.getData());
-        }  */
     }
 
     /**
@@ -578,11 +566,16 @@ public class Cannon
      */
     public void hide()
     {
+        //remove only attachable block
         for (SimpleBlock cBlock : design.getAllCannonBlocks(this.getCannonDirection()))
         {
             Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
+            //if that block is not loaded
+            if (wBlock == null) return;
+
+            System.out.println("hide " + wBlock.getType());
             wBlock.setType(Material.AIR);
-            wBlock.setData((byte) 0);
+            wBlock.setData((byte) 0, false);
         }
     }
 
@@ -916,10 +909,12 @@ public class Cannon
         angle = Math.round(angle);
         double dAngle =  angle*Math.PI/180;
 
+        center = new Vector (center.getBlockX(), center.getBlockY(), center.getBlockZ());
+
         Vector diffToCenter = offset.clone().subtract(center);
 
-        double newX = diffToCenter.getBlockX()*Math.cos(dAngle) - diffToCenter.getBlockZ()*Math.sin(dAngle);
-        double newZ = diffToCenter.getBlockX()*Math.sin(dAngle) + diffToCenter.getBlockZ()*Math.cos(dAngle);
+        double newX = diffToCenter.getX()*Math.cos(dAngle) - diffToCenter.getZ()*Math.sin(dAngle);
+        double newZ = diffToCenter.getX()*Math.sin(dAngle) + diffToCenter.getZ()*Math.cos(dAngle);
 
         offset = new Vector(Math.round(center.getX()+newX), offset.getBlockY(), Math.round(center.getZ()+newZ));
 
