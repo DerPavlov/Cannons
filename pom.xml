@@ -13,6 +13,15 @@
         <build.number>R1</build.number>
     </properties>
 
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License 3.0</name>
+            <url>LICENSE_LGPL.txt</url>
+            <distribution>repo</distribution>
+            <comments>License on all new contributions</comments>
+        </license>
+    </licenses>
+
     <!-- Source code -->
     <scm>
         <developerConnection>scm:git:git//github.com/DerPavlov/Cannons.git</developerConnection>
