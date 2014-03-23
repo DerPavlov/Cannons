@@ -573,9 +573,24 @@ public class Cannon
             //if that block is not loaded
             if (wBlock == null) return;
 
-            System.out.println("hide " + wBlock.getType());
-            wBlock.setType(Material.AIR);
-            wBlock.setData((byte) 0, false);
+            if (wBlock.getState() instanceof Attachable)
+            {
+                System.out.println("hide " + wBlock.getType());
+                wBlock.setType(Material.AIR);
+                wBlock.setData((byte) 0, false);
+            }
+        }
+
+        //remove all
+        for (SimpleBlock cBlock : design.getAllCannonBlocks(this.getCannonDirection()))
+        {
+            Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
+
+            if (wBlock.getType() != Material.AIR)
+            {
+                wBlock.setType(Material.AIR);
+                wBlock.setData((byte) 0, false);
+            }
         }
     }
 

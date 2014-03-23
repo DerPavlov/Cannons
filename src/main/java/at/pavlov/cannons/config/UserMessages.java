@@ -329,6 +329,7 @@ public class UserMessages {
 
 		for (int x = 0; x < message.length; x++)
 		{
+            plugin.logDebug("Message for " + player.getName() + ": " + message[x]);
 			player.sendMessage(message[x]); // Send each argument in the message
 		}
 
