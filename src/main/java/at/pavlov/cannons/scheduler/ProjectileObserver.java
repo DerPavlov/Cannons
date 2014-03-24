@@ -93,7 +93,7 @@ public class ProjectileObserver {
                             if (block.isLiquid())
                                 block.setType(Material.AIR);
                         }
-                    }, 20);
+                    }, 60);
                     //we are done now
                     break;
                 }
