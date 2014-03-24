@@ -8,6 +8,7 @@ import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
@@ -82,8 +83,12 @@ public class ProjectileObserver {
                 {
                     //found a free block - make the splash
                     block.setType(liquid);
-                    //revert it after some time
                     Location loc = block.getLocation();
+                    //make a sound
+                    loc.getWorld().playSound(loc, Sound.SPLASH2, 5, 1);
+                    //revert it after some time
+
+
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(loc)
                     {
                         public void run(Object object)
