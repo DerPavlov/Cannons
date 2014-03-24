@@ -29,6 +29,13 @@
         <tag>master</tag>
     </scm>
 
+    <distributionManagement>
+        <repository>
+            <id>Cannons-repo</id>
+            <url>https://github.com/DerPavlov/mvn-repo/raw/master/cannon</url>
+        </repository>
+    </distributionManagement>
+
     <repositories>
         <repository>
             <id>sk89q-repo</id>
@@ -99,4 +106,16 @@
             <version>1.7.2-R0.3</version>
         </dependency>
     </dependencies>
+
+    <developers>
+        <developer>
+            <id>DerPavlov</id>
+            <name>Peter Gruber</name>
+            <email>derPavlov@gmail.com</email>
+            <roles>
+                <role>author</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
 </project>
