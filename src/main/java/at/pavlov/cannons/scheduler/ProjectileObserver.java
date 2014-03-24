@@ -132,6 +132,7 @@ public class ProjectileObserver {
             shooter.setVelocity(playerVel);
             shooter.setFallDistance(0.0f);
 
+
             //teleport if the player is behind
             if (distToOptimum.length() > 30)
             {
