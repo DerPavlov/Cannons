@@ -15,7 +15,7 @@ import at.pavlov.cannons.listener.*;
 import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.Aiming;
-import at.pavlov.cannons.scheduler.Teleporter;
+import at.pavlov.cannons.scheduler.ProjectileObserver;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -47,7 +47,7 @@ public class Cannons extends JavaPlugin
 	private FireCannon fireCannon;
 	private CreateExplosion explosion;
 	private Aiming aiming;
-    private Teleporter teleporter;
+    private ProjectileObserver observer;
 	private Commands commands;
 
     private CannonsAPI cannonsAPI;
@@ -106,7 +106,7 @@ public class Cannons extends JavaPlugin
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config, explosion);
 		this.aiming = new Aiming(this);
-        this.teleporter = new Teleporter(this);
+        this.observer = new ProjectileObserver(this);
         this.cannonsAPI = new CannonsAPI(this);
 		
 		this.persistenceDatabase = new PersistenceDatabase(this);
@@ -138,7 +138,7 @@ public class Cannons extends JavaPlugin
 			// setting up Aiming Mode Task
 			aiming.initAimingMode();
             // setting up the Teleporter
-            teleporter.setupScheduler();
+            observer.setupScheduler();
 
 			// save cannons
 			//.Formatter:off
@@ -351,11 +351,6 @@ public class Cannons extends JavaPlugin
 	{
 		return entityListener;
 	}
-
-	public void setEntityListener(EntityListener entityListener)
-	{
-		this.entityListener = entityListener;
-	}
 	
 	public void displayMessage(Player player, Cannon cannon, MessageEnum message)
 	{
@@ -372,12 +367,8 @@ public class Cannons extends JavaPlugin
 		this.getCannonManager().createCannon(cannon);
 	}
 
-    public Teleporter getTeleporter() {
-        return teleporter;
-    }
-
-    public void setTeleporter(Teleporter teleporter) {
-        this.teleporter = teleporter;
+    public ProjectileObserver getProjectileObserver() {
+        return observer;
     }
 
     public ProjectileManager getProjectileManager(){
@@ -390,9 +381,5 @@ public class Cannons extends JavaPlugin
 
     public BlockListener getBlockListener() {
         return blockListener;
-    }
-
-    public void setBlockListener(BlockListener blockListener) {
-        this.blockListener = blockListener;
     }
 }

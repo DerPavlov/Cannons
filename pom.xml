@@ -5,13 +5,21 @@
     <groupId>at.pavlov</groupId>
     <artifactId>Cannons</artifactId>
     <name>Cannons</name>
-    <version>2.2</version>
+    <version>2.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <build.number>R1</build.number>
     </properties>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License 3.0</name>
+            <url>LICENSE_LGPL.txt</url>
+            <distribution>repo</distribution>
+            <comments>License on all new contributions</comments>
+        </license>
+    </licenses>
 
     <!-- Source code -->
     <scm>
@@ -20,6 +28,13 @@
         <url>https://github.com/DerPavlov/Cannons.git</url>
         <tag>master</tag>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>cannons-repo</id>
+            <url>https://github.com/DerPavlov/mvn-repo/raw/master</url>
+        </repository>
+    </distributionManagement>
 
     <repositories>
         <repository>
@@ -91,4 +106,16 @@
             <version>1.7.2-R0.3</version>
         </dependency>
     </dependencies>
+
+    <developers>
+        <developer>
+            <id>DerPavlov</id>
+            <name>Peter Gruber</name>
+            <email>derPavlov@gmail.com</email>
+            <roles>
+                <role>author</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
 </project>

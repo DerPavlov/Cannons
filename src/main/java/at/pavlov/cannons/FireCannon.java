@@ -231,10 +231,10 @@ public class FireCannon {
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
             {
                 public void run(Object object)
-                    {
-                        FireTaskWrapper fireTask = (FireTaskWrapper) object;
-                        fireTask(fireTask.getCannon(), fireTask.getPlayer(), fireTask.isRemoveCharge());
-                    }
+                {
+                    FireTaskWrapper fireTask = (FireTaskWrapper) object;
+                    fireTask(fireTask.getCannon(), fireTask.getPlayer(), fireTask.isRemoveCharge());
+                }
             }, delayTime);
         }
     }
