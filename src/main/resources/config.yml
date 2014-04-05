@@ -34,8 +34,8 @@ fakeExplosion:
   maximumDistance: 100.0
   #size of the impact fake explosion
   sphereSize: 3
-  #material of the fake explosion
-  material: '35:14'
+  #material of the fake explosion (default is a active redstone lamp '124:0')
+  material: '124:0'
   #how long the effect will be displayed [s]
   time: 2
 

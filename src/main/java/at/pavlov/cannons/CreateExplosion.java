@@ -615,6 +615,9 @@ public class CreateExplosion {
 
 		if (notCanceled)
         {
+            //if the player is too far away, there will be a fake explosion made of fake blocks
+            sendExplosionPlayers(impactLoc);
+
             //place blocks around the impact like webs, lava, water
             spreadBlocks(impactLoc, cannonball);
 
@@ -837,8 +840,8 @@ public class CreateExplosion {
 
 
     /**
-     * crates a fake explosion made of blocks which is transmitted to player in a give distance
-     * @param l
+     * creates a fake explosion made of blocks which is transmitted to player in a give distance
+     * @param l location of the explosion
      */
     public void sendExplosionPlayers(Location l)
     {
@@ -848,7 +851,9 @@ public class CreateExplosion {
         {
             Location pl = p.getLocation();
             double distance = pl.distance(l);
-            if(minDist >= distance && maxDist <= distance)
+            plugin.logDebug("distance to player: " + distance);
+
+            if(distance >= minDist  && distance <= maxDist)
             {
                 sendExplosionToPlayer(p, l);
             }
@@ -856,8 +861,11 @@ public class CreateExplosion {
     }
     public void sendExplosionToPlayer(Player player, Location l)
     {
-        int r = plugin.getMyConfig().getFakeExplosionSphereSize();
+        player.playSound(l, Sound.EXPLODE, 1, 1);
+        int r = plugin.getMyConfig().getFakeExplosionSphereSize()/2;
         MaterialHolder mat = plugin.getMyConfig().getFakeExplosionMaterial();
+        int delay = (int) plugin.getMyConfig().getFakeExplosionTime()*20;
+        plugin.logDebug("sent to player + size:" + r);
         for(int x = -r; x <=r; x++)
         {
             for(int y = -r; y<=r; y++)
@@ -866,16 +874,19 @@ public class CreateExplosion {
                 {
                     Location newL = l.clone().add(x, y, z);
                     if(newL.distance(l)<=r)
-                        sendBlockChangeToPlayer(player, l, mat.getId(), (byte) mat.getData());
+                    {
+                        sendBlockChangeToPlayer(player, newL, mat, delay);
+                    }
                 }
             }
         }
     }
-    public void sendBlockChangeToPlayer(final Player p, final Location l, int id, byte data)
+    public void sendBlockChangeToPlayer(final Player p, final Location l, MaterialHolder material, int delay)
     {
         if(l.getBlock().isEmpty())
         {
-            p.sendBlockChange(l, id, data);
+            plugin.logDebug("send block change " + material.getId() + ":" + material.getData() + " time:"+  (int)plugin.getMyConfig().getFakeExplosionTime()*20);
+            p.sendBlockChange(l, material.getId(), (byte) material.getData());
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
             {
                 @Override
@@ -883,7 +894,7 @@ public class CreateExplosion {
                 {
                     p.sendBlockChange(l, l.getBlock().getType(), l.getBlock().getData());
                 }
-            }, (int) plugin.getMyConfig().getFakeExplosionTime()*20);
+            }, delay);
         }
     }
 }
