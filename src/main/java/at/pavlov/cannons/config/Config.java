@@ -77,6 +77,9 @@ public class Config
 	{
 		// copy the default config to the disk if it does not exist
 		plugin.saveDefaultConfig();
+
+        plugin.logDebug("load Config");
+        plugin.reloadConfig();
 		
 		//general
 		setDebugMode(plugin.getConfig().getBoolean("general.debugMode", false));
@@ -99,8 +102,6 @@ public class Config
         setFakeExplosionSphereSize(plugin.getConfig().getInt("fakeExplosion.sphereSize", 2));
         setFakeExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("fakeExplosion.material", "35:14")));
         setFakeExplosionTime(plugin.getConfig().getDouble("fakeExplosion.time", 1.0));
-
-
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -125,9 +126,6 @@ public class Config
 		designStorage.loadCannonDesigns();
         cannonManager.updateCannonDesigns();
 		userMessage.loadLanguage();
-
-		
-
 
 	}
 	

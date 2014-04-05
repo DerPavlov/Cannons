@@ -50,7 +50,7 @@ public class Commands implements CommandExecutor
                 {
                     // reload config
                     config.loadConfig();
-                    sendMessage(sender, ChatColor.GREEN + "Cannons config loaded");
+                    sendMessage(sender, ChatColor.GREEN + "[Cannons] Config loaded");
                 }
                 //cannons save
                 else if (args[0].equalsIgnoreCase("save") && (player == null || player.hasPermission("cannons.admin.reload")))

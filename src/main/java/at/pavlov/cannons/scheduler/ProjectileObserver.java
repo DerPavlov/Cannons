@@ -1,6 +1,7 @@
 package at.pavlov.cannons.scheduler;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
@@ -11,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.Iterator;
@@ -72,39 +74,38 @@ public class ProjectileObserver {
         if (fproj.updateWaterSurfaceCheck())
         {
             //go up until there is air and place the same liquid
-            Material liquid = fproj.getProjectileEntity().getLocation().getBlock().getType();
             Location startLoc = fproj.getProjectileEntity().getLocation().clone();
             Vector vel = fproj.getProjectileEntity().getVelocity().clone();
+            MaterialHolder liquid = new MaterialHolder(startLoc.getBlock().getTypeId(), startLoc.getBlock().getData());
 
             for (int i = 0; i<5; i++)
             {
                 Block block = startLoc.subtract(vel.clone().multiply(i)).getBlock();
-                if (block != null && block.getType().equals(Material.AIR))
+                if (block != null && block.isEmpty())
                 {
                     //found a free block - make the splash
-                    block.setType(liquid);
-                    Location loc = block.getLocation();
-                    //make a sound
-                    loc.getWorld().playSound(loc, Sound.SPLASH2, 5, 1);
-                    //revert it after some time
-
-
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(loc)
-                    {
-                        public void run(Object object)
-                        {
-                            Location loc = (Location) object;
-                            Block block = loc.getBlock();
-                            if (block.isLiquid())
-                                block.setType(Material.AIR);
-                        }
-                    }, 60);
-                    //we are done now
+                    sendSplashToPlayers(block.getLocation(), liquid);
                     break;
                 }
             }
         }
+    }
 
+    public void sendSplashToPlayers(Location l, MaterialHolder liquid)
+    {
+        double maxDist = plugin.getMyConfig().getFakeExplosionMaximumDistance();
+
+        for(Player p : l.getWorld().getPlayers())
+        {
+            Location pl = p.getLocation();
+            double distance = pl.distance(l);
+            plugin.logDebug("distance to player: " + distance);
+
+            if(distance <= maxDist)
+            {
+                plugin.getExplosion().createFakeSphere(p, l, 1, new MaterialHolder(liquid.getId(),0), 40);
+            }
+        }
     }
 
     /**

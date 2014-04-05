@@ -847,6 +847,10 @@ public class CreateExplosion {
     {
         double minDist = plugin.getMyConfig().getFakeExplosionMinimumDistance();
         double maxDist = plugin.getMyConfig().getFakeExplosionMaximumDistance();
+        int r = plugin.getMyConfig().getFakeExplosionSphereSize()/2;
+        MaterialHolder mat = plugin.getMyConfig().getFakeExplosionMaterial();
+        int delay = (int) plugin.getMyConfig().getFakeExplosionTime()*20;
+
         for(Player p : l.getWorld().getPlayers())
         {
             Location pl = p.getLocation();
@@ -855,17 +859,23 @@ public class CreateExplosion {
 
             if(distance >= minDist  && distance <= maxDist)
             {
-                sendExplosionToPlayer(p, l);
+                p.playSound(l, Sound.EXPLODE, 5, 1);
+                createFakeSphere(p, l, r, mat, delay);
             }
         }
     }
-    public void sendExplosionToPlayer(Player player, Location l)
+
+    /**
+     * creates a sphere of fake block and sends it to the given player
+     * @param player the player how will be notified
+     * @param l center of the sphere
+     * @param r radius of the sphere
+     * @param mat material of the fake block
+     * @param delay delay until the block disappears again
+     */
+    public void createFakeSphere(Player player, Location l, int r, MaterialHolder mat, int delay)
     {
-        player.playSound(l, Sound.EXPLODE, 1, 1);
-        int r = plugin.getMyConfig().getFakeExplosionSphereSize()/2;
-        MaterialHolder mat = plugin.getMyConfig().getFakeExplosionMaterial();
-        int delay = (int) plugin.getMyConfig().getFakeExplosionTime()*20;
-        plugin.logDebug("sent to player + size:" + r);
+
         for(int x = -r; x <=r; x++)
         {
             for(int y = -r; y<=r; y++)
@@ -881,7 +891,15 @@ public class CreateExplosion {
             }
         }
     }
-    public void sendBlockChangeToPlayer(final Player p, final Location l, MaterialHolder material, int delay)
+
+    /**
+     * sends fake block to the given player
+     * @param p player to display the blocks
+     * @param l location of the block
+     * @param material type of the block
+     * @param delay how long to remove the block
+     */
+    private void sendBlockChangeToPlayer(final Player p, final Location l, MaterialHolder material, int delay)
     {
         if(l.getBlock().isEmpty())
         {
@@ -897,4 +915,6 @@ public class CreateExplosion {
             }, delay);
         }
     }
+
+
 }
