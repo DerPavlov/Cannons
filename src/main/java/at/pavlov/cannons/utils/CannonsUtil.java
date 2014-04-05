@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import at.pavlov.cannons.container.MaterialHolder;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -511,8 +512,5 @@ public class CannonsUtil
 
         return loc;
     }
-
-
-
 
 }

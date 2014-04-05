@@ -834,4 +834,56 @@ public class CreateExplosion {
 	{
 		transmittedEntities = new LinkedList<UUID>();
 	}
+
+
+    /**
+     * crates a fake explosion made of blocks which is transmitted to player in a give distance
+     * @param l
+     */
+    public void sendExplosionPlayers(Location l)
+    {
+        double minDist = plugin.getMyConfig().getFakeExplosionMinimumDistance();
+        double maxDist = plugin.getMyConfig().getFakeExplosionMaximumDistance();
+        for(Player p : l.getWorld().getPlayers())
+        {
+            Location pl = p.getLocation();
+            double distance = pl.distance(l);
+            if(minDist >= distance && maxDist <= distance)
+            {
+                sendExplosionToPlayer(p, l);
+            }
+        }
+    }
+    public void sendExplosionToPlayer(Player player, Location l)
+    {
+        int r = plugin.getMyConfig().getFakeExplosionSphereSize();
+        MaterialHolder mat = plugin.getMyConfig().getFakeExplosionMaterial();
+        for(int x = -r; x <=r; x++)
+        {
+            for(int y = -r; y<=r; y++)
+            {
+                for(int z = -r; z<=r; z++)
+                {
+                    Location newL = l.clone().add(x, y, z);
+                    if(newL.distance(l)<=r)
+                        sendBlockChangeToPlayer(player, l, mat.getId(), (byte) mat.getData());
+                }
+            }
+        }
+    }
+    public void sendBlockChangeToPlayer(final Player p, final Location l, int id, byte data)
+    {
+        if(l.getBlock().isEmpty())
+        {
+            p.sendBlockChange(l, id, data);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    p.sendBlockChange(l, l.getBlock().getType(), l.getBlock().getData());
+                }
+            }, (int) plugin.getMyConfig().getFakeExplosionTime()*20);
+        }
+    }
 }

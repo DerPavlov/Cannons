@@ -1,11 +1,15 @@
 general:
   #sets debug mode on or off. Turn off if you do not want to see as much info on in the server console or log files
   debugMode: false
+
+
 cannonLimits:
   #limits regarding how many cannons a player can build. set to false if you dont need it
   useLimits: false
   buildLimitA: 1
   buildLimitB: 100
+
+
 tools:
   #the item a player needs to be holding to adjust the aim of a cannon. Default is none.
   ajust: '0:0'
@@ -20,6 +24,23 @@ tools:
   rotatingItem: '350:0'
   #item to measure the cannon temperature. Default is a gold nugget
   thermometer: '371:0'
+
+
+#fake explosions made of fake blocks that are send to the player, to make the impact visible for large distances
+fakeExplosion:
+  #is the player closer that this distance, there is no fake explosion
+  minimumDistance: 40.0
+  #if the player is above this distance, there will be no fake explosion
+  maximumDistance: 100.0
+  #size of the impact fake explosion
+  sphereSize: 3
+  #material of the fake explosion
+  material: '35:14'
+  #how long the effect will be displayed [s]
+  time: 2
+
+
+
 #enter here the blocks which require the superbreaker ability to destroy.
 #e.g. if you enter here the enchantment table it requires a projectile with superbreaker to be destroyed.
 #else it can be destroyed by normal explosions
@@ -40,9 +61,13 @@ superbreakerBlocks:
   - 145
 #blocks which can't be destroyed by penetration of the projectile.
 #normal minecraft explosions are not affected by this option.
+
+
 unbreakableBlocks:
   # bedrock
   - 7
+
+
 #some items will consumed when used as projectile (e.g. a egg will be thrown) and the event has to be canceled, else the item can't be used as projectile
 cancelEventForLoadingItem:
   #EGG
@@ -57,6 +82,8 @@ cancelEventForLoadingItem:
   - 401
   #REDSTONE
   - 331
+
+
 database:
   #database implementation. Default is SQLite, can be changed to MySql if you change the driver.  
   username: bukkit

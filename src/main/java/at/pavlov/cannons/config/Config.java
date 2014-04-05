@@ -40,6 +40,12 @@ public class Config
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
     private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
 
+    private double fakeExplosionMinimumDistance;
+    private double fakeExplosionMaximumDistance;
+    private int fakeExplosionSphereSize;
+    private MaterialHolder fakeExplosionMaterial;
+    private double fakeExplosionTime;
+
     //superbreakerBlocks
     private List<MaterialHolder> superbreakerBlocks = new ArrayList<MaterialHolder>();
 
@@ -86,6 +92,15 @@ public class Config
 		setToolFiring(new MaterialHolder(plugin.getConfig().getString("tools.firing", "259:0")));
         setToolRamrod(new MaterialHolder(plugin.getConfig().getString("tools.ramrod", "280:0")));
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
+
+        //fakeExplosions
+        setFakeExplosionMinimumDistance(plugin.getConfig().getDouble("fakeExplosion.minimumDistance", 40.0));
+        setFakeExplosionMaximumDistance(plugin.getConfig().getDouble("fakeExplosion.maximumDistance", 200.0));
+        setFakeExplosionSphereSize(plugin.getConfig().getInt("fakeExplosion.sphereSize", 2));
+        setFakeExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("fakeExplosion.material", "35:14")));
+        setFakeExplosionTime(plugin.getConfig().getDouble("fakeExplosion.time", 1.0));
+
+
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -286,5 +301,45 @@ public class Config
                 return true;
         }
         return false;
+    }
+
+    public double getFakeExplosionMaximumDistance() {
+        return fakeExplosionMaximumDistance;
+    }
+
+    public void setFakeExplosionMaximumDistance(double fakeExplosionMaximumDistance) {
+        this.fakeExplosionMaximumDistance = fakeExplosionMaximumDistance;
+    }
+
+    public int getFakeExplosionSphereSize() {
+        return fakeExplosionSphereSize;
+    }
+
+    public void setFakeExplosionSphereSize(int fakeExplosionSphereSize) {
+        this.fakeExplosionSphereSize = fakeExplosionSphereSize;
+    }
+
+    public double getFakeExplosionMinimumDistance() {
+        return fakeExplosionMinimumDistance;
+    }
+
+    public void setFakeExplosionMinimumDistance(double fakeExplosionMinimumDistance) {
+        this.fakeExplosionMinimumDistance = fakeExplosionMinimumDistance;
+    }
+
+    public MaterialHolder getFakeExplosionMaterial() {
+        return fakeExplosionMaterial;
+    }
+
+    public void setFakeExplosionMaterial(MaterialHolder fakeExplosionMaterial) {
+        this.fakeExplosionMaterial = fakeExplosionMaterial;
+    }
+
+    public double getFakeExplosionTime() {
+        return fakeExplosionTime;
+    }
+
+    public void setFakeExplosionTime(double fakeExplosionTime) {
+        this.fakeExplosionTime = fakeExplosionTime;
     }
 }
