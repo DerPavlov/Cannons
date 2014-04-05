@@ -50,7 +50,7 @@ HeatManagement:
 
 Ramrod:
   Cleaning: 'YELLOW [Cannons] Scouring cannon.'
-  CleaningDone: 'GREEN [Cannons] The barrel is cleang enough.'
+  CleaningDone: 'GREEN [Cannons] The barrel is clean enough.'
   PushingProjectile: 'YELLOW [Cannons] Pushed projectile. Not ready now'
   PushingProjectileDone: 'GREEN [Cannons] Pushed projectile. CANNON is ready to fire'
 
