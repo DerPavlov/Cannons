@@ -99,7 +99,6 @@ public class ProjectileObserver {
         {
             Location pl = p.getLocation();
             double distance = pl.distance(l);
-            plugin.logDebug("distance to player: " + distance);
 
             if(distance <= maxDist)
             {

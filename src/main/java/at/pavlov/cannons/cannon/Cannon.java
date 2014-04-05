@@ -150,10 +150,9 @@ public class Cannon
             else
             {
                 //not enough gunpowder, put it back
-                gunpowder.setAmount(toLoad-gunpowder.getAmount()) ;
+                gunpowder.setAmount(toLoad-gunpowder.getAmount());
                 InventoryManagement.addItemInChests(invlist, gunpowder);
             }
-
         }
         else
         {
@@ -185,7 +184,6 @@ public class Cannon
                         {
                             //last item removed
                             inv.removeItem(item);
-                            break;
                         }
                         else
                         {

@@ -616,7 +616,7 @@ public class CreateExplosion {
 		if (notCanceled)
         {
             //if the player is too far away, there will be a fake explosion made of fake blocks
-            sendExplosionPlayers(impactLoc);
+            sendExplosionToPlayers(impactLoc);
 
             //place blocks around the impact like webs, lava, water
             spreadBlocks(impactLoc, cannonball);
@@ -843,7 +843,7 @@ public class CreateExplosion {
      * creates a fake explosion made of blocks which is transmitted to player in a give distance
      * @param l location of the explosion
      */
-    public void sendExplosionPlayers(Location l)
+    public void sendExplosionToPlayers(Location l)
     {
         double minDist = plugin.getMyConfig().getFakeExplosionMinimumDistance();
         double maxDist = plugin.getMyConfig().getFakeExplosionMaximumDistance();
@@ -855,11 +855,10 @@ public class CreateExplosion {
         {
             Location pl = p.getLocation();
             double distance = pl.distance(l);
-            plugin.logDebug("distance to player: " + distance);
 
             if(distance >= minDist  && distance <= maxDist)
             {
-                p.playSound(l, Sound.EXPLODE, 5, 1);
+                p.playSound(l, Sound.EXPLODE, (float) (0.8*distance), 0.5f);
                 createFakeSphere(p, l, r, mat, delay);
             }
         }
@@ -903,7 +902,6 @@ public class CreateExplosion {
     {
         if(l.getBlock().isEmpty())
         {
-            plugin.logDebug("send block change " + material.getId() + ":" + material.getData() + " time:"+  (int)plugin.getMyConfig().getFakeExplosionTime()*20);
             p.sendBlockChange(l, material.getId(), (byte) material.getData());
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
             {
