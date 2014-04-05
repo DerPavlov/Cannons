@@ -1,9 +1,6 @@
 package at.pavlov.cannons.listener;
 
-import at.pavlov.cannons.event.CannonRedstoneEvent;
-import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
-import at.pavlov.cannons.inventory.InventoryManagement;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,7 +14,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import at.pavlov.cannons.scheduler.Aiming;
+import at.pavlov.cannons.Aiming;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.FireCannon;
@@ -29,7 +26,6 @@ import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener

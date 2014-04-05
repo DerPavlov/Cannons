@@ -61,6 +61,9 @@ public class Cannon
 	// angles
 	private double horizontalAngle;
 	private double verticalAngle;
+    // additional angle if the cannon is mounted e.g. a ship which is facing a different angle
+    private double additionalHorizontalAngle;
+    private double additionalVerticalAngle;
 
 	// player who has build this cannon
 	private String owner;
@@ -1088,10 +1091,10 @@ public class Cannon
 		double playerSpreadMultiplier = getPlayerSpreadMultiplier(player);
 
         double deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
-        double azi = (horizontalAngle + deviation) * Math.PI / 180;
+        double azi = (getTotalHorizontalAngle() + deviation) * Math.PI / 180;
 
         deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
-        double polar = (-design.getDefaultVerticalAngle() - verticalAngle + 90.0 + deviation)* Math.PI / 180;
+        double polar = (-getTotalVerticalAngle() + 90.0 + deviation)* Math.PI / 180;
 
         double hx = Math.sin(polar)*Math.sin(azi);
         double hy = Math.sin(polar)*Math.cos(azi);
@@ -1623,6 +1626,39 @@ public class Cannon
      */
     public void pushProjectile(int amount){
         setProjectilePushed(getProjectilePushed()-amount);
+    }
+
+
+    public double getAdditionalHorizontalAngle() {
+        return additionalHorizontalAngle;
+    }
+
+    public void setAdditionalHorizontalAngle(double additionalHorizontalAngle) {
+        this.additionalHorizontalAngle = additionalHorizontalAngle;
+    }
+
+    public double getAdditionalVerticalAngle() {
+        return additionalVerticalAngle;
+    }
+
+    public void setAdditionalVerticalAngle(double additionalVerticalAngle) {
+        this.additionalVerticalAngle = additionalVerticalAngle;
+    }
+
+    /**
+     * the total angle is sum of the cannon angle and the location where it is mounted
+     * @return sum of all angles
+     */
+    public double getTotalHorizontalAngle(){
+        return this.horizontalAngle + this.additionalHorizontalAngle;
+    }
+
+    /**
+     * the total angle is sum of the cannon angle, its design and the location where it is mounted
+     * @return sum of all angles
+     */
+    public double getTotalVerticalAngle(){
+        return design.getDefaultVerticalAngle() + this.verticalAngle + this.additionalVerticalAngle;
     }
 
 

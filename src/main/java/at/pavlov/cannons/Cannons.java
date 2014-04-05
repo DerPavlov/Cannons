@@ -14,7 +14,6 @@ import at.pavlov.cannons.config.*;
 import at.pavlov.cannons.listener.*;
 import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
-import at.pavlov.cannons.scheduler.Aiming;
 import at.pavlov.cannons.scheduler.ProjectileObserver;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
