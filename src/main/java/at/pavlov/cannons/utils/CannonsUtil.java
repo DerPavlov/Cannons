@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.Random;
 
 import at.pavlov.cannons.container.MaterialHolder;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;

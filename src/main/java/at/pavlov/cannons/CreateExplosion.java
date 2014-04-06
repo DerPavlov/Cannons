@@ -123,11 +123,8 @@ public class CreateExplosion {
     	int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
     	Location impactLoc = snowballLoc.clone();
 
-        plugin.logDebug("impact loc: " + impactLoc + " vel: " + ((int) vel.length()*2));
-
-        plugin.logDebug("piercing some blocks at: " + penetration);
-
-        BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, (int) (vel.length()*2+1));
+        plugin.logDebug("Projectile impact at: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
+        BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, (int) (vel.length()*2));
 
         while (iter.hasNext())
         {
@@ -136,11 +133,10 @@ public class CreateExplosion {
             if (next.isEmpty())
             {
                 impactLoc = next.getLocation();
-                plugin.logDebug("go on to " + next.toString());
             }
             else
             {
-                plugin.logDebug("done with " + impactLoc);
+                plugin.logDebug("Found surface at: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
                 break;
             }
         }
@@ -511,7 +507,7 @@ public class CreateExplosion {
                 reduction *= (1-CannonsUtil.getArmorDamageReduced(player)/(armorPiercing+1)) * (1-CannonsUtil.getBlastProtection(player));
             }
 
-            plugin.logDebug("PlayerDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " armor reduction factor: " + String.format("%.2f", reduction));
+            plugin.logDebug("PlayerDamage " + living.getType() + ": " + String.format("%.2f", damage) + ", reduction: " + String.format("%.2f", reduction));
 
             damage = damage * reduction;
 
@@ -540,7 +536,7 @@ public class CreateExplosion {
 
             double dist = impactLoc.distance((living).getEyeLocation());
             //if the entity is too far away, return
-            if (dist > 2) return 0.0;
+            if (dist > 3) return 0.0;
 
             //given damage is in half hearts
             double damage = projectile.getDirectHitDamage();
@@ -563,7 +559,7 @@ public class CreateExplosion {
                 reduction *= (1-CannonsUtil.getArmorDamageReduced(player)/(armorPiercing+1)) * (1-CannonsUtil.getProjectileProtection(player)/(armorPiercing+1));
             }
 
-            plugin.logDebug("DirectHitDamage done to " + living.getType() + " is: " + String.format("%.2f", damage) + " armor reduction factor: " + String.format("%.2f", reduction));
+            plugin.logDebug("DirectHitDamage " + living.getType() + ": " + String.format("%.2f", damage) + ", reduction: " + String.format("%.2f", reduction));
             return damage * reduction;
         }
         //if the entity is not living
