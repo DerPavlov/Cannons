@@ -496,7 +496,7 @@ public class CreateExplosion {
             //randomizer
             Random r = new Random();
             float rand = r.nextFloat();
-            damage *= rand/2 + 0.5;
+            damage *= (rand + 0.5);
 
             //calculate the armor reduction
             double reduction = 1.0;
@@ -548,7 +548,7 @@ public class CreateExplosion {
             //randomizer
             Random r = new Random();
             float rand = r.nextFloat();
-            damage *= rand/2 + 0.5;
+            damage *= (rand + 0.5);
 
             //calculate the armor reduction
             double reduction = 1.0;
