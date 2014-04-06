@@ -29,7 +29,7 @@ tools:
 #imitated explosions made of fake blocks that are send to the player, to make the impact visible for large distances
 imitatedExplosion:
   #is the player closer that this distance, there is no imitated explosion
-  minimumDistance: 40.0
+  minimumDistance: 80.0
   #if the player is above this distance, there will be no imitated explosion
   maximumDistance: 200.0
   #size of the impact imitated explosion
