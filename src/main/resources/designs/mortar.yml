@@ -58,6 +58,11 @@ angles:
   #min and max vertical angles determine how far upwards or downwards the cannon can be aimed
   maxVerticalAngle: 20.0
   minVerticalAngle: -20.0
+  #if the cannon is on a ship the angles might be smaller
+  maxHorizontalAngleOnShip: 10.0
+  minHorizontalAngleOnShip: -10.0
+  maxVerticalAngleOnShip: 45.0
+  minVerticalAngleOnShip: -45.0
   #each change of the angles will change angle by this amount
   angleStepSize: 1.0
   #how fast the cannons can be turned in ticks
