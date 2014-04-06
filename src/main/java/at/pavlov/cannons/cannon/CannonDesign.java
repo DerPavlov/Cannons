@@ -51,6 +51,10 @@ public class CannonDesign
 	private double minHorizontalAngle;
 	private double maxVerticalAngle;
 	private double minVerticalAngle;
+    private double maxHorizontalAngleOnShip;
+    private double minHorizontalAngleOnShip;
+    private double maxVerticalAngleOnShip;
+    private double minVerticalAngleOnShip;
 	private double angleStepSize;
 	private double angleUpdateSpeed;
 
@@ -1036,5 +1040,37 @@ public class CannonDesign
 
     public void setProjectilePushing(int projectilePushing) {
         this.projectilePushing = projectilePushing;
+    }
+
+    public double getMaxHorizontalAngleOnShip() {
+        return maxHorizontalAngleOnShip;
+    }
+
+    public void setMaxHorizontalAngleOnShip(double maxHorizontalAngleOnShip) {
+        this.maxHorizontalAngleOnShip = maxHorizontalAngleOnShip;
+    }
+
+    public double getMinHorizontalAngleOnShip() {
+        return minHorizontalAngleOnShip;
+    }
+
+    public void setMinHorizontalAngleOnShip(double minHorizontalAngleOnShip) {
+        this.minHorizontalAngleOnShip = minHorizontalAngleOnShip;
+    }
+
+    public double getMaxVerticalAngleOnShip() {
+        return maxVerticalAngleOnShip;
+    }
+
+    public void setMaxVerticalAngleOnShip(double maxVerticalAngleOnShip) {
+        this.maxVerticalAngleOnShip = maxVerticalAngleOnShip;
+    }
+
+    public double getMinVerticalAngleOnShip() {
+        return minVerticalAngleOnShip;
+    }
+
+    public void setMinVerticalAngleOnShip(double minVerticalAngleOnShip) {
+        this.minVerticalAngleOnShip = minVerticalAngleOnShip;
     }
 }

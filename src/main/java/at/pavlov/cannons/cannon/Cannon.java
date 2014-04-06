@@ -23,7 +23,7 @@ import org.bukkit.util.Vector;
 
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.container.SimpleBlock;
-import at.pavlov.cannons.inventory.InventoryManagement;
+import at.pavlov.cannons.utils.InventoryManagement;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.sign.CannonSign;
 
@@ -42,6 +42,8 @@ public class Cannon
 	private Vector offset;
 	// world of the cannon
 	private String world;
+    // if the cannon is on a ship, the operation might be limited (e.g smaller angles to adjust the cannon)
+    private boolean onShip;
 
 	// time the cannon was last time fired
 	private long lastFired;
@@ -1431,11 +1433,14 @@ public class Cannon
 	public void setHorizontalAngle(double horizontalAngle)
 	{
 		this.horizontalAngle = horizontalAngle;
-        //the angle should not exceed the limits
-        if (this.horizontalAngle > design.getMaxHorizontalAngle())
-            this.horizontalAngle = design.getMaxHorizontalAngle();
-        if (this.horizontalAngle < design.getMinHorizontalAngle())
-            this.horizontalAngle = design.getMinHorizontalAngle();
+
+        //the angle should not exceed the limits - if the cannon is on a ship, the max/min angles are smaller
+        double maxHorizontal = (isOnShip())?design.getMaxHorizontalAngleOnShip():design.getMaxHorizontalAngle();
+        if (this.horizontalAngle > maxHorizontal)
+            this.horizontalAngle = maxHorizontal;
+        double minHorizontal = (isOnShip())?design.getMinHorizontalAngleOnShip():design.getMinHorizontalAngle();
+        if (this.horizontalAngle < minHorizontal)
+            this.horizontalAngle = minHorizontal;
 	}
 
 	public double getVerticalAngle()
@@ -1450,11 +1455,13 @@ public class Cannon
 	public void setVerticalAngle(double verticalAngle)
 	{
 		this.verticalAngle = verticalAngle;
-        //the angle should not exceed the limits
-        if (this.verticalAngle > design.getMaxVerticalAngle())
-            this.verticalAngle = design.getMaxVerticalAngle();
-        if (this.verticalAngle < design.getMinVerticalAngle())
-            this.verticalAngle = design.getMinVerticalAngle();
+        //the angle should not exceed the limits - if the cannon is on a ship, the max/min angles are smaller
+        double maxVertical = (isOnShip())?design.getMaxVerticalAngleOnShip():design.getMaxVerticalAngle();
+        if (this.verticalAngle > maxVertical)
+            this.verticalAngle = maxVertical;
+        double minVertical = (isOnShip())?design.getMinVerticalAngleOnShip():design.getMinVerticalAngle();
+        if (this.verticalAngle < minVertical)
+            this.verticalAngle = minVertical;
 	}
 
 	public String getOwner()
@@ -1660,4 +1667,11 @@ public class Cannon
     }
 
 
+    public boolean isOnShip() {
+        return onShip;
+    }
+
+    public void setOnShip(boolean onShip) {
+        this.onShip = onShip;
+    }
 }

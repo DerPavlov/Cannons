@@ -1,4 +1,4 @@
-package at.pavlov.cannons.inventory;
+package at.pavlov.cannons.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

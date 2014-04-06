@@ -599,7 +599,7 @@ public class CreateExplosion {
         //if canceled then exit
         if (impactEvent.isCancelled())
         {
-            //event canceled, make a save fake explosion
+            //event canceled, make a save imitated explosion
             world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
             return;
         }
@@ -615,7 +615,7 @@ public class CreateExplosion {
 
 		if (notCanceled)
         {
-            //if the player is too far away, there will be a fake explosion made of fake blocks
+            //if the player is too far away, there will be a imitated explosion made of fake blocks
             sendExplosionToPlayers(impactLoc);
 
             //place blocks around the impact like webs, lava, water
@@ -840,16 +840,16 @@ public class CreateExplosion {
 
 
     /**
-     * creates a fake explosion made of blocks which is transmitted to player in a give distance
+     * creates a imitated explosion made of blocks which is transmitted to player in a give distance
      * @param l location of the explosion
      */
     public void sendExplosionToPlayers(Location l)
     {
-        double minDist = plugin.getMyConfig().getFakeExplosionMinimumDistance();
-        double maxDist = plugin.getMyConfig().getFakeExplosionMaximumDistance();
-        int r = plugin.getMyConfig().getFakeExplosionSphereSize()/2;
-        MaterialHolder mat = plugin.getMyConfig().getFakeExplosionMaterial();
-        int delay = (int) plugin.getMyConfig().getFakeExplosionTime()*20;
+        double minDist = plugin.getMyConfig().getImitatedExplosionMinimumDistance();
+        double maxDist = plugin.getMyConfig().getImitatedExplosionMaximumDistance();
+        int r = plugin.getMyConfig().getImitatedExplosionSphereSize()/2;
+        MaterialHolder mat = plugin.getMyConfig().getImitatedExplosionMaterial();
+        int delay = (int) plugin.getMyConfig().getImitatedExplosionTime()*20;
 
         for(Player p : l.getWorld().getPlayers())
         {
@@ -859,7 +859,7 @@ public class CreateExplosion {
             if(distance >= minDist  && distance <= maxDist)
             {
                 p.playSound(l, Sound.EXPLODE, (float) (0.8*distance), 0.5f);
-                createFakeSphere(p, l, r, mat, delay);
+                createImitatedSphere(p, l, r, mat, delay);
             }
         }
     }
@@ -872,7 +872,7 @@ public class CreateExplosion {
      * @param mat material of the fake block
      * @param delay delay until the block disappears again
      */
-    public void createFakeSphere(Player player, Location l, int r, MaterialHolder mat, int delay)
+    public void createImitatedSphere(Player player, Location l, int r, MaterialHolder mat, int delay)
     {
 
         for(int x = -r; x <=r; x++)

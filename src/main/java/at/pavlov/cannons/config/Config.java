@@ -5,11 +5,9 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.container.MaterialHolder;
-import at.pavlov.cannons.inventory.InventoryManagement;
 import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -40,11 +38,11 @@ public class Config
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
     private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
 
-    private double fakeExplosionMinimumDistance;
-    private double fakeExplosionMaximumDistance;
-    private int fakeExplosionSphereSize;
-    private MaterialHolder fakeExplosionMaterial;
-    private double fakeExplosionTime;
+    private double imitatedExplosionMinimumDistance;
+    private double imitatedExplosionMaximumDistance;
+    private int imitatedExplosionSphereSize;
+    private MaterialHolder imitatedExplosionMaterial;
+    private double imitatedExplosionTime;
 
     //superbreakerBlocks
     private List<MaterialHolder> superbreakerBlocks = new ArrayList<MaterialHolder>();
@@ -96,12 +94,12 @@ public class Config
         setToolRamrod(new MaterialHolder(plugin.getConfig().getString("tools.ramrod", "280:0")));
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
 
-        //fakeExplosions
-        setFakeExplosionMinimumDistance(plugin.getConfig().getDouble("fakeExplosion.minimumDistance", 40.0));
-        setFakeExplosionMaximumDistance(plugin.getConfig().getDouble("fakeExplosion.maximumDistance", 200.0));
-        setFakeExplosionSphereSize(plugin.getConfig().getInt("fakeExplosion.sphereSize", 2));
-        setFakeExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("fakeExplosion.material", "35:14")));
-        setFakeExplosionTime(plugin.getConfig().getDouble("fakeExplosion.time", 1.0));
+        //imitatedExplosions
+        setImitatedExplosionMinimumDistance(plugin.getConfig().getDouble("imitatedExplosion.minimumDistance", 40.0));
+        setImitatedExplosionMaximumDistance(plugin.getConfig().getDouble("imitatedExplosion.maximumDistance", 200.0));
+        setImitatedExplosionSphereSize(plugin.getConfig().getInt("imitatedExplosion.sphereSize", 2));
+        setImitatedExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedExplosion.material", "35:14")));
+        setImitatedExplosionTime(plugin.getConfig().getDouble("imitatedExplosion.time", 1.0));
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -301,43 +299,43 @@ public class Config
         return false;
     }
 
-    public double getFakeExplosionMaximumDistance() {
-        return fakeExplosionMaximumDistance;
+    public double getImitatedExplosionMaximumDistance() {
+        return imitatedExplosionMaximumDistance;
     }
 
-    public void setFakeExplosionMaximumDistance(double fakeExplosionMaximumDistance) {
-        this.fakeExplosionMaximumDistance = fakeExplosionMaximumDistance;
+    public void setImitatedExplosionMaximumDistance(double imitatedExplosionMaximumDistance) {
+        this.imitatedExplosionMaximumDistance = imitatedExplosionMaximumDistance;
     }
 
-    public int getFakeExplosionSphereSize() {
-        return fakeExplosionSphereSize;
+    public int getImitatedExplosionSphereSize() {
+        return imitatedExplosionSphereSize;
     }
 
-    public void setFakeExplosionSphereSize(int fakeExplosionSphereSize) {
-        this.fakeExplosionSphereSize = fakeExplosionSphereSize;
+    public void setImitatedExplosionSphereSize(int imitatedExplosionSphereSize) {
+        this.imitatedExplosionSphereSize = imitatedExplosionSphereSize;
     }
 
-    public double getFakeExplosionMinimumDistance() {
-        return fakeExplosionMinimumDistance;
+    public double getImitatedExplosionMinimumDistance() {
+        return imitatedExplosionMinimumDistance;
     }
 
-    public void setFakeExplosionMinimumDistance(double fakeExplosionMinimumDistance) {
-        this.fakeExplosionMinimumDistance = fakeExplosionMinimumDistance;
+    public void setImitatedExplosionMinimumDistance(double imitatedExplosionMinimumDistance) {
+        this.imitatedExplosionMinimumDistance = imitatedExplosionMinimumDistance;
     }
 
-    public MaterialHolder getFakeExplosionMaterial() {
-        return fakeExplosionMaterial;
+    public MaterialHolder getImitatedExplosionMaterial() {
+        return imitatedExplosionMaterial;
     }
 
-    public void setFakeExplosionMaterial(MaterialHolder fakeExplosionMaterial) {
-        this.fakeExplosionMaterial = fakeExplosionMaterial;
+    public void setImitatedExplosionMaterial(MaterialHolder imitatedExplosionMaterial) {
+        this.imitatedExplosionMaterial = imitatedExplosionMaterial;
     }
 
-    public double getFakeExplosionTime() {
-        return fakeExplosionTime;
+    public double getImitatedExplosionTime() {
+        return imitatedExplosionTime;
     }
 
-    public void setFakeExplosionTime(double fakeExplosionTime) {
-        this.fakeExplosionTime = fakeExplosionTime;
+    public void setImitatedExplosionTime(double imitatedExplosionTime) {
+        this.imitatedExplosionTime = imitatedExplosionTime;
     }
 }

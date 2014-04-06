@@ -26,15 +26,15 @@ tools:
   thermometer: '371:0'
 
 
-#fake explosions made of fake blocks that are send to the player, to make the impact visible for large distances
-fakeExplosion:
-  #is the player closer that this distance, there is no fake explosion
+#imitated explosions made of fake blocks that are send to the player, to make the impact visible for large distances
+imitatedExplosion:
+  #is the player closer that this distance, there is no imitated explosion
   minimumDistance: 40.0
-  #if the player is above this distance, there will be no fake explosion
+  #if the player is above this distance, there will be no imitated explosion
   maximumDistance: 100.0
-  #size of the impact fake explosion
+  #size of the impact imitated explosion
   sphereSize: 3
-  #material of the fake explosion (default is a active redstone lamp '124:0')
+  #material of the imitated explosion (default is a active redstone lamp '124:0')
   material: '124:0'
   #how long the effect will be displayed [s]
   time: 2
