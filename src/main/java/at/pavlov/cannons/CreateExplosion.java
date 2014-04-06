@@ -127,7 +127,7 @@ public class CreateExplosion {
 
         plugin.logDebug("piercing some blocks at: " + penetration);
 
-        BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, (int) (vel.length()*2+2));
+        BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, (int) (vel.length()*2+1));
 
         while (iter.hasNext())
         {

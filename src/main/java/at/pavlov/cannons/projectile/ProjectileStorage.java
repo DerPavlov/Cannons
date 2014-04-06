@@ -217,6 +217,7 @@ public class ProjectileStorage
 	 */
 	private void copyDefaultProjectiles()
     {
+        copyFile("canistershot");
         copyFile("tnt");
         copyFile("cobblestone");
 
