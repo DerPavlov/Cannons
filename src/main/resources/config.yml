@@ -31,7 +31,7 @@ imitatedExplosion:
   #is the player closer that this distance, there is no imitated explosion
   minimumDistance: 40.0
   #if the player is above this distance, there will be no imitated explosion
-  maximumDistance: 100.0
+  maximumDistance: 200.0
   #size of the impact imitated explosion
   sphereSize: 3
   #material of the imitated explosion (default is a active redstone lamp '124:0')

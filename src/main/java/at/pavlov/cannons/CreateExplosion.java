@@ -123,12 +123,32 @@ public class CreateExplosion {
     	int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
     	Location impactLoc = snowballLoc.clone();
 
+        plugin.logDebug("impact loc: " + impactLoc + " vel: " + ((int) vel.length()*2));
+
         plugin.logDebug("piercing some blocks at: " + penetration);
+
+        BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, (int) (vel.length()*2+2));
+
+        while (iter.hasNext())
+        {
+            Block next = iter.next();
+            //if there is no block, go further until we hit the surface
+            if (next.isEmpty())
+            {
+                impactLoc = next.getLocation();
+                plugin.logDebug("go on to " + next.toString());
+            }
+            else
+            {
+                plugin.logDebug("done with " + impactLoc);
+                break;
+            }
+        }
 
     	// the cannonball will only break blocks if it has penetration. 
     	if (cannonball.getProjectile().getPenetration() > 0)
     	{
-    		BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
+    		iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
 
     		int i=0;
     		while (iter.hasNext() && i <= penetration + 1)
@@ -858,7 +878,7 @@ public class CreateExplosion {
 
             if(distance >= minDist  && distance <= maxDist)
             {
-                p.playSound(l, Sound.EXPLODE, (float) (0.8*distance), 0.5f);
+                p.playSound(l, Sound.EXPLODE, (float) (0.1*distance*distance/maxDist), 0.5f);
                 createImitatedSphere(p, l, r, mat, delay);
             }
         }

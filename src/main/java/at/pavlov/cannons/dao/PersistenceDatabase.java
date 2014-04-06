@@ -26,10 +26,23 @@ public class PersistenceDatabase
 
     /**
      * loads all cannons from the database
+     */
+    public void loadCannonsAsync()
+    {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            public void run() {
+                loadCannons();
+            }
+        });
+    }
+
+
+    /**
+     * loads all cannons from the database
      *
      * @return true if loading was successful
      */
-	public boolean loadCannons()
+	private boolean loadCannons()
 	{
 		plugin.getCannonManager().clearCannonList();
 		// create a query that returns CannonBean
@@ -153,7 +166,7 @@ public class PersistenceDatabase
 	 * 
 	 * @param cannon
 	 */
-    boolean saveCannon(Cannon cannon)
+    private boolean saveCannon(Cannon cannon)
 	{
 		try
 		{
@@ -253,7 +266,7 @@ public class PersistenceDatabase
 	 * @param owner
      * @return returns true is there is an entry of this player in the database
 	 */
-	public boolean deleteCannons(String owner)
+	private boolean deleteCannons(String owner)
 	{
 		// create a query that returns CannonBean
 		List<CannonBean> beans = plugin.getDatabase().find(CannonBean.class).where().eq("owner", owner).findList();
@@ -293,7 +306,7 @@ public class PersistenceDatabase
 	 * removes this cannon from the database
 	 * @param cannonID id of the cannon to delete
 	 */
-    void deleteCannon(UUID cannonID)
+    private void deleteCannon(UUID cannonID)
 	{
         CannonBean bean = plugin.getDatabase().find(CannonBean.class, cannonID);
 		// if the database id is null, it is not saved in the database

@@ -214,6 +214,7 @@ public abstract class MyDatabase {
         SpiEbeanServer serv = (SpiEbeanServer) ebeanServer;
         DdlGenerator gen = serv.getDdlGenerator();
 
+
        //Fire "before drop" event
         try {
             beforeDropDatabase();

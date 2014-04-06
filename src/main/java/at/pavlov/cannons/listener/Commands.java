@@ -20,7 +20,7 @@ public class Commands implements CommandExecutor
 	private final Config config;
 	private final UserMessages userMessages;
 	private final PersistenceDatabase persistenceDatabase;
-	
+
 	public Commands(Cannons plugin)
 	{
 		this.plugin = plugin;
@@ -63,7 +63,7 @@ public class Commands implements CommandExecutor
                 else if (args[0].equalsIgnoreCase("load") && (player == null || player.hasPermission("cannons.admin.reload")))
                 {
                     // load database
-                    persistenceDatabase.loadCannons();
+                    persistenceDatabase.loadCannonsAsync();
                     sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
                 }
                 //cannons reset
@@ -73,7 +73,8 @@ public class Commands implements CommandExecutor
                     {
                         // delete all cannon entries for this player
                         boolean b1 = plugin.getCannonManager().deleteCannons(args[1]);
-                        if (persistenceDatabase.deleteCannons(args[1]) || b1)
+                        persistenceDatabase.deleteCannonsAsync(args[1]);
+                        if (b1)
                         {
                             //there was an entry in the list
                             sendMessage(sender, ChatColor.GREEN + userMessages.getMessage(MessageEnum.CannonsReseted).replace("PLAYER", args[1]));

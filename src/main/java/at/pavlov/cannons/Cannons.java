@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Filter;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import at.pavlov.cannons.API.CannonsAPI;
@@ -129,10 +131,15 @@ public class Cannons extends JavaPlugin
 			config.loadConfig();
 
 			// Initialize the database
-			initializeDatabase();
-
-			// load cannons from database
-			persistenceDatabase.loadCannons();
+            getServer().getScheduler().runTaskAsynchronously(this, new Runnable()
+            {
+                public void run()
+                {
+                    initializeDatabase();
+                    // load cannons from database
+                    persistenceDatabase.loadCannonsAsync();
+                }
+            });
 
 			// setting up Aiming Mode Task
 			aiming.initAimingMode();
@@ -140,7 +147,6 @@ public class Cannons extends JavaPlugin
             observer.setupScheduler();
 
 			// save cannons
-			//.Formatter:off
 			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
 			{
 				public void run()
@@ -148,7 +154,6 @@ public class Cannons extends JavaPlugin
 					persistenceDatabase.saveAllCannonsAsync();
 				}
 			}, 6000L, 6000L);
-			//.Formatter:on
 			
 			try {
 			    Metrics metrics = new Metrics(this);
@@ -190,7 +195,7 @@ public class Cannons extends JavaPlugin
 	// set up ebean database
 	private void initializeDatabase()
 	{
-		Configuration config = getConfig();
+        Configuration config = getConfig();
 
 		database = new MyDatabase(this)
 		{
