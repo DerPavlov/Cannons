@@ -233,14 +233,16 @@ public class Aiming {
 		//get yaws of cannon and player
 		double cannonYaw = CannonsUtil.directionToYaw(cannon.getCannonDirection());
 		double playerYaw = loc.getYaw();
+        double horizontal = playerYaw - cannonYaw - cannon.getTotalHorizontalAngle();
 		
-		//make the player yaw prettier so it is 0<yaw<360
-		playerYaw = playerYaw % 360;
-		while(playerYaw < 0)
-			playerYaw = playerYaw + 360;
+        horizontal = horizontal % 360;
+		while(horizontal < -180)
+            horizontal = horizontal + 360;
 		
 		//set horizontal angle
-		returnValue.setHorizontal(playerYaw - cannonYaw - cannon.getTotalHorizontalAngle());
+		returnValue.setHorizontal(horizontal);
+
+        plugin.logDebug("player Yaw: " + playerYaw + " cannonYaw: " + horizontal);
 		
 		return returnValue;
 		

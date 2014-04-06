@@ -17,7 +17,7 @@ Aiming:
   EnableAimingMode: 'GREEN [Cannons] Entering aiming mode'
   DisableAimingMode: 'RED [Cannons] Leaving aiming mode'
   TooFarForAimingMode: 'YELLOW [Cannons] You need to be closer to the CANNON for the aiming mode'
-  SettingCombinedAngle: 'YELLOW [Cannons] New angle GOLD HDEGREE degree YELLOW horizontal and GOLD VDEGREE degree YELLOW vertical'
+  SettingCombinedAngle: 'YELLOW [Cannons] New angle h: GOLD HDEGREE degree YELLOW and v: GOLD VDEGREE degree'
   SettingVerticalAngleUp: 'YELLOW [Cannons] Setting vertical angle to GOLD VDEGREE degree'
   SettingVerticalAngleDown: 'YELLOW [Cannons] Setting vertical angle to GOLD VDEGREE degree'
   SettingHorizontalAngleRight: 'YELLOW [Cannons] Aiming GOLD HDEGREE degree YELLOW to the GOLD right'

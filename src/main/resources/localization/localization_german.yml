@@ -16,7 +16,7 @@ Aiming:
   EnableAimingMode: 'GREEN [Cannons] Zielmodus aktiviert'
   DisableAimingMode: 'RED [Cannons] Zielmodus deaktiviert'
   TooFarForAimingMode: 'YELLOW [Cannons] Zu weit entfernt für den Zielmodus'
-  SettingCombinedAngle: 'YELLOW [Cannons] Neuer Winkel HDEGREE° YELLOW horizontal und GOLD VDEGREE° YELLOW vertikal'
+  SettingCombinedAngle: 'YELLOW [Cannons] Neuer Winkel h: HDEGREE° YELLOW und v: GOLD VDEGREE°'
   SettingVerticalAngleUp: 'YELLOW [Cannons] Neuer vertikaler Winkel GOLD VDEGREE Grad'
   SettingVerticalAngleDown: 'YELLOW [Cannons] Neuer vertikaler Winkel GOLD VDEGREE Grad'
   SettingHorizontalAngleRight: 'YELLOW [Cannons] Neuer horizontaler Winkel GOLD HDEGREE Grad YELLOW nach GOLD rechts'
