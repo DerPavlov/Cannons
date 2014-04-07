@@ -364,8 +364,7 @@ public class Aiming {
 		//player in map change the angle to the angle the player is looking
     	for(Map.Entry<String, Cannon> entry : inAimingMode.entrySet()){
     		Player player = Bukkit.getPlayer(entry.getKey());
-            if (player == null)
-                continue;
+            if (player == null) return;
 
     		Cannon cannon = entry.getValue();
     		// only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
