@@ -39,7 +39,7 @@ import at.pavlov.cannons.dao.PersistenceDatabase;
 import at.pavlov.cannons.mcstats.Metrics;
 import at.pavlov.cannons.projectile.Projectile;
 
-public final class Cannons extends JavaPlugin
+public class Cannons extends JavaPlugin
 {
 	private PluginManager pm;
 	private final Logger logger = Logger.getLogger("Minecraft");
