@@ -74,7 +74,7 @@ public final class Cannons extends JavaPlugin
         //setup all classes
         this.config = new Config(this);
         this.explosion = new CreateExplosion(this, config);
-        this.fireCannon = new FireCannon(this, config, explosion);
+        this.fireCannon = new FireCannon(this, config);
         this.aiming = new Aiming(this);
         this.observer = new ProjectileObserver(this);
         this.cannonsAPI = new CannonsAPI(this);

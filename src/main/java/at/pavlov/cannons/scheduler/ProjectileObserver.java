@@ -5,6 +5,7 @@ import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
+import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
 import org.bukkit.Location;
@@ -103,7 +104,7 @@ public class ProjectileObserver {
 
             if(distance <= maxDist)
             {
-                plugin.getExplosion().createImitatedSphere(p, l, 1, new MaterialHolder(liquid.getId(),0), 40);
+                CannonsUtil.createImitatedSphere(p, l, 1, new MaterialHolder(liquid.getId(), 0), 40);
             }
         }
     }

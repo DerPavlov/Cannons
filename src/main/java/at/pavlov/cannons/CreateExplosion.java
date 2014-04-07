@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
-import java.util.TreeMap;
 import java.util.UUID;
 
 
@@ -874,7 +873,7 @@ public class CreateExplosion {
         int minExplodeSoundDistance = 40;
         int maxExplodeSoundDistance = 256;
         /////////////////////
-        imitateSound(l, Sound.EXPLODE, power, minExplodeSoundDistance, maxExplodeSoundDistance);//TODO
+        CannonsUtil.imitateSound(l, Sound.EXPLODE, power, minExplodeSoundDistance, maxExplodeSoundDistance);//TODO
 
         List<String> players = new ArrayList<String>();//IMPROVED
         for(Player p : l.getWorld().getPlayers())
@@ -888,135 +887,9 @@ public class CreateExplosion {
                 players.add(p.getName());
             }
         }
-        createImitatedSphere(players, l, r, mat, delay);
+        CannonsUtil.createImitatedSphere(players, l, r, mat, delay);
     }
 
-    /**
-     * creates a imitated explosion sound
-     * @param l location of the explosion
-     * @param s sound
-     * @param power power of the explosion
-     * @param minDist minimum distance
-     * @param maxDist maximum distance
-     */
-    public static void imitateSound(Location l, Sound s, float power, int minDist, int maxDist)//TODO
-    {
-        World w = l.getWorld();
-        if(s.equals(Sound.EXPLODE)) w.createExplosion(l, 0F, false);
-
-        //To config///////////
-        float soundPower = 5F;
-        float additionVolume = 3F;
-        //////////////////
-        TreeMap<String, Integer> lp = new TreeMap<String, Integer>();
-        for(Player p : w.getPlayers())
-        {
-            Location pl = p.getLocation();
-            int x = Math.abs(pl.getBlockX() - l.getBlockX());
-            int y = Math.abs(pl.getBlockY() - l.getBlockY());
-            int z = Math.abs(pl.getBlockZ() - l.getBlockZ());
-            int d = (int) Math.hypot(Math.hypot(x, y), z);
-            if(minDist<=d&&d<=maxDist)
-            {
-                lp.put(p.getName(), d);
-            }
-        }
-        for(String name : lp.keySet())
-        {
-            Player p = Bukkit.getPlayer(name);
-            Location pl = p.getLocation();
-            int x = l.getBlockX() - pl.getBlockX();
-            int y = l.getBlockY() - pl.getBlockY();
-            int z = l.getBlockZ() - pl.getBlockZ();
-            Vector v = new Vector(x,y,z).normalize().multiply(20);
-            float volume = soundPower*(power+additionVolume)/(float) Math.sqrt(lp.get(name));
-            p.playSound(p.getEyeLocation().add(v), s, volume, 0F);
-        }
-    }
-
-    /**
-     * creates a sphere of fake block and sends it to the given player
-     * @param players the players to be notified
-     * @param l center of the sphere
-     * @param r radius of the sphere
-     * @param mat material of the fake block
-     * @param delay delay until the block disappears again
-     */
-    public void createImitatedSphere(List<String> players, Location l, int r, MaterialHolder mat, int delay)//IMPROVED
-    {
-        for(String name : players)
-        {
-            createImitatedSphere(name, l, r, mat, delay);
-        }
-    }
-
-    /**
-     * creates a sphere of fake block and sends it to the given player
-     * @param name the player to be notified
-     * @param l center of the sphere
-     * @param r radius of the sphere
-     * @param mat material of the fake block
-     * @param delay delay until the block disappears again
-     */
-    public void createImitatedSphere(String name, Location l, int r, MaterialHolder mat, int delay)//IMPROVED
-    {
-        Player player = Bukkit.getPlayer(name);
-        if(player!=null)
-        {
-            createImitatedSphere(player, l, r, mat, delay);
-        }
-
-    }
-
-    /**
-     * creates a sphere of fake block and sends it to the given player
-     * @param player the player to be notified
-     * @param l center of the sphere
-     * @param r radius of the sphere
-     * @param mat material of the fake block
-     * @param delay delay until the block disappears again
-     */
-    public void createImitatedSphere(Player player, Location l, int r, MaterialHolder mat, int delay)//IMPROVED
-    {
-
-        for(int x = -r; x <=r; x++)
-        {
-            for(int y = -r; y<=r; y++)
-            {
-                for(int z = -r; z<=r; z++)
-                {
-                    Location newL = l.clone().add(x, y, z);
-                    if(newL.distance(l)<=r)
-                    {
-                        sendBlockChangeToPlayer(player, newL, mat, delay);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * sends fake block to the given player
-     * @param p player to display the blocks
-     * @param l location of the block
-     * @param material type of the block
-     * @param delay how long to remove the block
-     */
-    public static void sendBlockChangeToPlayer(final Player p, final Location l, MaterialHolder material, int delay)//TODO
-    {
-        if(l.getBlock().isEmpty())
-        {
-            p.sendBlockChange(l, material.getId(), (byte) material.getData());
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Cannons"), new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    p.sendBlockChange(l, l.getBlock().getType(), l.getBlock().getData());
-                }
-            }, delay);
-        }
-    }
 
 
 }

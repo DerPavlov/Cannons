@@ -1,6 +1,6 @@
 package at.pavlov.cannons.listener;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import at.pavlov.cannons.cannon.Cannon;
 
@@ -24,7 +24,7 @@ public class Commands implements CommandExecutor
     private final Config config;
     private final UserMessages userMessages;
     private final PersistenceDatabase persistenceDatabase;
-    private static TreeMap<String, Integer> imitatedPlayers = new TreeMap<String, Integer>();public static boolean isImitatedPlayer(String name){ return imitatedPlayers.containsKey(name); } public static int getImitatedH(String name){ if(imitatedPlayers.containsKey(name)) return imitatedPlayers.get(name); else return 0; }//TODO
+    private static HashMap<String, Integer> imitatedPlayers = new HashMap<String, Integer>();
     public static void toggleImitating(String name, int h)
     {
         Player p = Bukkit.getPlayer(name);
@@ -260,6 +260,17 @@ public class Commands implements CommandExecutor
 
         sender.sendMessage(str);
     }
+
+
+    public static boolean isImitatedPlayer(String name){
+        return imitatedPlayers.containsKey(name);
+    }
+
+    //TODO
+    public static int getImitatedH(String name){
+        return imitatedPlayers.containsKey(name) ? imitatedPlayers.get(name) : 0;
+    }
+
 
 
 }

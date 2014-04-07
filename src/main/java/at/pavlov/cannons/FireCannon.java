@@ -1,14 +1,13 @@
 package at.pavlov.cannons;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.TreeMap;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
+import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
 import org.bukkit.*;
@@ -33,17 +32,15 @@ public class FireCannon {
     private final Config config;
     private final DesignStorage designStorage;
     private final Cannons plugin;
-    private final CreateExplosion explosion;
 
 
 
 
-    public FireCannon(Cannons plugin, Config config, CreateExplosion explosion)
+    public FireCannon(Cannons plugin, Config config)
     {
         this.plugin = plugin;
         this.config = config;
         this.designStorage = plugin.getDesignStorage();
-        this.explosion = explosion;
     }
 
 
@@ -335,7 +332,7 @@ public class FireCannon {
         int minExplodeSoundDistance = 40;
         int maxExplodeSoundDistance = 256;
         /////////////////////
-        CreateExplosion.imitateSound(l, Sound.EXPLODE, (float) Math.sqrt(c.getLoadedGunpowder()), minExplodeSoundDistance, maxExplodeSoundDistance);
+        CannonsUtil.imitateSound(l, Sound.EXPLODE, (float) Math.sqrt(c.getLoadedGunpowder()), minExplodeSoundDistance, maxExplodeSoundDistance);
         List<String> players = new ArrayList<String>();
         for(Player p : l.getWorld().getPlayers())
         {
