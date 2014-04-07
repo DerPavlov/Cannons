@@ -1728,7 +1728,6 @@ public class Cannon
 
     public void imitateAngleToPlayer(String name)//TODO
     {
-        // TODO Auto-generated method stub
         Player p = Bukkit.getPlayer(name);
         if(p == null)
         {
@@ -1742,7 +1741,7 @@ public class Cannon
             for(int i = 1; i < 20; i++)
             {
                 Block newB = b.getLocation().add(dirRot.clone().multiply(i)).getBlock();
-                sendBlockChangeToPlayer(p, newB, 35, (byte) 14);
+                CannonsUtil.sendBlockChangeToPlayer(p, newB.getLocation(), new MaterialHolder(35, 14), 60);
             }
         }
         catch(Exception e)
@@ -1750,21 +1749,6 @@ public class Cannon
 
         }
 
-    }
-    public void sendBlockChangeToPlayer(final Player p, final Block b, int id, byte data)
-    {
-        if(b.isEmpty())
-        {
-            p.sendBlockChange(b.getLocation(), id, data);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("iSail"), new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    p.sendBlockChange(b.getLocation(), b.getType(), b.getData());
-                }
-            }, 19);
-        }
     }
     public double getImitatingDX(double direction)
     {
