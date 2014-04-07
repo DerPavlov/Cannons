@@ -29,7 +29,25 @@ public class InventoryManagement
      * @return the number of items which could not be removed
 	 */
 	public static int takeFromPlayerHand(Player player, int numberOfItems)
-	{
+	{   /*
+        int i;
+		for (i=0; i < numberOfItems; i ++)
+		{
+			int amount = player.getInventory().getItemInHand().getAmount();
+			if (amount == 1)
+			{
+				//last item removed
+				player.getInventory().setItemInHand(new ItemStack(Material.AIR));
+                i++;
+				break;
+			}
+			else
+			{
+				//remove one item
+				player.getInventory().getItemInHand().setAmount(amount - 1);
+			}
+		}
+        return numberOfItems-1-i;   */
         int amount = player.getInventory().getItemInHand().getAmount();
         if (numberOfItems >= amount)
         {
@@ -39,7 +57,7 @@ public class InventoryManagement
         }
         else
         {
-            player.getInventory().getItemInHand().setAmount(amount - numberOfItems);
+            player.getInventory().getItemInHand().setAmount(amount - 1);
             return 0;
         }
 	}

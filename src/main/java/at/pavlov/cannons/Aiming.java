@@ -150,32 +150,61 @@ public class Aiming {
 		//Check angles
 		if (Math.abs(angles.getHorizontal()) >= 1.0)
 		{
-            double old = cannon.getHorizontalAngle();
-            //right
 			if (angles.getHorizontal() >= 0)
-                cannon.setHorizontalAngle(cannon.getHorizontalAngle() + design.getAngleStepSize());
-            // left
+			{
+				// right 
+				if (cannon.getHorizontalAngle() + design.getAngleStepSize() <= design.getMaxHorizontalAngle())
+				{
+                    //if smaller than minimum -> set to minimum
+                    if (cannon.getHorizontalAngle() < design.getMinHorizontalAngle())
+                        cannon.setHorizontalAngle(design.getMinHorizontalAngle());
+                    cannon.setHorizontalAngle(cannon.getHorizontalAngle() + design.getAngleStepSize());
+					hasChanged = true;
+					message = setMessageHorizontal(cannon, combine);
+				}
+			}
 			else
-                cannon.setHorizontalAngle(cannon.getHorizontalAngle() - design.getAngleStepSize());
-            plugin.logDebug("new angle: " + cannon.getTotalHorizontalAngle() + " old: " + old + " onShip:" + cannon.isOnShip());
-            if (!(Math.abs(old-cannon.getHorizontalAngle()) <= 0.000001))
-                hasChanged = true;
-            message = setMessageHorizontal(cannon, combine);
+			{
+				// left 
+				if (cannon.getHorizontalAngle() - design.getAngleStepSize() >= design.getMinHorizontalAngle())
+				{
+                    //if smaller than maximum -> set to maximum
+                    if (cannon.getHorizontalAngle() > design.getMaxHorizontalAngle())
+                        cannon.setHorizontalAngle(design.getMaxHorizontalAngle());
+					cannon.setHorizontalAngle(cannon.getHorizontalAngle() - design.getAngleStepSize());
+					hasChanged = true;
+					message = setMessageHorizontal(cannon, combine);
+				}
+			}
 		}
 		
 		if (Math.abs(angles.getVertical()) >= 1.0)
 		{
-            double old = cannon.getVerticalAngle();
-            // up
-            if (angles.getVertical() >= 0)
-                cannon.setVerticalAngle(cannon.getVerticalAngle() + design.getAngleStepSize());
-            // down
-            else
-                cannon.setVerticalAngle(cannon.getVerticalAngle() - design.getAngleStepSize());
-            plugin.logDebug("new angle: " + cannon.getTotalVerticalAngle() + " old: " + old + " onShip:" + cannon.isOnShip());
-            if (!(Math.abs(old-cannon.getVerticalAngle()) <= 0.000001))
-                hasChanged = true;
-            message = setMessageVertical(cannon, combine);
+			if (angles.getVertical() >= 0.0)
+			{
+				// up
+				if (cannon.getVerticalAngle() + design.getAngleStepSize() <= design.getMaxVerticalAngle())
+				{
+                    //if smaller than minimum -> set to minimum
+                    if (cannon.getVerticalAngle() < design.getMinVerticalAngle())
+                        cannon.setVerticalAngle(design.getMinVerticalAngle());
+					cannon.setVerticalAngle(cannon.getVerticalAngle() + design.getAngleStepSize());
+					hasChanged = true;
+					message = setMessageVertical(cannon, combine);
+				}
+			}
+			else
+			{
+				// down
+				if (cannon.getVerticalAngle() - design.getAngleStepSize() >= design.getMinVerticalAngle())
+				{
+                    if (cannon.getVerticalAngle() > design.getMaxVerticalAngle())
+                        cannon.setVerticalAngle(design.getMaxVerticalAngle());
+					cannon.setVerticalAngle(cannon.getVerticalAngle() - design.getAngleStepSize());
+					hasChanged = true;
+					message = setMessageVertical(cannon, combine);
+				}
+			}
 		}
 		
 		//update the time
