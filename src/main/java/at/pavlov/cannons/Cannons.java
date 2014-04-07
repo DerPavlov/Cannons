@@ -68,7 +68,7 @@ public final class Cannons extends JavaPlugin
 	public Cannons()
 	{
 		super();
-	}
+    }
 
 	public void onDisable()
 	{

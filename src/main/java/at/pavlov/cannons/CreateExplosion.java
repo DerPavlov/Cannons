@@ -936,7 +936,7 @@ public class CreateExplosion {
 
     /**
      * creates a sphere of fake block and sends it to the given player
-     * @param player the player how will be notified
+     * @param players the players to be notified
      * @param l center of the sphere
      * @param r radius of the sphere
      * @param mat material of the fake block
@@ -946,21 +946,49 @@ public class CreateExplosion {
     {
         for(String name : players)
         {
-            Player player = Bukkit.getPlayer(name);
-            if(player!=null)
+            createImitatedSphere(name, l, r, mat, delay);
+        }
+    }
+
+    /**
+     * creates a sphere of fake block and sends it to the given player
+     * @param name the player to be notified
+     * @param l center of the sphere
+     * @param r radius of the sphere
+     * @param mat material of the fake block
+     * @param delay delay until the block disappears again
+     */
+    public void createImitatedSphere(String name, Location l, int r, MaterialHolder mat, int delay)//IMPROVED
+    {
+        Player player = Bukkit.getPlayer(name);
+        if(player!=null)
+        {
+            createImitatedSphere(player, l, r, mat, delay);
+        }
+
+    }
+
+    /**
+     * creates a sphere of fake block and sends it to the given player
+     * @param player the player to be notified
+     * @param l center of the sphere
+     * @param r radius of the sphere
+     * @param mat material of the fake block
+     * @param delay delay until the block disappears again
+     */
+    public void createImitatedSphere(Player player, Location l, int r, MaterialHolder mat, int delay)//IMPROVED
+    {
+
+        for(int x = -r; x <=r; x++)
+        {
+            for(int y = -r; y<=r; y++)
             {
-                for(int x = -r; x <=r; x++)
+                for(int z = -r; z<=r; z++)
                 {
-                    for(int y = -r; y<=r; y++)
+                    Location newL = l.clone().add(x, y, z);
+                    if(newL.distance(l)<=r)
                     {
-                        for(int z = -r; z<=r; z++)
-                        {
-                            Location newL = l.clone().add(x, y, z);
-                            if(newL.distance(l)<=r)
-                            {
-                                sendBlockChangeToPlayer(player, newL, mat, delay);
-                            }
-                        }
+                        sendBlockChangeToPlayer(player, newL, mat, delay);
                     }
                 }
             }
