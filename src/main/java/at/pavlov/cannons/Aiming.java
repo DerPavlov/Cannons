@@ -356,6 +356,7 @@ public class Aiming {
 		Location locCannon = design.getFiringTrigger(cannon);
         return player.getLocation().distance(locCannon) <= 4;
     }
+
 	
 	//############## updateAimingMode   ################################
     void updateAimingMode()

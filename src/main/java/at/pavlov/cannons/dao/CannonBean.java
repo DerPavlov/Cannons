@@ -39,6 +39,7 @@ public class CannonBean
 	private int projectileData;
     private int projectilePushed;
     private double cannonTemperature;
+    private long cannonTemperatureTimestamp;
 	private double horizontalAngle;
 	private double verticalAngle;
 
@@ -190,5 +191,13 @@ public class CannonBean
 
     public void setSoot(double soot) {
         this.soot = soot;
+    }
+
+    public long getCannonTemperatureTimestamp() {
+        return cannonTemperatureTimestamp;
+    }
+
+    public void setCannonTemperatureTimestamp(long cannonTemperatureTimestamp) {
+        this.cannonTemperatureTimestamp = cannonTemperatureTimestamp;
     }
 }

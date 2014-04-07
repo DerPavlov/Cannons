@@ -1574,6 +1574,11 @@ public class Cannon
         return tempValue;
     }
 
+    public double getTemperature(boolean update)
+    {
+        return (update) ? this.getTemperature():this.tempValue;
+    }
+
     /**
      * sets the temperature of the cannon to the given value
      * @param temperature - temperature of the cannon
@@ -1581,6 +1586,16 @@ public class Cannon
     public void setTemperature(double temperature) {
         this.tempTimestamp = System.currentTimeMillis();
         this.tempValue = temperature;
+    }
+
+    public long getTemperatureTimeStamp()
+    {
+        return tempTimestamp;
+    }
+
+    public void setTemperatureTimeStamp(long temperatureTimeStamp)
+    {
+        this.tempTimestamp = temperatureTimeStamp;
     }
 
     public boolean isClean()

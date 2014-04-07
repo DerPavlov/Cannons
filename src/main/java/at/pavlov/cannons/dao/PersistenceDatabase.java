@@ -95,6 +95,7 @@ public class PersistenceDatabase
 
                     //temperature
                     cannon.setTemperature(bean.getCannonTemperature());
+                    cannon.setTemperatureTimeStamp(bean.getCannonTemperatureTimestamp());
 					
 					cannon.setValid(bean.isValid());
 
@@ -227,7 +228,8 @@ public class PersistenceDatabase
 			// id
 			bean.setDesignId(cannon.getDesignID());
             //temperature
-            bean.setCannonTemperature(cannon.getTemperature());
+            bean.setCannonTemperature(cannon.getTemperature(false));
+            bean.setCannonTemperatureTimestamp(cannon.getTemperatureTimeStamp());
 
 
 			bean.setValid(cannon.isValid());
