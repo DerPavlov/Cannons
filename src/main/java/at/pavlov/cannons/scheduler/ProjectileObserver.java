@@ -93,6 +93,11 @@ public class ProjectileObserver {
         }
     }
 
+    /**
+     * creates a sphere of fake blocks on the impact for all player in the vicinity
+     * @param l - location of the impact
+     * @param liquid - material of the fake blocks
+     */
     public void sendSplashToPlayers(Location l, MaterialHolder liquid)
     {
         double maxDist = plugin.getMyConfig().getImitatedExplosionMaximumDistance();
