@@ -1,6 +1,10 @@
 package at.pavlov.cannons.listener;
 
+import java.util.TreeMap;
+
 import at.pavlov.cannons.cannon.Cannon;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,34 +20,63 @@ import at.pavlov.cannons.dao.PersistenceDatabase;
 
 public class Commands implements CommandExecutor
 {
-	private final Cannons plugin;
-	private final Config config;
-	private final UserMessages userMessages;
-	private final PersistenceDatabase persistenceDatabase;
+    private final Cannons plugin;
+    private final Config config;
+    private final UserMessages userMessages;
+    private final PersistenceDatabase persistenceDatabase;
+    private static TreeMap<String, Integer> imitatedPlayers = new TreeMap<String, Integer>();public static boolean isImitatedPlayer(String name){ return imitatedPlayers.containsKey(name); } public static int getImitatedH(String name){ if(imitatedPlayers.containsKey(name)) return imitatedPlayers.get(name); else return 0; }//TODO
+    public static void toggleImitating(String name, int h)
+    {
+        Player p = Bukkit.getPlayer(name);
+        if(isImitatedPlayer(name))
+        {
+            if(h==imitatedPlayers.get(name))
+            {
+                imitatedPlayers.remove(name);
+                if(p != null) p.sendMessage("Imitating disabled!");
+            }
+            else
+            {
+                imitatedPlayers.remove(name);
+                imitatedPlayers.put(name, h);
+                if(p != null) p.sendMessage("Changed imitating to " + h + "!");
+            }
+        }
+        else
+        {
+            imitatedPlayers.put(name, h);
+            if(p != null) p.sendMessage("Enabling imitating to " + h + "!");
+        }
+    }
+    public static void disableImitating(String name)
+    {
+        if(imitatedPlayers.containsKey(name)) imitatedPlayers.remove(name);
+    }
 
-	public Commands(Cannons plugin)
-	{
-		this.plugin = plugin;
-		config = this.plugin.getMyConfig();
-		userMessages = this.plugin.getMyConfig().getUserMessages();
-		persistenceDatabase = this.plugin.getPersistenceDatabase();
-	}
+
+    public Commands(Cannons plugin)
+    {
+        this.plugin = plugin;
+        config = this.plugin.getMyConfig();
+        userMessages = this.plugin.getMyConfig().getUserMessages();
+        persistenceDatabase = this.plugin.getPersistenceDatabase();
+    }
 
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
-	{
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
+    {
 
-		Player player = null;
-		if (sender instanceof Player)
-		{
-			player = (Player) sender;
-		}
+        Player player = null;
+        if (sender instanceof Player)
+        {
+            player = (Player) sender;
+        }
 
-		if (cmd.getName().equalsIgnoreCase("cannons"))
-		{
+        if (cmd.getName().equalsIgnoreCase("cannons"))
+        {
             if (args.length >= 1)
-			{
+            {
                 //############## console and player commands ######################
                 //cannons reload
                 if (args[0].equalsIgnoreCase("reload") && (player == null || player.hasPermission("cannons.admin.reload")))
@@ -147,6 +180,25 @@ public class Commands implements CommandExecutor
                                         ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc:" + ChatColor.GOLD + cannon.getOffset().toString());
                         }
                     }
+                    //cannons imitating toggle
+                    else if (args[0].equalsIgnoreCase("imitate")/* && player.hasPermission("cannons.player.command")TODO*/)
+                    {
+                        // how to build a cannon
+                        int h = -1;
+                        if(1 < args.length)
+                        {
+                            try
+                            {
+                                h = Integer.valueOf(args[1]);
+                            }
+                            catch(Exception e)
+                            {
+                                player.sendMessage("Use /cannons imitate [h=-1]!");
+                                return false;
+                            }
+                        }
+                        toggleImitating(player.getName(), h);
+                    }
 
                     //cannons reset
                     else if(args[0].equalsIgnoreCase("reset") && player.hasPermission("cannons.player.reset"))
@@ -171,7 +223,7 @@ public class Commands implements CommandExecutor
 
 
 
-			}
+            }
             //console command
             else
             {
@@ -194,10 +246,10 @@ public class Commands implements CommandExecutor
                     plugin.logInfo("Cannons plugin v" + plugin.getPluginDescription().getVersion() + " is running");
                 }
             }
-			return true;
-		}
-		return false;
-	}
+            return true;
+        }
+        return false;
+    }
 
 
     private void sendMessage(CommandSender sender, String str)

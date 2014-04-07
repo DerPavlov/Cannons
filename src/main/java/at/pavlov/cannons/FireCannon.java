@@ -1,7 +1,9 @@
 package at.pavlov.cannons;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.event.CannonFireEvent;
@@ -20,51 +22,52 @@ import org.bukkit.util.Vector;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
+import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
 
 public class FireCannon {
-	
-	private final Config config;
-	private final DesignStorage designStorage;
-	private final Cannons plugin;
-	private final CreateExplosion explosion;
 
-	
-	
-	
-	public FireCannon(Cannons plugin, Config config, CreateExplosion explosion)
-	{
-		this.plugin = plugin;
-		this.config = config;
-		this.designStorage = plugin.getDesignStorage();
-		this.explosion = explosion;
-	}
+    private final Config config;
+    private final DesignStorage designStorage;
+    private final Cannons plugin;
+    private final CreateExplosion explosion;
 
-	
-	/**
-	 * checks all condition but does not fire the cannon
-	 * @param cannon cannon which is fired
-	 * @param player operator of the cannon
-	 * @return message for the player
-	 */
+
+
+
+    public FireCannon(Cannons plugin, Config config, CreateExplosion explosion)
+    {
+        this.plugin = plugin;
+        this.config = config;
+        this.designStorage = plugin.getDesignStorage();
+        this.explosion = explosion;
+    }
+
+
+    /**
+     * checks all condition but does not fire the cannon
+     * @param cannon cannon which is fired
+     * @param player operator of the cannon
+     * @return message for the player
+     */
     private MessageEnum getPrepareFireMessage(Cannon cannon, Player player)
-	{
-		CannonDesign design = cannon.getCannonDesign();
-		if (design == null) return null;
-		//if the player is not the owner of this gun
-		if (player != null && !cannon.getOwner().equals(player.getName())  && design.isAccessForOwnerOnly())
-			return MessageEnum.ErrorNotTheOwner;
+    {
+        CannonDesign design = cannon.getCannonDesign();
+        if (design == null) return null;
+        //if the player is not the owner of this gun
+        if (player != null && !cannon.getOwner().equals(player.getName())  && design.isAccessForOwnerOnly())
+            return MessageEnum.ErrorNotTheOwner;
         // is the cannon already cleaned?
         if (!cannon.isClean())
             return MessageEnum.ErrorNotCleaned;
-		//check if there is some gunpowder in the barrel
-		if (cannon.getLoadedGunpowder() <= 0)
-			return MessageEnum.ErrorNoGunpowder;//is there a projectile
+        //check if there is some gunpowder in the barrel
+        if (cannon.getLoadedGunpowder() <= 0)
+            return MessageEnum.ErrorNoGunpowder;//is there a projectile
         // is there a projectile in the cannon?
-		if (!cannon.isLoaded())
+        if (!cannon.isLoaded())
             return MessageEnum.ErrorNoProjectile;
         // after cleaning the projectile needs to pushed in the barrel
         if (!cannon.isProjectilePushed())
@@ -72,30 +75,30 @@ public class FireCannon {
         //Firing in progress
         if (cannon.isFiring())
             return MessageEnum.ErrorFiringInProgress;
-		//Barrel too hot
+        //Barrel too hot
         if(cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
-			return MessageEnum.ErrorBarrelTooHot;
+            return MessageEnum.ErrorBarrelTooHot;
         //automatic temperature control, prevents overheating of the cannon
         if(design.isAutomaticTemperatureControl() && cannon.getTemperature() + design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder() > design.getCriticalTemperature())
             return MessageEnum.ErrorBarrelTooHot;
-		if (player!= null)
-		{
-		
-			//if the player has permission to fire
-			if (!player.hasPermission(design.getPermissionFire()))
-				return MessageEnum.PermissionErrorFire;
+        if (player!= null)
+        {
 
-			//check if the player has the permission for this projectile
-			Projectile projectile = cannon.getLoadedProjectile();
-			if(projectile != null && !projectile.hasPermission(player))
-				return MessageEnum.PermissionErrorProjectile;
-			//check for flint and steel
-           if (design.isFiringItemRequired() && !config.getToolFiring().equalsFuzzy(player.getItemInHand()) )
-				return MessageEnum.ErrorNoFlintAndSteel;
-		}
-		//everything fine fire the damn cannon
-		return MessageEnum.CannonFire;
-	}
+            //if the player has permission to fire
+            if (!player.hasPermission(design.getPermissionFire()))
+                return MessageEnum.PermissionErrorFire;
+
+            //check if the player has the permission for this projectile
+            Projectile projectile = cannon.getLoadedProjectile();
+            if(projectile != null && !projectile.hasPermission(player))
+                return MessageEnum.PermissionErrorProjectile;
+            //check for flint and steel
+            if (design.isFiringItemRequired() && !config.getToolFiring().equalsFuzzy(player.getItemInHand()) )
+                return MessageEnum.ErrorNoFlintAndSteel;
+        }
+        //everything fine fire the damn cannon
+        return MessageEnum.CannonFire;
+    }
 
     /**
      * checks if all preconditions for firing are fulfilled and fires the cannon
@@ -127,17 +130,17 @@ public class FireCannon {
 
         return this.fire(cannon, player, autoreload, !design.isAmmoInfiniteForPlayer(), action);
     }
-	
-	/**
-	 * checks if all preconditions for firing are fulfilled and fires the cannon
-	 * @param cannon the cannon which is fired
-	 * @param player player operating the cannon
-	 * @param autoload the cannon will autoreload before firing
+
+    /**
+     * checks if all preconditions for firing are fulfilled and fires the cannon
+     * @param cannon the cannon which is fired
+     * @param player player operating the cannon
+     * @param autoload the cannon will autoreload before firing
      * @param consumesAmmo if true ammo will be removed from chest inventories
-	 * @return message for the player
-	 */
-	public MessageEnum fire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo, InteractAction action)
-	{
+     * @return message for the player
+     */
+    public MessageEnum fire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo, InteractAction action)
+    {
         //fire event
         CannonUseEvent useEvent = new CannonUseEvent(cannon, player, action);
         Bukkit.getServer().getPluginManager().callEvent(useEvent);
@@ -178,11 +181,11 @@ public class FireCannon {
             }
         }
 
-		//check for all permissions
-		MessageEnum message = getPrepareFireMessage(cannon, player);
-		
-		//return if there are permission missing
-		if (message != MessageEnum.CannonFire)
+        //check for all permissions
+        MessageEnum message = getPrepareFireMessage(cannon, player);
+
+        //return if there are permission missing
+        if (message != MessageEnum.CannonFire)
             return message;
 
         CannonFireEvent fireEvent = new CannonFireEvent(cannon, player);
@@ -191,39 +194,39 @@ public class FireCannon {
         if (fireEvent.isCancelled())
             return null;
 
-		//ignite the cannon
-		delayedFire(cannon, player);
-		
-		return message;
-	}
-	
-	/**
-	 * delays the firing by the fuse burn time
-	 * @param cannon cannon to be fired
-	 * @param player player operating the cannon
-	 */
+        //ignite the cannon
+        delayedFire(cannon, player);
+
+        return message;
+    }
+
+    /**
+     * delays the firing by the fuse burn time
+     * @param cannon cannon to be fired
+     * @param player player operating the cannon
+     */
     private void delayedFire(Cannon cannon, Player player)
     {
-    	CannonDesign design = designStorage.getDesign(cannon);
+        CannonDesign design = designStorage.getDesign(cannon);
         Projectile projectile = cannon.getLoadedProjectile();
-    	
-		//reset after firing
-		cannon.setLastFired(System.currentTimeMillis());
-		
-		//Set up smoke effects on the torch
-		for (Location torchLoc : design.getFiringIndicator(cannon))
-		{
-			torchLoc.setX(torchLoc.getX() + 0.5);
-			torchLoc.setY(torchLoc.getY() + 1);
-			torchLoc.setZ(torchLoc.getZ() + 0.5);
-			torchLoc.getWorld().playEffect(torchLoc, Effect.SMOKE, BlockFace.UP);
-			torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 5, 1);
-		}
+
+        //reset after firing
+        cannon.setLastFired(System.currentTimeMillis());
+
+        //Set up smoke effects on the torch
+        for (Location torchLoc : design.getFiringIndicator(cannon))
+        {
+            torchLoc.setX(torchLoc.getX() + 0.5);
+            torchLoc.setY(torchLoc.getY() + 1);
+            torchLoc.setZ(torchLoc.getZ() + 0.5);
+            torchLoc.getWorld().playEffect(torchLoc, Effect.SMOKE, BlockFace.UP);
+            torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 5, 1);
+        }
 
         //this cannon is now firing
         cannon.setFiring(true);
-		
-		//set up delayed task with automatic firing. Several bullets with time delay for one loaded projectile
+
+        //set up delayed task with automatic firing. Several bullets with time delay for one loaded projectile
         for(int i=0; i < projectile.getAutomaticFiringMagazineSize(); i++)
         {
             Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
@@ -238,13 +241,13 @@ public class FireCannon {
             }, delayTime);
         }
     }
-	
-	/**
-	 * fires a cannon and removes the charge from the player
-	 * @param cannon - the fired cannon
+
+    /**
+     * fires a cannon and removes the charge from the player
+     * @param cannon - the fired cannon
      * @param shooter - the player firing the cannon
      * @param removeCharge - if the charge is removed after firing
-	 */
+     */
     private void fireTask(Cannon cannon, Player shooter, boolean removeCharge)
     {
         CannonDesign design = cannon.getCannonDesign();
@@ -262,8 +265,7 @@ public class FireCannon {
         //Muzzle flash + effects
         if (projectile.getProjectileEntity().equals(EntityType.ARROW))
             world.playEffect(firingLoc, Effect.BOW_FIRE, 10);
-        else
-            world.createExplosion(firingLoc, 0F, false);
+        sendBarrelFireToPlayers(cannon);//TODO
         world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 
         //increase heat of the cannon
@@ -319,9 +321,89 @@ public class FireCannon {
         }
     }
 
+    /**
+     * creates a imitated explosion made of blocks which is transmitted to player in a give distance
+     * @param c operated cannon
+     */
+    public void sendBarrelFireToPlayers(Cannon c)//TODO
+    {
+        double minDist = plugin.getMyConfig().getImitatedExplosionMinimumDistance();
+        double maxDist = plugin.getMyConfig().getImitatedExplosionMaximumDistance();
+        Location l = c.getCannonDesign().getMuzzle(c);
+
+        //ToConfig///////////
+        int minExplodeSoundDistance = 40;
+        int maxExplodeSoundDistance = 256;
+        /////////////////////
+        CreateExplosion.imitateSound(l, Sound.EXPLODE, (float) Math.sqrt(c.getLoadedGunpowder()), minExplodeSoundDistance, maxExplodeSoundDistance);
+        List<String> players = new ArrayList<String>();
+        for(Player p : l.getWorld().getPlayers())
+        {
+            Location pl = p.getLocation();
+            double distance = pl.distance(l);
+
+            if(distance >= minDist  && distance <= maxDist)
+            {
+                players.add(p.getName());
+            }
+        }
+        imitateSmoke(c, players);
+    }
 
 
-    
+    /**
+     * creates a sphere of fake block and sends it to the given player
+     * @param cannon - cannon in usage
+     */
+    public void imitateSmoke(Cannon cannon, List<String> players)//TODO
+    {
+        BlockFace bf = cannon.getCannonDirection();
+        int hor = (int) cannon.getTotalHorizontalAngle();
+        int vert = (int) cannon.getTotalVerticalAngle();
+        Vector v = cannon.getAimingVector();
+
+        //To config////////////////////////////////////////
+        MaterialHolder fireMat = new MaterialHolder(35, 14);
+        MaterialHolder smokeMat = new MaterialHolder(35, 15);
+        int r = 7;
+        int fireDelay = 20;
+        int smokeDelay = 100;
+        ///////////////////////////
+
+        Location l = cannon.getCannonDesign().getMuzzle(cannon);
+        for(int i = 0; i < r; i++)
+        {
+            l.add(v);
+            MaterialHolder m;
+            if(i*3<r)
+            {
+                m = fireMat;
+                for(String name : players)
+                {
+                    Player p = Bukkit.getPlayer(name);
+                    if(p!=null)
+                    {
+                        //Cannon.sendBlockChangeToPlayer(p, l.getBlock(), m.getId(), (byte) m.getData(), fireDelay);
+                    }
+                }
+            }
+            else
+            {
+                m = smokeMat;
+                for(String name : players)
+                {
+                    Player p = Bukkit.getPlayer(name);
+                    if(p!=null)
+                    {
+                        //Cannon.sendBlockChangeToPlayer(p, l.getBlock(), m.getId(), (byte) m.getData(), smokeDelay);
+                    }
+                }
+            }
+        }
+    }
+
+
+
     /**
      * confuses an entity to simulate the blast of a cannon
      * @param living
@@ -329,47 +411,47 @@ public class FireCannon {
      */
     private void confuseShooter(List<Entity> living, Location firingLoc, double confuseTime)
     {
-    	 //confuse shooter if he wears no helmet (only for one projectile and if its configured)
-    	if (confuseTime > 0)
-    	{
-    		for (Entity next : living)
-    		{
-    			boolean harmEntity = false;
-    			if (next instanceof Player)
-    			{
-    				
-    				Player player = (Player) next;
-    				if ( player.isOnline() && !CheckHelmet(player) && player.getGameMode() != GameMode.CREATIVE  )
-    				{
-    					//if player has no helmet and is not in creative and there are confusion effects - harm him
-    					harmEntity = true;		
-    				}
-    			}
-    			else if (next instanceof LivingEntity)
-    			{
-    				//damage entity
-    				harmEntity = true;
-    			}
-    			if (harmEntity)
-    			{
-    				//damage living entities and unprotected players
-    				LivingEntity livingEntity = (LivingEntity) next;
+        //confuse shooter if he wears no helmet (only for one projectile and if its configured)
+        if (confuseTime > 0)
+        {
+            for (Entity next : living)
+            {
+                boolean harmEntity = false;
+                if (next instanceof Player)
+                {
+
+                    Player player = (Player) next;
+                    if ( player.isOnline() && !CheckHelmet(player) && player.getGameMode() != GameMode.CREATIVE  )
+                    {
+                        //if player has no helmet and is not in creative and there are confusion effects - harm him
+                        harmEntity = true;
+                    }
+                }
+                else if (next instanceof LivingEntity)
+                {
+                    //damage entity
+                    harmEntity = true;
+                }
+                if (harmEntity)
+                {
+                    //damage living entities and unprotected players
+                    LivingEntity livingEntity = (LivingEntity) next;
                     if (livingEntity.getLocation().distance(firingLoc) < 5.0)
-    				    livingEntity.damage(1);
-    				livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,(int) confuseTime*20, 0));
+                        livingEntity.damage(1);
+                    livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,(int) confuseTime*20, 0));
 
-    			}
-    		}
-    	}
+                }
+            }
+        }
     }
-    
 
-		
-		
+
+
+
     //############## CheckHelmet   ################################
-	private boolean CheckHelmet(Player player)
-	{
-		ItemStack helmet = player.getInventory().getHelmet();
+    private boolean CheckHelmet(Player player)
+    {
+        ItemStack helmet = player.getInventory().getHelmet();
         return helmet != null;
     }
 }
