@@ -41,7 +41,7 @@ import at.pavlov.cannons.projectile.Projectile;
 
 public final class Cannons extends JavaPlugin
 {
-    private static final Cannons instance = new Cannons();
+    private static Cannons instance;
 
 	private PluginManager pm;
 	private final Logger logger = Logger.getLogger("Minecraft");

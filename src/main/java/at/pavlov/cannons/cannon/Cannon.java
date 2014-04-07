@@ -1737,10 +1737,10 @@ public class Cannon
         try
         {
             Block b = p.getLocation().getBlock().getRelative(0, Commands.getImitatedH(name)+2, 0);
-            Vector dirRot = new Vector(getImitatingDX(horizontalAngle), 0, getImitatingDZ(horizontalAngle));
+
             for(int i = 1; i < 20; i++)
             {
-                Block newB = b.getLocation().add(dirRot.clone().multiply(i)).getBlock();
+                Block newB = b.getLocation().add(getAimingVector().clone().multiply(i)).getBlock();
                 CannonsUtil.sendBlockChangeToPlayer(p, newB.getLocation(), new MaterialHolder(35, 14), 60);
             }
         }
@@ -1749,55 +1749,5 @@ public class Cannon
 
         }
 
-    }
-    public double getImitatingDX(double direction)
-    {
-        if(cannonDirection.equals(BlockFace.SOUTH))
-        {
-            return -Math.sin(Math.toRadians(direction));
-        }
-        else
-        {
-            if(cannonDirection.equals(BlockFace.NORTH))
-            {
-                return Math.sin(Math.toRadians(direction));
-            }
-            else
-            {
-                if(cannonDirection.equals(BlockFace.WEST))
-                {
-                    return -Math.cos(Math.toRadians(direction));
-                }
-                else
-                {
-                    return Math.cos(Math.toRadians(direction));
-                }
-            }
-        }
-    }
-    public double getImitatingDZ(double direction)
-    {
-        if(cannonDirection.equals(BlockFace.SOUTH))
-        {
-            return Math.cos(Math.toRadians(direction));
-        }
-        else
-        {
-            if(cannonDirection.equals(BlockFace.NORTH))
-            {
-                return -Math.cos(Math.toRadians(direction));
-            }
-            else
-            {
-                if(cannonDirection.equals(BlockFace.WEST))
-                {
-                    return -Math.sin(Math.toRadians(direction));
-                }
-                else
-                {
-                    return Math.sin(Math.toRadians(direction));
-                }
-            }
-        }
     }
 }
