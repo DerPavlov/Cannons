@@ -41,8 +41,6 @@ import at.pavlov.cannons.projectile.Projectile;
 
 public final class Cannons extends JavaPlugin
 {
-    private static Cannons instance;
-
 	private PluginManager pm;
 	private final Logger logger = Logger.getLogger("Minecraft");
 
@@ -89,8 +87,8 @@ public final class Cannons extends JavaPlugin
 
     }
 
-    public static final Cannons getPlugin() {
-        return instance;
+    public static Cannons getPlugin() {
+        return (Cannons) Bukkit.getPluginManager().getPlugin("Cannons");
     }
 
 	public void onDisable()
