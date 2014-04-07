@@ -41,26 +41,28 @@ import at.pavlov.cannons.projectile.Projectile;
 
 public final class Cannons extends JavaPlugin
 {
+    private static final Cannons instance = new Cannons();
+
 	private PluginManager pm;
 	private final Logger logger = Logger.getLogger("Minecraft");
 
-    private Config config;
-	private FireCannon fireCannon;
-	private CreateExplosion explosion;
-	private Aiming aiming;
-    private ProjectileObserver observer;
-	private Commands commands;
+    private final Config config;
+	private final FireCannon fireCannon;
+	private final CreateExplosion explosion;
+	private final Aiming aiming;
+    private final ProjectileObserver observer;
+	private final Commands commands;
 
-    private CannonsAPI cannonsAPI;
+    private final CannonsAPI cannonsAPI;
 	
 	//Listener
-    private BlockListener blockListener;
-	private PlayerListener playerListener;
-	private EntityListener entityListener;
-	private SignListener signListener;
+    private final BlockListener blockListener;
+	private final PlayerListener playerListener;
+	private final EntityListener entityListener;
+	private final SignListener signListener;
 	
 	// database
-	private PersistenceDatabase persistenceDatabase;
+	private final PersistenceDatabase persistenceDatabase;
 	private MyDatabase database;
 
 
@@ -68,6 +70,27 @@ public final class Cannons extends JavaPlugin
 	public Cannons()
 	{
 		super();
+
+        //setup all classes
+        this.config = new Config(this);
+        this.explosion = new CreateExplosion(this, config);
+        this.fireCannon = new FireCannon(this, config, explosion);
+        this.aiming = new Aiming(this);
+        this.observer = new ProjectileObserver(this);
+        this.cannonsAPI = new CannonsAPI(this);
+
+        this.persistenceDatabase = new PersistenceDatabase(this);
+
+        this.blockListener = new BlockListener(this);
+        this.playerListener = new PlayerListener(this);
+        this.entityListener = new EntityListener(this);
+        this.signListener = new SignListener(this);
+        this.commands = new Commands(this);
+
+    }
+
+    public static final Cannons getPlugin() {
+        return instance;
     }
 
 	public void onDisable()
@@ -77,7 +100,6 @@ public final class Cannons extends JavaPlugin
 		// save database on shutdown
 		if (persistenceDatabase != null)
 			persistenceDatabase.saveAllCannons();
-		
 
 		logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been disabled");
 	}
@@ -101,23 +123,7 @@ public final class Cannons extends JavaPlugin
 			return;
 		}
 		
-		//setup all classes
-		this.config = new Config(this);
 
-		this.explosion = new CreateExplosion(this, config);
-		this.fireCannon = new FireCannon(this, config, explosion);
-		this.aiming = new Aiming(this);
-        this.observer = new ProjectileObserver(this);
-        this.cannonsAPI = new CannonsAPI(this);
-		
-		this.persistenceDatabase = new PersistenceDatabase(this);
-
-        this.blockListener = new BlockListener(this);
-		this.playerListener = new PlayerListener(this);
-		this.entityListener = new EntityListener(this);
-		this.signListener = new SignListener(this);	
-		this.commands = new Commands(this);		
-		
 		try
 		{
 			pm.registerEvents(blockListener, this);
