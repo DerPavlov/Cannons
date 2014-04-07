@@ -16,13 +16,12 @@ import at.pavlov.cannons.projectile.Projectile;
 
 public class PersistenceDatabase
 {
-	private final Cannons plugin;
+	private Cannons plugin;
 
 	public PersistenceDatabase(Cannons _plugin)
 	{
 		plugin = _plugin;
 	}
-
 
     /**
      * loads all cannons from the database
