@@ -368,22 +368,19 @@ public class FireCannon {
         for(int i = 0; i < r; i++)
         {
             l.add(v);
-            MaterialHolder m;
             if(i*3<r)
             {
-                m = fireMat;
                 for(String name : players)
                 {
                     Player p = Bukkit.getPlayer(name);
                     if(p!=null)
                     {
-                        CannonsUtil.sendBlockChangeToPlayer(p, l, m, fireDelay);
+                        CannonsUtil.sendBlockChangeToPlayer(p, l, fireMat, fireDelay);
                     }
                 }
             }
             else
             {
-                m = smokeMat;
                 for(String name : players)
                 {
                     Player p = Bukkit.getPlayer(name);
