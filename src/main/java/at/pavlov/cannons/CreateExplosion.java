@@ -790,7 +790,7 @@ public class CreateExplosion {
         shooter = null;
 
         //check if there is a shooter, redstone cannons are not counted
-        if (shooter == null) return;
+        if (shooter == null) return;//FIXME
         if (!(shooter instanceof Player)) return;
 
         //return if the list before is empty

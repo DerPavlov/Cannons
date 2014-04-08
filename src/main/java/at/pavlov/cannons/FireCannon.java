@@ -354,9 +354,6 @@ public class FireCannon {
      */
     public void imitateSmoke(Cannon cannon, List<String> players)//TODO
     {
-        BlockFace bf = cannon.getCannonDirection();
-        int hor = (int) cannon.getTotalHorizontalAngle();
-        int vert = (int) cannon.getTotalVerticalAngle();
         Vector v = cannon.getAimingVector();
 
         //To config////////////////////////////////////////
@@ -380,7 +377,7 @@ public class FireCannon {
                     Player p = Bukkit.getPlayer(name);
                     if(p!=null)
                     {
-                        //Cannon.sendBlockChangeToPlayer(p, l.getBlock(), m.getId(), (byte) m.getData(), fireDelay);
+                        CannonsUtil.sendBlockChangeToPlayer(p, l, m, fireDelay);
                     }
                 }
             }
@@ -392,7 +389,7 @@ public class FireCannon {
                     Player p = Bukkit.getPlayer(name);
                     if(p!=null)
                     {
-                        //Cannon.sendBlockChangeToPlayer(p, l.getBlock(), m.getId(), (byte) m.getData(), smokeDelay);
+                        CannonsUtil.sendBlockChangeToPlayer(p, l, smokeMat, smokeDelay);
                     }
                 }
             }
