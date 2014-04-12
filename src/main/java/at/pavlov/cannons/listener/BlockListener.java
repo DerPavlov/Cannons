@@ -50,7 +50,6 @@ public class BlockListener implements Listener
     {
         Block block = event.getBlock().getRelative(BlockFace.DOWN);
         Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
-        plugin.logDebug("fire spread: " + block.toString() + " cannon: " + (cannon!=null));
 
         if (cannon !=  null)
         {

@@ -531,7 +531,7 @@ public class CannonsUtil
             int d = (int) p.getLocation().distance(loc);
             if(d>=minDist&&d<=maxDist)
             {
-                p.playSound(loc, Sound.EXPLODE, (float) (0.1*d*d/maxDist), 0.5f);
+                p.playSound(loc, Sound.EXPLODE, (float) (d*d/maxDist), 0.5f);
             }
         }
     }

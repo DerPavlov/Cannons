@@ -118,7 +118,6 @@ public class FakeBlockHandler {
      */
     public void createImitatedSphere(Player player, Location l, int r, MaterialHolder mat, int delay)//IMPROVED
     {
-        plugin.logDebug("create fake sphere at: " + l.toString());
         for(int x = -r; x <=r; x++)
         {
             for(int y = -r; y<=r; y++)
@@ -172,7 +171,6 @@ public class FakeBlockHandler {
     {
         if(loc.getBlock().isEmpty())
         {
-            plugin.logDebug("send block change");
             player.sendBlockChange(loc, material.getId(), (byte) material.getData());
 
             //register block to remove it later

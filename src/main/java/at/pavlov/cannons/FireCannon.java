@@ -361,9 +361,8 @@ public class FireCannon {
 
         for(String name : players)
         {
-            plugin.getFakeBlockHandler().imitateLine(loc.clone(), aimingVector, 0, 2, name, config.getImitatedFireMaterial(), 300);
-
-            plugin.getFakeBlockHandler().imitateLine(loc.clone().add(aimingVector.clone().normalize().multiply(3.0)), aimingVector, 0, 3, name, config.getImitatedSmokeMaterial(), 1000);
+            plugin.getFakeBlockHandler().imitateLine(loc, aimingVector, 0, 1, name, config.getImitatedFireMaterial(), 20);
+            plugin.getFakeBlockHandler().imitateLine(loc.clone().add(aimingVector.clone().normalize().multiply(2.0)), aimingVector, 0, 2, name, config.getImitatedSmokeMaterial(), 60);
         }
     }
 
