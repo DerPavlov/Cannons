@@ -38,8 +38,12 @@ public class Config
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
     private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
 
-    private double imitatedExplosionMinimumDistance;
-    private double imitatedExplosionMaximumDistance;
+    private double imitatedBlockMinimumDistance;
+    private double imitatedBlockMaximumDistance;
+    private double imitatedSoundMinimumDistance;
+    private double imitatedSoundMaximumDistance;
+
+    private boolean imitatedExplosionEnabled;
     private int imitatedExplosionSphereSize;
     private MaterialHolder imitatedExplosionMaterial;
     private double imitatedExplosionTime;
@@ -47,6 +51,7 @@ public class Config
     private boolean imitatedAimingEnabled;
     private int imitatedAimingLineLength;
     private MaterialHolder imitatedAimingMaterial = new MaterialHolder(20, 0);
+
     private boolean imitatedFiringEffect;
     private MaterialHolder imitatedFireMaterial = new MaterialHolder(35, 14);
     private MaterialHolder imitatedSmokeMaterial = new MaterialHolder(30, 0);
@@ -101,20 +106,27 @@ public class Config
         setToolRamrod(new MaterialHolder(plugin.getConfig().getString("tools.ramrod", "280:0")));
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
 
-        //imitatedExplosions
-        setImitatedExplosionMinimumDistance(plugin.getConfig().getDouble("imitatedExplosion.minimumDistance", 40.0));
-        setImitatedExplosionMaximumDistance(plugin.getConfig().getDouble("imitatedExplosion.maximumDistance", 200.0));
-        setImitatedExplosionSphereSize(plugin.getConfig().getInt("imitatedExplosion.sphereSize", 2));
-        setImitatedExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedExplosion.material", "35:14")));
-        setImitatedExplosionTime(plugin.getConfig().getDouble("imitatedExplosion.time", 1.0));
+        //imitated effects
+        setImitatedBlockMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumBlockDistance", 40.0));
+        setImitatedBlockMaximumDistance(plugin.getConfig().getDouble("imitatedEffects.maximumBlockDistance", 200.0));
+        setImitatedSoundMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumSoundDistance", 40.0));
+        setImitatedSoundMaximumDistance(plugin.getConfig().getDouble("imitatedEffects.maximumSoundDistance", 200.0));
 
-        //imitateCannonEffects
-        setImitatedAimingEnabled(plugin.getConfig().getBoolean("imitatedCannonEffects.aimingEnabled", false));
-        setImitatedAimingLineLength(plugin.getConfig().getInt("imitatedCannonEffects.aimingLineLength", 5));
-        setImitatedAimingMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedCannonEffects.aimingBlock", "35:14")));
-        setImitatedFiringEffect(plugin.getConfig().getBoolean("imitatedCannonEffects.firingEffects", false));
-        setImitatedFireMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedCannonEffects.fireBlock", "35:14")));
-        setImitatedSmokeMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedCannonEffects.smokeBlock", "35:0")));
+        //imitated explosions
+        setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));
+        setImitatedExplosionSphereSize(plugin.getConfig().getInt("imitatedEffects.explosion.sphereSize", 2));
+        setImitatedExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.explosion.material", "35:14")));
+        setImitatedExplosionTime(plugin.getConfig().getDouble("imitatedEffects.explosion.time", 1.0));
+
+        //imitated aiming
+        setImitatedAimingEnabled(plugin.getConfig().getBoolean("imitatedEffects.aiming.enabled", false));
+        setImitatedAimingLineLength(plugin.getConfig().getInt("imitatedEffects.aiming.length", 5));
+        setImitatedAimingMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.aiming.block", "35:14")));
+
+        //imitated firing effects
+        setImitatedFiringEffect(plugin.getConfig().getBoolean("imitatedEffects.firing.enabled", false));
+        setImitatedFireMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.fireBlock", "35:14")));
+        setImitatedSmokeMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.smokeBlock", "35:0")));
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -314,30 +326,6 @@ public class Config
         return false;
     }
 
-    public double getImitatedExplosionMaximumDistance() {
-        return imitatedExplosionMaximumDistance;
-    }
-
-    public void setImitatedExplosionMaximumDistance(double imitatedExplosionMaximumDistance) {
-        this.imitatedExplosionMaximumDistance = imitatedExplosionMaximumDistance;
-    }
-
-    public int getImitatedExplosionSphereSize() {
-        return imitatedExplosionSphereSize;
-    }
-
-    public void setImitatedExplosionSphereSize(int imitatedExplosionSphereSize) {
-        this.imitatedExplosionSphereSize = imitatedExplosionSphereSize;
-    }
-
-    public double getImitatedExplosionMinimumDistance() {
-        return imitatedExplosionMinimumDistance;
-    }
-
-    public void setImitatedExplosionMinimumDistance(double imitatedExplosionMinimumDistance) {
-        this.imitatedExplosionMinimumDistance = imitatedExplosionMinimumDistance;
-    }
-
     public MaterialHolder getImitatedExplosionMaterial() {
         return imitatedExplosionMaterial;
     }
@@ -400,5 +388,53 @@ public class Config
 
     public void setImitatedAimingLineLength(int imitatedAimingLineLength) {
         this.imitatedAimingLineLength = imitatedAimingLineLength;
+    }
+
+    public double getImitatedBlockMinimumDistance() {
+        return imitatedBlockMinimumDistance;
+    }
+
+    public void setImitatedBlockMinimumDistance(double imitatedBlockMinimumDistance) {
+        this.imitatedBlockMinimumDistance = imitatedBlockMinimumDistance;
+    }
+
+    public double getImitatedBlockMaximumDistance() {
+        return imitatedBlockMaximumDistance;
+    }
+
+    public void setImitatedBlockMaximumDistance(double imitatedBlockMaximumDistance) {
+        this.imitatedBlockMaximumDistance = imitatedBlockMaximumDistance;
+    }
+
+    public double getImitatedSoundMinimumDistance() {
+        return imitatedSoundMinimumDistance;
+    }
+
+    public void setImitatedSoundMinimumDistance(double imitatedSoundMinimumDistance) {
+        this.imitatedSoundMinimumDistance = imitatedSoundMinimumDistance;
+    }
+
+    public double getImitatedSoundMaximumDistance() {
+        return imitatedSoundMaximumDistance;
+    }
+
+    public void setImitatedSoundMaximumDistance(double imitatedSoundMaximumDistance) {
+        this.imitatedSoundMaximumDistance = imitatedSoundMaximumDistance;
+    }
+
+    public int getImitatedExplosionSphereSize() {
+        return imitatedExplosionSphereSize;
+    }
+
+    public void setImitatedExplosionSphereSize(int imitatedExplosionSphereSize) {
+        this.imitatedExplosionSphereSize = imitatedExplosionSphereSize;
+    }
+
+    public boolean isImitatedExplosionEnabled() {
+        return imitatedExplosionEnabled;
+    }
+
+    public void setImitatedExplosionEnabled(boolean imitatedExplosionEnabled) {
+        this.imitatedExplosionEnabled = imitatedExplosionEnabled;
     }
 }

@@ -262,7 +262,7 @@ public class FireCannon {
         //Muzzle flash + effects
         if (projectile.getProjectileEntity().equals(EntityType.ARROW))
             world.playEffect(firingLoc, Effect.BOW_FIRE, 10);
-        MuzzelFire(cannon);//TODO
+        MuzzleFire(cannon);
         world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 
         //increase heat of the cannon
@@ -322,19 +322,16 @@ public class FireCannon {
      * creates a imitated explosion made of blocks which is transmitted to player in a give distance
      * @param c operated cannon
      */
-    public void MuzzelFire(Cannon c)//TODO
+    public void MuzzleFire(Cannon c)//TODO
     {
-        double minDist = plugin.getMyConfig().getImitatedExplosionMinimumDistance();
-        double maxDist = plugin.getMyConfig().getImitatedExplosionMaximumDistance();
+        double minDist = config.getImitatedBlockMinimumDistance();
+        double maxDist = config.getImitatedBlockMaximumDistance();
         Location loc = c.getMuzzle();
 
         loc.getWorld().createExplosion(loc, 0F, false);
 
-        //ToConfig///////////
-        int minExplodeSoundDistance = 0;
-        int maxExplodeSoundDistance = 256;
-        /////////////////////
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, minExplodeSoundDistance, maxExplodeSoundDistance);
+
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMinimumDistance(), config.getImitatedSoundMaximumDistance());
         List<String> players = new ArrayList<String>();
         for(Player p : loc.getWorld().getPlayers())
         {
@@ -356,13 +353,15 @@ public class FireCannon {
      */
     public void imitateSmoke(Cannon cannon, List<String> players)//TODO
     {
+        if (!config.isImitatedFiringEffect())
+            return;
         Vector aimingVector = cannon.getAimingVector().clone();
         Location loc = cannon.getMuzzle();
 
         for(String name : players)
         {
-            plugin.getFakeBlockHandler().imitateLine(loc, aimingVector, 0, 1, name, config.getImitatedFireMaterial(), 20);
-            plugin.getFakeBlockHandler().imitateLine(loc.clone().add(aimingVector.clone().normalize().multiply(2.0)), aimingVector, 0, 2, name, config.getImitatedSmokeMaterial(), 60);
+            plugin.getFakeBlockHandler().imitateLine(name, loc, aimingVector, 0, 1, config.getImitatedFireMaterial(), 20);
+            plugin.getFakeBlockHandler().imitatedSphere(name, loc.clone().add(aimingVector.clone().normalize()), 1, config.getImitatedSmokeMaterial(), 60);
         }
     }
 

@@ -76,36 +76,19 @@ public class FakeBlockHandler {
 
     /**
      * creates a sphere of fake block and sends it to the given player
-     * @param players the players to be notified
-     * @param l center of the sphere
-     * @param r radius of the sphere
-     * @param mat material of the fake block
-     * @param delay delay until the block disappears again
-     */
-    public void createImitatedSphere(List<String> players, Location l, int r, MaterialHolder mat, int delay)//IMPROVED
-    {
-        for(String name : players)
-        {
-            createImitatedSphere(name, l, r, mat, delay);
-        }
-    }
-
-    /**
-     * creates a sphere of fake block and sends it to the given player
      * @param name the player to be notified
      * @param l center of the sphere
      * @param r radius of the sphere
      * @param mat material of the fake block
      * @param delay delay until the block disappears again
      */
-    public void createImitatedSphere(String name, Location l, int r, MaterialHolder mat, int delay)//IMPROVED
+    public void imitatedSphere(String name, Location l, int r, MaterialHolder mat, int delay)
     {
         Player player = Bukkit.getPlayer(name);
         if(player!=null)
         {
-            createImitatedSphere(player, l, r, mat, delay);
+            imitatedSphere(player, l, r, mat, delay);
         }
-
     }
 
     /**
@@ -116,7 +99,7 @@ public class FakeBlockHandler {
      * @param mat material of the fake block
      * @param delay delay until the block disappears again
      */
-    public void createImitatedSphere(Player player, Location l, int r, MaterialHolder mat, int delay)//IMPROVED
+    public void imitatedSphere(Player player, Location l, int r, MaterialHolder mat, int delay)
     {
         for(int x = -r; x <=r; x++)
         {
@@ -142,7 +125,7 @@ public class FakeBlockHandler {
      * @param length lenght of the line
      * @param player name of the player
      */
-    public void imitateLine(Location loc, Vector direction, int offset,int length, String player,   MaterialHolder material, long duration)
+    public void imitateLine(String player, Location loc, Vector direction, int offset, int length, MaterialHolder material, long duration)
     {
         Player p = Bukkit.getPlayer(player);
         if(p == null)

@@ -32,6 +32,7 @@ import at.pavlov.cannons.projectile.ProjectileProperties;
 public class CreateExplosion {
 
     private final Cannons plugin;
+    private final Config config;
 
     private LinkedList<UUID> transmittedEntities = new LinkedList<UUID>();
 
@@ -39,6 +40,7 @@ public class CreateExplosion {
     public CreateExplosion (Cannons plugin, Config config)
     {
         this.plugin = plugin;
+        this.config = plugin.getMyConfig();
         transmittedEntities = new LinkedList<UUID>();
     }
 
@@ -59,7 +61,7 @@ public class CreateExplosion {
         if (!destroyedBlock.equals(Material.AIR))
         {
             //if it is unbreakable, ignore it
-            for (MaterialHolder unbreakableBlock : plugin.getMyConfig().getUnbreakableBlocks())
+            for (MaterialHolder unbreakableBlock : config.getUnbreakableBlocks())
             {
                 if (unbreakableBlock.equalsFuzzy(destroyedBlock))
                 {
@@ -69,7 +71,7 @@ public class CreateExplosion {
             }
 
             //test if it needs superbreaker
-            for (MaterialHolder superbreakerBlock : plugin.getMyConfig().getSuperbreakerBlocks())
+            for (MaterialHolder superbreakerBlock : config.getSuperbreakerBlocks())
             {
                 if ((superbreakerBlock.equalsFuzzy(destroyedBlock)))
                 {
@@ -863,17 +865,16 @@ public class CreateExplosion {
      */
     public void sendExplosionToPlayers(Location loc)
     {
-        double minDist = plugin.getMyConfig().getImitatedExplosionMinimumDistance();
-        double maxDist = plugin.getMyConfig().getImitatedExplosionMaximumDistance();
-        int r = plugin.getMyConfig().getImitatedExplosionSphereSize()/2;
-        MaterialHolder mat = plugin.getMyConfig().getImitatedExplosionMaterial();
-        int delay = (int) plugin.getMyConfig().getImitatedExplosionTime()*20;
+        if (!config.isImitatedExplosionEnabled())
+            return;
 
-        //ToConfig///////////
-        int minExplodeSoundDistance = 40;
-        int maxExplodeSoundDistance = 256;
-        /////////////////////
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, minExplodeSoundDistance, maxExplodeSoundDistance);//TODO
+        double minDist = config.getImitatedBlockMinimumDistance();
+        double maxDist = config.getImitatedBlockMaximumDistance();
+        int r = config.getImitatedExplosionSphereSize()/2;
+        MaterialHolder mat = config.getImitatedExplosionMaterial();
+        int delay = (int) config.getImitatedExplosionTime()*20;
+
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMinimumDistance(), config.getImitatedSoundMaximumDistance());//TODO
 
         for(Player p : loc.getWorld().getPlayers())
         {
@@ -885,7 +886,7 @@ public class CreateExplosion {
             if(distance >= minDist  && distance <= maxDist)
             {
                 //p.playSound(loc, Sound.EXPLODE, (float) (0.1*distance*distance/maxDist), 0.5f); //TODO deleted
-                plugin.getFakeBlockHandler().createImitatedSphere(p, loc, r, mat, delay);
+                plugin.getFakeBlockHandler().imitatedSphere(p, loc, r, mat, delay);
             }
         }
 

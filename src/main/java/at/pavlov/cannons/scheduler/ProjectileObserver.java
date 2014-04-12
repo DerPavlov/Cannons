@@ -100,7 +100,7 @@ public class ProjectileObserver {
      */
     public void sendSplashToPlayers(Location l, MaterialHolder liquid)
     {
-        double maxDist = plugin.getMyConfig().getImitatedExplosionMaximumDistance();
+        double maxDist = plugin.getMyConfig().getImitatedBlockMaximumDistance();
 
         for(Player p : l.getWorld().getPlayers())
         {
@@ -109,7 +109,7 @@ public class ProjectileObserver {
 
             if(distance <= maxDist)
             {
-                plugin.getFakeBlockHandler().createImitatedSphere(p, l, 1, new MaterialHolder(liquid.getId(), 0), 40);
+                plugin.getFakeBlockHandler().imitatedSphere(p, l, 1, new MaterialHolder(liquid.getId(), 0), 40);
             }
         }
     }

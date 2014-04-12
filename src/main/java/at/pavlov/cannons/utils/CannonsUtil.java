@@ -522,16 +522,16 @@ public class CannonsUtil
      * @param minDist minimum distance
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location loc, Sound sound, int minDist, int maxDist)//TODO
+    public static void imitateSound(Location loc, Sound sound, double minDist, double maxDist)
     {
         World w = loc.getWorld();
         for(Player p : w.getPlayers())
         {
             //get distance from player to explosion
-            int d = (int) p.getLocation().distance(loc);
+            double d = p.getLocation().distance(loc);
             if(d>=minDist&&d<=maxDist)
             {
-                p.playSound(loc, Sound.EXPLODE, (float) (d*d/maxDist), 0.5f);
+                p.playSound(loc, sound, (float) (d*d/maxDist), 0.5f);
             }
         }
     }
