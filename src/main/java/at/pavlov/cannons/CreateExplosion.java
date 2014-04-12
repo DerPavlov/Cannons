@@ -580,14 +580,6 @@ public class CreateExplosion {
         if (shooter instanceof Player)
             player = (Player) shooter;
 
-        //do no underwater damage if disabled (explosion but no damage)
-        boolean isUnderwater = false;
-        if ( projectile_entity.getLocation().clone().subtract(projectile_entity.getVelocity().normalize().multiply(2)).getBlock().isLiquid())
-        {
-            isUnderwater = true;
-        }
-        plugin.logDebug("Explosion is underwater: " + isUnderwater);
-
         //breaks blocks from the impact of the projectile to the location of the explosion
         Location impactLoc = blockBreaker(cannonball);
 
@@ -600,9 +592,10 @@ public class CreateExplosion {
         float explosion_power = projectile.getExplosionPower();
 
         //reset explosion power if it is underwater and not allowed
-        if (!projectile.isUnderwaterDamage() && isUnderwater)
+        plugin.logDebug("Explosion is underwater: " + cannonball.wasInWater());
+        if (!projectile.isUnderwaterDamage() && cannonball.wasInWater())
         {
-            plugin.logDebug("Underwater explosion power set to zero");
+            plugin.logDebug("Underwater explosion not allowed. Event cancelled.");
             explosion_power = 0;
         }
 
@@ -616,15 +609,16 @@ public class CreateExplosion {
         //if canceled then exit
         if (impactEvent.isCancelled())
         {
-            //event canceled, make a save imitated explosion
-            //world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);//CHANGED
+            //event canceled, make some effects
+            world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
+            sendExplosionToPlayers(impactLoc, projectile.getExplosionPower());
             return;
         }
 
         //explosion event
         boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
         boolean blockDamage = projectile.getExplosionDamage();
-        boolean notCanceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);//FIXME sound underwater mustn't to be if !doesUnderwaterExplosion!
+        boolean notCanceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
 
         //send a message about the impact (only if the projectile has enabled this feature)
         if (projectile.isImpactMessage())
@@ -633,19 +627,16 @@ public class CreateExplosion {
         if (notCanceled)
         {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
-            if(cannonball.getProjectile().isUnderwaterDamage() || !cannonball.wasInWater()) sendExplosionToPlayers(impactLoc, projectile.getExplosionPower());
+            if(cannonball.getProjectile().isUnderwaterDamage() && cannonball.wasInWater())
+            {
+                sendExplosionToPlayers(impactLoc, projectile.getExplosionPower());
+            }
 
             //place blocks around the impact like webs, lava, water
             spreadBlocks(impactLoc, cannonball);
 
             //spawns additional projectiles after the explosion
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(cannonball)
-            {
-                public void run(Object object) {
-                    FlyingProjectile flying = (FlyingProjectile) object;
-                    spawnProjectiles(flying);
-                }
-            }, 1L);
+            spawnProjectiles(cannonball);
 
             //spawn fireworks
             spawnFireworks(cannonball);
@@ -703,6 +694,49 @@ public class CreateExplosion {
         }
     }
 
+
+    /**
+     * spawns Projectiles given in the spawnProjectile property
+     * @param cannonball
+     */
+    private void spawnProjectiles(FlyingProjectile cannonball)
+    {
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(cannonball)
+        {
+            public void run(Object object) {
+                FlyingProjectile cannonball = (FlyingProjectile) object;
+
+                Projectile projectile = cannonball.getProjectile();
+                LivingEntity shooter = cannonball.getShooter();
+                Player player = (Player) shooter;
+                Location impactLoc = cannonball.getProjectileEntity().getLocation();
+
+
+                Random r = new Random();
+
+                for (String strProj : projectile.getSpawnProjectiles())
+                {
+                    Projectile newProjectiles = plugin.getProjectileStorage().getByName(strProj);
+                    if (newProjectiles == null)
+                    {
+                        plugin.logSevere("Can't use spawnProjectile " + strProj + " because Projectile does not exist");
+                        continue;
+                    }
+
+                    for (int i=0; i<newProjectiles.getNumberOfBullets(); i++)
+                    {
+                        Vector vect = new Vector(r.nextDouble()-0.5, r.nextDouble()-0.5, r.nextDouble()-0.5);
+                        vect = vect.normalize().multiply(newProjectiles.getVelocity());
+
+                        //don't spawn the projectile in the center
+                        Location spawnLoc = impactLoc.clone().add(vect.clone().normalize().multiply(3.0));
+                        plugin.getProjectileManager().spawnProjectile(newProjectiles, player, spawnLoc, vect);
+                    }
+                }
+            }
+        }, 1L);
+    }
+
     /**
      * spawns fireworks after the explosion
      * @param cannonball
@@ -746,40 +780,6 @@ public class CreateExplosion {
         }, 1L);
     }
 
-    /**
-     * spawns Projectiles given in the spawnProjectile property
-     * @param cannonball
-     */
-    private void spawnProjectiles(FlyingProjectile cannonball)
-    {
-        Projectile projectile = cannonball.getProjectile();
-        LivingEntity shooter = cannonball.getShooter();
-        Player player = (Player) shooter;
-        Location impactLoc = cannonball.getProjectileEntity().getLocation();
-
-
-        Random r = new Random();
-
-        for (String strProj : projectile.getSpawnProjectiles())
-        {
-            Projectile newProjectiles = plugin.getProjectileStorage().getByName(strProj);
-            if (newProjectiles == null)
-            {
-                plugin.logSevere("Can't use spawnProjectile " + strProj + " because Projectile does not exist");
-                continue;
-            }
-
-            for (int i=0; i<newProjectiles.getNumberOfBullets(); i++)
-            {
-                Vector vect = new Vector(r.nextDouble()-0.5, r.nextDouble()-0.5, r.nextDouble()-0.5);
-                vect = vect.normalize().multiply(newProjectiles.getVelocity());
-
-                //don't spawn the projectile in the center
-                Location spawnLoc = impactLoc.clone().add(vect.clone().normalize().multiply(3.0));
-                plugin.getProjectileManager().spawnProjectile(newProjectiles, player, spawnLoc, vect);
-            }
-        }
-    }
 
     /**
      * event for all entities which died in the explosion
@@ -859,9 +859,9 @@ public class CreateExplosion {
 
     /**
      * creates a imitated explosion made of blocks which is transmitted to player in a give distance
-     * @param l location of the explosion
+     * @param loc location of the explosion
      */
-    public void sendExplosionToPlayers(Location l, float power)
+    public void sendExplosionToPlayers(Location loc, float power)
     {
         double minDist = plugin.getMyConfig().getImitatedExplosionMinimumDistance();
         double maxDist = plugin.getMyConfig().getImitatedExplosionMaximumDistance();
@@ -873,21 +873,21 @@ public class CreateExplosion {
         int minExplodeSoundDistance = 40;
         int maxExplodeSoundDistance = 256;
         /////////////////////
-        CannonsUtil.imitateSound(l, Sound.EXPLODE, power, minExplodeSoundDistance, maxExplodeSoundDistance);//TODO
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, power, minExplodeSoundDistance, maxExplodeSoundDistance);//TODO
 
         List<String> players = new ArrayList<String>();//IMPROVED
-        for(Player p : l.getWorld().getPlayers())
+        for(Player p : loc.getWorld().getPlayers())
         {
             Location pl = p.getLocation();
-            double distance = pl.distance(l);
+            double distance = pl.distance(loc);
 
             if(distance >= minDist  && distance <= maxDist)
             {
-                //p.playSound(l, Sound.EXPLODE, (float) (0.1*distance*distance/maxDist), 0.5f); TODO deleted
+                //p.playSound(l, Sound.EXPLODE, (float) (0.1*distance*distance/maxDist), 0.5f); //TODO deleted
                 players.add(p.getName());
             }
         }
-        CannonsUtil.createImitatedSphere(players, l, r, mat, delay);
+        CannonsUtil.createImitatedSphere(players, loc, r, mat, delay);
     }
 
 

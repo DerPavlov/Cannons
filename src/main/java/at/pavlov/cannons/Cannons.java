@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Filter;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import at.pavlov.cannons.API.CannonsAPI;
@@ -16,6 +14,7 @@ import at.pavlov.cannons.config.*;
 import at.pavlov.cannons.listener.*;
 import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
+import at.pavlov.cannons.scheduler.FakeBlockHandler;
 import at.pavlov.cannons.scheduler.ProjectileObserver;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -49,6 +48,7 @@ public final class Cannons extends JavaPlugin
 	private final CreateExplosion explosion;
 	private final Aiming aiming;
     private final ProjectileObserver observer;
+    private final FakeBlockHandler fakeBlockHandler;
 	private final Commands commands;
 
     private final CannonsAPI cannonsAPI;
@@ -75,6 +75,7 @@ public final class Cannons extends JavaPlugin
         this.fireCannon = new FireCannon(this, config);
         this.aiming = new Aiming(this);
         this.observer = new ProjectileObserver(this);
+        this.fakeBlockHandler = new FakeBlockHandler(this);
         this.cannonsAPI = new CannonsAPI(this);
 
         this.persistenceDatabase = new PersistenceDatabase(this);
@@ -96,8 +97,7 @@ public final class Cannons extends JavaPlugin
 		getServer().getScheduler().cancelTasks(this);
 		
 		// save database on shutdown
-		if (persistenceDatabase != null)
-			persistenceDatabase.saveAllCannons();
+		persistenceDatabase.saveAllCannons();
 
 		logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been disabled");
 	}
@@ -149,6 +149,7 @@ public final class Cannons extends JavaPlugin
 			aiming.initAimingMode();
             // setting up the Teleporter
             observer.setupScheduler();
+            fakeBlockHandler.setupScheduler();
 
 			// save cannons
 			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
@@ -281,8 +282,8 @@ public final class Cannons extends JavaPlugin
 	}
 	
 	/**
-	 * checks if worldEdit is running
-	 * @return
+	 * checks if WorldEdit is running
+	 * @return true is WorldEdit is running
 	 */
 	private boolean checkWorldEdit()
 	{
@@ -389,5 +390,9 @@ public final class Cannons extends JavaPlugin
 
     public BlockListener getBlockListener() {
         return blockListener;
+    }
+
+    public FakeBlockHandler getFakeBlockHandler() {
+        return fakeBlockHandler;
     }
 }

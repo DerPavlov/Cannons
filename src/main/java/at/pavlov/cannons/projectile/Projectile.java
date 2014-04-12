@@ -565,4 +565,5 @@ public class Projectile implements Cloneable{
     public void setDescription(String description) {
         this.description = description;
     }
+
 }
