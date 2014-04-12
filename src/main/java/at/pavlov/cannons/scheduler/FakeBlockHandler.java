@@ -1,11 +1,17 @@
 package at.pavlov.cannons.scheduler;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.container.FakeBlockEntry;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.listener.Commands;
+import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.util.BlockIterator;
+import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -130,6 +136,32 @@ public class FakeBlockHandler {
     }
 
     /**
+     * creates a line of blocks at the give location
+     * @param loc starting location of the line
+     * @param direction direction of the line
+     * @param offset offset from the starting point
+     * @param length lenght of the line
+     * @param player name of the player
+     */
+    public void imitateLine(Location loc, Vector direction, int offset,int length, String player,   MaterialHolder material)//TODO
+    {
+        Player p = Bukkit.getPlayer(player);
+        if(p == null)
+        {
+            Commands.disableImitating(player);
+            return;
+        }
+
+        BlockIterator iter = new BlockIterator(loc.getWorld(), loc.toVector(), direction, offset, length);
+
+        while (iter.hasNext())
+        {
+            sendBlockChangeToPlayer(p, iter.next().getLocation(), material, 60);
+        }
+
+    }
+
+    /**
      * sends fake block to the given player
      * @param player player to display the blocks
      * @param loc location of the block
@@ -147,6 +179,8 @@ public class FakeBlockHandler {
 
         }
     }
+
+
 
 
 

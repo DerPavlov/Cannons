@@ -7,7 +7,9 @@ import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
+import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
+import at.pavlov.cannons.listener.Commands;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -459,7 +461,7 @@ public class Aiming {
 	 * @param cannon
 	 * @return
 	 */
-    MessageEnum setMessageHorizontal(Cannon cannon, boolean combinedAngle)
+    private MessageEnum setMessageHorizontal(Cannon cannon, boolean combinedAngle)
 	{
 		if (combinedAngle)
 			return MessageEnum.SettingCombinedAngle;
@@ -481,7 +483,7 @@ public class Aiming {
 	 * @param cannon
 	 * @return
 	 */
-    MessageEnum setMessageVertical(Cannon cannon, boolean combinedAngle)
+    private MessageEnum setMessageVertical(Cannon cannon, boolean combinedAngle)
 	{
 		if (combinedAngle)
 			return MessageEnum.SettingCombinedAngle;
@@ -496,5 +498,21 @@ public class Aiming {
 			return MessageEnum.SettingVerticalAngleDown;
 		}
 	}
+
+    /**
+     * show a line where the cannon is aming
+     * @param cannon - operated cannon
+     * @param player - player operating the cannon
+     */
+    public void showAimingVector(Cannon cannon, String player)
+    {
+        // Imitation of angle TODO
+        if(Commands.isImitatedPlayer(player))
+        {
+            plugin.getFakeBlockHandler().imitateLine(cannon.getMuzzle(), cannon.getAimingVector(), 0, config.getImitatedAimingLineLength(), player, config.getImitatedAimingMaterial());
+        }
+    }
+
+
 	
 }

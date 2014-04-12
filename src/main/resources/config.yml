@@ -39,6 +39,20 @@ imitatedExplosion:
   #how long the effect will be displayed [s]
   time: 2
 
+#firing effect if the player is far away and display the aiming angle of the cannon
+imitatedCannonEffects:
+    #set to true to show a line of blocks while aiming
+    aimingEnabled: true
+    #how long the line will be. Longer line mean it is easier to see where you are aiming
+    aimingLineLength: 5
+    #this block will show the player operating the cannon the angle the cannon is aiming
+    aimingBlock: '20:0'
+    #will show fake blocks for players which are far away
+    firingEffects: true
+    #firing will show fire blocks if the player is far away
+    fireBlock: '35:14'
+    #firing will show smoke blocks if the player is far away
+    smokeBlock: '30:0'
 
 
 #enter here the blocks which require the superbreaker ability to destroy.

@@ -354,7 +354,7 @@ public class FireCannon {
      */
     public void imitateSmoke(Cannon cannon, List<String> players)//TODO
     {
-        Vector v = cannon.getAimingVector();
+        Vector aimingVector = cannon.getAimingVector();
 
         //To config////////////////////////////////////////
         MaterialHolder fireMat = new MaterialHolder(35, 14);
@@ -364,30 +364,19 @@ public class FireCannon {
         int smokeDelay = 100;
         ///////////////////////////
 
-        Location l = cannon.getCannonDesign().getMuzzle(cannon);
+        Location blockLoc = cannon.getCannonDesign().getMuzzle(cannon).clone();
         for(int i = 0; i < r; i++)
         {
-            l.add(v);
-            if(i*3<r)
+            for(String name : players)
             {
-                for(String name : players)
+                Player p = Bukkit.getPlayer(name);
+                if(p!=null)
                 {
-                    Player p = Bukkit.getPlayer(name);
-                    if(p!=null)
-                    {
-                        CannonsUtil.sendBlockChangeToPlayer(p, l, fireMat, fireDelay);
-                    }
-                }
-            }
-            else
-            {
-                for(String name : players)
-                {
-                    Player p = Bukkit.getPlayer(name);
-                    if(p!=null)
-                    {
-                        CannonsUtil.sendBlockChangeToPlayer(p, l, smokeMat, smokeDelay);
-                    }
+                    blockLoc.add(aimingVector);
+                    if(i*3<r)
+                        plugin.getFakeBlockHandler().sendBlockChangeToPlayer(p, blockLoc, fireMat, fireDelay);
+                    else
+                        plugin.getFakeBlockHandler().sendBlockChangeToPlayer(p, blockLoc, smokeMat, smokeDelay);
                 }
             }
         }
@@ -397,8 +386,9 @@ public class FireCannon {
 
     /**
      * confuses an entity to simulate the blast of a cannon
-     * @param living
-     * @param confuseTime
+     * @param living entity to confuse
+     * @param firingLoc distance to the muzzle
+     * @param confuseTime how long the enitity is confused in seconds
      */
     private void confuseShooter(List<Entity> living, Location firingLoc, double confuseTime)
     {

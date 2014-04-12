@@ -109,7 +109,7 @@ public class ProjectileObserver {
 
             if(distance <= maxDist)
             {
-                CannonsUtil.createImitatedSphere(p, l, 1, new MaterialHolder(liquid.getId(), 0), 40);
+                plugin.getFakeBlockHandler().createImitatedSphere(p, l, 1, new MaterialHolder(liquid.getId(), 0), 40);
             }
         }
     }

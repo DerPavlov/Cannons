@@ -44,6 +44,13 @@ public class Config
     private MaterialHolder imitatedExplosionMaterial;
     private double imitatedExplosionTime;
 
+    private boolean imitatedAimingEnabled;
+    private int imitatedAimingLineLength;
+    private MaterialHolder imitatedAimingMaterial = new MaterialHolder(20, 0);
+    private boolean imitatedFiringEffect;
+    private MaterialHolder imitatedFireMaterial = new MaterialHolder(35, 14);
+    private MaterialHolder imitatedSmokeMaterial = new MaterialHolder(30, 0);
+
     //superbreakerBlocks
     private List<MaterialHolder> superbreakerBlocks = new ArrayList<MaterialHolder>();
 
@@ -100,6 +107,14 @@ public class Config
         setImitatedExplosionSphereSize(plugin.getConfig().getInt("imitatedExplosion.sphereSize", 2));
         setImitatedExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedExplosion.material", "35:14")));
         setImitatedExplosionTime(plugin.getConfig().getDouble("imitatedExplosion.time", 1.0));
+
+        //imitateCannonEffects
+        setImitatedAimingEnabled(plugin.getConfig().getBoolean("imitatedCannonEffects.aimingEnabled", false));
+        setImitatedAimingLineLength(plugin.getConfig().getInt("imitatedCannonEffects.aimingLineLength", 5));
+        setImitatedAimingMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedCannonEffects.aimingBlock", "35:14")));
+        setImitatedFiringEffect(plugin.getConfig().getBoolean("imitatedCannonEffects.firingEffects", false));
+        setImitatedFireMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedCannonEffects.fireBlock", "35:14")));
+        setImitatedSmokeMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedCannonEffects.smokeBlock", "35:0")));
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -337,5 +352,53 @@ public class Config
 
     public void setImitatedExplosionTime(double imitatedExplosionTime) {
         this.imitatedExplosionTime = imitatedExplosionTime;
+    }
+
+    public MaterialHolder getImitatedAimingMaterial() {
+        return imitatedAimingMaterial;
+    }
+
+    public void setImitatedAimingMaterial(MaterialHolder imitatedAimingMaterial) {
+        this.imitatedAimingMaterial = imitatedAimingMaterial;
+    }
+
+    public MaterialHolder getImitatedFireMaterial() {
+        return imitatedFireMaterial;
+    }
+
+    public void setImitatedFireMaterial(MaterialHolder imitatedFireMaterial) {
+        this.imitatedFireMaterial = imitatedFireMaterial;
+    }
+
+    public MaterialHolder getImitatedSmokeMaterial() {
+        return imitatedSmokeMaterial;
+    }
+
+    public void setImitatedSmokeMaterial(MaterialHolder imitatedSmokeMaterial) {
+        this.imitatedSmokeMaterial = imitatedSmokeMaterial;
+    }
+
+    public boolean isImitatedAimingEnabled() {
+        return imitatedAimingEnabled;
+    }
+
+    public void setImitatedAimingEnabled(boolean imitatedAimingEnabled) {
+        this.imitatedAimingEnabled = imitatedAimingEnabled;
+    }
+
+    public boolean isImitatedFiringEffect() {
+        return imitatedFiringEffect;
+    }
+
+    public void setImitatedFiringEffect(boolean imitatedFiringEffect) {
+        this.imitatedFiringEffect = imitatedFiringEffect;
+    }
+
+    public int getImitatedAimingLineLength() {
+        return imitatedAimingLineLength;
+    }
+
+    public void setImitatedAimingLineLength(int imitatedAimingLineLength) {
+        this.imitatedAimingLineLength = imitatedAimingLineLength;
     }
 }

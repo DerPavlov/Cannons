@@ -122,6 +122,15 @@ public class Cannon
         return design.getAllCannonBlocks(this).get(0);
     }
 
+    /**
+     * returns the location of the muzzle
+     * @return
+     */
+    public Location getMuzzle()
+    {
+          return design.getMuzzle(this);
+    }
+
 
     /**
      * removes the loaded charge form the chest attached to the cannon, returns true if the ammo was found in the chest
@@ -1726,28 +1735,4 @@ public class Cannon
     }
 
 
-    public void imitateAngleToPlayer(String name)//TODO
-    {
-        Player p = Bukkit.getPlayer(name);
-        if(p == null)
-        {
-            Commands.disableImitating(name);
-            return;
-        }
-        try
-        {
-            Block b = p.getLocation().getBlock().getRelative(0, Commands.getImitatedH(name)+2, 0);
-
-            for(int i = 1; i < 20; i++)
-            {
-                Block newB = b.getLocation().add(getAimingVector().clone().multiply(i)).getBlock();
-                CannonsUtil.sendBlockChangeToPlayer(p, newB.getLocation(), new MaterialHolder(35, 14), 60);
-            }
-        }
-        catch(Exception e)
-        {
-
-        }
-
-    }
 }
