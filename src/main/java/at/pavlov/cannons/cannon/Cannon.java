@@ -929,12 +929,9 @@ public class Cannon
      */
     public void rotate(Vector center, int angle)
     {
-        while (angle < 0)
-        {
-            angle += 360;
-        }
-        angle %= 360;
-        angle = Math.round(angle);
+        if (angle == 0)
+            return;
+
         double dAngle =  angle*Math.PI/180;
 
         center = new Vector (center.getBlockX(), center.getBlockY(), center.getBlockZ());
@@ -947,8 +944,17 @@ public class Cannon
         offset = new Vector(Math.round(center.getX()+newX), offset.getBlockY(), Math.round(center.getZ()+newZ));
 
         //rotate blockface
-        for (int i = 0; i<=angle%90; i++)
-            cannonDirection = CannonsUtil.roatateFace(cannonDirection);
+        if (angle > 0)
+        {
+            for (int i = 0; i<=angle%90; i++)
+                cannonDirection = CannonsUtil.roatateFace(cannonDirection);
+        }
+        else
+        {
+            for (int i = 0; i<=(-angle)%90; i++)
+                cannonDirection = CannonsUtil.roatateFaceOpposite(cannonDirection);
+        }
+
     }
 
     /**

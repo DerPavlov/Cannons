@@ -155,6 +155,20 @@ public class CannonsUtil
 		if (face.equals(BlockFace.WEST)) return BlockFace.NORTH;
 		return BlockFace.UP;
 	}
+
+    /**
+     * rotates the direction by -90°
+     * @param face
+     * @return
+     */
+    public static BlockFace roatateFaceOpposite(BlockFace face)
+    {
+        if (face.equals(BlockFace.NORTH)) return BlockFace.WEST;
+        if (face.equals(BlockFace.EAST)) return BlockFace.NORTH;
+        if (face.equals(BlockFace.SOUTH)) return BlockFace.EAST;
+        if (face.equals(BlockFace.WEST)) return BlockFace.SOUTH;
+        return BlockFace.UP;
+    }
 	
 	/**
 	 * returns a new Itemstack
