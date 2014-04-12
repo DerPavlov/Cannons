@@ -523,36 +523,24 @@ public class CannonsUtil
      * @param minDist minimum distance
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location loc, Sound sound, float power, int minDist, int maxDist)//TODO
+    public static void imitateSound(Location loc, Sound sound, int minDist, int maxDist)//TODO
     {
         World w = loc.getWorld();
-        if(sound.equals(Sound.EXPLODE))
-            w.createExplosion(loc, 0F, false);
+        //if(sound.equals(Sound.EXPLODE))
+        //    w.createExplosion(loc, 0F, false);
 
         //To config///////////
-        float soundPower = 5F;
-        float additionVolume = 3F;
+        //float soundPower = 5F;
+        //float additionVolume = 3F;
         //////////////////
-        HashMap<String, Integer> playerList = new HashMap<String, Integer>();
         for(Player p : w.getPlayers())
         {
             //get distance from player to explosion
             int d = (int) p.getLocation().distance(loc);
-            if(minDist<=d&&d<=maxDist)
+            if(d>=minDist&&d<=maxDist)
             {
-                playerList.put(p.getName(), d);
+                p.playSound(loc, Sound.EXPLODE, (float) (0.1*d*d/maxDist), 0.5f);
             }
-        }
-        for(String name : playerList.keySet())
-        {
-            Player p = Bukkit.getPlayer(name);
-            Location pl = p.getLocation();
-            int x = loc.getBlockX() - pl.getBlockX();
-            int y = loc.getBlockY() - pl.getBlockY();
-            int z = loc.getBlockZ() - pl.getBlockZ();
-            Vector v = new Vector(x,y,z).normalize().multiply(20);
-            float volume = soundPower*(power+additionVolume)/(float) Math.sqrt(playerList.get(name));
-            p.playSound(p.getEyeLocation().add(v), sound, volume, 0F);
         }
     }
 

@@ -143,7 +143,7 @@ public class FakeBlockHandler {
      * @param length lenght of the line
      * @param player name of the player
      */
-    public void imitateLine(Location loc, Vector direction, int offset,int length, String player,   MaterialHolder material)//TODO
+    public void imitateLine(Location loc, Vector direction, int offset,int length, String player,   MaterialHolder material, long duration)
     {
         Player p = Bukkit.getPlayer(player);
         if(p == null)
@@ -156,7 +156,7 @@ public class FakeBlockHandler {
 
         while (iter.hasNext())
         {
-            sendBlockChangeToPlayer(p, iter.next().getLocation(), material, 60);
+            sendBlockChangeToPlayer(p, iter.next().getLocation(), material, duration);
         }
 
     }
@@ -168,7 +168,7 @@ public class FakeBlockHandler {
      * @param material type of the block
      * @param duration how long to remove the block
      */
-    public void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, int duration)
+    public void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, long duration)
     {
         if(loc.getBlock().isEmpty())
         {

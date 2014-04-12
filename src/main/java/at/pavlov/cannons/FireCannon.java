@@ -332,7 +332,7 @@ public class FireCannon {
         int minExplodeSoundDistance = 40;
         int maxExplodeSoundDistance = 256;
         /////////////////////
-        CannonsUtil.imitateSound(l, Sound.EXPLODE, (float) Math.sqrt(c.getLoadedGunpowder()), minExplodeSoundDistance, maxExplodeSoundDistance);
+        CannonsUtil.imitateSound(l, Sound.EXPLODE, minExplodeSoundDistance, maxExplodeSoundDistance);
         List<String> players = new ArrayList<String>();
         for(Player p : l.getWorld().getPlayers())
         {
@@ -356,29 +356,10 @@ public class FireCannon {
     {
         Vector aimingVector = cannon.getAimingVector();
 
-        //To config////////////////////////////////////////
-        MaterialHolder fireMat = new MaterialHolder(35, 14);
-        MaterialHolder smokeMat = new MaterialHolder(35, 15);
-        int r = 7;
-        int fireDelay = 20;
-        int smokeDelay = 100;
-        ///////////////////////////
-
-        Location blockLoc = cannon.getCannonDesign().getMuzzle(cannon).clone();
-        for(int i = 0; i < r; i++)
+        for(String name : players)
         {
-            for(String name : players)
-            {
-                Player p = Bukkit.getPlayer(name);
-                if(p!=null)
-                {
-                    blockLoc.add(aimingVector);
-                    if(i*3<r)
-                        plugin.getFakeBlockHandler().sendBlockChangeToPlayer(p, blockLoc, fireMat, fireDelay);
-                    else
-                        plugin.getFakeBlockHandler().sendBlockChangeToPlayer(p, blockLoc, smokeMat, smokeDelay);
-                }
-            }
+            plugin.getFakeBlockHandler().imitateLine(cannon.getMuzzle(), cannon.getAimingVector(), 0, 2, name, config.getImitatedFireMaterial(), 300);
+            plugin.getFakeBlockHandler().imitateLine(cannon.getMuzzle(), cannon.getAimingVector(), 3, 5, name, config.getImitatedSmokeMaterial(), 1000);
         }
     }
 

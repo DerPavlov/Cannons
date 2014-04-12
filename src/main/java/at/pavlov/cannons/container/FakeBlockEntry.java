@@ -13,14 +13,14 @@ public class FakeBlockEntry implements Cloneable{
     private String world;
 
     private long startTime;
-    //how long the block stays in ticks
+    //how long the block stays in ms
     private long duration;
 
     private MaterialHolder material;
 
     private String player;
 
-    public FakeBlockEntry(Location loc, Player player, MaterialHolder material, int duration)
+    public FakeBlockEntry(Location loc, Player player, MaterialHolder material, long duration)
     {
         this.locX = loc.getBlockX();
         this.locY = loc.getBlockY();
@@ -97,7 +97,7 @@ public class FakeBlockEntry implements Cloneable{
     }
 
     public boolean isExpired(){
-        return (System.currentTimeMillis() > getStartTime() + getDuration()*50);
+        return (System.currentTimeMillis() > getStartTime() + getDuration());
     }
 
     public String getPlayer() {
