@@ -517,44 +517,42 @@ public class CannonsUtil
 
     /**
      * creates a imitated explosion sound
-     * @param l location of the explosion
-     * @param s sound
+     * @param loc location of the explosion
+     * @param sound sound
      * @param power power of the explosion
      * @param minDist minimum distance
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location l, Sound s, float power, int minDist, int maxDist)//TODO
+    public static void imitateSound(Location loc, Sound sound, float power, int minDist, int maxDist)//TODO
     {
-        World w = l.getWorld();
-        if(s.equals(Sound.EXPLODE)) w.createExplosion(l, 0F, false);
+        World w = loc.getWorld();
+        if(sound.equals(Sound.EXPLODE))
+            w.createExplosion(loc, 0F, false);
 
         //To config///////////
         float soundPower = 5F;
         float additionVolume = 3F;
         //////////////////
-        HashMap<String, Integer> lp = new HashMap<String, Integer>();
+        HashMap<String, Integer> playerList = new HashMap<String, Integer>();
         for(Player p : w.getPlayers())
         {
-            Location pl = p.getLocation();
-            int x = Math.abs(pl.getBlockX() - l.getBlockX());
-            int y = Math.abs(pl.getBlockY() - l.getBlockY());
-            int z = Math.abs(pl.getBlockZ() - l.getBlockZ());
-            int d = (int) Math.hypot(Math.hypot(x, y), z);
+            //get distance from player to explosion
+            int d = (int) p.getLocation().distance(loc);
             if(minDist<=d&&d<=maxDist)
             {
-                lp.put(p.getName(), d);
+                playerList.put(p.getName(), d);
             }
         }
-        for(String name : lp.keySet())
+        for(String name : playerList.keySet())
         {
             Player p = Bukkit.getPlayer(name);
             Location pl = p.getLocation();
-            int x = l.getBlockX() - pl.getBlockX();
-            int y = l.getBlockY() - pl.getBlockY();
-            int z = l.getBlockZ() - pl.getBlockZ();
+            int x = loc.getBlockX() - pl.getBlockX();
+            int y = loc.getBlockY() - pl.getBlockY();
+            int z = loc.getBlockZ() - pl.getBlockZ();
             Vector v = new Vector(x,y,z).normalize().multiply(20);
-            float volume = soundPower*(power+additionVolume)/(float) Math.sqrt(lp.get(name));
-            p.playSound(p.getEyeLocation().add(v), s, volume, 0F);
+            float volume = soundPower*(power+additionVolume)/(float) Math.sqrt(playerList.get(name));
+            p.playSound(p.getEyeLocation().add(v), sound, volume, 0F);
         }
     }
 

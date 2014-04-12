@@ -873,7 +873,7 @@ public class CreateExplosion {
         int minExplodeSoundDistance = 40;
         int maxExplodeSoundDistance = 256;
         /////////////////////
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, power, minExplodeSoundDistance, maxExplodeSoundDistance);//TODO
+        //CannonsUtil.imitateSound(loc, Sound.EXPLODE, power, minExplodeSoundDistance, maxExplodeSoundDistance);//TODO
 
         List<String> players = new ArrayList<String>();//IMPROVED
         for(Player p : loc.getWorld().getPlayers())
@@ -883,7 +883,7 @@ public class CreateExplosion {
 
             if(distance >= minDist  && distance <= maxDist)
             {
-                //p.playSound(l, Sound.EXPLODE, (float) (0.1*distance*distance/maxDist), 0.5f); //TODO deleted
+                p.playSound(loc, Sound.EXPLODE, (float) (0.1*distance*distance/maxDist), 0.5f); //TODO deleted
                 players.add(p.getName());
             }
         }
