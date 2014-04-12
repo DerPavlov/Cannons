@@ -262,7 +262,7 @@ public class FireCannon {
         //Muzzle flash + effects
         if (projectile.getProjectileEntity().equals(EntityType.ARROW))
             world.playEffect(firingLoc, Effect.BOW_FIRE, 10);
-        sendBarrelFireToPlayers(cannon);//TODO
+        MuzzelFire(cannon);//TODO
         world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 
         //increase heat of the cannon
@@ -322,22 +322,24 @@ public class FireCannon {
      * creates a imitated explosion made of blocks which is transmitted to player in a give distance
      * @param c operated cannon
      */
-    public void sendBarrelFireToPlayers(Cannon c)//TODO
+    public void MuzzelFire(Cannon c)//TODO
     {
         double minDist = plugin.getMyConfig().getImitatedExplosionMinimumDistance();
         double maxDist = plugin.getMyConfig().getImitatedExplosionMaximumDistance();
-        Location l = c.getCannonDesign().getMuzzle(c);
+        Location loc = c.getMuzzle();
+
+        loc.getWorld().createExplosion(loc, 0F, false);
 
         //ToConfig///////////
-        int minExplodeSoundDistance = 40;
+        int minExplodeSoundDistance = 0;
         int maxExplodeSoundDistance = 256;
         /////////////////////
-        CannonsUtil.imitateSound(l, Sound.EXPLODE, minExplodeSoundDistance, maxExplodeSoundDistance);
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, minExplodeSoundDistance, maxExplodeSoundDistance);
         List<String> players = new ArrayList<String>();
-        for(Player p : l.getWorld().getPlayers())
+        for(Player p : loc.getWorld().getPlayers())
         {
             Location pl = p.getLocation();
-            double distance = pl.distance(l);
+            double distance = pl.distance(loc);
 
             if(distance >= minDist  && distance <= maxDist)
             {
@@ -354,12 +356,14 @@ public class FireCannon {
      */
     public void imitateSmoke(Cannon cannon, List<String> players)//TODO
     {
-        Vector aimingVector = cannon.getAimingVector();
+        Vector aimingVector = cannon.getAimingVector().clone();
+        Location loc = cannon.getMuzzle();
 
         for(String name : players)
         {
-            plugin.getFakeBlockHandler().imitateLine(cannon.getMuzzle(), cannon.getAimingVector(), 0, 2, name, config.getImitatedFireMaterial(), 300);
-            plugin.getFakeBlockHandler().imitateLine(cannon.getMuzzle(), cannon.getAimingVector(), 3, 5, name, config.getImitatedSmokeMaterial(), 1000);
+            plugin.getFakeBlockHandler().imitateLine(loc.clone(), aimingVector, 0, 2, name, config.getImitatedFireMaterial(), 300);
+
+            plugin.getFakeBlockHandler().imitateLine(loc.clone().add(aimingVector.clone().normalize().multiply(3.0)), aimingVector, 0, 3, name, config.getImitatedSmokeMaterial(), 1000);
         }
     }
 

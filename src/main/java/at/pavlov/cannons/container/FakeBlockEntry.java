@@ -1,6 +1,5 @@
 package at.pavlov.cannons.container;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,7 +12,7 @@ public class FakeBlockEntry implements Cloneable{
     private String world;
 
     private long startTime;
-    //how long the block stays in ms
+    //how long the block stays in ticks
     private long duration;
 
     private MaterialHolder material;
@@ -97,7 +96,7 @@ public class FakeBlockEntry implements Cloneable{
     }
 
     public boolean isExpired(){
-        return (System.currentTimeMillis() > getStartTime() + getDuration());
+        return (System.currentTimeMillis() > getStartTime() + getDuration()*20);
     }
 
     public String getPlayer() {
@@ -122,6 +121,13 @@ public class FakeBlockEntry implements Cloneable{
         hash = 19 * hash + (int) (Double.doubleToLongBits(this.locZ) ^ (Double.doubleToLongBits(this.locZ) >>> 32));
         hash = 19 * hash + player.hashCode();
         return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        FakeBlockEntry obj2 = (FakeBlockEntry) obj;
+        return this.locX == obj2.getLocX() && this.locY == obj2.getLocY() && this.locZ == obj2.getLocZ() && this.world.equals(obj2.getWorld()) && this.player.equals(obj2.getPlayer());
     }
 
     public MaterialHolder getMaterial() {

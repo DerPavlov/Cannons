@@ -397,6 +397,7 @@ public class PlayerListener implements Listener
                 {
                     plugin.logDebug("measure temperature");
                     userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementInfo);
+                    player.playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 10f, 1f);
                 }
                 else
                 {
@@ -419,14 +420,16 @@ public class PlayerListener implements Listener
                 // update Signs
                 cannon.updateCannonSigns();
 
-                if (message!=null)
+                if (message != null)
+                {
+                    player.playSound(cannon.getMuzzle(), Sound.DIG_STONE, 10f, 1f);
                     return;
+                }
             }
 
             // ########## Load Projectile ######################
             Projectile projectile = plugin.getProjectile(cannon, event.getItem());
-            if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null)
-            {
+            if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null) {
                 plugin.logDebug("load projectile");
 
                 // load projectile
@@ -434,8 +437,11 @@ public class PlayerListener implements Listener
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
-                if(message!=null)
+                if (message != null)
+                {
+                    player.playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 10f, 1f);
                     return;
+                }
             }
 
 
@@ -450,8 +456,11 @@ public class PlayerListener implements Listener
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
-                if(message!=null)
+                if (message != null)
+                {
+                    player.playSound(cannon.getMuzzle(), Sound.DIG_GRAVEL, 10f, 1f);
                     return;
+                }
             }
 
 
@@ -486,8 +495,11 @@ public class PlayerListener implements Listener
                 plugin.logDebug("Ramrod used");
                 MessageEnum message = cannon.useRamRod(player);
                 userMessages.displayMessage(player, cannon, message);
-                if (message!=null)
+                if (message != null)
+                {
+                    player.playSound(cannon.getMuzzle(), Sound.DIG_GRAVEL, 10f, 1f);
                     return;
+                }
             }
 
         }

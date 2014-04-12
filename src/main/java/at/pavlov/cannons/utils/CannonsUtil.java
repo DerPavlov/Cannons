@@ -519,20 +519,12 @@ public class CannonsUtil
      * creates a imitated explosion sound
      * @param loc location of the explosion
      * @param sound sound
-     * @param power power of the explosion
      * @param minDist minimum distance
      * @param maxDist maximum distance
      */
     public static void imitateSound(Location loc, Sound sound, int minDist, int maxDist)//TODO
     {
         World w = loc.getWorld();
-        //if(sound.equals(Sound.EXPLODE))
-        //    w.createExplosion(loc, 0F, false);
-
-        //To config///////////
-        //float soundPower = 5F;
-        //float additionVolume = 3F;
-        //////////////////
         for(Player p : w.getPlayers())
         {
             //get distance from player to explosion

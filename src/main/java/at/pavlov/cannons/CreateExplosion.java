@@ -627,7 +627,7 @@ public class CreateExplosion {
         if (notCanceled)
         {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
-            if(cannonball.getProjectile().isUnderwaterDamage() && cannonball.wasInWater())
+            if(cannonball.getProjectile().isUnderwaterDamage() || !cannonball.wasInWater())
             {
                 sendExplosionToPlayers(impactLoc);//, projectile.getExplosionPower());
             }
@@ -870,19 +870,21 @@ public class CreateExplosion {
         int delay = (int) plugin.getMyConfig().getImitatedExplosionTime()*20;
 
         //ToConfig///////////
-        //int minExplodeSoundDistance = 40;
-        //int maxExplodeSoundDistance = 256;
+        int minExplodeSoundDistance = 40;
+        int maxExplodeSoundDistance = 256;
         /////////////////////
-        //CannonsUtil.imitateSound(loc, Sound.EXPLODE, power, minExplodeSoundDistance, maxExplodeSoundDistance);//TODO
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, minExplodeSoundDistance, maxExplodeSoundDistance);//TODO
 
         for(Player p : loc.getWorld().getPlayers())
         {
             Location pl = p.getLocation();
             double distance = pl.distance(loc);
 
+            plugin.logDebug("distance: " + distance);
+
             if(distance >= minDist  && distance <= maxDist)
             {
-                p.playSound(loc, Sound.EXPLODE, (float) (0.1*distance*distance/maxDist), 0.5f); //TODO deleted
+                //p.playSound(loc, Sound.EXPLODE, (float) (0.1*distance*distance/maxDist), 0.5f); //TODO deleted
                 plugin.getFakeBlockHandler().createImitatedSphere(p, loc, r, mat, delay);
             }
         }

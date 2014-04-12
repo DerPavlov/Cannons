@@ -5,7 +5,9 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.cannon.Cannon;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
@@ -32,7 +34,27 @@ public class BlockListener implements Listener
         Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
         if (cannon !=  null)//block.getType() == Material.STONE_BUTTON || block.getType() == Material.WOOD_BUTTON || block.getType() == Material.   || block.getType() == Material.TORCH)
         {
-            if (cannon.isDestructibleBlock(event.getToBlock().getLocation()))
+            if (cannon.isCannonBlock(block))
+            {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    /**
+     * prevent fire on cannons
+     * @param event
+     */
+    @EventHandler
+    public void BlockSpread(BlockSpreadEvent  event)
+    {
+        Block block = event.getBlock().getRelative(BlockFace.DOWN);
+        Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
+        plugin.logDebug("fire spread: " + block.toString() + " cannon: " + (cannon!=null));
+
+        if (cannon !=  null)
+        {
+            if (cannon.isCannonBlock(block))
             {
                 event.setCancelled(true);
             }
