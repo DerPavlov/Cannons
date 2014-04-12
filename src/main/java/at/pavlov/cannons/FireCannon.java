@@ -322,7 +322,7 @@ public class FireCannon {
      * creates a imitated explosion made of blocks which is transmitted to player in a give distance
      * @param c operated cannon
      */
-    public void MuzzleFire(Cannon c)//TODO
+    public void MuzzleFire(Cannon c)
     {
         double minDist = config.getImitatedBlockMinimumDistance();
         double maxDist = config.getImitatedBlockMaximumDistance();
@@ -351,7 +351,7 @@ public class FireCannon {
      * creates a sphere of fake block and sends it to the given player
      * @param cannon - cannon in usage
      */
-    public void imitateSmoke(Cannon cannon, List<String> players)//TODO
+    public void imitateSmoke(Cannon cannon, List<String> players)
     {
         if (!config.isImitatedFiringEffect())
             return;

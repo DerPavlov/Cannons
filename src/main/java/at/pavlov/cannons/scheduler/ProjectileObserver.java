@@ -95,21 +95,22 @@ public class ProjectileObserver {
 
     /**
      * creates a sphere of fake blocks on the impact for all player in the vicinity
-     * @param l - location of the impact
+     * @param loc - location of the impact
      * @param liquid - material of the fake blocks
      */
-    public void sendSplashToPlayers(Location l, MaterialHolder liquid)
+    public void sendSplashToPlayers(Location loc, MaterialHolder liquid)
     {
         double maxDist = plugin.getMyConfig().getImitatedBlockMaximumDistance();
 
-        for(Player p : l.getWorld().getPlayers())
+        for(Player p : loc.getWorld().getPlayers())
         {
             Location pl = p.getLocation();
-            double distance = pl.distance(l);
+            double distance = pl.distance(loc);
 
             if(distance <= maxDist)
             {
-                plugin.getFakeBlockHandler().imitatedSphere(p, l, 1, new MaterialHolder(liquid.getId(), 0), 40);
+                CannonsUtil.imitateSound(loc, Sound.SPLASH, 0, maxDist);
+                plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getId(), 0), 40);
             }
         }
     }

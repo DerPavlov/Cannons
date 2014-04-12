@@ -570,7 +570,7 @@ public class CreateExplosion {
     }
 
     //####################################  CREATE_EXPLOSION ##############################
-    public void detonate(FlyingProjectile cannonball)//TODO
+    public void detonate(FlyingProjectile cannonball)
     {
         plugin.logDebug("detonate cannonball");
 
@@ -792,7 +792,7 @@ public class CreateExplosion {
         shooter = null;
 
         //check if there is a shooter, redstone cannons are not counted
-        if (shooter == null) return;//FIXME
+        if (shooter == null) return;
         if (!(shooter instanceof Player)) return;
 
         //return if the list before is empty
@@ -874,18 +874,15 @@ public class CreateExplosion {
         MaterialHolder mat = config.getImitatedExplosionMaterial();
         int delay = (int) config.getImitatedExplosionTime()*20;
 
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMinimumDistance(), config.getImitatedSoundMaximumDistance());//TODO
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMinimumDistance(), config.getImitatedSoundMaximumDistance());
 
         for(Player p : loc.getWorld().getPlayers())
         {
             Location pl = p.getLocation();
             double distance = pl.distance(loc);
 
-            plugin.logDebug("distance: " + distance);
-
             if(distance >= minDist  && distance <= maxDist)
             {
-                //p.playSound(loc, Sound.EXPLODE, (float) (0.1*distance*distance/maxDist), 0.5f); //TODO deleted
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, r, mat, delay);
             }
         }

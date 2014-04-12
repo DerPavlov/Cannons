@@ -177,11 +177,11 @@ public class Commands implements CommandExecutor
                             player.sendMessage(ChatColor.GREEN +"Cannon list for " + args[1] + ":");
                             if (cannon.getOwner().equalsIgnoreCase(player.getName()))
                                 player.sendMessage(ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
-                                        ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc:" + ChatColor.GOLD + cannon.getOffset().toString());
+                                        ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
                         }
                     }
                     //cannons imitating toggle
-                    else if (args[0].equalsIgnoreCase("imitate")/* && player.hasPermission("cannons.player.command")TODO*/)
+                    else if (args[0].equalsIgnoreCase("imitate") && player.hasPermission("cannons.player.command"))//TODO
                     {
                         // how to build a cannon
                         int h = -1;

@@ -2,7 +2,7 @@ Error:
   FiringInProgress: 'RED [Cannons] CANNON is firing. Step back.'
   BarrelTooHot: 'RED [Cannons] The barrel is too hot and must cool down.'
   NotCleaned: 'RED [Cannons] The barrel must be cleaned before firing.'
-  NoGunpowder: 'RED [Cannons] No gunpowder. Please load the barrel with gunpowder.'
+  NoGunpowder: 'RED [Cannons] No gunpowder. Please load the barrel.'
   NoProjectile: 'RED [Cannons] No projectile loaded. Load something!'
   NoFlintAndSteel: 'RED [Cannons] You need flint and steel to fire.'
   NotPushed: 'RED [Cannons] Push the projectile with a stick before firing.'
