@@ -110,7 +110,6 @@ public class FakeBlockHandler {
     public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, MaterialHolder material, long duration)
     {
         BlockIterator iter = new BlockIterator(loc.getWorld(), loc.toVector(), direction, offset, length);
-
         while (iter.hasNext())
         {
             sendBlockChangeToPlayer(player, iter.next().getLocation(), material, duration);

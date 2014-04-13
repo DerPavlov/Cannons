@@ -155,7 +155,7 @@ public class Commands implements CommandExecutor
                         }
                     }
                     //cannons imitating toggle
-                    else if (args[0].equalsIgnoreCase("imitate") && player.hasPermission("cannons.player.command"))
+                    else if (args[0].equalsIgnoreCase("imitate") && player.hasPermission("cannons.player.command") && config.isImitatedAimingEnabled())
                     {
                         if (args.length >= 2 && (args[1].equalsIgnoreCase("true")||args[1].equalsIgnoreCase("enable")))
                             plugin.getAiming().enableImitating(player);
