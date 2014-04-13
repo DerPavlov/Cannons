@@ -59,7 +59,6 @@ public class FakeBlockHandler {
             FakeBlockEntry next = iter.next();
             if (next.isExpired())
             {
-                plugin.logDebug("block List length: " + list.size());
                 //send real block to player
                 Player player = next.getPlayerBukkit();
                 Location loc = next.getLocation();
@@ -128,7 +127,6 @@ public class FakeBlockHandler {
      */
     public void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, long duration)
     {
-        plugin.logDebug("send Blockchange");
         if(loc.getBlock().isEmpty())
         {
             FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc,player,duration);
@@ -136,14 +134,12 @@ public class FakeBlockHandler {
             //don't send changes if there is already a block in the list
             if (!list.contains(fakeBlockEntry))
             {
-                plugin.logDebug("send changes " + loc);
                 player.sendBlockChange(loc, material.getId(), (byte) material.getData());
             }
             else
             {
                 //renew entry
                 list.remove(fakeBlockEntry);
-                plugin.logDebug("already in list " + loc);
             }
 
 

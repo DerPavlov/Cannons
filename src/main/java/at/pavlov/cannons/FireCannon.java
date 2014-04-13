@@ -328,6 +328,8 @@ public class FireCannon {
         double maxDist = config.getImitatedBlockMaximumDistance();
         Location loc = c.getMuzzle();
 
+        plugin.logDebug("minDist: " + minDist + " maxdist: " + maxDist + " enabled " + config.isImitatedFiringEffect());
+
         //simple particle effects for close distance
         loc.getWorld().createExplosion(loc, 0F, false);
 
@@ -356,6 +358,7 @@ public class FireCannon {
     {
         if (!config.isImitatedFiringEffect())
             return;
+
         Vector aimingVector = cannon.getAimingVector().clone();
         Location loc = cannon.getMuzzle();
 
@@ -365,7 +368,7 @@ public class FireCannon {
         {
             //make smoke and fire effects for large distance
             plugin.getFakeBlockHandler().imitateLine(name, loc, aimingVector, 0, 1, config.getImitatedFireMaterial(), duration);
-            plugin.getFakeBlockHandler().imitatedSphere(name, loc.clone().add(aimingVector.clone().normalize()), 1, config.getImitatedSmokeMaterial(), duration*3L);
+            plugin.getFakeBlockHandler().imitatedSphere(name, loc.clone().add(aimingVector.clone().normalize()), 2, config.getImitatedSmokeMaterial(), duration*3L);
         }
     }
 

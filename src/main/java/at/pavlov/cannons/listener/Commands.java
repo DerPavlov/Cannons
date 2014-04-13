@@ -160,7 +160,7 @@ public class Commands implements CommandExecutor
                         if (args.length >= 2 && (args[1].equalsIgnoreCase("true")||args[1].equalsIgnoreCase("enable")))
                             plugin.getAiming().enableImitating(player);
                         else if (args.length >= 2 && (args[1].equalsIgnoreCase("false")||args[1].equalsIgnoreCase("disable")))
-                            plugin.getAiming().enableImitating(player);
+                            plugin.getAiming().disableImitating(player);
                         else
                             plugin.getAiming().toggleImitating(player);
                     }
