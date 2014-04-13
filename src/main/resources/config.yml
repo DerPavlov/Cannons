@@ -33,7 +33,7 @@ imitatedEffects:
   #if the player is above this distance, there will be no fake block
   maximumBlockDistance: 200.0
   #is the player closer than this distance, there will be no sound
-  minimumSoundDistance: 80.0
+  minimumSoundDistance: 40.0
   #if the player is above this distance, there will be no sound
   maximumSoundDistance: 200.0
 

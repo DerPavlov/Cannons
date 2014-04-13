@@ -18,18 +18,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 
 public class Aiming {
 
-	private final Cannons plugin;
-	private final UserMessages userMessages;
-	private final Config config;
-
-	private HashMap<String, Cannon> inAimingMode = new HashMap<String, Cannon>();
-
-	private class gunAngles
+    private class gunAngles
 	{
 		private double horizontal;
 		private double vertical;
@@ -56,6 +51,13 @@ public class Aiming {
 			this.vertical = vertical;
 		}
 	}
+
+    private final Cannons plugin;
+    private final UserMessages userMessages;
+    private final Config config;
+
+    private HashMap<String, Cannon> inAimingMode = new HashMap<String, Cannon>();
+    private HashSet<String> imitatedEffectsOff = new HashSet<String>();
 
 
 	//##################### Constructor ##############################
@@ -507,9 +509,38 @@ public class Aiming {
     public void showAimingVector(Cannon cannon, Player player)
     {
         // Imitation of angle
-        if(config.isImitatedAimingEnabled() && Commands.isImitatedPlayer(player.getName()))
+        if(config.isImitatedAimingEnabled() && isImitatingEnabled(player.getName()))
         {
-            plugin.getFakeBlockHandler().imitateLine(player, cannon.getMuzzle(), cannon.getAimingVector(), 0, config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), 25);
+            plugin.getFakeBlockHandler().imitateLine(player, cannon.getMuzzle(), cannon.getAimingVector(), 0, config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), 100);
         }
+    }
+
+    public void toggleImitating(Player player)
+    {
+        if(!isImitatingEnabled(player.getName()))
+        {
+            enableImitating(player);
+        }
+        else
+        {
+            disableImitating(player);
+        }
+    }
+
+    public void disableImitating(Player player){
+        userMessages.displayMessage(player,MessageEnum.ImitatedEffectsDisabled);
+        //it is enabled on default, adding to this list will stop the aiming effect
+        imitatedEffectsOff.add(player.getName());
+    }
+
+    public boolean isImitatingEnabled(String name){
+        //it is enabled on default, adding to this list will stop the aiming effect
+        return !imitatedEffectsOff.contains(name);
+    }
+
+    public void enableImitating(Player player){
+        userMessages.displayMessage(player,MessageEnum.ImitatedEffectsEnabled);
+        //it is enabled on default, adding to this list will stop the aiming effect
+        imitatedEffectsOff.remove(player.getName());
     }
 }

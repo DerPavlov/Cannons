@@ -15,11 +15,9 @@ public class FakeBlockEntry implements Cloneable{
     //how long the block stays in ticks
     private long duration;
 
-    private MaterialHolder material;
-
     private String player;
 
-    public FakeBlockEntry(Location loc, Player player, MaterialHolder material, long duration)
+    public FakeBlockEntry(Location loc, Player player, long duration)
     {
         this.locX = loc.getBlockX();
         this.locY = loc.getBlockY();
@@ -27,8 +25,6 @@ public class FakeBlockEntry implements Cloneable{
         this.world = loc.getWorld().getName();
 
         this.player = player.getName();
-
-        this.material = material;
 
         this.startTime = System.currentTimeMillis();
         this.duration = duration;
@@ -128,13 +124,5 @@ public class FakeBlockEntry implements Cloneable{
     {
         FakeBlockEntry obj2 = (FakeBlockEntry) obj;
         return this.locX == obj2.getLocX() && this.locY == obj2.getLocY() && this.locZ == obj2.getLocZ() && this.world.equals(obj2.getWorld()) && this.player.equals(obj2.getPlayer());
-    }
-
-    public MaterialHolder getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(MaterialHolder material) {
-        this.material = material;
     }
 }

@@ -55,6 +55,11 @@ Ramrod:
   PushingProjectileDone: 'GREEN [Cannons] Projectile fixiert. CANNON bereit.'
 
 
+  ImitatedEffects:
+    Enabled: 'GREEN [Cannons] Alternativ Effekte aktiviert'
+    Disabled: 'RED [Cannons] Alternativ Effekte deaktiviert'
+
+
 Permission:
   ErrorRedstone: 'RED [Cannons] Du kannst diese CANNON nicht mit Redstone bedienen.'
   ErrorBuild: 'RED [Cannons] Du darfst diese CANNON nicht bauen.'

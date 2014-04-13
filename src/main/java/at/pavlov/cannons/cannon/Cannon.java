@@ -588,7 +588,7 @@ public class Cannon
 
             if (wBlock.getState() instanceof Attachable)
             {
-                System.out.println("hide " + wBlock.getType());
+                //System.out.println("hide " + wBlock.getType());
                 wBlock.setType(Material.AIR);
                 wBlock.setData((byte) 0, false);
             }

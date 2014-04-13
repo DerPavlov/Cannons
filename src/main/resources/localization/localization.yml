@@ -44,15 +44,21 @@ Projectile:
 HeatManagement:
   Burn: 'YELLOW [Cannons] You touched a hot CANNON and burned your fingers'
   Cooling: 'GREEN [Cannons] The CANNON cools down'
-  Info: 'GREEN [Cannons] CANNON temperature is CANNON_TEMP / MAX_TEMP degree Celsius'
+  Info: 'GREEN [Cannons] CANNON temperature is CANNON_TEMP / MAX_TEMP degree'
   Critical: 'YELLOW [Cannons] CANNON temperature of CANNON_TEMPC is critical'
   Overheated: 'RED [Cannons] The CANNON exploded due to overheating'
+
 
 Ramrod:
   Cleaning: 'YELLOW [Cannons] Scouring cannon.'
   CleaningDone: 'GREEN [Cannons] The barrel is clean enough.'
   PushingProjectile: 'YELLOW [Cannons] Pushed projectile. Not ready now'
   PushingProjectileDone: 'GREEN [Cannons] Pushed projectile. CANNON is ready to fire'
+
+
+ImitatedEffects:
+  Enabled: 'GREEN [Cannons] Imitated effects have been enabled'
+  Disabled: 'RED [Cannons] Imitated effects have been disabled'
 
 
 Permission:

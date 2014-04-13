@@ -2,6 +2,7 @@ package at.pavlov.cannons.listener;
 
 import java.util.HashMap;
 
+import at.pavlov.cannons.Aiming;
 import at.pavlov.cannons.cannon.Cannon;
 
 import org.bukkit.Bukkit;
@@ -24,34 +25,7 @@ public class Commands implements CommandExecutor
     private final Config config;
     private final UserMessages userMessages;
     private final PersistenceDatabase persistenceDatabase;
-    private static HashMap<String, Integer> imitatedPlayers = new HashMap<String, Integer>();
-    public static void toggleImitating(String name, int h)
-    {
-        Player p = Bukkit.getPlayer(name);
-        if(isImitatedPlayer(name))
-        {
-            if(h==imitatedPlayers.get(name))
-            {
-                imitatedPlayers.remove(name);
-                if(p != null) p.sendMessage("Imitating disabled!");
-            }
-            else
-            {
-                imitatedPlayers.remove(name);
-                imitatedPlayers.put(name, h);
-                if(p != null) p.sendMessage("Changed imitating to " + h + "!");
-            }
-        }
-        else
-        {
-            imitatedPlayers.put(name, h);
-            if(p != null) p.sendMessage("Enabling imitating to " + h + "!");
-        }
-    }
-    public static void disableImitating(String name)
-    {
-        if(imitatedPlayers.containsKey(name)) imitatedPlayers.remove(name);
-    }
+
 
 
     public Commands(Cannons plugin)
@@ -181,23 +155,14 @@ public class Commands implements CommandExecutor
                         }
                     }
                     //cannons imitating toggle
-                    else if (args[0].equalsIgnoreCase("imitate") && player.hasPermission("cannons.player.command"))//TODO
+                    else if (args[0].equalsIgnoreCase("imitate") && player.hasPermission("cannons.player.command"))
                     {
-                        // how to build a cannon
-                        int h = -1;
-                        if(1 < args.length)
-                        {
-                            try
-                            {
-                                h = Integer.valueOf(args[1]);
-                            }
-                            catch(Exception e)
-                            {
-                                player.sendMessage("Use /cannons imitate [h=-1]!");
-                                return false;
-                            }
-                        }
-                        toggleImitating(player.getName(), h);
+                        if (args.length >= 2 && (args[1].equalsIgnoreCase("true")||args[1].equalsIgnoreCase("enable")))
+                            plugin.getAiming().enableImitating(player);
+                        else if (args.length >= 2 && (args[1].equalsIgnoreCase("false")||args[1].equalsIgnoreCase("disable")))
+                            plugin.getAiming().enableImitating(player);
+                        else
+                            plugin.getAiming().toggleImitating(player);
                     }
 
                     //cannons reset
@@ -261,15 +226,6 @@ public class Commands implements CommandExecutor
         sender.sendMessage(str);
     }
 
-
-    public static boolean isImitatedPlayer(String name){
-        return imitatedPlayers.containsKey(name);
-    }
-
-    //TODO
-    public static int getImitatedH(String name){
-        return imitatedPlayers.containsKey(name) ? imitatedPlayers.get(name) : 0;
-    }
 
 
 

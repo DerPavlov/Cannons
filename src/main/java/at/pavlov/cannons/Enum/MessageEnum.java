@@ -53,6 +53,9 @@ public enum MessageEnum
     RamrodPushingProjectile ("Ramrod.PushingProjectile"),
     RamrodPushingProjectileDone ("Ramrod.PushingProjectileDone"),
 
+    //imitatedEffects
+    ImitatedEffectsEnabled ("ImitatedEffects.Enabled"),
+    ImitatedEffectsDisabled ("ImitatedEffects.Disabled"),
 	
 	//Permission
 	PermissionErrorRedstone ("Permission.ErrorRedstone"),

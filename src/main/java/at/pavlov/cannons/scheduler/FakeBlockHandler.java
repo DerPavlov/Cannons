@@ -110,8 +110,6 @@ public class FakeBlockHandler {
      */
     public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, MaterialHolder material, long duration)
     {
-        Commands.disableImitating(player.getName());
-
         BlockIterator iter = new BlockIterator(loc.getWorld(), loc.toVector(), direction, offset, length);
 
         while (iter.hasNext())
@@ -130,9 +128,10 @@ public class FakeBlockHandler {
      */
     public void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, long duration)
     {
+        plugin.logDebug("send Blockchange");
         if(loc.getBlock().isEmpty())
         {
-            FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc,player,material, duration);
+            FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc,player,duration);
 
             //don't send changes if there is already a block in the list
             if (!list.contains(fakeBlockEntry))
