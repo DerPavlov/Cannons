@@ -504,15 +504,12 @@ public class Aiming {
      * @param cannon - operated cannon
      * @param player - player operating the cannon
      */
-    public void showAimingVector(Cannon cannon, String player)
+    public void showAimingVector(Cannon cannon, Player player)
     {
         // Imitation of angle
-        if(config.isImitatedAimingEnabled() && Commands.isImitatedPlayer(player))
+        if(config.isImitatedAimingEnabled() && Commands.isImitatedPlayer(player.getName()))
         {
             plugin.getFakeBlockHandler().imitateLine(player, cannon.getMuzzle(), cannon.getAimingVector(), 0, config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), 25);
         }
     }
-
-
-	
 }

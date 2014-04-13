@@ -76,23 +76,6 @@ public class FakeBlockHandler {
 
     /**
      * creates a sphere of fake block and sends it to the given player
-     * @param name the player to be notified
-     * @param l center of the sphere
-     * @param r radius of the sphere
-     * @param mat material of the fake block
-     * @param delay delay until the block disappears again
-     */
-    public void imitatedSphere(String name, Location l, int r, MaterialHolder mat, int delay)
-    {
-        Player player = Bukkit.getPlayer(name);
-        if(player!=null)
-        {
-            imitatedSphere(player, l, r, mat, delay);
-        }
-    }
-
-    /**
-     * creates a sphere of fake block and sends it to the given player
      * @param player the player to be notified
      * @param l center of the sphere
      * @param r radius of the sphere
@@ -125,20 +108,15 @@ public class FakeBlockHandler {
      * @param length lenght of the line
      * @param player name of the player
      */
-    public void imitateLine(String player, Location loc, Vector direction, int offset, int length, MaterialHolder material, long duration)
+    public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, MaterialHolder material, long duration)
     {
-        Player p = Bukkit.getPlayer(player);
-        if(p == null)
-        {
-            Commands.disableImitating(player);
-            return;
-        }
+        Commands.disableImitating(player.getName());
 
         BlockIterator iter = new BlockIterator(loc.getWorld(), loc.toVector(), direction, offset, length);
 
         while (iter.hasNext())
         {
-            sendBlockChangeToPlayer(p, iter.next().getLocation(), material, duration);
+            sendBlockChangeToPlayer(player, iter.next().getLocation(), material, duration);
         }
 
     }
@@ -154,10 +132,22 @@ public class FakeBlockHandler {
     {
         if(loc.getBlock().isEmpty())
         {
-            player.sendBlockChange(loc, material.getId(), (byte) material.getData());
+            FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc,player,material, duration);
+
+            //don't send changes if there is already a block in the list
+            if (!list.contains(fakeBlockEntry))
+            {
+                plugin.logDebug("send changes " + loc);
+                player.sendBlockChange(loc, material.getId(), (byte) material.getData());
+            }
+            else
+            {
+                plugin.logDebug("already in list " + loc);
+            }
+
 
             //register block to remove it later
-            list.add(new FakeBlockEntry(loc,player,material, duration));
+            list.add(fakeBlockEntry);
 
         }
     }

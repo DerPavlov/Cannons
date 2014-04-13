@@ -328,11 +328,12 @@ public class FireCannon {
         double maxDist = config.getImitatedBlockMaximumDistance();
         Location loc = c.getMuzzle();
 
+        //simple particle effects for close distance
         loc.getWorld().createExplosion(loc, 0F, false);
 
-
+        //fake blocks effects for far distance
         CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMinimumDistance(), config.getImitatedSoundMaximumDistance());
-        List<String> players = new ArrayList<String>();
+        List<Player> players = new ArrayList<Player>();
         for(Player p : loc.getWorld().getPlayers())
         {
             Location pl = p.getLocation();
@@ -340,7 +341,7 @@ public class FireCannon {
 
             if(distance >= minDist  && distance <= maxDist)
             {
-                players.add(p.getName());
+                players.add(p);
             }
         }
         imitateSmoke(c, players);
@@ -351,15 +352,16 @@ public class FireCannon {
      * creates a sphere of fake block and sends it to the given player
      * @param cannon - cannon in usage
      */
-    public void imitateSmoke(Cannon cannon, List<String> players)
+    public void imitateSmoke(Cannon cannon, List<Player> players)
     {
         if (!config.isImitatedFiringEffect())
             return;
         Vector aimingVector = cannon.getAimingVector().clone();
         Location loc = cannon.getMuzzle();
 
-        for(String name : players)
+        for(Player name : players)
         {
+            //make smoke and fire effects for large distance
             plugin.getFakeBlockHandler().imitateLine(name, loc, aimingVector, 0, 1, config.getImitatedFireMaterial(), 20);
             plugin.getFakeBlockHandler().imitatedSphere(name, loc.clone().add(aimingVector.clone().normalize()), 1, config.getImitatedSmokeMaterial(), 60);
         }

@@ -330,11 +330,11 @@ public class PlayerListener implements Listener
             {
                 clickedBlock = event.getClickedBlock();
             }
-            Player player = event.getPlayer();
-            Location barrel = clickedBlock.getLocation();
+            final Player player = event.getPlayer();
+            final Location barrel = clickedBlock.getLocation();
 
             // find cannon or add it to the list
-            Cannon cannon = cannonManager.getCannon(barrel, player.getName(), true);
+            final Cannon cannon = cannonManager.getCannon(barrel, player.getName(), true);
 
             //no cannon found - maybe the player has click into the air to stop aiming
             if (cannon == null)
@@ -348,7 +348,7 @@ public class PlayerListener implements Listener
             }
 
             // get cannon design
-            CannonDesign design = cannon.getCannonDesign();
+            final CannonDesign design = cannon.getCannonDesign();
 
             // prevent eggs and snowball from firing when loaded into the gun
             if (config.isCancelItem(player.getItemInHand()))
@@ -415,7 +415,7 @@ public class PlayerListener implements Listener
                 MessageEnum message = aiming.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
                 userMessages.displayMessage(player, cannon, message);
 
-                aiming.showAimingVector(cannon, player.getName());
+                aiming.showAimingVector(cannon, player);
 
                 // update Signs
                 cannon.updateCannonSigns();
