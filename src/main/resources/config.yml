@@ -55,6 +55,8 @@ imitatedEffects:
     length: 5
     #this block will used to display the angle
     block: '20:0'
+    #how long the effect will be displayed [s]
+    time: 2
 
   firing:
     #will show fake blocks for players which are far away
@@ -63,6 +65,8 @@ imitatedEffects:
     fireBlock: '35:14'
     #firing will show smoke blocks if the player is far away
     smokeBlock: '30:0'
+    #how long the effect will be displayed [s]
+    time: 2
 
 
 #enter here the blocks which require the superbreaker ability to destroy.

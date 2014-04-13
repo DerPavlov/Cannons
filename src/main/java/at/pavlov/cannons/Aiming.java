@@ -511,7 +511,8 @@ public class Aiming {
         // Imitation of angle
         if(config.isImitatedAimingEnabled() && isImitatingEnabled(player.getName()))
         {
-            plugin.getFakeBlockHandler().imitateLine(player, cannon.getMuzzle(), cannon.getAimingVector(), 0, config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), 100);
+            plugin.getFakeBlockHandler().imitateLine(player, cannon.getMuzzle(), cannon.getAimingVector(), 0,
+                    config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), (long) (config.getImitatedAimingTime()*20.0));
         }
     }
 

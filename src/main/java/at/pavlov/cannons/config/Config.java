@@ -51,10 +51,12 @@ public class Config
     private boolean imitatedAimingEnabled;
     private int imitatedAimingLineLength;
     private MaterialHolder imitatedAimingMaterial = new MaterialHolder(20, 0);
+    private double imitatedAimingTime;
 
     private boolean imitatedFiringEffect;
     private MaterialHolder imitatedFireMaterial = new MaterialHolder(35, 14);
     private MaterialHolder imitatedSmokeMaterial = new MaterialHolder(30, 0);
+    private double imitatedFiringTime;
 
     //superbreakerBlocks
     private List<MaterialHolder> superbreakerBlocks = new ArrayList<MaterialHolder>();
@@ -122,11 +124,13 @@ public class Config
         setImitatedAimingEnabled(plugin.getConfig().getBoolean("imitatedEffects.aiming.enabled", false));
         setImitatedAimingLineLength(plugin.getConfig().getInt("imitatedEffects.aiming.length", 5));
         setImitatedAimingMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.aiming.block", "35:14")));
+        setImitatedAimingTime(plugin.getConfig().getDouble("imitatedEffects.aiming.time", 1.0));
 
         //imitated firing effects
         setImitatedFiringEffect(plugin.getConfig().getBoolean("imitatedEffects.firing.enabled", false));
         setImitatedFireMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.fireBlock", "35:14")));
         setImitatedSmokeMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.smokeBlock", "35:0")));
+        setImitatedFiringTime(plugin.getConfig().getDouble("imitatedEffects.firing.time", 1.0));
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -436,5 +440,21 @@ public class Config
 
     public void setImitatedExplosionEnabled(boolean imitatedExplosionEnabled) {
         this.imitatedExplosionEnabled = imitatedExplosionEnabled;
+    }
+
+    public double getImitatedAimingTime() {
+        return imitatedAimingTime;
+    }
+
+    public void setImitatedAimingTime(double imitatedAimingTime) {
+        this.imitatedAimingTime = imitatedAimingTime;
+    }
+
+    public double getImitatedFiringTime() {
+        return imitatedFiringTime;
+    }
+
+    public void setImitatedFiringTime(double imitatedFiringTime) {
+        this.imitatedFiringTime = imitatedFiringTime;
     }
 }

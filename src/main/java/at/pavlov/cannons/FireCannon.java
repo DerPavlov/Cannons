@@ -359,11 +359,13 @@ public class FireCannon {
         Vector aimingVector = cannon.getAimingVector().clone();
         Location loc = cannon.getMuzzle();
 
+        long duration = (long) (config.getImitatedFiringTime()*20.0);
+
         for(Player name : players)
         {
             //make smoke and fire effects for large distance
-            plugin.getFakeBlockHandler().imitateLine(name, loc, aimingVector, 0, 1, config.getImitatedFireMaterial(), 20);
-            plugin.getFakeBlockHandler().imitatedSphere(name, loc.clone().add(aimingVector.clone().normalize()), 1, config.getImitatedSmokeMaterial(), 60);
+            plugin.getFakeBlockHandler().imitateLine(name, loc, aimingVector, 0, 1, config.getImitatedFireMaterial(), duration);
+            plugin.getFakeBlockHandler().imitatedSphere(name, loc.clone().add(aimingVector.clone().normalize()), 1, config.getImitatedSmokeMaterial(), duration*3L);
         }
     }
 

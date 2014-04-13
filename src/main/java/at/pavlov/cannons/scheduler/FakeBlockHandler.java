@@ -80,9 +80,9 @@ public class FakeBlockHandler {
      * @param l center of the sphere
      * @param r radius of the sphere
      * @param mat material of the fake block
-     * @param delay delay until the block disappears again
+     * @param duration delay until the block disappears again in ticks
      */
-    public void imitatedSphere(Player player, Location l, int r, MaterialHolder mat, int delay)
+    public void imitatedSphere(Player player, Location l, int r, MaterialHolder mat, long duration)
     {
         for(int x = -r; x <=r; x++)
         {
@@ -93,7 +93,7 @@ public class FakeBlockHandler {
                     Location newL = l.clone().add(x, y, z);
                     if(newL.distance(l)<=r)
                     {
-                        sendBlockChangeToPlayer(player, newL, mat, delay);
+                        sendBlockChangeToPlayer(player, newL, mat, duration);
                     }
                 }
             }
@@ -141,6 +141,8 @@ public class FakeBlockHandler {
             }
             else
             {
+                //renew entry
+                list.remove(fakeBlockEntry);
                 plugin.logDebug("already in list " + loc);
             }
 
