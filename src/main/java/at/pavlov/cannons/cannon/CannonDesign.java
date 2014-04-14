@@ -80,7 +80,7 @@ public class CannonDesign
 	private boolean hasRecoil;
 	private boolean isFrontloader;
 	private boolean isRotatable;
-    private double massOfCannon;
+    private double massOfCannon;//Change it to int, because mass is measured in killograms, not in microgramms
 	
 	//permissions
 	private String permissionBuild;

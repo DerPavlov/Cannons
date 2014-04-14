@@ -533,21 +533,39 @@ public class CannonsUtil
      * creates a imitated explosion sound
      * @param loc location of the explosion
      * @param sound sound
+     * @param power ~volume
      * @param minDist minimum distance
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location loc, Sound sound, double minDist, double maxDist)
+    public static void imitateSound(Location loc, Sound sound, float power, int minDist, int maxDist)//Peter, please, do not touch this method! It have 
     {
         World w = loc.getWorld();
+        float soundPower = 5F;
+        float additionVolume = 3F;
+
+        HashMap<String, Vector> playerList = new HashMap<String, Vector>();
         for(Player p : w.getPlayers())
         {
             //get distance from player to explosion
-            double d = p.getLocation().distance(loc);
-            if(d>=minDist&&d<=maxDist)
+        	Location pl = p.getLocation();
+            int x = loc.getBlockX() - pl.getBlockX();
+            int y = loc.getBlockY() - pl.getBlockY();
+            int z = loc.getBlockZ() - pl.getBlockZ();
+            int d = (int) Math.hypot(Math.hypot(x, y), z);
+            if(minDist<=d&&d<=maxDist)
             {
-                p.playSound(loc, sound, (float) (d*d/maxDist), 0.5f);
+                Vector v = new Vector(x,y,z).normalize().multiply(d);//This vector is direction to sound with length = distance
+                playerList.put(p.getName(), v);
             }
         }
+        for(String name : playerList.keySet())
+        {
+            Player p = Bukkit.getPlayer(name);
+            Vector v = playerList.get(name);
+            float volume = soundPower*(power+additionVolume)/(float) Math.sqrt(v.length());
+            p.playSound(p.getEyeLocation().add(v.normalize().multiply(20)), sound, volume, 0F);//Imitating of sound sends sound to player in distance = 20 m, but you setted just playing of sound, whitch don't have eny effect on big distance
+        }
+
     }
 
 

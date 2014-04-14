@@ -38,7 +38,7 @@ public class Config
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
     private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
 
-    private double imitatedBlockMinimumDistance;
+    private double imitatedBlockMinimumDistance;//TODO change it to int, because double is very slow and we don't need double's accuracy (For examplse, I will not set it to 287.3657932428957289, I will set it to 287 or 288)
     private double imitatedBlockMaximumDistance;
     private double imitatedSoundMinimumDistance;
     private double imitatedSoundMaximumDistance;

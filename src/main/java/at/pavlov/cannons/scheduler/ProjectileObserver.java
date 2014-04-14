@@ -86,7 +86,7 @@ public class ProjectileObserver {
                 if (block != null && block.isEmpty())
                 {
                     //found a free block - make the splash
-                    sendSplashToPlayers(block.getLocation(), liquid);
+                    sendSplashToPlayers(block.getLocation(), (float) fproj.getProjectileEntity().getVelocity().length(), liquid);
                     break;
                 }
             }
@@ -96,11 +96,12 @@ public class ProjectileObserver {
     /**
      * creates a sphere of fake blocks on the impact for all player in the vicinity
      * @param loc - location of the impact
+     * @param power - power of splash
      * @param liquid - material of the fake blocks
      */
-    public void sendSplashToPlayers(Location loc, MaterialHolder liquid)
+    public void sendSplashToPlayers(Location loc, float power, MaterialHolder liquid)
     {
-        double maxDist = plugin.getMyConfig().getImitatedBlockMaximumDistance();
+        int maxDist = (int) plugin.getMyConfig().getImitatedBlockMaximumDistance();
 
         for(Player p : loc.getWorld().getPlayers())
         {
@@ -109,7 +110,7 @@ public class ProjectileObserver {
 
             if(distance <= maxDist)
             {
-                CannonsUtil.imitateSound(loc, Sound.SPLASH, 0, maxDist);
+                CannonsUtil.imitateSound(loc, Sound.SPLASH, power, 0, maxDist);
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getId(), 0), 40);
             }
         }
