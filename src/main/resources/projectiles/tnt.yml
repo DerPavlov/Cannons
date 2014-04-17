@@ -88,7 +88,6 @@ placeBlock:
 #spawns a new projectiles after the explosion of this projectile with the given name (file name)
 #spawning the same projectile more than once results in a endless loop
 spawnProjectiles:
-  - cobblestone
 
 spawnFireworks:
   #if true fireworks will be spawned
