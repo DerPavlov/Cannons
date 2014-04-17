@@ -597,12 +597,9 @@ public class CreateExplosion {
         plugin.logDebug("Explosion is underwater: " + cannonball.wasInWater());
         if (!projectile.isUnderwaterDamage() && cannonball.wasInWater())
         {
-            plugin.logDebug("Underwater explosion not allowed. Event cancelled.");
-            explosion_power = 0;
+            plugin.logDebug("Underwater explosion not allowed. Event cancelled");
+            return;
         }
-
-        //find living entities
-        List<Entity> entity;
 
         //fire impact event
         ProjectileImpactEvent impactEvent = new ProjectileImpactEvent(projectile, impactLoc);
@@ -626,47 +623,19 @@ public class CreateExplosion {
         if (projectile.isImpactMessage())
             plugin.displayImpactMessage(player, impactLoc, notCanceled);
 
+        // do nothing if the projectile impact was canceled or it is underwater with deactivated
         if (notCanceled)
         {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
-            if(cannonball.getProjectile().isUnderwaterDamage() || !cannonball.wasInWater())
-            {
-                sendExplosionToPlayers(impactLoc);
-            }
-
+            sendExplosionToPlayers(impactLoc);
             //place blocks around the impact like webs, lava, water
             spreadBlocks(impactLoc, cannonball);
-
             //spawns additional projectiles after the explosion
             spawnProjectiles(cannonball);
-
             //spawn fireworks
             spawnFireworks(cannonball);
-
-
             //do potion effects
-            int effectRange = (int) projectile.getPotionRange()/2;
-            entity = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
-
-            Iterator<Entity> it = entity.iterator();
-            while (it.hasNext())
-            {
-                Entity next = it.next();
-                applyPotionEffect(impactLoc, next, cannonball);
-
-                double damage = 0.0;
-                damage += getPlayerDamage(impactLoc, next, cannonball);
-                damage += getDirectHitDamage(impactLoc, next, cannonball);
-                // apply damage to the entity.
-                if (damage >= 1 && next instanceof LivingEntity)
-                {
-                    LivingEntity living = (LivingEntity) next;
-                    living.damage(damage);
-                    //if player wears armor reduce damage
-                    if (living instanceof Player)
-                        CannonsUtil.reduceArmorDurability((Player) living);
-                }
-            }
+            doPoitionEffects(impactLoc, cannonball);
 
             Location teleLoc = null;
             //teleport to impact and reset speed - make a soft landing
@@ -689,12 +658,41 @@ public class CreateExplosion {
             }
 
             //check which entities are affected by the event
-            List<Entity> EntitiesAfterExplosion = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
-            transmittingEntities(EntitiesAfterExplosion, cannonball.getShooter());//place blocks around the impact like webs, lava, water
-            spreadBlocks(impactLoc, cannonball);
-
+            //List<Entity> EntitiesAfterExplosion = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
+            //transmittingEntities(EntitiesAfterExplosion, cannonball.getShooter());//place blocks around the impact like webs, lava, water
         }
     }
+
+    private void doPoitionEffects(Location impactLoc, FlyingProjectile cannonball)
+    {
+        Projectile projectile = cannonball.getProjectile();
+        Entity projectile_entity = cannonball.getProjectileEntity();
+
+        int effectRange = (int) projectile.getPotionRange()/2;
+        List<Entity> entities = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
+
+        Iterator<Entity> it = entities.iterator();
+        while (it.hasNext())
+        {
+            Entity next = it.next();
+            applyPotionEffect(impactLoc, next, cannonball);
+
+            double damage = 0.0;
+            damage += getPlayerDamage(impactLoc, next, cannonball);
+            damage += getDirectHitDamage(impactLoc, next, cannonball);
+            // apply damage to the entity.
+            if (damage >= 1 && next instanceof LivingEntity)
+            {
+                LivingEntity living = (LivingEntity) next;
+                living.damage(damage);
+                //if player wears armor reduce damage
+                if (living instanceof Player)
+                    CannonsUtil.reduceArmorDurability((Player) living);
+            }
+        }
+
+    }
+
 
 
     /**
