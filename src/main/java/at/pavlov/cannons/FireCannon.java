@@ -328,13 +328,11 @@ public class FireCannon {
         double maxDist = config.getImitatedBlockMaximumDistance();
         Location loc = c.getMuzzle();
 
-        plugin.logDebug("minDist: " + minDist + " maxdist: " + maxDist + " enabled " + config.isImitatedFiringEffect());
-
         //simple particle effects for close distance
         loc.getWorld().createExplosion(loc, 0F, false);
 
         //fake blocks effects for far distance
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, c.getLoadedGunpowder(), (int) config.getImitatedSoundMinimumDistance(), (int) config.getImitatedSoundMaximumDistance());
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMaximumDistance());
         List<Player> players = new ArrayList<Player>();
         for(Player p : loc.getWorld().getPlayers())
         {

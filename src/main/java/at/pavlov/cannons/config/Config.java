@@ -38,9 +38,8 @@ public class Config
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
     private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
 
-    private double imitatedBlockMinimumDistance;//TODO change it to int, because double is very slow and we don't need double's accuracy (For examplse, I will not set it to 287.3657932428957289, I will set it to 287 or 288)
+    private double imitatedBlockMinimumDistance;
     private double imitatedBlockMaximumDistance;
-    private double imitatedSoundMinimumDistance;
     private double imitatedSoundMaximumDistance;
 
     private boolean imitatedExplosionEnabled;
@@ -111,7 +110,6 @@ public class Config
         //imitated effects
         setImitatedBlockMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumBlockDistance", 40.0));
         setImitatedBlockMaximumDistance(plugin.getConfig().getDouble("imitatedEffects.maximumBlockDistance", 200.0));
-        setImitatedSoundMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumSoundDistance", 40.0));
         setImitatedSoundMaximumDistance(plugin.getConfig().getDouble("imitatedEffects.maximumSoundDistance", 200.0));
 
         //imitated explosions
@@ -408,14 +406,6 @@ public class Config
 
     public void setImitatedBlockMaximumDistance(double imitatedBlockMaximumDistance) {
         this.imitatedBlockMaximumDistance = imitatedBlockMaximumDistance;
-    }
-
-    public double getImitatedSoundMinimumDistance() {
-        return imitatedSoundMinimumDistance;
-    }
-
-    public void setImitatedSoundMinimumDistance(double imitatedSoundMinimumDistance) {
-        this.imitatedSoundMinimumDistance = imitatedSoundMinimumDistance;
     }
 
     public double getImitatedSoundMaximumDistance() {

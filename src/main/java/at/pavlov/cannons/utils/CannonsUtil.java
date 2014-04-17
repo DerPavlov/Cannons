@@ -533,13 +533,13 @@ public class CannonsUtil
      * creates a imitated explosion sound
      * @param loc location of the explosion
      * @param sound sound
-     * @param power ~volume
-     * @param minDist minimum distance
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location loc, Sound sound, float power, int minDist, int maxDist)//Peter, please, do not touch this method! It have 
+    public static void imitateSound(Location loc, Sound sound, double maxDist)//Peter, please, do not touch this method! It have
     {
         World w = loc.getWorld();
+        w.playSound(loc,sound, (float)(maxDist/16.0f),0.5f);
+        /*
         float soundPower = 5F;
         float additionVolume = 3F;
 
@@ -563,8 +563,9 @@ public class CannonsUtil
             Player p = Bukkit.getPlayer(name);
             Vector v = playerList.get(name);
             float volume = soundPower*(power+additionVolume)/(float) Math.sqrt(v.length());
-            p.playSound(p.getEyeLocation().add(v.normalize().multiply(20)), sound, volume, 0F);//Imitating of sound sends sound to player in distance = 20 m, but you setted just playing of sound, whitch don't have eny effect on big distance
+            p.playSound(p.getEyeLocation().add(v.normalize().multiply(20)), sound, volume, 0F);//Imitating of sound sends sound to player in distance = 20 m, but you setted just playing of sound, which don't have eny effect on big distance
         }
+        */
 
     }
 

@@ -611,9 +611,9 @@ public class CreateExplosion {
         //if canceled then exit
         if (impactEvent.isCancelled())
         {
-            //event canceled, make some effects
+            //event canceled, make some effects - even if the area is protected by a plugin
             world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
-            //sendExplosionToPlayers(impactLoc);//, projectile.getExplosionPower()); 1) It is coppied method (634 line) 2) Players don't need to hear explosion if it wasn't created
+            sendExplosionToPlayers(impactLoc);
             return;
         }
 
@@ -631,7 +631,7 @@ public class CreateExplosion {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
             if(cannonball.getProjectile().isUnderwaterDamage() || !cannonball.wasInWater())
             {
-                sendExplosionToPlayers(impactLoc, projectile.getExplosionPower());//It's ok
+                sendExplosionToPlayers(impactLoc);
             }
 
             //place blocks around the impact like webs, lava, water
@@ -854,11 +854,10 @@ public class CreateExplosion {
     /**
      * creates a imitated explosion made of blocks which is transmitted to player in a give distance
      * @param loc location of the explosion
-     * @param power ~volume of the explosion
      */
-    public void sendExplosionToPlayers(Location loc, float power)
+    public void sendExplosionToPlayers(Location loc)
     {
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, power, (int) config.getImitatedSoundMinimumDistance(), (int) config.getImitatedSoundMaximumDistance());
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMaximumDistance());
 
         if (!config.isImitatedExplosionEnabled())
             return;

@@ -6,17 +6,13 @@ import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
 import at.pavlov.cannons.utils.CannonsUtil;
-import at.pavlov.cannons.utils.DelayedTask;
-import at.pavlov.cannons.utils.FireTaskWrapper;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 
@@ -110,7 +106,7 @@ public class ProjectileObserver {
 
             if(distance <= maxDist)
             {
-                CannonsUtil.imitateSound(loc, Sound.SPLASH, power, 0, maxDist);
+                CannonsUtil.imitateSound(loc, Sound.SPLASH, maxDist);
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getId(), 0), 40);
             }
         }
