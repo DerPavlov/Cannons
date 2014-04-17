@@ -365,10 +365,10 @@ public class CreateExplosion {
 
             double spread = projectile.getBlockPlaceRadius();
             //add some randomness to the amount of spawned blocks
-            int maxPlacement = (int) (projectile.getBlockPlaceAmount() * (1+r.nextGaussian()));
+            int maxPlacement = (int) Math.round(projectile.getBlockPlaceAmount() * (1+r.nextGaussian()/3.0));
 
 
-            //iterate blocks around to get a good place
+            //iterate blocks around to get a good spot
             int placedBlocks = 0;
             int iterations1 = 0;
             do
@@ -377,8 +377,8 @@ public class CreateExplosion {
 
                 loc = impactLoc.clone();
                 //get new position
-                loc.setX(loc.getX() + r.nextGaussian()*spread/2);
-                loc.setZ(loc.getZ() + r.nextGaussian()*spread/2);
+                loc.setX(loc.getX() + r.nextGaussian()*spread/2.0);
+                loc.setZ(loc.getZ() + r.nextGaussian()*spread/2.0);
 
                 //check a entity can spawn on this block
                 if (canPlaceBlock(loc.getBlock()))
