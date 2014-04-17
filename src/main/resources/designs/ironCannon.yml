@@ -120,7 +120,7 @@ realisticBehaviour:
   #whether the cannon can be used with fire missions to bombarded a certain location (not implemented yet)
   supportsFireMission: false
   #the mass in kilogram of a cannon is important for moving objects e.g. ships
-  massOfCannon: 500.0
+  massOfCannon: 500
 
 
 permissions:

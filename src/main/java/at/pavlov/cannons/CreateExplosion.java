@@ -851,14 +851,6 @@ public class CreateExplosion {
         return false;
     }
 
-    //############### deleteTransmittedEntities ##################
-    public void deleteTransmittedEntities()
-    {
-        transmittedEntities = new LinkedList<UUID>();
-    }
-
-
-
     /**
      * creates a imitated explosion made of blocks which is transmitted to player in a give distance
      * @param loc location of the explosion

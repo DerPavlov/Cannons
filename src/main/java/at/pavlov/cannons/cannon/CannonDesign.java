@@ -80,7 +80,7 @@ public class CannonDesign
 	private boolean hasRecoil;
 	private boolean isFrontloader;
 	private boolean isRotatable;
-    private double massOfCannon;//Change it to int, because mass is measured in killograms, not in microgramms
+    private int massOfCannon;
 	
 	//permissions
 	private String permissionBuild;
@@ -850,11 +850,11 @@ public class CannonDesign
         this.projectileConsumption = projectileConsumption;
     }
 
-    public double getMassOfCannon() {
+    public int getMassOfCannon() {
         return massOfCannon;
     }
 
-    public void setMassOfCannon(double massOfCannon) {
+    public void setMassOfCannon(int massOfCannon) {
         this.massOfCannon = massOfCannon;
     }
 
