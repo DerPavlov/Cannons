@@ -43,18 +43,19 @@ public class ProjectileObserver {
                 Iterator<FlyingProjectile> iter = plugin.getProjectileManager().getFlyingProjectiles().iterator();
                 while(iter.hasNext())
                 {
-                    FlyingProjectile fproj = iter.next();
+                    FlyingProjectile cannonball = iter.next();
                     //remove an not valid projectile
-                    if (fproj.getProjectileEntity() == null)
+                    if (cannonball.getProjectileEntity() == null)
                     {
                         iter.remove();
                         continue;
                     }
 
                     //update the cannonball
-                    checkWaterImpact(fproj);
-                    updateTeleporter(fproj);
-
+                    checkWaterImpact(cannonball);
+                    updateTeleporter(cannonball);
+                    if (updateProjectileLocation(cannonball))
+                        iter.remove();
                 }
 
             }
@@ -63,17 +64,17 @@ public class ProjectileObserver {
 
     /**
      * if cannonball enters water it will spawn a splash effect
-     * @param fproj the projectile to check
+     * @param cannonball the projectile to check
      */
-    private void checkWaterImpact(FlyingProjectile fproj)
+    private void checkWaterImpact(FlyingProjectile cannonball)
     {
 
         //the projectile has passed the water surface, make a splash
-        if (fproj.updateWaterSurfaceCheck())
+        if (cannonball.updateWaterSurfaceCheck())
         {
             //go up until there is air and place the same liquid
-            Location startLoc = fproj.getProjectileEntity().getLocation().clone();
-            Vector vel = fproj.getProjectileEntity().getVelocity().clone();
+            Location startLoc = cannonball.getProjectileEntity().getLocation().clone();
+            Vector vel = cannonball.getProjectileEntity().getVelocity().clone();
             MaterialHolder liquid = new MaterialHolder(startLoc.getBlock().getTypeId(), startLoc.getBlock().getData());
 
             for (int i = 0; i<5; i++)
@@ -82,7 +83,7 @@ public class ProjectileObserver {
                 if (block != null && block.isEmpty())
                 {
                     //found a free block - make the splash
-                    sendSplashToPlayers(block.getLocation(), (float) fproj.getProjectileEntity().getVelocity().length(), liquid);
+                    sendSplashToPlayers(block.getLocation(), (float) cannonball.getProjectileEntity().getVelocity().length(), liquid);
                     break;
                 }
             }
@@ -114,19 +115,19 @@ public class ProjectileObserver {
 
     /**
      * teleports the player to new position
-     * @param fproj the FlyingProjectile to check
+     * @param cannonball the FlyingProjectile to check
      */
-    private void updateTeleporter(FlyingProjectile fproj)
+    private void updateTeleporter(FlyingProjectile cannonball)
     {
         //if projectile has teleporter - update player position
-        Projectile projectile = fproj.getProjectile();
+        Projectile projectile = cannonball.getProjectile();
         if (projectile.hasProperty(ProjectileProperties.TELEPORT) || projectile.hasProperty(ProjectileProperties.OBSERVER))
         {
-            LivingEntity shooter = fproj.getShooter();
+            LivingEntity shooter = cannonball.getShooter();
             if(shooter == null)
                 return;
 
-            org.bukkit.entity.Projectile ball = fproj.getProjectileEntity();
+            org.bukkit.entity.Projectile ball = cannonball.getProjectileEntity();
             //set some distance to the snowball to prevent a collision
             Location optiLoc = ball.getLocation().clone().subtract(ball.getVelocity().normalize().multiply(20.0));
 
@@ -151,6 +152,35 @@ public class ProjectileObserver {
                 shooter.teleport(optiLoc);
             }
         }
+    }
+
+    /**
+     * calculates the location where the projectile should be an teleports the projectile to this location
+     * @param cannonball projectile to update
+     * @return true if the projectile has to be removed
+     */
+    private boolean updateProjectileLocation(FlyingProjectile cannonball)
+    {
+
+        if (cannonball.distanceToProjectile() > 5.0)
+        {
+            Location toLoc = cannonball.getExpectedLocation();
+            plugin.logDebug("teleported projectile to: " +  toLoc.getBlockX() + "," + toLoc.getBlockY() + "," + toLoc.getBlockZ());
+            cannonball.teleport(toLoc);
+        }
+
+
+        //see if we hit something
+        Block block = cannonball.getExpectedLocation().getBlock();
+        if (!block.isEmpty() && !block.isLiquid())
+        {
+            cannonball.revertUpdate();
+            cannonball.teleport(cannonball.getExpectedLocation());
+            plugin.getExplosion().detonate(cannonball);
+            return true;
+        }
+        cannonball.update();
+        return false;
     }
 
 }
