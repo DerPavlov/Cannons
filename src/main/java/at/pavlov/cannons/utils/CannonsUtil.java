@@ -550,8 +550,8 @@ public class CannonsUtil
             if(40<=d&&d<=maxDist)
             {
                 Vector v = new Vector(x,y,z).normalize().multiply(d);//This vector is direction to sound with length = distance
-                float volume = 10F/(float) Math.pow(v.length(), 0.25);
-                float pitch = (float) (2-v.length()/100F);
+                float volume = 5F/(float) Math.pow(v.length(), 0.1);
+                float pitch = (float) (1/(v.length()*0.01+1));
                 p.playSound(p.getEyeLocation().add(v.normalize().multiply(20)), sound, volume, pitch);//Imitating of sound sends sound to player in distance = 20 m, but you setted just playing of sound, which don't have eny effect on big distance
             }
         }

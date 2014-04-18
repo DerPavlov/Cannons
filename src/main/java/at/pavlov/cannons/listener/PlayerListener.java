@@ -374,7 +374,7 @@ public class PlayerListener implements Listener
 
                 Location effectLoc = clickedBlock.getRelative(clickedFace).getLocation();
                 effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
-                effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+                effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 0.1F, 1F);
             }
 
 
