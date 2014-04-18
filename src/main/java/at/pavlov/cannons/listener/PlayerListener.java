@@ -422,7 +422,7 @@ public class PlayerListener implements Listener
 
                 if (message != null)
                 {
-                    player.playSound(cannon.getMuzzle(), Sound.DIG_STONE, 10f, 1f);
+                    player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
                     return;
                 }
             }
@@ -437,9 +437,9 @@ public class PlayerListener implements Listener
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
-                if (message != null)
+                if (message !=null)
                 {
-                    player.playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 10f, 1f);
+                    if(message.equals(MessageEnum.loadProjectile)) player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
                     return;
                 }
             }
@@ -458,7 +458,7 @@ public class PlayerListener implements Listener
 
                 if (message != null)
                 {
-                    player.playSound(cannon.getMuzzle(), Sound.DIG_GRAVEL, 10f, 1f);
+                    if(message.equals(MessageEnum.loadGunpowder)) player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SAND, 0.5F, 1f);
                     return;
                 }
             }
@@ -497,8 +497,30 @@ public class PlayerListener implements Listener
                 userMessages.displayMessage(player, cannon, message);
                 if (message != null)
                 {
-                    player.playSound(cannon.getMuzzle(), Sound.DIG_GRAVEL, 10f, 1f);
-                    return;
+                    switch(message)
+                    {
+                    	case RamrodCleaning: 
+                    	{
+                    		player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SNOW, 0.5F, 0f);
+                    		return;
+                    	}
+                    	case RamrodCleaningDone: 
+                    	{
+                    		player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SNOW, 0.5F, 1f);
+                    		return;
+                    	}
+                    	case RamrodPushingProjectile: 
+                    	{
+                    		player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_STONE, 0.5F, 0f);
+                    		return;
+                    	}
+                    	case RamrodPushingProjectileDone: 
+                    	{
+                    		player.getWorld().playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 0.5F, 0f);
+                    		return;
+                    	}
+                    	default: return;
+                    }
                 }
             }
 

@@ -535,38 +535,26 @@ public class CannonsUtil
      * @param sound sound
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location loc, Sound sound, double maxDist)//Peter, please, do not touch this method! It have
+    public static void imitateSound(Location loc, Sound sound, double maxDist)//Peter, please, do not touch this method!
     {
         World w = loc.getWorld();
-        w.playSound(loc,sound, (float)(maxDist/16.0f),0.5f);
-        /*
-        float soundPower = 5F;
-        float additionVolume = 3F;
-
-        HashMap<String, Vector> playerList = new HashMap<String, Vector>();
+        w.playSound(loc,sound, 5F, 2F);
         for(Player p : w.getPlayers())
         {
-            //get distance from player to explosion
+            //get distance and x, y, z from player to explosion
         	Location pl = p.getLocation();
             int x = loc.getBlockX() - pl.getBlockX();
             int y = loc.getBlockY() - pl.getBlockY();
             int z = loc.getBlockZ() - pl.getBlockZ();
             int d = (int) Math.hypot(Math.hypot(x, y), z);
-            if(minDist<=d&&d<=maxDist)
+            if(40<=d&&d<=maxDist)
             {
                 Vector v = new Vector(x,y,z).normalize().multiply(d);//This vector is direction to sound with length = distance
-                playerList.put(p.getName(), v);
+                float volume = 10F/(float) Math.pow(v.length(), 0.25);
+                float pitch = (float) (2-v.length()/100F);
+                p.playSound(p.getEyeLocation().add(v.normalize().multiply(20)), sound, volume, pitch);//Imitating of sound sends sound to player in distance = 20 m, but you setted just playing of sound, which don't have eny effect on big distance
             }
         }
-        for(String name : playerList.keySet())
-        {
-            Player p = Bukkit.getPlayer(name);
-            Vector v = playerList.get(name);
-            float volume = soundPower*(power+additionVolume)/(float) Math.sqrt(v.length());
-            p.playSound(p.getEyeLocation().add(v.normalize().multiply(20)), sound, volume, 0F);//Imitating of sound sends sound to player in distance = 20 m, but you setted just playing of sound, which don't have eny effect on big distance
-        }
-        */
-
     }
 
 
