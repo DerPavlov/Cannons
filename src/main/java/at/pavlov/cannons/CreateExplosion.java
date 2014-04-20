@@ -11,6 +11,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffectType;
@@ -568,7 +569,7 @@ public class CreateExplosion {
     public void directHit(FlyingProjectile cannonball, Entity entity)
     {
         //add damage to map - it will be applied later to the player
-        double directHit = getDirectHitDamage(cannonball,entity);
+        double directHit = getDirectHitDamage(cannonball, entity);
         damageMap.put(entity, directHit);
         //explode the cannonball
         detonate(cannonball);
@@ -698,11 +699,19 @@ public class CreateExplosion {
             if (damage >= 1 &&  next instanceof LivingEntity)
             {
                 LivingEntity living = (LivingEntity) next;
-                living.damage(damage);
-                plugin.logDebug("damage entity " + living.getType() + " by " + String.format("%.2f", damage));
-                //if player wears armor reduce damage
-                if (living instanceof Player)
-                    CannonsUtil.reduceArmorDurability((Player) living);
+                EntityDamageEvent damageEvent = new EntityDamageEvent(living, EntityDamageEvent.DamageCause.PROJECTILE, damage);
+                Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+
+                if (!damageEvent.isCancelled())
+                {
+                    living.damage(damage);
+                    plugin.logDebug("damage entity " + living.getType() + " by " + String.format("%.2f", damage));
+                    //if player wears armor reduce damage
+                    if (living instanceof Player)
+                        CannonsUtil.reduceArmorDurability((Player) living);
+                }
+                else
+                    plugin.logDebug("damage event canceled for " + living.getType());
             }
         }
         //remove all entries in damageMap
