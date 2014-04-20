@@ -699,6 +699,7 @@ public class CreateExplosion {
             {
                 LivingEntity living = (LivingEntity) next;
                 living.damage(damage);
+                plugin.logDebug("damage entity " + living.getType() + " by " + String.format("%.2f", damage));
                 //if player wears armor reduce damage
                 if (living instanceof Player)
                     CannonsUtil.reduceArmorDurability((Player) living);

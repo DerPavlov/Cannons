@@ -52,7 +52,7 @@ explosion:
   #the explosion power is set to zero if the explosion is underwater (superbreaker will still do damage)
   doesUnderwaterExplosion: false
   #if the projectile hits the player additional damage is done. Damage is in half hearts and the player has 20 half hearts in vanilla minecraft.
-  directHitDamage: 50
+  directHitDamage: 100
   #if the player is next to an explosion he will receive additional damage
   playerDamageRange: 5
   #the damage which the player receives when he is near an explosion. Damage is in half hearts and the player has 20 half hearts in vanilla minecraft.
