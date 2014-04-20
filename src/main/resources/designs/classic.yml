@@ -1,7 +1,7 @@
 general:
   #name of the cannon. This will show of on the cannon sign - therefore keep it short
   designName: Classic
-  #This will be used for messages. (e.g. You created a classic cannon)
+  #This will be used for messages and will replace CANNON in all messages. (e.g. You created a classic cannon)
   messageName: classic cannon
   #a short description of the cannon
   description: "A small cheap cannon - nothing fancy. Will break very easily since it is made out of wool."

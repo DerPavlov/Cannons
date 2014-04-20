@@ -54,8 +54,10 @@ public class ProjectileObserver {
                     //update the cannonball
                     checkWaterImpact(cannonball);
                     updateTeleporter(cannonball);
-                    if (updateProjectileLocation(cannonball))
+                    if (updateProjectileLocation(cannonball)) {
                         iter.remove();
+                        continue;
+                    }
                 }
 
             }
@@ -83,7 +85,7 @@ public class ProjectileObserver {
                 if (block != null && block.isEmpty())
                 {
                     //found a free block - make the splash
-                    sendSplashToPlayers(block.getLocation(), (float) cannonball.getProjectileEntity().getVelocity().length(), liquid);
+                    sendSplashToPlayers(block.getLocation(), liquid);
                     break;
                 }
             }
@@ -93,10 +95,9 @@ public class ProjectileObserver {
     /**
      * creates a sphere of fake blocks on the impact for all player in the vicinity
      * @param loc - location of the impact
-     * @param power - power of splash
      * @param liquid - material of the fake blocks
      */
-    public void sendSplashToPlayers(Location loc, float power, MaterialHolder liquid)
+    public void sendSplashToPlayers(Location loc, MaterialHolder liquid)
     {
         int maxDist = (int) plugin.getMyConfig().getImitatedBlockMaximumDistance();
 
@@ -107,7 +108,7 @@ public class ProjectileObserver {
 
             if(distance <= maxDist)
             {
-                CannonsUtil.imitateSound(loc, Sound.SPLASH, maxDist);
+                CannonsUtil.imitateSound(loc, Sound.SPLASH, 0, maxDist, 0.5F);
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getId(), 0), 40);
             }
         }
@@ -177,6 +178,7 @@ public class ProjectileObserver {
             cannonball.revertUpdate();
             cannonball.teleport(cannonball.getExpectedLocation());
             plugin.getExplosion().detonate(cannonball);
+            cannonball.getProjectileEntity().remove();
             return true;
         }
         cannonball.update();

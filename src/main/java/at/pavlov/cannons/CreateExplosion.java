@@ -856,7 +856,7 @@ public class CreateExplosion {
      */
     public void sendExplosionToPlayers(Location loc)
     {
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMaximumDistance());
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMinimumDistance(), config.getImitatedSoundMaximumDistance(),0.5F);
 
         if (!config.isImitatedExplosionEnabled())
             return;

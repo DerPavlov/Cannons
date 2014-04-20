@@ -40,6 +40,7 @@ public class Config
 
     private double imitatedBlockMinimumDistance;
     private double imitatedBlockMaximumDistance;
+    private double imitatedSoundMinimumDistance;
     private double imitatedSoundMaximumDistance;
 
     private boolean imitatedExplosionEnabled;
@@ -110,6 +111,7 @@ public class Config
         //imitated effects
         setImitatedBlockMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumBlockDistance", 40.0));
         setImitatedBlockMaximumDistance(plugin.getConfig().getDouble("imitatedEffects.maximumBlockDistance", 200.0));
+        setImitatedSoundMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumSoundDistance", 40.0));
         setImitatedSoundMaximumDistance(plugin.getConfig().getDouble("imitatedEffects.maximumSoundDistance", 200.0));
 
         //imitated explosions
@@ -446,5 +448,13 @@ public class Config
 
     public void setImitatedFiringTime(double imitatedFiringTime) {
         this.imitatedFiringTime = imitatedFiringTime;
+    }
+
+    public double getImitatedSoundMinimumDistance() {
+        return imitatedSoundMinimumDistance;
+    }
+
+    public void setImitatedSoundMinimumDistance(double imitatedSoundMinimumDistance) {
+        this.imitatedSoundMinimumDistance = imitatedSoundMinimumDistance;
     }
 }

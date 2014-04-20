@@ -535,26 +535,28 @@ public class CannonsUtil
      * @param sound sound
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location loc, Sound sound, double maxDist)//Peter, please, do not touch this method!
+    public static void imitateSound(Location loc, Sound sound, double minDist, double maxDist, float pitch)//Peter, please, do not touch this method!
     {
+        //https://forums.bukkit.org/threads/playsound-parameters-volume-and-pitch.151517/
         World w = loc.getWorld();
-        w.playSound(loc,sound, 5F, 2F);
+        w.playSound(loc,sound, (float)(maxDist/15.0), pitch);/*
         for(Player p : w.getPlayers())
         {
             //get distance and x, y, z from player to explosion
         	Location pl = p.getLocation();
-            int x = loc.getBlockX() - pl.getBlockX();
-            int y = loc.getBlockY() - pl.getBlockY();
-            int z = loc.getBlockZ() - pl.getBlockZ();
-            int d = (int) Math.hypot(Math.hypot(x, y), z);
-            if(40<=d&&d<=maxDist)
+            Vector v = pl.clone().subtract(loc).toVector();
+            double d = loc.distance(pl);
+            System.out.println("distance " + d);
+            if(minDist<=d&&d<=maxDist)
             {
-                Vector v = new Vector(x,y,z).normalize().multiply(d);//This vector is direction to sound with length = distance
-                float volume = 5F/(float) Math.pow(v.length(), 0.1);
-                float pitch = (float) (1/(v.length()*0.01+1));
-                p.playSound(p.getEyeLocation().add(v.normalize().multiply(20)), sound, volume, pitch);//Imitating of sound sends sound to player in distance = 20 m, but you setted just playing of sound, which don't have eny effect on big distance
+                float volume = 10F/(float) Math.pow(d, 0.25);
+                float pitch = (float) (2-d/100.0);
+                System.out.println("volume " + volume + " pitch " + pitch);
+                //Imitating of sound sends sound to player in distance = 20 m, but you setted just playing of sound, which don't have eny effect on big distance
+                p.playSound(pl.add(v.normalize().multiply(16.0)), sound, volume, pitch);
             }
         }
+        */
     }
 
 

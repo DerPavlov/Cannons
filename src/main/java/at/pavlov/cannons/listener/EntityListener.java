@@ -36,7 +36,8 @@ public class EntityListener implements Listener
 		if(er instanceof Projectile)
 		{
 			Projectile p = (Projectile) er;
-			plugin.getProjectileManager().detonateProjectile(p, e.getEntity());//TODO something like this, but need to prevent double detonation with ProjectileHitEvent
+            plugin.logDebug("onProjectileHitEntity of " + p.getType());
+			plugin.getProjectileManager().detonateProjectile(p);//TODO something like this, but need to prevent double detonation with ProjectileHitEvent
 		}
 	}
 	/**
