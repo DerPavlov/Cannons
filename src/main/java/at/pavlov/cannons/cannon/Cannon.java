@@ -458,7 +458,7 @@ public class Cannon
         //if the player is not the owner of this gun
         if (player!=null &&!this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
             return MessageEnum.ErrorNotTheOwner;
-        //if the barrel id dirty clean it
+        //if the barrel is dirty clean it
         if (!isClean())
         {
             cleanCannon(1);
@@ -469,7 +469,10 @@ public class Cannon
         }
         //if clean load the gunpowder
         if (isClean()&&!isLoadedWithGunpowder())
+        {
+            cleanCannon(1);
             return MessageEnum.ErrorNoGunpowder;
+        }
         //if no projectile
         if (isLoadedWithGunpowder()&&!isLoaded())
             return MessageEnum.ErrorNoProjectile;

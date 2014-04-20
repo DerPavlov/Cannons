@@ -47,30 +47,9 @@ public class PlayerListener implements Listener
         this.aiming = this.plugin.getAiming();
     }
 
-    /**
-     * the distance of the player to the cannon is measured for the auto aiming event.
-     * Stops auto aiming mode if the player too far away
-     * @param event - PlayerMoveEvent
-     */
-    /*
-      This event needs a lot of iron (up to 100 checks per second for each player!). You need to replace it by scheduler (every second) method like this:
-      	onSecond()
-       {
-      		for(AimingPlayer ap : getPlayersInAimingMode())
-      		{
-      			Cannon c = ap.getAimingCannon();
-      			Player p = p.getPlayer();
-	  			if (!aiming.distanceCheck(ap.getPlayer(), c))
-	       		{
-	            	userMessages.displayMessage(p, MessageEnum.AimingModeTooFarAway);
-	            	MessageEnum message = ap.disableAimingMode();
-	            	userMessages.displayMessage(p, message);
-	       		}
-        	}
-		}
-     */
+
     @EventHandler
-    public void PlayerMove(PlayerMoveEvent event)//TODO
+    public void PlayerMove(PlayerMoveEvent event)
     {
         // only active if the player is in aiming mode
         if (!aiming.distanceCheck(event.getPlayer(), aiming.getCannonInAimingMode(event.getPlayer())))

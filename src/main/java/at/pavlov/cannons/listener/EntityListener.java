@@ -25,19 +25,19 @@ public class EntityListener implements Listener
 		this.plugin = plugin;
 	}
 
-	/*
-	TODO
-	Need to make event EntityHitByEntityEvent: it fires while projectile hits entity too (directionHitDamage will be more correctly)
-	 */
+    /**
+     * The projectile has hit an entity
+     * @param event
+     */
 	@EventHandler
-	public void onProjectileHitEntity(EntityDamageByEntityEvent e)
+	public void onProjectileHitEntity(EntityDamageByEntityEvent event)
 	{
-		Entity er = e.getDamager();
+		Entity er = event.getDamager();
 		if(er instanceof Projectile)
 		{
 			Projectile p = (Projectile) er;
-            plugin.logDebug("onProjectileHitEntity of " + p.getType());
-			plugin.getProjectileManager().detonateProjectile(p);//TODO something like this, but need to prevent double detonation with ProjectileHitEvent
+            plugin.logDebug("onProjectileHitEntity of " + p.getType() + " at " + event.getEntity().getType());
+			plugin.getProjectileManager().directHitProjectile(p, event.getEntity());
 		}
 	}
 	/**

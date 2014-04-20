@@ -520,11 +520,11 @@ public class CreateExplosion {
 
     /**
      * Returns the amount of damage dealt to an entity by the projectile
-     * @param next
      * @param cannonball
+     * @param target
      * @return return the amount of damage done to the living entity
      */
-    private double getDirectHitDamage(FlyingProjectile cannonball, Entity next)
+    private double getDirectHitDamage(FlyingProjectile cannonball, Entity target)
     {
         Projectile projectile = cannonball.getProjectile();
 
@@ -532,14 +532,9 @@ public class CreateExplosion {
             return 0.0;
 
 
-        if (next instanceof LivingEntity)
+        if (target instanceof LivingEntity)
         {
-            LivingEntity living = (LivingEntity) next;
-
-            Location impactLoc = cannonball.getProjectileEntity().getLocation();
-            double dist = impactLoc.distance((living).getEyeLocation());
-            //if the entity is too far away, return
-            if (dist > 3) return 0.0;
+            LivingEntity living = (LivingEntity) target;
 
             //given damage is in half hearts
             double damage = projectile.getDirectHitDamage();
@@ -693,7 +688,10 @@ public class CreateExplosion {
             applyPotionEffect(impactLoc, next, cannonball);
 
             //get previous damage
-            double damage = damageMap.get(next);
+            double damage = 0.0;
+            if (damageMap.containsKey(next))
+                damage = damageMap.get(next);
+
             //add explosion damage
             damage += getPlayerDamage(impactLoc, next, cannonball);
             //apply sum of all damages
