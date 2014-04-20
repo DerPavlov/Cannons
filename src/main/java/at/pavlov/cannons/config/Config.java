@@ -38,9 +38,8 @@ public class Config
 	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
     private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
 
-    private double imitatedBlockMinimumDistance;
-    private double imitatedBlockMaximumDistance;
-    private double imitatedSoundMinimumDistance;
+    private int imitatedBlockMinimumDistance;
+    private int imitatedBlockMaximumDistance;
     private int imitatedSoundMaximumDistance;
 
     private boolean imitatedExplosionEnabled;
@@ -109,10 +108,9 @@ public class Config
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
 
         //imitated effects
-        setImitatedBlockMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumBlockDistance", 40.0));
-        setImitatedBlockMaximumDistance(plugin.getConfig().getDouble("imitatedEffects.maximumBlockDistance", 200.0));
-        setImitatedSoundMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumSoundDistance", 40.0));
-        setImitatedSoundMaximumDistance((int) plugin.getConfig().getDouble("imitatedEffects.maximumSoundDistance", 200.0));//Change it to int, it will make plugin faster
+        setImitatedBlockMinimumDistance(plugin.getConfig().getInt("imitatedEffects.minimumBlockDistance", 40));
+        setImitatedBlockMaximumDistance(plugin.getConfig().getInt("imitatedEffects.maximumBlockDistance", 200));
+        setImitatedSoundMaximumDistance((int) plugin.getConfig().getInt("imitatedEffects.maximumSoundDistance", 200));
 
         //imitated explosions
         setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));
@@ -398,7 +396,7 @@ public class Config
         return imitatedBlockMinimumDistance;
     }
 
-    public void setImitatedBlockMinimumDistance(double imitatedBlockMinimumDistance) {
+    public void setImitatedBlockMinimumDistance(int imitatedBlockMinimumDistance) {
         this.imitatedBlockMinimumDistance = imitatedBlockMinimumDistance;
     }
 
@@ -406,7 +404,7 @@ public class Config
         return imitatedBlockMaximumDistance;
     }
 
-    public void setImitatedBlockMaximumDistance(double imitatedBlockMaximumDistance) {
+    public void setImitatedBlockMaximumDistance(int imitatedBlockMaximumDistance) {
         this.imitatedBlockMaximumDistance = imitatedBlockMaximumDistance;
     }
 
@@ -448,13 +446,5 @@ public class Config
 
     public void setImitatedFiringTime(double imitatedFiringTime) {
         this.imitatedFiringTime = imitatedFiringTime;
-    }
-
-    public double getImitatedSoundMinimumDistance() {
-        return imitatedSoundMinimumDistance;
-    }
-
-    public void setImitatedSoundMinimumDistance(double imitatedSoundMinimumDistance) {
-        this.imitatedSoundMinimumDistance = imitatedSoundMinimumDistance;
     }
 }

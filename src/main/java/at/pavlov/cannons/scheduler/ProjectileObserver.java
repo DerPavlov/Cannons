@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class ProjectileObserver {
@@ -40,10 +42,10 @@ public class ProjectileObserver {
             public void run()
             {
                 //get projectiles
-                Iterator<FlyingProjectile> iter = plugin.getProjectileManager().getFlyingProjectiles().iterator();
+                Iterator<Map.Entry<UUID,FlyingProjectile>> iter = plugin.getProjectileManager().getFlyingProjectiles().entrySet().iterator();
                 while(iter.hasNext())
                 {
-                    FlyingProjectile cannonball = iter.next();
+                    FlyingProjectile cannonball = iter.next().getValue();
                     //remove an not valid projectile
                     if (cannonball.getProjectileEntity() == null)
                     {

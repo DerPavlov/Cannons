@@ -1,20 +1,19 @@
 package at.pavlov.cannons.projectile;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.utils.DelayedTask;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ProjectileManager
 {
 
     private final Cannons plugin;
-    private final LinkedList<FlyingProjectile> flying_projectiles = new LinkedList<FlyingProjectile>();//Need to change it to HashMap<UUID, FlyingProjectile> to make plugin faster
+    private final HashMap<UUID, FlyingProjectile> flyingProjectilesMap = new HashMap<UUID, FlyingProjectile>();
 
     /**
      * ProjectileManager
@@ -61,7 +60,7 @@ public class ProjectileManager
             cannonball.setShooter(shooter);
         }
 
-        flying_projectiles.add(cannonball);
+        flyingProjectilesMap.put(cannonball.getUID(), cannonball);
 
         //detonate timefused projectiles
         detonateTimefuse(cannonball);
@@ -75,35 +74,24 @@ public class ProjectileManager
      * detonate a timefused projectile mid air
      * @param cannonball - the cannonball to detonate
      */
-    private void detonateTimefuse(FlyingProjectile cannonball)
+    private void detonateTimefuse(final FlyingProjectile cannonball)
     {
         if (cannonball.getProjectile().getTimefuse() > 0)
         {
 
             //Delayed Task
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin,  new DelayedTask(cannonball.getUID())
             {
-                public void run() {
+                public void run(Object object)
+                {
+                    //find given UID in list
+                    FlyingProjectile fproj = flyingProjectilesMap.get((UUID) object);
 
-                    //check is list is not empty
-                    if (!flying_projectiles.isEmpty())
-                    {
-                        Iterator<FlyingProjectile> iterator = flying_projectiles.iterator();
-                        while( iterator.hasNext())
-                        {
-                            FlyingProjectile flying = iterator.next();
-                            Projectile proj = flying.getProjectile();
-                            if (flying.getProjectileEntity() != null)
-                            {
-                                if (flying.getProjectileEntity().getTicksLived() > proj.getTimefuse()*20 - 5 && proj.getTimefuse() > 0)
-                                {
-                                    //detonate timefuse
-                                    plugin.getExplosion().detonate(flying);
-                                    flying.getProjectileEntity().remove();
-                                    iterator.remove();
-                                }
-                            }
-                        }
+                    if(fproj != null) {
+                        //detonate timefuse
+                        plugin.getExplosion().detonate(cannonball);
+                        cannonball.getProjectileEntity().remove();
+                        flyingProjectilesMap.remove(cannonball.getUID());
                     }
                 }}, (long) (cannonball.getProjectile().getTimefuse()*20));
         }
@@ -112,24 +100,37 @@ public class ProjectileManager
 
     /**
      * detonates the given projectile entity
-     * @param entity - the projectile with this entity
+     * @param projectile - the projectile with this entity
      */
-    public void detonateProjectile(Entity entity)
+    public void detonateProjectile(Entity projectile)
     {
-        if(entity == null) return;
+        if(projectile == null) return;
 
-        // iterate the list
-        if(flying_projectiles.isEmpty()) return;
-        
-        for(Iterator<FlyingProjectile> iterator = flying_projectiles.iterator(); iterator.hasNext();)
+        FlyingProjectile fproj = flyingProjectilesMap.get(projectile.getUniqueId());
+        if (fproj!=null)
         {
-            FlyingProjectile flying = iterator.next();
-            if(entity.getUniqueId().equals(flying.getProjectileEntity().getUniqueId()))//It is faster
-            {
-                plugin.getExplosion().detonate(flying);
-                flying.getProjectileEntity().remove();
-                iterator.remove();
-            }
+            plugin.getExplosion().detonate(fproj);
+            fproj.getProjectileEntity().remove();
+            flyingProjectilesMap.remove(fproj.getUID());
+        }
+    }
+
+    /**
+     * detonates the given projectile entity
+     * @param projectile - the projectile with this entity
+     * @param target the entity hit by the projectile
+     */
+    public void directHitProjectile(Entity projectile, Entity target)
+    {
+        if(projectile == null || target == null) return;
+
+        FlyingProjectile fproj = flyingProjectilesMap.get(projectile.getUniqueId());
+        if (fproj != null)
+        {
+
+            plugin.getExplosion().directHit(fproj, target);
+            fproj.getProjectileEntity().remove();
+            flyingProjectilesMap.remove(fproj.getUID());
         }
     }
 
@@ -138,8 +139,8 @@ public class ProjectileManager
      * returns the list of all flying projectiles
      * @return - the list of all flying projectiles
      */
-    public List<FlyingProjectile> getFlyingProjectiles()
+    public HashMap<UUID, FlyingProjectile> getFlyingProjectiles()
     {
-        return flying_projectiles;
+        return flyingProjectilesMap;
     }
 }

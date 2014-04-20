@@ -3,6 +3,7 @@ package at.pavlov.cannons.projectile;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Flying;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -211,5 +212,24 @@ public class FlyingProjectile
         //projectile_entity.setVelocity(vel);
         this.loc = loc.toVector();
         this.world = loc.getWorld().getUID();
+    }
+
+    @Override
+    public int hashCode() {
+        //compare projectile entities
+        return projectile_entity.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        //equal if the projectile entities are equal
+        FlyingProjectile obj2 = (FlyingProjectile) obj;
+        return this.projectile_entity.equals(obj2.getProjectileEntity());
+    }
+
+    public UUID getUID()
+    {
+        return projectile_entity.getUniqueId();
     }
 }

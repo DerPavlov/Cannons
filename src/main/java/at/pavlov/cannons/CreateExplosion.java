@@ -1,12 +1,6 @@
 package at.pavlov.cannons;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 
 import at.pavlov.cannons.event.ProjectileImpactEvent;
@@ -34,14 +28,15 @@ public class CreateExplosion {
     private final Cannons plugin;
     private final Config config;
 
-    private LinkedList<UUID> transmittedEntities = new LinkedList<UUID>();
+    private HashSet<UUID> transmittedEntities = new HashSet<UUID>();
+    //the entity is used in 1 tick. There should be no garbage collector problem
+    private HashMap<Entity,Double> damageMap = new HashMap<Entity, Double>();
 
     //################### Constructor ############################################
     public CreateExplosion (Cannons plugin, Config config)
     {
         this.plugin = plugin;
         this.config = plugin.getMyConfig();
-        transmittedEntities = new LinkedList<UUID>();
     }
 
 
@@ -129,6 +124,7 @@ public class CreateExplosion {
         plugin.logDebug("Projectile impact at: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
         BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, (int) (vel.length()*2));
 
+        //try to find a surface of the
         while (iter.hasNext())
         {
             Block next = iter.next();
@@ -524,30 +520,29 @@ public class CreateExplosion {
 
     /**
      * Returns the amount of damage dealt to an entity by the projectile
-     * @param impactLoc
      * @param next
      * @param cannonball
      * @return return the amount of damage done to the living entity
      */
-    private double getDirectHitDamage(Location impactLoc, Entity next, FlyingProjectile cannonball)
+    private double getDirectHitDamage(FlyingProjectile cannonball, Entity next)
     {
         Projectile projectile = cannonball.getProjectile();
+
+        if (cannonball.getProjectileEntity()==null)
+            return 0.0;
 
 
         if (next instanceof LivingEntity)
         {
             LivingEntity living = (LivingEntity) next;
 
+            Location impactLoc = cannonball.getProjectileEntity().getLocation();
             double dist = impactLoc.distance((living).getEyeLocation());
             //if the entity is too far away, return
             if (dist > 3) return 0.0;
 
             //given damage is in half hearts
             double damage = projectile.getDirectHitDamage();
-
-            //check line of sight and reduce damage if the way is blocked
-            int blockingBlocks = checkLineOfSight(impactLoc, living.getEyeLocation());
-            damage = damage / (blockingBlocks + 1);
 
             //randomizer
             Random r = new Random();
@@ -570,7 +565,25 @@ public class CreateExplosion {
         return 0.0;
     }
 
-    //####################################  CREATE_EXPLOSION ##############################
+    /**
+     * the given entity was hit by a cannonball
+     * @param cannonball cannonball which hit the entity
+     * @param entity entity hit
+     */
+    public void directHit(FlyingProjectile cannonball, Entity entity)
+    {
+        //add damage to map - it will be applied later to the player
+        double directHit = getDirectHitDamage(cannonball,entity);
+        damageMap.put(entity, directHit);
+        //explode the cannonball
+        detonate(cannonball);
+
+    }
+
+    /**
+     * detonated the cannonball
+     * @param cannonball cannonball which will explode
+     */
     public void detonate(FlyingProjectile cannonball)
     {
         plugin.logDebug("detonate cannonball");
@@ -636,7 +649,7 @@ public class CreateExplosion {
             //spawn fireworks
             spawnFireworks(cannonball);
             //do potion effects
-            doPoitionEffects(impactLoc, cannonball);
+            damagePlayer(impactLoc, cannonball);
 
             Location teleLoc = null;
             //teleport to impact and reset speed - make a soft landing
@@ -664,7 +677,7 @@ public class CreateExplosion {
         }
     }
 
-    private void doPoitionEffects(Location impactLoc, FlyingProjectile cannonball)
+    private void damagePlayer(Location impactLoc, FlyingProjectile cannonball)
     {
         Projectile projectile = cannonball.getProjectile();
         Entity projectile_entity = cannonball.getProjectileEntity();
@@ -672,17 +685,19 @@ public class CreateExplosion {
         int effectRange = (int) projectile.getPotionRange()/2;
         List<Entity> entities = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
 
+        //search all entities to damage
         Iterator<Entity> it = entities.iterator();
         while (it.hasNext())
         {
             Entity next = it.next();
             applyPotionEffect(impactLoc, next, cannonball);
 
-            double damage = 0.0;
+            //get previous damage
+            double damage = damageMap.get(next);
+            //add explosion damage
             damage += getPlayerDamage(impactLoc, next, cannonball);
-            damage += getDirectHitDamage(impactLoc, next, cannonball);
-            // apply damage to the entity.
-            if (damage >= 1 && next instanceof LivingEntity)
+            //apply sum of all damages
+            if (damage >= 1 &&  next instanceof LivingEntity)
             {
                 LivingEntity living = (LivingEntity) next;
                 living.damage(damage);
@@ -691,7 +706,8 @@ public class CreateExplosion {
                     CannonsUtil.reduceArmorDurability((Player) living);
             }
         }
-
+        //remove all entries in damageMap
+        damageMap.clear();
     }
 
 
@@ -841,13 +857,7 @@ public class CreateExplosion {
     //############### hasBeenTransmitted ########################
     private boolean hasBeenTransmitted(UUID id)
     {
-        ListIterator<UUID> iter = transmittedEntities.listIterator(transmittedEntities.size());
-        while (iter.hasPrevious())
-        {
-            if (iter.previous() == id) return true;
-        }
-        //has not been transmitted
-        return false;
+        return transmittedEntities.contains(id);
     }
 
     /**

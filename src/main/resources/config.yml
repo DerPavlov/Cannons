@@ -29,13 +29,11 @@ tools:
 #fake blocks/sound that are send to the player, to make effects visible at large distance
 imitatedEffects:
   #is the player closer than this distance, there will be no fake block
-  minimumBlockDistance: 80.0
+  minimumBlockDistance: 80
   #if the player is above this distance, there will be no fake block
-  maximumBlockDistance: 200.0
-  #if the player is below this distance, there will be no sound
-  minimumSoundDistance: 40.0
+  maximumBlockDistance: 200
   #if the player is above this distance, there will be no sound
-  maximumSoundDistance: 200.0
+  maximumSoundDistance: 200
 
   explosion:
     #are imitated blocks enabled
