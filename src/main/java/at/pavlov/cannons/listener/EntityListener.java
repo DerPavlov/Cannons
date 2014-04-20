@@ -5,8 +5,11 @@ import java.util.List;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
@@ -26,6 +29,16 @@ public class EntityListener implements Listener
 	TODO
 	Need to make event EntityHitByEntityEvent: it fires while projectile hits entity too (directionHitDamage will be more correctly)
 	 */
+	@EventHandler
+	public void onProjectileHitEntity(EntityDamageByEntityEvent e)
+	{
+		Entity er = e.getDamager();
+		if(er instanceof Projectile)
+		{
+			Projectile p = (Projectile) er;
+			plugin.getProjectileManager().detonateProjectile(p, e.getEntity());//TODO something like this, but need to prevent double detonation with ProjectileHitEvent
+		}
+	}
 	/**
 	 * Cannon snowball hits the ground
 	 * 
