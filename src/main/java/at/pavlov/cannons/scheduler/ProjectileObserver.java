@@ -100,18 +100,17 @@ public class ProjectileObserver {
     public void sendSplashToPlayers(Location loc, MaterialHolder liquid)
     {
         int maxDist = (int) plugin.getMyConfig().getImitatedBlockMaximumDistance();
+        int maxSoundDist = plugin.getMyConfig().getImitatedSoundMaximumDistance();
 
         for(Player p : loc.getWorld().getPlayers())
         {
             Location pl = p.getLocation();
             double distance = pl.distance(loc);
 
-            if(distance <= maxDist)
-            {
-                CannonsUtil.imitateSound(loc, Sound.SPLASH, 0, maxDist, 0.5F);
-                plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getId(), 0), 40);
-            }
+            if(distance <= maxDist) plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getId(), 0), 40);
+            
         }
+        CannonsUtil.imitateSound(loc, Sound.SPLASH, maxSoundDist, 0.3F);//Too many errors in code, Peter!
     }
 
     /**

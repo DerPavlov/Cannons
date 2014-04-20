@@ -41,7 +41,7 @@ public class Config
     private double imitatedBlockMinimumDistance;
     private double imitatedBlockMaximumDistance;
     private double imitatedSoundMinimumDistance;
-    private double imitatedSoundMaximumDistance;
+    private int imitatedSoundMaximumDistance;
 
     private boolean imitatedExplosionEnabled;
     private int imitatedExplosionSphereSize;
@@ -112,7 +112,7 @@ public class Config
         setImitatedBlockMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumBlockDistance", 40.0));
         setImitatedBlockMaximumDistance(plugin.getConfig().getDouble("imitatedEffects.maximumBlockDistance", 200.0));
         setImitatedSoundMinimumDistance(plugin.getConfig().getDouble("imitatedEffects.minimumSoundDistance", 40.0));
-        setImitatedSoundMaximumDistance(plugin.getConfig().getDouble("imitatedEffects.maximumSoundDistance", 200.0));
+        setImitatedSoundMaximumDistance((int) plugin.getConfig().getDouble("imitatedEffects.maximumSoundDistance", 200.0));//Change it to int, it will make plugin faster
 
         //imitated explosions
         setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));
@@ -410,11 +410,11 @@ public class Config
         this.imitatedBlockMaximumDistance = imitatedBlockMaximumDistance;
     }
 
-    public double getImitatedSoundMaximumDistance() {
+    public int getImitatedSoundMaximumDistance() {
         return imitatedSoundMaximumDistance;
     }
 
-    public void setImitatedSoundMaximumDistance(double imitatedSoundMaximumDistance) {
+    public void setImitatedSoundMaximumDistance(int imitatedSoundMaximumDistance) {
         this.imitatedSoundMaximumDistance = imitatedSoundMaximumDistance;
     }
 

@@ -332,7 +332,8 @@ public class FireCannon {
         loc.getWorld().createExplosion(loc, 0F, false);
 
         //fake blocks effects for far distance
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMinimumDistance(), config.getImitatedSoundMaximumDistance(), 1.5f);
+        int maxSoundDist = config.getImitatedSoundMaximumDistance();
+        CannonsUtil.imitateSound(loc, Sound.EXPLODE, maxSoundDist, 0.5F);
         List<Player> players = new ArrayList<Player>();
         for(Player p : loc.getWorld().getPlayers())
         {
