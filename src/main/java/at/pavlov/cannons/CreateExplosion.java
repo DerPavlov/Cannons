@@ -699,19 +699,13 @@ public class CreateExplosion {
             if (damage >= 1 &&  next instanceof LivingEntity)
             {
                 LivingEntity living = (LivingEntity) next;
-                EntityDamageEvent damageEvent = new EntityDamageEvent(living, EntityDamageEvent.DamageCause.PROJECTILE, damage);
-                Bukkit.getServer().getPluginManager().callEvent(damageEvent);
+                plugin.logDebug("damage entity " + living.getType() + " by " + String.format("%.2f", damage));
+                double health = living.getHealth();
+                living.damage(damage);
 
-                if (!damageEvent.isCancelled())
-                {
-                    living.damage(damage);
-                    plugin.logDebug("damage entity " + living.getType() + " by " + String.format("%.2f", damage));
-                    //if player wears armor reduce damage
-                    if (living instanceof Player)
-                        CannonsUtil.reduceArmorDurability((Player) living);
-                }
-                else
-                    plugin.logDebug("damage event canceled for " + living.getType());
+                //if player wears armor reduce damage if the player has take damage
+                if (living instanceof Player && health > living.getHealth())
+                    CannonsUtil.reduceArmorDurability((Player) living);
             }
         }
         //remove all entries in damageMap
