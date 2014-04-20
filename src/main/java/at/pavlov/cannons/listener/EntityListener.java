@@ -22,7 +22,10 @@ public class EntityListener implements Listener
 		this.plugin = plugin;
 	}
 
-
+	/*
+	TODO
+	Need to make event EntityHitByEntityEvent: it fires while projectile hits entity too (directionHitDamage will be more correctly)
+	 */
 	/**
 	 * Cannon snowball hits the ground
 	 * 

@@ -14,7 +14,7 @@ public class ProjectileManager
 {
 
     private final Cannons plugin;
-    private final LinkedList<FlyingProjectile> flying_projectiles = new LinkedList<FlyingProjectile>();
+    private final LinkedList<FlyingProjectile> flying_projectiles = new LinkedList<FlyingProjectile>();//Need to change it to HashMap<UUID, FlyingProjectile> to make plugin faster
 
     /**
      * ProjectileManager
@@ -116,20 +116,19 @@ public class ProjectileManager
      */
     public void detonateProjectile(Entity entity)
     {
-        if (entity == null) return;
+        if(entity == null) return;
 
         // iterate the list
-        if (!flying_projectiles.isEmpty())
+        if(flying_projectiles.isEmpty()) return;
+        
+        for(Iterator<FlyingProjectile> iterator = flying_projectiles.iterator(); iterator.hasNext();)
         {
-            for (Iterator<FlyingProjectile> iterator = flying_projectiles.iterator(); iterator.hasNext();)
+            FlyingProjectile flying = iterator.next();
+            if(entity.getUniqueId().equals(flying.getProjectileEntity().getUniqueId()))//It is faster
             {
-                FlyingProjectile flying = iterator.next();
-                if (entity.equals(flying.getProjectileEntity()))
-                {
-                    plugin.getExplosion().detonate(flying);
-                    flying.getProjectileEntity().remove();
-                    iterator.remove();
-                }
+                plugin.getExplosion().detonate(flying);
+                flying.getProjectileEntity().remove();
+                iterator.remove();
             }
         }
     }
