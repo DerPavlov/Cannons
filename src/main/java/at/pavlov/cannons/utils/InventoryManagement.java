@@ -27,23 +27,28 @@ public class InventoryManagement
     /**
      * removes the given number of items from the players hand
      * @param player the item in hand of this player
-     * @param items how many items will be removed
+     * @param itemsToRemove how many items will be removed
      * @return the number of items which could not be removed
      */
-    public static int takeFromPlayerHand(Player player, int items)
+    public static int takeFromPlayerHand(Player player, int itemsToRemove)
     {
         ItemStack item = player.getInventory().getItemInHand();
+        if (item == null)
+            return itemsToRemove;
+
         int amount = item.getAmount();
-        int total = amount - items;
-        if(0 < total)
+        int total = amount - itemsToRemove;
+        if(total>0)
         {
+            //there have been enough items
             item.setAmount(total);
             return total;
         }
         else
         {
+            //not enough
             player.setItemInHand(null);
-            return 0;
+            return (-total);
         }
     }
 
