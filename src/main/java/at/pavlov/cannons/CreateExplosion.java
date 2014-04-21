@@ -352,7 +352,7 @@ public class CreateExplosion {
      * @param impactLoc
      * @param cannonball
      */
-    private void spreadBlocks(Location impactLoc, FlyingProjectile cannonball)
+    private void spreadBlocks(FlyingProjectile cannonball, Location impactLoc)
     {
         Projectile projectile = cannonball.getProjectile();
 
@@ -639,33 +639,16 @@ public class CreateExplosion {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
             sendExplosionToPlayers(impactLoc);
             //place blocks around the impact like webs, lava, water
-            spreadBlocks(impactLoc, cannonball);
+            spreadBlocks(cannonball, impactLoc);
             //spawns additional projectiles after the explosion
             spawnProjectiles(cannonball);
             //spawn fireworks
             spawnFireworks(cannonball);
             //do potion effects
-            damagePlayer(impactLoc, cannonball);
+            damageEntity(cannonball, impactLoc);
+            //teleport the player to the impact or to the start point
+            teleportPlayer(cannonball, impactLoc, player);
 
-            Location teleLoc = null;
-            //teleport to impact and reset speed - make a soft landing
-            if (projectile.hasProperty(ProjectileProperties.TELEPORT))
-            {
-                teleLoc = impactLoc.clone();
-            }
-            //teleport the player back to the location before firing
-            else if(projectile.hasProperty(ProjectileProperties.OBSERVER))
-            {
-                teleLoc = cannonball.getFiringLocation();
-            }
-            //teleport to this location
-            if (teleLoc != null)
-            {
-                teleLoc.setYaw(player.getLocation().getYaw());
-                teleLoc.setPitch(player.getLocation().getPitch());
-                player.teleport(teleLoc);
-                player.setVelocity(new Vector(0,0,0));
-            }
 
             //check which entities are affected by the event
             //List<Entity> EntitiesAfterExplosion = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
@@ -673,7 +656,43 @@ public class CreateExplosion {
         }
     }
 
-    private void damagePlayer(Location impactLoc, FlyingProjectile cannonball)
+    /**
+     * teleport the player to the impact or to the starting point, depending on the given projectile properties
+     * @param cannonball the flying projectile
+     * @param impactLoc location to teleport the player
+     * @param player the one to teleport
+     */
+    private void teleportPlayer(FlyingProjectile cannonball, Location impactLoc, Player player)
+    {
+        Projectile projectile = cannonball.getProjectile();
+
+        Location teleLoc = null;
+        //teleport to impact and reset speed - make a soft landing
+        if (projectile.hasProperty(ProjectileProperties.TELEPORT) || projectile.hasProperty(ProjectileProperties.HUMAN_CANNONBALL))
+        {
+            teleLoc = impactLoc.clone();
+        }
+        //teleport the player back to the location before firing
+        else if(projectile.hasProperty(ProjectileProperties.OBSERVER))
+        {
+            teleLoc = cannonball.getFiringLocation();
+        }
+        //teleport to this location
+        if (teleLoc != null)
+        {
+            teleLoc.setYaw(player.getLocation().getYaw());
+            teleLoc.setPitch(player.getLocation().getPitch());
+            player.teleport(teleLoc);
+            player.setVelocity(new Vector(0,0,0));
+        }
+    }
+
+    /**
+     * does additional damage effects to player (directHit, explosion and potion effects)
+     * @param cannonball the flying projectile
+     * @param impactLoc location of the projectile impact
+     */
+    private void damageEntity(FlyingProjectile cannonball, Location impactLoc)
     {
         Projectile projectile = cannonball.getProjectile();
         Entity projectile_entity = cannonball.getProjectileEntity();
@@ -716,7 +735,7 @@ public class CreateExplosion {
 
     /**
      * spawns Projectiles given in the spawnProjectile property
-     * @param cannonball
+     * @param cannonball the flying projectile
      */
     private void spawnProjectiles(FlyingProjectile cannonball)
     {
@@ -758,7 +777,7 @@ public class CreateExplosion {
 
     /**
      * spawns fireworks after the explosion
-     * @param cannonball
+     * @param cannonball the flying projectile
      */
     private void spawnFireworks(FlyingProjectile cannonball)
     {

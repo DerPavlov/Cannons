@@ -116,14 +116,14 @@ public class ProjectileObserver {
     }
 
     /**
-     * teleports the player to new position
+     * teleports the player to new position of the cannonball
      * @param cannonball the FlyingProjectile to check
      */
     private void updateTeleporter(FlyingProjectile cannonball)
     {
-        //if projectile has teleporter - update player position
+        //if projectile has HUMAN_CANNONBALL or OBSERVER - update player position
         Projectile projectile = cannonball.getProjectile();
-        if (projectile.hasProperty(ProjectileProperties.TELEPORT) || projectile.hasProperty(ProjectileProperties.OBSERVER))
+        if (projectile.hasProperty(ProjectileProperties.HUMAN_CANNONBALL) || projectile.hasProperty(ProjectileProperties.OBSERVER))
         {
             LivingEntity shooter = cannonball.getShooter();
             if(shooter == null)
