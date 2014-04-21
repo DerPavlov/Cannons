@@ -576,7 +576,7 @@ public class DesignStorage
 		
 		for (BaseBlock listBlock : list)
 		{
-			if (listBlock != null && listBlock.equals(block))
+			if (listBlock != null && listBlock.equalsFuzzy(block))
 				return true;
 		}
 		return false;

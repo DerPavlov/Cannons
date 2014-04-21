@@ -653,6 +653,7 @@ public class Cannon
     {
         for (Location loc : design.getDestructibleBlocks(this))
         {
+            System.out.println("destructable: " + loc);
             if (loc.equals(block))
             {
                 return true;
