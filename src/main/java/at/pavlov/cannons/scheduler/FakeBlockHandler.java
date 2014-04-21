@@ -79,9 +79,9 @@ public class FakeBlockHandler {
      * @param loc center of the sphere
      * @param r radius of the sphere
      * @param mat material of the fake block
-     * @param duration delay until the block disappears again in ticks
+     * @param duration delay until the block disappears again in s
      */
-    public void imitatedSphere(Player player, Location loc, int r, MaterialHolder mat, long duration)
+    public void imitatedSphere(Player player, Location loc, int r, MaterialHolder mat, double duration)
     {
         if(loc == null || player == null)
             return;
@@ -110,7 +110,7 @@ public class FakeBlockHandler {
      * @param length lenght of the line
      * @param player name of the player
      */
-    public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, MaterialHolder material, long duration)
+    public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, MaterialHolder material, double duration)
     {
         if(loc == null || player == null)
             return;
@@ -128,13 +128,13 @@ public class FakeBlockHandler {
      * @param player player to display the blocks
      * @param loc location of the block
      * @param material type of the block
-     * @param duration how long to remove the block
+     * @param duration how long to remove the block in [s]
      */
-    public void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, long duration)
+    public void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, double duration)
     {
         if(loc.getBlock().isEmpty())
         {
-            FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc,player,duration);
+            FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc,player,(long) (duration*20.0));
 
             //don't send changes if there is already a block in the list
             if (!list.contains(fakeBlockEntry))

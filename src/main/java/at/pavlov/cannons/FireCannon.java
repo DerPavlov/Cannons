@@ -355,13 +355,13 @@ public class FireCannon {
      */
     public void imitateSmoke(Cannon cannon, List<Player> players)
     {
-        if (!config.isImitatedFiringEffect())
+        if (!config.isImitatedFiringEffectEnabled())
             return;
 
         Vector aimingVector = cannon.getAimingVector().clone();
         Location loc = cannon.getMuzzle();
 
-        long duration = (long) (config.getImitatedFiringTime()*20.0);
+        double duration = config.getImitatedFiringTime();
 
         for(Player name : players)
         {

@@ -422,7 +422,7 @@ public class PlayerListener implements Listener
                 plugin.logDebug("Time to predict impact: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
                 plugin.logDebug("impact location: " + loc);
 
-                plugin.getFakeBlockHandler().imitatedSphere(player, loc, 1, config.getImitatedExplosionMaterial(), (long) (config.getImitatedExplosionTime()*20.0));
+                plugin.getFakeBlockHandler().imitatedSphere(player, loc, 1, config.getImitatedPredictorMaterial(), config.getImitatedPredictorTime());
 
 
                 if (message != null)

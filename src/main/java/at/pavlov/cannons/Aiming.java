@@ -515,7 +515,7 @@ public class Aiming {
         if(config.isImitatedAimingEnabled() && isImitatingEnabled(player.getName()))
         {
             plugin.getFakeBlockHandler().imitateLine(player, cannon.getMuzzle(), cannon.getAimingVector(), 0,
-                    config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), (long) (config.getImitatedAimingTime()*20.0));
+                    config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), config.getImitatedAimingTime());
         }
     }
 
@@ -555,7 +555,7 @@ public class Aiming {
      */
     public Location impactPredictor(Cannon cannon)
     {
-        if (!cannon.isLoaded())
+        if (!cannon.isLoaded() || !config.isImitatedPredictorEnabled())
             return null;
 
         Location muzzle = cannon.getMuzzle();
@@ -566,7 +566,7 @@ public class Aiming {
 
 
         //make a few iterations until we hit something
-        for (int i=0;start.distance(predictor.getLoc()) < 400.0 && i < 500; i++)
+        for (int i=0;start.distance(predictor.getLoc()) < config.getImitatedPredictorDistance() && i < config.getImitatedPredictorIterations(); i++)
         {
             //see if we hit something
             Block block = predictor.getLocation().getBlock();

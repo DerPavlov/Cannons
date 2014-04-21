@@ -55,10 +55,17 @@ public class Config
     private MaterialHolder imitatedAimingMaterial = new MaterialHolder(20, 0);
     private double imitatedAimingTime;
 
-    private boolean imitatedFiringEffect;
+    private boolean imitatedFiringEffectEnabled;
     private MaterialHolder imitatedFireMaterial = new MaterialHolder(35, 14);
     private MaterialHolder imitatedSmokeMaterial = new MaterialHolder(30, 0);
     private double imitatedFiringTime;
+
+    private boolean imitatedPredictorEnabled;
+    private int imitatedPredictorIterations;
+    private double imitatedPredictorDistance;
+    private MaterialHolder imitatedPredictorMaterial = new MaterialHolder(35, 14);
+    private double imitatedPredictorTime;
+
 
     //superbreakerBlocks
     private List<MaterialHolder> superbreakerBlocks = new ArrayList<MaterialHolder>();
@@ -122,7 +129,7 @@ public class Config
         //imitated explosions
         setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));
         setImitatedExplosionSphereSize(plugin.getConfig().getInt("imitatedEffects.explosion.sphereSize", 2));
-        setImitatedExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.explosion.material", "35:14")));
+        setImitatedExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.explosion.material", "124:0")));
         setImitatedExplosionTime(plugin.getConfig().getDouble("imitatedEffects.explosion.time", 1.0));
 
         //imitated aiming
@@ -132,10 +139,17 @@ public class Config
         setImitatedAimingTime(plugin.getConfig().getDouble("imitatedEffects.aiming.time", 1.0));
 
         //imitated firing effects
-        setImitatedFiringEffect(plugin.getConfig().getBoolean("imitatedEffects.firing.enabled", false));
+        setImitatedFiringEffectEnabled(plugin.getConfig().getBoolean("imitatedEffects.firing.enabled", false));
         setImitatedFireMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.fireBlock", "35:14")));
         setImitatedSmokeMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.smokeBlock", "35:0")));
         setImitatedFiringTime(plugin.getConfig().getDouble("imitatedEffects.firing.time", 1.0));
+
+        //imitaded predictor
+        setImitatedPredictorEnabled(plugin.getConfig().getBoolean("imitatedEffects.predictor.enabled", true));
+        setImitatedPredictorIterations(plugin.getConfig().getInt("imitatedEffects.predictor.maxIterations", 500));
+        setImitatedPredictorDistance(plugin.getConfig().getDouble("imitatedEffects.predictor.maxDistance", 400.0));
+        setImitatedPredictorMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.predictor.material", "124:0")));
+        setImitatedPredictorTime(plugin.getConfig().getDouble("imitatedEffects.predictor.time", 1.0));
 
         //superbreakerBlocks
         setSuperbreakerBlocks(CannonsUtil.toMaterialHolderList(plugin.getConfig().getStringList("superbreakerBlocks")));
@@ -383,12 +397,12 @@ public class Config
         this.imitatedAimingEnabled = imitatedAimingEnabled;
     }
 
-    public boolean isImitatedFiringEffect() {
-        return imitatedFiringEffect;
+    public boolean isImitatedFiringEffectEnabled() {
+        return imitatedFiringEffectEnabled;
     }
 
-    public void setImitatedFiringEffect(boolean imitatedFiringEffect) {
-        this.imitatedFiringEffect = imitatedFiringEffect;
+    public void setImitatedFiringEffectEnabled(boolean imitatedFiringEffectEnabled) {
+        this.imitatedFiringEffectEnabled = imitatedFiringEffectEnabled;
     }
 
     public int getImitatedAimingLineLength() {
@@ -469,5 +483,45 @@ public class Config
 
     public void setKeepAliveTeleportDistance(double keepAliveTeleportDistance) {
         this.keepAliveTeleportDistance = keepAliveTeleportDistance;
+    }
+
+    public boolean isImitatedPredictorEnabled() {
+        return imitatedPredictorEnabled;
+    }
+
+    public void setImitatedPredictorEnabled(boolean imitatedPredictorEnabled) {
+        this.imitatedPredictorEnabled = imitatedPredictorEnabled;
+    }
+
+    public int getImitatedPredictorIterations() {
+        return imitatedPredictorIterations;
+    }
+
+    public void setImitatedPredictorIterations(int imitatedPredictorIterations) {
+        this.imitatedPredictorIterations = imitatedPredictorIterations;
+    }
+
+    public double getImitatedPredictorDistance() {
+        return imitatedPredictorDistance;
+    }
+
+    public void setImitatedPredictorDistance(double imitatedPredictorDistance) {
+        this.imitatedPredictorDistance = imitatedPredictorDistance;
+    }
+
+    public MaterialHolder getImitatedPredictorMaterial() {
+        return imitatedPredictorMaterial;
+    }
+
+    public void setImitatedPredictorMaterial(MaterialHolder imitatedPredictorMaterial) {
+        this.imitatedPredictorMaterial = imitatedPredictorMaterial;
+    }
+
+    public double getImitatedPredictorTime() {
+        return imitatedPredictorTime;
+    }
+
+    public void setImitatedPredictorTime(double imitatedPredictorTime) {
+        this.imitatedPredictorTime = imitatedPredictorTime;
     }
 }

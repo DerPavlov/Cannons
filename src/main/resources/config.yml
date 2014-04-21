@@ -73,6 +73,18 @@ imitatedEffects:
     #how long the effect will be displayed [s]
     time: 2
 
+  predictor:
+    #shows the impact of the projectile for a loaded cannon
+    enabled: true
+    #how many iterations until the projectile hits the surface
+    maxIterations: 500
+    #the predictor will work for this distance (muzzle to impact)
+    maxDistance: 200.0
+    #fake block which shows the impact location
+    material: '124:0'
+    #how long the effect will be displayed [s]
+    time: 2
+
 
 #enter here the blocks which require the superbreaker ability to destroy.
 #e.g. if you enter here the enchantment table it requires a projectile with superbreaker to be destroyed.
