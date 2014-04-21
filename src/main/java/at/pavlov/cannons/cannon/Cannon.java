@@ -1107,15 +1107,15 @@ public class Cannon
         Vector vect = new Vector(1f, 0f, 0f);
         Random r = new Random();
 
-        double playerSpreadMultiplier = getPlayerSpreadMultiplier(player);
+        final double spread = design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*getPlayerSpreadMultiplier(player);
         double deviation = 0.0;
 
         if (addSpread)
-            deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
+            deviation = r.nextGaussian() * spread;
         double azi = (getTotalHorizontalAngle() + deviation) * Math.PI / 180;
 
         if (addSpread)
-            deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
+            deviation = r.nextGaussian() * spread;
         double polar = (-getTotalVerticalAngle() + 90.0 + deviation)* Math.PI / 180;
 
         double hx = Math.sin(polar)*Math.sin(azi);
@@ -1144,8 +1144,8 @@ public class Cannon
 
         double randomness = 1.0;
         if (addSpread)
-            randomness = (1.0 + r.nextGaussian()/10.0);
-        return vect.multiply(multi);
+            randomness = (1.0 + r.nextGaussian()*spread/180.0);
+        return vect.multiply(multi*randomness);
     }
 
     public Vector getAimingVector()
