@@ -59,10 +59,10 @@ public class MaterialHolder
 			data = -1;
 		}
 		//check if some formatting didn't work and give the user a hint
-		if ((id > 500 && id <2200) || id > 2300)
-		{
-			System.out.println("[Cannons] Can't convert " + str + ". Check the formating ('35:1').");
-		}
+		//if ((id > 500 && id <2200) || id > 2300)
+		//{
+		//	System.out.println("[Cannons] Can't convert " + str + ". Check the formating ('35:1').");
+		//}
 	}
 	
 	public BaseBlock toBaseBlock()
