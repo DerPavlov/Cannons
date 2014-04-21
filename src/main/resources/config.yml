@@ -10,6 +10,13 @@ cannonLimits:
   buildLimitB: 100
 
 
+keepProjectileAlive:
+  #projectile will only be updated by minecraft if a player is close to it. Enable this to keep them alive forever
+  enabled: true
+  #teleports the projectile to the expected location when the difference is too big
+  teleportProjectile: 5.0
+
+
 tools:
   #the item a player needs to be holding to adjust the aim of a cannon. Default is none.
   ajust: '0:0'

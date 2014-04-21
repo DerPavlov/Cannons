@@ -30,6 +30,9 @@ public class Config
 	private boolean buildLimitEnabled;
 	private int buildLimitA;
 	private int buildLimitB;
+    //keepProjectileAlive
+    private boolean keepAliveEnabled;
+    private double keepAliveTeleportDistance;
 	//tools
 	private MaterialHolder toolAdjust = new MaterialHolder(0, 0);
 	private MaterialHolder toolAutoaim = new MaterialHolder(347, 0);
@@ -99,6 +102,10 @@ public class Config
 		setBuildLimitEnabled(plugin.getConfig().getBoolean("cannonLimits.useLimits", true));
 		setBuildLimitA(plugin.getConfig().getInt("cannonLimits.buildLimitA", 10));
 		setBuildLimitB(plugin.getConfig().getInt("cannonLimits.buildLimitB", 2));
+
+        //keepProjectileAlive
+        setKeepAliveEnabled(plugin.getConfig().getBoolean("keepProjectileAlive.enabled", true));
+        setKeepAliveTeleportDistance(plugin.getConfig().getDouble("keepProjectileAlive.teleportProjectile", 5.0));
 
 		//tools
 		setToolAdjust(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "0:0")));
@@ -446,5 +453,21 @@ public class Config
 
     public void setImitatedFiringTime(double imitatedFiringTime) {
         this.imitatedFiringTime = imitatedFiringTime;
+    }
+
+    public boolean isKeepAliveEnabled() {
+        return keepAliveEnabled;
+    }
+
+    public void setKeepAliveEnabled(boolean keepAliveEnabled) {
+        this.keepAliveEnabled = keepAliveEnabled;
+    }
+
+    public double getKeepAliveTeleportDistance() {
+        return keepAliveTeleportDistance;
+    }
+
+    public void setKeepAliveTeleportDistance(double keepAliveTeleportDistance) {
+        this.keepAliveTeleportDistance = keepAliveTeleportDistance;
     }
 }

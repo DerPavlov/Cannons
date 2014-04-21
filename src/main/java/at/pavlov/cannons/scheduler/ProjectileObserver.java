@@ -159,12 +159,14 @@ public class ProjectileObserver {
     /**
      * calculates the location where the projectile should be an teleports the projectile to this location
      * @param cannonball projectile to update
-     * @return true if the projectile has to be removed
+     * @return true if the projectile must be removed
      */
     private boolean updateProjectileLocation(FlyingProjectile cannonball)
     {
+        if (!plugin.getMyConfig().isKeepAliveEnabled())
+            return false;
 
-        if (cannonball.distanceToProjectile() > 5.0)
+        if (cannonball.distanceToProjectile() > plugin.getMyConfig().getKeepAliveTeleportDistance())
         {
             Location toLoc = cannonball.getExpectedLocation();
             plugin.logDebug("teleported projectile to: " +  toLoc.getBlockX() + "," + toLoc.getBlockY() + "," + toLoc.getBlockZ());
