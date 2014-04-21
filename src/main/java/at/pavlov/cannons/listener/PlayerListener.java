@@ -28,6 +28,8 @@ import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 
+import java.text.DecimalFormat;
+
 public class PlayerListener implements Listener
 {
     private final Config config;
@@ -415,7 +417,9 @@ public class PlayerListener implements Listener
 
                 // update Signs
                 cannon.updateCannonSigns();
+                long startTime = System.nanoTime();
                 Location loc = aiming.impactPredictor(cannon);
+                plugin.logDebug("Time to predict impact: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
                 plugin.logDebug("impact location: " + loc);
 
                 plugin.getFakeBlockHandler().imitatedSphere(player, loc, 1, config.getImitatedExplosionMaterial(), (long) (config.getImitatedExplosionTime()*20.0));

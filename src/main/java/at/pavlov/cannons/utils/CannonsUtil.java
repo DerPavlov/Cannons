@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
+import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 
@@ -557,5 +558,50 @@ public class CannonsUtil
                 p.playSound(loc, sound, maxDist/16f, newPitch);
             }
         }
+    }
+
+    /**
+     * find the surface in the given direction
+     * @param start starting point
+     * @param direction direction
+     * @return returns the the location of one block in front of the surface or (if the surface is not found) the start location
+     */
+    public static Location findSurface(Location start, Vector direction)
+    {
+        World world = start.getWorld();
+        Location surface = start.clone();
+
+        //see if there is a block already - then go back if necessary
+        if (!start.getBlock().isEmpty())
+            surface.subtract(direction);
+
+        //are we now in air - if not, something is wrong
+        if (!start.getBlock().isEmpty())
+            return start;
+
+        int length = (int) (direction.length()*3);
+        BlockIterator iter = new BlockIterator(world, start.toVector(), direction.normalize(), 0, length);
+        System.out.println("length: " + length);
+
+        //try to find a surface of the
+        while (iter.hasNext())
+        {
+            Block next = iter.next();
+            System.out.println("new location " + next);
+            //if there is no block, go further until we hit the surface
+            if (next.isEmpty())
+            {
+                System.out.println("is empty");
+                surface = next.getLocation();
+            }
+            else
+            {
+                System.out.println("finished " + surface);
+                return surface;
+            }
+        }
+
+        System.out.println("too short " + surface);
+        return surface;
     }
 }

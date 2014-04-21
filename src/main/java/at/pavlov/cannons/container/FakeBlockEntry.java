@@ -92,7 +92,7 @@ public class FakeBlockEntry implements Cloneable{
     }
 
     public boolean isExpired(){
-        return (System.currentTimeMillis() > getStartTime() + getDuration()*20);
+        return (System.currentTimeMillis() > getStartTime() + getDuration()*50);
     }
 
     public String getPlayer() {

@@ -274,7 +274,7 @@ public class FireCannon {
         //for each bullet, but at least once
         for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
         {
-            Vector vect = cannon.getFiringVector(shooter);
+            Vector vect = cannon.getFiringVector(shooter, true);
             org.bukkit.entity.Projectile projectileEntity = plugin.getProjectileManager().spawnProjectile(projectile, shooter, firingLoc, vect);
 
             if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))

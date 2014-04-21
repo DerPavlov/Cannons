@@ -559,21 +559,21 @@ public class Aiming {
             return null;
 
         Location muzzle = cannon.getMuzzle();
-        Vector vel = cannon.getFiringVector(null);
+        Vector vel = cannon.getFiringVector(null, false);
 
         MovingObject predictor = new MovingObject(muzzle, vel);
         Vector start = muzzle.toVector();
 
 
         //make a few iterations until we hit something
-        for (int i=0;start.distance(predictor.getLoc()) < 400.0 && i < 5; i++)
+        for (int i=0;start.distance(predictor.getLoc()) < 400.0 && i < 500; i++)
         {
             //see if we hit something
             Block block = predictor.getLocation().getBlock();
             if (!block.isEmpty())
             {
                 predictor.revertProjectileLocation(false);
-                return predictor.getLocation();
+                return CannonsUtil.findSurface(predictor.getLocation(), predictor.getVel());
             }
             predictor.updateProjectileLocation(false);
         }

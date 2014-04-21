@@ -122,29 +122,14 @@ public class CreateExplosion {
         int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
         Location impactLoc = snowballLoc.clone();
 
-        plugin.logDebug("Projectile impact at: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
-        BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, (int) (vel.length()*2));
-
-        //try to find a surface of the
-        while (iter.hasNext())
-        {
-            Block next = iter.next();
-            //if there is no block, go further until we hit the surface
-            if (next.isEmpty())
-            {
-                impactLoc = next.getLocation();
-            }
-            else
-            {
-                plugin.logDebug("Found surface at: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
-                break;
-            }
-        }
+        plugin.logDebug("Projectile impact: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
+        impactLoc = CannonsUtil.findSurface(impactLoc, vel);
+        plugin.logDebug("Impact surface: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
 
         // the cannonball will only break blocks if it has penetration.
         if (cannonball.getProjectile().getPenetration() > 0)
         {
-            iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
+            BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
 
             int i=0;
             while (iter.hasNext() && i <= penetration + 1)

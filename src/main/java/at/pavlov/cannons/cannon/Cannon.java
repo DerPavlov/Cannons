@@ -1100,7 +1100,7 @@ public class Cannon
      * @param player
      * @return
      */
-    public Vector getFiringVector(Player player)
+    public Vector getFiringVector(Player player, boolean addSpread)
     {
         // get projectile
         // set direction of the snowball
@@ -1108,11 +1108,14 @@ public class Cannon
         Random r = new Random();
 
         double playerSpreadMultiplier = getPlayerSpreadMultiplier(player);
+        double deviation = 0.0;
 
-        double deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
+        if (addSpread)
+            deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
         double azi = (getTotalHorizontalAngle() + deviation) * Math.PI / 180;
 
-        deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
+        if (addSpread)
+            deviation = r.nextGaussian() * design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpreadMultiplier;
         double polar = (-getTotalVerticalAngle() + 90.0 + deviation)* Math.PI / 180;
 
         double hx = Math.sin(polar)*Math.sin(azi);
