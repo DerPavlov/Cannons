@@ -414,16 +414,11 @@ public class PlayerListener implements Listener
                 userMessages.displayMessage(player, cannon, message);
 
                 aiming.showAimingVector(cannon, player);
+                //predict impact marker
+                aiming.impactPredictor(cannon,player);
 
                 // update Signs
                 cannon.updateCannonSigns();
-                long startTime = System.nanoTime();
-                Location loc = aiming.impactPredictor(cannon);
-                plugin.logDebug("Time to predict impact: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
-                plugin.logDebug("impact location: " + loc);
-
-                plugin.getFakeBlockHandler().imitatedSphere(player, loc, 1, config.getImitatedPredictorMaterial(), config.getImitatedPredictorTime());
-
 
                 if (message != null)
                 {

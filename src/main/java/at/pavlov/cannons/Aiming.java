@@ -63,18 +63,19 @@ public class Aiming {
     private HashSet<String> imitatedEffectsOff = new HashSet<String>();
 
 
-	//##################### Constructor ##############################
-	public Aiming(Cannons plugin)
-	{
-		this.plugin = plugin;
-		this.config = plugin.getMyConfig();
+    /**
+     * Constructor
+     * @param plugin Cannons main class
+     */
+	public Aiming(Cannons plugin) {
+        this.plugin = plugin;
+        this.config = plugin.getMyConfig();
         this.userMessages = plugin.getMyConfig().getUserMessages();
-		
-		inAimingMode = new HashMap<String, Cannon>();
+    }
 
-	}
-	
-	//##################### InitAimingMode ##############################
+    /**
+     * starts the aiming mode scheduler
+     */
 	public void initAimingMode()
 	{
 		//changing angles for aiming mode
@@ -86,8 +87,15 @@ public class Aiming {
 			    }
 		}, 1L, 1L);	
 	}
-	
-	//################# ChangeAngle #######################################################
+
+    /**
+     * player click interaction with cannon
+     * @param cannon operated cannon
+     * @param action interaction of player with cannon
+     * @param clickedFace which side was clicked (up, down, left, right)
+     * @param player operator of the cannon
+     * @return message for the player
+     */
 	public MessageEnum ChangeAngle(Cannon cannon, Action action, BlockFace clickedFace, Player player){
         //fire event
         CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.adjustPlayer);
@@ -111,8 +119,14 @@ public class Aiming {
 		}
 		return null;
 	}
-	
-	//################# DisplayAngle #######################################################
+
+    /**
+     * evaluates the new cannon angle and returns a message for the user
+     * @param cannon operated cannon
+     * @param clickedFace which side was clicked (up, down, left, right)
+     * @param player operator of the cannon
+     * @return message for the player
+     */
 	private MessageEnum DisplayAngle(Cannon cannon, BlockFace clickedFace, Player player)
 	{
 		CannonDesign design = cannon.getCannonDesign();
@@ -223,15 +237,16 @@ public class Aiming {
 		else
 			return null;
 	}
-	
-	
-	
-	
-	//############## CheckLookingDirection   ################################
+
+
+    /**
+     * evaluates the difference between actual cannon direction and the given direction
+     * @param cannon operated cannon
+     * @param loc yaw and pitch will be used
+     * @return new cannon aiming direction
+     */
 	private gunAngles CheckLookingDirection(Cannon cannon, Location loc)
-	{	
-		CannonDesign design = cannon.getCannonDesign();
-		
+	{
 		gunAngles returnValue = new gunAngles(0.0 ,0.0);
 		
 		//calc vertical angle difference
@@ -239,8 +254,8 @@ public class Aiming {
 		
 		//get yaws of cannon and player
 		double cannonYaw = CannonsUtil.directionToYaw(cannon.getCannonDirection());
-		double playerYaw = loc.getYaw();
-        double horizontal = playerYaw - cannonYaw - cannon.getTotalHorizontalAngle();
+		double yaw = loc.getYaw();
+        double horizontal = yaw - cannonYaw - cannon.getTotalHorizontalAngle();
 		
         horizontal = horizontal % 360;
 		while(horizontal < -180)
@@ -249,7 +264,7 @@ public class Aiming {
 		//set horizontal angle
 		returnValue.setHorizontal(horizontal);
 
-        plugin.logDebug("player Yaw: " + playerYaw + " cannonYaw: " + horizontal);
+        plugin.logDebug("Yaw: " + yaw + " cannonYaw: " + horizontal);
 		
 		return returnValue;
 		
@@ -364,8 +379,10 @@ public class Aiming {
         return player.getLocation().distance(locCannon) <= 4;
     }
 
-	
-	//############## updateAimingMode   ################################
+
+    /**
+     * updates the auto Aiming direction for player in auto-aiming mode
+     */
     void updateAimingMode()
 	{
 		//player in map change the angle to the angle the player is looking
@@ -381,6 +398,8 @@ public class Aiming {
     			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && player.isOnline() && cannon.isValid())
         		{
             		MessageEnum message = DisplayAngle(cannon, null, player);
+                    //show impact predictor marker
+                    impactPredictor(cannon, player);
             		userMessages.displayMessage(player, cannon, message);
         		}		
         		else
@@ -505,7 +524,7 @@ public class Aiming {
 	}
 
     /**
-     * show a line where the cannon is aming
+     * show a line where the cannon is aiming
      * @param cannon - operated cannon
      * @param player - player operating the cannon
      */
@@ -581,5 +600,18 @@ public class Aiming {
         //nothing found
         plugin.logDebug("nothing found");
         return null;
+    }
+
+    /**
+     * calculated the impact of the projectile and make a sphere with fakeBlocks at the impact for the given player
+     * @param cannon the cannon must be loaded with a projectile
+     * @param player only this player will see this impact marker blocks
+     * @return the expected impact location
+     */
+    public Location impactPredictor(Cannon cannon, Player player)
+    {
+        Location surface = impactPredictor(cannon);
+        plugin.getFakeBlockHandler().imitatedSphere(player, surface, 1, config.getImitatedPredictorMaterial(), config.getImitatedPredictorTime());
+        return surface;
     }
 }
