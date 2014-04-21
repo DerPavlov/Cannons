@@ -549,10 +549,12 @@ public class CannonsUtil
             double d = v.length();
             if(40.0<=d&&d<=maxDist)
             {
-                //Vector v = new Vector(x,y,z).normalize().multiply(20);//This vector is direction to sound with length = distance
-                float volume = 2.1f-(float)(d/maxDist);
+
+                //float volume = 2.1f-(float)(d/maxDist);
                 float newPitch = pitch/(float) Math.sqrt(d);
-                p.playSound(p.getEyeLocation().add(v.normalize().multiply(16)), sound, volume, newPitch);
+                //p.playSound(p.getEyeLocation().add(v.normalize().multiply(16)), sound, volume, newPitch);
+
+                p.playSound(loc, sound, maxDist/16f, newPitch);
             }
         }
     }
