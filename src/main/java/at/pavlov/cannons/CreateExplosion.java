@@ -119,41 +119,36 @@ public class CreateExplosion {
         Vector vel = projectile_entity.getVelocity();
         Location snowballLoc = projectile_entity.getLocation();
         World world = projectile_entity.getWorld();
-        int penetration = (int) ((cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
         Location impactLoc = snowballLoc.clone();
-
         plugin.logDebug("Projectile impact: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
+
+        //find surface and set this as new impact location
         impactLoc = CannonsUtil.findSurface(impactLoc, vel);
         plugin.logDebug("Impact surface: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
 
-        // the cannonball will only break blocks if it has penetration.
+        //the cannonball will only break blocks if it has penetration.
         if (cannonball.getProjectile().getPenetration() > 0)
         {
-            BlockIterator iter = new BlockIterator(world, snowballLoc.toVector(), vel.normalize(), 0, penetration + 1);
+            Random r = new Random();
+            double randomness = (1+r.nextGaussian()/5.0);
+            int penetration = (int) Math.round(randomness*(cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
 
-            int i=0;
-            while (iter.hasNext() && i <= penetration + 1)
+
+            BlockIterator iter = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, penetration);
+
+            while (iter.hasNext())
             {
-                i++;
                 Block next = iter.next();
-                //Break block on ray
-                if (i <= penetration)
+                // if block can be destroyed the the iterator will check the next block. Else the projectile will explode
+                if (!breakBlock(next, blocklist, superbreaker, doesBlockDamage))
                 {
-                    // if block can be destroyed the the iterator will check the next block. Else the projectile will explode
-                    if (!breakBlock(next, blocklist, superbreaker, doesBlockDamage))
-                    {
-                        //found undestroyable block - set impactloc
-                        impactLoc = next.getLocation();
-                        break;
-                    }
+                    //found undestroyable block - set impactloc
+                    break;
                 }
-                //set impact location
-                else
-                {
-                    impactLoc = next.getLocation();
-                }
+                impactLoc = next.getLocation();
             }
         }
+        plugin.logDebug("Penetration loc: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
 
         if (superbreaker)
         {

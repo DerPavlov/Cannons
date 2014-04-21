@@ -1142,6 +1142,9 @@ public class Cannon
         double multi = getCannonballVelocity();
         if (multi < 0.1) multi = 0.1;
 
+        double randomness = 1.0;
+        if (addSpread)
+            randomness = (1.0 + r.nextGaussian()/10.0);
         return vect.multiply(multi);
     }
 

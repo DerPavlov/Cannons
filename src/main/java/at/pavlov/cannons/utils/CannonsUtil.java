@@ -554,7 +554,6 @@ public class CannonsUtil
                 //float volume = 2.1f-(float)(d/maxDist);
                 float newPitch = pitch/(float) Math.sqrt(d);
                 //p.playSound(p.getEyeLocation().add(v.normalize().multiply(16)), sound, volume, newPitch);
-
                 p.playSound(loc, sound, maxDist/16f, newPitch);
             }
         }
@@ -580,28 +579,18 @@ public class CannonsUtil
             return start;
 
         int length = (int) (direction.length()*3);
-        BlockIterator iter = new BlockIterator(world, start.toVector(), direction.normalize(), 0, length);
-        System.out.println("length: " + length);
+        BlockIterator iter = new BlockIterator(world, start.toVector(), direction.clone().normalize(), 0, length);
 
         //try to find a surface of the
         while (iter.hasNext())
         {
             Block next = iter.next();
-            System.out.println("new location " + next);
             //if there is no block, go further until we hit the surface
             if (next.isEmpty())
-            {
-                System.out.println("is empty");
                 surface = next.getLocation();
-            }
             else
-            {
-                System.out.println("finished " + surface);
                 return surface;
-            }
         }
-
-        System.out.println("too short " + surface);
         return surface;
     }
 }
