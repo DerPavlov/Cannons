@@ -209,7 +209,7 @@ public class FlyingProjectile
     public void teleport(Location loc)
     {
         projectile_entity.teleport(loc);
-        //projectile_entity.setVelocity(vel);
+        projectile_entity.setVelocity(vel);
         this.loc = loc.toVector();
         this.world = loc.getWorld().getUID();
     }
