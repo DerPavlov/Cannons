@@ -121,11 +121,14 @@ public class BlockListener implements Listener
     @EventHandler
     public void BlockBreak(BlockBreakEvent event)
     {
-        // if deleted block is cannonBlock delete cannon
+        // breaking is only allowed when the barrel is broken - minor stuff as buttons are canceled
         Cannon cannon = plugin.getCannonManager().getCannon(event.getBlock().getLocation(), null);
         if (cannon != null)
         {
-            plugin.getCannonManager().removeCannon(cannon, false, BreakCause.PlayerBreak);
+            if (cannon.isDestructibleBlock(event.getBlock().getLocation()))
+                plugin.getCannonManager().removeCannon(cannon, false, BreakCause.PlayerBreak);
+            else
+                event.setCancelled(true);
         }
     }
 }
