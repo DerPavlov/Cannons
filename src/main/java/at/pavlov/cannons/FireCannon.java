@@ -154,6 +154,11 @@ public class FireCannon {
             //this cannon will try to find some gunpowder and projectile in the chest
             if (autoload)
             {
+                //check if the cannon needs to be cleand
+                if (!cannon.isClean())
+                    return MessageEnum.ErrorNotCleaned;
+
+                //try to load some projectiles
                 boolean hasReloaded =  cannon.reloadFromChests(player, consumesAmmo);
                 if (!hasReloaded)
                 {
@@ -165,7 +170,9 @@ public class FireCannon {
                 }
                 else
                 {
+                    //everything went fine - next click on torch wil fire the cannon
                     plugin.logDebug("Charge loaded from chest");
+                    return MessageEnum.loadProjectile;
                 }
             }
             else
