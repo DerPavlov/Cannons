@@ -76,21 +76,24 @@ public class FakeBlockHandler {
     /**
      * creates a sphere of fake block and sends it to the given player
      * @param player the player to be notified
-     * @param l center of the sphere
+     * @param loc center of the sphere
      * @param r radius of the sphere
      * @param mat material of the fake block
      * @param duration delay until the block disappears again in ticks
      */
-    public void imitatedSphere(Player player, Location l, int r, MaterialHolder mat, long duration)
+    public void imitatedSphere(Player player, Location loc, int r, MaterialHolder mat, long duration)
     {
+        if(loc == null || player == null)
+            return;
+
         for(int x = -r; x <=r; x++)
         {
             for(int y = -r; y<=r; y++)
             {
                 for(int z = -r; z<=r; z++)
                 {
-                    Location newL = l.clone().add(x, y, z);
-                    if(newL.distance(l)<=r)
+                    Location newL = loc.clone().add(x, y, z);
+                    if(newL.distance(loc)<=r)
                     {
                         sendBlockChangeToPlayer(player, newL, mat, duration);
                     }
@@ -109,6 +112,9 @@ public class FakeBlockHandler {
      */
     public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, MaterialHolder material, long duration)
     {
+        if(loc == null || player == null)
+            return;
+
         BlockIterator iter = new BlockIterator(loc.getWorld(), loc.toVector(), direction, offset, length);
         while (iter.hasNext())
         {

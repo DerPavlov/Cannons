@@ -8,14 +8,17 @@ import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.MovingObject;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.listener.Commands;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -543,5 +546,40 @@ public class Aiming {
         userMessages.displayMessage(player,MessageEnum.ImitatedEffectsEnabled);
         //it is enabled on default, adding to this list will stop the aiming effect
         imitatedEffectsOff.remove(player.getName());
+    }
+
+    /**
+     * calculated the impact of the projectile
+     * @param cannon the cannon must be loaded with a projectile
+     * @return the expected impact location
+     */
+    public Location impactPredictor(Cannon cannon)
+    {
+        if (!cannon.isLoaded())
+            return null;
+
+        Location muzzle = cannon.getMuzzle();
+        Vector vel = cannon.getFiringVector(null);
+
+        MovingObject predictor = new MovingObject(muzzle, vel);
+        Vector start = muzzle.toVector();
+
+
+        //make a few iterations until we hit something
+        for (int i=0;start.distance(predictor.getLoc()) < 400.0 && i < 5; i++)
+        {
+            //see if we hit something
+            Block block = predictor.getLocation().getBlock();
+            if (!block.isEmpty())
+            {
+                predictor.revertProjectileLocation(false);
+                return predictor.getLocation();
+            }
+            predictor.updateProjectileLocation(false);
+        }
+
+        //nothing found
+        plugin.logDebug("nothing found");
+        return null;
     }
 }

@@ -1,5 +1,7 @@
 package at.pavlov.cannons.projectile;
 
+import at.pavlov.cannons.container.MovingObject;
+import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -24,10 +26,9 @@ public class FlyingProjectile
     private boolean inWater;
     private boolean wasInWater;
 
-    //location and speed
-    private UUID world;
-    private Vector loc;
-    private Vector vel;
+    private MovingObject predictor;
+
+
 	
 	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, Player shooter)
 	{
@@ -47,9 +48,7 @@ public class FlyingProjectile
 
         //set location and speed
         Location new_loc = projectile_entity.getLocation();
-        world = new_loc.getWorld().getUID();
-        loc = new_loc.toVector();
-        vel = projectile_entity.getVelocity();
+        predictor = new MovingObject(new_loc, projectile_entity.getVelocity());
 	}
 	
 	public Player getShooter()
@@ -146,16 +145,7 @@ public class FlyingProjectile
      */
     public void update()
     {
-        double f2 = 0.99F;
-        if (isInWater())
-            f2 = 0.8F;
-        double f3 = 0.03F;
-        //update location
-        this.loc.add(this.vel);
-        //slow down projectile
-        this.vel.multiply(f2);
-        //apply gravity
-        this.vel.subtract(new Vector(0,f3,0));
+        predictor.updateProjectileLocation(isInWater());
     }
 
     /**
@@ -163,16 +153,7 @@ public class FlyingProjectile
      */
     public void revertUpdate()
     {
-        double f2 = 0.99F;
-        if (isInWater())
-            f2 = 0.8F;
-        double f3 = 0.03F;
-        //apply gravity
-        this.vel.add(new Vector(0, f3, 0));
-        //slow down projectile
-        this.vel.multiply(1.0 / f2);
-        //update location
-        this.loc.subtract(this.vel);
+        predictor.revertProjectileLocation(isInWater());
     }
 
     /**
@@ -181,7 +162,7 @@ public class FlyingProjectile
      */
     public Location getExpectedLocation()
     {
-        return loc.toLocation(Bukkit.getWorld(world));
+        return predictor.getLocation();
     }
 
     /**
@@ -199,19 +180,28 @@ public class FlyingProjectile
      */
     public double distanceToProjectile()
     {
-        return projectile_entity.getLocation().toVector().distance(loc);
+        return projectile_entity.getLocation().toVector().distance(predictor.getLoc());
     }
 
     /**
-     * teleports the projectile to this location
-     * @param loc the projectile will be teleported to this location
+     * teleports the projectile to the predicted location
      */
-    public void teleport(Location loc)
+    public void teleportToPrediction()
     {
-        projectile_entity.teleport(loc);
-        projectile_entity.setVelocity(vel);
-        this.loc = loc.toVector();
-        this.world = loc.getWorld().getUID();
+        projectile_entity.teleport(predictor.getLocation());
+        projectile_entity.setVelocity(predictor.getVel());
+    }
+
+    /**
+     * teleports the projectile to the given location
+     * @param loc target location
+     * @param vel velocity of the projectile
+     */
+    public void teleport(Location loc, Vector vel)
+    {
+        this.predictor.setLocation(loc);
+        this.predictor.setVel(vel);
+        teleportToPrediction();
     }
 
     @Override

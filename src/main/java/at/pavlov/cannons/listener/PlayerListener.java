@@ -415,6 +415,11 @@ public class PlayerListener implements Listener
 
                 // update Signs
                 cannon.updateCannonSigns();
+                Location loc = aiming.impactPredictor(cannon);
+                plugin.logDebug("impact location: " + loc);
+
+                plugin.getFakeBlockHandler().imitatedSphere(player, loc, 1, config.getImitatedExplosionMaterial(), (long) (config.getImitatedExplosionTime()*20.0));
+
 
                 if (message != null)
                 {

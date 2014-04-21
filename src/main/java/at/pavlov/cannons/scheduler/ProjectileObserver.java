@@ -170,7 +170,7 @@ public class ProjectileObserver {
         {
             Location toLoc = cannonball.getExpectedLocation();
             plugin.logDebug("teleported projectile to: " +  toLoc.getBlockX() + "," + toLoc.getBlockY() + "," + toLoc.getBlockZ());
-            cannonball.teleport(toLoc);
+            cannonball.teleportToPrediction();
         }
 
 
@@ -179,7 +179,7 @@ public class ProjectileObserver {
         if (!block.isEmpty() && !block.isLiquid())
         {
             cannonball.revertUpdate();
-            cannonball.teleport(cannonball.getExpectedLocation());
+            cannonball.teleportToPrediction();
             plugin.getExplosion().detonate(cannonball);
             cannonball.getProjectileEntity().remove();
             return true;
