@@ -67,6 +67,10 @@ public class Cannon
     // additional angle if the cannon is mounted e.g. a ship which is facing a different angle
     private double additionalHorizontalAngle;
     private double additionalVerticalAngle;
+    // autoaiming angles the cannon tries to reach
+    private double aimingYaw;
+    private double aimingPitch;
+
 
     // player who has build this cannon
     private String owner;
@@ -1752,5 +1756,21 @@ public class Cannon
 
     public void setOnShip(boolean onShip) {
         this.onShip = onShip;
+    }
+
+    public double getAimingYaw() {
+        return aimingYaw;
+    }
+
+    public void setAimingYaw(double aimingYaw) {
+        this.aimingYaw = aimingYaw;
+    }
+
+    public double getAimingPitch() {
+        return aimingPitch;
+    }
+
+    public void setAimingPitch(double aimingPitch) {
+        this.aimingPitch = aimingPitch;
     }
 }

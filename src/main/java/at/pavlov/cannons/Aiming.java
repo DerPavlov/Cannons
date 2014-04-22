@@ -484,6 +484,21 @@ public class Aiming {
 		}
         return null;
 	}
+
+    /**
+     * set a new aiming target for the given cannon
+     * @param cannon operated cannon
+     * @param loc new yaw and pitch angles
+     */
+    public void setAimingTarget(Cannon cannon, Location loc)
+    {
+        if (cannon == null)
+            return;
+
+        cannon.setAimingPitch(loc.getPitch());
+        cannon.setAimingYaw(loc.getYaw());
+
+    }
 	
 	/**
 	 * finds the right message for the horizontal angle change
