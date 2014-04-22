@@ -38,7 +38,7 @@ public class CannonManager
 
 	/**
 	 * removes a cannons from the list that are not valid
-     * @param cause - the reason why the cannon is removed
+     * @param cause the reason why the cannon is removed
 	 */
 	public void removeInvalidCannons(BreakCause cause)
 	{
@@ -57,9 +57,9 @@ public class CannonManager
 
 	/**
 	 * removes a cannon from the list
-	 * @param loc - location of the cannon
-     * @param breakCannon - the cannon will explode and all cannon blocks will drop
-     * @param cause - the reason way the cannon was broken
+	 * @param loc location of the cannon
+     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param cause the reason way the cannon was broken
 	 */
 	public void removeCannon(Location loc, boolean breakCannon, BreakCause cause)
 	{
@@ -70,8 +70,8 @@ public class CannonManager
 	/**
 	 * removes a cannon from the list
 	 * @param cannon cannon to remove
-     * @param breakCannon - the cannon will explode and all cannon blocks will drop
-     * @param cause - the reason way the cannon was broken
+     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param cause the reason way the cannon was broken
 	 */
 	public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause)
 	{
@@ -81,8 +81,8 @@ public class CannonManager
     /**
      * removes a cannon from the list
      * @param cannon cannon to remove
-     * @param breakCannon - the cannon will explode and all cannon blocks will drop
-     * @param cause - the reason way the cannon was broken
+     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param cause the reason way the cannon was broken
      */
     public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause, boolean removeEntry)
     {
@@ -112,6 +112,30 @@ public class CannonManager
         if (removeEntry)
             cannonList.remove(cannon.getID());
 
+    }
+
+    /**
+     * removes a cannon from the list
+     * @param uid UID of the cannon
+     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param cause the reason way the cannon was broken
+     */
+    public void removeCannon(UUID uid, boolean breakCannon, BreakCause cause)
+    {
+        removeCannon(uid,breakCannon,cause,true);
+    }
+
+    /**
+     * removes a cannon from the list
+     * @param uid UID of the cannon
+     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param cause the reason way the cannon was broken
+     * @param removeEntry should the cannon be removed from the list
+     */
+    public void removeCannon(UUID uid, boolean breakCannon, BreakCause cause, boolean removeEntry)
+    {
+        Cannon cannon = cannonList.get(uid);
+        removeCannon(cannon,breakCannon,cause,removeEntry);
     }
 
 	/**
