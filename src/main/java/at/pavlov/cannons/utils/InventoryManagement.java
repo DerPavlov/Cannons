@@ -47,7 +47,7 @@ public class InventoryManagement
         else
         {
             //not enough
-            player.setItemInHand(null);
+            player.getInventory().clear(player.getInventory().getHeldItemSlot());
             return (-total);
         }
     }
