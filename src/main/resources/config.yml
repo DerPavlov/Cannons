@@ -61,7 +61,7 @@ imitatedEffects:
     #this block will used to display the angle
     block: '20:0'
     #how long the effect will be displayed [s]
-    time: 1
+    time: 0.5
 
   firing:
     #will show fake blocks for players which are far away
@@ -83,7 +83,7 @@ imitatedEffects:
     #fake block which shows the impact location
     material: '124:0'
     #how long the effect will be displayed [s]
-    time: 1
+    time: 0.5
 
 
 #enter here the blocks which require the superbreaker ability to destroy.
