@@ -23,6 +23,7 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class Aiming {
@@ -59,7 +60,7 @@ public class Aiming {
     private final UserMessages userMessages;
     private final Config config;
 
-    private HashMap<String, Cannon> inAimingMode = new HashMap<String, Cannon>();
+    private HashMap<String, UUID> inAimingMode = new HashMap<String, UUID>();
     private HashSet<String> imitatedEffectsOff = new HashSet<String>();
 
 
@@ -357,7 +358,7 @@ public class Aiming {
     public Cannon getCannonInAimingMode(Player player)
     {
         //return the cannon of the player if he is in aiming mode
-        return inAimingMode.get(player.getName());
+        return plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
     }
 
 	
@@ -386,11 +387,15 @@ public class Aiming {
     void updateAimingMode()
 	{
 		//player in map change the angle to the angle the player is looking
-    	for(Map.Entry<String, Cannon> entry : inAimingMode.entrySet()){
+    	for(Map.Entry<String, UUID> entry : inAimingMode.entrySet()){
     		Player player = Bukkit.getPlayer(entry.getKey());
             if (player == null) return;
 
-    		Cannon cannon = entry.getValue();
+            //find the cannon with this id
+    		Cannon cannon = plugin.getCannonManager().getCannon(entry.getValue());
+            if (cannon == null)
+                continue;
+
     		// only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
     		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()*50 )
     		{
@@ -423,7 +428,7 @@ public class Aiming {
 		if (inAimingMode.containsKey(player.getName()))
 		{
             if (cannon == null)
-                cannon = inAimingMode.get(player.getName());
+                cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
 
             //this player is already in aiming mode, he might fire the cannon or turn the aiming mode of
 		    if (player.isSneaking())
@@ -447,7 +452,7 @@ public class Aiming {
                 if (distanceCheck(player, cannon))
                 {
                     userMessages.displayMessage(player, cannon, MessageEnum.AimingModeEnabled);
-                    inAimingMode.put(player.getName(), cannon);
+                    inAimingMode.put(player.getName(), cannon.getID());
                 }
                 else
                 {

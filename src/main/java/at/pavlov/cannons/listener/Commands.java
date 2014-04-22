@@ -102,7 +102,7 @@ public class Commands implements CommandExecutor
                     if (args.length >= 2)
                     {
                         //additional player name
-                        for (Cannon cannon : plugin.getCannonManager().getCannonList())
+                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
                             sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1]);
                             if (cannon.getOwner().equalsIgnoreCase(args[1]))
@@ -113,7 +113,7 @@ public class Commands implements CommandExecutor
                     {
                         //plot all cannons
                         sendMessage(sender, ChatColor.GREEN + "List of all cannons:");
-                        for (Cannon cannon : plugin.getCannonManager().getCannonList())
+                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
                             sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + cannon.getOwner() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
                         }
@@ -146,7 +146,7 @@ public class Commands implements CommandExecutor
                     //list cannons of this player name
                     else if(args[0].equalsIgnoreCase("list") && player.hasPermission("cannons.player.list"))
                     {
-                        for (Cannon cannon : plugin.getCannonManager().getCannonList())
+                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
                             player.sendMessage(ChatColor.GREEN +"Cannon list for " + args[1] + ":");
                             if (cannon.getOwner().equalsIgnoreCase(player.getName()))

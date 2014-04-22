@@ -73,7 +73,7 @@ public class CannonsAPI {
      * @param sphereRadius - radius of the sphere in blocks
      * @return - list of all cannons in this sphere
      */
-    public List<Cannon> getCannonsInSphere(Location center, double sphereRadius)
+    public HashSet<Cannon> getCannonsInSphere(Location center, double sphereRadius)
     {
         return plugin.getCannonManager().getCannonsInSphere(center, sphereRadius);
     }
@@ -86,7 +86,7 @@ public class CannonsAPI {
      * @param lengthZ - box length in Z
      * @return - list of all cannons in this sphere
      */
-    public List<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
+    public HashSet<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
     {
         return plugin.getCannonManager().getCannonsInBox(center, lengthX, lengthY, lengthZ);
     }

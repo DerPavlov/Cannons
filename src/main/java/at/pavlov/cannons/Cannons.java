@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import at.pavlov.cannons.API.CannonsAPI;
@@ -355,6 +356,11 @@ public final class Cannons extends JavaPlugin
 	{
 		return this.getProjectileStorage().getProjectile(cannon, item);
 	}
+
+    public Cannon getCannon(UUID id)
+    {
+        return this.getCannonManager().getCannon(id);
+    }
 
 	public EntityListener getEntityListener()
 	{

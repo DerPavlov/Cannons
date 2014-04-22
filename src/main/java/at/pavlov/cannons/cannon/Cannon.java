@@ -1383,11 +1383,14 @@ public class Cannon
      * @param obj - object to compare
      * @return true if both cannons are equal
      */
+    @Override
     public boolean equals(Object obj)
     {
-        return this.getID().equals(((Cannon) obj).getID());
+        Cannon obj2 = (Cannon) obj;
+        return this.getID().equals(obj2.getID());
     }
 
+    @Override
     public int hashCode()
     {
         return databaseId.hashCode();
@@ -1750,6 +1753,4 @@ public class Cannon
     public void setOnShip(boolean onShip) {
         this.onShip = onShip;
     }
-
-
 }

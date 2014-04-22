@@ -1,10 +1,7 @@
 package at.pavlov.cannons.cannon;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
@@ -26,7 +23,7 @@ import at.pavlov.cannons.event.CannonBeforeCreateEvent;
 
 public class CannonManager
 {
-	private final ArrayList<Cannon> cannonList = new ArrayList<Cannon>();
+	private final HashMap<UUID, Cannon> cannonList = new HashMap<UUID, Cannon>();
 
 	private final Cannons plugin;
 	private final UserMessages userMessages;
@@ -45,13 +42,15 @@ public class CannonManager
 	 */
 	public void removeInvalidCannons(BreakCause cause)
 	{
-		for (int i=0; i < cannonList.size(); i++)
-		{
-			Cannon cannon = cannonList.get(i);
-			if (!cannon.isValid())
+		Iterator<Cannon> iter = cannonList.values().iterator();
+
+        while(iter.hasNext())
+        {
+            Cannon next = iter.next();
+			if (!next.isValid())
 			{
-				removeCannon(cannon, false, cause);
-				i--;
+				removeCannon(next, false, cause, false);
+                iter.remove();
 			}
 		}
 	}
@@ -70,37 +69,50 @@ public class CannonManager
 
 	/**
 	 * removes a cannon from the list
-	 * @param cannon
+	 * @param cannon cannon to remove
      * @param breakCannon - the cannon will explode and all cannon blocks will drop
      * @param cause - the reason way the cannon was broken
 	 */
 	public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause)
 	{
-		if (cannon != null)
-		{
-			// send message to the owner
-			Player player = null;
-			if (cannon.getOwner() != null)
-			{
-				player = Bukkit.getPlayer(cannon.getOwner());
-			}
-
-            //fire and an event that this cannon is destroyed
-            CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon);
-            Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
-
-			// destroy cannon (drops items, edit sign)
-			MessageEnum message = cannon.destroyCannon(breakCannon, cause);
-			
-			if (player != null) userMessages.displayMessage(player, cannon, message);
-
-			//remove from database
-			plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getID());
-			
-			//remove from list
-			cannonList.remove(cannon);
-		}
+        removeCannon(cannon, breakCannon, cause, true);
 	}
+
+    /**
+     * removes a cannon from the list
+     * @param cannon cannon to remove
+     * @param breakCannon - the cannon will explode and all cannon blocks will drop
+     * @param cause - the reason way the cannon was broken
+     */
+    public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause, boolean removeEntry)
+    {
+        if (cannon == null)
+            return;
+
+        // send message to the owner
+        Player player = null;
+        if (cannon.getOwner() != null)
+        {
+            player = Bukkit.getPlayer(cannon.getOwner());
+        }
+
+        //fire and an event that this cannon is destroyed
+        CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon);
+        Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
+
+        // destroy cannon (drops items, edit sign)
+        MessageEnum message = cannon.destroyCannon(breakCannon, cause);
+
+        if (player != null) userMessages.displayMessage(player, cannon, message);
+
+        //remove from database
+        plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getID());
+
+        //remove entry
+        if (removeEntry)
+            cannonList.remove(cannon.getID());
+
+    }
 
 	/**
 	 * Checks if the name of a cannon is unique
@@ -110,7 +122,7 @@ public class CannonManager
 	 */
 	private boolean isCannonNameUnique(String name, String owner)
 	{
-		for (Cannon cannon : cannonList)
+		for (Cannon cannon : cannonList.values())
 		{
 			if (cannon.getCannonName() != null && name != null && cannon.getOwner() != null && cannon.getOwner().equals(owner))
 			{
@@ -173,7 +185,7 @@ public class CannonManager
 		
 		
 		// add cannon to the list
-		cannonList.add(cannon);
+		cannonList.put(cannon.getID(), cannon);
 
         plugin.getPersistenceDatabase().saveCannonAsync(cannon);
         plugin.logDebug("added cannon to the list");
@@ -189,11 +201,11 @@ public class CannonManager
      * @param sphereRadius - radius of the sphere in blocks
      * @return - list of all cannons in this sphere
      */
-    public List<Cannon> getCannonsInSphere(Location center, double sphereRadius)
+    public HashSet<Cannon> getCannonsInSphere(Location center, double sphereRadius)
     {
-        ArrayList<Cannon> newCannonList = new ArrayList<Cannon>();
+        HashSet<Cannon> newCannonList = new HashSet<Cannon>();
 
-        for (Cannon cannon : getCannonList())
+        for (Cannon cannon : getCannonList().values())
         {
             Location newLoc = cannon.getCannonDesign().getFiringTrigger(cannon);
             if (newLoc.distance(center) < sphereRadius)
@@ -210,11 +222,11 @@ public class CannonManager
      * @param lengthZ - box length in Z
      * @return - list of all cannons in this sphere
      */
-    public List<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
+    public HashSet<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
     {
-        ArrayList<Cannon> newCannonList = new ArrayList<Cannon>();
+        HashSet<Cannon> newCannonList = new HashSet<Cannon>();
 
-        for (Cannon cannon : getCannonList())
+        for (Cannon cannon : getCannonList().values())
         {
             Location newLoc = cannon.getCannonDesign().getFiringTrigger(cannon);
             Vector box = newLoc.subtract(center).toVector();
@@ -232,7 +244,7 @@ public class CannonManager
     public HashSet<Cannon> getCannonsByLocations(List<Location> locations)
     {
         HashSet<Cannon> newCannonList = new HashSet<Cannon>();
-        for (Cannon cannon : getCannonList())
+        for (Cannon cannon : getCannonList().values())
         {
             for (Location loc : locations)
             {
@@ -276,7 +288,7 @@ public class CannonManager
 	{
 		if (cannonName == null || owner == null) return null;
 
-		for (Cannon cannon : cannonList)
+		for (Cannon cannon : cannonList.values())
 		{
 			if (cannonName.equals(cannon.getCannonName()))
 			{
@@ -298,7 +310,7 @@ public class CannonManager
 	 */
 	private Cannon getCannonFromStorage(Location loc)
 	{
-		for (Cannon cannon : cannonList)
+		for (Cannon cannon : cannonList.values())
 		{
 			if (cannon.isCannonBlock(loc.getBlock()))
 			{
@@ -410,6 +422,16 @@ public class CannonManager
         return cannon;
 	}
 
+    /**
+     * returns the Cannons from the storage
+     * @param id UUID of the Cannon
+     * @return the cannon from the storage
+     */
+    public Cannon getCannon(UUID id)
+    {
+        return cannonList.get(id);
+    }
+
 	/**
 	 * searches if this block is part of a cannon and create a new one
 	 * @param cannonBlock
@@ -484,7 +506,7 @@ public class CannonManager
 	public int getNumberOfCannons(String player)
 	{
 		int i = 1;
-		for (Cannon cannon : cannonList)
+		for (Cannon cannon : cannonList.values())
 		{
 			if (cannon.getOwner() == null)
 			{
@@ -502,7 +524,7 @@ public class CannonManager
 	 * 
 	 * @return List of cannons
 	 */
-	public List<Cannon> getCannonList()
+	public HashMap<UUID,Cannon> getCannonList()
 	{
 		return cannonList;
 	}
@@ -624,7 +646,7 @@ public class CannonManager
 	 */
 	public boolean deleteCannons(String owner)
 	{
-		Iterator<Cannon> iter = cannonList.iterator();
+		Iterator<Cannon> iter = cannonList.values().iterator();
         boolean inList = false;
 
 		while (iter.hasNext())
@@ -645,7 +667,7 @@ public class CannonManager
      */
     public void updateCannonDesigns()
     {
-        for (Cannon cannon : cannonList)
+        for (Cannon cannon : cannonList.values())
         {
             cannon.setCannonDesign(plugin.getCannonDesign(cannon));
         }

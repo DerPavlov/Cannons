@@ -1,5 +1,6 @@
 package at.pavlov.cannons.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -132,10 +133,10 @@ public class PersistenceDatabase
 	{
 
 		// get list of all cannons
-		List<Cannon> cannonList = plugin.getCannonManager().getCannonList();
+		HashMap<UUID, Cannon> cannonList = plugin.getCannonManager().getCannonList();
 
 		// save all cannon to database
-		for (Cannon cannon : cannonList)
+		for (Cannon cannon : cannonList.values())
 		{
 			boolean noError = saveCannon(cannon);
 			if (!noError)
