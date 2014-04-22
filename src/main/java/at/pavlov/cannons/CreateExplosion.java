@@ -876,7 +876,7 @@ public class CreateExplosion {
         double maxDist = config.getImitatedBlockMaximumDistance();
         int r = config.getImitatedExplosionSphereSize()/2;
         MaterialHolder mat = config.getImitatedExplosionMaterial();
-        int delay = (int) config.getImitatedExplosionTime()*20;
+        double delay = config.getImitatedExplosionTime();
 
 
         for(Player p : loc.getWorld().getPlayers())
