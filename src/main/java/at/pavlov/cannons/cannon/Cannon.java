@@ -164,6 +164,7 @@ public class Cannon
                 //not enough gunpowder, put it back
                 gunpowder.setAmount(toLoad-gunpowder.getAmount());
                 InventoryManagement.addItemInChests(invlist, gunpowder);
+                return false;
             }
         }
         else

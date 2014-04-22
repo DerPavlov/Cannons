@@ -21,7 +21,7 @@ cannonball:
   #set to true if you want to have a burning projectile
   isOnFire: false
   #the velocity of the projectile.
-  velocity: 1.5
+  velocity: 3.0
   #how many blocks the projectile will penetrate before it explodes. If it hits something impenetrable (e.g. obsidian) it will explode instantly.
   penetration: 0
   #whether the .projectile destroys blocks it penetrates. If false it will explode if it hits something impenetrable.
@@ -35,7 +35,7 @@ cannonball:
   #how many projectiles are fired with a single shoot
   numberOfBullets: 20
   #the higher this is, the more inaccurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from
-  spreadMultiplier: 7.0
+  spreadMultiplier: 2.0
   #different properties of the projectile. If you don't want any of these properties then just leave this all blank.
   #possible properties are: superbreaker, incendiary, human_cannonball, teleport, observer
   properties:
