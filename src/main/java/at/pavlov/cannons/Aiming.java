@@ -524,8 +524,8 @@ public class Aiming {
 	
 	/**
 	 * finds the right message for the vertical angle change
-	 * @param cannon
-	 * @return
+	 * @param cannon operated cannon
+	 * @return message for the player
 	 */
     private MessageEnum setMessageVertical(Cannon cannon, boolean combinedAngle)
 	{
