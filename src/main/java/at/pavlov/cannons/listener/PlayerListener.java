@@ -316,10 +316,10 @@ public class PlayerListener implements Listener
     @EventHandler
     public void PlayerInteract(PlayerInteractEvent event)
     {
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)
+        if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)
         {
             Block clickedBlock;
-            if (event.getClickedBlock() == null)
+            if(event.getClickedBlock() == null)
             {
                 // no clicked block - get block player is looking at
                 clickedBlock = event.getPlayer().getTargetBlock(null, 4);
@@ -335,10 +335,10 @@ public class PlayerListener implements Listener
             final Cannon cannon = cannonManager.getCannon(barrel, player.getName(), true);
 
             //no cannon found - maybe the player has click into the air to stop aiming
-            if (cannon == null)
+            if(cannon == null)
             {
                 // all other actions will stop aiming mode
-                if (event.getAction() == Action.RIGHT_CLICK_AIR)
+                if(event.getAction() == Action.RIGHT_CLICK_AIR)
                 {
                     aiming.ToggleAimingMode(event.getPlayer(), null);
                 }
@@ -349,7 +349,7 @@ public class PlayerListener implements Listener
             final CannonDesign design = cannon.getCannonDesign();
 
             // prevent eggs and snowball from firing when loaded into the gun
-            if (config.isCancelItem(player.getItemInHand()))
+            if(config.isCancelItem(player.getItemInHand()))
             {
                 event.setCancelled(true);
             }
@@ -359,7 +359,7 @@ public class PlayerListener implements Listener
 
 
             // ############ touching a hot cannon will burn you ####################
-            if (cannon.getTemperature() > design.getWarningTemperature())
+            if(cannon.getTemperature() > design.getWarningTemperature())
             {
                 plugin.logDebug("someone touched a hot cannon");
                 userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementBurn);
@@ -377,7 +377,7 @@ public class PlayerListener implements Listener
 
 
             // ############ cooling a hot cannon ####################
-            if (design.isCoolingTool(player.getItemInHand()))
+            if(design.isCoolingTool(player.getItemInHand()))
             {
                 plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
                 userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementCooling);
@@ -389,7 +389,7 @@ public class PlayerListener implements Listener
 
 
             // ############ temperature measurement ################################
-            if (config.getToolThermometer().equalsFuzzy(player.getItemInHand()))
+            if(config.getToolThermometer().equalsFuzzy(player.getItemInHand()))
             {
                 if (player.hasPermission(design.getPermissionThermometer()))
                 {
@@ -405,7 +405,7 @@ public class PlayerListener implements Listener
 
 
             // ############ set angle ################################
-            if ((config.getToolAdjust().equalsFuzzy(player.getItemInHand()) || config.getToolAutoaim().equalsFuzzy(player.getItemInHand())) && cannon.isLoadingBlock(clickedBlock.getLocation()))
+            if((config.getToolAdjust().equalsFuzzy(player.getItemInHand()) || config.getToolAutoaim().equalsFuzzy(player.getItemInHand())) && cannon.isLoadingBlock(clickedBlock.getLocation()))
             {
                 plugin.logDebug("change cannon angle");
 
@@ -420,9 +420,10 @@ public class PlayerListener implements Listener
                 // update Signs
                 cannon.updateCannonSigns();
 
-                if (message != null)
+                if(message != null)
                 {
-                    player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
+                    if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
+                    else player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
                     return;
                 }
             }
@@ -437,16 +438,17 @@ public class PlayerListener implements Listener
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
-                if (message !=null)
+                if(message !=null)
                 {
-                    if(message.equals(MessageEnum.loadProjectile)) player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
+                	if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
+                	else if(message.equals(MessageEnum.loadProjectile)) player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
                     return;
                 }
             }
 
 
             // ########## Barrel clicked with gunpowder
-            if (cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(event.getItem()))
+            if(cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(event.getItem()))
             {
                 plugin.logDebug("load gunpowder");
 
@@ -456,16 +458,17 @@ public class PlayerListener implements Listener
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
-                if (message != null)
+                if(message != null)
                 {
-                    if(message.equals(MessageEnum.loadGunpowder)) player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SAND, 0.5F, 1f);
+                	if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
+                	else if(message.equals(MessageEnum.loadGunpowder)) player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SAND, 0.5F, 1f);
                     return;
                 }
             }
 
 
             // ############ Torch clicked ############################
-            if (cannon.isRightClickTrigger(clickedBlock.getLocation()))
+            if(cannon.isRightClickTrigger(clickedBlock.getLocation()))
             {
                 plugin.logDebug("fire torch");
 
@@ -475,12 +478,15 @@ public class PlayerListener implements Listener
                 userMessages.displayMessage(player, cannon, message);
 
                 if(message!=null)
+                {
+                	if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
                     return;
+                }
             }
 
 
             // ############ Button clicked ############################
-            if (cannon.isRestoneTrigger(clickedBlock.getLocation()))
+            if(cannon.isRestoneTrigger(clickedBlock.getLocation()))
             {
                 plugin.logDebug("interact event: fire button");
                 cannon.setLastUser(player.getName());
@@ -490,14 +496,15 @@ public class PlayerListener implements Listener
 
 
             // ########## Ramrod ###############################
-            if (config.getToolRamrod().equalsFuzzy(player.getItemInHand()) && cannon.isLoadingBlock(clickedBlock.getLocation()))
+            if(config.getToolRamrod().equalsFuzzy(player.getItemInHand()) && cannon.isLoadingBlock(clickedBlock.getLocation()))
             {
                 plugin.logDebug("Ramrod used");
                 MessageEnum message = cannon.useRamRod(player);
                 userMessages.displayMessage(player, cannon, message);
-                if (message != null)
+                if(message != null)
                 {
-                    switch(message)
+                	if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
+                	else switch(message)
                     {
                     	case RamrodCleaning: 
                     	{

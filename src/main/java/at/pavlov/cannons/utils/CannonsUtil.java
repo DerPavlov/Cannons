@@ -12,6 +12,7 @@ import java.util.HashMap;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.container.MaterialHolder;
 import org.bukkit.*;
+import org.bukkit.Note.Tone;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
@@ -558,7 +559,32 @@ public class CannonsUtil
             }
         }
     }
-
+    /**
+     * creates a imitated error sound (called when played doing something wrong)
+     * @param p player
+     * @param v volume
+     * @param pt pitch
+     */
+    public static void playErrorSound(final Player p)
+    {
+        try
+        {
+        	p.playSound(p.getEyeLocation(), Sound.NOTE_PIANO, 1f, 3f);
+        	Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
+        	{
+        		@Override public void run()
+        		{
+        			p.playSound(p.getEyeLocation(), Sound.NOTE_PIANO, 1f, 0.5f);
+        			}
+        		}
+        	, 5);
+        }
+        catch(Exception e)
+        {
+        	//Fired if bukkit doen't have this sound, try/catch block is not neccesury
+        }
+    	
+    }
     /**
      * find the surface in the given direction
      * @param start starting point
