@@ -116,6 +116,7 @@ public class CannonManager
         plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getUID());
         //remove cannon name
         cannonNameMap.remove(cannon.getCannonName());
+        plugin.getAiming().removeCannon(cannon);
 
         //remove entry
         if (removeEntry)

@@ -8,11 +8,8 @@ import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
-import at.pavlov.cannons.container.LastUpdate;
-import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.container.MovingObject;
 import at.pavlov.cannons.event.CannonUseEvent;
-import at.pavlov.cannons.listener.Commands;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -63,7 +60,8 @@ public class Aiming {
     private HashMap<String, UUID> inAimingMode = new HashMap<String, UUID>();
     private HashSet<String> imitatedEffectsOff = new HashSet<String>();
 
-    private ArrayList<LastUpdate> lastAimed = new ArrayList<LastUpdate>();
+    private HashMap<UUID, List<String>> observingPlayers = new HashMap<UUID, List<String>>();
+    private HashMap<UUID, Long> lastAimed = new HashMap<UUID, Long>();
 
 
     /**
@@ -87,6 +85,7 @@ public class Aiming {
 			public void run() 
 			    {
 			    	updateAimingMode();
+                    showImpactDelayed();
 			    }
 		}, 1L, 1L);	
 	}
@@ -117,7 +116,7 @@ public class Aiming {
 			else
 			{
 				//barrel clicked to change angle
-				return DisplayAngle(cannon, clickedFace, player);
+				return changeAngle(cannon, clickedFace, player);
 			}
 		}
 		return null;
@@ -130,7 +129,7 @@ public class Aiming {
      * @param player operator of the cannon
      * @return message for the player
      */
-	private MessageEnum DisplayAngle(Cannon cannon, BlockFace clickedFace, Player player)
+	private MessageEnum changeAngle(Cannon cannon, BlockFace clickedFace, Player player)
 	{
 		CannonDesign design = cannon.getCannonDesign();
 
@@ -243,6 +242,8 @@ public class Aiming {
 		if (hasChanged) {
 
             player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
+            //predict impact marker
+            impactPredictor(cannon,player);
             return message;
         }
 		else
@@ -304,61 +305,41 @@ public class Aiming {
 		if (clickedFace.equals(BlockFace.DOWN)) 
 		{
 			if (isSneaking)
-			{
 				return new gunAngles(0.0, 1.0);
-			}
 			else
-			{
 				return new gunAngles(0.0, -1.0);
-			}
 		}
 		if (clickedFace.equals(BlockFace.UP)) 
 		{
 			if (isSneaking)
-			{
 				return new gunAngles(0.0, -1.0);
-			}
 			else
-			{
 				return new gunAngles(0.0, 1.0);
-			}
 		}
 		//check left 
 		BlockFace rightFace = CannonsUtil.roatateFace(cannonDirection);
 		if (clickedFace.equals(rightFace.getOppositeFace())) 
 		{
 			if (isSneaking)
-			{
 				return new gunAngles(1.0, 0.0);
-			}
 			else
-			{
 				return new gunAngles(-1.0, 0.0);
-			}
 		}
 		//check right
 		if (clickedFace.equals(rightFace)) 
 		{
 			if (isSneaking)
-			{
 				return new gunAngles(-1.0, 0.0);
-			}
 			else
-			{
 				return new gunAngles(1.0, 0.0);
-			}
 		}
 		//check front or back
 		if (clickedFace.equals(cannonDirection) || clickedFace.equals(cannonDirection.getOppositeFace()) ) 
 		{
 			if (isSneaking)
-			{
 				return new gunAngles(0.0, -1.0);
-			}
 			else
-			{
 				return new gunAngles(0.0, 1.0);
-			}
 		}
 		
 		return new gunAngles(0.0, 0.0);
@@ -425,7 +406,7 @@ public class Aiming {
     			// autoaming or fineadjusting
     			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && player.isOnline() && cannon.isValid())
         		{
-            		MessageEnum message = DisplayAngle(cannon, null, player);
+            		MessageEnum message = changeAngle(cannon, null, player);
                     //show impact predictor marker
                     impactPredictor(cannon, player);
             		userMessages.displayMessage(player, cannon, message);
@@ -644,6 +625,55 @@ public class Aiming {
         plugin.logDebug("nothing found");
         return null;
     }
+
+    /**
+     *  impact effects will be only be shown if the cannon is not moved for a while
+     */
+    public void showImpactDelayed()
+    {
+        for (Map.Entry<UUID, Long> last : lastAimed.entrySet())
+        {
+            if (last.getValue()+1000 < System.currentTimeMillis());
+            {
+                //find all the watching players
+                List<String> nameList = observingPlayers.get(last.getKey());
+                if (nameList == null)
+                {
+                    plugin.logDebug("no observing players");
+                    continue;
+                }
+                for (String name : nameList)
+                {
+                    Player player = Bukkit.getPlayer(name);
+                    Cannon cannon = plugin.getCannon(last.getKey());
+                    if (player != null && cannon != null)
+                        impactPredictor(cannon, player);
+                }
+            }
+        }
+    }
+
+    /**
+     * updates the last time usage of the cannon
+     * @param cannon operated cannon
+     */
+    public void updateLastAimed(Cannon cannon)
+    {
+        lastAimed.put(cannon.getUID(), System.currentTimeMillis());
+    }
+
+    /**
+     * removes this cannon from the list of last time usage
+     * @param cannon
+     */
+    public void removeCannon(Cannon cannon)
+    {
+        lastAimed.remove(cannon.getUID());
+        observingPlayers.remove(cannon.getUID());
+
+    }
+
+
 
     /**
      * calculated the impact of the projectile and make a sphere with fakeBlocks at the impact for the given player

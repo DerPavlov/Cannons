@@ -416,8 +416,6 @@ public class PlayerListener implements Listener
                 userMessages.displayMessage(player, cannon, message);
 
                 aiming.showAimingVector(cannon, player);
-                //predict impact marker
-                aiming.impactPredictor(cannon,player);
 
                 // update Signs
                 cannon.updateCannonSigns();
