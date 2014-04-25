@@ -345,15 +345,16 @@ public class PlayerListener implements Listener
                 }
                 return;
             }
+            else event.setCancelled(true);//prevents player from using redstone blocks, such as lever, button, if player clicked cannon by right click
 
             // get cannon design
             final CannonDesign design = cannon.getCannonDesign();
 
             // prevent eggs and snowball from firing when loaded into the gun
-            if(config.isCancelItem(player.getItemInHand()))
+            /*if(config.isCancelItem(player.getItemInHand()))
             {
                 event.setCancelled(true);
-            }
+            }*/
 
 
             plugin.logDebug("player interact event fired");
