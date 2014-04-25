@@ -243,7 +243,7 @@ public class Aiming {
 
             player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
             //predict impact marker
-            impactPredictor(cannon,player);
+            updateLastAimed(cannon);
             return message;
         }
 		else
