@@ -60,7 +60,8 @@ public class Aiming {
     private HashMap<String, UUID> inAimingMode = new HashMap<String, UUID>();
     private HashSet<String> imitatedEffectsOff = new HashSet<String>();
 
-    private HashMap<UUID, List<String>> observingPlayers = new HashMap<UUID, List<String>>();
+    //Cannon name, <Player, remove after showing>
+    private HashMap<UUID, HashMap<String,Boolean>> observingPlayers = new HashMap<UUID, HashMap<String, Boolean>>();
     private HashMap<UUID, Long> lastAimed = new HashMap<UUID, Long>();
 
 
@@ -636,13 +637,15 @@ public class Aiming {
             if (last.getValue()+1000 < System.currentTimeMillis());
             {
                 //find all the watching players
-                List<String> nameList = observingPlayers.get(last.getKey());
+                HashMap<String, Long> nameList = observingPlayers.get(last.getKey());
                 if (nameList == null)
                 {
                     plugin.logDebug("no observing players");
                     continue;
                 }
-                for (String name : nameList)
+
+
+                for (String name : nameList.keySet())
                 {
                     Player player = Bukkit.getPlayer(name);
                     Cannon cannon = plugin.getCannon(last.getKey());
@@ -664,7 +667,7 @@ public class Aiming {
 
     /**
      * removes this cannon from the list of last time usage
-     * @param cannon
+     * @param cannon operated cannon
      */
     public void removeCannon(Cannon cannon)
     {
@@ -672,8 +675,6 @@ public class Aiming {
         observingPlayers.remove(cannon.getUID());
 
     }
-
-
 
     /**
      * calculated the impact of the projectile and make a sphere with fakeBlocks at the impact for the given player

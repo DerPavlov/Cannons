@@ -42,7 +42,7 @@ public class InventoryManagement
         {
             //there have been enough items
             item.setAmount(total);
-            return total;
+            return 0;
         }
         else
         {
