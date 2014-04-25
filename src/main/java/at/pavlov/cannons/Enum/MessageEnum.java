@@ -3,18 +3,18 @@ package at.pavlov.cannons.Enum;
 public enum MessageEnum
 {
 	//Error Messages
-    ErrorFiringInProgress ("Error.FiringInProgress"),
-	ErrorBarrelTooHot ("Error.BarrelTooHot"),
-    ErrorNotCleaned ("Error.NotCleaned"),
-	ErrorNoGunpowder ("Error.NoGunpowder"),
-    ErrorNoProjectile ("Error.NoProjectile"),
-    ErrorNotPushed ("Error.NotPushed"),
-	ErrorNoFlintAndSteel ("Error.NoFlintAndSteel"),
-	ErrorMaximumGunpowderLoaded ("Error.MaximumGunpowderLoaded"),
-	ErrorProjectileAlreadyLoaded ("Error.ProjectileAlreadyLoaded"),
-	ErrorCannonBuiltLimit ("Error.CannonBuiltLimit"),
-	ErrorNotTheOwner ("Error.NotTheOwner"),
-    ErrorMissingSign ("Error.MissingSign"),
+    ErrorFiringInProgress ("Error.FiringInProgress", true),
+	ErrorBarrelTooHot ("Error.BarrelTooHot", true),
+    ErrorNotCleaned ("Error.NotCleaned", true),
+	ErrorNoGunpowder ("Error.NoGunpowder", true),
+    ErrorNoProjectile ("Error.NoProjectile", true),
+    ErrorNotPushed ("Error.NotPushed", true),
+	ErrorNoFlintAndSteel ("Error.NoFlintAndSteel", true),
+	ErrorMaximumGunpowderLoaded ("Error.MaximumGunpowderLoaded", true),
+	ErrorProjectileAlreadyLoaded ("Error.ProjectileAlreadyLoaded", true),
+	ErrorCannonBuiltLimit ("Error.CannonBuiltLimit", true),
+	ErrorNotTheOwner ("Error.NotTheOwner", true),
+    ErrorMissingSign ("Error.MissingSign", true),
 	
 	//Aiming
 	SettingCombinedAngle ("Aiming.SettingCombinedAngle"),
@@ -58,14 +58,14 @@ public enum MessageEnum
     ImitatedEffectsDisabled ("ImitatedEffects.Disabled"),
 	
 	//Permission
-	PermissionErrorRedstone ("Permission.ErrorRedstone"),
-	PermissionErrorBuild ("Permission.ErrorBuild"),
-	PermissionErrorFire ("Permission.ErrorFire"),
-	PermissionErrorLoad ("Permission.ErrorLoad"),
-	PermissionErrorAdjust ("Permission.ErrorAdjust"),
-	PermissionErrorProjectile ("Permission.ErrorProjectile"),
-    PermissionErrorThermometer ("Permission.ErrorThermometer"),
-    PermissionErrorRamrod ("Permission.ErrorRamrod"),
+	PermissionErrorRedstone ("Permission.ErrorRedstone", true),
+	PermissionErrorBuild ("Permission.ErrorBuild", true),
+	PermissionErrorFire ("Permission.ErrorFire", true),
+	PermissionErrorLoad ("Permission.ErrorLoad", true),
+	PermissionErrorAdjust ("Permission.ErrorAdjust", true),
+	PermissionErrorProjectile ("Permission.ErrorProjectile", true),
+    PermissionErrorThermometer ("Permission.ErrorThermometer", true),
+    PermissionErrorRamrod ("Permission.ErrorRamrod", true),
 	
 	//Help
 	HelpText ("Help.Text"),
@@ -75,14 +75,25 @@ public enum MessageEnum
 
 	
 	private final String str;
+	private final boolean isError;
 	
+	MessageEnum(String str, boolean e)
+	{
+		this.str = str;
+		isError = e;
+	}
 	MessageEnum(String str)
 	{
 		this.str = str;
+		isError = false;
 	}
 
 	public String getString()
 	{
 		return str;
+	}
+	public boolean isError()
+	{
+		return isError;
 	}
 }

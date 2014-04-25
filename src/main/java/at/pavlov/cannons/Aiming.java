@@ -14,6 +14,7 @@ import at.pavlov.cannons.listener.Commands;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -110,7 +111,7 @@ public class Aiming {
 			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
 			{
 				//aiming mode
-				ToggleAimingMode(player, cannon);
+				ToggleAimingMode(player, cannon, false);
 			}
 			else
 			{
@@ -159,8 +160,16 @@ public class Aiming {
 		if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
 		{
 			//aiming mode
-			angles = CheckLookingDirection(cannon, player.getLocation());
-			combine = true;
+			if(player.isSneaking())//player can to turn cannon while sneaking (to improve autoaimming)
+			{
+				angles = CheckLookingDirection(cannon, player.getLocation());
+                player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 0.5f, 0.5f);
+				combine = true;
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{
@@ -423,48 +432,52 @@ public class Aiming {
      * @param player - player in aiming mode
      * @param cannon - operated cannon
      */
-	public void ToggleAimingMode(Player player, Cannon cannon)
+	public void ToggleAimingMode(Player player, Cannon cannon, boolean leftClick)
 	{
-		if (inAimingMode.containsKey(player.getName()))
+		if(leftClick)//firing
 		{
-            if (cannon == null)
-                cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
-
-            //this player is already in aiming mode, he might fire the cannon or turn the aiming mode of
-		    if (player.isSneaking())
-            {
-                MessageEnum message = plugin.getFireCannon().playerFiring(cannon, player, InteractAction.fireAutoaim);
-                userMessages.displayMessage(player, cannon, message);
-            }
-            else
-            {
-                //turn off the aiming mode
-                MessageEnum message = disableAimingMode(player);
-                userMessages.displayMessage(player, cannon, message);
-            }
-        }
-		else if(cannon != null)
-		{
-			//check if player has permission to aim
-			if (player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
+			if(inAimingMode.containsKey(player.getName()))
 			{
-                //check distance before enabling the cannon
-                if (distanceCheck(player, cannon))
-                {
-                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeEnabled);
-                    inAimingMode.put(player.getName(), cannon.getID());
-                }
-                else
-                {
-                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeTooFarAway);
-                }
-
+				cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));MessageEnum message = plugin.getFireCannon().playerFiring(cannon, player, InteractAction.fireAutoaim);
+                userMessages.displayMessage(player, cannon, message);
+                if(message.isError()) CannonsUtil.playErrorSound(player);
 			}
-			else
+		}
+		else//rotating and toggle aiming mode
+		{
+			if(inAimingMode.containsKey(player.getName()))
 			{
-				//no Permission to aim
-				userMessages.displayMessage(player, cannon, MessageEnum.PermissionErrorAdjust);
-				return;
+	            if(cannon == null)
+	                cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
+
+	            //this player is already in aiming mode, he might fire the cannon or turn the aiming mode of
+	            //turn off the aiming mode
+	            MessageEnum message = disableAimingMode(player);
+	            userMessages.displayMessage(player, cannon, message);
+	        }
+			else if(cannon != null)
+			{
+				//check if player has permission to aim
+				if (player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
+				{
+	                //check distance before enabling the cannon
+	                if (distanceCheck(player, cannon))
+	                {
+	                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeEnabled);
+	                    inAimingMode.put(player.getName(), cannon.getID());
+	                }
+	                else
+	                {
+	                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeTooFarAway);
+	                }
+
+				}
+				else
+				{
+					//no Permission to aim
+					userMessages.displayMessage(player, cannon, MessageEnum.PermissionErrorAdjust);
+					return;
+				}
 			}
 		}
 	}

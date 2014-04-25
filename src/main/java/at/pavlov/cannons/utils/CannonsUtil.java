@@ -569,19 +569,28 @@ public class CannonsUtil
     {
         try
         {
-        	p.playSound(p.getEyeLocation(), Sound.NOTE_PIANO, 1f, 3f);
+        	p.playSound(p.getEyeLocation(), Sound.SUCCESSFUL_HIT, 0.25f, 0.75f);
         	Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
         	{
         		@Override public void run()
         		{
-        			p.playSound(p.getEyeLocation(), Sound.NOTE_PIANO, 1f, 0.5f);
+        			p.playSound(p.getEyeLocation(), Sound.SUCCESSFUL_HIT, 0.25f, 0.1f);
         			}
         		}
-        	, 5);
+        	, 3);
         }
         catch(Exception e)
         {
         	//Fired if bukkit doen't have this sound, try/catch block is not neccesury
+        	p.playSound(p.getEyeLocation(), Sound.NOTE_PIANO, 0.25f, 2f);
+        	Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
+        	{
+        		@Override public void run()
+        		{
+        			p.playSound(p.getEyeLocation(), Sound.NOTE_PIANO, 0.25f, 0.75f);
+        			}
+        		}
+        	, 3);
         }
     	
     }

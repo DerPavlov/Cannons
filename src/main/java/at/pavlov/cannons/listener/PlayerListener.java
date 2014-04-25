@@ -316,7 +316,8 @@ public class PlayerListener implements Listener
     @EventHandler
     public void PlayerInteract(PlayerInteractEvent event)
     {
-        if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)
+        Action action = event.getAction();
+    	if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)
         {
             Block clickedBlock;
             if(event.getClickedBlock() == null)
@@ -338,9 +339,9 @@ public class PlayerListener implements Listener
             if(cannon == null)
             {
                 // all other actions will stop aiming mode
-                if(event.getAction() == Action.RIGHT_CLICK_AIR)
+                if(action == Action.RIGHT_CLICK_AIR)
                 {
-                    aiming.ToggleAimingMode(event.getPlayer(), null);
+                    aiming.ToggleAimingMode(event.getPlayer(), null, false);
                 }
                 return;
             }
@@ -422,7 +423,7 @@ public class PlayerListener implements Listener
 
                 if(message != null)
                 {
-                    if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
+                    if(message.isError()) CannonsUtil.playErrorSound(player);
                     else player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
                     return;
                 }
@@ -440,7 +441,7 @@ public class PlayerListener implements Listener
 
                 if(message !=null)
                 {
-                	if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
+                	if(message.isError()) CannonsUtil.playErrorSound(player);
                 	else if(message.equals(MessageEnum.loadProjectile)) player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
                     return;
                 }
@@ -460,7 +461,7 @@ public class PlayerListener implements Listener
 
                 if(message != null)
                 {
-                	if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
+                	if(message.isError()) CannonsUtil.playErrorSound(player);
                 	else if(message.equals(MessageEnum.loadGunpowder)) player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SAND, 0.5F, 1f);
                     return;
                 }
@@ -479,7 +480,7 @@ public class PlayerListener implements Listener
 
                 if(message!=null)
                 {
-                	if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
+                	if(message.isError()) CannonsUtil.playErrorSound(player);
                     return;
                 }
             }
@@ -503,7 +504,7 @@ public class PlayerListener implements Listener
                 userMessages.displayMessage(player, cannon, message);
                 if(message != null)
                 {
-                	if(message.toString().startsWith("er")) CannonsUtil.playErrorSound(player);
+                	if(message.isError()) CannonsUtil.playErrorSound(player);
                 	else switch(message)
                     {
                     	case RamrodCleaning: 
@@ -532,7 +533,10 @@ public class PlayerListener implements Listener
             }
 
         }
-        return;
+        else if(event.getAction().equals(Action.LEFT_CLICK_AIR)/* || event.getAction().equals(Action.LEFT_CLICK_BLOCK)*/)
+        {
+        	aiming.ToggleAimingMode(event.getPlayer(), null, true);
+        }
     }
 
 }
