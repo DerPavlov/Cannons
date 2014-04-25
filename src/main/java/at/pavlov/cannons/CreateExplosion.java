@@ -3,6 +3,7 @@ package at.pavlov.cannons;
 import java.util.*;
 
 
+import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
@@ -887,7 +888,7 @@ public class CreateExplosion {
 
             if(distance >= minDist  && distance <= maxDist)
             {
-                plugin.getFakeBlockHandler().imitatedSphere(p, loc, r, mat, delay);
+                plugin.getFakeBlockHandler().imitatedSphere(p, loc, r, mat, FakeBlockType.EXPLOSION, delay);
             }
         }
 

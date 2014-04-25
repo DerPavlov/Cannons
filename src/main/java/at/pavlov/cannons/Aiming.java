@@ -1,6 +1,7 @@
 package at.pavlov.cannons;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.cannon.Cannon;
@@ -569,7 +570,7 @@ public class Aiming {
         if(config.isImitatedAimingEnabled() && isImitatingEnabled(player.getName()))
         {
             plugin.getFakeBlockHandler().imitateLine(player, cannon.getMuzzle(), cannon.getAimingVector(), 0,
-                    config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), config.getImitatedAimingTime());
+                    config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), FakeBlockType.AIMING, config.getImitatedAimingTime());
         }
     }
 
@@ -646,7 +647,7 @@ public class Aiming {
     public Location impactPredictor(Cannon cannon, Player player)
     {
         Location surface = impactPredictor(cannon);
-        plugin.getFakeBlockHandler().imitatedSphere(player, surface, 1, config.getImitatedPredictorMaterial(), config.getImitatedPredictorTime());
+        plugin.getFakeBlockHandler().imitatedSphere(player, surface, 0, config.getImitatedPredictorMaterial(), FakeBlockType.IMPACT_PREDICTOR, config.getImitatedPredictorTime());
         return surface;
     }
 }

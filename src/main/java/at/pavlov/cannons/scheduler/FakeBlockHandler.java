@@ -1,6 +1,7 @@
 package at.pavlov.cannons.scheduler;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.container.FakeBlockEntry;
 import at.pavlov.cannons.container.MaterialHolder;
@@ -74,6 +75,32 @@ public class FakeBlockHandler {
     }
 
     /**
+     * removes previous entries for this type of fake blocks
+     */
+    private void removeOldBlockType(FakeBlockType type)
+    {
+        Iterator<FakeBlockEntry> iter = list.iterator();
+        while(iter.hasNext())
+        {
+            FakeBlockEntry next = iter.next();
+            //if older and if the type matches
+            if (next.getStartTime() < System.currentTimeMillis() && next.getType() == type)
+            {
+                //send real block to player
+                Player player = next.getPlayerBukkit();
+                Location loc = next.getLocation();
+                if (player != null && loc != null)
+                {
+                    player.sendBlockChange(loc, loc.getBlock().getType(), loc.getBlock().getData());
+                }
+
+                //remove this entry
+                iter.remove();
+            }
+        }
+    }
+
+    /**
      * creates a sphere of fake block and sends it to the given player
      * @param player the player to be notified
      * @param loc center of the sphere
@@ -81,7 +108,7 @@ public class FakeBlockHandler {
      * @param mat material of the fake block
      * @param duration delay until the block disappears again in s
      */
-    public void imitatedSphere(Player player, Location loc, int r, MaterialHolder mat, double duration)
+    public void imitatedSphere(Player player, Location loc, int r, MaterialHolder mat, FakeBlockType type, double duration)
     {
         if(loc == null || player == null)
             return;
@@ -95,7 +122,7 @@ public class FakeBlockHandler {
                     Location newL = loc.clone().add(x, y, z);
                     if(newL.distance(loc)<=r)
                     {
-                        sendBlockChangeToPlayer(player, newL, mat, duration);
+                        sendBlockChangeToPlayer(player, newL, mat, type, duration);
                     }
                 }
             }
@@ -110,7 +137,7 @@ public class FakeBlockHandler {
      * @param length lenght of the line
      * @param player name of the player
      */
-    public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, MaterialHolder material, double duration)
+    public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, MaterialHolder material, FakeBlockType type, double duration)
     {
         if(loc == null || player == null)
             return;
@@ -118,7 +145,7 @@ public class FakeBlockHandler {
         BlockIterator iter = new BlockIterator(loc.getWorld(), loc.toVector(), direction, offset, length);
         while (iter.hasNext())
         {
-            sendBlockChangeToPlayer(player, iter.next().getLocation(), material, duration);
+            sendBlockChangeToPlayer(player, iter.next().getLocation(), material, type, duration);
         }
 
     }
@@ -130,11 +157,13 @@ public class FakeBlockHandler {
      * @param material type of the block
      * @param duration how long to remove the block in [s]
      */
-    public void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, double duration)
+    private void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, FakeBlockType type, double duration)
     {
+
+        //only show block in air
         if(loc.getBlock().isEmpty())
         {
-            FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc,player,(long) (duration*20.0));
+            FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc, player, type, (long) (duration*20.0));
 
             //don't send changes if there is already a block in the list
             if (!list.contains(fakeBlockEntry))
@@ -146,6 +175,8 @@ public class FakeBlockHandler {
                 //renew entry
                 list.remove(fakeBlockEntry);
             }
+
+            //remove older entries of this type
 
 
             //register block to remove it later

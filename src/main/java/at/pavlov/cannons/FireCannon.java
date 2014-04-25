@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.pavlov.cannons.Enum.BreakCause;
+import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
@@ -373,8 +374,8 @@ public class FireCannon {
         for(Player name : players)
         {
             //make smoke and fire effects for large distance
-            plugin.getFakeBlockHandler().imitateLine(name, loc, aimingVector, 0, 1, config.getImitatedFireMaterial(), duration);
-            plugin.getFakeBlockHandler().imitatedSphere(name, loc.clone().add(aimingVector.clone().normalize()), 2, config.getImitatedSmokeMaterial(), duration);
+            plugin.getFakeBlockHandler().imitateLine(name, loc, aimingVector, 0, 1, config.getImitatedFireMaterial(), FakeBlockType.MUZZLE_FIRE, duration);
+            plugin.getFakeBlockHandler().imitatedSphere(name, loc.clone().add(aimingVector.clone().normalize()), 2, config.getImitatedSmokeMaterial(), FakeBlockType.MUZZLE_FIRE, duration);
         }
     }
 

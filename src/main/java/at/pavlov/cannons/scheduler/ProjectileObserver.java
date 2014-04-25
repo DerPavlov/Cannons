@@ -1,6 +1,7 @@
 package at.pavlov.cannons.scheduler;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.projectile.FlyingProjectile;
@@ -111,7 +112,7 @@ public class ProjectileObserver {
             double distance = pl.distance(loc);
 
             if(distance <= maxDist)
-                plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getId(), 0), 1.0);
+                plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getId(), 0), FakeBlockType.WATER_SPLASH, 1.0);
             
         }
         CannonsUtil.imitateSound(loc, Sound.SPLASH, maxSoundDist, 0.3F);//Too many errors in code, Peter!
