@@ -14,7 +14,6 @@ import at.pavlov.cannons.listener.Commands;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -111,7 +110,7 @@ public class Aiming {
 			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
 			{
 				//aiming mode
-				ToggleAimingMode(player, cannon, false);
+				ToggleAimingMode(player, cannon);
 			}
 			else
 			{
@@ -157,19 +156,11 @@ public class Aiming {
         gunAngles angles;
 
 		//barrel clicked to change angle
-		if(inAimingMode.containsKey(player.getName()) && !cannon.getCannonDesign().getGunpowderType().equalsFuzzy(player.getItemInHand())/*config.getToolAutoaim().equalsFuzzy(player.getItemInHand())*/)
+		if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
 		{
 			//aiming mode
-			if(player.isSneaking())//player can to turn cannon while sneaking (to improve autoaimming)
-			{
-				angles = CheckLookingDirection(cannon, player.getLocation());
-                player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 0.5f, 0.5f);
-				combine = true;
-			}
-			else
-			{
-				return null;
-			}
+			angles = CheckLookingDirection(cannon, player.getLocation());
+			combine = true;
 		}
 		else
 		{
@@ -409,19 +400,19 @@ public class Aiming {
     		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()*50 )
     		{
     			// autoaming or fineadjusting
-    			if (/*config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && */player.isOnline() && cannon.isValid())
+    			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && player.isOnline() && cannon.isValid())
         		{
             		MessageEnum message = DisplayAngle(cannon, null, player);
                     //show impact predictor marker
                     impactPredictor(cannon, player);
             		userMessages.displayMessage(player, cannon, message);
         		}		
-        		/*else It is not needed anymore, because player can to use cannon in aiming mode without unwanted rotating
+        		else
         		{
         			//leave aiming Mode
         			MessageEnum message = disableAimingMode(player);
                     userMessages.displayMessage(player, cannon, message);
-        		}*/
+        		}
     		}	
     	}
 	}
@@ -432,52 +423,48 @@ public class Aiming {
      * @param player - player in aiming mode
      * @param cannon - operated cannon
      */
-	public void ToggleAimingMode(Player player, Cannon cannon, boolean leftClick)
+	public void ToggleAimingMode(Player player, Cannon cannon)
 	{
-		if(leftClick)//firing
+		if (inAimingMode.containsKey(player.getName()))
 		{
-			if(inAimingMode.containsKey(player.getName()))
-			{
-				cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));MessageEnum message = plugin.getFireCannon().playerFiring(cannon, player, InteractAction.fireAutoaim);
+            if (cannon == null)
+                cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
+
+            //this player is already in aiming mode, he might fire the cannon or turn the aiming mode of
+		    if (player.isSneaking())
+            {
+                MessageEnum message = plugin.getFireCannon().playerFiring(cannon, player, InteractAction.fireAutoaim);
                 userMessages.displayMessage(player, cannon, message);
-                if(message.isError()) CannonsUtil.playErrorSound(player);
-			}
-		}
-		else//rotating and toggle aiming mode
+            }
+            else
+            {
+                //turn off the aiming mode
+                MessageEnum message = disableAimingMode(player);
+                userMessages.displayMessage(player, cannon, message);
+            }
+        }
+		else if(cannon != null)
 		{
-			if(inAimingMode.containsKey(player.getName()))
+			//check if player has permission to aim
+			if (player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
 			{
-	            if(cannon == null)
-	                cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
+                //check distance before enabling the cannon
+                if (distanceCheck(player, cannon))
+                {
+                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeEnabled);
+                    inAimingMode.put(player.getName(), cannon.getUID());
+                }
+                else
+                {
+                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeTooFarAway);
+                }
 
-	            //this player is already in aiming mode, he might fire the cannon or turn the aiming mode of
-	            //turn off the aiming mode
-	            MessageEnum message = disableAimingMode(player);
-	            userMessages.displayMessage(player, cannon, message);
-	        }
-			else if(cannon != null)
+			}
+			else
 			{
-				//check if player has permission to aim
-				if (player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
-				{
-	                //check distance before enabling the cannon
-	                if (distanceCheck(player, cannon))
-	                {
-	                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeEnabled);
-	                    inAimingMode.put(player.getName(), cannon.getID());
-	                }
-	                else
-	                {
-	                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeTooFarAway);
-	                }
-
-				}
-				else
-				{
-					//no Permission to aim
-					userMessages.displayMessage(player, cannon, MessageEnum.PermissionErrorAdjust);
-					return;
-				}
+				//no Permission to aim
+				userMessages.displayMessage(player, cannon, MessageEnum.PermissionErrorAdjust);
+				return;
 			}
 		}
 	}

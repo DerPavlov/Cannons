@@ -1391,7 +1391,7 @@ public class Cannon
     public boolean equals(Object obj)
     {
         Cannon obj2 = (Cannon) obj;
-        return this.getID().equals(obj2.getID());
+        return this.getUID().equals(obj2.getUID());
     }
 
     @Override
@@ -1418,12 +1418,12 @@ public class Cannon
         return null;
     }
 
-    public UUID getID()
+    public UUID getUID()
     {
         return databaseId;
     }
 
-    public void setID(UUID ID)
+    public void setUID(UUID ID)
     {
         this.databaseId = ID;
     }

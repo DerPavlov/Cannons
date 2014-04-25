@@ -3,6 +3,7 @@ package at.pavlov.cannons.dao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import at.pavlov.cannons.utils.DelayedTask;
 import org.bukkit.block.BlockFace;
@@ -79,7 +80,7 @@ public class PersistenceDatabase
 					//make a cannon
 					Cannon cannon = new Cannon(design, world, offset, cannonDirection, owner);
 					// cannon created - load properties
-					cannon.setID(bean.getId());
+					cannon.setUID(bean.getId());
 					cannon.setCannonName(bean.getName());
                     cannon.setSoot(bean.getSoot());
 					cannon.setLoadedGunpowder(bean.getGunpowder());
@@ -133,7 +134,7 @@ public class PersistenceDatabase
 	{
 
 		// get list of all cannons
-		HashMap<UUID, Cannon> cannonList = plugin.getCannonManager().getCannonList();
+		ConcurrentHashMap<UUID, Cannon> cannonList = plugin.getCannonManager().getCannonList();
 
 		// save all cannon to database
 		for (Cannon cannon : cannonList.values())
@@ -173,7 +174,7 @@ public class PersistenceDatabase
 		{
 			// search if the is cannon already stored in the database
 			//CannonBean bean = plugin.getDatabase().find(CannonBean.class).where().idEq(cannon.getID()).findUnique();
-            CannonBean bean = plugin.getDatabase().find(CannonBean.class, cannon.getID());
+            CannonBean bean = plugin.getDatabase().find(CannonBean.class, cannon.getUID());
 			
 			if (bean == null)
 			{
@@ -181,11 +182,11 @@ public class PersistenceDatabase
 				// create a new bean that is managed by bukkit
 				bean = plugin.getDatabase().createEntityBean(CannonBean.class);
 
-				bean.setId(cannon.getID());
+				bean.setId(cannon.getUID());
 			}
 			else
 			{
-				plugin.logDebug("saving cannon: " + cannon.getID());
+				plugin.logDebug("saving cannon: " + cannon.getUID());
 			}
 
 			// fill the bean with values to store

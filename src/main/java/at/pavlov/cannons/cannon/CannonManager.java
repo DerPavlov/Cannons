@@ -2,9 +2,11 @@ package at.pavlov.cannons.cannon;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
+import at.pavlov.cannons.container.UniqueName;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
@@ -21,13 +23,18 @@ import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.event.CannonAfterCreateEvent;
 import at.pavlov.cannons.event.CannonBeforeCreateEvent;
 
+
 public class CannonManager
 {
-	private final HashMap<UUID, Cannon> cannonList = new HashMap<UUID, Cannon>();
+	private final ConcurrentHashMap<UUID, Cannon> cannonList = new ConcurrentHashMap<UUID, Cannon>();
+    private final ConcurrentHashMap<UniqueName, UUID> cannonNameMap = new ConcurrentHashMap<UniqueName, UUID>();
 
-	private final Cannons plugin;
+
+    private final Cannons plugin;
 	private final UserMessages userMessages;
 	private final Config config;
+
+
 
 	public CannonManager(Cannons cannons, UserMessages userMessages, Config config)
 	{
@@ -106,11 +113,13 @@ public class CannonManager
         if (player != null) userMessages.displayMessage(player, cannon, message);
 
         //remove from database
-        plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getID());
+        plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getUID());
+        //remove cannon name
+        cannonNameMap.remove(cannon.getCannonName());
 
         //remove entry
         if (removeEntry)
-            cannonList.remove(cannon.getID());
+            cannonList.remove(cannon.getUID());
 
     }
 
@@ -146,17 +155,17 @@ public class CannonManager
 	 */
 	private boolean isCannonNameUnique(String name, String owner)
 	{
-		for (Cannon cannon : cannonList.values())
-		{
-			if (cannon.getCannonName() != null && name != null && cannon.getOwner() != null && cannon.getOwner().equals(owner))
-			{
-				if (cannon.getCannonName().equals(name))
-				{
-					return false;
-				}
-			}
-		}
-		return true;
+        if (name == null || owner == null)
+            return false;
+
+		// try to find this in the map
+        UniqueName uName = new UniqueName(name, owner);
+        //there is no such cannon name
+        if (cannonNameMap.get(uName)==null)
+            return true;
+        //there is such a cannon name
+        else
+            return false;
 	}
 
 	/**
@@ -209,7 +218,9 @@ public class CannonManager
 		
 		
 		// add cannon to the list
-		cannonList.put(cannon.getID(), cannon);
+		cannonList.put(cannon.getUID(), cannon);
+        //add cannon name to the list
+        cannonNameMap.put(new UniqueName(cannon.getCannonName(),cannon.getOwner()), cannon.getUID());
 
         plugin.getPersistenceDatabase().saveCannonAsync(cannon);
         plugin.logDebug("added cannon to the list");
@@ -312,18 +323,12 @@ public class CannonManager
 	{
 		if (cannonName == null || owner == null) return null;
 
-		for (Cannon cannon : cannonList.values())
-		{
-			if (cannonName.equals(cannon.getCannonName()))
-			{
-				if (owner.equals(cannon.getOwner()))
-				{
-					return cannon;
-				}
-			}
+        UUID uid = cannonNameMap.get(cannonName);
+        if (uid != null)
+		    return cannonList.get(uid);
 
-		}
-		return null;
+        //cannon not found
+        return null;
 	}
 
 	/**
@@ -548,7 +553,7 @@ public class CannonManager
 	 * 
 	 * @return List of cannons
 	 */
-	public HashMap<UUID,Cannon> getCannonList()
+	public ConcurrentHashMap<UUID,Cannon> getCannonList()
 	{
 		return cannonList;
 	}
