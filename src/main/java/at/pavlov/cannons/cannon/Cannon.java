@@ -356,6 +356,8 @@ public class Cannon
             if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
                 InventoryManagement.takeFromPlayerHand(player, gunpowder);
         }
+
+        player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
         return returnVal;
 
     }
@@ -404,6 +406,8 @@ public class Cannon
             // update Signs
             updateCannonSigns();
         }
+
+        player.getWorld().playSound(this.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
         return returnVal;
     }
 

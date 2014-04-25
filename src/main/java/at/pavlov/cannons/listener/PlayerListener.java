@@ -424,8 +424,8 @@ public class PlayerListener implements Listener
 
                 if(message != null)
                 {
-                    if(!message.isValid()) CannonsUtil.playErrorSound(player);
-                    else player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
+                    if(!message.isValid())
+                        CannonsUtil.playErrorSound(player);
                     return;
                 }
             }
@@ -442,8 +442,8 @@ public class PlayerListener implements Listener
 
                 if(message !=null)
                 {
-                	if(!message.isValid()) CannonsUtil.playErrorSound(player);
-                	else if(message.equals(MessageEnum.loadProjectile)) player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
+                	if(!message.isValid())
+                        CannonsUtil.playErrorSound(player);
                     return;
                 }
             }
@@ -462,8 +462,8 @@ public class PlayerListener implements Listener
 
                 if(message != null)
                 {
-                	if(!message.isValid()) CannonsUtil.playErrorSound(player);
-                	else if(message.equals(MessageEnum.loadGunpowder)) player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
+                	if(!message.isValid())
+                        CannonsUtil.playErrorSound(player);
                     return;
                 }
             }
@@ -481,7 +481,8 @@ public class PlayerListener implements Listener
 
                 if(message!=null)
                 {
-                	if(!message.isValid()) CannonsUtil.playErrorSound(player);
+                	if(!message.isValid())
+                        CannonsUtil.playErrorSound(player);
                     return;
                 }
             }
@@ -503,6 +504,13 @@ public class PlayerListener implements Listener
                 plugin.logDebug("Ramrod used");
                 MessageEnum message = cannon.useRamRod(player);
                 userMessages.displayMessage(player, cannon, message);
+
+                if(message!=null)
+                {
+                    if(!message.isValid())
+                        CannonsUtil.playErrorSound(player);
+                    return;
+                }
 
             }
 

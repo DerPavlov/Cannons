@@ -8,6 +8,7 @@ import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
+import at.pavlov.cannons.container.LastUpdate;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.container.MovingObject;
 import at.pavlov.cannons.event.CannonUseEvent;
@@ -15,6 +16,7 @@ import at.pavlov.cannons.listener.Commands;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -60,6 +62,8 @@ public class Aiming {
 
     private HashMap<String, UUID> inAimingMode = new HashMap<String, UUID>();
     private HashSet<String> imitatedEffectsOff = new HashSet<String>();
+
+    private ArrayList<LastUpdate> lastAimed = new ArrayList<LastUpdate>();
 
 
     /**
@@ -236,8 +240,11 @@ public class Aiming {
 		cannon.setLastAimed(System.currentTimeMillis());
 		
 		//display message only if the angle has changed
-		if (hasChanged)
-			return message;
+		if (hasChanged) {
+
+            player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
+            return message;
+        }
 		else
 			return null;
 	}

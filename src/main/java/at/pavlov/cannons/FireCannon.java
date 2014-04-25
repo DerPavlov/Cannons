@@ -225,7 +225,7 @@ public class FireCannon {
             torchLoc.setY(torchLoc.getY() + 1);
             torchLoc.setZ(torchLoc.getZ() + 0.5);
             torchLoc.getWorld().playEffect(torchLoc, Effect.SMOKE, BlockFace.UP);
-            torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 5, 1);
+            torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 10f, 1f);
         }
 
         //this cannon is now firing
