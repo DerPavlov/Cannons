@@ -157,7 +157,7 @@ public class Aiming {
         gunAngles angles;
 
 		//barrel clicked to change angle
-		if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
+		if(inAimingMode.containsKey(player.getName()) && !cannon.getCannonDesign().getGunpowderType().equalsFuzzy(player.getItemInHand())/*config.getToolAutoaim().equalsFuzzy(player.getItemInHand())*/)
 		{
 			//aiming mode
 			if(player.isSneaking())//player can to turn cannon while sneaking (to improve autoaimming)
@@ -409,19 +409,19 @@ public class Aiming {
     		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()*50 )
     		{
     			// autoaming or fineadjusting
-    			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && player.isOnline() && cannon.isValid())
+    			if (/*config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && */player.isOnline() && cannon.isValid())
         		{
             		MessageEnum message = DisplayAngle(cannon, null, player);
                     //show impact predictor marker
                     impactPredictor(cannon, player);
             		userMessages.displayMessage(player, cannon, message);
         		}		
-        		else
+        		/*else It is not needed anymore, because player can to use cannon in aiming mode without unwanted rotating
         		{
         			//leave aiming Mode
         			MessageEnum message = disableAimingMode(player);
                     userMessages.displayMessage(player, cannon, message);
-        		}
+        		}*/
     		}	
     	}
 	}

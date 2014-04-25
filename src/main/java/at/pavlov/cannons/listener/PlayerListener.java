@@ -462,7 +462,7 @@ public class PlayerListener implements Listener
                 if(message != null)
                 {
                 	if(message.isError()) CannonsUtil.playErrorSound(player);
-                	else if(message.equals(MessageEnum.loadGunpowder)) player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SAND, 0.5F, 1f);
+                	else if(message.equals(MessageEnum.loadGunpowder)) player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
                     return;
                 }
             }
