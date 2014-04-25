@@ -700,6 +700,7 @@ public class CreateExplosion {
                 LivingEntity living = (LivingEntity) next;
                 plugin.logDebug("damage entity " + living.getType() + " by " + String.format("%.2f", damage));
                 double health = living.getHealth();
+                living.setNoDamageTicks(0);//It will do damage by each projectile without noDamageTime
                 living.damage(damage);
 
                 //if player wears armor reduce damage if the player has take damage
