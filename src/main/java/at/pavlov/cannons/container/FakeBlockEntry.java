@@ -12,7 +12,7 @@ public class FakeBlockEntry implements Cloneable{
     private final int locZ;
     private final String world;
 
-    private final long startTime;
+    private long startTime;
     //how long the block stays in ticks
     private final long duration;
 
@@ -69,6 +69,11 @@ public class FakeBlockEntry implements Cloneable{
 
     public long getStartTime() {
         return startTime;
+    }
+
+    public void setStartTime(long startTime)
+    {
+        this.startTime = startTime;
     }
 
     public long getDuration() {

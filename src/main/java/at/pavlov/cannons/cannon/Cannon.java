@@ -451,11 +451,11 @@ public class Cannon
     }
 
     /**
-     * Permission check for use ram rod
+     * Permission check and usage for ram rod
      * @param player player using the ramrod tool (null will bypass permission check)
      * @return message for the player
      */
-    public MessageEnum useRamRodPermissions(Player player)
+    private MessageEnum useRamRodInteral(Player player)
     {
         //no permission to use this tool
         if (player!=null && !player.hasPermission(design.getPermissionRamrod()))
@@ -506,7 +506,7 @@ public class Cannon
      */
     public MessageEnum useRamRod(Player player)
     {
-        MessageEnum message = useRamRodPermissions(player);
+        MessageEnum message = useRamRodInteral(player);
         if(message != null)
         {
             if(!message.isValid())

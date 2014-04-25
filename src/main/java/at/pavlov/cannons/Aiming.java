@@ -647,7 +647,7 @@ public class Aiming {
     public Location impactPredictor(Cannon cannon, Player player)
     {
         Location surface = impactPredictor(cannon);
-        plugin.getFakeBlockHandler().imitatedSphere(player, surface, 0, config.getImitatedPredictorMaterial(), FakeBlockType.IMPACT_PREDICTOR, config.getImitatedPredictorTime());
+        plugin.getFakeBlockHandler().imitatedSphere(player, surface, 1, config.getImitatedPredictorMaterial(), FakeBlockType.IMPACT_PREDICTOR, config.getImitatedPredictorTime());
         return surface;
     }
 }

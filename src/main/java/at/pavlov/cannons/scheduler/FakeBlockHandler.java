@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +23,10 @@ import java.util.List;
 public class FakeBlockHandler {
     private final Cannons plugin;
 
-    private HashSet<FakeBlockEntry> list = new HashSet<FakeBlockEntry>();
+    private ArrayList<FakeBlockEntry> list = new ArrayList<FakeBlockEntry>();
+
+    private boolean newAiming;
+    private boolean newImpactPredictor;
 
 
     /**
@@ -44,6 +48,7 @@ public class FakeBlockHandler {
         {
             public void run() {
                 removeOldBlocks();
+                removeOldBlockType();
             }
 
         }, 1L, 1L);
@@ -70,6 +75,7 @@ public class FakeBlockHandler {
 
                 //remove this entry
                 iter.remove();
+                plugin.logDebug("expired fake block: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + next.getType().toString());
             }
         }
     }
@@ -77,14 +83,15 @@ public class FakeBlockHandler {
     /**
      * removes previous entries for this type of fake blocks
      */
-    private void removeOldBlockType(FakeBlockType type)
+    private void removeOldBlockType()
     {
         Iterator<FakeBlockEntry> iter = list.iterator();
         while(iter.hasNext())
         {
             FakeBlockEntry next = iter.next();
             //if older and if the type matches
-            if (next.getStartTime() < System.currentTimeMillis() && next.getType() == type)
+            if (next.getStartTime() < (System.currentTimeMillis() - 50)
+                    && ((next.getType() == FakeBlockType.AIMING && newAiming) || (next.getType() == FakeBlockType.IMPACT_PREDICTOR && newImpactPredictor)))
             {
                 //send real block to player
                 Player player = next.getPlayerBukkit();
@@ -96,8 +103,12 @@ public class FakeBlockHandler {
 
                 //remove this entry
                 iter.remove();
+                plugin.logDebug("remove older fake entry: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + next.getType().toString());
             }
         }
+
+        newAiming=false;
+        newImpactPredictor=false;
     }
 
     /**
@@ -163,25 +174,36 @@ public class FakeBlockHandler {
         //only show block in air
         if(loc.getBlock().isEmpty())
         {
+            long time = System.currentTimeMillis();
             FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc, player, type, (long) (duration*20.0));
 
-            //don't send changes if there is already a block in the list
-            if (!list.contains(fakeBlockEntry))
+
+            boolean found = false;
+            for (FakeBlockEntry block : list)
             {
+                if (block.equals(fakeBlockEntry))
+                {
+                    //renew entry
+                    //plugin.logDebug("renew block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
+                    block.setStartTime(System.currentTimeMillis());
+                    found = true;
+                    //there is only one block here
+                    break;
+                }
+            }
+            if (!found)
+            {
+                plugin.logDebug("new block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
                 player.sendBlockChange(loc, material.getId(), (byte) material.getData());
-            }
-            else
-            {
-                //renew entry
-                list.remove(fakeBlockEntry);
+                list.add(fakeBlockEntry);
             }
 
-            //remove older entries of this type
 
-
-            //register block to remove it later
-            list.add(fakeBlockEntry);
-
+            if (type == FakeBlockType.IMPACT_PREDICTOR)
+                newImpactPredictor = true;
+            if (type == FakeBlockType.AIMING)
+                newAiming = true;
         }
     }
+
 }
