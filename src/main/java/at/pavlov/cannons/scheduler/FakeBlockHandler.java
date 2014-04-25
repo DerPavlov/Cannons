@@ -54,6 +54,7 @@ public class FakeBlockHandler {
         }, 1L, 1L);
     }
 
+
     /**
      * removes old blocks form the players vision
      */
@@ -63,10 +64,15 @@ public class FakeBlockHandler {
         while(iter.hasNext())
         {
             FakeBlockEntry next = iter.next();
+            Player player = next.getPlayerBukkit();
+
+            //if player is offline remove this one
+            if (player == null)
+                iter.remove();
+
             if (next.isExpired())
             {
                 //send real block to player
-                Player player = next.getPlayerBukkit();
                 Location loc = next.getLocation();
                 if (player != null && loc != null)
                 {

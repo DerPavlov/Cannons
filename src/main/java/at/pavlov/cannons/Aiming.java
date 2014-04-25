@@ -57,11 +57,12 @@ public class Aiming {
     private final UserMessages userMessages;
     private final Config config;
 
+    //<Player,cannon name>
     private HashMap<String, UUID> inAimingMode = new HashMap<String, UUID>();
+    //<Player>
     private HashSet<String> imitatedEffectsOff = new HashSet<String>();
 
-    //Cannon name, <Player, remove after showing>
-    private HashMap<UUID, HashMap<String,Boolean>> observingPlayers = new HashMap<UUID, HashMap<String, Boolean>>();
+    //<cannon name, timespamp>
     private HashMap<UUID, Long> lastAimed = new HashMap<UUID, Long>();
 
 
@@ -99,7 +100,7 @@ public class Aiming {
      * @param player operator of the cannon
      * @return message for the player
      */
-	public MessageEnum ChangeAngle(Cannon cannon, Action action, BlockFace clickedFace, Player player){
+	public MessageEnum changeAngle(Cannon cannon, Action action, BlockFace clickedFace, Player player){
         //fire event
         CannonUseEvent useEvent = new CannonUseEvent(cannon, player, InteractAction.adjustPlayer);
         Bukkit.getServer().getPluginManager().callEvent(useEvent);
@@ -117,7 +118,7 @@ public class Aiming {
 			else
 			{
 				//barrel clicked to change angle
-				return changeAngle(cannon, clickedFace, player);
+				return updateAngle(player, cannon, clickedFace);
 			}
 		}
 		return null;
@@ -125,12 +126,12 @@ public class Aiming {
 
     /**
      * evaluates the new cannon angle and returns a message for the user
+     * @param player operator of the cannon
      * @param cannon operated cannon
      * @param clickedFace which side was clicked (up, down, left, right)
-     * @param player operator of the cannon
      * @return message for the player
      */
-	private MessageEnum changeAngle(Cannon cannon, BlockFace clickedFace, Player player)
+	private MessageEnum updateAngle(Player player, Cannon cannon, BlockFace clickedFace)
 	{
 		CannonDesign design = cannon.getCannonDesign();
 
@@ -174,6 +175,8 @@ public class Aiming {
 			//barrel clicked to change angle
 			angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking());
 			combine = false;
+            //register impact predictor
+            cannon.addObserver(player, true);
 		}
 
 		//Check angles
@@ -353,6 +356,8 @@ public class Aiming {
      */
     public Cannon getCannonInAimingMode(Player player)
     {
+        if (player == null)
+            return null;
         //return the cannon of the player if he is in aiming mode
         return plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
     }
@@ -407,15 +412,15 @@ public class Aiming {
     			// autoaming or fineadjusting
     			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && player.isOnline() && cannon.isValid())
         		{
-            		MessageEnum message = changeAngle(cannon, null, player);
+            		MessageEnum message = updateAngle(player, cannon, null);
                     //show impact predictor marker
-                    impactPredictor(cannon, player);
+                    //impactPredictor(cannon, player);
             		userMessages.displayMessage(player, cannon, message);
         		}		
         		else
         		{
         			//leave aiming Mode
-        			MessageEnum message = disableAimingMode(player);
+        			MessageEnum message = disableAimingMode(player, cannon);
                     userMessages.displayMessage(player, cannon, message);
         		}
     		}	
@@ -430,7 +435,11 @@ public class Aiming {
      */
 	public void aimingMode(Player player, Cannon cannon)
 	{
-		if (inAimingMode.containsKey(player.getName()))
+        if (player == null)
+            return;
+
+        boolean isAimingMode = inAimingMode.containsKey(player.getName());
+		if (isAimingMode)
 		{
             if (cannon == null)
                 cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
@@ -444,7 +453,7 @@ public class Aiming {
             else
             {
                 //turn off the aiming mode
-                MessageEnum message = disableAimingMode(player);
+                MessageEnum message = disableAimingMode(player, cannon);
                 userMessages.displayMessage(player, cannon, message);
             }
         }
@@ -456,8 +465,8 @@ public class Aiming {
                 //check distance before enabling the cannon
                 if (distanceCheck(player, cannon))
                 {
-                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeEnabled);
-                    inAimingMode.put(player.getName(), cannon.getUID());
+                    MessageEnum message = enableAimingMode(player, cannon);
+                    userMessages.displayMessage(player, cannon, message);
                 }
                 else
                 {
@@ -474,17 +483,53 @@ public class Aiming {
 		}
 	}
 
+    public MessageEnum enableAimingMode(Player player, Cannon cannon)
+    {
+        if (player == null)
+            return null;
+
+        inAimingMode.put(player.getName(), cannon.getUID());
+
+        if (cannon != null)
+            cannon.addObserver(player, false);
+
+        return MessageEnum.AimingModeEnabled;
+
+    }
+
+
     /**
      * disables the aiming mode for this player
      * @param player - player in aiming mode
      * @return message for the player
      */
-	public MessageEnum disableAimingMode(Player player)
-	{		
+    public MessageEnum disableAimingMode(Player player)
+    {
+        Cannon cannon = getCannonInAimingMode(player);
+        return disableAimingMode(player, cannon);
+    }
+
+        /**
+         * disables the aiming mode for this player
+         * @param player player in aiming mode
+         * @param cannon operated cannon
+         * @return message for the player
+         */
+	public MessageEnum disableAimingMode(Player player, Cannon cannon)
+	{
+        if (player == null)
+            return null;
+
 		if (inAimingMode.containsKey(player.getName()))
 		{
 			//player in map -> remove
 			inAimingMode.remove(player.getName());
+
+            if (cannon!=null)
+            {
+                cannon.removeObserver(player);
+            }
+
             return MessageEnum.AimingModeDisabled;
 		}
         return null;
@@ -593,6 +638,33 @@ public class Aiming {
     }
 
     /**
+     * updates the last time usage of the cannon
+     * @param cannon operated cannon
+     */
+    public void updateLastAimed(Cannon cannon)
+    {
+        lastAimed.put(cannon.getUID(), System.currentTimeMillis());
+    }
+
+    /**
+     * removes this cannon from the list of last time usage
+     * @param cannon operated cannon
+     */
+    public void removeCannon(Cannon cannon)
+    {
+        lastAimed.remove(cannon.getUID());
+    }
+
+    /**
+     * removes all entries of this player in this class
+     * @param player player to remove
+     */
+    public void removePlayer(Player player)
+    {
+        disableAimingMode(player);
+    }
+
+    /**
      * calculated the impact of the projectile
      * @param cannon the cannon must be loaded with a projectile
      * @return the expected impact location
@@ -632,49 +704,38 @@ public class Aiming {
      */
     public void showImpactDelayed()
     {
-        for (Map.Entry<UUID, Long> last : lastAimed.entrySet())
+        Iterator<Map.Entry<UUID, Long>> iter = lastAimed.entrySet().iterator();
+        while (iter.hasNext())
         {
-            if (last.getValue()+1000 < System.currentTimeMillis());
+            Map.Entry<UUID, Long> last = iter.next();
+            if (last.getValue()+1000 < System.currentTimeMillis())
             {
+                Cannon cannon = plugin.getCannon(last.getKey());
                 //find all the watching players
-                HashMap<String, Long> nameList = observingPlayers.get(last.getKey());
-                if (nameList == null)
+                HashMap<String, Boolean> nameList = cannon.getObserverMap();
+                if (cannon == null || nameList.isEmpty())
                 {
-                    plugin.logDebug("no observing players");
+                    //remove wrong entries and cannon with no observer (we don't need to update them)
+                    iter.remove();
                     continue;
                 }
 
-
-                for (String name : nameList.keySet())
+                Iterator<Map.Entry<String, Boolean>> entry = nameList.entrySet().iterator();
+                while(entry.hasNext())
                 {
-                    Player player = Bukkit.getPlayer(name);
-                    Cannon cannon = plugin.getCannon(last.getKey());
+                    Map.Entry<String, Boolean> nextName = entry.next();
+                    Player player = Bukkit.getPlayer(nextName.getKey());
                     if (player != null && cannon != null)
                         impactPredictor(cannon, player);
+                    //remove entry if there removeEntry enabled, or player is offline
+                    if (nextName.getValue() || player == null)
+                        iter.remove();
                 }
             }
         }
     }
 
-    /**
-     * updates the last time usage of the cannon
-     * @param cannon operated cannon
-     */
-    public void updateLastAimed(Cannon cannon)
-    {
-        lastAimed.put(cannon.getUID(), System.currentTimeMillis());
-    }
 
-    /**
-     * removes this cannon from the list of last time usage
-     * @param cannon operated cannon
-     */
-    public void removeCannon(Cannon cannon)
-    {
-        lastAimed.remove(cannon.getUID());
-        observingPlayers.remove(cannon.getUID());
-
-    }
 
     /**
      * calculated the impact of the projectile and make a sphere with fakeBlocks at the impact for the given player

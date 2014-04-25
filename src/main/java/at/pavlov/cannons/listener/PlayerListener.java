@@ -54,10 +54,11 @@ public class PlayerListener implements Listener
     public void PlayerMove(PlayerMoveEvent event)
     {
         // only active if the player is in aiming mode
-        if (!aiming.distanceCheck(event.getPlayer(), aiming.getCannonInAimingMode(event.getPlayer())))
+        Cannon cannon =  aiming.getCannonInAimingMode(event.getPlayer());
+        if (!aiming.distanceCheck(event.getPlayer(), cannon))
         {
             userMessages.displayMessage(event.getPlayer(), MessageEnum.AimingModeTooFarAway);
-            MessageEnum message = aiming.disableAimingMode(event.getPlayer());
+            MessageEnum message = aiming.disableAimingMode(event.getPlayer(), cannon);
             userMessages.displayMessage(event.getPlayer(), message);
         }
 
@@ -70,7 +71,7 @@ public class PlayerListener implements Listener
     @EventHandler
     public void LogoutEvent(PlayerQuitEvent event)
     {
-        aiming.disableAimingMode(event.getPlayer());
+        aiming.removePlayer(event.getPlayer());
     }
 
     /**
@@ -412,7 +413,7 @@ public class PlayerListener implements Listener
                 plugin.logDebug("change cannon angle");
 
 
-                MessageEnum message = aiming.ChangeAngle(cannon, event.getAction(), event.getBlockFace(), player);
+                MessageEnum message = aiming.changeAngle(cannon, event.getAction(), event.getBlockFace(), player);
                 userMessages.displayMessage(player, cannon, message);
 
                 aiming.showAimingVector(cannon, player);

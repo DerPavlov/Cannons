@@ -19,9 +19,6 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.schematic.SchematicFormat;
 
 import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.cannon.CannonBlocks;
-import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.container.DesignFileName;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.container.SimpleBlock;

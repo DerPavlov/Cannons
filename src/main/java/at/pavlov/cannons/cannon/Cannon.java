@@ -1,9 +1,6 @@
 package at.pavlov.cannons.cannon;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
@@ -71,6 +68,8 @@ public class Cannon
     private double aimingYaw;
     private double aimingPitch;
 
+    //observer will see the impact of the target predictor
+    private HashMap<String, Boolean> observerMap = new HashMap<String, Boolean>();
 
     // player who has build this cannon
     private String owner;
@@ -1816,5 +1815,19 @@ public class Cannon
 
     public void setAimingPitch(double aimingPitch) {
         this.aimingPitch = aimingPitch;
+    }
+
+    public HashMap<String, Boolean> getObserverMap() {
+        return observerMap;
+    }
+
+    public void addObserver(Player player, boolean removeAfterShowing)
+    {
+        observerMap.put(player.getName(), removeAfterShowing);
+    }
+
+    public void removeObserver(Player player)
+    {
+        observerMap.remove(player.getName());
     }
 }
