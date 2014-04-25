@@ -20,10 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 public class Aiming {
@@ -110,7 +107,7 @@ public class Aiming {
 			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
 			{
 				//aiming mode
-				ToggleAimingMode(player, cannon);
+				aimingMode(player, cannon);
 			}
 			else
 			{
@@ -158,9 +155,14 @@ public class Aiming {
 		//barrel clicked to change angle
 		if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
 		{
-			//aiming mode
-			angles = CheckLookingDirection(cannon, player.getLocation());
-			combine = true;
+			//aiming mode only if player is sneaking
+            if (player == null || player.isSneaking())
+            {
+                angles = CheckLookingDirection(cannon, player.getLocation());
+                combine = true;
+            }
+            else
+                return null;
 		}
 		else
 		{
@@ -285,7 +287,11 @@ public class Aiming {
      * @return - angle to change
      */
     private gunAngles CheckBlockFace(BlockFace clickedFace, BlockFace cannonDirection, boolean isSneaking)
-	{	
+	{
+        if (clickedFace == null || cannonDirection == null)
+            return new gunAngles(0.0, 0.0);
+
+
 		//check up or down
 		if (clickedFace.equals(BlockFace.DOWN)) 
 		{
@@ -384,17 +390,26 @@ public class Aiming {
     /**
      * updates the auto Aiming direction for player in auto-aiming mode
      */
-    void updateAimingMode()
+    private void updateAimingMode()
 	{
 		//player in map change the angle to the angle the player is looking
-    	for(Map.Entry<String, UUID> entry : inAimingMode.entrySet()){
+    	Iterator<Map.Entry<String, UUID>> iter = inAimingMode.entrySet().iterator();
+        while(iter.hasNext())
+        {
+            Map.Entry<String, UUID> entry = iter.next();
     		Player player = Bukkit.getPlayer(entry.getKey());
-            if (player == null) return;
+            if (player == null) {
+                iter.remove();
+                continue;
+            }
+
 
             //find the cannon with this id
     		Cannon cannon = plugin.getCannonManager().getCannon(entry.getValue());
-            if (cannon == null)
+            if (cannon == null) {
+                iter.remove();
                 continue;
+            }
 
     		// only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
     		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()*50 )
@@ -423,14 +438,14 @@ public class Aiming {
      * @param player - player in aiming mode
      * @param cannon - operated cannon
      */
-	public void ToggleAimingMode(Player player, Cannon cannon)
+	public void aimingMode(Player player, Cannon cannon)
 	{
 		if (inAimingMode.containsKey(player.getName()))
 		{
             if (cannon == null)
                 cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
 
-            //this player is already in aiming mode, he might fire the cannon or turn the aiming mode of
+            //this player is already in aiming mode, he might fire the cannon or turn the aiming mode off
 		    if (player.isSneaking())
             {
                 MessageEnum message = plugin.getFireCannon().playerFiring(cannon, player, InteractAction.fireAutoaim);

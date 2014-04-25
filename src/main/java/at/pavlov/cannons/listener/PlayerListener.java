@@ -341,7 +341,7 @@ public class PlayerListener implements Listener
                 // all other actions will stop aiming mode
                 if(action == Action.RIGHT_CLICK_AIR)
                 {
-                    aiming.ToggleAimingMode(event.getPlayer(), null, false);
+                    aiming.aimingMode(event.getPlayer(), null);
                 }
                 return;
             }
@@ -424,7 +424,7 @@ public class PlayerListener implements Listener
 
                 if(message != null)
                 {
-                    if(message.isError()) CannonsUtil.playErrorSound(player);
+                    if(!message.isValid()) CannonsUtil.playErrorSound(player);
                     else player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
                     return;
                 }
@@ -442,7 +442,7 @@ public class PlayerListener implements Listener
 
                 if(message !=null)
                 {
-                	if(message.isError()) CannonsUtil.playErrorSound(player);
+                	if(!message.isValid()) CannonsUtil.playErrorSound(player);
                 	else if(message.equals(MessageEnum.loadProjectile)) player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
                     return;
                 }
@@ -462,7 +462,7 @@ public class PlayerListener implements Listener
 
                 if(message != null)
                 {
-                	if(message.isError()) CannonsUtil.playErrorSound(player);
+                	if(!message.isValid()) CannonsUtil.playErrorSound(player);
                 	else if(message.equals(MessageEnum.loadGunpowder)) player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
                     return;
                 }
@@ -481,7 +481,7 @@ public class PlayerListener implements Listener
 
                 if(message!=null)
                 {
-                	if(message.isError()) CannonsUtil.playErrorSound(player);
+                	if(!message.isValid()) CannonsUtil.playErrorSound(player);
                     return;
                 }
             }
@@ -503,40 +503,15 @@ public class PlayerListener implements Listener
                 plugin.logDebug("Ramrod used");
                 MessageEnum message = cannon.useRamRod(player);
                 userMessages.displayMessage(player, cannon, message);
-                if(message != null)
-                {
-                	if(message.isError()) CannonsUtil.playErrorSound(player);
-                	else switch(message)
-                    {
-                    	case RamrodCleaning: 
-                    	{
-                    		player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SNOW, 0.5F, 0f);
-                    		return;
-                    	}
-                    	case RamrodCleaningDone: 
-                    	{
-                    		player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_SNOW, 0.5F, 1f);
-                    		return;
-                    	}
-                    	case RamrodPushingProjectile: 
-                    	{
-                    		player.getWorld().playSound(cannon.getMuzzle(), Sound.DIG_STONE, 0.5F, 0f);
-                    		return;
-                    	}
-                    	case RamrodPushingProjectileDone: 
-                    	{
-                    		player.getWorld().playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 0.5F, 0f);
-                    		return;
-                    	}
-                    	default: return;
-                    }
-                }
+
             }
 
         }
-        else if(event.getAction().equals(Action.LEFT_CLICK_AIR)/* || event.getAction().equals(Action.LEFT_CLICK_BLOCK)*/)
+
+        //fire cannon
+        else if(event.getAction().equals(Action.LEFT_CLICK_AIR)) //|| event.getAction().equals(Action.LEFT_CLICK_BLOCK))
         {
-        	aiming.ToggleAimingMode(event.getPlayer(), null, true);
+        	aiming.aimingMode(event.getPlayer(), null);
         }
     }
 

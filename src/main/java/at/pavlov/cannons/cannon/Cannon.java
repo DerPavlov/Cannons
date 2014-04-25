@@ -451,11 +451,11 @@ public class Cannon
     }
 
     /**
-     * a ramrod is used to clean the barrel before loading gunpowder and to push the projectile into the barrel
+     * Permission check for use ram rod
      * @param player player using the ramrod tool (null will bypass permission check)
      * @return message for the player
      */
-    public MessageEnum useRamRod(Player player)
+    public MessageEnum useRamRodPermissions(Player player)
     {
         //no permission to use this tool
         if (player!=null && !player.hasPermission(design.getPermissionRamrod()))
@@ -496,6 +496,46 @@ public class Cannon
 
         //no matching case found
         return null;
+
+    }
+
+    /**
+     * a ramrod is used to clean the barrel before loading gunpowder and to push the projectile into the barrel
+     * @param player player using the ramrod tool (null will bypass permission check)
+     * @return message for the player
+     */
+    public MessageEnum useRamRod(Player player)
+    {
+        MessageEnum message = useRamRodPermissions(player);
+        if(message != null)
+        {
+            if(!message.isValid())
+                CannonsUtil.playErrorSound(player);
+            else switch(message)
+            {
+                case RamrodCleaning:
+                {
+                    player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SNOW, 0.5F, 0f);
+                    break;
+                }
+                case RamrodCleaningDone:
+                {
+                    player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SNOW, 0.5F, 1f);
+                    break;
+                }
+                case RamrodPushingProjectile:
+                {
+                    player.getWorld().playSound(this.getMuzzle(), Sound.DIG_STONE, 0.5F, 0f);
+                    break;
+                }
+                case RamrodPushingProjectileDone:
+                {
+                    player.getWorld().playSound(this.getMuzzle(), Sound.ANVIL_LAND, 0.5F, 0f);
+                    break;
+                }
+            }
+        }
+        return message;
     }
 
     /**

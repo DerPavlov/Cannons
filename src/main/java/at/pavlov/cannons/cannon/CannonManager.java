@@ -458,6 +458,9 @@ public class CannonManager
      */
     public Cannon getCannon(UUID id)
     {
+        if (id == null)
+            return null;
+
         return cannonList.get(id);
     }
 

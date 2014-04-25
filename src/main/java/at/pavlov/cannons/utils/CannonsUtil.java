@@ -562,8 +562,6 @@ public class CannonsUtil
     /**
      * creates a imitated error sound (called when played doing something wrong)
      * @param p player
-     * @param v volume
-     * @param pt pitch
      */
     public static void playErrorSound(final Player p)
     {
