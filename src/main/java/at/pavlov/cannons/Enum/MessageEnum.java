@@ -75,17 +75,17 @@ public enum MessageEnum
 
 	
 	private final String str;
-	private final boolean valid;
+	private final boolean isError;
 	
-	MessageEnum(String str, boolean v)
+	MessageEnum(String str, boolean e)
 	{
 		this.str = str;
-        this.valid = v;
+        this.isError = e;
 	}
 	MessageEnum(String str)
 	{
 		this.str = str;
-        valid = true;
+        isError = false;
 	}
 
 	public String getString()
@@ -94,6 +94,10 @@ public enum MessageEnum
 	}
 	public boolean isValid()
 	{
-		return this.valid;
+		return !isError;
+	}
+	public boolean isError()
+	{
+		return isError;
 	}
 }

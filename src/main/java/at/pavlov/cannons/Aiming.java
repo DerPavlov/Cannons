@@ -732,7 +732,11 @@ public class Aiming {
                         impactPredictor(cannon, player);
                     //remove entry if there removeEntry enabled, or player is offline
                     if (nextName.getValue() || player == null)
+                    {
+                        plugin.logDebug("remove " + nextName.getKey() + " from observerlist");
                         iter.remove();
+
+                    }
                 }
             }
         }

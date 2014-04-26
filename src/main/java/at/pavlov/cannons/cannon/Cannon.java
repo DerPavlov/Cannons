@@ -355,6 +355,7 @@ public class Cannon
             player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
             if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
                 InventoryManagement.takeFromPlayerHand(player, gunpowder);
+            player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
         }
         else
         {
@@ -520,13 +521,13 @@ public class Cannon
      * @param player player using the ramrod tool (null will bypass permission check)
      * @return message for the player
      */
-    public MessageEnum useRamRod(Player player)
+    @SuppressWarnings("incomplete-switch")
+	public MessageEnum useRamRod(Player player)
     {
         MessageEnum message = useRamRodInteral(player);
         if(message != null)
         {
-            if(!message.isValid())
-                CannonsUtil.playErrorSound(player);
+            if(message.isError()) CannonsUtil.playErrorSound(player);
             else switch(message)
             {
                 case RamrodCleaning:
