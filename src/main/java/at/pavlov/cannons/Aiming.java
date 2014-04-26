@@ -734,7 +734,7 @@ public class Aiming {
                     if (nextName.getValue() || player == null)
                     {
                         plugin.logDebug("remove " + nextName.getKey() + " from observerlist");
-                        iter.remove();
+                        entry.remove();
 
                     }
                 }
