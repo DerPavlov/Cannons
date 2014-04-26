@@ -410,7 +410,7 @@ public class Aiming {
     		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()*50 )
     		{
     			// autoaming or fineadjusting
-    			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()) && player.isOnline() && cannon.isValid())
+    			if (distanceCheck(player, cannon)/*Player must to be in aiming mode while using current cannon, so delete this code: "config.getToolAutoaim().equalsFuzzy(player.getItemInHand())"*/ && player.isOnline() && cannon.isValid())
         		{
             		MessageEnum message = updateAngle(player, cannon, null);
                     //show impact predictor marker
