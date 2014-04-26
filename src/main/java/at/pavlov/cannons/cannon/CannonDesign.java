@@ -463,9 +463,14 @@ public class CannonDesign
 	{
 		this.autoreloadRedstone = autoreloadRedstone;
 	}
-	public int getMaxLoadableGunpowder()
+	public int getMaxLoadableGunpowder_Normal()
 	{
 		return maxLoadableGunpowder;
+	}
+	public int getMaxLoadableGunpowder_Absolute()
+	{
+		if(overloading_type.isEnabled()) return maxLoadableGunpowder+overloading_maxOverloadableGunpowder;
+		else return getMaxLoadableGunpowder_Normal();
 	}
 	public void setMaxLoadableGunpowder(int maxLoadableGunpowder)
 	{
