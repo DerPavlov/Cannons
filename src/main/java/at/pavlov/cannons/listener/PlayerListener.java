@@ -423,7 +423,7 @@ public class PlayerListener implements Listener
 
                 if(message != null)
                 {
-                    if(!message.isValid())
+                    if(message.isError())
                         CannonsUtil.playErrorSound(player);
                     return;
                 }
@@ -441,7 +441,7 @@ public class PlayerListener implements Listener
 
                 if(message !=null)
                 {
-                	if(!message.isValid())
+                	if(message.isError())
                         CannonsUtil.playErrorSound(player);
                     return;
                 }
@@ -461,7 +461,7 @@ public class PlayerListener implements Listener
 
                 if(message != null)
                 {
-                	if(!message.isValid())
+                	if(message.isError())
                         CannonsUtil.playErrorSound(player);
                     return;
                 }
@@ -480,7 +480,7 @@ public class PlayerListener implements Listener
 
                 if(message!=null)
                 {
-                	if(!message.isValid())
+                	if(message.isError())
                         CannonsUtil.playErrorSound(player);
                     return;
                 }
@@ -506,7 +506,7 @@ public class PlayerListener implements Listener
 
                 if(message!=null)
                 {
-                    if(!message.isValid())
+                    if(message.isError())
                         CannonsUtil.playErrorSound(player);
                     return;
                 }
