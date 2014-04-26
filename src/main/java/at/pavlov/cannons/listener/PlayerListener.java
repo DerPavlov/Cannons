@@ -342,7 +342,7 @@ public class PlayerListener implements Listener
                 // all other actions will stop aiming mode
                 if(action == Action.RIGHT_CLICK_AIR)
                 {
-                    aiming.aimingMode(event.getPlayer(), null);
+                    aiming.aimingMode(event.getPlayer(), null, false);
                 }
                 return;
             }
@@ -498,7 +498,7 @@ public class PlayerListener implements Listener
         //fire cannon
         else if(event.getAction().equals(Action.LEFT_CLICK_AIR)) //|| event.getAction().equals(Action.LEFT_CLICK_BLOCK))
         {
-        	aiming.aimingMode(event.getPlayer(), null);
+        	aiming.aimingMode(event.getPlayer(), null, true);
         }
     }
 

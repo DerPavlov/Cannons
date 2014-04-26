@@ -113,7 +113,7 @@ public class Aiming {
 			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
 			{
 				//aiming mode
-				aimingMode(player, cannon);
+				aimingMode(player, cannon, false);
 			}
 			else
 			{
@@ -433,7 +433,7 @@ public class Aiming {
      * @param player - player in aiming mode
      * @param cannon - operated cannon
      */
-	public void aimingMode(Player player, Cannon cannon)
+	public void aimingMode(Player player, Cannon cannon, boolean fire)
 	{
         if (player == null)
             return;
@@ -445,7 +445,7 @@ public class Aiming {
                 cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
 
             //this player is already in aiming mode, he might fire the cannon or turn the aiming mode off
-		    if (player.isSneaking())
+		    if (fire)
             {
                 MessageEnum message = plugin.getFireCannon().playerFiring(cannon, player, InteractAction.fireAutoaim);
                 userMessages.displayMessage(player, cannon, message);
