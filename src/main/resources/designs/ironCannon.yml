@@ -121,6 +121,17 @@ realisticBehaviour:
   supportsFireMission: false
   #the mass in kilogram of a cannon is important for moving objects e.g. ships
   massOfCannon: 500
+  #Cannon might to be overloaded by gunpowder with risk of explosion
+  Overloading:
+  #Modes:
+  #0 = disable overloading stuff
+  #1 = cannon might to explode if it is overloaded by gunpowder (chance = changeInc*((all loaded gunpowder - MaxOverloadableGunpowder) * ChanceOfExplosionPerGunpowder)^Exponent)
+  #2 = cannon might to explode any time (chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent)
+    Mode: 1
+    Exponent: 2
+    ChanceInc: 0.5
+    MaxOverloadableGunpowder: 3
+    ChanceOfExplosionPerGunpowder: 0.1
 
 
 permissions:
