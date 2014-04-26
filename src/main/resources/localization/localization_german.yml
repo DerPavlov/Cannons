@@ -25,7 +25,7 @@ Aiming:
 
 Load:  
   Projectile: 'YELLOW [Cannons] Projektil GOLD PROJECTILE YELLOW wurde geladen.'
-  Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW Schwarzpulver geladen.'
+  Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW von GOLD MAX_GUNPOWDER YELLOW Schwarzpulver geladen.'
 
 
 Cannon:
@@ -49,9 +49,9 @@ HeatManagement:
 
 
 Ramrod:
-  Cleaning: 'YELLOW [Cannons] Das Rohr is noch nicht sauber genug.'
+  Cleaning: 'YELLOW [Cannons] Das Rohr is noch nicht sauber genug. GOLD SOOT_LEFT YELLOW mal noch.'
   CleaningDone: 'GREEN [Cannons] Die CANNON is jetzt bereit zum Laden.'
-  PushingProjectile: 'YELLOW [Cannons] Projectile in das Rohr gedrückt. Es ist noch nicht fixiert.'
+  PushingProjectile: 'YELLOW [Cannons] Projectile in das Rohr gedrückt. Es ist noch nicht fixiert, mach es noch GOLD PUSHING_LEFT YELLOW mal.'
   PushingProjectileDone: 'GREEN [Cannons] Projectile fixiert. CANNON bereit.'
 
 

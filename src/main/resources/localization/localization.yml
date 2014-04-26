@@ -26,7 +26,7 @@ Aiming:
 
 Load:  
   Projectile: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW has been loaded.'
-  Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg of MAX_GUNPOWDERkg YELLOW of Gunpowder loaded.'
+  Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW of GOLD MAX_GUNPOWDERkg YELLOW of Gunpowder loaded.'
 
 
 Cannon:
@@ -50,9 +50,9 @@ HeatManagement:
 
 
 Ramrod:
-  Cleaning: 'YELLOW [Cannons] Scouring cannon. Need to do it SOOT_LEFT times more.'
+  Cleaning: 'YELLOW [Cannons] Scouring cannon. Need to do it GOLD SOOT_LEFT YELLOW times more.'
   CleaningDone: 'GREEN [Cannons] The barrel is clean enough.'
-  PushingProjectile: 'YELLOW [Cannons] Pushed projectile. Do it PUSHING_LEFT times more.'
+  PushingProjectile: 'YELLOW [Cannons] Pushed projectile. Do it GOLD PUSHING_LEFT YELLOW times more.'
   PushingProjectileDone: 'GREEN [Cannons] Pushed projectile. CANNON is ready to fire'
 
 
