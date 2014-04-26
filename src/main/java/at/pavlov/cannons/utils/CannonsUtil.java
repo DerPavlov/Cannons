@@ -567,8 +567,8 @@ public class CannonsUtil
     {
         try
         {
-            p.playSound(p.getEyeLocation(), Sound.VILLAGER_NO, 0.25f, 0.75f);
-            /*
+            //p.playSound(p.getEyeLocation(), Sound.VILLAGER_NO, 0.25f, 0.75f);
+
         	p.playSound(p.getEyeLocation(), Sound.SUCCESSFUL_HIT, 0.25f, 0.75f);
         	Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
         	{
@@ -577,7 +577,7 @@ public class CannonsUtil
         			p.playSound(p.getEyeLocation(), Sound.SUCCESSFUL_HIT, 0.25f, 0.1f);
         			}
         		}
-        	, 3);*/
+        	, 3);
         }
         catch(Exception e)
         {

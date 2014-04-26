@@ -493,7 +493,7 @@ public class Aiming {
         if (cannon != null)
             cannon.addObserver(player, false);
 
-        player.playSound(player.getEyeLocation(), Sound.MINECART_INSIDE, 0.25f, 0.75f);
+        //player.playSound(player.getEyeLocation(), Sound.MINECART_INSIDE, 0.25f, 0.75f);
 
         return MessageEnum.AimingModeEnabled;
 
@@ -507,7 +507,7 @@ public class Aiming {
      */
     public MessageEnum disableAimingMode(Player player)
     {
-        player.playSound(player.getEyeLocation(), Sound.MINECART_BASE, 0.25f, 0.75f);
+        //player.playSound(player.getEyeLocation(), Sound.MINECART_BASE, 0.25f, 0.75f);
         Cannon cannon = getCannonInAimingMode(player);
         return disableAimingMode(player, cannon);
     }
@@ -735,7 +735,6 @@ public class Aiming {
                     {
                         plugin.logDebug("remove " + nextName.getKey() + " from observerlist");
                         entry.remove();
-
                     }
                 }
             }
