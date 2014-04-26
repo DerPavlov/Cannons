@@ -159,7 +159,7 @@ public class Aiming {
         gunAngles angles;
 
 		//barrel clicked to change angle
-		if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
+		if (!config.getToolAdjust().equalsFuzzy(player.getItemInHand()))
 		{
 			//aiming mode only if player is sneaking
             if (player == null || player.isSneaking())
