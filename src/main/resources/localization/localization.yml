@@ -6,7 +6,7 @@ Error:
   NoProjectile: 'RED [Cannons] No projectile loaded. Load something!'
   NoFlintAndSteel: 'RED [Cannons] You need flint and steel to fire.'
   NotPushed: 'RED [Cannons] Push the projectile with a stick before firing.'
-  MaximumGunpowderLoaded: 'YELLOW [Cannons] Maximum gunpowder of GOLD GUNPOWDERkg YELLOW already loaded. More will destroyed the barrel.'
+  MaximumGunpowderLoaded: 'YELLOW [Cannons] Maximum gunpowder of GOLD GUNPOWDERkg YELLOW already loaded.'
   ProjectileAlreadyLoaded: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW and GOLD GUNPOWDER YELLOW gunpowder already loaded. Fire the damn gun before you blow yourself up.'
   CannonBuiltLimit: 'RED [Cannons] You cant build more than GOLD CANNONS YELLOW guns'
   NotTheOwner: 'RED [Cannons] This CANNON is locked and can only used by its owner'
@@ -27,6 +27,8 @@ Aiming:
 Load:  
   Projectile: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW has been loaded.'
   Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW of GOLD MAX_GUNPOWDERkg YELLOW of Gunpowder loaded.'
+  loadGunpowderNormalLimit: 'YELLOW [Cannons] GOLD Maximum gunpowder (MAX_GUNPOWDERkg) loaded. More gunpowder may to destroy cannon'
+  OverloadedGunpowder: 'YELLOW [Cannons] RED GUNPOWDERkg YELLOW of GOLD MAX_GUNPOWDERkg YELLOW of Gunpowder loaded'
 
 
 Cannon:
