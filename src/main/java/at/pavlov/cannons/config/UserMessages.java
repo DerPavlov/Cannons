@@ -278,6 +278,7 @@ public class UserMessages {
 		{
 			//replace the loaded gunpowder
 			message = message.replace("GUNPOWDER", Integer.toString(cannon.getLoadedGunpowder()));
+            message = message.replace("MAX_GUNPOWDER", Integer.toString(cannon.getCannonDesign().getMaxLoadableGunpowder()));
 			//replace the loaded projectile
 			if (cannon.getLoadedProjectile()!=null)
 				message = message.replace("PROJECTILE", cannon.getLoadedProjectile().getProjectileName());
@@ -292,6 +293,11 @@ public class UserMessages {
             message = message.replace("WARN_TEMP", String.format("%.1f", cannon.getCannonDesign().getWarningTemperature()));
             //cannon message name
             message = message.replace("CANNON", cannon.getCannonDesign().getMessageName());
+            //soot left
+            message = message.replace("SOOT_LEFT", Integer.toString((int) Math.floor(cannon.getSoot())));
+            //pushing projectile
+            message = message.replace("PUSHING_LEFT", Integer.toString(cannon.getProjectilePushed()));
+
 		}
 
 		if (player != null)
