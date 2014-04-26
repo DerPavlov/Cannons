@@ -421,12 +421,8 @@ public class PlayerListener implements Listener
                 // update Signs
                 cannon.updateCannonSigns();
 
-                if(message != null)
-                {
-                    if(!message.isValid())
-                        CannonsUtil.playErrorSound(player);
+                if(message!=null)
                     return;
-                }
             }
 
             // ########## Load Projectile ######################
@@ -439,12 +435,8 @@ public class PlayerListener implements Listener
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
-                if(message !=null)
-                {
-                	if(!message.isValid())
-                        CannonsUtil.playErrorSound(player);
+                if(message!=null)
                     return;
-                }
             }
 
 
@@ -459,12 +451,8 @@ public class PlayerListener implements Listener
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
-                if(message != null)
-                {
-                	if(!message.isValid())
-                        CannonsUtil.playErrorSound(player);
+                if(message!=null)
                     return;
-                }
             }
 
 
@@ -479,11 +467,7 @@ public class PlayerListener implements Listener
                 userMessages.displayMessage(player, cannon, message);
 
                 if(message!=null)
-                {
-                	if(!message.isValid())
-                        CannonsUtil.playErrorSound(player);
                     return;
-                }
             }
 
 
@@ -505,11 +489,7 @@ public class PlayerListener implements Listener
                 userMessages.displayMessage(player, cannon, message);
 
                 if(message!=null)
-                {
-                    if(!message.isValid())
-                        CannonsUtil.playErrorSound(player);
                     return;
-                }
 
             }
 

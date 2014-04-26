@@ -165,6 +165,8 @@ public class FireCannon {
                 {
                     //there is not enough gunpowder or no projectile in the chest
                     plugin.logDebug("Can't reload cannon, because there is no valid charge in the chests");
+                    CannonsUtil.playErrorSound(player);
+
                     if (cannon.getLoadedGunpowder() > 0)
                         return MessageEnum.ErrorNoProjectile;
                     return MessageEnum.ErrorNoGunpowder;
@@ -173,6 +175,7 @@ public class FireCannon {
                 {
                     //everything went fine - next click on torch wil fire the cannon
                     plugin.logDebug("Charge loaded from chest");
+                    player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
                     return MessageEnum.loadProjectile;
                 }
             }
@@ -180,6 +183,8 @@ public class FireCannon {
             {
                 //can't fire without charge
                 plugin.logDebug("Can't fire without a charge");
+                CannonsUtil.playErrorSound(player);
+
                 if (cannon.getLoadedGunpowder() > 0)
                     return MessageEnum.ErrorNoProjectile;
                 return MessageEnum.ErrorNoGunpowder;

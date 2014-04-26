@@ -352,11 +352,16 @@ public class Cannon
         if (returnVal.equals(MessageEnum.loadGunpowder))
         {
             // take item from the player
+            player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
             if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
                 InventoryManagement.takeFromPlayerHand(player, gunpowder);
         }
+        else
+        {
+            //error no gunpowder loaded
+            CannonsUtil.playErrorSound(player);
+        }
 
-        player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
         return returnVal;
 
     }
@@ -382,21 +387,9 @@ public class Cannon
         // check if loading of projectile was successful
         if (returnVal.equals(MessageEnum.loadProjectile))
         {
-            //if the player is not the owner of this gun
-            if (player != null && !this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
-                return MessageEnum.ErrorNotTheOwner;
-            // already loaded with a projectile
-            if (isLoaded())
-                return MessageEnum.ErrorProjectileAlreadyLoaded;
-            // is cannon cleaned with ramrod?
-            if (!isClean())
-                return MessageEnum.ErrorNotCleaned;
-            // no gunpowder loaded
-            if (getLoadedGunpowder() == 0)
-                return MessageEnum.ErrorNoGunpowder;
-
             // load projectile
             loadedProjectile = projectile;
+            player.getWorld().playSound(this.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
 
             // remove from player
             if (design.isProjectileConsumption()&&!design.isAmmoInfiniteForPlayer())
@@ -405,8 +398,12 @@ public class Cannon
             // update Signs
             updateCannonSigns();
         }
+        else {
+            //projectile not loaded
+            CannonsUtil.playErrorSound(player);
+        }
 
-        player.getWorld().playSound(this.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
+
         return returnVal;
     }
 
@@ -427,6 +424,12 @@ public class Cannon
             // player can't load cannon
             if (!player.hasPermission(design.getPermissionLoad()))
                 return MessageEnum.PermissionErrorLoad;
+            // already loaded with a projectile
+            if (isLoaded())
+                return MessageEnum.ErrorProjectileAlreadyLoaded;
+            // is cannon cleaned with ramrod?
+            if (!isClean())
+                return MessageEnum.ErrorNotCleaned;
         }
         // loading successful
         return MessageEnum.loadGunpowder;
@@ -442,13 +445,23 @@ public class Cannon
     {
         if (player != null)
         {
-            // no permission to load
-            if (!player.hasPermission(design.getPermissionLoad()))
-                return MessageEnum.PermissionErrorLoad;
+            //if the player is not the owner of this gun
+            if (!this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
+                return MessageEnum.ErrorNotTheOwner;
+            // no permission for this projectile
+            if (!projectile.hasPermission(player))
+                return MessageEnum.PermissionErrorProjectile;
+            // no gunpowder loaded
+            if (getLoadedGunpowder() == 0)
+                return MessageEnum.ErrorNoGunpowder;
+            // already loaded with a projectile
+            if (isLoaded())
+                return MessageEnum.ErrorProjectileAlreadyLoaded;
+            // is cannon cleaned with ramrod?
+            if (!isClean())
+                return MessageEnum.ErrorNotCleaned;
         }
-        // no permission for this projectile
-        if (!projectile.hasPermission(player))
-            return MessageEnum.PermissionErrorProjectile;
+
         // loading successful
         return MessageEnum.loadProjectile;
     }
@@ -536,6 +549,8 @@ public class Cannon
                     player.getWorld().playSound(this.getMuzzle(), Sound.ANVIL_LAND, 0.5F, 0f);
                     break;
                 }
+                default:
+                    CannonsUtil.playErrorSound(player);
             }
         }
         return message;

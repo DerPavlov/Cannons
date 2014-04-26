@@ -11,6 +11,7 @@ import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -228,6 +229,11 @@ public class CannonManager
         plugin.logDebug("added cannon to the list");
 		
 		cannon.updateCannonSigns();
+
+        //make some sounds
+        Player player = Bukkit.getPlayer(cannon.getOwner());
+        if (player != null)
+            player.getWorld().playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 1F, 0.5F);
 
         return ;
 	}
