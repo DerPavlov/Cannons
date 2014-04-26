@@ -1081,4 +1081,54 @@ public class CannonDesign
     public void setMinVerticalAngleOnShip(double minVerticalAngleOnShip) {
         this.minVerticalAngleOnShip = minVerticalAngleOnShip;
     }
+
+//It is hard to do
+    public void setOverloading_type(OverloadingType overloading_type)
+    {
+        this.overloading_type = overloading_type;
+    }
+    
+    public OverloadingType getOverloading_type()
+    {
+        return overloading_type;
+    }
+    
+    public void setOverloading_exponent(double overloading_exponent)
+    {
+        this.overloading_exponent = overloading_exponent;
+    }
+    
+    public double getOverloading_exponent()
+    {
+        return overloading_exponent;
+    }
+    
+    public void setOverloading_changeInc(double overloading_changeInc)
+    {
+        this.overloading_changeInc = overloading_changeInc;
+    }
+    
+    public double getOverloading_changeInc()
+    {
+        return overloading_changeInc;
+    }
+    
+    public void setOverloading_maxOverloadableGunpowder(int overloading_maxOverloadableGunpowder)
+    {
+        this.overloading_maxOverloadableGunpowder = overloading_maxOverloadableGunpowder;
+    }
+
+    public int getOverloading_maxOverloadableGunpowder()
+    {
+        return overloading_maxOverloadableGunpowder;
+    }
+    public void setOverloading_chanceOfExplosionPerGunpowder(double overloading_chanceOfExplosionPerGunpowder)
+    {
+        this.overloading_chanceOfExplosionPerGunpowder = overloading_chanceOfExplosionPerGunpowder;
+    }
+    
+    public double getOverloading_chanceOfExplosionPerGunpowder()
+    {
+        return overloading_chanceOfExplosionPerGunpowder;
+    }
 }
