@@ -3,6 +3,7 @@ package at.pavlov.cannons.cannon;
 import java.util.*;
 
 import at.pavlov.cannons.Enum.BreakCause;
+import at.pavlov.cannons.Enum.OverloadingType;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
@@ -1846,4 +1847,24 @@ public class Cannon
     {
         observerMap.remove(player.getName());
     }
+
+	public boolean isExplodedOnOverloading()
+	{
+		OverloadingType ot = design.getOverloading_type();
+        if(ot.isEnabled())
+        {
+        	double chance;
+        	if(ot.equals(OverloadingType.REAL))
+        	{
+        		chance = design.getOverloading_changeInc()*Math.pow(loadedGunpowder*design.getOverloading_chanceOfExplosionPerGunpowder(), design.getOverloading_exponent());
+        	}
+        	else
+        	{
+        		if(loadedGunpowder <= design.getMaxLoadableGunpowder()) return false;
+        		chance = design.getOverloading_changeInc()*Math.pow((loadedGunpowder-design.getMaxLoadableGunpowder())*design.getOverloading_chanceOfExplosionPerGunpowder(), design.getOverloading_exponent());
+        	}
+        	if(Math.random()<chance) return true;
+        }
+		return false;
+	}
 }

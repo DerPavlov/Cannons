@@ -8,6 +8,7 @@ public enum BreakCause {
     Explosion ("explosion"),
     Overheating ("overheating"),
     ShipDestroyed ("ShipDestroyed"),
+    Overloading ("overloading"),
     Other ("other");
 
 
