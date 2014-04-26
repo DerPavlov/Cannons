@@ -25,8 +25,8 @@ public class FakeBlockHandler {
 
     private ArrayList<FakeBlockEntry> list = new ArrayList<FakeBlockEntry>();
 
-    private boolean newAiming;
-    private boolean newImpactPredictor;
+    private long lastAiming;
+    private long lastImpactPredictor;
 
 
     /**
@@ -96,8 +96,8 @@ public class FakeBlockHandler {
         {
             FakeBlockEntry next = iter.next();
             //if older and if the type matches
-            if (next.getStartTime() < (System.currentTimeMillis() - 50)
-                    && ((next.getType() == FakeBlockType.AIMING && newAiming) || (next.getType() == FakeBlockType.IMPACT_PREDICTOR && newImpactPredictor)))
+            if (next.getStartTime() < (lastAiming - 50) && (next.getType() == FakeBlockType.AIMING)
+                    || next.getStartTime() < (lastImpactPredictor - 50) && (next.getType() == FakeBlockType.IMPACT_PREDICTOR))
             {
                 //send real block to player
                 Player player = next.getPlayerBukkit();
@@ -109,13 +109,11 @@ public class FakeBlockHandler {
 
                 //remove this entry
                 iter.remove();
-                plugin.logDebug("remove older fake entry: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + next.getType().toString());
+                plugin.logDebug("remove older fake entry: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + next.getType().toString() + " stime " + next.getStartTime());
             }
         }
-
-        newAiming=false;
-        newImpactPredictor=false;
     }
+
 
     /**
      * creates a sphere of fake block and sends it to the given player
@@ -206,9 +204,10 @@ public class FakeBlockHandler {
 
 
             if (type == FakeBlockType.IMPACT_PREDICTOR)
-                newImpactPredictor = true;
+                lastImpactPredictor = System.currentTimeMillis();
             if (type == FakeBlockType.AIMING)
-                newAiming = true;
+                lastAiming = System.currentTimeMillis();
+
         }
     }
 
