@@ -122,19 +122,21 @@ realisticBehaviour:
   supportsFireMission: false
   #the mass in kilogram of a cannon is important for moving objects e.g. ships
   massOfCannon: 100
-  #Cannon might to be overloaded by gunpowder with risk of explosion
-  Overloading:
-    #Modes:
+  #cannon can be loaded with more gunpowder, but there is a risk that the cannon will be destroyed
+  overloading:
+    #modes:
     #0 = disable overloading stuff
-    #1 = cannon might to explode if it is overloaded by gunpowder (chance = changeInc*((all loaded gunpowder - MaxOverloadableGunpowder) * ChanceOfExplosionPerGunpowder)^Exponent)
-    #2 = cannon might to explode any time (chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent)
-    Mode: 1
-    Exponent: 2
-    ChanceInc: 1
-    MaxOverloadableGunpowder: 3
-    ChanceOfExplosionPerGunpowder: 0.1
-    #DependsOfTemperature means, what chance will be multiplied by cannon temperature / maximumTemperature
-    DependsOfTemperature: true
+    #1 = cannon might explode if it is overloaded with gunpowder (chance = changeInc*((all loaded gunpowder - MaxLoadableGunpowder) * ChanceOfExplosionPerGunpowder)^Exponent)
+    #2 = cannon might explode any time (chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent)
+    mode: 1
+    exponent: 2
+    chanceInc: 1
+    maxOverloadableGunpowder: 3
+    chanceOfExplosionPerGunpowder: 0.1
+    #DependsOnTemperature means that the explosion chance will be multiplied by cannon temperature / maximumTemperature
+    dependsOnTemperature: true
+    #Loaded gunpowder = 6 (3 normal + 3 overloaded)
+    #-> chance of explosion = 1*(6*0.1)^2 = 0.36 = 36%
 
     #For example, if cannon have:
     #Mode = 1

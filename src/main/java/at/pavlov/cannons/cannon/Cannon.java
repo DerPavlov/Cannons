@@ -1896,7 +1896,8 @@ public class Cannon
         	}
         	else
         	{
-        		if(loadedGunpowder <= design.getMaxLoadableGunpowder_Normal()) return false;
+        		if(loadedGunpowder <= design.getMaxLoadableGunpowder_Normal())
+                    return false;
         		chance = design.getOverloadingChangeInc()*Math.pow((loadedGunpowder-design.getMaxLoadableGunpowder_Normal())*design.getOverloading_chanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
         	}
         	if(design.overloadingDependsOfTemperature())
