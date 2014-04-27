@@ -124,17 +124,18 @@ realisticBehaviour:
   massOfCannon: 100
   #Cannon might to be overloaded by gunpowder with risk of explosion
   Overloading:
-  #Modes:
-  #0 = disable overloading stuff
-  #1 = cannon might to explode if it is overloaded by gunpowder (chance = changeInc*((all loaded gunpowder - MaxOverloadableGunpowder) * ChanceOfExplosionPerGunpowder)^Exponent)
-  #2 = cannon might to explode any time (chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent)
+    #Modes:
+    #0 = disable overloading stuff
+    #1 = cannon might to explode if it is overloaded by gunpowder (chance = changeInc*((all loaded gunpowder - MaxOverloadableGunpowder) * ChanceOfExplosionPerGunpowder)^Exponent)
+    #2 = cannon might to explode any time (chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent)
     Mode: 1
     Exponent: 2
     ChanceInc: 1
     MaxOverloadableGunpowder: 3
     ChanceOfExplosionPerGunpowder: 0.1
-#DependsOfTemperature means, what chance will be multiplied by cannon temperature / maximumTemperature
+    #DependsOfTemperature means, what chance will be multiplied by cannon temperature / maximumTemperature
     DependsOfTemperature: true
+
 #For example, if cannon have:
 #Mode = 1
 #Exponent = 2
@@ -184,6 +185,8 @@ realisticBehaviour:
 #ChanceOfExplosionPerGunpowder = 0.1
 #Loaded gunpowder = 6 (3 normal + 3 overloaded)
 #Chance of explosion = 1*(6*0.1)^3 = 0.216 = 21.6%
+
+
 permissions:
   #all the permissions required for a player to use certain parts of the cannon
   #more information can be found here: http://dev.bukkit.org/bukkit-plugins/cannons/pages/installation-and-configuration/cannons-2-0-and-up/permissions/

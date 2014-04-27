@@ -74,6 +74,15 @@ public class CannonDesign
     private List<MaterialHolder> itemCooling = new ArrayList<MaterialHolder>();
     private List<MaterialHolder> itemCoolingUsed = new ArrayList<MaterialHolder>();
 
+    //Overloading stuff
+    //Overloading mode (0 = default (no risk), 1 = safe (risk exists only if cannon is overloaded), 2 = real (risk exists any time))
+    private OverloadingType overloading_type;
+    private double overloading_exponent;
+    private double overloading_changeInc;
+    private int overloading_maxOverloadableGunpowder;
+    private double overloading_chanceOfExplosionPerGunpowder;
+    private boolean overloading_dependsOfTemperature;
+
 	//realisticBehaviour
 	private boolean FiringItemRequired;
     private double sootPerGunpowder;
@@ -119,15 +128,7 @@ public class CannonDesign
     //cannon design block lists for every direction (NORTH, EAST, SOUTH, WEST)
     private HashMap<BlockFace, CannonBlocks> cannonBlockMap = new HashMap<BlockFace, CannonBlocks>();
     
-    //Overloading stuff
-    
-    //Overloading mode (0 = default (no risk), 1 = safe (risk exists only if cannon is overloaded), 2 = real (risk exists any time))
-    private OverloadingType overloading_type;
-    private double overloading_exponent;
-    private double overloading_changeInc;
-    private int overloading_maxOverloadableGunpowder;
-    private double overloading_chanceOfExplosionPerGunpowder;
-    private boolean overloading_dependsOfTemperature;
+
 
     
     /**

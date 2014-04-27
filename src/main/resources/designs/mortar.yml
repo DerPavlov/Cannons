@@ -123,16 +123,16 @@ realisticBehaviour:
   massOfCannon: 300
   #Cannon might to be overloaded by gunpowder with risk of explosion
   Overloading:
-  #Modes:
-  #0 = disable overloading stuff
-  #1 = cannon might to explode if it is overloaded by gunpowder (chance = changeInc*((all loaded gunpowder - MaxOverloadableGunpowder) * ChanceOfExplosionPerGunpowder)^Exponent)
-  #2 = cannon might to explode any time (chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent)
+    #Modes:
+    #0 = disable overloading stuff
+    #1 = cannon might to explode if it is overloaded by gunpowder (chance = changeInc*((all loaded gunpowder - MaxOverloadableGunpowder) * ChanceOfExplosionPerGunpowder)^Exponent)
+    #2 = cannon might to explode any time (chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent)
     Mode: 2
     Exponent: 2
     ChanceInc: 1
     MaxOverloadableGunpowder: 1
     ChanceOfExplosionPerGunpowder: 0.1
-#DependsOfTemperature means, what chance will be multiplied by cannon temperature / maximumTemperature
+    #DependsOfTemperature means, what chance will be multiplied by cannon temperature / maximumTemperature
     DependsOfTemperature: true
 
 

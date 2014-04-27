@@ -313,24 +313,13 @@ public class Cannon
         	if(design.getOverloading_type().equals(OverloadingType.SAFE))
         	{
                 if(design.getMaxLoadableGunpowder_Normal()<getLoadedGunpowder())
-                {
                 	return MessageEnum.loadOverloadedGunpowder;
-                }
-                else
-                {
-                	if(design.getMaxLoadableGunpowder_Normal()==getLoadedGunpowder())
-                	{
-                		return MessageEnum.loadGunpowderNormalLimit;
-                	}
-                }
+                else if(design.getMaxLoadableGunpowder_Normal()==getLoadedGunpowder())
+                	return MessageEnum.loadGunpowderNormalLimit;
         	}
-        	else
-        	{
-        		if(design.getMaxLoadableGunpowder_Normal()<getLoadedGunpowder())
-                {
-                	return MessageEnum.loadOverloadedGunpowder;
-                }
-        	}
+        	else if(design.getMaxLoadableGunpowder_Normal()<getLoadedGunpowder())
+                return MessageEnum.loadOverloadedGunpowder;
+
         }
         return MessageEnum.loadGunpowder;
     }
