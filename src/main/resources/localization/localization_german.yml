@@ -3,6 +3,8 @@ Error:
   NotCleaned: 'RED [Cannons] Das Rohr muss noch geputzt werden.'
   NoGunpowder: 'RED [Cannons] Kein Schwarzpulver. Lade zuerst die Treibladung!'
   NoProjectile: 'RED [Cannons] Kein Kanonenkugel im Rohr. Lade einen Block!'
+  NoGunpowderInChest: 'RED [Cannons] Nicht genügend Schwarzpulver zum Laden in der Kiste.'
+  NoProjectileInChest: 'RED [Cannons] Kein Projectile in der Kiste.'
   NotPushed: 'RED [Cannons] Die CANNON muss noch gestopft werden.'
   NoFlintAndSteel: 'RED [Cannons] Du brauchst ein Feuerzeug zum Feuern.'
   MaximumGunpowderLoaded: 'YELLOW [Cannons] Du hast bereits GOLD GUNPOWDERkg YELLOW Schwarzpulver geladen.'

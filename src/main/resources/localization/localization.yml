@@ -4,6 +4,8 @@ Error:
   NotCleaned: 'RED [Cannons] The barrel must be cleaned before firing.'
   NoGunpowder: 'RED [Cannons] No gunpowder. Please load the barrel.'
   NoProjectile: 'RED [Cannons] No projectile loaded. Load something!'
+  NoGunpowderInChest: 'RED [Cannons] Not enough gunpowder in the chest to reload the cannon.'
+  NoProjectileInChest: 'RED [Cannons] No projectile in the chest.'
   NoFlintAndSteel: 'RED [Cannons] You need flint and steel to fire.'
   NotPushed: 'RED [Cannons] Push the projectile with a stick before firing.'
   MaximumGunpowderLoaded: 'YELLOW [Cannons] Maximum gunpowder of GOLD GUNPOWDERkg YELLOW already loaded.'

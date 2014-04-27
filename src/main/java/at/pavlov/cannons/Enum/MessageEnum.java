@@ -8,6 +8,8 @@ public enum MessageEnum
     ErrorNotCleaned ("Error.NotCleaned", true),
 	ErrorNoGunpowder ("Error.NoGunpowder", true),
     ErrorNoProjectile ("Error.NoProjectile", true),
+    ErrorNoGunpowderInChest ("Error.NoGunpowderInChest", true),
+    ErrorNoProjectileInChest ("Error.NoProjectileInChest", true),
     ErrorNotPushed ("Error.NotPushed", true),
 	ErrorNoFlintAndSteel ("Error.NoFlintAndSteel", true),
 	ErrorMaximumGunpowderLoaded ("Error.MaximumGunpowderLoaded", true),
