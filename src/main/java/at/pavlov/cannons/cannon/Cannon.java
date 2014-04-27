@@ -1910,9 +1910,9 @@ public class Cannon
         	if(design.overloading_dependsOfTemperature())
         	{
         		chance *= tempValue/design.getMaximumTemperature();
-        		Cannons.getPlugin().logDebug("Chance *= " + tempValue + " / " + design.getMaximumTemperature());
+        		Cannons.getPlugin().logDebug("Chance of explosion (overloading) *= " + tempValue + " / " + design.getMaximumTemperature());
         	}
-        	Cannons.getPlugin().logDebug("Chance = " + design.getOverloading_changeInc() + " * ((" + loadedGunpowder + " - " + design.getMaxLoadableGunpowder_Normal() + ") * " + design.getOverloading_chanceOfExplosionPerGunpowder() + ") ^ " + design.getOverloading_exponent());
+        	Cannons.getPlugin().logDebug("Chance of explosion (overloading) = " + design.getOverloading_changeInc() + " * ((" + loadedGunpowder + " ( may to be - " + design.getMaxLoadableGunpowder_Normal() + ")) * " + design.getOverloading_chanceOfExplosionPerGunpowder() + ") ^ " + design.getOverloading_exponent() + " (may to be multiplied by " + tempValue + " / " + design.getMaximumTemperature() + " = " + chance);
         	if(Math.random()<chance) return true;
         }
 		return false;

@@ -278,6 +278,7 @@ public class UserMessages {
 		{
 			//replace the loaded gunpowder
             message = message.replace("MAX_GUNPOWDER", Integer.toString(cannon.getCannonDesign().getMaxLoadableGunpowder_Normal()));
+            message = message.replace("MAX_ABSOLUTE_GUNPOWDER", Integer.toString(cannon.getCannonDesign().getMaxLoadableGunpowder_Absolute()));
 			message = message.replace("GUNPOWDER", Integer.toString(cannon.getLoadedGunpowder()));
 			//replace the loaded projectile
 			if (cannon.getLoadedProjectile()!=null)
