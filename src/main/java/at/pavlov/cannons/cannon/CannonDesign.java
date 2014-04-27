@@ -1117,7 +1117,7 @@ public class CannonDesign
         return overloadingExponent;
     }
     
-    public void setOverloadingChangeInc(double overloading_changeInc)
+    public void setOverloadingChangeInc(double overloadingChangeInc)
     {
         this.overloadingChangeInc = overloadingChangeInc;
     }
@@ -1142,7 +1142,7 @@ public class CannonDesign
         this.overloadingChanceOfExplosionPerGunpowder = overloadingChanceOfExplosionPerGunpowder;
     }
     
-    public double getOverloading_chanceOfExplosionPerGunpowder()
+    public double getOverloadingChanceOfExplosionPerGunpowder()
     {
         return overloadingChanceOfExplosionPerGunpowder;
     }

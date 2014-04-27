@@ -143,39 +143,33 @@ public class Cannon
      * @param consumesAmmo - if true ammo will be removed from chest inventories
      * @return - true if the cannon has been reloaded. False if there is not enough ammunition
      */
-    public boolean reloadFromChests(Player player, boolean consumesAmmo)
-    {
+    public boolean reloadFromChests(Player player, boolean consumesAmmo) {
         List<Inventory> invlist = getInventoryList();
 
         //clean the cannon
         //setSoot(0.0);
 
-        //load gunpowder
-        if (design.isGunpowderConsumption()&&consumesAmmo)
-        {
-
-            //gunpowder will be consumed from the inventory
-            //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
-            int toLoad = design.getMaxLoadableGunpowder_Normal() - getLoadedGunpowder();
-            ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
-            gunpowder = InventoryManagement.removeItem(invlist, gunpowder);
-            if (gunpowder.getAmount() == 0)
-            {
-                //there was enough gunpowder in the chest
+        //load gunpowder if there is no gunpowder in the barrel
+        if (getLoadedGunpowder() == 0) {
+            if (design.isGunpowderConsumption() && consumesAmmo) {
+                //gunpowder will be consumed from the inventory
+                //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
+                int toLoad = design.getMaxLoadableGunpowder_Normal() - getLoadedGunpowder();
+                ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
+                gunpowder = InventoryManagement.removeItem(invlist, gunpowder);
+                if (gunpowder.getAmount() == 0) {
+                    //there was enough gunpowder in the chest
+                    loadedGunpowder = design.getMaxLoadableGunpowder_Normal();
+                } else {
+                    //not enough gunpowder, put it back
+                    gunpowder.setAmount(toLoad - gunpowder.getAmount());
+                    InventoryManagement.addItemInChests(invlist, gunpowder);
+                    return false;
+                }
+            } else {
                 loadedGunpowder = design.getMaxLoadableGunpowder_Normal();
             }
-            else
-            {
-                //not enough gunpowder, put it back
-                gunpowder.setAmount(toLoad-gunpowder.getAmount());
-                InventoryManagement.addItemInChests(invlist, gunpowder);
-                return false;
-            }
-        }
-        else
-        {
-            loadedGunpowder = design.getMaxLoadableGunpowder_Normal();
-        }
+    }
 
 
 
@@ -1892,20 +1886,20 @@ public class Cannon
         	double chance;
         	if(ot.equals(OverloadingType.REAL))
         	{
-        		chance = design.getOverloadingChangeInc()*Math.pow(loadedGunpowder*design.getOverloading_chanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
+        		chance = design.getOverloadingChangeInc()*Math.pow(loadedGunpowder*design.getOverloadingChanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
         	}
         	else
         	{
         		if(loadedGunpowder <= design.getMaxLoadableGunpowder_Normal())
                     return false;
-        		chance = design.getOverloadingChangeInc()*Math.pow((loadedGunpowder-design.getMaxLoadableGunpowder_Normal())*design.getOverloading_chanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
+        		chance = design.getOverloadingChangeInc()*Math.pow((loadedGunpowder-design.getMaxLoadableGunpowder_Normal())*design.getOverloadingChanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
         	}
         	if(design.overloadingDependsOfTemperature())
         	{
         		chance *= tempValue/design.getMaximumTemperature();
         		Cannons.getPlugin().logDebug("Chance of explosion (overloading) *= " + tempValue + " / " + design.getMaximumTemperature());
         	}
-        	Cannons.getPlugin().logDebug("Chance of explosion (overloading) = " + design.getOverloadingChangeInc() + " * ((" + loadedGunpowder + " ( may to be - " + design.getMaxLoadableGunpowder_Normal() + ")) * " + design.getOverloading_chanceOfExplosionPerGunpowder() + ") ^ " + design.getOverloadingExponent() + " (may to be multiplied by " + tempValue + " / " + design.getMaximumTemperature() + " = " + chance);
+        	Cannons.getPlugin().logDebug("Chance of explosion (overloading) = " + design.getOverloadingChangeInc() + " * ((" + loadedGunpowder + " ( maybe - " + design.getMaxLoadableGunpowder_Normal() + ")) * " + design.getOverloadingChanceOfExplosionPerGunpowder() + ") ^ " + design.getOverloadingExponent() + " (may to be multiplied by " + tempValue + " / " + design.getMaximumTemperature() + " = " + chance);
         	if(Math.random()<chance) return true;
         }
 		return false;
