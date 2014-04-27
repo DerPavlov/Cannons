@@ -148,32 +148,37 @@ public class Cannon
         //clean the cannon
         //setSoot(0.0);
 
-        //load gunpowder
+        //load gunpowder if there is nothing in the barrel
         if (design.isGunpowderConsumption()&&consumesAmmo)
         {
 
             //gunpowder will be consumed from the inventory
             //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
             int toLoad = design.getMaxLoadableGunpowder_Normal() - getLoadedGunpowder();
-            ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
-            gunpowder = InventoryManagement.removeItem(invlist, gunpowder);
-            if (gunpowder.getAmount() == 0)
+            if (toLoad > 0)
             {
-                //there was enough gunpowder in the chest
-                loadedGunpowder = design.getMaxLoadableGunpowder_Normal();
+                ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
+                gunpowder = InventoryManagement.removeItem(invlist, gunpowder);
+                if (gunpowder.getAmount() == 0)
+                {
+                    //there was enough gunpowder in the chest
+                    loadedGunpowder = design.getMaxLoadableGunpowder_Normal();
+                }
+                else
+                {
+                    //not enough gunpowder, put it back
+                    gunpowder.setAmount(toLoad-gunpowder.getAmount());
+                    InventoryManagement.addItemInChests(invlist, gunpowder);
+                    return false;
+                }
             }
-            else
-            {
-                //not enough gunpowder, put it back
-                gunpowder.setAmount(toLoad-gunpowder.getAmount());
-                InventoryManagement.addItemInChests(invlist, gunpowder);
-                return false;
-            }
+
         }
-        else
-        {
+        else {
+            //no ammo consumption
             loadedGunpowder = design.getMaxLoadableGunpowder_Normal();
         }
+
 
 
 
