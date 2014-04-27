@@ -76,12 +76,12 @@ public class CannonDesign
 
     //Overloading stuff
     //Overloading mode (0 = default (no risk), 1 = safe (risk exists only if cannon is overloaded), 2 = real (risk exists any time))
-    private OverloadingType overloading_type;
-    private double overloading_exponent;
-    private double overloading_changeInc;
-    private int overloading_maxOverloadableGunpowder;
-    private double overloading_chanceOfExplosionPerGunpowder;
-    private boolean overloading_dependsOfTemperature;
+    private OverloadingType overloadingType;
+    private double overloadingExponent;
+    private double overloadingChangeInc;
+    private int overloadingMaxOverloadableGunpowder;
+    private double overloadingChanceOfExplosionPerGunpowder;
+    private boolean overloadingDependsOfTemperature;
 
 	//realisticBehaviour
 	private boolean FiringItemRequired;
@@ -479,7 +479,7 @@ public class CannonDesign
 	 */
 	public int getMaxLoadableGunpowder_Absolute()
 	{
-		if(overloading_type.isEnabled()) return maxLoadableGunpowder+overloading_maxOverloadableGunpowder;
+		if(overloadingType.isEnabled()) return maxLoadableGunpowder+overloadingMaxOverloadableGunpowder;
 		else return getMaxLoadableGunpowder_Normal();
 	}
 	public void setMaxLoadableGunpowder(int maxLoadableGunpowder)
@@ -1097,65 +1097,65 @@ public class CannonDesign
         this.minVerticalAngleOnShip = minVerticalAngleOnShip;
     }
 
-//It is hard to do
-    public void setOverloading_type(OverloadingType overloading_type)
+    public void setOverloadingType(OverloadingType overloadingType)
     {
-        this.overloading_type = overloading_type;
+        this.overloadingType = overloadingType;
     }
     
-    public OverloadingType getOverloading_type()
+    public OverloadingType getOverloadingType()
     {
-        return overloading_type;
+        return overloadingType;
     }
     
-    public void setOverloading_exponent(double overloading_exponent)
+    public void setOverloadingExponent(double overloadingExponent)
     {
-        this.overloading_exponent = overloading_exponent;
+        this.overloadingExponent = overloadingExponent;
     }
     
-    public double getOverloading_exponent()
+    public double getOverloadingExponent()
     {
-        return overloading_exponent;
+        return overloadingExponent;
     }
     
-    public void setOverloading_changeInc(double overloading_changeInc)
+    public void setOverloadingChangeInc(double overloading_changeInc)
     {
-        this.overloading_changeInc = overloading_changeInc;
+        this.overloadingChangeInc = overloadingChangeInc;
     }
     
-    public double getOverloading_changeInc()
+    public double getOverloadingChangeInc()
     {
-        return overloading_changeInc;
+        return overloadingChangeInc;
     }
     
-    public void setOverloading_maxOverloadableGunpowder(int overloading_maxOverloadableGunpowder)
+    public void setOverloadingMaxOverloadableGunpowder(int overloadingMaxOverloadableGunpowder)
     {
-        this.overloading_maxOverloadableGunpowder = overloading_maxOverloadableGunpowder;
+        this.overloadingMaxOverloadableGunpowder = overloadingMaxOverloadableGunpowder;
     }
 
-    public int getOverloading_maxOverloadableGunpowder()
+    public int getOverloadingMaxOverloadableGunpowder()
     {
-        return overloading_maxOverloadableGunpowder;
+        return overloadingMaxOverloadableGunpowder;
     }
-    public void setOverloading_chanceOfExplosionPerGunpowder(double overloading_chanceOfExplosionPerGunpowder)
+
+    public void setOverloadingChanceOfExplosionPerGunpowder(double overloadingChanceOfExplosionPerGunpowder)
     {
-        this.overloading_chanceOfExplosionPerGunpowder = overloading_chanceOfExplosionPerGunpowder;
+        this.overloadingChanceOfExplosionPerGunpowder = overloadingChanceOfExplosionPerGunpowder;
     }
     
     public double getOverloading_chanceOfExplosionPerGunpowder()
     {
-        return overloading_chanceOfExplosionPerGunpowder;
+        return overloadingChanceOfExplosionPerGunpowder;
     }
 
 
-	public boolean overloading_dependsOfTemperature()
+	public boolean overloadingDependsOfTemperature()
 	{
-		return overloading_dependsOfTemperature;
+		return overloadingDependsOfTemperature;
 	}
 
 
-	public void setOverloading_dependsOfTemperature(boolean overloading_dependsOfTemperature)
+	public void setOverloadingDependsOfTemperature(boolean overloadingDependsOfTemperature)
 	{
-		this.overloading_dependsOfTemperature = overloading_dependsOfTemperature;
+		this.overloadingDependsOfTemperature = overloadingDependsOfTemperature;
 	}
 }
