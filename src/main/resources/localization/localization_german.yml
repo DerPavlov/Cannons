@@ -14,6 +14,14 @@ Error:
   MissingSign: 'RED [Cannons] Diese CANNON benötigt ein Sign um zu funktioinieren.'
 
 
+Commands:
+  SelectCannon: 'YELLOW [Cannons] Bitte Kanone auswählen.'
+  SelectedCannon: 'GREEN [Cannons] Kanone CANNON_NAME ausgewählt.'
+  SelectDone: 'GREEN [Cannons] Auswahl abgeschlossen.'
+  SelectCanceled: 'RED [Cannons] Auswahl abgebrochen.'
+  NoCannonSelected: 'RED [Cannons] Keine Kanone ausgewählt.'
+
+
 Aiming:
   EnableAimingMode: 'GREEN [Cannons] Zielmodus aktiviert'
   DisableAimingMode: 'RED [Cannons] Zielmodus deaktiviert'
@@ -37,6 +45,8 @@ Cannon:
   Created: 'GREEN [Cannons] Eine CANNON wurde erstellt.'
   Destroyed: 'RED [Cannons] Eine deiner Kanonen wurde zerstört.'
   Reseted: 'GREEN [Cannons] Alle Kanonen von PLAYER wurden aus der Datenbank entfernt.'
+  ObserverAdded: 'GREEN [Cannons] Du wurdest als Beobachter bei CANNON_NAME hinzugefügt.'
+  ObserverRemoved: 'RED [Cannons] Du bist nicht mehr Beobachter für CANNON_NAME.'
 
 
 Projectile:

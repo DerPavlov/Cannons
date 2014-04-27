@@ -50,7 +50,6 @@ public final class Cannons extends JavaPlugin
 	private final Aiming aiming;
     private final ProjectileObserver observer;
     private final FakeBlockHandler fakeBlockHandler;
-	private final Commands commands;
 
     private final CannonsAPI cannonsAPI;
 	
@@ -59,6 +58,7 @@ public final class Cannons extends JavaPlugin
 	private final PlayerListener playerListener;
 	private final EntityListener entityListener;
 	private final SignListener signListener;
+    private final Commands commands;
 	
 	// database
 	private final PersistenceDatabase persistenceDatabase;
@@ -400,5 +400,9 @@ public final class Cannons extends JavaPlugin
 
     public FakeBlockHandler getFakeBlockHandler() {
         return fakeBlockHandler;
+    }
+
+    public Commands getCommandListener() {
+        return commands;
     }
 }

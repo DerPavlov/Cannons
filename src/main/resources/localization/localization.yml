@@ -25,6 +25,13 @@ Aiming:
   SettingHorizontalAngleRight: 'YELLOW [Cannons] Aiming GOLD HDEGREE degree YELLOW to the GOLD right'
   SettingHorizontalAngleLeft: 'YELLOW [Cannons] Aiming GOLD HDEGREE degree YELLOW to the GOLD left'
 
+Commands:
+  SelectCannon: 'YELLOW [Cannons] Please click on the cannon.'
+  SelectedCannon: 'GREEN [Cannons] CANNON_NAME selected.'
+  SelectDone: 'GREEN [Cannons] Selection finished.'
+  SelectCanceled: 'RED [Cannons] Selection canceled.'
+  NoCannonSelected: 'RED [Cannons] No cannon selected.'
+
 
 Load:  
   Projectile: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW has been loaded.'
@@ -38,6 +45,8 @@ Cannon:
   Created: 'GREEN [Cannons] You created a CANNON'
   Destroyed: 'RED [Cannons] One of your cannons has been destroyed'
   Reseted: 'GREEN [Cannons] All cannons of PLAYER have been deleted from the database'
+  ObserverAdded: 'GREEN [Cannons] You have been added as observer to CANNON_NAME.'
+  ObserverRemoved: 'RED [Cannons] You are no longer observer for CANNON_NAME.'
 
 
 Projectile:

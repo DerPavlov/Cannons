@@ -293,6 +293,7 @@ public class UserMessages {
             message = message.replace("CRIT_TEMP", String.format("%.1f", cannon.getCannonDesign().getCriticalTemperature()));
             message = message.replace("WARN_TEMP", String.format("%.1f", cannon.getCannonDesign().getWarningTemperature()));
             //cannon message name
+            message = message.replace("CANNON_NAME", cannon.getCannonName());
             message = message.replace("CANNON", cannon.getCannonDesign().getMessageName());
             //soot left
             message = message.replace("SOOT_LEFT", Integer.toString((int) Math.floor(cannon.getSoot())));

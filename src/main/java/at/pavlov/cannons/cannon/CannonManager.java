@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
-import at.pavlov.cannons.container.UniqueName;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
@@ -28,7 +27,7 @@ import at.pavlov.cannons.event.CannonBeforeCreateEvent;
 public class CannonManager
 {
 	private final ConcurrentHashMap<UUID, Cannon> cannonList = new ConcurrentHashMap<UUID, Cannon>();
-    private final ConcurrentHashMap<UniqueName, UUID> cannonNameMap = new ConcurrentHashMap<UniqueName, UUID>();
+    private final ConcurrentHashMap<String, UUID> cannonNameMap = new ConcurrentHashMap<String, UUID>();
 
 
     private final Cannons plugin;
@@ -152,19 +151,17 @@ public class CannonManager
 
 	/**
 	 * Checks if the name of a cannon is unique
-	 * 
-	 * @param name
+	 * @param name name of the cannon
 	 * @return true if the name is unique
 	 */
-	private boolean isCannonNameUnique(String name, String owner)
+	private boolean isCannonNameUnique(String name)
 	{
-        if (name == null || owner == null)
+        if (name == null)
             return false;
 
 		// try to find this in the map
-        UniqueName uName = new UniqueName(name, owner);
         //there is no such cannon name
-        if (cannonNameMap.get(uName)==null)
+        if (cannonNameMap.get(name)==null)
             return true;
         //there is such a cannon name
         else
@@ -193,7 +190,7 @@ public class CannonManager
 		{
 			String cannonName = name + " " + i;
 
-			if (isCannonNameUnique(cannonName, cannon.getOwner()))
+			if (isCannonNameUnique(cannonName))
 			{
 				return cannonName;
 			}
@@ -223,7 +220,7 @@ public class CannonManager
 		// add cannon to the list
 		cannonList.put(cannon.getUID(), cannon);
         //add cannon name to the list
-        cannonNameMap.put(new UniqueName(cannon.getCannonName(),cannon.getOwner()), cannon.getUID());
+        cannonNameMap.put(cannon.getCannonName(), cannon.getUID());
 
         plugin.getPersistenceDatabase().saveCannonAsync(cannon);
         plugin.logDebug("added cannon to the list");
@@ -326,9 +323,9 @@ public class CannonManager
 	 * @param cannonName
 	 * @return
 	 */
-	public Cannon getCannonFromStorage(String cannonName, String owner)
+	public Cannon getCannon(String cannonName)
 	{
-		if (cannonName == null || owner == null) return null;
+		if (cannonName == null) return null;
 
         UUID uid = cannonNameMap.get(cannonName);
         if (uid != null)
@@ -373,7 +370,7 @@ public class CannonManager
 	 * 
 	 * @param cannonBlock - one block of the cannon
 	 * @param owner - the owner of the cannon (important for message notification). Can't be null
-	 * @return
+	 * @return the cannon at this location
 	 */
 	public Cannon getCannon(Location cannonBlock, String owner, boolean silent)
 	{
@@ -387,7 +384,7 @@ public class CannonManager
             return null;
 
         // search cannon that is written on the sign
-        Cannon cannonFromSign = getCannonFromStorage(cannon.getCannonNameFromSign(), cannon.getOwnerFromSign());
+        Cannon cannonFromSign = getCannon(cannon.getCannonNameFromSign());
 
         // if there is a different name on the cannon sign we use that one
         if (cannonFromSign != null)

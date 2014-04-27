@@ -342,7 +342,8 @@ public class PlayerListener implements Listener
                 // all other actions will stop aiming mode
                 if(action == Action.RIGHT_CLICK_AIR)
                 {
-                    aiming.aimingMode(event.getPlayer(), null, false);
+                    aiming.aimingMode(player, null, false);
+                    plugin.getCommandListener().removeCannonSelector(player);
                 }
                 return;
             }
@@ -360,6 +361,12 @@ public class PlayerListener implements Listener
 
             plugin.logDebug("player interact event fired");
 
+
+            // ############ select a cannon ####################
+            if(plugin.getCommandListener().isSelectingMode(player))
+            {
+                plugin.getCommandListener().addSelectedCannon(player, cannon);
+            }
 
             // ############ touching a hot cannon will burn you ####################
             if(cannon.getTemperature() > design.getWarningTemperature())

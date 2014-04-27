@@ -1,6 +1,6 @@
 package at.pavlov.cannons.listener;
 
-import java.util.HashMap;
+import java.util.*;
 
 import at.pavlov.cannons.Aiming;
 import at.pavlov.cannons.cannon.Cannon;
@@ -25,6 +25,11 @@ public class Commands implements CommandExecutor
     private final Config config;
     private final UserMessages userMessages;
     private final PersistenceDatabase persistenceDatabase;
+
+    //<player>
+    private HashSet<String> cannonSelector = new HashSet<String>();
+    //<player,List<Cannons ID>>
+    private HashMap<String, List<UUID>> selectedCannons = new HashMap<String, List<UUID>>();
 
 
 
@@ -76,7 +81,16 @@ public class Commands implements CommandExecutor
                 //cannons reset
                 else if(args[0].equalsIgnoreCase("reset") && (player == null || player.hasPermission("cannons.admin.reset")))
                 {
-                    if (args.length >= 2 && args[1] != null)
+                    //try first if there is no player "all" or "all_players"
+                    if (args.length >= 2 && (
+                            (args[1].equalsIgnoreCase("all")&&Bukkit.getPlayer("all")==null)||
+                            (args[1].equalsIgnoreCase("all_players")&&Bukkit.getPlayer("all_players")==null)))
+                    {
+                        //remove all cannons
+                        persistenceDatabase.deleteAllCannonsAsync();
+                        plugin.getCannonManager().deleteAllCannons();
+                    }
+                    else if (args.length >= 2 && args[1] != null)
                     {
                         // delete all cannon entries for this player
                         boolean b1 = plugin.getCannonManager().deleteCannons(args[1]);
@@ -93,7 +107,7 @@ public class Commands implements CommandExecutor
                     }
                     else
                     {
-                        sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "/cannons reset <NAME>");
+                        sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons reset <NAME>' or '/cannons reset all' or '/cannons reset all_players'");
                     }
                 }
                 //cannons list
@@ -153,39 +167,73 @@ public class Commands implements CommandExecutor
                         else
                             plugin.getAiming().toggleImitating(player);
                     }
-                    //selector for cannon
+                    //select a cannon
+                    else if(args[0].equalsIgnoreCase("select") && player.hasPermission("cannons.player.select"))
+                    {
+                        if (args.length <2)
+                            toggleCannonSelector(player);
+                        else if (args.length >= 2 && (args[1].equalsIgnoreCase("enable")||args[1].equalsIgnoreCase("start")))
+                            addCannonSelector(player);
+                        else if (args.length >= 2 && (args[1].equalsIgnoreCase("disable")||args[1].equalsIgnoreCase("stop")))
+                            removeCannonSelector(player);
+                        else if (args.length >= 2 && args[1].equalsIgnoreCase("cancel"))
+                            cancelCannonSelector(player);
+                        else if (args.length >= 2 && args[1].equalsIgnoreCase("list"))
+                        {
+                            sendMessage(sender, ChatColor.GREEN +"selected cannons:");
+                            int i = 0;
+                            for (Cannon cannon : getSelectedCannons(player))
+                            {
+                                i++;
+                                sendMessage(sender, ChatColor.YELLOW + Integer.toString(i) + ") " + ChatColor.GOLD + cannon.getCannonName() + ChatColor.YELLOW + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
+                            }
+                        }
+                        else
+                            sendMessage(sender, ChatColor.RED + "Usage '/cannons observer <enable|disable|cancel|list>'");
+                    }
+                    //add observer for cannon
                     else if(args[0].equalsIgnoreCase("observer") && player.hasPermission("cannons.player.observer"))
                     {
                         if (args.length >= 2 && (args[1].equalsIgnoreCase("off")||args[1].equalsIgnoreCase("disable")))
-                            plugin.getAiming().enableImitating(player);
+                            plugin.getAiming().removeObserverForAllCannons(player);
+                        else if (args.length < 2)
+                        {
+                            //selection done by preselection
+                            List<Cannon> list = getSelectedCannons(player);
+                            for (Cannon cannon : list)
+                            {
+                                cannon.addObserver(player, false);
+                                userMessages.displayMessage(player, cannon, MessageEnum.CannonObserverAdded);
+                            }
 
+                        }
+                        if (args.length >= 2 && args[1]!=null)
+                        {
+                            //selection done by a string '/cannons observer CANNON_NAME'
+                            Cannon cannon = plugin.getCannonManager().getCannon(args[1]);
+                            cannon.addObserver(player, false);
+                            userMessages.displayMessage(player, cannon, MessageEnum.CannonObserverAdded);
+                        }
+                        else
+                            sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
                     }
                     //list cannons of this player name
                     else if(args[0].equalsIgnoreCase("list") && player.hasPermission("cannons.player.list"))
                     {
-                        player.sendMessage(ChatColor.GREEN +"Cannon list for " + args[1] + ":");
+                        sendMessage(sender, ChatColor.GREEN +"Cannon list for " + args[1] + ":");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
                             if (cannon.getOwner().equalsIgnoreCase(player.getName()))
-                                player.sendMessage(ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
+                                sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
                                         ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
                         }
                     }
                     //cannons reset
                     else if(args[0].equalsIgnoreCase("reset") && player.hasPermission("cannons.player.reset"))
                     {
-                        if (args.length >= 2 && (args[1].equalsIgnoreCase("all")))
-                        {
-                            //remove all cannons
-                            persistenceDatabase.deleteAllCannonsAsync();
-                            plugin.getCannonManager().deleteAllCannons();
-                        }
-                        else
-                        {
-                            // delete all cannon entries for this player
-                            persistenceDatabase.deleteCannonsAsync(player.getName());
-                            plugin.getCannonManager().deleteCannons(player.getName());
-                        }
+                        // delete all cannon entries for this player
+                        persistenceDatabase.deleteCannonsAsync(player.getName());
+                        plugin.getCannonManager().deleteCannons(player.getName());
                         userMessages.displayMessage(player, MessageEnum.CannonsReseted);
                     }
                     //no help message if it is forbidden for this player
@@ -231,14 +279,191 @@ public class Commands implements CommandExecutor
         return false;
     }
 
-
+    /**
+     * sends a message to the console of the player. Console messages will be striped form color
+     * @param sender player or console
+     * @param str message
+     */
     private void sendMessage(CommandSender sender, String str)
     {
+        if (sender == null)
+            return;
+
         //strip color of console messages
         if (!(sender instanceof Player))
             str = ChatColor.stripColor(str);
 
         sender.sendMessage(str);
+    }
+
+    /**
+     * this player will be registered to selected a new cannon
+     * @param player the player will be registered
+     */
+    public void addCannonSelector(Player player)
+    {
+        if (player == null)
+            return;
+
+        if (!isSelectingMode(player))
+        {
+            clearSelectedCannons(player);
+            cannonSelector.add(player.getName());
+            userMessages.displayMessage(player, MessageEnum.CmdSelectCannon);
+        }
+    }
+
+    /**
+     * this player will be removed from the selecting mode
+     * @param player the player will be removed
+     */
+    public void removeCannonSelector(Player player)
+    {
+        if (player == null)
+            return;
+
+        if (isSelectingMode(player))
+        {
+            cannonSelector.remove(player.getName());
+            if (hasSelectedCannons(player))
+                userMessages.displayMessage(player, MessageEnum.CmdSelectDone);
+            else
+                userMessages.displayMessage(player, MessageEnum.CmdSelectCanceled);
+        }
+    }
+
+    /**
+     * this player will be removed from the selecting mode
+     * @param player the player will be removed
+     */
+    public void cancelCannonSelector(Player player)
+    {
+        if (player == null)
+            return;
+
+        if (isSelectingMode(player))
+        {
+            cannonSelector.remove(player.getName());
+            clearSelectedCannons(player);
+            userMessages.displayMessage(player, MessageEnum.CmdSelectDone);
+        }
+    }
+
+    /**
+     * selecting mode will be toggled
+     * @param player the player using the selecting mode
+     */
+    public void toggleCannonSelector(Player player)
+    {
+        if (player == null)
+            return;
+
+        if (isSelectingMode(player))
+            removeCannonSelector(player);
+        else
+            addCannonSelector(player);
+    }
+
+
+    /**
+     * Checks if this player is in selecting mode
+     * @param player player to check
+     * @return true if in selecting mode
+     */
+    public boolean isSelectingMode(Player player)
+    {
+        if (player == null)
+            return false;
+
+        return cannonSelector.contains(player.getName());
+    }
+
+    /**
+     * adds a new selected cannon for this player
+     * @param player player that selected the cannon
+     * @param cannon the selected cannon
+     */
+    public void addSelectedCannon(Player player, Cannon cannon)
+    {
+        if (player == null || cannon == null)
+            return;
+
+        List<UUID> cannonList = selectedCannons.get(player.getName());
+        //if there is no list, make a new one
+        if (cannonList == null)
+            cannonList = new ArrayList<UUID>();
+        //add to the list
+        cannonList.add(cannon.getUID());
+        userMessages.displayMessage(player, cannon, MessageEnum.CmdSelectCannon);
+    }
+
+    /**
+     * removes selection list for this player
+     * @param player the list for this player will be removed
+     */
+    public void clearSelectedCannons(Player player)
+    {
+        if (player == null)
+            return;
+
+        selectedCannons.remove(player.getName());
+    }
+
+    /**
+     * selection successfully finished
+     * @param player the player that finished the selection
+     */
+    public void selectionDone(Player player)
+    {
+        userMessages.displayMessage(player, MessageEnum.CmdSelectDone);
+    }
+
+    /**
+     * get all the selected cannons for the given player
+     * @param player player who selected the cannons
+     * @return list of cannons
+     */
+    public List<Cannon> getSelectedCannons(Player player)
+    {
+        if (player == null)
+            return new ArrayList<Cannon>();
+
+        List<UUID> uids = selectedCannons.get(player.getName());
+
+        if (uids == null || uids.size() == 0)
+        {
+            userMessages.displayMessage(player, MessageEnum.CmdNoCannonSelected);
+            return new ArrayList<Cannon>();
+        }
+
+        List<Cannon> cannons = new ArrayList<Cannon>();
+        for (UUID id : uids)
+        {
+            Cannon cannon = plugin.getCannonManager().getCannon(id);
+            if (cannon != null)
+                cannons.add(cannon);
+        }
+
+        return cannons;
+    }
+
+    /**
+     * checks if this player has already some cannons selected
+     * @param player the player in question
+     * @return true if there are cannons selected for this player
+     */
+    public boolean hasSelectedCannons(Player player)
+    {
+        if (player == null)
+            return false;
+
+        List<UUID> uids = selectedCannons.get(player.getName());
+
+        if (uids == null || uids.size() == 0)
+            return false;
+        //this player has already some cannons selected
+        return true;
+
     }
 
 

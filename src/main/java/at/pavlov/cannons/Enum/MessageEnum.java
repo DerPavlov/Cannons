@@ -17,7 +17,14 @@ public enum MessageEnum
 	ErrorCannonBuiltLimit ("Error.CannonBuiltLimit", true),
 	ErrorNotTheOwner ("Error.NotTheOwner", true),
     ErrorMissingSign ("Error.MissingSign", true),
-	
+
+    //Commands
+    CmdSelectCannon ("Commands.SelectCannon"),
+    CmdSelectedCannon ("Commands.SelectedCannon"),
+    CmdSelectDone ("Commands.SelectDone"),
+    CmdSelectCanceled ("Commands.SelectCanceled"),
+    CmdNoCannonSelected ("Commands.NoCannonSelected"),
+
 	//Aiming
 	SettingCombinedAngle ("Aiming.SettingCombinedAngle"),
 	SettingVerticalAngleUp ("Aiming.SettingVerticalAngleUp"),
@@ -39,6 +46,8 @@ public enum MessageEnum
 	CannonDestroyed ("Cannon.Destroyed"),
     CannonsReseted ("Cannon.Reseted"),
 	CannonFire ("Cannon.Fire"),
+    CannonObserverAdded ("Cannon.ObserverAdded"),
+    CannonObserverRemoved ("Cannon.ObserverRemoved"),
 
     //projectile
     ProjectileExplosion ("Projectile.Explosion"),
