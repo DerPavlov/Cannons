@@ -222,12 +222,12 @@ public class DesignStorage
         cannonDesign.setMassOfCannon(cannonDesignConfig.getInt("realisticBehaviour.massOfCannon", 1000));//What means 1000?
         
         // overloading stuff
-        cannonDesign.setOverloadingType(OverloadingType.get(cannonDesignConfig.getInt("realisticBehaviour.overloading.mode")));
-        cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.overloading.exponent"));
-        cannonDesign.setOverloadingChangeInc((cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceInc")));
-        cannonDesign.setOverloadingMaxOverloadableGunpowder((cannonDesignConfig.getInt("realisticBehaviour.overloading.maxOverloadableGunpowder")));
-        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder((cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceOfExplosionPerGunpowder")));
-        cannonDesign.setOverloadingDependsOfTemperature((cannonDesignConfig.getBoolean("realisticBehaviour.overloading.dependsOnTemperature")));
+        cannonDesign.setOverloadingType(OverloadingType.get(cannonDesignConfig.getInt("realisticBehaviour.Overloading.Mode")));
+        cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.Overloading.Exponent"));
+        cannonDesign.setOverloadingChangeInc((cannonDesignConfig.getDouble("realisticBehaviour.Overloading.ChanceInc")));
+        cannonDesign.setOverloadingMaxOverloadableGunpowder((cannonDesignConfig.getInt("realisticBehaviour.Overloading.MaxOverloadableGunpowder")));
+        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder((cannonDesignConfig.getDouble("realisticBehaviour.Overloading.ChanceOfExplosionPerGunpowder")));
+        cannonDesign.setOverloadingDependsOfTemperature((cannonDesignConfig.getBoolean("realisticBehaviour.Overloading.DependsOfTemperature")));
 
 		// permissions
 		cannonDesign.setPermissionBuild(cannonDesignConfig.getString("permissions.build", "cannon.player.build"));
