@@ -19,7 +19,6 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.schematic.SchematicFormat;
 
 import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.Enum.OverloadingType;
 import at.pavlov.cannons.container.DesignFileName;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.container.SimpleBlock;
@@ -220,9 +219,11 @@ public class DesignStorage
 		cannonDesign.setFrontloader(cannonDesignConfig.getBoolean("realisticBehaviour.isFrontloader", false));
 		cannonDesign.setRotatable(cannonDesignConfig.getBoolean("realisticBehaviour.isRotatable", false));
         cannonDesign.setMassOfCannon(cannonDesignConfig.getInt("realisticBehaviour.massOfCannon", 1000));//What means 1000?
+        cannonDesign.setStartingSoot(cannonDesignConfig.getInt("realisticBehaviour.startingSoot"));
         
         // overloading stuff
-        cannonDesign.setOverloadingType(OverloadingType.get((byte) (cannonDesignConfig.getInt("realisticBehaviour.Overloading.Mode"))));
+        cannonDesign.setOverloadingEnabled(cannonDesignConfig.getBoolean("realisticBehaviour.Overloading.Enabled"));
+        cannonDesign.setOverloadingRealMode(cannonDesignConfig.getBoolean("realisticBehaviour.Overloading.RealMode"));
         cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.Overloading.Exponent"));
         cannonDesign.setOverloadingChangeInc((cannonDesignConfig.getDouble("realisticBehaviour.Overloading.ChanceInc")));
         cannonDesign.setOverloadingMaxOverloadableGunpowder((cannonDesignConfig.getInt("realisticBehaviour.Overloading.MaxOverloadableGunpowder")));

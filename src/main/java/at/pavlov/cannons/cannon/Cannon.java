@@ -4,11 +4,9 @@ import java.util.*;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
-import at.pavlov.cannons.Enum.OverloadingType;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
-import at.pavlov.cannons.listener.Commands;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.*;
@@ -308,9 +306,9 @@ public class Cannon
 
 
         //Overloading is enabled
-        if(design.getOverloadingType().isEnabled())
+        if(design.isOverloadingEnabled())
         {
-        	if(design.getOverloadingType().equals(OverloadingType.SAFE))
+        	if(!design.isOverloadingRealMode())
         	{
                 if(design.getMaxLoadableGunpowder_Normal()<getLoadedGunpowder())
                 	return MessageEnum.loadOverloadedGunpowder;
@@ -1886,24 +1884,18 @@ public class Cannon
      */
 	public boolean isExplodedOnOverloading()
 	{
-		OverloadingType ot = design.getOverloadingType();
-        if(ot.isEnabled())
+        if(design.isOverloadingEnabled())
         {
-        	double chance;
-        	if(ot.equals(OverloadingType.REAL))
-        	{
-        		chance = design.getOverloadingChangeInc()*Math.pow(loadedGunpowder*design.getOverloading_chanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
-        	}
-        	else
-        	{
-        		if(loadedGunpowder <= design.getMaxLoadableGunpowder_Normal()) return false;
-        		chance = design.getOverloadingChangeInc()*Math.pow((loadedGunpowder-design.getMaxLoadableGunpowder_Normal())*design.getOverloading_chanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
-        	}
-        	if(design.overloadingDependsOfTemperature())
-        	{
-        		chance *= tempValue/design.getMaximumTemperature();
-        		Cannons.getPlugin().logDebug("Chance of explosion (overloading) *= " + tempValue + " / " + design.getMaximumTemperature());
-        	}
+        	double tempInc;
+        	if(design.isOverloadingDependsOfTemperature()) tempInc = tempValue/design.getMaximumTemperature();
+        	else tempInc = 1;
+        	
+        	int saferGunpowder;
+        	if(design.isOverloadingRealMode()) saferGunpowder = design.getMaxLoadableGunpowder_Normal();
+        	else saferGunpowder = 0;
+        	
+        	double chance  = tempInc * design.getOverloadingChangeInc()*Math.pow((loadedGunpowder - saferGunpowder)*design.getOverloading_chanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
+        	if(chance <= 0) return false;
         	Cannons.getPlugin().logDebug("Chance of explosion (overloading) = " + design.getOverloadingChangeInc() + " * ((" + loadedGunpowder + " ( may to be - " + design.getMaxLoadableGunpowder_Normal() + ")) * " + design.getOverloading_chanceOfExplosionPerGunpowder() + ") ^ " + design.getOverloadingExponent() + " (may to be multiplied by " + tempValue + " / " + design.getMaximumTemperature() + " = " + chance);
         	if(Math.random()<chance) return true;
         }

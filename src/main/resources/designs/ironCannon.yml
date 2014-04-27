@@ -121,18 +121,19 @@ realisticBehaviour:
   supportsFireMission: false
   #the mass in kilogram of a cannon is important for moving objects e.g. ships
   massOfCannon: 500
+  #created cannon will have this amount of soot (0 to disable this feature)
+  startingSoot: 10
   #Cannon might to be overloaded by gunpowder with risk of explosion
   Overloading:
-    #Modes:
-    #0 = disable overloading stuff
-    #1 = cannon might to explode if it is overloaded by gunpowder (chance = changeInc*((all loaded gunpowder - MaxOverloadableGunpowder) * ChanceOfExplosionPerGunpowder)^Exponent)
-    #2 = cannon might to explode any time (chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent)
-    Mode: 1
+    #cannon might to explode time (chance = chanceInc * ((all loaded gunpowder - maximum loadable gunpowder without overloading) * ChanceOfExplosionPerGunpowder)^Exponent)
+    Enabled: true
+    #cannon might to explode any time (maximum loadable gunpowder without overloading = 0)
+    RealMode: true
     Exponent: 2
-    ChanceInc: 0.5
-    MaxOverloadableGunpowder: 3
+    ChanceInc: 1
+    MaxOverloadableGunpowder: 1
     ChanceOfExplosionPerGunpowder: 0.1
-    #DependsOfTemperature means, what chance will be multiplied by cannon temperature / maximumTemperature
+    #DependsOfTemperature means, what chance will be multiplied by cannon's temperature / maximumTemperature
     DependsOfTemperature: true
 
 
