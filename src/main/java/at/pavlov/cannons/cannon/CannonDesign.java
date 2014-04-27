@@ -464,10 +464,18 @@ public class CannonDesign
 	{
 		this.autoreloadRedstone = autoreloadRedstone;
 	}
+	/**
+	 * Normal means without overloading stuff
+	 * @return maxLoadableGunpowder
+	 */
 	public int getMaxLoadableGunpowder_Normal()
 	{
 		return maxLoadableGunpowder;
 	}
+	/**
+	 * Absolute means maximum loadable gunpowder
+	 * @return if overloading stuff is enabled for this cannon, returns maxLoadableGunpowder+overloading_maxOverloadableGunpowder, else returns maxLoadableGunpowder
+	 */
 	public int getMaxLoadableGunpowder_Absolute()
 	{
 		if(overloading_type.isEnabled()) return maxLoadableGunpowder+overloading_maxOverloadableGunpowder;

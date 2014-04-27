@@ -1891,7 +1891,10 @@ public class Cannon
     {
         observerMap.remove(player.getName());
     }
-
+    /**
+     * Calculating if cannon might to explode
+     * @return true if explosion chance was more then random number
+     */
 	public boolean isExplodedOnOverloading()
 	{
 		OverloadingType ot = design.getOverloading_type();
