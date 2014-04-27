@@ -19,7 +19,6 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.schematic.SchematicFormat;
 
 import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.Enum.OverloadingType;
 import at.pavlov.cannons.container.DesignFileName;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.container.SimpleBlock;
@@ -220,14 +219,16 @@ public class DesignStorage
 		cannonDesign.setFrontloader(cannonDesignConfig.getBoolean("realisticBehaviour.isFrontloader", false));
 		cannonDesign.setRotatable(cannonDesignConfig.getBoolean("realisticBehaviour.isRotatable", false));
         cannonDesign.setMassOfCannon(cannonDesignConfig.getInt("realisticBehaviour.massOfCannon", 1000));//What means 1000?
+        cannonDesign.setStartingSoot(cannonDesignConfig.getInt("realisticBehaviour.startingSoot"));
         
         // overloading stuff
-        cannonDesign.setOverloadingType(OverloadingType.get(cannonDesignConfig.getInt("realisticBehaviour.overloading.mode",0)));
-        cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.overloading.exponent",1));
-        cannonDesign.setOverloadingChangeInc(cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceInc",0.1));
-        cannonDesign.setOverloadingMaxOverloadableGunpowder(cannonDesignConfig.getInt("realisticBehaviour.overloading.maxOverloadableGunpowder",1));
-        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder(cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceOfExplosionPerGunpowder",0.05));
-        cannonDesign.setOverloadingDependsOfTemperature(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.dependsOfTemperature",false));
+        cannonDesign.setOverloadingEnabled(cannonDesignConfig.getBoolean("realisticBehaviour.Overloading.Enabled"));
+        cannonDesign.setOverloadingRealMode(cannonDesignConfig.getBoolean("realisticBehaviour.Overloading.RealMode"));
+        cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.Overloading.Exponent"));
+        cannonDesign.setOverloadingChangeInc((cannonDesignConfig.getDouble("realisticBehaviour.Overloading.ChanceInc")));
+        cannonDesign.setOverloadingMaxOverloadableGunpowder((cannonDesignConfig.getInt("realisticBehaviour.Overloading.MaxOverloadableGunpowder")));
+        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder((cannonDesignConfig.getDouble("realisticBehaviour.Overloading.ChanceOfExplosionPerGunpowder")));
+        cannonDesign.setOverloadingDependsOfTemperature((cannonDesignConfig.getBoolean("realisticBehaviour.Overloading.DependsOfTemperature")));
 
 		// permissions
 		cannonDesign.setPermissionBuild(cannonDesignConfig.getString("permissions.build", "cannon.player.build"));

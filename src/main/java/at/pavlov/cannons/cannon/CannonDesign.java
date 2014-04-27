@@ -9,7 +9,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import at.pavlov.cannons.Enum.OverloadingType;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.projectile.Projectile;
@@ -76,9 +75,10 @@ public class CannonDesign
 
     //Overloading stuff
     //Overloading mode (0 = default (no risk), 1 = safe (risk exists only if cannon is overloaded), 2 = real (risk exists any time))
-    private OverloadingType overloadingType;
+    private boolean overloadingEnabled;
+    private boolean overloadingRealMode;
     private double overloadingExponent;
-    private double overloadingChangeInc;
+    private double overloadingChanceInc;
     private int overloadingMaxOverloadableGunpowder;
     private double overloadingChanceOfExplosionPerGunpowder;
     private boolean overloadingDependsOfTemperature;
@@ -91,6 +91,7 @@ public class CannonDesign
 	private boolean isFrontloader;
 	private boolean isRotatable;
     private int massOfCannon;
+    private int startingSoot;
 	
 	//permissions
 	private String permissionBuild;
@@ -479,7 +480,7 @@ public class CannonDesign
 	 */
 	public int getMaxLoadableGunpowder_Absolute()
 	{
-		if(overloadingType.isEnabled()) return maxLoadableGunpowder+overloadingMaxOverloadableGunpowder;
+		if(overloadingEnabled) return maxLoadableGunpowder+overloadingMaxOverloadableGunpowder;
 		else return getMaxLoadableGunpowder_Normal();
 	}
 	public void setMaxLoadableGunpowder(int maxLoadableGunpowder)
@@ -1097,15 +1098,6 @@ public class CannonDesign
         this.minVerticalAngleOnShip = minVerticalAngleOnShip;
     }
 
-    public void setOverloadingType(OverloadingType overloadingType)
-    {
-        this.overloadingType = overloadingType;
-    }
-    
-    public OverloadingType getOverloadingType()
-    {
-        return overloadingType;
-    }
     
     public void setOverloadingExponent(double overloadingExponent)
     {
@@ -1117,14 +1109,14 @@ public class CannonDesign
         return overloadingExponent;
     }
     
-    public void setOverloadingChangeInc(double overloadingChangeInc)
+    public void setOverloadingChangeInc(double overloading_chanceInc)
     {
-        this.overloadingChangeInc = overloadingChangeInc;
+        this.overloadingChanceInc = overloading_chanceInc;
     }
     
     public double getOverloadingChangeInc()
     {
-        return overloadingChangeInc;
+        return overloadingChanceInc;
     }
     
     public void setOverloadingMaxOverloadableGunpowder(int overloadingMaxOverloadableGunpowder)
@@ -1142,13 +1134,13 @@ public class CannonDesign
         this.overloadingChanceOfExplosionPerGunpowder = overloadingChanceOfExplosionPerGunpowder;
     }
     
-    public double getOverloadingChanceOfExplosionPerGunpowder()
+    public double getOverloading_chanceOfExplosionPerGunpowder()
     {
         return overloadingChanceOfExplosionPerGunpowder;
     }
 
 
-	public boolean overloadingDependsOfTemperature()
+	public boolean isOverloadingDependsOfTemperature()
 	{
 		return overloadingDependsOfTemperature;
 	}
@@ -1157,5 +1149,41 @@ public class CannonDesign
 	public void setOverloadingDependsOfTemperature(boolean overloadingDependsOfTemperature)
 	{
 		this.overloadingDependsOfTemperature = overloadingDependsOfTemperature;
+	}
+
+
+	public int getStartingSoot()
+	{
+		return startingSoot;
+	}
+
+
+	public void setStartingSoot(int startingSoot)
+	{
+		this.startingSoot = startingSoot;
+	}
+
+
+	public boolean isOverloadingRealMode()
+	{
+		return overloadingRealMode;
+	}
+
+
+	public void setOverloadingRealMode(boolean overloadingRealMode)
+	{
+		this.overloadingRealMode = overloadingRealMode;
+	}
+
+
+	public boolean isOverloadingEnabled()
+	{
+		return overloadingEnabled;
+	}
+
+
+	public void setOverloadingEnabled(boolean overloadingEnabled)
+	{
+		this.overloadingEnabled = overloadingEnabled;
 	}
 }
