@@ -132,9 +132,9 @@ realisticBehaviour:
     chanceInc: 0.5
     maxOverloadableGunpowder: 3
     chanceOfExplosionPerGunpowder: 0.1
-    #DependsOnTemperature means that the explosion chance will be multiplied by cannon temperature / maximumTemperature
+    #dependsOnTemperature means that the explosion chance will be multiplied by cannon temperature / maximumTemperature
     dependsOnTemperature: true
-    #Loaded gunpowder = 6 (3 normal + 3 overloaded)
+    #loaded gunpowder = 6 (3 normal + 3 overloaded)
     #-> chance of explosion = 0.5*(6*0.1)^2 = 0.18 = 18%
 
 
