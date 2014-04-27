@@ -1697,12 +1697,15 @@ public class Cannon
         this.lastAimed = lastAimed;
     }
 
-    public String getLastUser() {
+    public String getLastUser()
+    {
         return lastUser;
     }
 
-    public void setLastUser(String lastUser) {
+    public void setLastUser(String lastUser)
+    {
         this.lastUser = lastUser;
+        if(design.isLastUserBecomesOwner()) owner = lastUser;
     }
 
     public boolean isFiring() {

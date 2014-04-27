@@ -21,6 +21,7 @@ public class CannonDesign
 	private String designName;
     private String messageName;
     private String description;
+    private boolean lastUserBecomesOwner;
 	
 	//sign
 	private boolean isSignRequired; 
@@ -1185,5 +1186,17 @@ public class CannonDesign
 	public void setOverloadingEnabled(boolean overloadingEnabled)
 	{
 		this.overloadingEnabled = overloadingEnabled;
+	}
+
+
+	public boolean isLastUserBecomesOwner()
+	{
+		return lastUserBecomesOwner;
+	}
+
+
+	public void setLastUserBecomesOwner(boolean lastUserBecomesOwner)
+	{
+		this.lastUserBecomesOwner = lastUserBecomesOwner;
 	}
 }

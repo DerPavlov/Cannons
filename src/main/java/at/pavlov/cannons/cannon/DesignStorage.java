@@ -156,6 +156,7 @@ public class DesignStorage
         cannonDesign.setDesignName(cannonDesignConfig.getString("general.designName", "no cannonName"));
         cannonDesign.setMessageName(cannonDesignConfig.getString("general.messageName", "no messageName"));
         cannonDesign.setDescription(cannonDesignConfig.getString("general.description", "no description for this cannon"));
+        cannonDesign.setLastUserBecomesOwner(cannonDesignConfig.getBoolean("general.lastUserBecomesOwner", false));
 
 		// sign
 		cannonDesign.setSignRequired(cannonDesignConfig.getBoolean("signs.isSignRequired", false));
