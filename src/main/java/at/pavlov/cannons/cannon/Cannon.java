@@ -1896,8 +1896,8 @@ public class Cannon
         	else tempInc = 1;
         	
         	int saferGunpowder;
-        	if(design.isOverloadingRealMode()) saferGunpowder = design.getMaxLoadableGunpowder_Normal();
-        	else saferGunpowder = 0;
+        	if(design.isOverloadingRealMode()) saferGunpowder = 0;
+        	else saferGunpowder = design.getMaxLoadableGunpowder_Normal();
         	
         	double chance  = tempInc * design.getOverloadingChangeInc()*Math.pow((loadedGunpowder - saferGunpowder)*design.getOverloadingChanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
         	if(chance <= 0) return false;
