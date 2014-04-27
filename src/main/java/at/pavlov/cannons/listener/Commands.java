@@ -176,8 +176,9 @@ public class Commands implements CommandExecutor
                     {
                         if (args.length >= 2 && (args[1].equalsIgnoreCase("all")))
                         {
-                            persistenceDatabase.deleteCannonsAsync(player.getName());
-                            plugin.getCannonManager().deleteCannons(player.getName());
+                            //remove all cannons
+                            persistenceDatabase.deleteAllCannonsAsync();
+                            plugin.getCannonManager().deleteAllCannons();
                         }
                         else
                         {

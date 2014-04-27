@@ -323,6 +323,18 @@ public class PersistenceDatabase
     /**
      * removes all cannons from the database
      */
+    public void deleteAllCannonsAsync()
+    {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            public void run() {
+                deleteAllCannons();
+            }
+        });
+    }
+
+    /**
+     * removes all cannons from the database
+     */
     private void deleteAllCannons()
     {
         List<CannonBean> bean = plugin.getDatabase().find(CannonBean.class).findList();
