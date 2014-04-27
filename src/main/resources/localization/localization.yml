@@ -30,7 +30,7 @@ Load:
   Projectile: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW has been loaded.'
   Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW of GOLD MAX_GUNPOWDERkg YELLOW of Gunpowder loaded.'
   loadGunpowderNormalLimit: 'YELLOW [Cannons] GOLD Maximum gunpowder (MAX_GUNPOWDERkg) loaded. More gunpowder may to destroy cannon'
-  OverloadedGunpowder: 'YELLOW [Cannons] RED GUNPOWDERkg YELLOW of GOLD MAX_GUNPOWDERkg YELLOW of Gunpowder loaded'
+  OverloadedGunpowder: 'YELLOW [Cannons] RED GUNPOWDERkg YELLOW of GOLD MAX_GUNPOWDERkg YELLOW of gunpowder loaded'
 
 
 Cannon:
