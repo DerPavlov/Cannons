@@ -49,8 +49,12 @@ class CannonBlocks
     	if (rightClickTrigger != null && rightClickTrigger.size() > 0)
     		return rightClickTrigger.get(0);	
     	if (redstoneTrigger != null && redstoneTrigger.size() > 0)
-        		return redstoneTrigger.get(0);
-        return null;	  	
+        	return redstoneTrigger.get(0);
+        //ok there was no firing trigger - return a barrel block
+        if (barrelBlocks != null && barrelBlocks.size() > 0)
+            return barrelBlocks.get(0);
+        //still nothing - use something
+        return allCannonBlocks.get(0).toVector();
     }
     
 	public Vector getRotationCenter()

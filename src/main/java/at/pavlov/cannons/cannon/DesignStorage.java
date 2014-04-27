@@ -226,10 +226,10 @@ public class DesignStorage
         cannonDesign.setOverloadingEnabled(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.enabled"));
         cannonDesign.setOverloadingRealMode(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.realMode"));
         cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.overloading.exponent"));
-        cannonDesign.setOverloadingChangeInc((cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceInc")));
-        cannonDesign.setOverloadingMaxOverloadableGunpowder((cannonDesignConfig.getInt("realisticBehaviour.overloading.maxOverloadableGunpowder")));
-        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder((cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceOfExplosionPerGunpowder")));
-        cannonDesign.setOverloadingDependsOfTemperature((cannonDesignConfig.getBoolean("realisticBehaviour.overloading.dependsOfTemperature")));
+        cannonDesign.setOverloadingChangeInc(cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceInc"));
+        cannonDesign.setOverloadingMaxOverloadableGunpowder(cannonDesignConfig.getInt("realisticBehaviour.overloading.maxOverloadableGunpowder"));
+        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder(cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceOfExplosionPerGunpowder"));
+        cannonDesign.setOverloadingDependsOfTemperature(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.dependsOfTemperature"));
 
 		// permissions
 		cannonDesign.setPermissionBuild(cannonDesignConfig.getString("permissions.build", "cannon.player.build"));

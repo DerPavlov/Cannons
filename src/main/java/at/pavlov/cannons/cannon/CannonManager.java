@@ -250,7 +250,7 @@ public class CannonManager
 
         for (Cannon cannon : getCannonList().values())
         {
-            Location newLoc = cannon.getCannonDesign().getFiringTrigger(cannon);
+            Location newLoc = cannon.getCannonDesign().getBarrelBlocks(cannon).get(0);
             if (newLoc.distance(center) < sphereRadius)
                 newCannonList.add(cannon);
         }
@@ -271,7 +271,7 @@ public class CannonManager
 
         for (Cannon cannon : getCannonList().values())
         {
-            Location newLoc = cannon.getCannonDesign().getFiringTrigger(cannon);
+            Location newLoc = cannon.getCannonDesign().getBarrelBlocks(cannon).get(0);
             Vector box = newLoc.subtract(center).toVector();
             if (cannon.getWorld().equals(center.getWorld().getName()) && Math.abs(box.getX())<lengthX/2 && Math.abs(box.getY())<lengthY/2 && Math.abs(box.getZ())<lengthZ/2)
                 newCannonList.add(cannon);
@@ -296,7 +296,6 @@ public class CannonManager
             }
 
         }
-
         return newCannonList;
     }
 
@@ -675,6 +674,21 @@ public class CannonManager
 		// player has sufficient permission to build a cannon
 		return MessageEnum.CannonCreated;
 	}
+
+    /**
+     * removes all cannon
+     */
+    public void deleteAllCannons()
+    {
+        Iterator<Cannon> iter = cannonList.values().iterator();
+
+        while (iter.hasNext())
+        {
+            Cannon next = iter.next();
+            next.destroyCannon(false, BreakCause.Other);
+            iter.remove();
+        }
+    }
 
 
 	/**

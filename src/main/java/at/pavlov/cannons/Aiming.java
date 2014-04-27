@@ -668,6 +668,19 @@ public class Aiming {
     }
 
     /**
+     * removes the observer entry for this player in all cannons
+     * @param player this player will be removed from the lists
+     */
+    public void removeObserverForAllCannons(Player player)
+    {
+        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
+        {
+            cannon.removeObserver(player);
+        }
+
+    }
+
+    /**
      * calculated the impact of the projectile
      * @param cannon the cannon must be loaded with a projectile
      * @return the expected impact location

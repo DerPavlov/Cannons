@@ -320,4 +320,19 @@ public class PersistenceDatabase
         }
 	}
 
+    /**
+     * removes all cannons from the database
+     */
+    private void deleteAllCannons()
+    {
+        List<CannonBean> bean = plugin.getDatabase().find(CannonBean.class).findList();
+        // if the database id is null, it is not saved in the database
+        if (bean != null)
+        {
+            //plugin.logDebug("removing cannon " + .toString());
+            plugin.getDatabase().delete(bean);
+        }
+
+    }
+
 }

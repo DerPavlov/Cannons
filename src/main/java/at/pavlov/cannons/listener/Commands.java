@@ -143,17 +143,6 @@ public class Commands implements CommandExecutor
                         // how to adjust
                         userMessages.displayMessage(player, MessageEnum.HelpAdjust);
                     }
-                    //list cannons of this player name
-                    else if(args[0].equalsIgnoreCase("list") && player.hasPermission("cannons.player.list"))
-                    {
-                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
-                        {
-                            player.sendMessage(ChatColor.GREEN +"Cannon list for " + args[1] + ":");
-                            if (cannon.getOwner().equalsIgnoreCase(player.getName()))
-                                player.sendMessage(ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
-                                        ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
-                        }
-                    }
                     //cannons imitating toggle
                     else if (args[0].equalsIgnoreCase("imitate") && player.hasPermission("cannons.player.command") && config.isImitatedAimingEnabled())
                     {
@@ -164,13 +153,38 @@ public class Commands implements CommandExecutor
                         else
                             plugin.getAiming().toggleImitating(player);
                     }
+                    //selector for cannon
+                    else if(args[0].equalsIgnoreCase("observer") && player.hasPermission("cannons.player.observer"))
+                    {
+                        if (args.length >= 2 && (args[1].equalsIgnoreCase("off")||args[1].equalsIgnoreCase("disable")))
+                            plugin.getAiming().enableImitating(player);
 
+                    }
+                    //list cannons of this player name
+                    else if(args[0].equalsIgnoreCase("list") && player.hasPermission("cannons.player.list"))
+                    {
+                        player.sendMessage(ChatColor.GREEN +"Cannon list for " + args[1] + ":");
+                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
+                        {
+                            if (cannon.getOwner().equalsIgnoreCase(player.getName()))
+                                player.sendMessage(ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
+                                        ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
+                        }
+                    }
                     //cannons reset
                     else if(args[0].equalsIgnoreCase("reset") && player.hasPermission("cannons.player.reset"))
                     {
-                        // delete all cannon entries for this player
-                        persistenceDatabase.deleteCannonsAsync(player.getName());
-                        plugin.getCannonManager().deleteCannons(player.getName());
+                        if (args.length >= 2 && (args[1].equalsIgnoreCase("all")))
+                        {
+                            persistenceDatabase.deleteCannonsAsync(player.getName());
+                            plugin.getCannonManager().deleteCannons(player.getName());
+                        }
+                        else
+                        {
+                            // delete all cannon entries for this player
+                            persistenceDatabase.deleteCannonsAsync(player.getName());
+                            plugin.getCannonManager().deleteCannons(player.getName());
+                        }
                         userMessages.displayMessage(player, MessageEnum.CannonsReseted);
                     }
                     //no help message if it is forbidden for this player

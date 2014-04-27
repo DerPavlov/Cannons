@@ -27,6 +27,7 @@ permissions:
       cannons.player.adjust: true
       cannons.player.fire: true
       cannons.player.autoaim: true
+      cannons.player.observer: true
       cannons.player.tracking: true
       cannons.player.autoreload: true
       cannons.player.thermometer: true
@@ -57,6 +58,9 @@ permissions:
     default: false
   cannons.player.autoaim:
     description: Allows a player to autoaim with a cannon
+    default: false
+  cannons.player.observer:
+    description: Allows a player to see the impact prediction for selected cannons
     default: false
   cannons.player.redstone:
     description: Allows a player to use redstone with a cannon
