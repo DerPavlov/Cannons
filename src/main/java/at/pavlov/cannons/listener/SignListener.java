@@ -54,7 +54,7 @@ public class SignListener implements Listener
 	        Cannon cannon = cannonManager.getCannon(cannonBlock.getLocation(), event.getPlayer().getName());
 			
 	        //get cannon from the sign
-			Cannon cannonFromSign = cannonManager.getCannonFromStorage(event.getLine(0), event.getLine(1));
+			Cannon cannonFromSign = cannonManager.getCannon(event.getLine(0));
 			
 			//if the sign is placed against a cannon - no problem
 			//if the sign has the name of other cannon - change it
