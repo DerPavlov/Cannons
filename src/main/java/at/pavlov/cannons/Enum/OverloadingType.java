@@ -24,7 +24,7 @@ public boolean isEnabled()
 {
 	return enabled;
 }
-public static OverloadingType get(byte b)
+public static OverloadingType get(int b)
 {
 	switch(b)
 	{
