@@ -1319,7 +1319,7 @@ public class Cannon
     double getCannonballVelocity()
     {
         if (loadedProjectile == null || design == null) return 0.0;
-        return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowder_Absolute()));
+        return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowder_Normal()));
     }
 
     /**
