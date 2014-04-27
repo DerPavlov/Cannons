@@ -222,7 +222,7 @@ public class DesignStorage
         cannonDesign.setMassOfCannon(cannonDesignConfig.getInt("realisticBehaviour.massOfCannon", 1000));//What means 1000?
         
         // overloading stuff
-        cannonDesign.setOverloadingType(OverloadingType.get(cannonDesignConfig.getInt("realisticBehaviour.Overloading.Mode")));
+        cannonDesign.setOverloadingType(OverloadingType.get((byte) (cannonDesignConfig.getInt("realisticBehaviour.Overloading.Mode"))));
         cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.Overloading.Exponent"));
         cannonDesign.setOverloadingChangeInc((cannonDesignConfig.getDouble("realisticBehaviour.Overloading.ChanceInc")));
         cannonDesign.setOverloadingMaxOverloadableGunpowder((cannonDesignConfig.getInt("realisticBehaviour.Overloading.MaxOverloadableGunpowder")));
