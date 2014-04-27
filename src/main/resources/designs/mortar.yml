@@ -5,6 +5,8 @@ general:
   messageName: mortar
   #a short description of the cannon
   description: "Compact iron mortar. Allows you to fire over walls."
+  #last user of cannon becomes to it's owner (cannon is public)
+  lastUserBecomesOwner: false
 
 
 signs:

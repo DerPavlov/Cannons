@@ -5,6 +5,8 @@ general:
   messageName: classic cannon
   #a short description of the cannon
   description: "A small cheap cannon - nothing fancy. Will break very easily since it is made out of wool."
+  #last user of cannon becomes to it's owner (cannon is public)
+  lastUserBecomesOwner: false
 
 
 signs:

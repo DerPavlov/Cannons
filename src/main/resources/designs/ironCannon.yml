@@ -5,6 +5,8 @@ general:
   messageName: iron cannon
   #a short description of the cannon
   description: "Compact iron cannon. Sturdier than the wool design."
+  #last user of cannon becomes to it's owner (cannon is public)
+  lastUserBecomesOwner: false
 
 
 signs:
