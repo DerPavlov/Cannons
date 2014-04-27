@@ -127,6 +127,7 @@ public class CannonDesign
     private double overloading_changeInc;
     private int overloading_maxOverloadableGunpowder;
     private double overloading_chanceOfExplosionPerGunpowder;
+    private boolean overloading_dependsOfTemperature;
 
     
     /**
@@ -1136,4 +1137,16 @@ public class CannonDesign
     {
         return overloading_chanceOfExplosionPerGunpowder;
     }
+
+
+	public boolean overloading_dependsOfTemperature()
+	{
+		return overloading_dependsOfTemperature;
+	}
+
+
+	public void setOverloading_dependsOfTemperature(boolean overloading_dependsOfTemperature)
+	{
+		this.overloading_dependsOfTemperature = overloading_dependsOfTemperature;
+	}
 }

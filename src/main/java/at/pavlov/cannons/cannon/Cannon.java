@@ -2,6 +2,7 @@ package at.pavlov.cannons.cannon;
 
 import java.util.*;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.Enum.OverloadingType;
 import at.pavlov.cannons.container.MaterialHolder;
@@ -309,18 +310,27 @@ public class Cannon
         //Overloading is enabled
         if(design.getOverloading_type().isEnabled())
         {
-
-            if(design.getMaxLoadableGunpowder_Normal()<getLoadedGunpowder())
-            {
-            	return MessageEnum.loadOverloadedGunpowder;
-            }
-            else
-            {
-            	if(design.getMaxLoadableGunpowder_Normal()==getLoadedGunpowder())
-            	{
-            		return MessageEnum.loadGunpowderNormalLimit;
-            	}
-            }
+        	if(design.getOverloading_type().equals(OverloadingType.SAFE))
+        	{
+                if(design.getMaxLoadableGunpowder_Normal()<getLoadedGunpowder())
+                {
+                	return MessageEnum.loadOverloadedGunpowder;
+                }
+                else
+                {
+                	if(design.getMaxLoadableGunpowder_Normal()==getLoadedGunpowder())
+                	{
+                		return MessageEnum.loadGunpowderNormalLimit;
+                	}
+                }
+        	}
+        	else
+        	{
+        		if(design.getMaxLoadableGunpowder_Normal()<getLoadedGunpowder())
+                {
+                	return MessageEnum.loadOverloadedGunpowder;
+                }
+        	}
         }
         return MessageEnum.loadGunpowder;
     }
@@ -1897,6 +1907,12 @@ public class Cannon
         		if(loadedGunpowder <= design.getMaxLoadableGunpowder_Normal()) return false;
         		chance = design.getOverloading_changeInc()*Math.pow((loadedGunpowder-design.getMaxLoadableGunpowder_Normal())*design.getOverloading_chanceOfExplosionPerGunpowder(), design.getOverloading_exponent());
         	}
+        	if(design.overloading_dependsOfTemperature())
+        	{
+        		chance *= tempValue/design.getMaximumTemperature();
+        		Cannons.getPlugin().logDebug("Chance *= " + tempValue + " / " + design.getMaximumTemperature());
+        	}
+        	Cannons.getPlugin().logDebug("Chance = " + design.getOverloading_changeInc() + " * ((" + loadedGunpowder + " - " + design.getMaxLoadableGunpowder_Normal() + ") * " + design.getOverloading_chanceOfExplosionPerGunpowder() + ") ^ " + design.getOverloading_exponent());
         	if(Math.random()<chance) return true;
         }
 		return false;

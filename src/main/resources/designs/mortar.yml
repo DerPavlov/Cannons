@@ -132,6 +132,8 @@ realisticBehaviour:
     ChanceInc: 1
     MaxOverloadableGunpowder: 1
     ChanceOfExplosionPerGunpowder: 0.1
+#DependsOfTemperature means, what chance will be multiplied by cannon temperature / maximumTemperature
+    DependsOfTemperature: true
 
 
 permissions:
