@@ -109,7 +109,7 @@ public class Cannon
         // reset
         this.setLoadedGunpowder(0);
         this.setLoadedProjectile(null);
-        this.setSoot(0.0);
+        this.setSoot(design.getStartingSoot());
         this.setProjectilePushed(design.getProjectilePushing());
 
         this.databaseId = UUID.randomUUID();
