@@ -222,13 +222,13 @@ public class DesignStorage
         cannonDesign.setStartingSoot(cannonDesignConfig.getInt("realisticBehaviour.startingSoot"));
         
         // overloading stuff
-        cannonDesign.setOverloadingEnabled(cannonDesignConfig.getBoolean("realisticBehaviour.Overloading.Enabled"));
-        cannonDesign.setOverloadingRealMode(cannonDesignConfig.getBoolean("realisticBehaviour.Overloading.RealMode"));
-        cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.Overloading.Exponent"));
-        cannonDesign.setOverloadingChangeInc((cannonDesignConfig.getDouble("realisticBehaviour.Overloading.ChanceInc")));
-        cannonDesign.setOverloadingMaxOverloadableGunpowder((cannonDesignConfig.getInt("realisticBehaviour.Overloading.MaxOverloadableGunpowder")));
-        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder((cannonDesignConfig.getDouble("realisticBehaviour.Overloading.ChanceOfExplosionPerGunpowder")));
-        cannonDesign.setOverloadingDependsOfTemperature((cannonDesignConfig.getBoolean("realisticBehaviour.Overloading.DependsOfTemperature")));
+        cannonDesign.setOverloadingEnabled(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.enabled"));
+        cannonDesign.setOverloadingRealMode(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.realMode"));
+        cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.overloading.exponent"));
+        cannonDesign.setOverloadingChangeInc((cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceInc")));
+        cannonDesign.setOverloadingMaxOverloadableGunpowder((cannonDesignConfig.getInt("realisticBehaviour.overloading.maxOverloadableGunpowder")));
+        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder((cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceOfExplosionPerGunpowder")));
+        cannonDesign.setOverloadingDependsOfTemperature((cannonDesignConfig.getBoolean("realisticBehaviour.overloading.dependsOfTemperature")));
 
 		// permissions
 		cannonDesign.setPermissionBuild(cannonDesignConfig.getString("permissions.build", "cannon.player.build"));
