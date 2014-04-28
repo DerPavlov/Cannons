@@ -20,10 +20,7 @@ public enum MessageEnum
 
     //Commands
     CmdSelectCannon ("Commands.SelectCannon"),
-    CmdSelectedCannon ("Commands.SelectedCannon"),
-    CmdSelectDone ("Commands.SelectDone"),
     CmdSelectCanceled ("Commands.SelectCanceled"),
-    CmdNoCannonSelected ("Commands.NoCannonSelected"),
 
 	//Aiming
 	SettingCombinedAngle ("Aiming.SettingCombinedAngle"),
@@ -48,6 +45,8 @@ public enum MessageEnum
 	CannonFire ("Cannon.Fire"),
     CannonObserverAdded ("Cannon.ObserverAdded"),
     CannonObserverRemoved ("Cannon.ObserverRemoved"),
+    CannonRenameSuccess ("Cannon.RenameSuccess"),
+    CannonRenameFail ("Cannon.RenameFail"),
 
     //projectile
     ProjectileExplosion ("Projectile.Explosion"),
@@ -73,9 +72,12 @@ public enum MessageEnum
 	//Permission
 	PermissionErrorRedstone ("Permission.ErrorRedstone", true),
 	PermissionErrorBuild ("Permission.ErrorBuild", true),
+    PermissionErrorRename ("Permission.ErrorRename", true),
 	PermissionErrorFire ("Permission.ErrorFire", true),
 	PermissionErrorLoad ("Permission.ErrorLoad", true),
 	PermissionErrorAdjust ("Permission.ErrorAdjust", true),
+    PermissionErrorAutoaim ("Permission.ErrorAutoaim", true),
+    PermissionErrorObserver ("Permission.ErrorObserver", true),
 	PermissionErrorProjectile ("Permission.ErrorProjectile", true),
     PermissionErrorThermometer ("Permission.ErrorThermometer", true),
     PermissionErrorRamrod ("Permission.ErrorRamrod", true),

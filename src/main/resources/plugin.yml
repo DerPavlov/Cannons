@@ -22,7 +22,7 @@ permissions:
     description: Gives single permissions for loading, adjusting, firing and recall help with cannons
     children:
       cannons.player.command: true
-      cannons.player.select: true
+      cannons.player.rename: true
       cannons.player.build: true
       cannons.player.load: true
       cannons.player.adjust: true
@@ -45,8 +45,8 @@ permissions:
   cannons.player.command:
     description: Allows a player to use the help commands
     default: true
-  cannons.player.select:
-    description: Allows the player to select some cannons via command
+  cannons.player.rename:
+    description: Allows the player to give his cannons better names
     default: false
   cannons.player.build:
     description: Allows a player to build a cannon

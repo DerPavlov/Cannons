@@ -16,10 +16,7 @@ Error:
 
 Commands:
   SelectCannon: 'YELLOW [Cannons] Bitte Kanone auswählen.'
-  SelectedCannon: 'GREEN [Cannons] Kanone CANNON_NAME ausgewählt.'
-  SelectDone: 'GREEN [Cannons] Auswahl abgeschlossen.'
   SelectCanceled: 'RED [Cannons] Auswahl abgebrochen.'
-  NoCannonSelected: 'RED [Cannons] Keine Kanone ausgewählt.'
 
 
 Aiming:
@@ -42,11 +39,13 @@ Load:
 
 Cannon:
   Fire: 'YELLOW [Cannons] FEUER!'
-  Created: 'GREEN [Cannons] Eine CANNON wurde erstellt.'
+  Created: 'GREEN [Cannons] Eine GOLD CANNON GREEN wurde erstellt.'
   Destroyed: 'RED [Cannons] Eine deiner Kanonen wurde zerstört.'
-  Reseted: 'GREEN [Cannons] Alle Kanonen von PLAYER wurden aus der Datenbank entfernt.'
-  ObserverAdded: 'GREEN [Cannons] Du wurdest als Beobachter bei CANNON_NAME hinzugefügt.'
-  ObserverRemoved: 'RED [Cannons] Du bist nicht mehr Beobachter für CANNON_NAME.'
+  Reseted: 'GREEN [Cannons] Alle Kanonen von GOLD PLAYER GREEN wurden aus der Datenbank entfernt.'
+  ObserverAdded: 'GREEN [Cannons] Du wurdest als Beobachter bei GOLD CANNON_NAME GRENN hinzugefügt.'
+  ObserverRemoved: 'RED [Cannons] Du bist nicht mehr Beobachter für GOLD CANNON_NAME.'
+  RenameSuccess: 'GREEN [Cannons] Die Kanone wurde umbenannt in GOLD CANNON_NAME.'
+  RenameFail: 'RED [Cannons] Der Name für die Kanone ist nicht einzigartig.'
 
 
 Projectile:
@@ -77,9 +76,12 @@ Ramrod:
 Permission:
   ErrorRedstone: 'RED [Cannons] Du kannst diese CANNON nicht mit Redstone bedienen.'
   ErrorBuild: 'RED [Cannons] Du darfst diese CANNON nicht bauen.'
+  ErrorRename: 'RED [Cannons] Du darfst diese Kanone nicht umbenennen CANNON.'
   ErrorFire: 'RED [Cannons] Du weisst nicht wie du diese CANNON abfeuerst.'
   ErrorLoad: 'RED [Cannons] Keine Berechtigung um die Kanone zu laden.'
   ErrorAdjust: 'RED [Cannons] Dir fehlt die Berechtigung zum Zielen.'
+  ErrorAutoaim: 'RED [Cannons] Du weißt nicht wie du die Zieleinrichtung verwendest.'
+  ErrorObserver: 'RED [Cannons] Du taugst nicht als Beobachter für CANNON_NAME.'
   ErrorProjectile: 'RED [Cannons] Keine Erlaubnis für dieses Projektil.'
   ErrorThermometer: 'RED [Cannons] Du hast keine Ahnung wie man das Thermometer bedient.'
   ErrorRamrod: 'RED [Cannons] Du würdest dich nur selbst verletzen.'

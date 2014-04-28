@@ -9,6 +9,7 @@ import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
+import org.apache.commons.lang.Validate;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -1877,15 +1878,54 @@ public class Cannon
         return observerMap;
     }
 
-    public void addObserver(Player player, boolean removeAfterShowing)
+    /**
+     * add the player as observer for this cannon
+     * @param player player will be added as observer
+     * @param removeAfterShowing if true, the observer only works once
+     * @return message for the player
+     */
+    public MessageEnum addObserver(Player player, boolean removeAfterShowing)
     {
+        Validate.notNull(player, "player must not be null");
+
+        //permission check
+        if (!player.hasPermission(design.getPermissionObserver()))
+            return MessageEnum.PermissionErrorObserver;
+
         observerMap.put(player.getName(), removeAfterShowing);
+        return MessageEnum.CannonObserverAdded;
     }
 
-    public void removeObserver(Player player)
+    /**
+     * removes the player as observer
+     * @param player player will be removed as observer
+     * @return message for the player
+     */
+    public MessageEnum removeObserver(Player player)
     {
+        Validate.notNull(player, "player must not be null");
+
         observerMap.remove(player.getName());
+        return MessageEnum.CannonObserverRemoved;
     }
+
+    /**
+     * toogles the player as observer for this cannon
+     * @param player player will be added as observer
+     * @param removeAfterShowing if true, the observer only works once
+     * @return message for the player
+     */
+    public MessageEnum toggleObserver(Player player, boolean removeAfterShowing)
+    {
+        Validate.notNull(player, "player must not be null");
+
+        if (observerMap.containsKey(player.getName()))
+            return removeObserver(player);
+        else
+            return addObserver(player, removeAfterShowing);
+
+    }
+
     /**
      * Calculating if cannon might to explode
      * @return true if explosion chance was more then random number

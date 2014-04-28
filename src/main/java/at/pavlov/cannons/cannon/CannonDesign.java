@@ -96,10 +96,12 @@ public class CannonDesign
 	
 	//permissions
 	private String permissionBuild;
+    private String permissionRename;
 	private String permissionLoad;
 	private String permissionFire;
 	private String permissionAdjust;
 	private String permissionAutoaim;
+    private String permissionObserver;
 	private String permissionTargetTracking;
 	private String permissionRedstone;
     private String permissionThermometer;
@@ -1199,4 +1201,20 @@ public class CannonDesign
 	{
 		this.lastUserBecomesOwner = lastUserBecomesOwner;
 	}
+
+    public String getPermissionRename() {
+        return permissionRename;
+    }
+
+    public void setPermissionRename(String permissionRename) {
+        this.permissionRename = permissionRename;
+    }
+
+    public String getPermissionObserver() {
+        return permissionObserver;
+    }
+
+    public void setPermissionObserver(String permissionObserver) {
+        this.permissionObserver = permissionObserver;
+    }
 }

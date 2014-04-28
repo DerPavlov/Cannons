@@ -144,11 +144,20 @@ permissions:
   #all the permissions required for a player to use certain parts of the cannon
   #more information can be found here: http://dev.bukkit.org/bukkit-plugins/cannons/pages/installation-and-configuration/cannons-2-0-and-up/permissions/
   build: cannons.player.build
+  #give the cannon a new name
+  rename: cannons.player.rename
+  #permission for loading gunpowder and projectiles
   load: cannons.player.load
+  #permission for firing a cannon
   fire: cannons.player.fire
+  #permission for aiming with a cannon
   adjust: cannons.player.adjust
+  #permission to used the ramrod (stick) to clean and push the projectile
+  ramrod: cannons.player.ramrod
   #the cannon will follow the looking direction of the player if the aiming item is used (default: clock)
   autoaim: cannons.player.autoaim
+  #player can add himself as an observer of a cannon with the cmd: '/cannons observer'
+  observer: cannons.player.observer
   #not implemented yet
   targetTracking: cannons.player.tracking
   #if a player has no permission for redstone, it is not possible to wire a cannon with redstone or uses torches.
