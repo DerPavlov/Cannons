@@ -345,14 +345,14 @@ public class CannonManager
 	{
 		for (Cannon cannon : cannonList.values())
 		{
-			if (cannon.isCannonBlock(loc.getBlock()))
+			if (/*:*/loc.toVector().distance(cannon.getOffset()) <= 32 /*To make code faster on servers with a lot of cannons */ && cannon.isCannonBlock(loc.getBlock()))
 			{
 				return cannon;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * searches for a cannon and creates a new entry if it does not exist
 	 * 
