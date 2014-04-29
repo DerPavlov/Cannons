@@ -2,8 +2,7 @@ package at.pavlov.cannons.listener;
 
 import java.util.*;
 
-import at.pavlov.cannons.Aiming;
-import at.pavlov.cannons.Enum.SelectCannon;
+//import at.pavlov.cannons.Enum.SelectCannon; FIXME uploaded wrongly, I made simple enum
 import at.pavlov.cannons.cannon.Cannon;
 
 import org.bukkit.Bukkit;
@@ -28,6 +27,7 @@ public class Commands implements CommandExecutor
     private final PersistenceDatabase persistenceDatabase;
 
     //<player>
+    enum SelectCannon {OBSERVER};
     private HashMap<String,SelectCannon> cannonSelector = new HashMap<String,SelectCannon>();
 
 

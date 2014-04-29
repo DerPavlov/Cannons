@@ -35,6 +35,7 @@ public class Projectile implements Cloneable{
 	
 	//explosion
 	private float explosionPower;
+	private boolean explosionPowerDependsOnVelocity;
 	private boolean explosionDamage;
     private boolean underwaterDamage;
 	private boolean penetrationDamage;
@@ -565,5 +566,16 @@ public class Projectile implements Cloneable{
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public boolean isExplosionPowerDependsOnVelocity()
+	{
+		return explosionPowerDependsOnVelocity;
+	}
+	
+
+	public void setExplosionPowerDependsOnVelocity(boolean explosionPowerDependsOnVelocity)
+	{
+		this.explosionPowerDependsOnVelocity = explosionPowerDependsOnVelocity;
+	}
 
 }
