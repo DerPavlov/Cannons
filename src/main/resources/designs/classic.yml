@@ -107,6 +107,72 @@ heatManagement:
     - '0:0'
 
 
+#cannon can be loaded with more gunpowder, but might explode after firing
+overloading:
+  #cannon can explode if overloaded with gunpowder
+  #(chance = chanceInc * ((all loaded gunpowder - maximum loadable gunpowder without overloading) * ChanceOfExplosionPerGunpowder)^Exponent)
+  enabled: true
+  #in real mode cannon can explode any time after firing (maximum loadable gunpowder without overloading = 0)
+  realMode: true
+  exponent: 2
+  chanceInc: 1
+  maxOverloadableGunpowder: 1
+  chanceOfExplosionPerGunpowder: 0.1
+  #the explosion chance will be multiplied by cannon's temperature / maximumTemperature
+  dependsOfTemperature: true
+
+  #For example, if cannon have:
+  #Mode = 1
+  #Exponent = 2
+  #ChanceInc = 1
+  #MaxLoadableGunpowder = 3
+  #MaxOverloadableGunpowder = 3
+  #ChanceOfExplosionPerGunpowder = 0.1
+  #Loaded gunpowder = 5 (3 normal + 2 overloaded)
+  #Chance of explosion = 1*((5-3)*0.1)^2 = 0.04 = 4%
+  #=================================
+  #Another example:
+  #Mode = 1
+  #Exponent = 2
+  #ChanceInc = 1
+  #MaxLoadableGunpowder = 3
+  #MaxOverloadableGunpowder = 3
+  #ChanceOfExplosionPerGunpowder = 0.1
+  #Loaded gunpowder = 6 (3 normal + 3 overloaded)
+  #Chance of explosion = 1*((6-3)*0.1)^2 = 0.1 = 10%
+  #=================================
+  #Another example:
+  #Mode = 1
+  #Exponent = 1
+  #ChanceInc = 0.1
+  #MaxLoadableGunpowder = 3
+  #MaxOverloadableGunpowder = 3
+  #ChanceOfExplosionPerGunpowder = 0.1
+  #Loaded gunpowder = 6 (3 normal + 3 overloaded)
+  #Chance of explosion = 0.1*((6-3)*0.1)^1 = 0.03 = 3%
+  #=================================
+  #Another example:
+  #Mode = 1
+  #Exponent = 3
+  #ChanceInc = 4
+  #MaxLoadableGunpowder = 3
+  #MaxOverloadableGunpowder = 3
+  #ChanceOfExplosionPerGunpowder = 0.1
+  #Loaded gunpowder = 6 (3 normal + 3 overloaded)
+  #Chance of explosion = 0.4*((6-3)*0.1)^3 = 0.108 = 10.8%
+  #=================================
+  #Another example:
+  #Mode = 2
+  #Exponent = 3
+  #ChanceInc = 1
+  #MaxLoadableGunpowder = 3
+  #MaxOverloadableGunpowder = 3
+  #ChanceOfExplosionPerGunpowder = 0.1
+  #Loaded gunpowder = 6 (3 normal + 3 overloaded)
+  #Chance of explosion = 1*(6*0.1)^3 = 0.216 = 21.6%
+
+
+
 realisticBehaviour:
   #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
   isFiringItemRequired: false
@@ -126,69 +192,6 @@ realisticBehaviour:
   massOfCannon: 100
   #created cannon will have this amount of soot (0 to disable this feature)
   startingSoot: 10
-  #cannon can be loaded with more gunpowder, but might explode after firing
-  overloading:
-    #cannon can explode if overloaded with gunpowder
-    #(chance = chanceInc * ((all loaded gunpowder - maximum loadable gunpowder without overloading) * ChanceOfExplosionPerGunpowder)^Exponent)
-    enabled: true
-    #in real mode cannon can explode any time after firing (maximum loadable gunpowder without overloading = 0)
-    realMode: true
-    exponent: 2
-    chanceInc: 1
-    maxOverloadableGunpowder: 1
-    chanceOfExplosionPerGunpowder: 0.1
-    #the explosion chance will be multiplied by cannon's temperature / maximumTemperature
-    dependsOfTemperature: true
-
-    #For example, if cannon have:
-    #Mode = 1
-    #Exponent = 2
-    #ChanceInc = 1
-    #MaxLoadableGunpowder = 3
-    #MaxOverloadableGunpowder = 3
-    #ChanceOfExplosionPerGunpowder = 0.1
-    #Loaded gunpowder = 5 (3 normal + 2 overloaded)
-    #Chance of explosion = 1*((5-3)*0.1)^2 = 0.04 = 4%
-    #=================================
-    #Another example:
-    #Mode = 1
-    #Exponent = 2
-    #ChanceInc = 1
-    #MaxLoadableGunpowder = 3
-    #MaxOverloadableGunpowder = 3
-    #ChanceOfExplosionPerGunpowder = 0.1
-    #Loaded gunpowder = 6 (3 normal + 3 overloaded)
-    #Chance of explosion = 1*((6-3)*0.1)^2 = 0.1 = 10%
-    #=================================
-    #Another example:
-    #Mode = 1
-    #Exponent = 1
-    #ChanceInc = 0.1
-    #MaxLoadableGunpowder = 3
-    #MaxOverloadableGunpowder = 3
-    #ChanceOfExplosionPerGunpowder = 0.1
-    #Loaded gunpowder = 6 (3 normal + 3 overloaded)
-    #Chance of explosion = 0.1*((6-3)*0.1)^1 = 0.03 = 3%
-    #=================================
-    #Another example:
-    #Mode = 1
-    #Exponent = 3
-    #ChanceInc = 4
-    #MaxLoadableGunpowder = 3
-    #MaxOverloadableGunpowder = 3
-    #ChanceOfExplosionPerGunpowder = 0.1
-    #Loaded gunpowder = 6 (3 normal + 3 overloaded)
-    #Chance of explosion = 0.4*((6-3)*0.1)^3 = 0.108 = 10.8%
-    #=================================
-    #Another example:
-    #Mode = 2
-    #Exponent = 3
-    #ChanceInc = 1
-    #MaxLoadableGunpowder = 3
-    #MaxOverloadableGunpowder = 3
-    #ChanceOfExplosionPerGunpowder = 0.1
-    #Loaded gunpowder = 6 (3 normal + 3 overloaded)
-    #Chance of explosion = 1*(6*0.1)^3 = 0.216 = 21.6%
 
 
 permissions:

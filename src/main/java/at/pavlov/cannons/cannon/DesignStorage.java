@@ -223,13 +223,13 @@ public class DesignStorage
         cannonDesign.setStartingSoot(cannonDesignConfig.getInt("realisticBehaviour.startingSoot"));
         
         // overloading stuff
-        cannonDesign.setOverloadingEnabled(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.enabled"));
-        cannonDesign.setOverloadingRealMode(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.realMode"));
-        cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("realisticBehaviour.overloading.exponent"));
-        cannonDesign.setOverloadingChangeInc(cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceInc"));
-        cannonDesign.setOverloadingMaxOverloadableGunpowder(cannonDesignConfig.getInt("realisticBehaviour.overloading.maxOverloadableGunpowder"));
-        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder(cannonDesignConfig.getDouble("realisticBehaviour.overloading.chanceOfExplosionPerGunpowder"));
-        cannonDesign.setOverloadingDependsOfTemperature(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.dependsOfTemperature"));
+        cannonDesign.setOverloadingEnabled(cannonDesignConfig.getBoolean("overloading.enabled"));
+        cannonDesign.setOverloadingRealMode(cannonDesignConfig.getBoolean("overloading.realMode"));
+        cannonDesign.setOverloadingExponent(cannonDesignConfig.getDouble("overloading.exponent"));
+        cannonDesign.setOverloadingChangeInc(cannonDesignConfig.getDouble("overloading.chanceInc"));
+        cannonDesign.setOverloadingMaxOverloadableGunpowder(cannonDesignConfig.getInt("overloading.maxOverloadableGunpowder"));
+        cannonDesign.setOverloadingChanceOfExplosionPerGunpowder(cannonDesignConfig.getDouble("overloading.chanceOfExplosionPerGunpowder"));
+        cannonDesign.setOverloadingDependsOfTemperature(cannonDesignConfig.getBoolean("overloading.dependsOfTemperature"));
 
 		// permissions
 		cannonDesign.setPermissionBuild(cannonDesignConfig.getString("permissions.build", "cannons.player.build"));

@@ -106,6 +106,21 @@ heatManagement:
     - '0:0'
 
 
+#cannon can be loaded with more gunpowder, but might explode after firing
+overloading:
+  #cannon can explode if overloaded with gunpowder
+  #(chance = chanceInc * ((all loaded gunpowder - maximum loadable gunpowder without overloading) * ChanceOfExplosionPerGunpowder)^Exponent)
+  enabled: true
+  #in real mode cannon can explode any time after firing (maximum loadable gunpowder without overloading = 0)
+  realMode: true
+  exponent: 2
+  chanceInc: 1
+  maxOverloadableGunpowder: 1
+  chanceOfExplosionPerGunpowder: 0.1
+  #the explosion chance will be multiplied by cannon's temperature / maximumTemperature
+  dependsOfTemperature: true
+
+
 realisticBehaviour:
   #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
   isFiringItemRequired: false
@@ -125,19 +140,7 @@ realisticBehaviour:
   massOfCannon: 300
   #created cannon will have this amount of soot (0 to disable this feature)
   startingSoot: 10
-  #cannon can be loaded with more gunpowder, but might explode after firing
-  overloading:
-    #cannon can explode if overloaded with gunpowder
-    #(chance = chanceInc * ((all loaded gunpowder - maximum loadable gunpowder without overloading) * ChanceOfExplosionPerGunpowder)^Exponent)
-    enabled: true
-    #in real mode cannon can explode any time after firing (maximum loadable gunpowder without overloading = 0)
-    realMode: true
-    exponent: 2
-    chanceInc: 1
-    maxOverloadableGunpowder: 1
-    chanceOfExplosionPerGunpowder: 0.1
-    #the explosion chance will be multiplied by cannon's temperature / maximumTemperature
-    dependsOfTemperature: true
+
 
 
 permissions:
