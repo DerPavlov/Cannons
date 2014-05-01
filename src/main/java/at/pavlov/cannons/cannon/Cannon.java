@@ -155,7 +155,7 @@ public class Cannon
 
             //gunpowder will be consumed from the inventory
             //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
-            int toLoad = design.getMaxLoadableGunpowder_Normal() - getLoadedGunpowder();
+            int toLoad = design.getMaxLoadableGunpowderNormal() - getLoadedGunpowder();
             if (toLoad > 0)
             {
                 ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
@@ -163,7 +163,7 @@ public class Cannon
                 if (gunpowder.getAmount() == 0)
                 {
                     //there was enough gunpowder in the chest
-                    loadedGunpowder = design.getMaxLoadableGunpowder_Normal();
+                    loadedGunpowder = design.getMaxLoadableGunpowderNormal();
                 }
                 else
                 {
@@ -177,7 +177,7 @@ public class Cannon
         }
         else {
             //no ammo consumption
-            loadedGunpowder = design.getMaxLoadableGunpowder_Normal();
+            loadedGunpowder = design.getMaxLoadableGunpowderNormal();
         }
 
 
@@ -298,7 +298,7 @@ public class Cannon
         if (isLoaded()&&isProjectilePushed())
             return MessageEnum.ErrorProjectileAlreadyLoaded;
         // maximum gunpowder already loaded
-        if (getLoadedGunpowder() >= design.getMaxLoadableGunpowder_Absolute())
+        if (getLoadedGunpowder() >= design.getMaxLoadableGunpowderOverloaded())
             return MessageEnum.ErrorMaximumGunpowderLoaded;
 
         //load the maximum gunpowder
@@ -307,8 +307,8 @@ public class Cannon
         // update Signs
         updateCannonSigns();
         
-        if (getLoadedGunpowder() > design.getMaxLoadableGunpowder_Absolute())
-            setLoadedGunpowder(design.getMaxLoadableGunpowder_Absolute());
+        if (getLoadedGunpowder() > design.getMaxLoadableGunpowderOverloaded())
+            setLoadedGunpowder(design.getMaxLoadableGunpowderOverloaded());
 
 
         //Overloading is enabled
@@ -316,12 +316,12 @@ public class Cannon
         {
         	if(!design.isOverloadingRealMode())
         	{
-                if(design.getMaxLoadableGunpowder_Normal()<getLoadedGunpowder())
+                if(design.getMaxLoadableGunpowderNormal()<getLoadedGunpowder())
                 	return MessageEnum.loadOverloadedGunpowder;
-                else if(design.getMaxLoadableGunpowder_Normal()==getLoadedGunpowder())
+                else if(design.getMaxLoadableGunpowderNormal()==getLoadedGunpowder())
                 	return MessageEnum.loadGunpowderNormalLimit;
         	}
-        	else if(design.getMaxLoadableGunpowder_Normal()<getLoadedGunpowder())
+        	else if(design.getMaxLoadableGunpowderNormal()<getLoadedGunpowder())
                 return MessageEnum.loadOverloadedGunpowder;
 
         }
@@ -346,8 +346,8 @@ public class Cannon
 
         //save the amount of gunpowder we loaded in the cannon
         int gunpowder = 0;
-        int maximumLoadableNormal = design.getMaxLoadableGunpowder_Normal() - getLoadedGunpowder();
-        int maximumLoadableAbsolute = design.getMaxLoadableGunpowder_Absolute() - getLoadedGunpowder();
+        int maximumLoadableNormal = design.getMaxLoadableGunpowderNormal() - getLoadedGunpowder();
+        int maximumLoadableAbsolute = design.getMaxLoadableGunpowderOverloaded() - getLoadedGunpowder();
 
         //check if the player has permissions for this cannon
         MessageEnum returnVal = CheckPermGunpowder(player);
@@ -647,8 +647,17 @@ public class Cannon
         isValid = false;
         updateCannonSigns();
 
+        //loaded cannon can exploded (80% chance)
+        if (design.getExplodingLoadedCannons() > 0 && getLoadedGunpowder() > 0 && Math.random() > 0.2)
+        {
+            double power = getLoadedGunpowder()/design.getMaxLoadableGunpowderNormal()*design.getExplodingLoadedCannons();
+            World world = getWorldBukkit();
+            if (world != null)
+                world.createExplosion(getMuzzle(),(float) power);
+        }
         // drop charge
-        dropCharge();
+        else
+            dropCharge();
 
         if (breakBlocks)
             breakAllCannonBlocks();
@@ -1331,7 +1340,7 @@ public class Cannon
     double getCannonballVelocity()
     {
         if (loadedProjectile == null || design == null) return 0.0;
-        return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowder_Normal()));
+        return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowderNormal()));
     }
 
     /**
@@ -1952,7 +1961,7 @@ public class Cannon
             if(design.isOverloadingRealMode())
                 saferGunpowder = 0;
             else
-                saferGunpowder = design.getMaxLoadableGunpowder_Normal();
+                saferGunpowder = design.getMaxLoadableGunpowderNormal();
 
             double chance  = tempInc * design.getOverloadingChangeInc()*Math.pow((loadedGunpowder - saferGunpowder)*design.getOverloadingChanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
             return (chance <= 0) ? 0.0:chance;

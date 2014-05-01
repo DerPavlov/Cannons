@@ -75,7 +75,6 @@ public class CannonDesign
     private List<MaterialHolder> itemCoolingUsed = new ArrayList<MaterialHolder>();
 
     //Overloading stuff
-    //Overloading mode (0 = default (no risk), 1 = safe (risk exists only if cannon is overloaded), 2 = real (risk exists any time))
     private boolean overloadingEnabled;
     private boolean overloadingRealMode;
     private double overloadingExponent;
@@ -93,6 +92,7 @@ public class CannonDesign
 	private boolean isRotatable;
     private int massOfCannon;
     private int startingSoot;
+    private double explodingLoadedCannons;
 	
 	//permissions
 	private String permissionBuild;
@@ -473,7 +473,7 @@ public class CannonDesign
 	 * Normal means without overloading stuff
 	 * @return maxLoadableGunpowder
 	 */
-	public int getMaxLoadableGunpowder_Normal()
+	public int getMaxLoadableGunpowderNormal()
 	{
 		return maxLoadableGunpowder;
 	}
@@ -481,10 +481,12 @@ public class CannonDesign
 	 * Absolute means maximum loadable gunpowder
 	 * @return if overloading stuff is enabled for this cannon, returns maxLoadableGunpowder+overloading_maxOverloadableGunpowder, else returns maxLoadableGunpowder
 	 */
-	public int getMaxLoadableGunpowder_Absolute()
+	public int getMaxLoadableGunpowderOverloaded()
 	{
-		if(overloadingEnabled) return maxLoadableGunpowder+overloadingMaxOverloadableGunpowder;
-		else return getMaxLoadableGunpowder_Normal();
+		if(overloadingEnabled)
+            return maxLoadableGunpowder+overloadingMaxOverloadableGunpowder;
+		else
+            return getMaxLoadableGunpowderNormal();
 	}
 	public void setMaxLoadableGunpowder(int maxLoadableGunpowder)
 	{
@@ -1216,5 +1218,13 @@ public class CannonDesign
 
     public void setPermissionObserver(String permissionObserver) {
         this.permissionObserver = permissionObserver;
+    }
+
+    public double getExplodingLoadedCannons() {
+        return explodingLoadedCannons;
+    }
+
+    public void setExplodingLoadedCannons(double explodingLoadedCannons) {
+        this.explodingLoadedCannons = explodingLoadedCannons;
     }
 }

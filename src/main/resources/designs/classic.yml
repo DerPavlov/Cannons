@@ -195,6 +195,8 @@ realisticBehaviour:
   massOfCannon: 100
   #created cannon will have this amount of soot (0 to disable this feature)
   startingSoot: 10
+  #cannon explodes if a loaded cannon is destroyed. Explosion power 4 (like tnt) and 0 to disable it. Will be scaled with the loaded gunpowder.
+  explodingLoadingCannon: 3.0
 
 
 permissions:
