@@ -1090,10 +1090,10 @@ public class Cannon
     }
 
     /**
-     * Checks the cannon if the actual temperature might destroy the cannon
-     * @return true if the cannon will explode
+     * get the change for a barrel explosion due to overheating
+     * @return chance for a barrel explosion
      */
-    public boolean checkHeatManagement()
+    public double getOverheatingChance()
     {
         double tempCannon = this.getTemperature();
         double tempCritical = design.getCriticalTemperature();
@@ -1104,12 +1104,21 @@ public class Cannon
         {
             //no exploding chance for temperature < critical, 100% chance for > maximum
             explodingProbability = Math.pow((tempCannon-tempCritical)/(tempMax-tempCritical),3);
-            //play some effects for a hot barrel
-            this.playBarrelSmokeEffect((int)(explodingProbability*20.0+1));
         }
+        return explodingProbability;
+    }
 
-        Random r = new Random();
-        return r.nextDouble()<explodingProbability;
+    /**
+     * Checks the cannon if the actual temperature might destroy the cannon
+     * @return true if the cannon will explode
+     */
+    public boolean checkHeatManagement()
+    {
+        double explodingProbability = getOverheatingChance();
+        //play some effects for a hot barrel
+        if (getTemperature() > design.getCriticalTemperature())
+            this.playBarrelSmokeEffect((int)(explodingProbability*20.0+1));
+        return Math.random()<explodingProbability;
     }
 
     /**
@@ -1926,26 +1935,37 @@ public class Cannon
     }
 
     /**
+     * gets the chance of cannon explosion due to overloading of gunpowder
+     * @return chance of explosion
+     */
+    public double getOverloadingExplosionChance()
+    {
+        if(design.isOverloadingEnabled())
+        {
+            double tempInc;
+            if(design.isOverloadingDependsOfTemperature()) tempInc = tempValue/design.getMaximumTemperature();
+            else tempInc = 1;
+
+            int saferGunpowder;
+            if(design.isOverloadingRealMode()) saferGunpowder = 0;
+            else saferGunpowder = design.getMaxLoadableGunpowder_Normal();
+
+            double chance  = tempInc * design.getOverloadingChangeInc()*Math.pow((loadedGunpowder - saferGunpowder)*design.getOverloadingChanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
+            return (chance <= 0) ? 0.0:chance;
+        }
+        return 0.0;
+    }
+
+    /**
      * Calculating if cannon might to explode
      * @return true if explosion chance was more then random number
      */
-	public boolean isExplodedOnOverloading()
+	public boolean isExplodedDueOverloading()
 	{
-        if(design.isOverloadingEnabled())
-        {
-        	double tempInc;
-        	if(design.isOverloadingDependsOfTemperature()) tempInc = tempValue/design.getMaximumTemperature();
-        	else tempInc = 1;
-        	
-        	int saferGunpowder;
-        	if(design.isOverloadingRealMode()) saferGunpowder = 0;
-        	else saferGunpowder = design.getMaxLoadableGunpowder_Normal();
-        	
-        	double chance  = tempInc * design.getOverloadingChangeInc()*Math.pow((loadedGunpowder - saferGunpowder)*design.getOverloadingChanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
-        	if(chance <= 0) return false;
-        	Cannons.getPlugin().logDebug("Chance of explosion (overloading) = " + design.getOverloadingChangeInc() + " * ((" + loadedGunpowder + " ( may to be - " + design.getMaxLoadableGunpowder_Normal() + ")) * " + design.getOverloadingChanceOfExplosionPerGunpowder() + ") ^ " + design.getOverloadingExponent() + " (may to be multiplied by " + tempValue + " / " + design.getMaximumTemperature() + " = " + chance);
-        	if(Math.random()<chance) return true;
-        }
-		return false;
-	}
+        double chance = getOverloadingExplosionChance();
+        //Cannons.getPlugin().logDebug("Chance of explosion (overloading) = " + design.getOverloadingChangeInc() + " * ((" + loadedGunpowder + " ( may to be - " + design.getMaxLoadableGunpowder_Normal() + ")) * " + design.getOverloadingChanceOfExplosionPerGunpowder() + ") ^ " + design.getOverloadingExponent() + " (may to be multiplied by " + tempValue + " / " + design.getMaximumTemperature() + " = " + chance);
+        if(Math.random()<chance)
+            return true;
+        return false;
+    }
 }

@@ -253,10 +253,6 @@ public class FireCannon {
                 }
             }, delayTime);
         }
-        
-        //Calculating overloading stuff
-        if(cannon.isExplodedOnOverloading())
-            plugin.getCannonManager().removeCannon(cannon, true, BreakCause.Overloading);
     }
 
     /**
@@ -314,14 +310,12 @@ public class FireCannon {
         cannon.setSoot(cannon.getSoot() + design.getSootPerGunpowder()*cannon.getLoadedGunpowder());
         cannon.setProjectilePushed(design.getProjectilePushing());
 
-        //check if the temperature exceeds the limit
-        boolean isDestroyed = cannon.checkHeatManagement();
-        if (isDestroyed)
+        //check if the temperature exceeds the limit and overloading
+        if (cannon.checkHeatManagement() || cannon.isExplodedDueOverloading())
         {
             plugin.getCannonManager().removeCannon(cannon, true, BreakCause.Overheating);
             return;
         }
-
 
         if (removeCharge)
         {
