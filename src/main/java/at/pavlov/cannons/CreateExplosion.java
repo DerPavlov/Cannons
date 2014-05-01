@@ -583,6 +583,14 @@ public class CreateExplosion {
         projectile_entity.teleport(impactLoc);
 
         float explosion_power = projectile.getExplosionPower();
+        if(projectile.isExplosionPowerDependsOnVelocity())
+        {
+        	double vel = projectile_entity.getVelocity().length();
+        	double maxVel = projectile.getVelocity();
+        	double maxEnergy = Math.pow(maxVel, 2);
+        	double energy = Math.pow(vel, 2);
+        	explosion_power *= energy/maxEnergy;
+        }
 
         //reset explosion power if it is underwater and not allowed
         plugin.logDebug("Explosion is underwater: " + cannonball.wasInWater());

@@ -488,6 +488,9 @@ public class Aiming {
         if (player == null)
             return null;
 
+        if (!player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
+            return MessageEnum.PermissionErrorAutoaim;
+
         inAimingMode.put(player.getName(), cannon.getUID());
 
         if (cannon != null)

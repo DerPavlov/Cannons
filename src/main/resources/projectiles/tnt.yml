@@ -47,6 +47,8 @@ explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
   #for comparison, the explosion power of a creeper is 3. anything above 50 will cause lag on smaller servers
   explosionPower: 2
+  #explosion power depends on velocity (see kinetic energy)
+  explosionPowerDependsOnVelocity: false
   #whether the explosion will destroy blocks
   doesExplosionDamage: true
   #the explosion power is set to zero if the explosion is underwater (superbreaker will still do damage)

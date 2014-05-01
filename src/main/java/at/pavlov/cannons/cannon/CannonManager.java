@@ -8,6 +8,7 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -200,6 +201,27 @@ public class CannonManager
 		return "no unique name";
 	}
 
+    public MessageEnum renameCannon(Player player, Cannon cannon, String newCannonName)
+    {
+        Validate.notNull(player, "player must not be null");
+        Validate.notNull(cannon, "cannon must not be null");
+
+        //check some permissions
+        if (!player.getName().equals(cannon.getOwner()))
+            return MessageEnum.ErrorNotTheOwner;
+        if (!player.hasPermission(cannon.getCannonDesign().getPermissionRename()))
+            return MessageEnum.PermissionErrorRename;
+        if (newCannonName == null || !isCannonNameUnique(newCannonName))
+            return MessageEnum.CannonRenameFail;
+
+        //put the new name
+        cannon.setCannonName(newCannonName);
+        cannon.updateCannonSigns();
+
+        return MessageEnum.CannonRenameSuccess;
+
+    }
+
 	/**
 	 * adds a new cannon to the list of cannons
 	 * @param cannon
@@ -346,14 +368,14 @@ public class CannonManager
 	{
 		for (Cannon cannon : cannonList.values())
 		{
-			if (cannon.isCannonBlock(loc.getBlock()))
+			if (/*:*/loc.toVector().distance(cannon.getOffset()) <= 32 /*To make code faster on servers with a lot of cannons */ && cannon.isCannonBlock(loc.getBlock()))
 			{
 				return cannon;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * searches for a cannon and creates a new entry if it does not exist
 	 * 

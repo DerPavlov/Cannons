@@ -27,10 +27,7 @@ Aiming:
 
 Commands:
   SelectCannon: 'YELLOW [Cannons] Please click on the cannon.'
-  SelectedCannon: 'GREEN [Cannons] CANNON_NAME selected.'
-  SelectDone: 'GREEN [Cannons] Selection finished.'
   SelectCanceled: 'RED [Cannons] Selection canceled.'
-  NoCannonSelected: 'RED [Cannons] No cannon selected.'
 
 
 Load:  
@@ -42,11 +39,13 @@ Load:
 
 Cannon:
   Fire: 'YELLOW [Cannons] FIRE!'
-  Created: 'GREEN [Cannons] You created a CANNON'
+  Created: 'GREEN [Cannons] You created a GOLD CANNON'
   Destroyed: 'RED [Cannons] One of your cannons has been destroyed'
-  Reseted: 'GREEN [Cannons] All cannons of PLAYER have been deleted from the database'
-  ObserverAdded: 'GREEN [Cannons] You have been added as observer to CANNON_NAME.'
-  ObserverRemoved: 'RED [Cannons] You are no longer observer for CANNON_NAME.'
+  Reseted: 'GREEN [Cannons] All cannons of GOLD PLAYER GREEN have been deleted from the database'
+  ObserverAdded: 'GREEN [Cannons] You have been added as observer to GOLD CANNON_NAME.'
+  ObserverRemoved: 'RED [Cannons] You are no longer observer for GOLD CANNON_NAME.'
+  RenameSuccess: 'GREEN [Cannons] You have rename the cannon to GOLD CANNON_NAME.'
+  RenameFail: 'RED [Cannons] New cannon name is not unique.'
 
 
 Projectile:
@@ -77,9 +76,12 @@ ImitatedEffects:
 Permission:
   ErrorRedstone: 'RED [Cannons] You are not allowed to control this with redstone.'
   ErrorBuild: 'RED [Cannons] You have no permission to build a CANNON.'
+  ErrorRename: 'RED [Cannons] You have no permission to rename CANNON.'
   ErrorFire: 'RED [Cannons] You have no idea how to fire this CANNON.'
   ErrorLoad: 'RED [Cannons] No permission to load this CANNON.'
   ErrorAdjust: 'RED [Cannons] You have no idea how to adjust this CANNON.'
+  ErrorAutoaim: 'RED [Cannons] You have no idea how to use autoaim.'
+  ErrorObserver: 'RED [Cannons] You have no permission to be an obsever for CANNON_NAME.'
   ErrorProjectile: 'RED [Cannons] No permission for this projectile.'
   ErrorThermometer: 'RED [Cannons] No permission to use the thermometer.'
   ErrorRamrod: 'RED [Cannons] No permission for the ramrod.'

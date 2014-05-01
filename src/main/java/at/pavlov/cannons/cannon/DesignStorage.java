@@ -232,10 +232,12 @@ public class DesignStorage
         cannonDesign.setOverloadingDependsOfTemperature(cannonDesignConfig.getBoolean("realisticBehaviour.overloading.dependsOfTemperature"));
 
 		// permissions
-		cannonDesign.setPermissionBuild(cannonDesignConfig.getString("permissions.build", "cannon.player.build"));
+		cannonDesign.setPermissionBuild(cannonDesignConfig.getString("permissions.build", "cannons.player.build"));
+        cannonDesign.setPermissionRename(cannonDesignConfig.getString("permissions.rename", "cannons.player.rename"));
 		cannonDesign.setPermissionLoad(cannonDesignConfig.getString("permissions.load", "cannons.player.load"));
 		cannonDesign.setPermissionFire(cannonDesignConfig.getString("permissions.fire", "cannons.player.fire"));
 		cannonDesign.setPermissionAutoaim(cannonDesignConfig.getString("permissions.autoaim", "cannons.player.autoaim"));
+        cannonDesign.setPermissionObserver(cannonDesignConfig.getString("permissions.observer", "cannons.player.observer"));
 		cannonDesign.setPermissionTargetTracking(cannonDesignConfig.getString("permissions.targetTracking", "cannons.player.targetTracking"));
 		cannonDesign.setPermissionRedstone(cannonDesignConfig.getString("permissions.redstone", "cannons.player.redstone"));
         cannonDesign.setPermissionThermometer(cannonDesignConfig.getString("permissions.thermometer", "cannons.player.thermometer"));
