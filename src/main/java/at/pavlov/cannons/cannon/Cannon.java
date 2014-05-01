@@ -558,7 +558,6 @@ public class Cannon
      * @param player player using the ramrod tool (null will bypass permission check)
      * @return message for the player
      */
-    @SuppressWarnings("incomplete-switch")
 	public MessageEnum useRamRod(Player player)
     {
         MessageEnum message = useRamRodInteral(player);

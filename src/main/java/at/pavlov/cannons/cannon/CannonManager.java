@@ -110,7 +110,8 @@ public class CannonManager
         // destroy cannon (drops items, edit sign)
         MessageEnum message = cannon.destroyCannon(breakCannon, cause);
 
-        if (player != null) userMessages.displayMessage(player, cannon, message);
+        if (player != null)
+            userMessages.displayMessage(player, cannon, message);
 
         //remove from database
         plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getUID());

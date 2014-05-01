@@ -255,7 +255,8 @@ public class FireCannon {
         }
         
         //Calculating overloading stuff
-        if(cannon.isExplodedOnOverloading()) cannon.destroyCannon(true, BreakCause.Overloading);
+        if(cannon.isExplodedOnOverloading())
+            plugin.getCannonManager().removeCannon(cannon, true, BreakCause.Overloading);
     }
 
     /**
