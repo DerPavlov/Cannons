@@ -182,7 +182,6 @@ public class CannonDesign
     	{
             return cannonBlocks.getFiringTrigger().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
-
     	return null;
     }
     
