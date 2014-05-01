@@ -378,6 +378,9 @@ public class Aiming {
         CannonDesign design = plugin.getCannonDesign(cannon);
 		//go to trigger location
 		Location locCannon = design.getFiringTrigger(cannon);
+        //if there is no trigger
+        if (locCannon == null)
+            cannon.getMuzzle();
         return player.getLocation().distance(locCannon) <= 4;
     }
 

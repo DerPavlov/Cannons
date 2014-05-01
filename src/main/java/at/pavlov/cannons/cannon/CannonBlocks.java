@@ -41,7 +41,7 @@ class CannonBlocks
     
     /**
      * returns the location off one firing Trigger
-     * @return
+     * @return the firing trigger. (can be null if there is no trigger on the cannon)
      */
     public Vector getFiringTrigger()
     {
@@ -50,11 +50,7 @@ class CannonBlocks
     		return rightClickTrigger.get(0);	
     	if (redstoneTrigger != null && redstoneTrigger.size() > 0)
         	return redstoneTrigger.get(0);
-        //ok there was no firing trigger - return a barrel block
-        if (barrelBlocks != null && barrelBlocks.size() > 0)
-            return barrelBlocks.get(0);
-        //still nothing - use something
-        return allCannonBlocks.get(0).toVector();
+        return null;
     }
     
 	public Vector getRotationCenter()

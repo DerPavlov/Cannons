@@ -172,19 +172,18 @@ public class CannonDesign
     
     /**
      * returns one trigger location
-     * @param cannon
-     * @return
+     * @param cannon the used cannon
+     * @return the firing trigger of the cannon - can be null if the cannon has no trigger
      */
     public Location getFiringTrigger(Cannon cannon)
     {
     	CannonBlocks cannonBlocks  = cannonBlockMap.get(cannon.getCannonDirection());
-    	if (cannonBlocks != null)
+    	if (cannonBlocks != null && cannonBlocks.getFiringTrigger() != null)
     	{
-    		return cannonBlocks.getFiringTrigger().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
+            return cannonBlocks.getFiringTrigger().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
-    	
-    	System.out.println("[Cannons] missing FiringIndicator for cannon design" + cannon.getCannonName());
-    	return cannon.getOffset().toLocation(cannon.getWorldBukkit());
+
+    	return null;
     }
     
     /**
