@@ -1943,12 +1943,16 @@ public class Cannon
         if(design.isOverloadingEnabled())
         {
             double tempInc;
-            if(design.isOverloadingDependsOfTemperature()) tempInc = tempValue/design.getMaximumTemperature();
-            else tempInc = 1;
+            if(design.isOverloadingDependsOfTemperature())
+                tempInc = tempValue/design.getMaximumTemperature();
+            else
+                tempInc = 1;
 
             int saferGunpowder;
-            if(design.isOverloadingRealMode()) saferGunpowder = 0;
-            else saferGunpowder = design.getMaxLoadableGunpowder_Normal();
+            if(design.isOverloadingRealMode())
+                saferGunpowder = 0;
+            else
+                saferGunpowder = design.getMaxLoadableGunpowder_Normal();
 
             double chance  = tempInc * design.getOverloadingChangeInc()*Math.pow((loadedGunpowder - saferGunpowder)*design.getOverloadingChanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
             return (chance <= 0) ? 0.0:chance;

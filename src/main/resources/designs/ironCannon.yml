@@ -109,16 +109,19 @@ heatManagement:
 #cannon can be loaded with more gunpowder, but might explode after firing
 overloading:
   #cannon can explode if overloaded with gunpowder
-  #(chance = chanceInc * ((all loaded gunpowder - maximum loadable gunpowder without overloading) * ChanceOfExplosionPerGunpowder)^Exponent)
+  #chance = chanceInc * ((all loaded gunpowder - maximum loadable gunpowder without overloading) * ChanceOfExplosionPerGunpowder)^Exponent
   enabled: true
-  #in real mode cannon can explode any time after firing (maximum loadable gunpowder without overloading = 0)
+  #in real mode cannon can also explode when not overloaded
+  #chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent
   realMode: true
   exponent: 2
   chanceInc: 1
   maxOverloadableGunpowder: 1
-  chanceOfExplosionPerGunpowder: 0.1
+  chanceOfExplosionPerGunpowder: 0.05
   #the explosion chance will be multiplied by cannon's temperature / maximumTemperature
   dependsOfTemperature: true
+  #loaded gunpowder = 3 normal + 1 overloaded
+  #exploding change = 1 * ((3+1)*0.05)^2 = 4%
 
 
 realisticBehaviour:
