@@ -288,7 +288,7 @@ public class UserMessages {
 			//replace the vertical angle
 			message = message.replace("VDEGREE", String.format("%.1f", cannon.getVerticalAngle()));
             //replace cannon temperature
-            message = message.replace("EXPLOSION_CHANCE", String.format("%.1f%", (cannon.getOverheatingChance()+cannon.getOverloadingExplosionChance())*100.0));
+            message = message.replace("EXPLOSION_CHANCE", String.format("%.1f", (cannon.getOverheatingChance()+cannon.getOverloadingExplosionChance())*100.0));
             message = message.replace("CANNON_TEMP", String.format("%.1f", cannon.getTemperature()));
             message = message.replace("MAX_TEMP", String.format("%.1f", cannon.getCannonDesign().getMaximumTemperature()));
             message = message.replace("CRIT_TEMP", String.format("%.1f", cannon.getCannonDesign().getCriticalTemperature()));

@@ -56,7 +56,7 @@ Projectile:
 HeatManagement:
   Burn: 'YELLOW [Cannons] You touched a hot CANNON and burned your fingers'
   Cooling: 'GREEN [Cannons] The CANNON cools down'
-  Info: 'GREEN [Cannons] CANNON temperature is CANNON_TEMP / MAX_TEMP degree. Explosion chance: EXPLOSION_CHANCE'
+  Info: 'GREEN [Cannons] CANNON temperature is CANNON_TEMP / MAX_TEMP degree. Explosion chance: EXPLOSION_CHANCE percent'
   Critical: 'YELLOW [Cannons] CANNON temperature of CANNON_TEMPC is critical'
   Overheated: 'RED [Cannons] The CANNON exploded due to overheating'
 
