@@ -85,6 +85,9 @@ public class Cannon
     private double tempValue;
     private long tempTimestamp;
 
+    //amount of fired cannonballs with this cannon
+    private long firedCannonballs;
+
     private CannonDesign design;
 
 
@@ -1980,5 +1983,13 @@ public class Cannon
         if(Math.random()<chance)
             return true;
         return false;
+    }
+
+    public long getFiredCannonballs() {
+        return firedCannonballs;
+    }
+
+    public void setFiredCannonballs(long firedCannonballs) {
+        this.firedCannonballs = firedCannonballs;
     }
 }

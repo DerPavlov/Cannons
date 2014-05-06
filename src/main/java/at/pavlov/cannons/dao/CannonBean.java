@@ -46,6 +46,8 @@ public class CannonBean
     @Length(max=20)
 	private String designId;
 	private boolean Valid;
+
+    private long firedCannonballs;
 	
 	
 	
@@ -129,7 +131,6 @@ public class CannonBean
 	{
 		this.horizontalAngle = horizontalAngle;
 	}
-
 	public double getVerticalAngle()
 	{
 		return verticalAngle;
@@ -176,28 +177,30 @@ public class CannonBean
     public void setCannonTemperature(double cannonTemperature) {
         this.cannonTemperature = cannonTemperature;
     }
-
     public int getProjectilePushed() {
         return projectilePushed;
     }
-
     public void setProjectilePushed(int projectilePushed) {
         this.projectilePushed = projectilePushed;
     }
-
     public double getSoot() {
         return soot;
     }
-
     public void setSoot(double soot) {
         this.soot = soot;
     }
-
     public long getCannonTemperatureTimestamp() {
         return cannonTemperatureTimestamp;
     }
-
     public void setCannonTemperatureTimestamp(long cannonTemperatureTimestamp) {
         this.cannonTemperatureTimestamp = cannonTemperatureTimestamp;
+    }
+
+    public long getFiredCannonballs() {
+        return firedCannonballs;
+    }
+
+    public void setFiredCannonballs(long firedCannonballs) {
+        this.firedCannonballs = firedCannonballs;
     }
 }

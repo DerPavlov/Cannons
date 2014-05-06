@@ -97,7 +97,10 @@ public class PersistenceDatabase
                     //temperature
                     cannon.setTemperature(bean.getCannonTemperature());
                     cannon.setTemperatureTimeStamp(bean.getCannonTemperatureTimestamp());
-					
+
+                    //amount of fired cannonballs
+                    cannon.setFiredCannonballs(bean.getFiredCannonballs());
+
 					cannon.setValid(bean.isValid());
 
 					//add a cannon to the cannon list
@@ -231,6 +234,8 @@ public class PersistenceDatabase
             //temperature
             bean.setCannonTemperature(cannon.getTemperature(false));
             bean.setCannonTemperatureTimestamp(cannon.getTemperatureTimeStamp());
+            //load fired cannonballs
+            bean.setFiredCannonballs(cannon.getFiredCannonballs());
 
 
 			bean.setValid(cannon.isValid());
