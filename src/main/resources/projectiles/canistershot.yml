@@ -80,7 +80,7 @@ clusterExplosion:
   #after which time the explosion will be triggered [s]
   minDelay: 0.5
   #how long the explosion will last [s]
-  maxDelay: 5
+  maxDelay: 5.0
   #in which sphere radius this explosion will occur
   radius: 5.0
   #explosion power

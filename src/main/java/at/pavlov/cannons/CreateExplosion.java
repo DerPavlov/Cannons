@@ -648,6 +648,10 @@ public class CreateExplosion {
         }
     }
 
+    /**
+     * makes a sphere with additional explosions around the impact
+     * @param cannonball exploding cannonball
+     */
     private void clusterExplosions(FlyingProjectile cannonball)
     {
         Projectile projectile = cannonball.getProjectile();
@@ -662,8 +666,8 @@ public class CreateExplosion {
                         Projectile proj = cannonball.getProjectile();
 
                         Location expLoc = CannonsUtil.randomPointInSphere(cannonball.getImpactLocation(),proj.getClusterExplosionsRadius());
-                        //only do if explosion in blocks is allowed
-                        if (proj.isClusterExplosionsInBlocks()||expLoc.getBlock().isEmpty())
+                        //only do if explosion in blocks are allowed
+                        if (proj.isClusterExplosionsInBlocks()||expLoc.getBlock().isEmpty()||(expLoc.getBlock().isLiquid()&&proj.isUnderwaterDamage()))
                             expLoc.getWorld().createExplosion(expLoc,(float) proj.getClusterExplosionsPower());
                     }
                 }, (long) (delay*20.0));
