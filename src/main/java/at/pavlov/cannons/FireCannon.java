@@ -271,7 +271,10 @@ public class FireCannon {
         // no gunpowder no cannon firing
         if (cannon.getLoadedGunpowder() <= 0) return;
 
+        //increased fired cannonballs
+        cannon.imcrementFiredCannonballs();
 
+        //get firing location
         Location firingLoc = design.getMuzzle(cannon);
         World world = cannon.getWorldBukkit();
 

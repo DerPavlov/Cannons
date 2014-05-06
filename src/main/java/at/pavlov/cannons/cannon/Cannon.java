@@ -1992,4 +1992,8 @@ public class Cannon
     public void setFiredCannonballs(long firedCannonballs) {
         this.firedCannonballs = firedCannonballs;
     }
+
+    public void imcrementFiredCannonballs(){
+        this.firedCannonballs++;
+    }
 }
