@@ -71,6 +71,23 @@ explosion:
    - harm
    - slow
 
+#spawns additional delayed explosions around the explosion
+clusterExplosion:
+  #turn it on or off
+  enabled: true
+  #explosion can also be in blocks and not only in air
+  explosionInBlocks: false
+  #how many explosions will be spawned
+  amount: 10
+  #after which time the explosion will be triggered [s]
+  minDelay: 0.5
+  #how long the explosion will last [s]
+  maxDelay: 5
+  #in which sphere radius this explosion will occur
+  radius: 5.0
+  #explosion power
+  power: 4.0
+
 #options which determine whether blocks are spawned around the impact area. Works with spawn eggs and blocks
 placeBlock:
   #the radius where blocks will be placed. If the radius is too small there might be no air gap to spawn a block.

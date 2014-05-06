@@ -628,4 +628,23 @@ public class CannonsUtil
         }
         return surface;
     }
+
+    /**
+     * returns a random point in a sphere
+     * @param center center location
+     * @param radius radius of the sphere
+     * @return returns a random point in a sphere
+     */
+    public static Location randomPointInSphere(Location center, double radius)
+    {
+        Random rand = new Random();
+        double r = radius*rand.nextDouble();
+        double polar = Math.PI*rand.nextDouble();
+        double azi = Math.PI*(rand.nextDouble()*2.0-1.0);
+        //sphere coordinates
+        double x = r*Math.sin(polar)*Math.cos(azi);
+        double y = r*Math.sin(polar)*Math.sin(azi);
+        double z = r*Math.cos(polar);
+        return center.clone().add(x,z,y);
+    }
 }

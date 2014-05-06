@@ -46,8 +46,17 @@ public class Projectile implements Cloneable{
 	private double potionDuration;
 	private int potionAmplifier;
 	private List<PotionEffectType> potionsEffectList = new ArrayList<PotionEffectType>();
-	
-	//placeBlock
+
+    //cluster
+    private boolean clusterExplosionsEnabled;
+    private boolean clusterExplosionsInBlocks;
+    private int clusterExplosionsAmount;
+    private double clusterExplosionsMinDelay;
+    private double clusterExplosionsMaxDelay;
+    private double clusterExplosionsRadius;
+    private double clusterExplosionsPower;
+
+    //placeBlock
 	private double blockPlaceRadius;
 	private int blockPlaceAmount;
 	private double blockPlaceVelocity;
@@ -578,4 +587,59 @@ public class Projectile implements Cloneable{
 		this.explosionPowerDependsOnVelocity = explosionPowerDependsOnVelocity;
 	}
 
+    public boolean isClusterExplosionsEnabled() {
+        return clusterExplosionsEnabled;
+    }
+
+    public void setClusterExplosionsEnabled(boolean clusterExplosionsEnabled) {
+        this.clusterExplosionsEnabled = clusterExplosionsEnabled;
+    }
+
+    public int getClusterExplosionsAmount() {
+        return clusterExplosionsAmount;
+    }
+
+    public void setClusterExplosionsAmount(int clusterExplosionsAmount) {
+        this.clusterExplosionsAmount = clusterExplosionsAmount;
+    }
+
+    public double getClusterExplosionsRadius() {
+        return clusterExplosionsRadius;
+    }
+
+    public void setClusterExplosionsRadius(double clusterExplosionsRadius) {
+        this.clusterExplosionsRadius = clusterExplosionsRadius;
+    }
+
+    public boolean isClusterExplosionsInBlocks() {
+        return clusterExplosionsInBlocks;
+    }
+
+    public void setClusterExplosionsInBlocks(boolean clusterExplosionsInBlocks) {
+        this.clusterExplosionsInBlocks = clusterExplosionsInBlocks;
+    }
+
+    public double getClusterExplosionsMinDelay() {
+        return clusterExplosionsMinDelay;
+    }
+
+    public void setClusterExplosionsMinDelay(double clusterExplosionsMinDelay) {
+        this.clusterExplosionsMinDelay = clusterExplosionsMinDelay;
+    }
+
+    public double getClusterExplosionsMaxDelay() {
+        return clusterExplosionsMaxDelay;
+    }
+
+    public void setClusterExplosionsMaxDelay(double clusterExplosionsMaxDelay) {
+        this.clusterExplosionsMaxDelay = clusterExplosionsMaxDelay;
+    }
+
+    public double getClusterExplosionsPower() {
+        return clusterExplosionsPower;
+    }
+
+    public void setClusterExplosionsPower(double clusterExplosionsPower) {
+        this.clusterExplosionsPower = clusterExplosionsPower;
+    }
 }

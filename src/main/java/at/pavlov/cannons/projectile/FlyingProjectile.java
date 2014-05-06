@@ -22,6 +22,7 @@ public class FlyingProjectile
 	private final Projectile projectile;
     //location of the shooter before firing - important for teleporting the player back - observer property
     private final Location firingLocation;
+    private Location impactLocation;
     //Important for visual splash effect when the cannonball hits the water surface
     private boolean inWater;
     private boolean wasInWater;
@@ -221,5 +222,13 @@ public class FlyingProjectile
     public UUID getUID()
     {
         return projectile_entity.getUniqueId();
+    }
+
+    public Location getImpactLocation() {
+        return impactLocation;
+    }
+
+    public void setImpactLocation(Location impactLocation) {
+        this.impactLocation = impactLocation;
     }
 }

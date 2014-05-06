@@ -50,6 +50,7 @@ explosion:
   doesExplosionDamage: false
   #the explosion power is set to zero if the explosion is underwater (superbreaker will still do damage)
   doesUnderwaterExplosion: false
+  #spawns additional delayed explosions around the explosion
   #if the projectile hits the player additional damage is done. Damage is in half hearts and the player has 20 half hearts in vanilla minecraft.
   directHitDamage: 50
   #if the player is next to an explosion he will receive additional damage
@@ -67,6 +68,23 @@ explosion:
   potionEffects:
    - harm
    - slow
+
+#spawns additional delayed explosions around the explosion
+clusterExplosion:
+  #true it on or off
+  enabled: false
+  #explosion can also be in blocks and not only in air
+  explosionInBlocks: false
+  #how many explosions will be spawned
+  amount: 10
+  #after which time the explosion will be triggered [s]
+  minDelay: 0.5
+  #how long the explosion will last [s]
+  maxDelay: 5
+  #in which sphere radius this explosion will occur
+  radius: 5.0
+  #explosion power
+  power: 4.0
 
 #options which determine whether blocks are spawned around the impact area. Works with spawn eggs and blocks
 placeBlock:

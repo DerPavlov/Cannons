@@ -330,12 +330,12 @@ public class CreateExplosion {
 
     /**
      * performs the block spawning for the given projectile
-     * @param impactLoc
      * @param cannonball
      */
-    private void spreadBlocks(FlyingProjectile cannonball, Location impactLoc)
+    private void spreadBlocks(FlyingProjectile cannonball)
     {
         Projectile projectile = cannonball.getProjectile();
+        Location impactLoc = cannonball.getImpactLocation();
 
         if (projectile.doesBlockPlace())
         {
@@ -575,6 +575,7 @@ public class CreateExplosion {
 
         //breaks blocks from the impact of the projectile to the location of the explosion
         Location impactLoc = blockBreaker(cannonball);
+        cannonball.setImpactLocation(impactLoc);
 
         //get world
         World world = impactLoc.getWorld();
@@ -628,15 +629,17 @@ public class CreateExplosion {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
             sendExplosionToPlayers(impactLoc);
             //place blocks around the impact like webs, lava, water
-            spreadBlocks(cannonball, impactLoc);
+            spreadBlocks(cannonball);
             //spawns additional projectiles after the explosion
             spawnProjectiles(cannonball);
             //spawn fireworks
             spawnFireworks(cannonball);
             //do potion effects
-            damageEntity(cannonball, impactLoc);
+            damageEntity(cannonball);
             //teleport the player to the impact or to the start point
-            teleportPlayer(cannonball, impactLoc, player);
+            teleportPlayer(cannonball, player);
+            //make some additional explosion around the impact
+            clusterExplosions(cannonball);
 
 
             //check which entities are affected by the event
@@ -645,15 +648,38 @@ public class CreateExplosion {
         }
     }
 
+    private void clusterExplosions(FlyingProjectile cannonball)
+    {
+        Projectile projectile = cannonball.getProjectile();
+        if (projectile.isClusterExplosionsEnabled())
+        {
+            for (int i=0; i < projectile.getClusterExplosionsAmount(); i++)
+            {
+                double delay = projectile.getClusterExplosionsMinDelay() + Math.random()*(projectile.getClusterExplosionsMaxDelay()-projectile.getClusterExplosionsMinDelay());
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(cannonball) {
+                    public void run(Object object) {
+                        FlyingProjectile cannonball = (FlyingProjectile) object;
+                        Projectile proj = cannonball.getProjectile();
+
+                        Location expLoc = CannonsUtil.randomPointInSphere(cannonball.getImpactLocation(),proj.getClusterExplosionsRadius());
+                        //only do if explosion in blocks is allowed
+                        if (proj.isClusterExplosionsInBlocks()||expLoc.getBlock().isEmpty())
+                            expLoc.getWorld().createExplosion(expLoc,(float) proj.getClusterExplosionsPower());
+                    }
+                }, (long) (delay*20.0));
+            }
+        }
+    }
+
     /**
      * teleport the player to the impact or to the starting point, depending on the given projectile properties
      * @param cannonball the flying projectile
-     * @param impactLoc location to teleport the player
      * @param player the one to teleport
      */
-    private void teleportPlayer(FlyingProjectile cannonball, Location impactLoc, Player player)
+    private void teleportPlayer(FlyingProjectile cannonball, Player player)
     {
         Projectile projectile = cannonball.getProjectile();
+        Location impactLoc = cannonball.getImpactLocation();
 
         Location teleLoc = null;
         //teleport to impact and reset speed - make a soft landing
@@ -679,12 +705,12 @@ public class CreateExplosion {
     /**
      * does additional damage effects to player (directHit, explosion and potion effects)
      * @param cannonball the flying projectile
-     * @param impactLoc location of the projectile impact
      */
-    private void damageEntity(FlyingProjectile cannonball, Location impactLoc)
+    private void damageEntity(FlyingProjectile cannonball)
     {
         Projectile projectile = cannonball.getProjectile();
         Entity projectile_entity = cannonball.getProjectileEntity();
+        Location impactLoc = cannonball.getImpactLocation();
 
         int effectRange = (int) projectile.getPotionRange()/2;
         List<Entity> entities = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
