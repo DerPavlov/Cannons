@@ -447,9 +447,6 @@ public class CannonManager
                 if (message == MessageEnum.CannonCreated && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
                     message = MessageEnum.ErrorMissingSign;
 
-                //send messages
-                if (!silent)
-                    userMessages.displayMessage(owner, message, cannon);
 
                 CannonBeforeCreateEvent cbceEvent = new CannonBeforeCreateEvent(cannon, message, player);
                 Bukkit.getServer().getPluginManager().callEvent(cbceEvent);
@@ -461,6 +458,10 @@ public class CannonManager
 
                     plugin.logDebug("a new cannon was created by " + cannon.getOwner());
                     createCannon(cannon);
+
+                    //send messages
+                    if (!silent)
+                        userMessages.displayMessage(owner, message, cannon);
 
                     CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
                 	Bukkit.getServer().getPluginManager().callEvent(caceEvent);
