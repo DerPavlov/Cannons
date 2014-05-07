@@ -156,7 +156,7 @@ public class Cannon
         //setSoot(0.0);
 
         //load gunpowder if there is nothing in the barrel
-        if (design.isGunpowderConsumption()&&!design.isGunpowderNeeded()&&consumesAmmo)
+        if (design.isGunpowderConsumption()&&design.isGunpowderNeeded()&&consumesAmmo)
         {
 
             //gunpowder will be consumed from the inventory
@@ -501,16 +501,16 @@ public class Cannon
             // no permission for this projectile
             if (!projectile.hasPermission(player))
                 return MessageEnum.PermissionErrorProjectile;
-            // no gunpowder loaded
-            if (!isGunpowderLoaded())
-                return MessageEnum.ErrorNoGunpowder;
-            // already loaded with a projectile
-            if (isLoaded())
-                return MessageEnum.ErrorProjectileAlreadyLoaded;
-            // is cannon cleaned with ramrod?
-            if (!isClean())
-                return MessageEnum.ErrorNotCleaned;
         }
+        // no gunpowder loaded
+        if (!isGunpowderLoaded())
+            return MessageEnum.ErrorNoGunpowder;
+        // already loaded with a projectile
+        if (isLoaded())
+            return MessageEnum.ErrorProjectileAlreadyLoaded;
+        // is cannon cleaned with ramrod?
+        if (!isClean())
+            return MessageEnum.ErrorNotCleaned;
 
         // loading successful
         return MessageEnum.loadProjectile;
@@ -659,7 +659,8 @@ public class Cannon
     public void removeCharge()
     {
         //delete charge for human gunner
-        this.setLoadedGunpowder(0);
+        if (design.isGunpowderNeeded())
+            this.setLoadedGunpowder(0);
         this.setLoadedProjectile(null);
 
         //update Sign
@@ -1622,6 +1623,9 @@ public class Cannon
 
     public int getLoadedGunpowder()
     {
+        if (loadedGunpowder<design.getMaxLoadableGunpowderNormal() && !design.isGunpowderNeeded())
+            design.getMaxLoadableGunpowderNormal();
+
         return loadedGunpowder;
     }
 

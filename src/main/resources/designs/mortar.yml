@@ -27,7 +27,7 @@ ammunition:
   projectileConsumption: true
   #if true, no item is removed from the players inventory
   ammoInfiniteForPlayer: false
-  #if true, the cannons does not consume ammunition after firing with redstone
+  #if true, the cannons does not consume ammunition for autoreloading with redstone
   ammoInfiniteForRedstone: false
   #whether the cannon can reload from a chest
   autoreloadRedstone: true

@@ -107,7 +107,6 @@ public class FireCannon {
      */
     public MessageEnum redstoneFiring(Cannon cannon, InteractAction action)
     {
-
         CannonDesign design = cannon.getCannonDesign();
         return this.fire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !design.isAmmoInfiniteForRedstone(), action);
     }
@@ -146,16 +145,20 @@ public class FireCannon {
         if (useEvent.isCancelled())
             return null;
 
-
-
         Projectile projectile = cannon.getLoadedProjectile();
-        //no charge no firing
-        if (cannon.getLoadedGunpowder() == 0 || projectile == null)
+        CannonDesign design = cannon.getCannonDesign();
+
+
+        //no charge try some autoreload from chests
+        if (cannon.getLoadedGunpowder() == 0 || !cannon.isProjectileLoaded())
         {
             //check if the cannon needs to be cleaned
             if (!cannon.isClean())
                 return MessageEnum.ErrorNotCleaned;
 
+            //if there is no gunpowder needed we set it to the maximum
+            if (!design.isGunpowderNeeded())
+                cannon.setLoadedGunpowder(design.getMaxLoadableGunpowderNormal());
 
             //this cannon will try to find some gunpowder and projectile in the chest
             if (autoload)
@@ -176,7 +179,7 @@ public class FireCannon {
                 {
                     //everything went fine - next click on torch wil fire the cannon
                     plugin.logDebug("Charge loaded from chest");
-                    player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
+                    cannon.getWorldBukkit().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 5F, 0.5F);
                     return MessageEnum.loadProjectile;
                 }
             }
@@ -227,11 +230,15 @@ public class FireCannon {
         //this cannon is now firing
         cannon.setFiring(true);
 
+        //boolean removeCharge = cannon.getCannonDesign().isGunpowderNeeded();
+
         //set up delayed task with automatic firing. Several bullets with time delay for one loaded projectile
         for(int i=0; i < projectile.getAutomaticFiringMagazineSize(); i++)
         {
+            //charge is only removed in the last round fired
+            boolean lastRound = i==(projectile.getAutomaticFiringMagazineSize()-1);
             Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
-            Object fireTask = new FireTaskWrapper(cannon, player, i==(projectile.getAutomaticFiringMagazineSize()-1));
+            FireTaskWrapper fireTask = new FireTaskWrapper(cannon, player, lastRound);
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
             {
                 public void run(Object object)
@@ -313,13 +320,9 @@ public class FireCannon {
             //finished firing
             cannon.setFiring(false);
 
-            //redstone or player infinite ammo will not remove the charge
-            //if ((shooter == null && !cannon.getCannonDesign().isAmmoInfiniteForRedstone()))
-            //{
             plugin.logDebug("fire event complete, charge removed from the cannon");
             //removes the gunpowder and projectile loaded in the cannon
             cannon.removeCharge();
-            //}
         }
     }
 
