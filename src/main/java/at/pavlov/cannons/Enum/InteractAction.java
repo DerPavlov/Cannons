@@ -10,6 +10,7 @@ public enum InteractAction
     fireButton,
     fireTorch,
     fireRedstone,
+    fireAfterLoading,
     fireOther,
     adjustPlayer,
     adjustAutoaim,

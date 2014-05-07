@@ -27,6 +27,7 @@ import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
+import sun.plugin2.message.Message;
 
 import java.text.DecimalFormat;
 
@@ -442,6 +443,11 @@ public class PlayerListener implements Listener
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
+                //do some automatic firing after loading the projectile
+                if (design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
+                    fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
+
+
                 if(message!=null)
                     return;
             }
@@ -495,9 +501,13 @@ public class PlayerListener implements Listener
                 MessageEnum message = cannon.useRamRod(player);
                 userMessages.displayMessage(player, cannon, message);
 
+                //do some automatic firing after loading the projectile
+                plugin.logDebug("1: " + design.isFireAfterLoading() + cannon.isLoaded() + cannon.isProjectilePushed());
+                if (design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
+                    fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
+
                 if(message!=null)
                     return;
-
             }
 
         }

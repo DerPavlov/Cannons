@@ -29,6 +29,7 @@ public class CannonDesign
 	//ammunition_consumption
 	private String gunpowderName;
 	private MaterialHolder gunpowderType;
+    private boolean needsGunpowder;
     private boolean gunpowderConsumption;
     private boolean projectileConsumption;
 	private boolean ammoInfiniteForPlayer;
@@ -93,6 +94,7 @@ public class CannonDesign
     private int massOfCannon;
     private int startingSoot;
     private double explodingLoadedCannons;
+    private boolean fireAfterLoading;
 	
 	//permissions
 	private String permissionBuild;
@@ -1224,5 +1226,21 @@ public class CannonDesign
 
     public void setExplodingLoadedCannons(double explodingLoadedCannons) {
         this.explodingLoadedCannons = explodingLoadedCannons;
+    }
+
+    public boolean isGunpowderNeeded() {
+        return needsGunpowder;
+    }
+
+    public void setNeedsGunpowder(boolean needsGunpowder) {
+        this.needsGunpowder = needsGunpowder;
+    }
+
+    public boolean isFireAfterLoading() {
+        return fireAfterLoading;
+    }
+
+    public void setFireAfterLoading(boolean fireAfterLoading) {
+        this.fireAfterLoading = fireAfterLoading;
     }
 }

@@ -7,6 +7,7 @@ public enum MessageEnum
 	ErrorBarrelTooHot ("Error.BarrelTooHot", true),
     ErrorNotCleaned ("Error.NotCleaned", true),
 	ErrorNoGunpowder ("Error.NoGunpowder", true),
+    ErrorNoGunpowderNeeded ("Error.NoGunpowderNeeded", true),
     ErrorNoProjectile ("Error.NoProjectile", true),
     ErrorNoGunpowderInChest ("Error.NoGunpowderInChest", true),
     ErrorNoProjectileInChest ("Error.NoProjectileInChest", true),

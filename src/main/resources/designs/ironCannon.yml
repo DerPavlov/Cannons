@@ -1,8 +1,8 @@
 general:
   #name of the cannon. This will show of on the cannon sign - therefore keep it short
-  designName: ironCannon
+  designName: "ironCannon"
   #This will be used for messages and will replace CANNON in all messages. (e.g. You created a classic cannon)
-  messageName: iron cannon
+  messageName: "iron cannon"
   #a short description of the cannon
   description: "Compact iron cannon. Sturdier than the wool design."
   #last user of cannon becomes to it's owner (cannon is public)
@@ -19,6 +19,8 @@ ammunition:
   gunpowderName: gunpowder
   #what item is used as gunpowder
   gunpowderType: '289:0'
+  #does this cannon need gunpowder. If false you can directly load the projectile
+  needsGunpowder: true
   #gunpowder will be removed from inventories. If false you have to click the cannon until it is reloaded
   gunpowderConsumption: true
   #if false the cannons will not remove the projectile form the inventory but you still need a projectile
@@ -67,7 +69,7 @@ angles:
   minVerticalAngleOnShip: -45.0
   #each change of the angles will change angle by this amount
   angleStepSize: 1.0
-  #how fast the cannons can be turned in ticks
+  #how fast the cannons can be turned in seconds
   angleUpdateSpeed: 5.0
 
 heatManagement:
@@ -145,6 +147,8 @@ realisticBehaviour:
   startingSoot: 10
   #cannon explodes if a loaded cannon is destroyed. Explosion power 4 (like tnt) and 0 to disable it. Will be scaled with the loaded gunpowder.
   explodingLoadingCannon: 3.0
+  #fire after loading projectile with the time delay given by fuse time
+  fireAfterLoading: false
 
 
 permissions:

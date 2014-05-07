@@ -3,6 +3,7 @@ Error:
   BarrelTooHot: 'RED [Cannons] The barrel is too hot and must cool down.'
   NotCleaned: 'RED [Cannons] The barrel must be cleaned before firing.'
   NoGunpowder: 'RED [Cannons] No gunpowder. Please load the barrel.'
+  NoGunpowderNeeded: 'RED [Cannons] This CANNON needs no gunpowder.'
   NoProjectile: 'RED [Cannons] No projectile loaded. Load something!'
   NoGunpowderInChest: 'RED [Cannons] Not enough gunpowder in the chest to reload the cannon.'
   NoProjectileInChest: 'RED [Cannons] No projectile in the chest.'
@@ -24,6 +25,7 @@ Aiming:
   SettingVerticalAngleDown: 'YELLOW [Cannons] Setting vertical angle to GOLD VDEGREE degree'
   SettingHorizontalAngleRight: 'YELLOW [Cannons] Aiming GOLD HDEGREE degree YELLOW to the GOLD right'
   SettingHorizontalAngleLeft: 'YELLOW [Cannons] Aiming GOLD HDEGREE degree YELLOW to the GOLD left'
+
 
 Commands:
   SelectCannon: 'YELLOW [Cannons] Please click on the cannon.'

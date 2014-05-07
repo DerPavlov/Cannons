@@ -111,7 +111,10 @@ public class Cannon
         this.verticalAngle = (design.getMaxVerticalAngle()+design.getMinVerticalAngle())/2.0;
 
         // reset
-        this.setLoadedGunpowder(0);
+        if (design.isGunpowderNeeded())
+            this.setLoadedGunpowder(0);
+        else
+            this.setLoadedGunpowder(design.getMaxLoadableGunpowderNormal());
         this.setLoadedProjectile(null);
         this.setSoot(design.getStartingSoot());
         this.setProjectilePushed(design.getProjectilePushing());
@@ -440,7 +443,8 @@ public class Cannon
             // update Signs
             updateCannonSigns();
         }
-        else {
+        else
+        {
             //projectile not loaded
             CannonsUtil.playErrorSound(player);
         }
@@ -466,6 +470,9 @@ public class Cannon
             // player can't load cannon
             if (!player.hasPermission(design.getPermissionLoad()))
                 return MessageEnum.PermissionErrorLoad;
+            //this cannon does not need gunpowder
+            if (!design.isGunpowderNeeded())
+                return MessageEnum.ErrorNoGunpowderNeeded;
             // already loaded with a projectile
             if (isLoaded())
                 return MessageEnum.ErrorProjectileAlreadyLoaded;
@@ -494,7 +501,7 @@ public class Cannon
             if (!projectile.hasPermission(player))
                 return MessageEnum.PermissionErrorProjectile;
             // no gunpowder loaded
-            if (getLoadedGunpowder() == 0)
+            if (!isGunpowderLoaded())
                 return MessageEnum.ErrorNoGunpowder;
             // already loaded with a projectile
             if (isLoaded())
@@ -531,13 +538,13 @@ public class Cannon
                 return MessageEnum.RamrodCleaning;
         }
         //if clean load the gunpowder
-        if (isClean()&&!isLoadedWithGunpowder())
+        if (isClean()&&!isGunpowderLoaded())
         {
             cleanCannon(1);
             return MessageEnum.ErrorNoGunpowder;
         }
         //if no projectile
-        if (isLoadedWithGunpowder()&&!isLoaded())
+        if (isGunpowderLoaded()&&!isLoaded())
             return MessageEnum.ErrorNoProjectile;
         //if the projectile is loaded
         if (isLoaded() && !isProjectilePushed())
@@ -599,12 +606,29 @@ public class Cannon
 
     /**
      * is cannon loaded return true
-     *
-     * @return - true if there is a projectile in the cannon
+     * @return - true if the cannon is loaded with a projectile and gunpowder
      */
     public boolean isLoaded()
     {
+        return isProjectileLoaded()&&isGunpowderLoaded();
+    }
+
+    /**
+     * is the cannon loaded with a projectile
+     * @return - true if there is a projectile in the cannon
+     */
+    public boolean isProjectileLoaded()
+    {
         return (loadedProjectile != null);
+    }
+
+    /**
+     * returns true if the cannon has at least 1 gunpowder loaded
+     * @return true if loaded with gunpowder
+     */
+    public boolean isGunpowderLoaded()
+    {
+        return getLoadedGunpowder()>0 || !design.isGunpowderNeeded();
     }
 
     /**
@@ -1789,11 +1813,6 @@ public class Cannon
     public boolean isClean()
     {
         return getSoot()<1;
-    }
-
-    public boolean isLoadedWithGunpowder()
-    {
-        return loadedGunpowder!=0;
     }
 
     public double getSoot() {

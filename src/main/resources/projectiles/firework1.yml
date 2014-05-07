@@ -30,7 +30,7 @@ cannonball:
   #how many seconds after firing the projectile will detonate if it does not hit anything
   timefuse: 1.0
   #the delay in seconds between two fired cannonball in the automatic firing mode. Highest firing frequency is 20 shots per second - 0.05s
-  automaticFiringDelay: 1
+  automaticFiringDelay: 1.0
   #a cannon can fire several times with a single projectile - like a magazine in a automatic firearm
   automaticFiringMagazineSize: 1
   #how many projectiles are fired

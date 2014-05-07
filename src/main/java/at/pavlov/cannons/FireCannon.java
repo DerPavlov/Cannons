@@ -62,7 +62,7 @@ public class FireCannon {
         if (!cannon.isClean())
             return MessageEnum.ErrorNotCleaned;
         //check if there is some gunpowder in the barrel
-        if (cannon.getLoadedGunpowder() <= 0)
+        if (!cannon.isGunpowderLoaded())
             return MessageEnum.ErrorNoGunpowder;//is there a projectile
         // is there a projectile in the cannon?
         if (!cannon.isLoaded())
@@ -180,18 +180,6 @@ public class FireCannon {
                     return MessageEnum.loadProjectile;
                 }
             }
-            /*else
-            {
-                //can't fire without charge
-                plugin.logDebug("Can't fire without a charge");
-                CannonsUtil.playErrorSound(player);
-
-                if (cannon.isClean())
-
-                if (cannon.getLoadedGunpowder() > 0)
-                    return MessageEnum.ErrorNoProjectile;
-                return MessageEnum.ErrorNoGunpowder;
-            } */
         }
 
         //check for all permissions
