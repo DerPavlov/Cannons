@@ -443,8 +443,8 @@ public class PlayerListener implements Listener
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
-                //do some automatic firing after loading the projectile
-                if (design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
+                //this will directly fire the cannon after it was loaded
+                if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
                     fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
 
 
@@ -475,7 +475,6 @@ public class PlayerListener implements Listener
                 plugin.logDebug("fire torch");
 
                 MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireTorch);
-
                 // display message
                 userMessages.displayMessage(player, cannon, message);
 
@@ -501,9 +500,8 @@ public class PlayerListener implements Listener
                 MessageEnum message = cannon.useRamRod(player);
                 userMessages.displayMessage(player, cannon, message);
 
-                //do some automatic firing after loading the projectile
-                plugin.logDebug("1: " + design.isFireAfterLoading() + cannon.isLoaded() + cannon.isProjectilePushed());
-                if (design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
+                //this will directly fire the cannon after it was loaded
+                if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
                     fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
 
                 if(message!=null)

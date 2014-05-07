@@ -199,7 +199,7 @@ realisticBehaviour:
   startingSoot: 10
   #cannon explodes if a loaded cannon is destroyed. Explosion power 4 (like tnt) and 0 to disable it. Will be scaled with the loaded gunpowder.
   explodingLoadingCannon: 3.0
-  #fire after loading projectile with the time delay given by fuse time
+  #fire after loading projectile with the time delay given by the fuse time. Sneaking will stop immediate firing.
   fireAfterLoading: false
 
 

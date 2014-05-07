@@ -156,7 +156,7 @@ public class Cannon
         //setSoot(0.0);
 
         //load gunpowder if there is nothing in the barrel
-        if (design.isGunpowderConsumption()&&consumesAmmo)
+        if (design.isGunpowderConsumption()&&!design.isGunpowderNeeded()&&consumesAmmo)
         {
 
             //gunpowder will be consumed from the inventory
@@ -182,8 +182,9 @@ public class Cannon
 
         }
         else {
-            //no ammo consumption
-            loadedGunpowder = design.getMaxLoadableGunpowderNormal();
+            //no ammo consumption - only load if there is less gunpowder then normal in the barrel
+            if (getLoadedGunpowder() <= design.getMaxLoadableGunpowderNormal())
+                loadedGunpowder = design.getMaxLoadableGunpowderNormal();
         }
 
 
