@@ -480,16 +480,16 @@ public class CannonManager
 	}
 
     /**
-     * returns the Cannons from the storage
-     * @param id UUID of the Cannon
+     * returns the cannon from the storage
+     * @param uid UUID of the cannon
      * @return the cannon from the storage
      */
-    public Cannon getCannon(UUID id)
+    public Cannon getCannon(UUID uid)
     {
-        if (id == null)
+        if (uid == null)
             return null;
 
-        return cannonList.get(id);
+        return cannonList.get(uid);
     }
 
 	/**

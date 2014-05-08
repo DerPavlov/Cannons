@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 public class CannonsAPI {
 
@@ -112,6 +113,16 @@ public class CannonsAPI {
     public HashSet<Cannon> getCannons(List<Location> locations, Player player)
     {
         return plugin.getCannonManager().getCannons(locations, player.getName(), true);
+    }
+
+    /**
+     * returns the cannon from the storage
+     * @param uid UUID of the cannon
+     * @return the cannon from the storage
+     */
+    public Cannon getCannon(UUID uid)
+    {
+        return plugin.getCannonManager().getCannon(uid);
     }
 
 
