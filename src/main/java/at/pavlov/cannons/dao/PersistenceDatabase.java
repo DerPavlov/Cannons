@@ -101,8 +101,6 @@ public class PersistenceDatabase
                     //amount of fired cannonballs
                     cannon.setFiredCannonballs(bean.getFiredCannonballs());
 
-					cannon.setValid(bean.isValid());
-
 					//add a cannon to the cannon list
 					plugin.createCannon(cannon);
 					
@@ -173,6 +171,11 @@ public class PersistenceDatabase
 	 */
     private boolean saveCannon(Cannon cannon)
 	{
+        //don't save cannons which are not valid anymore
+        if (!cannon.isValid())
+            return true;
+
+
 		try
 		{
 			// search if the is cannon already stored in the database
@@ -237,8 +240,6 @@ public class PersistenceDatabase
             //load fired cannonballs
             bean.setFiredCannonballs(cannon.getFiredCannonballs());
 
-
-			bean.setValid(cannon.isValid());
 
 			// store the bean
 			plugin.getDatabase().save(bean);

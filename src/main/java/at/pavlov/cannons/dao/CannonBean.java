@@ -45,7 +45,6 @@ public class CannonBean
 
     @Length(max=20)
 	private String designId;
-	private boolean Valid;
 
     private long firedCannonballs;
 	
@@ -138,14 +137,6 @@ public class CannonBean
 	public void setVerticalAngle(double verticalAngle)
 	{
 		this.verticalAngle = verticalAngle;
-	}
-	public boolean isValid()
-	{
-		return Valid;
-	}
-	public void setValid(boolean valid)
-	{
-		Valid = valid;
 	}
 	public String getOwner()
 	{

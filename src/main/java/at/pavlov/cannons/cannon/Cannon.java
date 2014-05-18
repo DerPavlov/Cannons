@@ -676,6 +676,9 @@ public class Cannon
         isValid = false;
         updateCannonSigns();
 
+        if (breakBlocks)
+            breakAllCannonBlocks();
+
         //loaded cannon can exploded (80% chance)
         if (design.getExplodingLoadedCannons() > 0 && getLoadedGunpowder() > 0 && Math.random() > 0.2)
         {
@@ -687,9 +690,6 @@ public class Cannon
         // drop charge
         else
             dropCharge();
-
-        if (breakBlocks)
-            breakAllCannonBlocks();
 
         // return message
         switch (cause)

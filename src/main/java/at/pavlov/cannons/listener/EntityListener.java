@@ -1,6 +1,8 @@
 package at.pavlov.cannons.listener;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
@@ -64,6 +66,7 @@ public class EntityListener implements Listener
 		if (event.isCancelled()) return;
 		
 		List<Block> blocks = event.blockList();
+        HashSet<UUID> remove = new HashSet<UUID>();
 
 
 
@@ -80,7 +83,8 @@ public class EntityListener implements Listener
 				if (cannon.isDestructibleBlock(block.getLocation()))
 				{
 					//this cannon is destroyed
-					cannon.setValid(false);
+					//cannon.setValid(false);
+                    remove.add(cannon.getUID());
 				}			
 			}
 		}
@@ -93,7 +97,7 @@ public class EntityListener implements Listener
 			Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
 
 			// if it is a cannon block and the cannon is not destroyed (see above)
-			if (cannon != null && cannon.isValid())
+			if (cannon != null && cannon.isValid() && !remove.contains(cannon.getUID()))
 			{
 				if (cannon.isCannonBlock(block))
 				{
@@ -103,9 +107,9 @@ public class EntityListener implements Listener
 		}
 
         //cannons event - remove unbreakable blocks
+        //this will also affect other plugins which spawn bukkit explosions
         if (event.getEntity() == null)
         {
-            plugin.logDebug("cannonball hit event");
             for (int i = 0; i < blocks.size(); i++)
             {
                 Block block = blocks.get(i);
@@ -120,11 +124,9 @@ public class EntityListener implements Listener
             }
         }
 
-
-		
 		//now remove all invalid cannons
-		plugin.getCannonManager().removeInvalidCannons(BreakCause.Explosion);
-	
+        for (UUID id : remove)
+		    plugin.getCannonManager().removeCannon(id, false, BreakCause.Explosion);
 	}		
 
 	

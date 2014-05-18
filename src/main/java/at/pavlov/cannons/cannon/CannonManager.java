@@ -48,7 +48,7 @@ public class CannonManager
 	 * removes a cannons from the list that are not valid
      * @param cause the reason why the cannon is removed
 	 */
-	public void removeInvalidCannons(BreakCause cause)
+	private void removeInvalidCannons(BreakCause cause)
 	{
 		Iterator<Cannon> iter = cannonList.values().iterator();
 
@@ -57,7 +57,7 @@ public class CannonManager
             Cannon next = iter.next();
 			if (!next.isValid())
 			{
-				removeCannon(next, false, cause, false);
+				removeCannon(next, false, cause, false, false);
                 iter.remove();
 			}
 		}
@@ -83,7 +83,7 @@ public class CannonManager
 	 */
 	public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause)
 	{
-        removeCannon(cannon, breakCannon, cause, true);
+        removeCannon(cannon, breakCannon, cause, true, true);
 	}
 
     /**
@@ -91,10 +91,12 @@ public class CannonManager
      * @param cannon cannon to remove
      * @param breakCannon the cannon will explode and all cannon blocks will drop
      * @param cause the reason way the cannon was broken
+     * @param ignoreInvalid if true invalid cannons will be skipped and not removed
      */
-    public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause, boolean removeEntry)
+    public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause, boolean removeEntry, boolean ignoreInvalid)
     {
-        if (cannon == null)
+        //ignore invalid cannons
+        if (cannon == null || (!cannon.isValid() && ignoreInvalid))
             return;
 
         // send message to the owner
@@ -148,7 +150,7 @@ public class CannonManager
     public void removeCannon(UUID uid, boolean breakCannon, BreakCause cause, boolean removeEntry)
     {
         Cannon cannon = cannonList.get(uid);
-        removeCannon(cannon,breakCannon,cause,removeEntry);
+        removeCannon(cannon,breakCannon,cause,removeEntry,true);
     }
 
 	/**
