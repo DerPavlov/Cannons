@@ -833,7 +833,7 @@ public class CreateExplosion {
         Projectile projectile = cannonball.getProjectile();
 
         //a fireworks needs some colors
-        if (projectile.getFireworksColors().size() == 0) return;
+        if (!projectile.isFireworksEnabled() || projectile.getFireworksColors().size() == 0) return;
 
         //building the fireworks effect
         FireworkEffect.Builder fwb = FireworkEffect.builder().flicker(projectile.isFireworksFlicker()).trail(projectile.isFireworksTrail()).with(projectile.getFireworksType());
