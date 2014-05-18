@@ -11,6 +11,8 @@ import java.util.HashMap;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.SpawnEntityHolder;
+import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.*;
 import org.bukkit.Note.Tone;
 import org.bukkit.block.Block;
@@ -185,7 +187,7 @@ public class CannonsUtil
 	}
 	
 	/**
-	 * returns a list of MaterialHolder
+	 * returns a list of MaterialHolder. Formatting id:data
 	 * @param stringList
 	 * @return
 	 */
@@ -203,9 +205,50 @@ public class CannonsUtil
 		
 		return materialList;
 	}
-	
-	
-	/**
+
+    /**
+     * returns a list of MaterialHolder. Formatting id:data min:max
+     * @param stringList list of strings to convert
+     * @return list of converted SpawnMaterialHolder
+     */
+    public static List<SpawnMaterialHolder> toSpawnMaterialHolderList(List<String> stringList)
+    {
+        List<SpawnMaterialHolder> materialList = new ArrayList<SpawnMaterialHolder>();
+
+        for (String str : stringList)
+        {
+            SpawnMaterialHolder material = new SpawnMaterialHolder(str);
+            //if id == -1 the str was invalid
+            if (material.getMaterial().getId() >= 0)
+                materialList.add(material);
+        }
+
+        return materialList;
+    }
+
+    /**
+     * returns a list of MaterialHolder. Formatting id:data min:max
+     * @param stringList list of strings to convert
+     * @return list of converted SpawnMaterialHolder
+     */
+    public static List<SpawnEntityHolder> toSpawnEntityHolderList(List<String> stringList)
+    {
+        List<SpawnEntityHolder> entityList = new ArrayList<SpawnEntityHolder>();
+
+        for (String str : stringList)
+        {
+            SpawnEntityHolder entity = new SpawnEntityHolder(str);
+            //if id == -1 the str was invalid
+            if (entity.getType() != null)
+                entityList.add(entity);
+        }
+
+        return entityList;
+    }
+
+
+
+    /**
 	 * get all block next to this block (UP, DOWN, SOUT, WEST, NORTH, EAST)
 	 * @param block
 	 * @return
@@ -646,5 +689,18 @@ public class CannonsUtil
         double y = r*Math.sin(polar)*Math.sin(azi);
         double z = r*Math.cos(polar);
         return center.clone().add(x,z,y);
+    }
+
+
+    /**
+     * returns a random number in the given range
+     * @param min smallest value
+     * @param max largest value
+     * @return a integer in the given range
+     */
+    public static int getRandomInt(int min, int max)
+    {
+        Random r = new Random();
+        return r.nextInt(max+1-min) + min;
     }
 }

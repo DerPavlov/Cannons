@@ -3,6 +3,8 @@ package at.pavlov.cannons.projectile;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.pavlov.cannons.container.SpawnEntityHolder;
+import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -57,13 +59,13 @@ public class Projectile implements Cloneable{
     private double clusterExplosionsPower;
 
     //placeBlock
-	private double blockPlaceRadius;
-	private int blockPlaceAmount;
-	private double blockPlaceVelocity;
-    private double tntFuseTime;
-	private List<MaterialHolder> blockPlaceList = new ArrayList<MaterialHolder>();
-
-    //spawnProjectile
+    private boolean spawnEnabled;
+	private double spawnBlockRadius;
+    private double spawnEntityRadius;
+    private double spawnVelocity;
+    private double spawnTntFuseTime;
+	private List<SpawnMaterialHolder> spawnBlocks = new ArrayList<SpawnMaterialHolder>();
+    private List<SpawnEntityHolder> spawnEntities = new ArrayList<SpawnEntityHolder>();
     private List<String> spawnProjectiles;
 
     //spawn Fireworks
@@ -142,11 +144,6 @@ public class Projectile implements Cloneable{
 				return true;
 		}
 		return false;
-	}
-	
-	public boolean doesBlockPlace()
-	{
-		return (blockPlaceAmount > 0 && blockPlaceList != null && !blockPlaceList.isEmpty());
 	}
 	
 	/**
@@ -327,42 +324,6 @@ public class Projectile implements Cloneable{
 		this.potionsEffectList = potionsEffectList;
 	}
 
-
-	public double getBlockPlaceRadius()
-	{
-		return blockPlaceRadius;
-	}
-
-
-	public void setBlockPlaceRadius(double blockPlaceRadius)
-	{
-		this.blockPlaceRadius = blockPlaceRadius;
-	}
-
-
-	public int getBlockPlaceAmount()
-	{
-		return blockPlaceAmount;
-	}
-
-
-	public void setBlockPlaceAmount(int blockPlaceAmount)
-	{
-		this.blockPlaceAmount = blockPlaceAmount;
-	}
-
-
-	public List<MaterialHolder> getBlockPlaceList()
-	{
-		return blockPlaceList;
-	}
-
-
-	public void setBlockPlaceList(List<MaterialHolder> blockPlaceList)
-	{
-		this.blockPlaceList = blockPlaceList;
-	}
-
 	public String getProjectileID()
 	{
 		return projectileID;
@@ -423,15 +384,6 @@ public class Projectile implements Cloneable{
 		this.permissionLoad = permissionLoad;
 	}
 
-	public double getBlockPlaceVelocity()
-	{
-		return blockPlaceVelocity;
-	}
-
-	public void setBlockPlaceVelocity(double blockPlaceVelocity)
-	{
-		this.blockPlaceVelocity = blockPlaceVelocity;
-	}
     public double getDirectHitDamage() {
         return directHitDamage;
     }
@@ -470,22 +422,6 @@ public class Projectile implements Cloneable{
 
     public void setUnderwaterDamage(boolean underwaterDamage) {
         this.underwaterDamage = underwaterDamage;
-    }
-
-    public double getTntFuseTime() {
-        return tntFuseTime;
-    }
-
-    public void setTntFuseTime(double tntFuseTime) {
-        this.tntFuseTime = tntFuseTime;
-    }
-
-    public List<String> getSpawnProjectiles() {
-        return spawnProjectiles;
-    }
-
-    public void setSpawnProjectiles(List<String> spawnProjectiles) {
-        this.spawnProjectiles = spawnProjectiles;
     }
 
     public boolean isFireworksFlicker() {
@@ -641,5 +577,69 @@ public class Projectile implements Cloneable{
 
     public void setClusterExplosionsPower(double clusterExplosionsPower) {
         this.clusterExplosionsPower = clusterExplosionsPower;
+    }
+
+    public boolean isSpawnEnabled() {
+        return spawnEnabled;
+    }
+
+    public void setSpawnEnabled(boolean spawnEnabled) {
+        this.spawnEnabled = spawnEnabled;
+    }
+
+    public double getSpawnVelocity() {
+        return spawnVelocity;
+    }
+
+    public void setSpawnVelocity(double spawnVelocity) {
+        this.spawnVelocity = spawnVelocity;
+    }
+
+    public double getSpawnTntFuseTime() {
+        return spawnTntFuseTime;
+    }
+
+    public void setSpawnTntFuseTime(double spawnTntFuseTime) {
+        this.spawnTntFuseTime = spawnTntFuseTime;
+    }
+
+    public List<SpawnMaterialHolder> getSpawnBlocks() {
+        return spawnBlocks;
+    }
+
+    public void setSpawnBlocks(List<SpawnMaterialHolder> spawnBlocks) {
+        this.spawnBlocks = spawnBlocks;
+    }
+
+    public List<SpawnEntityHolder> getSpawnEntities() {
+        return spawnEntities;
+    }
+
+    public void setSpawnEntities(List<SpawnEntityHolder> spawnEntities) {
+        this.spawnEntities = spawnEntities;
+    }
+
+    public List<String> getSpawnProjectiles() {
+        return spawnProjectiles;
+    }
+
+    public void setSpawnProjectiles(List<String> spawnProjectiles) {
+        this.spawnProjectiles = spawnProjectiles;
+    }
+
+    public double getSpawnEntityRadius() {
+        return spawnEntityRadius;
+    }
+
+    public void setSpawnEntityRadius(double spawnEntityRadius) {
+        this.spawnEntityRadius = spawnEntityRadius;
+    }
+
+    public double getSpawnBlockRadius() {
+        return spawnBlockRadius;
+    }
+
+    public void setSpawnBlockRadius(double spawnBlockRadius) {
+        this.spawnBlockRadius = spawnBlockRadius;
     }
 }

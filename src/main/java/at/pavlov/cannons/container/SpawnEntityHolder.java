@@ -1,40 +1,42 @@
 package at.pavlov.cannons.container;
 
+import org.bukkit.entity.EntityType;
+
 import java.util.Scanner;
 import java.util.regex.MatchResult;
 
-public class SpawnMaterialHolder {
-    MaterialHolder material;
+public class SpawnEntityHolder{
+    private EntityType type;
     private int minAmount;
     private int maxAmount;
 
-    public SpawnMaterialHolder(String str)
+    public SpawnEntityHolder(String str)
     {
         //split string at space
-        // id:data min-max
-        // 10:0 1-2
+        // NAME min-max
+        // ZOMBIE 1-2
         try
         {
             Scanner s = new Scanner(str);
-            s.findInLine("(\\d+):(\\d+)\\s+(\\d+)-(\\d+)");
+            s.findInLine("(\\w+)\\s+(\\d+)-(\\d+)");
             MatchResult result = s.match();
-            material = new MaterialHolder(Integer.parseInt(result.group(1)), Integer.parseInt(result.group(2)));
-            setMinAmount(Integer.parseInt(result.group(3)));
-            setMaxAmount(Integer.parseInt(result.group(4)));
+            setType(EntityType.valueOf(result.group(1)));
+            setMinAmount(Integer.parseInt(result.group(2)));
+            setMaxAmount(Integer.parseInt(result.group(3)));
             s.close();
             //System.out.println("id: " + getId() + " data: " + getData() + " min: " + minAmount + " max: " + maxAmount + " from str: " + str);
         }
         catch(Exception e)
         {
-            System.out.println("Error while converting " + str + ". Check formatting (10:0 1-2)");
-            material = new MaterialHolder(-1,0);
+            System.out.println("Error while converting " + str + ". Check formatting (ZOMBIE 1-2)");
+            setType(null);
             setMinAmount(0);
             setMaxAmount(0);
         }
     }
 
-    public SpawnMaterialHolder(MaterialHolder material, int minAmount, int maxAmount) {
-        this.material = material;
+    public SpawnEntityHolder(EntityType type, int minAmount, int maxAmount) {
+        this.type = type;
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
     }
@@ -55,11 +57,11 @@ public class SpawnMaterialHolder {
         this.maxAmount = maxAmount;
     }
 
-    public MaterialHolder getMaterial(){
-        return this.material;
+    public EntityType getType() {
+        return type;
     }
 
-    public void setMaterial(MaterialHolder material){
-        this.material = material;
+    public void setType(EntityType type) {
+        this.type = type;
     }
 }

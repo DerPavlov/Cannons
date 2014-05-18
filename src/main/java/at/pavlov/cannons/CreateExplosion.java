@@ -4,6 +4,8 @@ import java.util.*;
 
 
 import at.pavlov.cannons.Enum.FakeBlockType;
+import at.pavlov.cannons.container.SpawnEntityHolder;
+import at.pavlov.cannons.container.SpawnMaterialHolder;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
@@ -211,44 +213,30 @@ public class CreateExplosion {
         }
     }
 
+
     /**
-     * places a mob on the given location and pushes it away from the impact
-     * @param impactLoc
-     * @param loc
-     * @param data
+     * places a entity on the given location and pushes it away from the impact
+     * @param impactLoc location of the impact
+     * @param loc location of the spawn
+     * @param entityVelocity how fast the entity is push away
+     * @param type entity type
+     * @param tntFuse time fuse for tnt
      */
-    private void PlaceMob(Location impactLoc, Location loc, double entityVelocity, int data, double tntFuse)
+    private void spawnEntity(Location impactLoc, Location loc, double entityVelocity, EntityType type, double tntFuse)
     {
         World world = impactLoc.getWorld();
         Random r = new Random();
 
-        Integer mobList[] = {50,51,52,54,55,56,57,58,59,60,61,62,65,66,90,91,92,93,94,95,96,98,120};
-
-        if (data < 0)
-        {
-            //if all datavalues are allowed create a random spawn
-            data = mobList[r.nextInt(mobList.length)];
-        }
-
-        Entity entity;
-        EntityType entityType = EntityType.fromId(data);
-        if (entityType != null)
-        {
-            //spawn mob
-            entity = world.spawnEntity(loc, entityType);
-        }
-        else
-        {
-            plugin.logSevere("MonsterEgg ID " + data + " does not exist");
-            return;
-        }
+        //spawn mob
+        Entity entity = world.spawnEntity(loc, type);
 
         if (entity != null)
         {
+            plugin.logDebug("Spawned entity: " + type.toString() + " at impact");
             //get distance form the center + 1 to avoid division by zero
             double dist = impactLoc.distance(loc) + 1;
-            //calculate veloctiy away from the impact
-            Vector vect = loc.clone().subtract(impactLoc).toVector().multiply(entityVelocity/dist);
+            //calculate veloctiy away from the impact (speed in y makes problems and entity sinks in ground)
+            Vector vect = loc.clone().subtract(impactLoc).toVector().normalize().multiply(entityVelocity/dist).multiply(new Vector(1.0,0.0,1.0));
             //set the entity velocity
             entity.setVelocity(vect);
             //for TNT only
@@ -263,68 +251,81 @@ public class CreateExplosion {
     }
 
     /**
+     * performs the block spawning for the given projectile
+     * @param cannonball
+     */
+    private void spreadEntities(FlyingProjectile cannonball)
+    {
+
+        if (!cannonball.getProjectile().isSpawnEnabled())
+            return;
+
+        Projectile projectile = cannonball.getProjectile();
+        Location impactLoc = cannonball.getImpactLocation();
+
+        Random r = new Random();
+        Location placeLoc;
+
+        double spread = projectile.getSpawnEntityRadius();
+
+        for (SpawnEntityHolder spawn : projectile.getSpawnEntities())
+        {
+            //add some randomness to the amount of spawned blocks
+            int maxPlacement = CannonsUtil.getRandomInt(spawn.getMinAmount(), spawn.getMaxAmount());
+
+
+            //iterate blocks around to get a good spot
+            int placedEntities = 0;
+            int iterations1 = 0;
+            do
+            {
+                iterations1 ++;
+
+                //get new position
+                placeLoc = CannonsUtil.randomPointInSphere(impactLoc, spread);
+                plugin.logDebug("loc " + placeLoc);
+
+                //check a entity can spawn on this block
+                if (canPlaceEntity(placeLoc.getBlock()))
+                {
+                    placedEntities++;
+                    //place the block
+                    spawnEntity(impactLoc, placeLoc, projectile.getSpawnVelocity(), spawn.getType(), projectile.getSpawnTntFuseTime());
+                }
+            } while (iterations1 < maxPlacement*10 && placedEntities < maxPlacement);
+
+            if (placedEntities < maxPlacement)
+                plugin.logDebug("Could only place " + placedEntities + " entities instead of " + maxPlacement);
+        }
+    }
+
+    /**
      * spawns a falling block with the id and data that is slinged away from the impact
      * @param impactLoc
-     * @param loc
+     * @param placeLoc
      * @param entityVelocity
      * @param item
      */
-    private void spawnFallingBlock(Location impactLoc, Location loc, double entityVelocity, MaterialHolder item)
+    private void spawnFallingBlock(Location impactLoc, Location placeLoc, double entityVelocity, MaterialHolder item)
     {
-        FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(loc, item.getId(), (byte) item.getData());
+        FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getId(), (byte) item.getData());
 
         //give the blocks some velocity
         if (entity != null)
         {
             //get distance form the center + 1, to avoid division by zero
-            double dist = impactLoc.distance(loc) + 1;
+            double dist = impactLoc.distance(placeLoc) + 1;
             //calculate veloctiy away from the impact
-            Vector vect = loc.clone().subtract(impactLoc).toVector().multiply(entityVelocity/dist);
+            Vector vect = placeLoc.clone().subtract(impactLoc).toVector().normalize().multiply(entityVelocity/dist);
             //set the entity velocity
             entity.setVelocity(vect);
             //set some other properties
             entity.setDropItem(false);
+            plugin.logDebug("Spawned block: " +item.toString() + " at impact");
         }
         else
         {
             plugin.logSevere("Item id:" + item.getId() + " data:" + item.getData() + " can't be spawned as falling block.");
-        }
-    }
-
-    /**
-     * performs the entity placing on the given location
-     * @param impactLoc
-     * @param loc
-     * @param cannonball
-     */
-    private void makeBlockPlace(Location impactLoc, Location loc, FlyingProjectile cannonball)
-    {
-        Projectile projectile = cannonball.getProjectile();
-
-        if (canPlaceBlock(loc.getBlock()))
-        {
-            if (checkLineOfSight(impactLoc, loc) == 0)
-            {
-                if (projectile == null)
-                {
-                    plugin.logSevere("no projectile data in flyingprojectile for makeBlockPlace");
-                    return;
-                }
-
-                for (MaterialHolder placeBlock : projectile.getBlockPlaceList())
-                {
-                    //check if Material is a mob egg
-                    if (placeBlock.equals(Material.MONSTER_EGG))
-                    {
-                        //else place mob
-                        PlaceMob(impactLoc, loc, projectile.getBlockPlaceVelocity(), placeBlock.getData(),projectile.getTntFuseTime());
-                    }
-                    else
-                    {
-                        spawnFallingBlock(impactLoc, loc, projectile.getBlockPlaceVelocity(), placeBlock);
-                    }
-                }
-            }
         }
     }
 
@@ -334,18 +335,23 @@ public class CreateExplosion {
      */
     private void spreadBlocks(FlyingProjectile cannonball)
     {
+        if (!cannonball.getProjectile().isSpawnEnabled())
+            return;
+
         Projectile projectile = cannonball.getProjectile();
         Location impactLoc = cannonball.getImpactLocation();
 
-        if (projectile.doesBlockPlace())
+        Random r = new Random();
+        Location placeLoc;
+
+        double spread = projectile.getSpawnBlockRadius();
+
+
+        for (SpawnMaterialHolder spawn : projectile.getSpawnBlocks())
         {
-            Random r = new Random();
-            Location loc;
 
-            double spread = projectile.getBlockPlaceRadius();
             //add some randomness to the amount of spawned blocks
-            int maxPlacement = (int) Math.round(projectile.getBlockPlaceAmount() * (1+r.nextGaussian()/3.0));
-
+            int maxPlacement = CannonsUtil.getRandomInt(spawn.getMinAmount(), spawn.getMaxAmount());
 
             //iterate blocks around to get a good spot
             int placedBlocks = 0;
@@ -354,34 +360,51 @@ public class CreateExplosion {
             {
                 iterations1 ++;
 
-                loc = impactLoc.clone();
-                //get new position
-                loc.setX(loc.getX() + r.nextGaussian()*spread/2.0);
-                loc.setZ(loc.getZ() + r.nextGaussian()*spread/2.0);
+                //get location to place block
+                placeLoc = CannonsUtil.randomPointInSphere(impactLoc, spread);
 
                 //check a entity can spawn on this block
-                if (canPlaceBlock(loc.getBlock()))
+                if (canPlaceBlock(placeLoc.getBlock()))
                 {
                     placedBlocks++;
                     //place the block
-                    makeBlockPlace(impactLoc, loc, cannonball);
+                    spawnFallingBlock(impactLoc, placeLoc, projectile.getSpawnVelocity(), spawn.getMaterial());
                 }
-            } while (iterations1 < maxPlacement && placedBlocks < maxPlacement);
+            } while (iterations1 < maxPlacement*5 && placedBlocks < maxPlacement);
+
+            if (placedBlocks < maxPlacement)
+                plugin.logDebug("Could only place " + placedBlocks + " blocks instead of " + maxPlacement);
         }
     }
 
     /**
-     * returns true if an entity can be place on this block
-     * @param block
-     * @return
+     * returns true if an falling block can be place on this block
+     * @param block location to spawn the entity
+     * @return true if the block is empty or liquid
      */
     private boolean canPlaceBlock(Block block)
     {
-        return block.getType() == Material.AIR || block.getType() == Material.FIRE || block.isLiquid();
+        return block.isEmpty() || block.isLiquid();
+    }
+
+    /**
+     * returns true if an entity can be place on this block
+     * @param block location to spawn the entity
+     * @return true if there can be an entity spawned
+     */
+    private boolean canPlaceEntity(Block block)
+    {
+        //this block an the block underneath should be empty
+        return canPlaceBlock(block) && canPlaceBlock(block.getRelative(BlockFace.DOWN));
     }
 
 
-    //####################################  checkLineOfSight ##############################
+    /**
+     * counts the number of blocks which are between the given locations
+     * @param impact starting point
+     * @param target end point
+     * @return number of non AIR block between the locations
+     */
     private int checkLineOfSight(Location impact, Location target)
     {
         int blockingBlocks = 0;
@@ -630,6 +653,8 @@ public class CreateExplosion {
             sendExplosionToPlayers(impactLoc);
             //place blocks around the impact like webs, lava, water
             spreadBlocks(cannonball);
+            //place blocks around the impact like webs, lava, water
+            spreadEntities(cannonball);
             //spawns additional projectiles after the explosion
             spawnProjectiles(cannonball);
             //spawn fireworks
@@ -759,6 +784,9 @@ public class CreateExplosion {
      */
     private void spawnProjectiles(FlyingProjectile cannonball)
     {
+        if (!cannonball.getProjectile().isSpawnEnabled())
+            return;
+
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(cannonball)
         {
             public void run(Object object) {

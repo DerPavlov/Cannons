@@ -194,15 +194,15 @@ public class ProjectileStorage
         projectile.setClusterExplosionsRadius(projectileConfig.getDouble("clusterExplosion.radius", 5.0));
         projectile.setClusterExplosionsPower(projectileConfig.getDouble("clusterExplosion.power", 5.0));
 
-		//placeBlock
-		projectile.setBlockPlaceRadius(projectileConfig.getDouble("placeBlock.radius", 3.0));
-		projectile.setBlockPlaceAmount(projectileConfig.getInt("placeBlock.amount", 3));
-		projectile.setBlockPlaceVelocity(projectileConfig.getDouble("placeBlock.velocity", 0.1));
-        projectile.setTntFuseTime(projectileConfig.getDouble("placeBlock.tntFuseTime", 3));
-		projectile.setBlockPlaceList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("placeBlock.material")));
-
-        //spawnProjectiles
-        projectile.setSpawnProjectiles(projectileConfig.getStringList("spawnProjectiles"));
+		//spawnOnExplosion
+        projectile.setSpawnEnabled(projectileConfig.getBoolean("spawnOnExplosion.enabled", false));
+		projectile.setSpawnBlockRadius(projectileConfig.getDouble("spawnOnExplosion.blockRadius", 1.0));
+        projectile.setSpawnEntityRadius(projectileConfig.getDouble("spawnOnExplosion.entityRadius", 2.0));
+		projectile.setSpawnVelocity(projectileConfig.getDouble("spawnOnExplosion.velocity", 0.1));
+        projectile.setSpawnTntFuseTime(projectileConfig.getDouble("spawnOnExplosion.tntFuseTime", 3));
+		projectile.setSpawnBlocks(CannonsUtil.toSpawnMaterialHolderList(projectileConfig.getStringList("spawnOnExplosion.block")));
+        projectile.setSpawnEntities(CannonsUtil.toSpawnEntityHolderList(projectileConfig.getStringList("spawnOnExplosion.entity")));
+        projectile.setSpawnProjectiles(projectileConfig.getStringList("spawnOnExplosion.projectiles"));
 
         //spawnFireworks
         projectile.setFireworksEnabled(projectileConfig.getBoolean("spawnFireworks.enabled", false));

@@ -37,16 +37,23 @@ public class MaterialHolder
         // data structure:
         // data:id
         // 10:0
-        id = 0;
-        data = -1;
-        Scanner s = new Scanner(str).useDelimiter("\\s*:\\s*");
-        if (!s.hasNext())
-            System.out.println("missing id value in: " + str);
+        try
+        {
+            id = 0;
+            data = -1;
+            Scanner s = new Scanner(str).useDelimiter("\\s*:\\s*");
+            if (!s.hasNext())
+                System.out.println("missing id value in: " + str);
 
-        id = s.nextInt();
-        if (s.hasNext())
-            data = s.nextInt();
-        s.close();
+            id = s.nextInt();
+            if (s.hasNext())
+                data = s.nextInt();
+            s.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error while converting " + str + ". Check formatting (10:0)");
+        }
 
         //System.out.println("id: " + id + " data: " + data + " from str: " + str);
 
