@@ -10,6 +10,8 @@ import java.lang.Exception;
 import java.lang.Integer;
 import java.lang.String;
 import java.lang.System;
+import java.util.Scanner;
+import java.util.regex.MatchResult;
 
 //small class as at.pavlov.cannons.container for item id and data
 public class MaterialHolder
@@ -32,9 +34,23 @@ public class MaterialHolder
 	
 	public MaterialHolder(String str)
 	{
-		//remove all spaces
-		str = str.replace(" ", "");
-		
+        // data structure:
+        // data:id
+        // 10:0
+        id = 0;
+        data = -1;
+        Scanner s = new Scanner(str).useDelimiter("\\s*:\\s*");
+        if (!s.hasNext())
+            System.out.println("missing id value in: " + str);
+
+        id = s.nextInt();
+        if (s.hasNext())
+            data = s.nextInt();
+        s.close();
+
+        //System.out.println("id: " + id + " data: " + data + " from str: " + str);
+
+        /*
 		//split string at :
 		String subStr[] = str.split(":");
 	
@@ -58,11 +74,7 @@ public class MaterialHolder
 			id = -1;
 			data = -1;
 		}
-		//check if some formatting didn't work and give the user a hint
-		//if ((id > 500 && id <2200) || id > 2300)
-		//{
-		//	System.out.println("[Cannons] Can't convert " + str + ". Check the formating ('35:1').");
-		//}
+		*/
 	}
 	
 	public BaseBlock toBaseBlock()
