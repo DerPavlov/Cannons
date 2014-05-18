@@ -229,7 +229,7 @@ public class DesignStorage
 		cannonDesign.setRotatable(cannonDesignConfig.getBoolean("realisticBehaviour.isRotatable", false));
         cannonDesign.setMassOfCannon(cannonDesignConfig.getInt("realisticBehaviour.massOfCannon", 1000));//What means 1000?
         cannonDesign.setStartingSoot(cannonDesignConfig.getInt("realisticBehaviour.startingSoot",10));
-        cannonDesign.setExplodingLoadedCannons(cannonDesignConfig.getDouble("realisticBehaviour.explodingLoadingCannon",2.0));
+        cannonDesign.setExplodingLoadedCannons(cannonDesignConfig.getDouble("realisticBehaviour.explodingLoadedCannon",2.0));
         cannonDesign.setFireAfterLoading(cannonDesignConfig.getBoolean("realisticBehaviour.fireAfterLoading", false));
 
 		// permissions

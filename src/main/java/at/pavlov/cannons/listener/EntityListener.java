@@ -83,7 +83,6 @@ public class EntityListener implements Listener
 				if (cannon.isDestructibleBlock(block.getLocation()))
 				{
 					//this cannon is destroyed
-					//cannon.setValid(false);
                     remove.add(cannon.getUID());
 				}			
 			}
@@ -97,7 +96,7 @@ public class EntityListener implements Listener
 			Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
 
 			// if it is a cannon block and the cannon is not destroyed (see above)
-			if (cannon != null && cannon.isValid() && !remove.contains(cannon.getUID()))
+			if (cannon != null && !remove.contains(cannon.getUID()))
 			{
 				if (cannon.isCannonBlock(block))
 				{

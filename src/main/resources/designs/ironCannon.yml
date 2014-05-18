@@ -131,6 +131,8 @@ realisticBehaviour:
   isFiringItemRequired: false
   #firing a cannon produced soot (dirt) which needs to be cleaned. Cleaning is necessary if soot>=1
   sootPerGunpowder: 0.1
+  #created cannon will have this amount of soot (0 to disable this feature)
+  startingSoot: 10
   #after loading a projectile it is necessary to push the projectile against the gunpowder
   projectilePushing: 2
   #the cannon move one block back after firing (not implemented yet)
@@ -143,10 +145,8 @@ realisticBehaviour:
   supportsFireMission: false
   #the mass in kilogram of a cannon is important for moving objects e.g. ships
   massOfCannon: 500
-  #created cannon will have this amount of soot (0 to disable this feature)
-  startingSoot: 10
   #cannon explodes if a loaded cannon is destroyed. Explosion power 4 (like tnt) and 0 to disable it. Will be scaled with the loaded gunpowder.
-  explodingLoadingCannon: 3.0
+  explodingLoadedCannon: 2.0
   #fire after loading projectile with the time delay given by the fuse time. Sneaking will stop immediate firing.
   fireAfterLoading: false
 

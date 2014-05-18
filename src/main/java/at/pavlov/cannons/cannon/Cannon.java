@@ -141,6 +141,20 @@ public class Cannon
           return design.getMuzzle(this);
     }
 
+    /**
+     * returns a random block of the barrel or the cannon if there is no barrel
+     * @return location of the barrel block
+     */
+    public Location getRandomBarrelBlock()
+    {
+        Random r = new Random();
+        List<Location> barrel = design.getBarrelBlocks(this);
+        if (barrel.size() > 0)
+            return barrel.get(r.nextInt(barrel.size()));
+        List<Location> all = design.getAllCannonBlocks(this);
+        return all.get(r.nextInt(all.size()));
+    }
+
 
     /**
      * removes the loaded charge form the chest attached to the cannon, returns true if the ammo was found in the chest
@@ -685,7 +699,7 @@ public class Cannon
             double power = getLoadedGunpowder()/design.getMaxLoadableGunpowderNormal()*design.getExplodingLoadedCannons();
             World world = getWorldBukkit();
             if (world != null)
-                world.createExplosion(getMuzzle(),(float) power);
+                world.createExplosion(getRandomBarrelBlock(),(float) power);
         }
         // drop charge
         else
@@ -792,7 +806,6 @@ public class Cannon
     {
         for (Location loc : design.getDestructibleBlocks(this))
         {
-            System.out.println("destructable: " + loc);
             if (loc.equals(block))
             {
                 return true;
@@ -1772,7 +1785,7 @@ public class Cannon
      */
     public double getAmbientTemperature()
     {
-        return (Math.sqrt(this.design.getMuzzle(this).getBlock().getTemperature())-0.5)*60;
+        return (Math.sqrt(getMuzzle().getBlock().getTemperature())-0.5)*60;
     }
 
     /**
