@@ -53,7 +53,7 @@ timings:
 
 angles:
   #used to adjust in what direction a projectile is fired from a cannon. adjust this if your cannon is firing sideways or at itself
-  defaultHorizonatalFacing: west
+  defaultHorizontalFacing: west
   #the default angle vertical angle which the cannon aims at when built. this is good for mortars and similar upwards firing weapons
   defaultVerticalAngle: 0.0
   #min and max horizontal angles determine how far to the left and right the cannon can be aim
@@ -69,8 +69,18 @@ angles:
   minVerticalAngleOnShip: -45.0
   #each change of the angles will change angle by this amount
   angleStepSize: 1.0
-  #how fast the cannons can be turned in seconds
-  angleUpdateSpeed: 5.0
+  #how fast the cannons can be turned in seconds (fastest is 0.05s)
+  angleUpdateSpeed: 0.1
+
+
+#the impact predictor will show the impact location of a loaded cannon
+impactPredictor:
+  #enable the impact predictor
+  enabled: true
+  #the impact location will be shown after the last angle change of the cannon [s]
+  delay: 0.5
+  #update rate. How often the impact predictor will be calculated per second
+  update: 0.2
 
 
 heatManagement:
@@ -116,7 +126,7 @@ overloading:
   enabled: true
   #in real mode cannon can also explode when not overloaded
   #chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent
-  realMode: true
+  realMode: false
   exponent: 2
   chanceInc: 1
   maxOverloadableGunpowder: 1

@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 
@@ -86,8 +87,10 @@ public class Aiming {
 		{
 			public void run() 
 			    {
+                    //long startTime = System.nanoTime();
 			    	updateAimingMode();
-                    showImpactDelayed();
+                    updateImpactPredictorAndAimingVector();
+                    //plugin.logDebug("Time update aiming: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
 			    }
 		}, 1L, 1L);	
 	}
@@ -185,11 +188,11 @@ public class Aiming {
 			if (angles.getHorizontal() >= 0)
 			{
 				// right 
-				if (cannon.getHorizontalAngle() + design.getAngleStepSize() <= design.getMaxHorizontalAngle())
+				if (cannon.getHorizontalAngle() + design.getAngleStepSize() <= cannon.getMaxHorizontalAngle())
 				{
                     //if smaller than minimum -> set to minimum
-                    if (cannon.getHorizontalAngle() < design.getMinHorizontalAngle())
-                        cannon.setHorizontalAngle(design.getMinHorizontalAngle());
+                    if (cannon.getHorizontalAngle() < cannon.getMinHorizontalAngle())
+                        cannon.setHorizontalAngle(cannon.getMinHorizontalAngle());
                     cannon.setHorizontalAngle(cannon.getHorizontalAngle() + design.getAngleStepSize());
 					hasChanged = true;
 					message = setMessageHorizontal(cannon, combine);
@@ -198,11 +201,11 @@ public class Aiming {
 			else
 			{
 				// left 
-				if (cannon.getHorizontalAngle() - design.getAngleStepSize() >= design.getMinHorizontalAngle())
+				if (cannon.getHorizontalAngle() - design.getAngleStepSize() >= cannon.getMinHorizontalAngle())
 				{
                     //if smaller than maximum -> set to maximum
-                    if (cannon.getHorizontalAngle() > design.getMaxHorizontalAngle())
-                        cannon.setHorizontalAngle(design.getMaxHorizontalAngle());
+                    if (cannon.getHorizontalAngle() > cannon.getMaxHorizontalAngle())
+                        cannon.setHorizontalAngle(cannon.getMaxHorizontalAngle());
 					cannon.setHorizontalAngle(cannon.getHorizontalAngle() - design.getAngleStepSize());
 					hasChanged = true;
 					message = setMessageHorizontal(cannon, combine);
@@ -215,11 +218,11 @@ public class Aiming {
 			if (angles.getVertical() >= 0.0)
 			{
 				// up
-				if (cannon.getVerticalAngle() + design.getAngleStepSize() <= design.getMaxVerticalAngle())
+				if (cannon.getVerticalAngle() + design.getAngleStepSize() <= cannon.getMaxVerticalAngle())
 				{
                     //if smaller than minimum -> set to minimum
-                    if (cannon.getVerticalAngle() < design.getMinVerticalAngle())
-                        cannon.setVerticalAngle(design.getMinVerticalAngle());
+                    if (cannon.getVerticalAngle() < cannon.getMinVerticalAngle())
+                        cannon.setVerticalAngle(cannon.getMinVerticalAngle());
 					cannon.setVerticalAngle(cannon.getVerticalAngle() + design.getAngleStepSize());
 					hasChanged = true;
 					message = setMessageVertical(cannon, combine);
@@ -228,10 +231,10 @@ public class Aiming {
 			else
 			{
 				// down
-				if (cannon.getVerticalAngle() - design.getAngleStepSize() >= design.getMinVerticalAngle())
+				if (cannon.getVerticalAngle() - design.getAngleStepSize() >= cannon.getMinVerticalAngle())
 				{
-                    if (cannon.getVerticalAngle() > design.getMaxVerticalAngle())
-                        cannon.setVerticalAngle(design.getMaxVerticalAngle());
+                    if (cannon.getVerticalAngle() > cannon.getMaxVerticalAngle())
+                        cannon.setVerticalAngle(cannon.getMaxVerticalAngle());
 					cannon.setVerticalAngle(cannon.getVerticalAngle() - design.getAngleStepSize());
 					hasChanged = true;
 					message = setMessageVertical(cannon, combine);
@@ -241,6 +244,8 @@ public class Aiming {
 		
 		//update the time
 		cannon.setLastAimed(System.currentTimeMillis());
+        //show aiming vector in front of the cannon
+        showAimingVector(cannon, player);
 		
 		//display message only if the angle has changed
 		if (hasChanged) {
@@ -410,7 +415,7 @@ public class Aiming {
             }
 
     		// only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
-    		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()*50 )
+    		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed() )
     		{
     			// autoaming or fineadjusting
     			if (distanceCheck(player, cannon)/*Player must to be in aiming mode while using current cannon, so delete this code: "config.getToolAutoaim().equalsFuzzy(player.getItemInHand())"*/ && player.isOnline() && cannon.isValid())
@@ -693,7 +698,7 @@ public class Aiming {
      */
     public Location impactPredictor(Cannon cannon)
     {
-        if (!cannon.isLoaded() || !config.isImitatedPredictorEnabled())
+        if (!cannon.isLoaded() || !config.isImitatedPredictorEnabled() || !cannon.getCannonDesign().isPredictorEnabled())
             return null;
 
         Location muzzle = cannon.getMuzzle();
@@ -717,38 +722,48 @@ public class Aiming {
         }
 
         //nothing found
-        plugin.logDebug("nothing found");
+        plugin.logDebug("impact predictor could not find the impact");
         return null;
     }
 
     /**
      *  impact effects will be only be shown if the cannon is not moved for a while
      */
-    public void showImpactDelayed()
+    public void updateImpactPredictorAndAimingVector()
     {
         Iterator<Map.Entry<UUID, Long>> iter = lastAimed.entrySet().iterator();
         while (iter.hasNext())
         {
             Map.Entry<UUID, Long> last = iter.next();
-            if (last.getValue()+1000 < System.currentTimeMillis())
+            Cannon cannon = plugin.getCannonManager().getCannon(last.getKey());
+            if (cannon == null)
+                iter.remove();
+
+            CannonDesign design = cannon.getCannonDesign();
+            if (last.getValue()+design.getPredictorDelay() < System.currentTimeMillis())
             {
-                Cannon cannon = plugin.getCannon(last.getKey());
+                //reset the aiming so we have the do the next update after the update time
+                last.setValue(last.getValue() - design.getPredictorDelay() + design.getPredictorUpdate());
+
                 //find all the watching players
                 HashMap<String, Boolean> nameList = cannon.getObserverMap();
-                if (cannon == null || nameList.isEmpty())
+                if ( nameList.isEmpty())
                 {
                     //remove wrong entries and cannon with no observer (we don't need to update them)
                     iter.remove();
                     continue;
                 }
 
+                Location impact = impactPredictor(cannon);
                 Iterator<Map.Entry<String, Boolean>> entry = nameList.entrySet().iterator();
                 while(entry.hasNext())
                 {
                     Map.Entry<String, Boolean> nextName = entry.next();
                     Player player = Bukkit.getPlayer(nextName.getKey());
-                    if (player != null && cannon != null)
-                        impactPredictor(cannon, player);
+                    //show impact to the player
+                    if (player != null && cannon != null && impact != null && plugin.getFakeBlockHandler().belowMaxLimit(player, impact)) {
+                        plugin.getFakeBlockHandler().imitatedSphere(player, impact, 1, config.getImitatedPredictorMaterial(), FakeBlockType.IMPACT_PREDICTOR, config.getImitatedPredictorTime());
+                    }
                     //remove entry if there removeEntry enabled, or player is offline
                     if (nextName.getValue() || player == null)
                     {
@@ -774,4 +789,5 @@ public class Aiming {
         plugin.getFakeBlockHandler().imitatedSphere(player, surface, 1, config.getImitatedPredictorMaterial(), FakeBlockType.IMPACT_PREDICTOR, config.getImitatedPredictorTime());
         return surface;
     }
+
 }

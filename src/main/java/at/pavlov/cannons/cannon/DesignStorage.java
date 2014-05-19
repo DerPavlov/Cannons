@@ -181,18 +181,23 @@ public class DesignStorage
 		cannonDesign.setBarrelCooldownTime(cannonDesignConfig.getDouble("timings.barrelCooldownTime", 1.0));
 
 		// angles
-		cannonDesign.setDefaultHorizonatalFacing(BlockFace.valueOf(cannonDesignConfig.getString("angles.defaultHorizonatalFacing", "NORTH").toUpperCase()));
+		cannonDesign.setDefaultHorizontalFacing(BlockFace.valueOf(cannonDesignConfig.getString("angles.defaultHorizontalFacing", "NORTH").toUpperCase()));
 		cannonDesign.setDefaultVerticalAngle(cannonDesignConfig.getDouble("angles.defaultVerticalAngle", 0.0));
-		cannonDesign.setMaxHorizontalAngle(cannonDesignConfig.getDouble("angles.maxHorizontalAngle", 45.0));
-		cannonDesign.setMinHorizontalAngle(cannonDesignConfig.getDouble("angles.minHorizontalAngle", -45.0));
-		cannonDesign.setMaxVerticalAngle(cannonDesignConfig.getDouble("angles.maxVerticalAngle", 45.0));
-		cannonDesign.setMinVerticalAngle(cannonDesignConfig.getDouble("angles.minVerticalAngle", -45.0));
+		cannonDesign.setMaxHorizontalAngleNormal(cannonDesignConfig.getDouble("angles.maxHorizontalAngle", 45.0));
+		cannonDesign.setMinHorizontalAngleNormal(cannonDesignConfig.getDouble("angles.minHorizontalAngle", -45.0));
+		cannonDesign.setMaxVerticalAngleNormal(cannonDesignConfig.getDouble("angles.maxVerticalAngle", 45.0));
+		cannonDesign.setMinVerticalAngleNormal(cannonDesignConfig.getDouble("angles.minVerticalAngle", -45.0));
         cannonDesign.setMaxHorizontalAngleOnShip(cannonDesignConfig.getDouble("angles.maxHorizontalAngleOnShip", 20.0));
         cannonDesign.setMinHorizontalAngleOnShip(cannonDesignConfig.getDouble("angles.minHorizontalAngleOnShip", -20.0));
         cannonDesign.setMaxVerticalAngleOnShip(cannonDesignConfig.getDouble("angles.maxVerticalAngleOnShip", 30.0));
         cannonDesign.setMinVerticalAngleOnShip(cannonDesignConfig.getDouble("angles.minVerticalAngleOnShip", -30.0));
 		cannonDesign.setAngleStepSize(cannonDesignConfig.getDouble("angles.angleStepSize", 1.0));
-		cannonDesign.setAngleUpdateSpeed(cannonDesignConfig.getDouble("angles.angleUpdateSpeed", 1.0));
+		cannonDesign.setAngleUpdateSpeed((int) (cannonDesignConfig.getDouble("angles.angleUpdateSpeed", 1.0)*1000.0));
+
+        //impactPredictor
+        cannonDesign.setPredictorEnabled(cannonDesignConfig.getBoolean("impactPredictor.enabled", true));
+        cannonDesign.setPredictorDelay((int) (cannonDesignConfig.getDouble("impactPredictor.delay", 1.0)*1000.0));
+        cannonDesign.setPredictorUpdate((int) (cannonDesignConfig.getDouble("impactPredictor.update", 0.1)*1000.0));
 
         //heatManagement
         cannonDesign.setHeatManagementEnabled(cannonDesignConfig.getBoolean("heatManagement.enabled", false));
@@ -322,7 +327,7 @@ public class DesignStorage
 		
 		
 		// get facing of the cannon
-		BlockFace cannonDirection = cannonDesign.getDefaultHorizonatalFacing();
+		BlockFace cannonDirection = cannonDesign.getDefaultHorizontalFacing();
 
 		// for all directions
 		for (int i = 0; i < 4; i++)

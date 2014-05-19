@@ -424,8 +424,6 @@ public class PlayerListener implements Listener
                 MessageEnum message = aiming.changeAngle(cannon, event.getAction(), event.getBlockFace(), player);
                 userMessages.displayMessage(player, cannon, message);
 
-                aiming.showAimingVector(cannon, player);
-
                 // update Signs
                 cannon.updateCannonSigns();
 

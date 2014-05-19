@@ -174,7 +174,6 @@ public class FakeBlockHandler {
      */
     private void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, FakeBlockType type, double duration)
     {
-
         //only show block in air
         if(loc.getBlock().isEmpty())
         {
@@ -209,6 +208,41 @@ public class FakeBlockHandler {
                 lastAiming = System.currentTimeMillis();
 
         }
+    }
+
+    /**
+     * returns true if the distance is in between the min and max limits of the imitate block distance
+     * @param player player the check
+     * @param loc location of the block
+     * @return true if the distance is in the limits
+     */
+    public boolean isBetweenLimits(Player player, Location loc)
+    {
+        if (player == null || loc == null)
+            return false;
+
+        double dist = player.getLocation().distance(loc);
+        if (dist > plugin.getMyConfig().getImitatedBlockMinimumDistance() &&
+            dist < plugin.getMyConfig().getImitatedBlockMaximumDistance())
+            return true;
+        return false;
+    }
+
+    /**
+     * returns true if the distance is below max limit of the imitate block distance
+     * @param player player the check
+     * @param loc location of the block
+     * @return true if the distance is smaller than upper limit
+     */
+    public boolean belowMaxLimit(Player player, Location loc)
+    {
+        if (player == null || loc == null)
+            return false;
+
+        double dist = player.getLocation().distance(loc);
+        if (dist < plugin.getMyConfig().getImitatedBlockMaximumDistance())
+            return true;
+        return false;
     }
 
 }

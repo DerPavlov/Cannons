@@ -47,7 +47,7 @@ public class CannonDesign
     private double barrelCooldownTime;
 	
     //angles
-	private BlockFace defaultHorizonatalFacing;
+	private BlockFace defaultHorizontalFacing;
 	private double defaultVerticalAngle;
 	private double maxHorizontalAngle;
 	private double minHorizontalAngle;
@@ -58,7 +58,12 @@ public class CannonDesign
     private double maxVerticalAngleOnShip;
     private double minVerticalAngleOnShip;
 	private double angleStepSize;
-	private double angleUpdateSpeed;
+	private int angleUpdateSpeed;
+
+    //impactPredictor
+    private boolean predictorEnabled;
+    private int predictorDelay;         //in ms
+    private int predictorUpdate;        //in ms
 
     //heatManagment
     private boolean heatManagementEnabled;
@@ -532,13 +537,13 @@ public class CannonDesign
 	{
 		this.barrelCooldownTime = barrelCooldownTime;
 	}
-	public BlockFace getDefaultHorizonatalFacing()
+	public BlockFace getDefaultHorizontalFacing()
 	{
-		return defaultHorizonatalFacing;
+		return defaultHorizontalFacing;
 	}
-	public void setDefaultHorizonatalFacing(BlockFace defaultHorizonatalFacing)
+	public void setDefaultHorizontalFacing(BlockFace defaultHorizontalFacing)
 	{
-		this.defaultHorizonatalFacing = defaultHorizonatalFacing;
+		this.defaultHorizontalFacing = defaultHorizontalFacing;
 	}
 	public double getDefaultVerticalAngle()
 	{
@@ -548,35 +553,35 @@ public class CannonDesign
 	{
 		this.defaultVerticalAngle = defaultVerticalAngle;
 	}
-	public double getMaxHorizontalAngle()
+	public double getMaxHorizontalAngleNormal()
 	{
 		return maxHorizontalAngle;
 	}
-	public void setMaxHorizontalAngle(double maxHorizontalAngle)
+	public void setMaxHorizontalAngleNormal(double maxHorizontalAngle)
 	{
 		this.maxHorizontalAngle = maxHorizontalAngle;
 	}
-	public double getMinHorizontalAngle()
+	public double getMinHorizontalAngleNormal()
 	{
 		return minHorizontalAngle;
 	}
-	public void setMinHorizontalAngle(double minHorizontalAngle)
+	public void setMinHorizontalAngleNormal(double minHorizontalAngle)
 	{
 		this.minHorizontalAngle = minHorizontalAngle;
 	}
-	public double getMaxVerticalAngle()
+	public double getMaxVerticalAngleNormal()
 	{
 		return maxVerticalAngle;
 	}
-	public void setMaxVerticalAngle(double maxVerticalAngle)
+	public void setMaxVerticalAngleNormal(double maxVerticalAngle)
 	{
 		this.maxVerticalAngle = maxVerticalAngle;
 	}
-	public double getMinVerticalAngle()
+	public double getMinVerticalAngleNormal()
 	{
 		return minVerticalAngle;
 	}
-	public void setMinVerticalAngle(double minVerticalAngle)
+	public void setMinVerticalAngleNormal(double minVerticalAngle)
 	{
 		this.minVerticalAngle = minVerticalAngle;
 	}
@@ -588,11 +593,11 @@ public class CannonDesign
 	{
 		this.angleStepSize = angleStepSize;
 	}
-	public double getAngleUpdateSpeed()
+	public int getAngleUpdateSpeed()
 	{
 		return angleUpdateSpeed;
 	}
-	public void setAngleUpdateSpeed(double angleUpdateSpeed)
+	public void setAngleUpdateSpeed(int angleUpdateSpeed)
 	{
 		this.angleUpdateSpeed = angleUpdateSpeed;
 	}
@@ -1242,5 +1247,29 @@ public class CannonDesign
 
     public void setFireAfterLoading(boolean fireAfterLoading) {
         this.fireAfterLoading = fireAfterLoading;
+    }
+
+    public boolean isPredictorEnabled() {
+        return predictorEnabled;
+    }
+
+    public void setPredictorEnabled(boolean predictorEnabled) {
+        this.predictorEnabled = predictorEnabled;
+    }
+
+    public int getPredictorDelay() {
+        return predictorDelay;
+    }
+
+    public void setPredictorDelay(int predictorDelay) {
+        this.predictorDelay = predictorDelay;
+    }
+
+    public int getPredictorUpdate() {
+        return predictorUpdate;
+    }
+
+    public void setPredictorUpdate(int predictorUpdate) {
+        this.predictorUpdate = predictorUpdate;
     }
 }
