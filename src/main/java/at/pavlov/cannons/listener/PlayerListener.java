@@ -58,9 +58,9 @@ public class PlayerListener implements Listener
         Cannon cannon =  aiming.getCannonInAimingMode(event.getPlayer());
         if (!aiming.distanceCheck(event.getPlayer(), cannon))
         {
-            userMessages.displayMessage(event.getPlayer(), MessageEnum.AimingModeTooFarAway);
+            userMessages.sendMessage(event.getPlayer(), MessageEnum.AimingModeTooFarAway);
             MessageEnum message = aiming.disableAimingMode(event.getPlayer(), cannon);
-            userMessages.displayMessage(event.getPlayer(), message);
+            userMessages.sendMessage(event.getPlayer(), message);
         }
 
 
@@ -157,7 +157,7 @@ public class PlayerListener implements Listener
                     //check if the placed block is in the redstone torch interface
                     if (cannon.isRedstoneTorchInterface(event.getBlock().getLocation()))
                     {
-                        userMessages.displayMessage(event.getPlayer(), MessageEnum.PermissionErrorRedstone);
+                        userMessages.sendMessage(event.getPlayer(), MessageEnum.PermissionErrorRedstone);
                         event.setCancelled(true);
                     }
                 }
@@ -180,7 +180,7 @@ public class PlayerListener implements Listener
                         //check if the placed block is in the redstone wire interface
                         if (cannon.isRedstoneWireInterface(event.getBlock().getLocation()))
                         {
-                            userMessages.displayMessage(event.getPlayer(), MessageEnum.PermissionErrorRedstone);
+                            userMessages.sendMessage(event.getPlayer(), MessageEnum.PermissionErrorRedstone);
                             event.setCancelled(true);
                         }
                     }
@@ -302,7 +302,7 @@ public class PlayerListener implements Listener
                 plugin.logDebug("Redfire with button by " + player.getName());
 
                 MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireButton);
-                userMessages.displayMessage(player, cannon, message);
+                userMessages.sendMessage(player, cannon, message);
             }
         }
 
@@ -373,7 +373,7 @@ public class PlayerListener implements Listener
             if(cannon.getTemperature() > design.getWarningTemperature())
             {
                 plugin.logDebug("someone touched a hot cannon");
-                userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementBurn);
+                userMessages.sendMessage(player, cannon, MessageEnum.HeatManagementBurn);
                 if (design.getBurnDamage() > 0)
                     player.damage(design.getBurnDamage()*2);
                 if (design.getBurnSlowing() > 0)
@@ -391,7 +391,7 @@ public class PlayerListener implements Listener
             if(design.isCoolingTool(player.getItemInHand()))
             {
                 plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
-                userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementCooling);
+                userMessages.sendMessage(player, cannon, MessageEnum.HeatManagementCooling);
 
                 cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation());
 
@@ -405,7 +405,7 @@ public class PlayerListener implements Listener
                 if (player.hasPermission(design.getPermissionThermometer()))
                 {
                     plugin.logDebug("measure temperature");
-                    userMessages.displayMessage(player, cannon, MessageEnum.HeatManagementInfo);
+                    userMessages.sendMessage(player, cannon, MessageEnum.HeatManagementInfo);
                     player.playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 10f, 1f);
                 }
                 else
@@ -422,7 +422,7 @@ public class PlayerListener implements Listener
 
 
                 MessageEnum message = aiming.changeAngle(cannon, event.getAction(), event.getBlockFace(), player);
-                userMessages.displayMessage(player, cannon, message);
+                userMessages.sendMessage(player, cannon, message);
 
                 // update Signs
                 cannon.updateCannonSigns();
@@ -439,7 +439,7 @@ public class PlayerListener implements Listener
                 // load projectile
                 MessageEnum message = cannon.loadProjectile(projectile, player);
                 // display message
-                userMessages.displayMessage(player, cannon, message);
+                userMessages.sendMessage(player, cannon, message);
 
                 //this will directly fire the cannon after it was loaded
                 if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
@@ -460,7 +460,7 @@ public class PlayerListener implements Listener
                 MessageEnum message = cannon.loadGunpowder(player);
 
                 // display message
-                userMessages.displayMessage(player, cannon, message);
+                userMessages.sendMessage(player, cannon, message);
 
                 if(message!=null)
                     return;
@@ -474,7 +474,7 @@ public class PlayerListener implements Listener
 
                 MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireTorch);
                 // display message
-                userMessages.displayMessage(player, cannon, message);
+                userMessages.sendMessage(player, cannon, message);
 
                 if(message!=null)
                     return;
@@ -496,7 +496,7 @@ public class PlayerListener implements Listener
             {
                 plugin.logDebug("Ramrod used");
                 MessageEnum message = cannon.useRamRod(player);
-                userMessages.displayMessage(player, cannon, message);
+                userMessages.sendMessage(player, cannon, message);
 
                 //this will directly fire the cannon after it was loaded
                 if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())

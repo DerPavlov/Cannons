@@ -30,6 +30,7 @@ Aiming:
 Commands:
   SelectCannon: 'YELLOW [Cannons] Please click on the cannon.'
   SelectCanceled: 'RED [Cannons] Selection canceled.'
+  CannonNotFound: 'RED [Cannons] Cannon not found.'
 
 
 Load:  

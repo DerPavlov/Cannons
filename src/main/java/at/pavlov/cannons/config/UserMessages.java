@@ -162,12 +162,12 @@ public class UserMessages {
 	 * @param messageEnum
 	 * @param cannon
 	 */
-	public void displayMessage(String player, MessageEnum messageEnum, Cannon cannon)
+	public void sendMessage(String player, MessageEnum messageEnum, Cannon cannon)
 	{
 		//no player no message
 		if (player != null)
 		{
-			displayMessage(Bukkit.getPlayer(player), cannon, messageEnum);
+            sendMessage(Bukkit.getPlayer(player), cannon, messageEnum);
 		}
 	}
 	
@@ -176,9 +176,9 @@ public class UserMessages {
 	 * @param player
 	 * @param messageEnum
 	 */
-	public void displayMessage(Player player, MessageEnum messageEnum)
+	public void sendMessage(Player player, MessageEnum messageEnum)
 	{
-		displayMessage(player, null, messageEnum);
+        sendMessage(player, null, messageEnum);
 	}
 	
 	/**
@@ -187,7 +187,7 @@ public class UserMessages {
 	 * @param messageEnum
 	 * @param cannon
 	 */
-	public void displayMessage(Player player, Cannon cannon, MessageEnum messageEnum)
+	public void sendMessage(Player player, Cannon cannon, MessageEnum messageEnum)
 	{
 		//no player no message
 		if (player == null) return;
@@ -200,7 +200,7 @@ public class UserMessages {
 		sendMessage(message, player);
 	}
 
-    public void displayImpactMessage(Player player, Location impact, boolean notCanceled)
+    public void sendImpactMessage(Player player, Location impact, boolean notCanceled)
     {
         //no player no message
         if (player == null)

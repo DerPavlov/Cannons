@@ -114,7 +114,7 @@ public class CannonManager
         MessageEnum message = cannon.destroyCannon(breakCannon, cause);
 
         if (player != null)
-            userMessages.displayMessage(player, cannon, message);
+            userMessages.sendMessage(player, cannon, message);
 
         //remove from database
         plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getUID());
@@ -463,7 +463,7 @@ public class CannonManager
 
                     //send messages
                     if (!silent)
-                        userMessages.displayMessage(owner, message, cannon);
+                        userMessages.sendMessage(owner, message, cannon);
 
                     CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
                 	Bukkit.getServer().getPluginManager().callEvent(caceEvent);

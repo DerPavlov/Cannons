@@ -644,7 +644,7 @@ public class CreateExplosion {
 
         //send a message about the impact (only if the projectile has enabled this feature)
         if (projectile.isImpactMessage())
-            plugin.displayImpactMessage(player, impactLoc, notCanceled);
+            plugin.sendImpactMessage(player, impactLoc, notCanceled);
 
         // do nothing if the projectile impact was canceled or it is underwater with deactivated
         if (notCanceled)

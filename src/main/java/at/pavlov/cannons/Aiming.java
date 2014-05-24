@@ -423,13 +423,13 @@ public class Aiming {
             		MessageEnum message = updateAngle(player, cannon, null);
                     //show impact predictor marker
                     //impactPredictor(cannon, player);
-            		userMessages.displayMessage(player, cannon, message);
+            		userMessages.sendMessage(player, cannon, message);
         		}		
         		else
         		{
         			//leave aiming Mode
         			MessageEnum message = disableAimingMode(player, cannon);
-                    userMessages.displayMessage(player, cannon, message);
+                    userMessages.sendMessage(player, cannon, message);
         		}
     		}	
     	}
@@ -456,13 +456,13 @@ public class Aiming {
 		    if (fire)
             {
                 MessageEnum message = plugin.getFireCannon().playerFiring(cannon, player, InteractAction.fireAutoaim);
-                userMessages.displayMessage(player, cannon, message);
+                userMessages.sendMessage(player, cannon, message);
             }
             else
             {
                 //turn off the aiming mode
                 MessageEnum message = disableAimingMode(player, cannon);
-                userMessages.displayMessage(player, cannon, message);
+                userMessages.sendMessage(player, cannon, message);
             }
         }
 		else if(cannon != null)
@@ -474,18 +474,18 @@ public class Aiming {
                 if (distanceCheck(player, cannon))
                 {
                     MessageEnum message = enableAimingMode(player, cannon);
-                    userMessages.displayMessage(player, cannon, message);
+                    userMessages.sendMessage(player, cannon, message);
                 }
                 else
                 {
-                    userMessages.displayMessage(player, cannon, MessageEnum.AimingModeTooFarAway);
+                    userMessages.sendMessage(player, cannon, MessageEnum.AimingModeTooFarAway);
                 }
 
 			}
 			else
 			{
 				//no Permission to aim
-				userMessages.displayMessage(player, cannon, MessageEnum.PermissionErrorAdjust);
+				userMessages.sendMessage(player, cannon, MessageEnum.PermissionErrorAdjust);
 				return;
 			}
 		}
@@ -635,7 +635,7 @@ public class Aiming {
     }
 
     public void disableImitating(Player player){
-        userMessages.displayMessage(player,MessageEnum.ImitatedEffectsDisabled);
+        userMessages.sendMessage(player,MessageEnum.ImitatedEffectsDisabled);
         //it is enabled on default, adding to this list will stop the aiming effect
         imitatedEffectsOff.add(player.getName());
     }
@@ -646,7 +646,7 @@ public class Aiming {
     }
 
     public void enableImitating(Player player){
-        userMessages.displayMessage(player,MessageEnum.ImitatedEffectsEnabled);
+        userMessages.sendMessage(player,MessageEnum.ImitatedEffectsEnabled);
         //it is enabled on default, adding to this list will stop the aiming effect
         imitatedEffectsOff.remove(player.getName());
     }

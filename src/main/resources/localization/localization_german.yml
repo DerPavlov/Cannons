@@ -18,6 +18,7 @@ Error:
 Commands:
   SelectCannon: 'YELLOW [Cannons] Bitte Kanone auswählen.'
   SelectCanceled: 'RED [Cannons] Auswahl abgebrochen.'
+  CannonNotFound: 'RED [Cannons] Kanone existiert nicht.'
 
 
 Aiming:

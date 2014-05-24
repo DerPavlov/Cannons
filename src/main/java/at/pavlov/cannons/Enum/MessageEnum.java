@@ -22,6 +22,7 @@ public enum MessageEnum
     //Commands
     CmdSelectCannon ("Commands.SelectCannon"),
     CmdSelectCanceled ("Commands.SelectCanceled"),
+    CmdCannonNotFound ("Commands.CannonNotFound"),
 
 	//Aiming
 	SettingCombinedAngle ("Aiming.SettingCombinedAngle"),

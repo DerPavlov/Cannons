@@ -367,14 +367,14 @@ public final class Cannons extends JavaPlugin
 		return entityListener;
 	}
 	
-	public void displayMessage(Player player, Cannon cannon, MessageEnum message)
+	public void sendMessage(Player player, Cannon cannon, MessageEnum message)
 	{
-		this.config.getUserMessages().displayMessage(player, cannon, message);
+		this.config.getUserMessages().sendMessage(player, cannon, message);
 	}
 
-    public void displayImpactMessage(Player player, Location impact, boolean notCanceled)
+    public void sendImpactMessage(Player player, Location impact, boolean notCanceled)
     {
-        this.config.getUserMessages().displayImpactMessage(player, impact, notCanceled);
+        this.config.getUserMessages().sendImpactMessage(player, impact, notCanceled);
     }
 	
 	public void createCannon(Cannon cannon)

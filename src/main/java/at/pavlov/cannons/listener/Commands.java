@@ -114,9 +114,9 @@ public class Commands implements CommandExecutor
                     if (args.length >= 2)
                     {
                         //additional player name
+                        sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1]);
                         for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
-                            sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1]);
                             if (cannon.getOwner().equalsIgnoreCase(args[1]))
                                 sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
                         }
@@ -141,19 +141,19 @@ public class Commands implements CommandExecutor
                     if (args[0].equalsIgnoreCase("build") && player.hasPermission("cannons.player.command"))
                     {
                         // how to build a cannon
-                        userMessages.displayMessage(player, MessageEnum.HelpBuild);
+                        userMessages.sendMessage(player, MessageEnum.HelpBuild);
                     }
                     //cannons fire
                     else if (args[0].equalsIgnoreCase("fire") && player.hasPermission("cannons.player.command"))
                     {
                         // how to fire
-                        userMessages.displayMessage(player, MessageEnum.HelpFire);
+                        userMessages.sendMessage(player, MessageEnum.HelpFire);
                     }
                     //cannons adjust
                     else if (args[0].equalsIgnoreCase("adjust") && player.hasPermission("cannons.player.command"))
                     {
                         // how to adjust
-                        userMessages.displayMessage(player, MessageEnum.HelpAdjust);
+                        userMessages.sendMessage(player, MessageEnum.HelpAdjust);
                     }
                     //cannons imitating toggle
                     else if (args[0].equalsIgnoreCase("imitate") && player.hasPermission("cannons.player.command") && config.isImitatedAimingEnabled())
@@ -175,7 +175,7 @@ public class Commands implements CommandExecutor
                             if (cannon != null)
                             {
                                 MessageEnum message = plugin.getCannonManager().renameCannon(player, cannon, args[2]);
-                                userMessages.displayMessage(player, cannon, message);
+                                userMessages.sendMessage(player, cannon, message);
                             }
                         }
                         else
@@ -184,7 +184,7 @@ public class Commands implements CommandExecutor
                     //add observer for cannon
                     else if(args[0].equalsIgnoreCase("observer"))
                     {
-                        if (args.length >= 2 && (args[1].equalsIgnoreCase("off")||args[1].equalsIgnoreCase("disable")))
+                        if (args.length >= 2 && (args[1].equalsIgnoreCase("off")||args[1].equalsIgnoreCase("disable")||args[1].equalsIgnoreCase("remove")))
                             plugin.getAiming().removeObserverForAllCannons(player);
                         else if (args.length < 2)
                             toggleCannonSelector(player, SelectCannon.OBSERVER);
@@ -192,7 +192,10 @@ public class Commands implements CommandExecutor
                         {
                             //selection done by a string '/cannons observer CANNON_NAME'
                             Cannon cannon = plugin.getCannonManager().getCannon(args[1]);
-                            cannon.toggleObserver(player, false);
+                            if (cannon!=null)
+                                cannon.toggleObserver(player, false);
+                            else
+                                userMessages.sendMessage(player, MessageEnum.CmdCannonNotFound);
                         }
                         else
                             sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
@@ -214,13 +217,13 @@ public class Commands implements CommandExecutor
                         // delete all cannon entries for this player
                         persistenceDatabase.deleteCannonsAsync(player.getName());
                         plugin.getCannonManager().deleteCannons(player.getName());
-                        userMessages.displayMessage(player, MessageEnum.CannonsReseted);
+                        userMessages.sendMessage(player, MessageEnum.CannonsReseted);
                     }
                     //no help message if it is forbidden for this player
                     else if (player.hasPermission("cannons.player.command"))
                     {
                         // display help
-                        userMessages.displayMessage(player, MessageEnum.HelpText);
+                        userMessages.sendMessage(player, MessageEnum.HelpText);
                     }
                 }
                 else
@@ -241,7 +244,7 @@ public class Commands implements CommandExecutor
                     if(player.hasPermission("cannons.player.command"))
                     {
                         // display help
-                        userMessages.displayMessage(player, MessageEnum.HelpText);
+                        userMessages.sendMessage(player, MessageEnum.HelpText);
                     }
                     else
                     {
@@ -289,7 +292,7 @@ public class Commands implements CommandExecutor
         if (!isSelectingMode(player))
         {
             cannonSelector.put(player.getName(),cmd);
-            userMessages.displayMessage(player, MessageEnum.CmdSelectCannon);
+            userMessages.sendMessage(player, MessageEnum.CmdSelectCannon);
         }
     }
 
@@ -305,7 +308,7 @@ public class Commands implements CommandExecutor
         if (isSelectingMode(player))
         {
             cannonSelector.remove(player.getName());
-            userMessages.displayMessage(player, MessageEnum.CmdSelectCanceled);
+            userMessages.sendMessage(player, MessageEnum.CmdSelectCanceled);
         }
     }
 
@@ -355,7 +358,7 @@ public class Commands implements CommandExecutor
             switch (cmd){
                 case OBSERVER:{
                     MessageEnum message = cannon.toggleObserver(player,false);
-                    userMessages.displayMessage(player, cannon, message);
+                    userMessages.sendMessage(player, cannon, message);
                     break;
                 }
             }

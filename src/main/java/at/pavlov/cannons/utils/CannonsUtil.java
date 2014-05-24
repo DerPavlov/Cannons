@@ -608,6 +608,9 @@ public class CannonsUtil
      */
     public static void playErrorSound(final Player p)
     {
+        if (p == null)
+            return;
+
         try
         {
             //p.playSound(p.getEyeLocation(), Sound.VILLAGER_NO, 0.25f, 0.75f);
