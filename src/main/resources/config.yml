@@ -114,6 +114,7 @@ unbreakableBlocks:
 
 
 #some items will consumed when used as projectile (e.g. a egg will be thrown) and the event has to be canceled, else the item can't be used as projectile
+#you can also enter here a lever to use it as right click trigger not as redstone trigger.
 cancelEventForLoadingItem:
   #EGG
   - 344
