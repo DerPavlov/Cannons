@@ -125,7 +125,7 @@ public class EntityListener implements Listener
 
 		//now remove all invalid cannons
         for (UUID id : remove)
-		    plugin.getCannonManager().removeCannon(id, false, BreakCause.Explosion);
+		    plugin.getCannonManager().removeCannon(id, false, true, BreakCause.Explosion);
 	}		
 
 	

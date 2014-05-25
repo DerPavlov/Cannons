@@ -127,7 +127,7 @@ public class BlockListener implements Listener
         {
             if (cannon.isDestructibleBlock(event.getBlock().getLocation()))
             {
-                plugin.getCannonManager().removeCannon(cannon, false, BreakCause.PlayerBreak);
+                plugin.getCannonManager().removeCannon(cannon, false, true, BreakCause.PlayerBreak);
                 plugin.logDebug("cannon broken:  " + cannon.isDestructibleBlock(event.getBlock().getLocation()));
             }
             else

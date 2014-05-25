@@ -57,7 +57,7 @@ public class CannonManager
             Cannon next = iter.next();
 			if (!next.isValid())
 			{
-				removeCannon(next, false, cause, false, false);
+				removeCannon(next, false, false, cause, false, false);
                 iter.remove();
 			}
 		}
@@ -67,33 +67,36 @@ public class CannonManager
 	 * removes a cannon from the list
 	 * @param loc location of the cannon
      * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
 	 */
-	public void removeCannon(Location loc, boolean breakCannon, BreakCause cause)
+	public void removeCannon(Location loc, boolean breakCannon, boolean canExplode, BreakCause cause)
 	{
 		Cannon cannon = getCannon(loc, null);
-		removeCannon(cannon, breakCannon, cause);
+		removeCannon(cannon, breakCannon, canExplode, cause);
 	}
 
 	/**
 	 * removes a cannon from the list
 	 * @param cannon cannon to remove
      * @param breakCannon the cannon will explode and all cannon blocks will drop
+     @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
 	 */
-	public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause)
+	public void removeCannon(Cannon cannon, boolean breakCannon, boolean canExplode, BreakCause cause)
 	{
-        removeCannon(cannon, breakCannon, cause, true, true);
+        removeCannon(cannon, breakCannon, canExplode, cause, true, true);
 	}
 
     /**
      * removes a cannon from the list
      * @param cannon cannon to remove
      * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
      * @param ignoreInvalid if true invalid cannons will be skipped and not removed
      */
-    public void removeCannon(Cannon cannon, boolean breakCannon, BreakCause cause, boolean removeEntry, boolean ignoreInvalid)
+    public void removeCannon(Cannon cannon, boolean breakCannon, boolean canExplode, BreakCause cause, boolean removeEntry, boolean ignoreInvalid)
     {
         //ignore invalid cannons
         if (cannon == null || (!cannon.isValid() && ignoreInvalid))
@@ -111,7 +114,7 @@ public class CannonManager
         Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
 
         // destroy cannon (drops items, edit sign)
-        MessageEnum message = cannon.destroyCannon(breakCannon, cause);
+        MessageEnum message = cannon.destroyCannon(breakCannon, canExplode, cause);
 
         if (player != null)
             userMessages.sendMessage(player, cannon, message);
@@ -133,24 +136,26 @@ public class CannonManager
      * removes a cannon from the list
      * @param uid UID of the cannon
      * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
      */
-    public void removeCannon(UUID uid, boolean breakCannon, BreakCause cause)
+    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause)
     {
-        removeCannon(uid,breakCannon,cause,true);
+        removeCannon(uid, breakCannon, canExplode, cause, true);
     }
 
     /**
      * removes a cannon from the list
      * @param uid UID of the cannon
-     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param breakCannon the cannon will explode and all cannon blocks will drop #
+     * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
      * @param removeEntry should the cannon be removed from the list
      */
-    public void removeCannon(UUID uid, boolean breakCannon, BreakCause cause, boolean removeEntry)
+    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause, boolean removeEntry)
     {
         Cannon cannon = cannonList.get(uid);
-        removeCannon(cannon,breakCannon,cause,removeEntry,true);
+        removeCannon(cannon, breakCannon, canExplode, cause, removeEntry, true);
     }
 
 	/**
@@ -708,17 +713,15 @@ public class CannonManager
         while (iter.hasNext())
         {
             Cannon next = iter.next();
-            next.destroyCannon(false, BreakCause.Other);
+            next.destroyCannon(false, false, BreakCause.Other);
             iter.remove();
         }
     }
 
 
 	/**
-	 * Deletes all cannons of this player in the database to reset the cannon
-	 * limit
-	 * 
-	 * @param owner
+	 * Deletes all cannons of this player in the database to reset the cannon limit
+	 * @param owner the owner of the cannon
      * @return returns true if there was an entry of this player in the list
 	 */
 	public boolean deleteCannons(String owner)
@@ -732,7 +735,7 @@ public class CannonManager
 			if (next.getOwner().equals(owner))
 			{
                 inList = true;
-				next.destroyCannon(false, BreakCause.Other);
+				next.destroyCannon(false, false, BreakCause.Other);
 				iter.remove();
 			}
 		}

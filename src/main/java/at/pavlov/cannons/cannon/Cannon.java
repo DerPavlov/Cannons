@@ -684,8 +684,11 @@ public class Cannon
 
     /**
      * removes the sign text and charge of the cannon after destruction
+     * @param breakBlocks break all cannon block naturally
+     * @param canExplode if the cannon can explode when loaded with gunpoweder
+     * @param cause cause of the cannon destruction
      */
-    public MessageEnum destroyCannon(boolean breakBlocks, BreakCause cause)
+    public MessageEnum destroyCannon(boolean breakBlocks, boolean canExplode, BreakCause cause)
     {
         // update cannon signs the last time
         isValid = false;
@@ -695,7 +698,7 @@ public class Cannon
             breakAllCannonBlocks();
 
         //loaded cannon can exploded (80% chance)
-        if (design.getExplodingLoadedCannons() > 0 && getLoadedGunpowder() > 0 && Math.random() > 0.2)
+        if (canExplode && design.getExplodingLoadedCannons() > 0 && getLoadedGunpowder() > 0 && Math.random() > 0.2)
         {
             double power = getLoadedGunpowder()/design.getMaxLoadableGunpowderNormal()*design.getExplodingLoadedCannons();
             World world = getWorldBukkit();

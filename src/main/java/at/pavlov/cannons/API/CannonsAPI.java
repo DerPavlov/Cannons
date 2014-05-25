@@ -1,6 +1,7 @@
 package at.pavlov.cannons.API;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.Enum.MessageEnum;
@@ -129,6 +130,18 @@ public class CannonsAPI {
     public void setCannonAngle(Cannon cannon, double horizontal, double vertical)
     {
         //plugin.getAiming().
+    }
+
+    /**
+     * removes a cannon from the list
+     * @param uid UID of the cannon
+     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param canExplode if the cannon can explode when loaded with gunpowder
+     * @param cause the reason way the cannon was broken
+     */
+    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause)
+    {
+        plugin.getCannonManager().removeCannon(uid, breakCannon, canExplode, cause, true);
     }
 
 
