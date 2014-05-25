@@ -1983,12 +1983,10 @@ public class Cannon
         if (!player.hasPermission(design.getPermissionObserver()))
             return MessageEnum.PermissionErrorObserver;
 
-        System.out.println("entry before: " +observerMap.get(player.getName()));
         //the player might have an entry which allows unlimited observing (e.g. observer)
         //removeAfterShowing == true is weaker
         if (observerMap.get(player.getName()) == null || observerMap.get(player.getName()))
             observerMap.put(player.getName(), removeAfterShowing);
-        System.out.println("entry after: " +observerMap.get(player.getName()));
         return MessageEnum.CannonObserverAdded;
     }
 
