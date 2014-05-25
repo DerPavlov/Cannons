@@ -70,6 +70,7 @@ public class Cannon
     private double aimingPitch;
 
     //observer will see the impact of the target predictor
+    //<Player name, remove after showing impact>
     private HashMap<String, Boolean> observerMap = new HashMap<String, Boolean>();
 
     // player who has build this cannon
@@ -1982,7 +1983,12 @@ public class Cannon
         if (!player.hasPermission(design.getPermissionObserver()))
             return MessageEnum.PermissionErrorObserver;
 
-        observerMap.put(player.getName(), removeAfterShowing);
+        System.out.println("entry before: " +observerMap.get(player.getName()));
+        //the player might have an entry which allows unlimited observing (e.g. observer)
+        //removeAfterShowing == true is weaker
+        if (observerMap.get(player.getName()) == null || observerMap.get(player.getName()))
+            observerMap.put(player.getName(), removeAfterShowing);
+        System.out.println("entry after: " +observerMap.get(player.getName()));
         return MessageEnum.CannonObserverAdded;
     }
 

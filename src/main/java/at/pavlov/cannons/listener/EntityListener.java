@@ -61,7 +61,7 @@ public class EntityListener implements Listener
 	public void EntityExplode(EntityExplodeEvent event)
 	{
 		plugin.logDebug("Explode event listener called");
-		
+
 		//do nothing if it is cancelled
 		if (event.isCancelled()) return;
 		

@@ -688,6 +688,7 @@ public class Aiming {
         {
             cannon.removeObserver(player);
         }
+        userMessages.sendMessage(player, MessageEnum.CannonObserverRemoved);
 
     }
 

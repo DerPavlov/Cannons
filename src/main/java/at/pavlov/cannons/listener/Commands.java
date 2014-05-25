@@ -56,22 +56,37 @@ public class Commands implements CommandExecutor
             {
                 //############## console and player commands ######################
                 //cannons reload
-                if (args[0].equalsIgnoreCase("reload") && (player == null || player.hasPermission("cannons.admin.reload")))
+                if (args[0].equalsIgnoreCase("reload") )
                 {
+                    if (player != null && !player.hasPermission("cannons.admin.reload"))
+                    {
+                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                        return true;
+                    }
                     // reload config
                     config.loadConfig();
                     sendMessage(sender, ChatColor.GREEN + "[Cannons] Config loaded");
                 }
                 //cannons save
-                else if (args[0].equalsIgnoreCase("save") && (player == null || player.hasPermission("cannons.admin.reload")))
+                else if (args[0].equalsIgnoreCase("save"))
                 {
+                    if (player != null && !player.hasPermission("cannons.admin.reload"))
+                    {
+                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                        return true;
+                    }
                     // save database
                     persistenceDatabase.saveAllCannonsAsync();
                     sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
                 }
                 //cannons load
-                else if (args[0].equalsIgnoreCase("load") && (player == null || player.hasPermission("cannons.admin.reload")))
+                else if (args[0].equalsIgnoreCase("load"))
                 {
+                    if (player != null && !player.hasPermission("cannons.admin.reload"))
+                    {
+                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                        return true;
+                    }
                     // load database
                     persistenceDatabase.loadCannonsAsync();
                     sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
@@ -81,8 +96,8 @@ public class Commands implements CommandExecutor
                 {
                     //try first if there is no player "all" or "all_players"
                     if (args.length >= 2 && (
-                            (args[1].equalsIgnoreCase("all")&&Bukkit.getPlayer("all")==null)||
-                            (args[1].equalsIgnoreCase("all_players")&&Bukkit.getPlayer("all_players")==null)))
+                            (args[1].equals("all")&&Bukkit.getPlayer("all")==null)||
+                            (args[1].equals("all_players")&&Bukkit.getPlayer("all_players")==null)))
                     {
                         //remove all cannons
                         persistenceDatabase.deleteAllCannonsAsync();
@@ -109,12 +124,12 @@ public class Commands implements CommandExecutor
                     }
                 }
                 //cannons list
-                else if(args[0].equalsIgnoreCase("list") && (player == null || player.hasPermission("cannons.admin.list")) )
+                else if(args[0].equalsIgnoreCase("list") && (player == null || player.hasPermission("cannons.admin.list")))
                 {
                     if (args.length >= 2)
                     {
                         //additional player name
-                        sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1]);
+                        sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1] + ChatColor.GREEN + ":");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
                             if (cannon.getOwner().equalsIgnoreCase(args[1]))
@@ -138,26 +153,46 @@ public class Commands implements CommandExecutor
                 else if (player != null)
                 {
                     //cannons build
-                    if (args[0].equalsIgnoreCase("build") && player.hasPermission("cannons.player.command"))
+                    if (args[0].equalsIgnoreCase("build"))
                     {
+                        if (!player.hasPermission("cannons.player.command"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
                         // how to build a cannon
                         userMessages.sendMessage(player, MessageEnum.HelpBuild);
                     }
                     //cannons fire
-                    else if (args[0].equalsIgnoreCase("fire") && player.hasPermission("cannons.player.command"))
+                    else if (args[0].equalsIgnoreCase("fire"))
                     {
+                        if (!player.hasPermission("cannons.player.command"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
                         // how to fire
                         userMessages.sendMessage(player, MessageEnum.HelpFire);
                     }
                     //cannons adjust
-                    else if (args[0].equalsIgnoreCase("adjust") && player.hasPermission("cannons.player.command"))
+                    else if (args[0].equalsIgnoreCase("adjust"))
                     {
+                        if (!player.hasPermission("cannons.player.command"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
                         // how to adjust
                         userMessages.sendMessage(player, MessageEnum.HelpAdjust);
                     }
                     //cannons imitating toggle
-                    else if (args[0].equalsIgnoreCase("imitate") && player.hasPermission("cannons.player.command") && config.isImitatedAimingEnabled())
+                    else if (args[0].equalsIgnoreCase("imitate") && config.isImitatedAimingEnabled())
                     {
+                        if (!player.hasPermission("cannons.player.command"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
                         if (args.length >= 2 && (args[1].equalsIgnoreCase("true")||args[1].equalsIgnoreCase("enable")))
                             plugin.getAiming().enableImitating(player);
                         else if (args.length >= 2 && (args[1].equalsIgnoreCase("false")||args[1].equalsIgnoreCase("disable")))
@@ -168,6 +203,11 @@ public class Commands implements CommandExecutor
                     //rename cannon
                     else if(args[0].equalsIgnoreCase("rename"))
                     {
+                        if (!player.hasPermission("cannons.player.rename"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
                         if (args.length >= 3 && args[1]!=null  && args[2]!=null)
                         {
                             //selection done by a string '/cannons rename OLD NEW'
@@ -184,6 +224,11 @@ public class Commands implements CommandExecutor
                     //add observer for cannon
                     else if(args[0].equalsIgnoreCase("observer"))
                     {
+                        if (!player.hasPermission("cannons.player.observer"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
                         if (args.length >= 2 && (args[1].equalsIgnoreCase("off")||args[1].equalsIgnoreCase("disable")||args[1].equalsIgnoreCase("remove")))
                             plugin.getAiming().removeObserverForAllCannons(player);
                         else if (args.length < 2)
@@ -201,9 +246,14 @@ public class Commands implements CommandExecutor
                             sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
                     }
                     //list cannons of this player name
-                    else if(args[0].equalsIgnoreCase("list") && player.hasPermission("cannons.player.list"))
+                    else if(args[0].equalsIgnoreCase("list"))
                     {
-                        sendMessage(sender, ChatColor.GREEN +"Cannon list for " + args[1] + ":");
+                        if (!player.hasPermission("cannons.player.list"))
+                        {
+                            plugin.logDebug("[Cannons] Missing permission 'cannons.player.list' for command /cannons " + args[0]);
+                            return true;
+                        }
+                        sendMessage(sender, ChatColor.GREEN +"Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
                             if (cannon.getOwner().equalsIgnoreCase(player.getName()))
@@ -212,18 +262,29 @@ public class Commands implements CommandExecutor
                         }
                     }
                     //cannons reset
-                    else if(args[0].equalsIgnoreCase("reset") && player.hasPermission("cannons.player.reset"))
+                    else if(args[0].equalsIgnoreCase("reset"))
                     {
+                        if (!player.hasPermission("cannons.player.reset"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
                         // delete all cannon entries for this player
                         persistenceDatabase.deleteCannonsAsync(player.getName());
                         plugin.getCannonManager().deleteCannons(player.getName());
                         userMessages.sendMessage(player, MessageEnum.CannonsReseted);
                     }
                     //no help message if it is forbidden for this player
-                    else if (player.hasPermission("cannons.player.command"))
+                    else
                     {
+                        if (!player.hasPermission("cannons.player.command"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command " + args[0]);
+                            return true;
+                        }
                         // display help
                         userMessages.sendMessage(player, MessageEnum.HelpText);
+                        return true;
                     }
                 }
                 else
@@ -363,5 +424,6 @@ public class Commands implements CommandExecutor
                 }
             }
         }
+        cannonSelector.remove(player.getName());
     }
 }

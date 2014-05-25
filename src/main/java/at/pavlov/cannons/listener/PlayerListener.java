@@ -364,6 +364,8 @@ public class PlayerListener implements Listener
             if(plugin.getCommandListener().isSelectingMode(player))
             {
                 plugin.getCommandListener().setSelectedCannon(player, cannon);
+                event.setCancelled(true);
+                return;
             }
 
             // ############ touching a hot cannon will burn you ####################
