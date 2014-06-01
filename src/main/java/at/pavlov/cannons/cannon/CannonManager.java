@@ -475,6 +475,10 @@ public class CannonManager
                }
                 else
                 {
+                    //send messages
+                    if (!silent)
+                        userMessages.sendMessage(player, message);
+
                     plugin.logDebug("Creating a cannon event was canceled by a plugin: " + message);
                     return null;
                 }

@@ -592,7 +592,7 @@ public class CannonsUtil
             //readable code
             Vector v = loc.clone().subtract(pl).toVector();
             double d = v.length();
-            if(40.0<=d&&d<=maxDist)
+            if(d<=maxDist)
             {
 
                 //float volume = 2.1f-(float)(d/maxDist);
