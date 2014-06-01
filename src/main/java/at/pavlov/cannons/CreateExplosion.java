@@ -633,14 +633,17 @@ public class CreateExplosion {
         {
             //event canceled, make some effects - even if the area is protected by a plugin
             world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
-            sendExplosionToPlayers(impactLoc);
+            sendExplosionToPlayers(impactLoc, explosion_power);
             return;
         }
 
         //explosion event
         boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
         boolean blockDamage = projectile.getExplosionDamage();
-        boolean notCanceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
+        boolean notCanceled = true;
+        //if the explosion power is negative there will be only a arrow impact sound
+        if (explosion_power>=0)
+            notCanceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
 
         //send a message about the impact (only if the projectile has enabled this feature)
         if (projectile.isImpactMessage())
@@ -650,7 +653,7 @@ public class CreateExplosion {
         if (notCanceled)
         {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
-            sendExplosionToPlayers(impactLoc);
+            sendExplosionToPlayers(impactLoc,explosion_power);
             //place blocks around the impact like webs, lava, water
             spreadBlocks(cannonball);
             //place blocks around the impact like webs, lava, water
@@ -933,9 +936,12 @@ public class CreateExplosion {
      * creates a imitated explosion made of blocks which is transmitted to player in a give distance
      * @param loc location of the explosion
      */
-    public void sendExplosionToPlayers(Location loc)
+    public void sendExplosionToPlayers(Location loc, float power)
     {
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMaximumDistance(), 0.5F);
+        if (power >= 0)
+            CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMaximumDistance(), 0.5F);
+        else
+            CannonsUtil.imitateSound(loc, Sound.ARROW_HIT, config.getImitatedSoundMaximumDistance(), 1F);
 
         if (!config.isImitatedExplosionEnabled())
             return;
