@@ -63,6 +63,9 @@ permissions:
   cannons.player.autoaim:
     description: Allows a player to autoaim with a cannon
     default: false
+  cannons.player.tracking:
+    description: Allows tracking of entities
+    default: false
   cannons.player.observer:
     description: Allows a player to see the impact prediction for selected cannons
     default: false
@@ -89,9 +92,6 @@ permissions:
     default: true
   cannons.player.reset:
     description: Allows a player to delete all of his build cannons.
-    default: false
-  cannons.player.redstone:
-    description: Allows a player to place redstone torch under a cannon
     default: false
   cannons.player.list:
     description: Allows a player to request a list of all his cannons
