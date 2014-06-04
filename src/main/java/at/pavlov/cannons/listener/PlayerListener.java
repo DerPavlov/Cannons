@@ -469,7 +469,7 @@ public class PlayerListener implements Listener
             }
 
 
-            // ############ Torch clicked ############################
+            // ############ Right click trigger clicked (e.g.torch) ############################
             if(cannon.isRightClickTrigger(clickedBlock.getLocation()))
             {
                 plugin.logDebug("fire torch");
@@ -483,10 +483,10 @@ public class PlayerListener implements Listener
             }
 
 
-            // ############ Button clicked ############################
+            // ############ Redstone trigger clicked (e.g. button) ############################
             if(cannon.isRestoneTrigger(clickedBlock.getLocation()))
             {
-                plugin.logDebug("interact event: fire button");
+                plugin.logDebug("interact event: fire redstone trigger");
                 cannon.setLastUser(player.getName());
 
                 return;
