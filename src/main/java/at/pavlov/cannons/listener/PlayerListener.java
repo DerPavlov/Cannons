@@ -286,13 +286,11 @@ public class PlayerListener implements Listener
         Cannon cannon = cannonManager.getCannon(event.getBlock().getLocation(), null);
         if (cannon != null)
         {
-            //check if the button is a loading firing interface of the cannon
+            //check if this is a redstone trigger of the cannon (e.g. button)
             if (cannon.isRestoneTrigger(event.getBlock().getLocation()))
             {
-
-
                 //get the user of the cannon
-                Player player = null;
+                Player player;
                 if (cannon.getLastUser() != null)
                     player = Bukkit.getPlayer(cannon.getLastUser());
                 else
