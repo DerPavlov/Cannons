@@ -1807,6 +1807,7 @@ public class Cannon
 
     public void setLastUser(String lastUser)
     {
+        System.out.println("set last used to: " + lastUser);
         this.lastUser = lastUser;
         if(design.isLastUserBecomesOwner()) owner = lastUser;
     }

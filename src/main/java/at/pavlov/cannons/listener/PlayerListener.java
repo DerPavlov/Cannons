@@ -282,7 +282,7 @@ public class PlayerListener implements Listener
         }
 
 
-        // ##########  fire with Button
+        // ##########  fire with redstone trigger ######
         Cannon cannon = cannonManager.getCannon(event.getBlock().getLocation(), null);
         if (cannon != null)
         {
@@ -290,18 +290,23 @@ public class PlayerListener implements Listener
             if (cannon.isRestoneTrigger(event.getBlock().getLocation()))
             {
 
+
                 //get the user of the cannon
                 Player player = null;
                 if (cannon.getLastUser() != null)
                     player = Bukkit.getPlayer(cannon.getLastUser());
+                else
+                    //no last cannon user
+                    return;
+
+                if (cannon.getLastUser().isEmpty() || player == null)
+                    return;
                 //reset user
                 cannon.setLastUser("");
-                if (player == null)
-                    return;
 
                 plugin.logDebug("Redfire with button by " + player.getName());
 
-                MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireButton);
+                MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireRedstoneTrigger);
                 userMessages.sendMessage(player, cannon, message);
             }
         }
@@ -319,7 +324,7 @@ public class PlayerListener implements Listener
     public void PlayerInteract(PlayerInteractEvent event)
     {
         Action action = event.getAction();
-    	if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)
+    	if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL)
         {
             Block clickedBlock;
             if(event.getClickedBlock() == null)
@@ -471,7 +476,7 @@ public class PlayerListener implements Listener
             {
                 plugin.logDebug("fire torch");
 
-                MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireTorch);
+                MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireRightClickTigger);
                 // display message
                 userMessages.sendMessage(player, cannon, message);
 
