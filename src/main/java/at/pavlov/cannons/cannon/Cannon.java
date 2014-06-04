@@ -1150,6 +1150,9 @@ public class Cannon
      */
     public double getOverheatingChance()
     {
+        if (!design.isHeatManagementEnabled())
+            return 0.0;
+
         double tempCannon = this.getTemperature();
         double tempCritical = design.getCriticalTemperature();
         double tempMax = design.getMaximumTemperature();
@@ -2043,10 +2046,15 @@ public class Cannon
             else
                 saferGunpowder = design.getMaxLoadableGunpowderNormal();
 
-            double chance  = tempInc * design.getOverloadingChangeInc()*Math.pow((loadedGunpowder - saferGunpowder)*design.getOverloadingChanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
+            //prevent negative values
+            int gunpowder = loadedGunpowder - saferGunpowder;
+            if (gunpowder < 0)
+                gunpowder = 0;
+            double chance  = tempInc * design.getOverloadingChangeInc()*Math.pow(gunpowder*design.getOverloadingChanceOfExplosionPerGunpowder(), design.getOverloadingExponent());
             return (chance <= 0) ? 0.0:chance;
         }
-        return 0.0;
+        else
+            return 0.0;
     }
 
     /**
