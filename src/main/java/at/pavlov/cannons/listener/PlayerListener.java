@@ -27,9 +27,6 @@ import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
-import sun.plugin2.message.Message;
-
-import java.text.DecimalFormat;
 
 public class PlayerListener implements Listener
 {
