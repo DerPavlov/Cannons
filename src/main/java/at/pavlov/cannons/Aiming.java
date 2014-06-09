@@ -385,7 +385,13 @@ public class Aiming {
 		Location locCannon = design.getFiringTrigger(cannon);
         //if there is no trigger - set the muzzle a location
         if (locCannon == null)
-            cannon.getMuzzle();
+            locCannon = cannon.getMuzzle();
+        if (cannon.getMuzzle() == null)
+        {
+            plugin.logSevere("cannon design " + cannon.getCannonDesign() + " has no muzzle location");
+            return false;
+        }
+
         return player.getLocation().distance(locCannon) <= 4;
     }
 
