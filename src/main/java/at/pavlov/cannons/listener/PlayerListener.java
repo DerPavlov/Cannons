@@ -343,6 +343,7 @@ public class PlayerListener implements Listener
                 // all other actions will stop aiming mode
                 if(action == Action.RIGHT_CLICK_AIR)
                 {
+                    if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
                     aiming.aimingMode(player, null, false);
                     plugin.getCommandListener().removeCannonSelector(player);
                 }
