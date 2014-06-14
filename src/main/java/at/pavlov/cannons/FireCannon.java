@@ -189,6 +189,9 @@ public class FireCannon {
         //check for all permissions
         MessageEnum message = getPrepareFireMessage(cannon, player);
 
+        if (message.isError())
+            CannonsUtil.playErrorSound(player);
+
         //return if there are permission missing
         if (message != MessageEnum.CannonFire)
             return message;
