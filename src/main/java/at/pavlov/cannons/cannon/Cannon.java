@@ -652,14 +652,14 @@ public class Cannon
      */
     private void dropCharge()
     {
-        removeCharge();
-        if (loadedGunpowder > 0)
+        //drop gunpowder
+        if (loadedGunpowder > 0 && !design.isGunpowderNeeded())
         {
             ItemStack powder = design.getGunpowderType().toItemStack(loadedGunpowder);
             getWorldBukkit().dropItemNaturally(design.getMuzzle(this), powder);
         }
 
-        // can't drop Air
+        // drop projectile
         if (isLoaded())
         {
             getWorldBukkit().dropItemNaturally(design.getMuzzle(this), loadedProjectile.getLoadingItem().toItemStack(1));
