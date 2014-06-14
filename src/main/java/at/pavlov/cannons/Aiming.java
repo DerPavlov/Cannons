@@ -89,7 +89,7 @@ public class Aiming {
 			    {
                     //long startTime = System.nanoTime();
 			    	updateAimingMode();
-                    updateImpactPredictorAndAimingVector();
+                    updateImpactPredictor();
                     //plugin.logDebug("Time update aiming: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
 			    }
 		}, 1L, 1L);	
@@ -736,7 +736,7 @@ public class Aiming {
     /**
      *  impact effects will be only be shown if the cannon is not moved for a while
      */
-    public void updateImpactPredictorAndAimingVector()
+    public void updateImpactPredictor()
     {
         Iterator<Map.Entry<UUID, Long>> iter = lastAimed.entrySet().iterator();
         while (iter.hasNext())
