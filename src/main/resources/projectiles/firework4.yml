@@ -139,6 +139,16 @@ messages:
   #if this projectile can send a message of the impact location.
   hasImpactMessage: false
 
+sounds:
+  #loading sound of projectile
+  loading: 'IRONGOLEM_THROW:5:0.5'
+  #impact sound
+  impact: 'EXPLODE:10:0.5'
+  #impact sound if the area is protected by an plugin (ProjectileImpactEvent was cancelled)
+  impactProtected: 'EXPLODE:10:0.5'
+  #impact on water surface
+  impactWater: 'SPLASH:10:0.3'
+
 loadPermission:
   #the permissions required for a player to use this projectile. There can be several permissions to load a projectile
   - cannons.projectile.default

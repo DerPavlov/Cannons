@@ -283,7 +283,7 @@ sounds:
   #loading gunpowder
   gunpowderLoading: 'DIG_SAND:1:1.5'
   #loading gunpowder
-  gunpowderOverloading: 'DIG_GRASS,1,1.5'
+  gunpowderOverloading: 'DIG_GRASS:1:1.5'
   #cooling a cannon
   cool: 'FIZZ:1:1'
   #smoke effects for touching a hot barrel
