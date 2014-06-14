@@ -68,6 +68,7 @@ public class PersistenceDatabase
 				if (design == null)
 				{
 					plugin.logSevere("Design " + bean.getDesignId() + " not found in plugin/designs");
+                    deleteCannon(bean.getId());
 				}
 				else
 				{

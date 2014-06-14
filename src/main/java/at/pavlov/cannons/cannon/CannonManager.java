@@ -257,11 +257,6 @@ public class CannonManager
 		
 		cannon.updateCannonSigns();
 
-        //make some sounds
-        Player player = Bukkit.getPlayer(cannon.getOwner());
-        if (player != null)
-            player.getWorld().playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 1F, 0.5F);
-
         return ;
 	}
 
@@ -468,7 +463,12 @@ public class CannonManager
 
                     //send messages
                     if (!silent)
+                    {
                         userMessages.sendMessage(owner, message, cannon);
+                        //make some sounds
+                        CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundCreate());
+                        //player.getWorld().playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 1F, 0.5F);
+                    }
 
                     CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
                 	Bukkit.getServer().getPluginManager().callEvent(caceEvent);

@@ -383,7 +383,8 @@ public class PlayerListener implements Listener
 
                 Location effectLoc = clickedBlock.getRelative(clickedFace).getLocation();
                 effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
-                effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 0.1F, 1F);
+                //ffectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 0.1F, 1F);
+                CannonsUtil.playSound(effectLoc, design.getSoundHot());
             }
 
 
@@ -406,7 +407,8 @@ public class PlayerListener implements Listener
                 {
                     plugin.logDebug("measure temperature");
                     userMessages.sendMessage(player, cannon, MessageEnum.HeatManagementInfo);
-                    player.playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 10f, 1f);
+                    //player.playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 10f, 1f);
+                    CannonsUtil.playSound(cannon.getMuzzle(), design.getSoundThermometer());
                 }
                 else
                 {

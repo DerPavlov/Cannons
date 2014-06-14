@@ -3,6 +3,7 @@ package at.pavlov.cannons.projectile;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.FireworkEffect;
@@ -78,6 +79,12 @@ public class Projectile implements Cloneable{
 
     //messages
     private boolean impactMessage;
+
+    //sounds
+    private SoundHolder soundLoading;
+    private SoundHolder soundImpact;
+    private SoundHolder soundImpactProtected;
+    private SoundHolder soundImpactWater;
 
 	//permissions
 	private List<String> permissionLoad = new ArrayList<String>();
@@ -641,5 +648,37 @@ public class Projectile implements Cloneable{
 
     public void setSpawnBlockRadius(double spawnBlockRadius) {
         this.spawnBlockRadius = spawnBlockRadius;
+    }
+
+    public SoundHolder getSoundLoading() {
+        return soundLoading;
+    }
+
+    public void setSoundLoading(SoundHolder soundLoading) {
+        this.soundLoading = soundLoading;
+    }
+
+    public SoundHolder getSoundImpact() {
+        return soundImpact;
+    }
+
+    public void setSoundImpact(SoundHolder soundImpact) {
+        this.soundImpact = soundImpact;
+    }
+
+    public SoundHolder getSoundImpactWater() {
+        return soundImpactWater;
+    }
+
+    public void setSoundImpactWater(SoundHolder soundImpactWater) {
+        this.soundImpactWater = soundImpactWater;
+    }
+
+    public SoundHolder getSoundImpactProtected() {
+        return soundImpactProtected;
+    }
+
+    public void setSoundImpactProtected(SoundHolder soundImpactProtected) {
+        this.soundImpactProtected = soundImpactProtected;
     }
 }

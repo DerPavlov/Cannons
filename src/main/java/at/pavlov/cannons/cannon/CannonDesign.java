@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import at.pavlov.cannons.container.SoundHolder;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
@@ -121,6 +122,24 @@ public class CannonDesign
 	
 	//allowedProjectile
 	private List<String> allowedProjectiles;
+
+    //sounds
+    private SoundHolder soundCreate;
+    private SoundHolder soundAdjust;
+    private SoundHolder soundIgnite;
+    private SoundHolder soundFiring;
+    private SoundHolder soundGunpowderLoading;
+    private SoundHolder soundGunpowderOverloading;
+    private SoundHolder soundCool;
+    private SoundHolder soundHot;
+    private SoundHolder soundRamrodCleaning;
+    private SoundHolder soundRamrodCleaningDone;
+    private SoundHolder soundRamrodPushing;
+    private SoundHolder soundRamrodPushingDone;
+    private SoundHolder soundThermometer;
+    private SoundHolder soundEnableAimingMode;
+    private SoundHolder soundDisableAimingMode;
+
 	
 	//constructionblocks:
 	private MaterialHolder schematicBlockTypeIgnore;     				//this block this is ignored in the schematic file
@@ -1271,5 +1290,125 @@ public class CannonDesign
 
     public void setPredictorUpdate(int predictorUpdate) {
         this.predictorUpdate = predictorUpdate;
+    }
+
+    public SoundHolder getSoundAdjust() {
+        return soundAdjust;
+    }
+
+    public void setSoundAdjust(SoundHolder soundAdjust) {
+        this.soundAdjust = soundAdjust;
+    }
+
+    public SoundHolder getSoundCreate() {
+        return soundCreate;
+    }
+
+    public void setSoundCreate(SoundHolder soundCreate) {
+        this.soundCreate = soundCreate;
+    }
+
+    public SoundHolder getSoundIgnite() {
+        return soundIgnite;
+    }
+
+    public void setSoundIgnite(SoundHolder soundIgnite) {
+        this.soundIgnite = soundIgnite;
+    }
+
+    public SoundHolder getSoundFiring() {
+        return soundFiring;
+    }
+
+    public void setSoundFiring(SoundHolder soundFiring) {
+        this.soundFiring = soundFiring;
+    }
+
+    public SoundHolder getSoundGunpowderLoading() {
+        return soundGunpowderLoading;
+    }
+
+    public void setSoundGunpowderLoading(SoundHolder soundGunpowderLoading) {
+        this.soundGunpowderLoading = soundGunpowderLoading;
+    }
+
+    public SoundHolder getSoundGunpowderOverloading() {
+        return soundGunpowderOverloading;
+    }
+
+    public void setSoundGunpowderOverloading(SoundHolder soundGunpowderOverloading) {
+        this.soundGunpowderOverloading = soundGunpowderOverloading;
+    }
+
+    public SoundHolder getSoundCool() {
+        return soundCool;
+    }
+
+    public void setSoundCool(SoundHolder soundCool) {
+        this.soundCool = soundCool;
+    }
+
+    public SoundHolder getSoundHot() {
+        return soundHot;
+    }
+
+    public void setSoundHot(SoundHolder soundHot) {
+        this.soundHot = soundHot;
+    }
+
+    public SoundHolder getSoundRamrodCleaning() {
+        return soundRamrodCleaning;
+    }
+
+    public void setSoundRamrodCleaning(SoundHolder soundRamrodCleaning) {
+        this.soundRamrodCleaning = soundRamrodCleaning;
+    }
+
+    public SoundHolder getSoundRamrodCleaningDone() {
+        return soundRamrodCleaningDone;
+    }
+
+    public void setSoundRamrodCleaningDone(SoundHolder soundRamrodCleaningDone) {
+        this.soundRamrodCleaningDone = soundRamrodCleaningDone;
+    }
+
+    public SoundHolder getSoundRamrodPushing() {
+        return soundRamrodPushing;
+    }
+
+    public void setSoundRamrodPushing(SoundHolder soundRamrodPushing) {
+        this.soundRamrodPushing = soundRamrodPushing;
+    }
+
+    public SoundHolder getSoundRamrodPushingDone() {
+        return soundRamrodPushingDone;
+    }
+
+    public void setSoundRamrodPushingDone(SoundHolder soundRamrodPushingDone) {
+        this.soundRamrodPushingDone = soundRamrodPushingDone;
+    }
+
+    public SoundHolder getSoundThermometer() {
+        return soundThermometer;
+    }
+
+    public void setSoundThermometer(SoundHolder soundThermometer) {
+        this.soundThermometer = soundThermometer;
+    }
+
+    public SoundHolder getSoundEnableAimingMode() {
+        return soundEnableAimingMode;
+    }
+
+    public void setSoundEnableAimingMode(SoundHolder soundEnableAimingMode) {
+        this.soundEnableAimingMode = soundEnableAimingMode;
+    }
+
+    public SoundHolder getSoundDisableAimingMode() {
+        return soundDisableAimingMode;
+    }
+
+    public void setSoundDisableAimingMode(SoundHolder soundDisableAimingMode) {
+        this.soundDisableAimingMode = soundDisableAimingMode;
     }
 }

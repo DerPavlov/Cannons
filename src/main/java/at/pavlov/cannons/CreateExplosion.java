@@ -4,6 +4,7 @@ import java.util.*;
 
 
 import at.pavlov.cannons.Enum.FakeBlockType;
+import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
@@ -633,7 +634,7 @@ public class CreateExplosion {
         {
             //event canceled, make some effects - even if the area is protected by a plugin
             world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
-            sendExplosionToPlayers(impactLoc, explosion_power);
+            sendExplosionToPlayers(impactLoc, projectile.getSoundImpactProtected());
             return;
         }
 
@@ -653,7 +654,7 @@ public class CreateExplosion {
         if (notCanceled)
         {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
-            sendExplosionToPlayers(impactLoc,explosion_power);
+            sendExplosionToPlayers(impactLoc, projectile.getSoundImpact());
             //place blocks around the impact like webs, lava, water
             spreadBlocks(cannonball);
             //place blocks around the impact like webs, lava, water
@@ -936,12 +937,9 @@ public class CreateExplosion {
      * creates a imitated explosion made of blocks which is transmitted to player in a give distance
      * @param loc location of the explosion
      */
-    public void sendExplosionToPlayers(Location loc, float power)
+    public void sendExplosionToPlayers(Location loc, SoundHolder sound)
     {
-        if (power >= 0)
-            CannonsUtil.imitateSound(loc, Sound.EXPLODE, config.getImitatedSoundMaximumDistance(), 0.5F);
-        else
-            CannonsUtil.imitateSound(loc, Sound.ARROW_HIT, config.getImitatedSoundMaximumDistance(), 1F);
+        CannonsUtil.imitateSound(loc, sound, config.getImitatedSoundMaximumDistance());
 
         if (!config.isImitatedExplosionEnabled())
             return;

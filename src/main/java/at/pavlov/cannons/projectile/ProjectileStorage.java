@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.pavlov.cannons.container.SoundHolder;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -214,6 +215,12 @@ public class ProjectileStorage
 
         //messages
         projectile.setImpactMessage(projectileConfig.getBoolean("messages.hasImpactMessage", false));
+
+        //sounds
+        projectile.setSoundLoading(new SoundHolder(projectileConfig.getString("sounds.loading", "IRONGOLEM_THROW:5:0.5")));
+        projectile.setSoundImpact(new SoundHolder(projectileConfig.getString("sounds.impact", "EXPLODE:10:0.5")));
+        projectile.setSoundImpactProtected(new SoundHolder(projectileConfig.getString("sounds.impactProtected", "EXPLODE:10:0.5")));
+        projectile.setSoundImpactWater(new SoundHolder(projectileConfig.getString("sounds.impactWater", "SPLASH:10:0.3")));
 
 		//loadPermissions
 		projectile.setPermissionLoad(projectileConfig.getStringList("loadPermission"));

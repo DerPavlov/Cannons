@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import at.pavlov.cannons.container.SoundHolder;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -256,6 +257,23 @@ public class DesignStorage
 
 		// allowedProjectiles
 		cannonDesign.setAllowedProjectiles(cannonDesignConfig.getStringList("allowedProjectiles"));
+
+        // sounds
+        cannonDesign.setSoundCreate(new SoundHolder(cannonDesignConfig.getString("sounds.create","ANVIL_LAND:1:0.5")));
+        cannonDesign.setSoundAdjust(new SoundHolder(cannonDesignConfig.getString("sounds.adjust","IRONGOLEM_WALK:1:0.5")));
+        cannonDesign.setSoundIgnite(new SoundHolder(cannonDesignConfig.getString("sounds.ignite","FUSE:5:1")));
+        cannonDesign.setSoundFiring(new SoundHolder(cannonDesignConfig.getString("sounds.firing","EXPLODE:20:1.5")));
+        cannonDesign.setSoundGunpowderLoading(new SoundHolder(cannonDesignConfig.getString("sounds.gunpowderLoading","DIG_SAND:1:1.5")));
+        cannonDesign.setSoundGunpowderOverloading(new SoundHolder(cannonDesignConfig.getString("sounds.gunpowderOverloading","DIG_GRASS,1,1.5")));
+        cannonDesign.setSoundCool(new SoundHolder(cannonDesignConfig.getString("sounds.cool","FIZZ:1:1")));
+        cannonDesign.setSoundHot(new SoundHolder(cannonDesignConfig.getString("sounds.hot","FIZZ:1:1")));
+        cannonDesign.setSoundRamrodCleaning(new SoundHolder(cannonDesignConfig.getString("sounds.ramrodCleaning","DIG_SNOW:0.5:0")));
+        cannonDesign.setSoundRamrodCleaningDone(new SoundHolder(cannonDesignConfig.getString("sounds.ramrodCleaningDone","DIG_SNOW:0.5:1")));
+        cannonDesign.setSoundRamrodPushing(new SoundHolder(cannonDesignConfig.getString("sounds.ramrodPushing","DIG_STONE:0.5:0")));
+        cannonDesign.setSoundRamrodPushingDone(new SoundHolder(cannonDesignConfig.getString("sounds.ramrodPushingDone","ANVIL_LAND:0.5:0")));
+        cannonDesign.setSoundThermometer(new SoundHolder(cannonDesignConfig.getString("sounds.thermometer","ANVIL_LAND:1:1")));
+        cannonDesign.setSoundEnableAimingMode(new SoundHolder(cannonDesignConfig.getString("sounds.enableAimingMode","NONE:1:1")));
+        cannonDesign.setSoundDisableAimingMode(new SoundHolder(cannonDesignConfig.getString("sounds.disableAimingMode","NONE:1:1")));
 
 		// constructionBlocks
 		cannonDesign.setSchematicBlockTypeIgnore(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.ignore", "12:0")));

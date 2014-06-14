@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.*;
@@ -580,11 +581,11 @@ public class CannonsUtil
      * @param sound sound
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location loc, Sound sound, int maxDist, float pitch)
+    public static void imitateSound(Location loc, SoundHolder sound, int maxDist)
     {
         //https://forums.bukkit.org/threads/playsound-parameters-volume-and-pitch.151517/
         World w = loc.getWorld();
-        w.playSound(loc,sound, 15F, pitch);
+        w.playSound(loc,sound.getSound(), 15F, sound.getPitch());
 
         for(Player p : w.getPlayers())
         {
@@ -596,9 +597,9 @@ public class CannonsUtil
             {
 
                 //float volume = 2.1f-(float)(d/maxDist);
-                float newPitch = pitch/(float) Math.sqrt(d);
+                float newPitch = sound.getPitch()/(float) Math.sqrt(d);
                 //p.playSound(p.getEyeLocation().add(v.normalize().multiply(16)), sound, volume, newPitch);
-                p.playSound(loc, sound, maxDist/16f, newPitch);
+                p.playSound(loc, sound.getSound(), maxDist/16f, newPitch);
             }
         }
     }
@@ -638,8 +639,22 @@ public class CannonsUtil
         		}
         	, 3);
         }
-    	
     }
+
+    /**
+     * play a sound effect for the player
+     * @param loc location of the sound
+     * @param sound type of sound (sound, volume, pitch)
+     */
+    public static void playSound(Location loc, SoundHolder sound)
+    {
+        if (!sound.isValid())
+            return;
+
+        loc.getWorld().playSound(loc,sound.getSound(),sound.getVolume(),sound.getPitch());
+
+    }
+
     /**
      * find the surface in the given direction
      * @param start starting point

@@ -4,6 +4,7 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
@@ -89,7 +90,7 @@ public class ProjectileObserver {
                 if (block != null && block.isEmpty())
                 {
                     //found a free block - make the splash
-                    sendSplashToPlayers(block.getLocation(), liquid);
+                    sendSplashToPlayers(block.getLocation(), liquid, cannonball.getProjectile().getSoundImpactWater());
                     break;
                 }
             }
@@ -101,7 +102,7 @@ public class ProjectileObserver {
      * @param loc - location of the impact
      * @param liquid - material of the fake blocks
      */
-    public void sendSplashToPlayers(Location loc, MaterialHolder liquid)
+    public void sendSplashToPlayers(Location loc, MaterialHolder liquid, SoundHolder sound)
     {
         int maxDist = (int) plugin.getMyConfig().getImitatedBlockMaximumDistance();
         int maxSoundDist = plugin.getMyConfig().getImitatedSoundMaximumDistance();
@@ -115,7 +116,7 @@ public class ProjectileObserver {
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getId(), 0), FakeBlockType.WATER_SPLASH, 1.0);
             
         }
-        CannonsUtil.imitateSound(loc, Sound.SPLASH, maxSoundDist, 0.3F);//Too many errors in code, Peter!
+        CannonsUtil.imitateSound(loc, sound, maxSoundDist);
     }
 
     /**

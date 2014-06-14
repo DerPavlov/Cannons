@@ -250,7 +250,8 @@ public class Aiming {
 		//display message only if the angle has changed
 		if (hasChanged) {
 
-            player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
+            //player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
+            CannonsUtil.playSound(cannon.getMuzzle(),design.getSoundAdjust());
             //predict impact marker
             updateLastAimed(cannon);
             return message;
@@ -508,9 +509,11 @@ public class Aiming {
         inAimingMode.put(player.getName(), cannon.getUID());
 
         if (cannon != null)
+        {
             cannon.addObserver(player, false);
-
-        //player.playSound(player.getEyeLocation(), Sound.MINECART_INSIDE, 0.25f, 0.75f);
+            CannonsUtil.playSound(player.getEyeLocation(), cannon.getCannonDesign().getSoundEnableAimingMode());
+            //player.playSound(player.getEyeLocation(), Sound.MINECART_INSIDE, 0.25f, 0.75f);
+        }
 
         return MessageEnum.AimingModeEnabled;
 
@@ -526,6 +529,8 @@ public class Aiming {
     {
         //player.playSound(player.getEyeLocation(), Sound.MINECART_BASE, 0.25f, 0.75f);
         Cannon cannon = getCannonInAimingMode(player);
+        if (cannon!=null)
+            CannonsUtil.playSound(player.getEyeLocation(), cannon.getCannonDesign().getSoundDisableAimingMode());
         return disableAimingMode(player, cannon);
     }
 

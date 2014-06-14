@@ -179,7 +179,8 @@ public class FireCannon {
                 {
                     //everything went fine - next click on torch wil fire the cannon
                     plugin.logDebug("Charge loaded from chest");
-                    cannon.getWorldBukkit().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 5F, 0.5F);
+                    //cannon.getWorldBukkit().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 5F, 0.5F);
+                    CannonsUtil.playSound(cannon.getMuzzle(), cannon.getLoadedProjectile().getSoundLoading());
                     return MessageEnum.loadProjectile;
                 }
             }
@@ -224,7 +225,8 @@ public class FireCannon {
             torchLoc.setY(torchLoc.getY() + 1);
             torchLoc.setZ(torchLoc.getZ() + 0.5);
             torchLoc.getWorld().playEffect(torchLoc, Effect.SMOKE, BlockFace.UP);
-            torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 10f, 1f);
+            //torchLoc.getWorld().playSound(torchLoc, Sound.FUSE , 10f, 1f);
+            CannonsUtil.playSound(torchLoc, design.getSoundIgnite());
         }
 
         //this cannon is now firing
@@ -341,7 +343,8 @@ public class FireCannon {
 
         //fake blocks effects for far distance
         int maxSoundDist = config.getImitatedSoundMaximumDistance();
-        CannonsUtil.imitateSound(loc, Sound.EXPLODE, maxSoundDist, 1.5F);
+        CannonsUtil.imitateSound(loc, c.getCannonDesign().getSoundFiring(), maxSoundDist);
+
         List<Player> players = new ArrayList<Player>();
         for(Player p : loc.getWorld().getPlayers())
         {

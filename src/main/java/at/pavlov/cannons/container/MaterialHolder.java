@@ -42,10 +42,11 @@ public class MaterialHolder
             id = 0;
             data = -1;
             Scanner s = new Scanner(str).useDelimiter("\\s*:\\s*");
-            if (!s.hasNext())
+            if (s.hasNext())
+                id = s.nextInt();
+            else
                 System.out.println("missing id value in: " + str);
 
-            id = s.nextInt();
             if (s.hasNext())
                 data = s.nextInt();
             s.close();
@@ -54,34 +55,6 @@ public class MaterialHolder
         {
             System.out.println("Error while converting " + str + ". Check formatting (10:0)");
         }
-
-        //System.out.println("id: " + id + " data: " + data + " from str: " + str);
-
-        /*
-		//split string at :
-		String subStr[] = str.split(":");
-	
-		try
-		{
-			//get ID
-			if (subStr.length>=1)
-				id = Integer.parseInt(subStr[0]);
-			else
-				id = -1;		//invalid
-			
-			//get Data
-			if (subStr.length >= 2)
-				data = Integer.parseInt(subStr[1]);
-			else
-				data = -1;
-		}
-		catch (Exception e)
-		{
-			System.out.println("[Cannons] Can't convert " + str + ". Check the formating ('35:1').");
-			id = -1;
-			data = -1;
-		}
-		*/
 	}
 	
 	public BaseBlock toBaseBlock()

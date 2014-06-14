@@ -398,21 +398,24 @@ public class Cannon
 	        case loadGunpowder:
 	        {
 	        	// take item from the player
-	            player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
+	            //player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
+                CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderLoading());
 	            if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
 	                InventoryManagement.takeFromPlayerHand(player, gunpowder);
 	        	break;
 	        }
 	        case loadGunpowderNormalLimit:
 	        {
-	        	player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 0.5f);
+	        	//player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 0.5f);
+                CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderLoading());
 	            if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
 	                InventoryManagement.takeFromPlayerHand(player, gunpowder);
 	        	break;
 	        }
 	        case loadOverloadedGunpowder:
 	        {
-	        	player.getWorld().playSound(this.getMuzzle(), Sound.DIG_GRASS, 1F, 1.5f);
+	        	//player.getWorld().playSound(this.getMuzzle(), Sound.DIG_GRASS, 1F, 1.5f);
+                CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderOverloading());
 	            if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
 	                InventoryManagement.takeFromPlayerHand(player, gunpowder);
 	        	break;
@@ -450,7 +453,8 @@ public class Cannon
         {
             // load projectile
             loadedProjectile = projectile;
-            player.getWorld().playSound(this.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
+            //player.getWorld().playSound(this.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
+            CannonsUtil.playSound(getMuzzle(), projectile.getSoundLoading());
 
             // remove from player
             if (design.isProjectileConsumption()&&!design.isAmmoInfiniteForPlayer())
@@ -595,22 +599,26 @@ public class Cannon
             {
                 case RamrodCleaning:
                 {
-                    player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SNOW, 0.5F, 0f);
+                    //player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SNOW, 0.5F, 0f);
+                    CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodCleaning());
                     break;
                 }
                 case RamrodCleaningDone:
                 {
-                    player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SNOW, 0.5F, 1f);
+                    //player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SNOW, 0.5F, 1f);
+                    CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodCleaningDone());
                     break;
                 }
                 case RamrodPushingProjectile:
                 {
-                    player.getWorld().playSound(this.getMuzzle(), Sound.DIG_STONE, 0.5F, 0f);
+                    //player.getWorld().playSound(this.getMuzzle(), Sound.DIG_STONE, 0.5F, 0f);
+                    CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodPushing());
                     break;
                 }
                 case RamrodPushingProjectileDone:
                 {
-                    player.getWorld().playSound(this.getMuzzle(), Sound.ANVIL_LAND, 0.5F, 0f);
+                    //player.getWorld().playSound(this.getMuzzle(), Sound.ANVIL_LAND, 0.5F, 0f);
+                    CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodPushingDone());
                     break;
                 }
                 default:
@@ -1211,7 +1219,8 @@ public class Cannon
             } while (i<4 && effectLoc.getBlock().getType() != Material.AIR);
 
             effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, face);
-            effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+            //effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+            CannonsUtil.playSound(effectLoc, design.getSoundHot());
         }
     }
 
@@ -1257,7 +1266,8 @@ public class Cannon
         if (effectLoc !=null && getTemperature() > design.getWarningTemperature())
         {
             effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
-            effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+            //effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+            CannonsUtil.playSound(effectLoc, design.getSoundCool());
         }
         return;
     }
