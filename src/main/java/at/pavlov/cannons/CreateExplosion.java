@@ -488,7 +488,6 @@ public class CreateExplosion {
             LivingEntity living = (LivingEntity) next;
 
             double dist = impactLoc.distance((living).getEyeLocation());
-            plugin.logDebug("Distance of " + living.getType() + " to impact: " + String.format("%.2f", dist));
             //if the entity is too far away, return
             if (dist > projectile.getPlayerDamageRange()) return 0.0;
 
@@ -513,7 +512,7 @@ public class CreateExplosion {
                 reduction *= (1-CannonsUtil.getArmorDamageReduced(player)/(armorPiercing+1)) * (1-CannonsUtil.getBlastProtection(player));
             }
 
-            plugin.logDebug("PlayerDamage " + living.getType() + ": " + String.format("%.2f", damage) + ", reduction: " + String.format("%.2f", reduction));
+            plugin.logDebug("PlayerDamage " + living.getType() + ":" + String.format("%.2f", damage) + ",reduct:" + String.format("%.2f", reduction) + ",dist:"+ String.format("%.2f", dist));
 
             damage = damage * reduction;
 
@@ -745,28 +744,39 @@ public class CreateExplosion {
         Entity projectile_entity = cannonball.getProjectileEntity();
         Location impactLoc = cannonball.getImpactLocation();
 
-        int effectRange = (int) projectile.getPotionRange()/2;
+
+
+        //explosion effect
+        double effectRange = projectile.getPlayerDamageRange();
         List<Entity> entities = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
 
         //search all entities to damage
         Iterator<Entity> it = entities.iterator();
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             Entity next = it.next();
-            applyPotionEffect(impactLoc, next, cannonball);
 
-            //get previous damage
-            double damage = 0.0;
-            if (damageMap.containsKey(next))
-                damage = damageMap.get(next);
+            if (next instanceof LivingEntity) {
+                //get previous damage
+                double damage = 0.0;
+                if (damageMap.containsKey(next))
+                    damage = damageMap.get(next);
 
-            //add explosion damage
-            damage += getPlayerDamage(impactLoc, next, cannonball);
-            //apply sum of all damages
-            if (damage >= 1 &&  next instanceof LivingEntity)
-            {
-                LivingEntity living = (LivingEntity) next;
-                plugin.logDebug("damage entity " + living.getType() + " by " + String.format("%.2f", damage));
+                //add explosion damage
+                damage += getPlayerDamage(impactLoc, next, cannonball);
+                damageMap.put(next, damage);
+
+            }
+        }
+
+        //apply sum of all damages
+        for (Map.Entry<Entity, Double> entry : damageMap.entrySet())
+        {
+            double damage = entry.getValue();
+            Entity entity = entry.getKey();
+
+            if (damage >= 1 && entity instanceof LivingEntity) {
+                LivingEntity living = (LivingEntity) entity;
+                plugin.logDebug("apply damage to entity " + living.getType() + " by " + String.format("%.2f", damage));
                 double health = living.getHealth();
                 living.setNoDamageTicks(0);//It will do damage by each projectile without noDamageTime
                 living.damage(damage);
@@ -776,6 +786,18 @@ public class CreateExplosion {
                     CannonsUtil.reduceArmorDurability((Player) living);
             }
         }
+
+        //potion effects
+        effectRange = projectile.getPotionRange();
+        entities = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
+
+        //apply potion effect
+        it = entities.iterator();
+        while (it.hasNext()) {
+            Entity next = it.next();
+            applyPotionEffect(impactLoc, next, cannonball);
+        }
+
         //remove all entries in damageMap
         damageMap.clear();
     }
@@ -820,7 +842,7 @@ public class CreateExplosion {
 
                         //don't spawn the projectile in the center
                         Location spawnLoc = impactLoc.clone().add(vect.clone().normalize().multiply(3.0));
-                        plugin.getProjectileManager().spawnProjectile(newProjectiles, player, cannonball.getOwner(), spawnLoc, vect);
+                        plugin.getProjectileManager().spawnProjectile(newProjectiles, player, cannonball.getCannonOwner(), spawnLoc, vect);
                     }
                 }
             }

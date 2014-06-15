@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -42,6 +43,21 @@ public class EntityListener implements Listener
 			plugin.getProjectileManager().directHitProjectile(p, event.getEntity());
 		}
 	}
+
+    /**
+     * The projectile explosion has damaged an entity
+     * @param event
+     */
+    @EventHandler
+    public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent event)
+    {
+        //if (plugin.getProjectileManager().isFlyingProjectile(event.getDamager()))
+        {
+            //event.setCancelled(true);
+            //plugin.logDebug("Explosion damage was canceled. Damage done: " + event.getDamage());
+        }
+    }
+
 	/**
 	 * Cannon snowball hits the ground
 	 * 

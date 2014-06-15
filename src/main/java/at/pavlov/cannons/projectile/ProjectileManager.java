@@ -134,6 +134,17 @@ public class ProjectileManager
         }
     }
 
+    /**
+     * returns true if the given entity is a cannonball projectile
+     * @param projectile flying projectile
+     * @return true if cannonball projectile
+     */
+    public boolean isFlyingProjectile(Entity projectile)
+    {
+        FlyingProjectile fproj = flyingProjectilesMap.get(projectile.getUniqueId());
+        return fproj != null;
+    }
+
 
     /**
      * returns the list of all flying projectiles
