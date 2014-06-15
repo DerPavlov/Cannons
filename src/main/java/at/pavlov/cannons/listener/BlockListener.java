@@ -129,7 +129,8 @@ public class BlockListener implements Listener
             Cannon aimingCannon = null;
             if (event.getPlayer()!=null)
                  aimingCannon = plugin.getAiming().getCannonInAimingMode(event.getPlayer());
-            if (cannon.isDestructibleBlock(event.getBlock().getLocation()) && (aimingCannon==null||cannon.equals(aimingCannon)))
+
+            if (cannon.isDestructibleBlock(event.getBlock().getLocation()) && (aimingCannon==null||!cannon.equals(aimingCannon)))
             {
                 plugin.getCannonManager().removeCannon(cannon, false, true, BreakCause.PlayerBreak);
                 plugin.logDebug("cannon broken:  " + cannon.isDestructibleBlock(event.getBlock().getLocation()));
