@@ -1,15 +1,15 @@
 general:
   #the name of the projectile displayed in game
-  projectileName: cannonball
+  projectileName: hardenrf cannonball
   #a short description of the projectile
-  description: "A cheap and simple cannonball."
+  description: "This cannonball contains a diamond and will even break obsidian."
   #the name of the item to load this projectile
-  itemName: cobblestone
+  itemName: diamond
   #the item which is associated with the projectile.
   #items can be assigned to many different projectiles which are used with different cannons
   #example: one cannon can be loaded with stone but will fire an armor piercing round, while a different cannon
   #can be loaded with stone and it will fire an explosive projectile
-  loadingItem: '4:0'
+  loadingItem: '264:0'
   #some item create a block when placed e.g. redstone dust makes a wire if placed on ground. 
   #if you load the dust, type in the wire id and data, else there is a wire on the cannon.
   alternativeId:
@@ -24,7 +24,7 @@ cannonball:
   #the velocity of the projectile.
   velocity: 3
   #how many blocks the projectile will penetrate before it explodes. If it hits something impenetrable (e.g. obsidian) it will explode instantly.
-  penetration: 1
+  penetration: 2
   #whether the .projectile destroys blocks it penetrates. If false it will explode if it hits something impenetrable.
   doesPenetrationDamage: true
   #how many seconds after firing the projectile will detonate if it does not hit anything
@@ -40,6 +40,8 @@ cannonball:
   #different properties of the projectile. If you don't want any of these properties then just leave this all blank.
   #possible properties are: superbreaker, incendiary, human_cannonball, teleport, observer
   properties:
+    #this means the cannonball will break through obsidian, water, and lava
+    - superbreaker
     #this property sets the impact area on fire. range is determined by the explosion power property
     - incendiary
 
@@ -47,7 +49,7 @@ explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
   #for comparison, the explosion power of a creeper is 3. anything above 50 will cause lag on smaller servers
   #explosionPower: -1 will have no explosion effect and an arrow hit sound instead of the explosion sound
-  explosionPower: 2
+  explosionPower: 3
   #explosion power depends on velocity (see kinetic energy)
   explosionPowerDependsOnVelocity: true
   #whether the explosion will destroy blocks
@@ -55,11 +57,11 @@ explosion:
   #the explosion power is set to zero if the explosion is underwater (superbreaker will still do damage)
   doesUnderwaterExplosion: false
   #if the projectile hits the player additional damage is done. Damage is in half hearts and the player has 20 half hearts in vanilla minecraft.
-  directHitDamage: 100
+  directHitDamage: 150
   #if the player is next to an explosion he will receive additional damage
   playerDamageRange: 5
   #the damage which the player receives when he is near an explosion. Damage is in half hearts and the player has 20 half hearts in vanilla minecraft.
-  playerDamage: 10
+  playerDamage: 15
   #the range of the potion effects specified below
   potionRange: 5
   #how long the effects will last. If the potion duration is <= 0 it will be disabled

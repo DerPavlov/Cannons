@@ -237,6 +237,7 @@ public class ProjectileStorage
         copyFile("canistershot");
         copyFile("tnt");
         copyFile("cobblestone");
+        copyFile("diamond");
 
         copyFile("enderpearl");
 
