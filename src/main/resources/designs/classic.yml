@@ -93,7 +93,7 @@ heatManagement:
   #touching a hot cannon will slow you (in seconds)
   burnSlowing: 10
   #how much firing one gunpowder will increase the temperature of the barrel
-  heatIncreasePerGunpowder: 5.0
+  heatIncreasePerGunpowder: 10.0
   #heat dissipation time coefficient. Smaller time coefficient means it cools down faster
   coolingTimeCoefficient: 10.0
   #how much cooling with the cooling item (config.yml e.g. water bucket) will cool the cannon
