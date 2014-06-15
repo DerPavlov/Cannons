@@ -820,7 +820,7 @@ public class CreateExplosion {
 
                         //don't spawn the projectile in the center
                         Location spawnLoc = impactLoc.clone().add(vect.clone().normalize().multiply(3.0));
-                        plugin.getProjectileManager().spawnProjectile(newProjectiles, player, spawnLoc, vect);
+                        plugin.getProjectileManager().spawnProjectile(newProjectiles, player, cannonball.getOwner(), spawnLoc, vect);
                     }
                 }
             }

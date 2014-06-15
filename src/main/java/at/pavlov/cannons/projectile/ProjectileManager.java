@@ -24,7 +24,7 @@ public class ProjectileManager
         this.plugin = plugin;
     }
 
-    public org.bukkit.entity.Projectile spawnProjectile(Projectile projectile, Player shooter, Location spawnLoc, Vector velocity)
+    public org.bukkit.entity.Projectile spawnProjectile(Projectile projectile, Player shooter, String cannonOwner, Location spawnLoc, Vector velocity)
     {
         World world = spawnLoc.getWorld();
 
@@ -53,7 +53,7 @@ public class ProjectileManager
         projectileEntity.setVelocity(velocity);
 
         //create a new flying projectile container
-        FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter);
+        FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter, cannonOwner);
         //set shooter to the cannonball
         if (shooter != null)
         {

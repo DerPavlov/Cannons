@@ -19,6 +19,7 @@ public class FlyingProjectile
 	
 	private final org.bukkit.entity.Projectile projectile_entity;
     private String shooter;
+    private String cannonOwner;
 	private final Projectile projectile;
     //location of the shooter before firing - important for teleporting the player back - observer property
     private final Location firingLocation;
@@ -31,11 +32,12 @@ public class FlyingProjectile
 
 
 	
-	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, Player shooter)
+	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, Player shooter, String cannonOwner)
 	{
 		this.projectile_entity = projectile_entity;
         this.wasInWater = this.isInWater();
 		this.projectile = projectile;
+        this.cannonOwner = cannonOwner;
         if (shooter != null)
         {
             this.shooter = shooter.getName();
@@ -230,5 +232,13 @@ public class FlyingProjectile
 
     public void setImpactLocation(Location impactLocation) {
         this.impactLocation = impactLocation;
+    }
+
+    public String getCannonOwner() {
+        return cannonOwner;
+    }
+
+    public void setCannonOwner(String cannonOwner) {
+        this.cannonOwner = cannonOwner;
     }
 }
