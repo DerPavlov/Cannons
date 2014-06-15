@@ -203,6 +203,7 @@ allowedProjectiles:
   #they do not have to be named after an in-game item and can be named anything.
   #make sure the name matches the name of the config file of the projectile you want this cannon to be able to fire. the .yml part does not need to be included
   - cobblestone
+  - diamond
   - canistershot
   - enderpearl
   - tnt
