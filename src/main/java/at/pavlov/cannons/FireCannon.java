@@ -181,7 +181,9 @@ public class FireCannon {
                     plugin.logDebug("Charge loaded from chest");
                     //cannon.getWorldBukkit().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 5F, 0.5F);
                     CannonsUtil.playSound(cannon.getMuzzle(), cannon.getLoadedProjectile().getSoundLoading());
-                    return MessageEnum.loadProjectile;
+                    //if fire after reloading is active, if will fire automatically. This can be a problem for the impact predictor
+                    if (!design.isFireAfterLoading())
+                        return MessageEnum.loadProjectile;
                 }
             }
         }
