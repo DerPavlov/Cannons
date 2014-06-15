@@ -125,6 +125,7 @@ public class CannonDesign
 
     //sounds
     private SoundHolder soundCreate;
+    private SoundHolder soundDestroy;
     private SoundHolder soundAdjust;
     private SoundHolder soundIgnite;
     private SoundHolder soundFiring;
@@ -1410,5 +1411,13 @@ public class CannonDesign
 
     public void setSoundDisableAimingMode(SoundHolder soundDisableAimingMode) {
         this.soundDisableAimingMode = soundDisableAimingMode;
+    }
+
+    public SoundHolder getSoundDestroy() {
+        return soundDestroy;
+    }
+
+    public void setSoundDestroy(SoundHolder soundDestroy) {
+        this.soundDestroy = soundDestroy;
     }
 }

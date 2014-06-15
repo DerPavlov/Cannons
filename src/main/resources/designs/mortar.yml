@@ -221,6 +221,8 @@ sounds:
 
   #creating a new cannon
   create: 'ANVIL_LAND:1:0.5'
+  #destroying a cannon
+  destroy: 'ZOMBIE_METAL:1:0.5'
   #changing the angle of a cannon
   adjust: 'IRONGOLEM_WALK:1:0.5'
   #fuse igniting sound when firing

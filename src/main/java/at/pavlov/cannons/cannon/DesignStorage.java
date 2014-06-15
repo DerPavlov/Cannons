@@ -260,6 +260,7 @@ public class DesignStorage
 
         // sounds
         cannonDesign.setSoundCreate(new SoundHolder(cannonDesignConfig.getString("sounds.create","ANVIL_LAND:1:0.5")));
+        cannonDesign.setSoundDestroy(new SoundHolder(cannonDesignConfig.getString("sounds.destroy","ZOMBIE_METAL:1:0.5")));
         cannonDesign.setSoundAdjust(new SoundHolder(cannonDesignConfig.getString("sounds.adjust","IRONGOLEM_WALK:1:0.5")));
         cannonDesign.setSoundIgnite(new SoundHolder(cannonDesignConfig.getString("sounds.ignite","FUSE:5:1")));
         cannonDesign.setSoundFiring(new SoundHolder(cannonDesignConfig.getString("sounds.firing","EXPLODE:20:1.5")));
