@@ -95,7 +95,7 @@ heatManagement:
   #how much firing one gunpowder will increase the temperature of the barrel
   heatIncreasePerGunpowder: 5.0
   #heat dissipation time coefficient. Smaller time coefficient means it cools down faster
-  coolingTimeCoefficient: 2.0
+  coolingTimeCoefficient: 10.0
   #how much cooling with the cooling item (config.yml e.g. water bucket) will cool the cannon
   coolingAmount: 50.0
   #searchs for cooling items in chests and cools the cannon if the cannon temperature above the warning temperature
