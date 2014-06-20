@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import at.pavlov.cannons.scheduler.CreateCannon;
 import at.pavlov.cannons.utils.DelayedTask;
+import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import com.avaje.ebean.Query;
@@ -103,10 +106,9 @@ public class PersistenceDatabase
                     cannon.setFiredCannonballs(bean.getFiredCannonballs());
 
 					//add a cannon to the cannon list
-					plugin.createCannon(cannon);
-					
-					// update sign
-					cannon.updateCannonSigns();
+                    BukkitTask task = new CreateCannon(plugin, cannon).runTask(plugin);
+                    //plugin.createCannon(cannon);
+
                     i++;
 				}
 

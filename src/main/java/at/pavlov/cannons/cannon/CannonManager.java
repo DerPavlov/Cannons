@@ -257,7 +257,7 @@ public class CannonManager
 		
 		cannon.updateCannonSigns();
 
-        return ;
+        return;
 	}
 
     /**
