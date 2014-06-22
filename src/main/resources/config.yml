@@ -137,3 +137,9 @@ database:
   isolation: SERIALIZABLE
   driver: org.sqlite.JDBC
   url: jdbc:sqlite:{DIR}{NAME}.db
+  #mysql example
+  #username: {USERNAME}
+  #isolation: SERIALIZABLE
+  #driver: com.mysql.jdbc.Driver
+  #password: {PASSWORD}
+  #url: jdbc:mysql://{IP}:{PORT}/{DATABASENAME}
