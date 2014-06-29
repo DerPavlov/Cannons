@@ -633,24 +633,8 @@ public class CannonManager
 
 		// both limitA/B and cannons.limit.5 work
 		// if all notes are enabled, set limit to a high number. If no permission plugin is loaded, everything is enabled
-		int newBuiltLimit = -1;
-		if (player.hasPermission("cannons.limit." + Integer.MAX_VALUE))
-		{
-			newBuiltLimit = Integer.MAX_VALUE;
-		}
-		else
-		{
-			// else check all nodes for the player
-			for (int i = 100; i >= 0; i--)
-			{
-				if (player.hasPermission("cannons.limit." + i))
-				{
-					newBuiltLimit = i;
-					break;
-				}
-			}
-		}
 
+        int newBuiltLimit = getNewBuildLimit(player);
 
 		// config implementation
 		if (config.isBuildLimitEnabled())
@@ -677,6 +661,35 @@ public class CannonManager
         plugin.logDebug("no build limit found. Setting to max value.");
         return Integer.MAX_VALUE;
 	}
+
+    /**
+     * returns the build limit for the player given by cannons.limit.5
+     * @param player the build limit for this player
+     * @return how many cannosn this player can build
+     */
+    public int getNewBuildLimit(Player player)
+    {
+        if (player == null) return -1;
+
+        if (player.hasPermission("cannons.limit." + Integer.MAX_VALUE))
+        {
+            //all nodes are enabled
+            return Integer.MAX_VALUE;
+        }
+        else
+        {
+            // else check all nodes for the player
+            for (int i = 100; i >= 0; i--)
+            {
+                if (player.hasPermission("cannons.limit." + i))
+                {
+                    return i;
+                }
+            }
+        }
+        //no build limit found
+        return -1;
+    }
 	/**
 	 * checks if the player can build a cannon (permission, builtLimit)
 	 * 

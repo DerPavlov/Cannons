@@ -61,11 +61,11 @@ public class Commands implements CommandExecutor
                     if (player != null && !player.hasPermission("cannons.admin.reload"))
                     {
                         plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
-                        return true;
                     }
                     // reload config
                     config.loadConfig();
                     sendMessage(sender, ChatColor.GREEN + "[Cannons] Config loaded");
+                    return true;
                 }
                 //cannons save
                 else if (args[0].equalsIgnoreCase("save"))
@@ -73,11 +73,11 @@ public class Commands implements CommandExecutor
                     if (player != null && !player.hasPermission("cannons.admin.reload"))
                     {
                         plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
-                        return true;
                     }
                     // save database
                     persistenceDatabase.saveAllCannonsAsync();
                     sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
+                    return true;
                 }
                 //cannons load
                 else if (args[0].equalsIgnoreCase("load"))
@@ -90,6 +90,7 @@ public class Commands implements CommandExecutor
                     // load database
                     persistenceDatabase.loadCannonsAsync();
                     sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
+                    return true;
                 }
                 //cannons reset
                 else if(args[0].equalsIgnoreCase("reset") && (player == null || player.hasPermission("cannons.admin.reset")))
@@ -122,6 +123,7 @@ public class Commands implements CommandExecutor
                     {
                         sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons reset <NAME>' or '/cannons reset all' or '/cannons reset all_players'");
                     }
+                    return true;
                 }
                 //cannons list
                 else if(args[0].equalsIgnoreCase("list") && (player == null || player.hasPermission("cannons.admin.list")))
@@ -145,30 +147,29 @@ public class Commands implements CommandExecutor
                             sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + cannon.getOwner() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
                         }
                     }
+                    return true;
                 }
 
-                //cannons list
-                else if(args[0].equalsIgnoreCase("permission") && (player == null || player.hasPermission("cannons.admin.permission")))
+                //cannons permissions
+                else if(args[0].equalsIgnoreCase("permissions") && (player == null || player.hasPermission("cannons.admin.permissions")))
                 {
-                    if (args.length >= 2)
+                    //given name in args[1]
+                    if (args.length >= 2 && args[1]!=null)
                     {
-                        //additional player name
-                        sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1] + ChatColor.GREEN + ":");
-                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
-                        {
-                            if (cannon.getOwner().equalsIgnoreCase(args[1]))
-                                sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
-                        }
+                        Player permPlayer = Bukkit.getPlayer(args[1]);
+                        if (permPlayer!=null)
+                            sendAllPermissions(sender,permPlayer);
+                        else
+                            sendMessage(sender, ChatColor.GREEN + "Player not found. Usage: " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
+                    }
+                    //the command sender is also a player - return the permissions of the sender
+                    else if (player != null)
+                    {
+                        sendAllPermissions(sender, player);
                     }
                     else
-                    {
-                        //plot all cannons
-                        sendMessage(sender, ChatColor.GREEN + "List of all cannons:");
-                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
-                        {
-                            sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + cannon.getOwner() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
-                        }
-                    }
+                        sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
+                    return true;
                 }
 
 
@@ -449,5 +450,65 @@ public class Commands implements CommandExecutor
             }
         }
         cannonSelector.remove(player.getName());
+    }
+
+    /**
+     * displays the given permission of the player
+     * @param sender command sender
+     * @param player the permission of this player will be checked
+     * @param permission permission as string
+     */
+    public void displayPermission(CommandSender sender, Player player, String permission)
+    {
+        if (player == null || permission == null) return;
+
+        //request permission
+        Boolean hasPerm = player.hasPermission(permission);
+        //add some color
+        String perm;
+        if (hasPerm)
+            perm = ChatColor.GREEN + "TRUE";
+        else
+            perm = ChatColor.RED + "FALSE";
+        sendMessage(sender, ChatColor.YELLOW + permission + ": " + perm);
+    }
+
+
+    /**
+     * sends all default permissions of the player to the sender
+     * @param sender command sender
+     * @param permPlayer the permission of this player will be checked
+     */
+    public void sendAllPermissions(CommandSender sender, Player permPlayer)
+    {
+        sendMessage(sender, ChatColor.GREEN + "Permissions for " + ChatColor.GOLD + permPlayer.getName() + ChatColor.GREEN + ":");
+        displayPermission(sender, permPlayer, "cannons.player.command");
+        displayPermission(sender, permPlayer, "cannons.player.help");
+        displayPermission(sender, permPlayer, "cannons.player.rename");
+        displayPermission(sender, permPlayer, "cannons.player.build");
+        displayPermission(sender, permPlayer, "cannons.player.redstone");
+        displayPermission(sender, permPlayer, "cannons.player.load");
+        displayPermission(sender, permPlayer, "cannons.player.adjust");
+        displayPermission(sender, permPlayer, "cannons.player.fire");
+        displayPermission(sender, permPlayer, "cannons.player.autoaim");
+        displayPermission(sender, permPlayer, "cannons.player.observer");
+        displayPermission(sender, permPlayer, "cannons.player.tracking");
+        displayPermission(sender, permPlayer, "cannons.player.autoreload");
+        displayPermission(sender, permPlayer, "cannons.player.thermometer");
+        displayPermission(sender, permPlayer, "cannons.player.ramrod");
+        displayPermission(sender, permPlayer, "cannons.player.reset");
+        displayPermission(sender, permPlayer, "cannons.player.list");
+        displayPermission(sender, permPlayer, "cannons.projectile.default");
+        displayPermission(sender, permPlayer, "cannons.limit.limitA");
+        displayPermission(sender, permPlayer, "cannons.limit.limitB");
+        int newBuildlimit = plugin.getCannonManager().getNewBuildLimit(permPlayer);
+        if (newBuildlimit==-1||newBuildlimit==Integer.MAX_VALUE)
+            sendMessage(sender, ChatColor.YELLOW + "no Permission cannons.limit.x (with 0<=x<=100)");
+        else
+            displayPermission(sender, permPlayer, "cannons.limit."+newBuildlimit);
+        displayPermission(sender, permPlayer, "cannons.admin.reload");
+        displayPermission(sender, permPlayer, "cannons.admin.reset");
+        displayPermission(sender, permPlayer, "cannons.admin.list");
+        displayPermission(sender, permPlayer, "cannons.admin.permissions");
     }
 }

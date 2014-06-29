@@ -43,11 +43,17 @@ permissions:
   cannons.player.command:
     description: Allows a player to use the help commands
     default: true
+  cannons.player.help:
+    description: Allows a player to request help with a cannon
+    default: true
   cannons.player.rename:
     description: Allows the player to give his cannons better names
     default: false
   cannons.player.build:
     description: Allows a player to build a cannon
+    default: false
+  cannons.player.redstone:
+    description: Allows a player to use redstone with a cannon
     default: false
   cannons.player.load:
     description: Allows a player to load a cannon
@@ -67,9 +73,6 @@ permissions:
   cannons.player.observer:
     description: Allows a player to see the impact prediction for selected cannons
     default: false
-  cannons.player.redstone:
-    description: Allows a player to use redstone with a cannon
-    default: false
   cannons.player.thermometer:
     description: Allows a player to measure the temperature of a cannon with the thermometer item
     default: false
@@ -79,9 +82,6 @@ permissions:
   cannons.player.autoreload:
     description: Allows a player to use autoreload on a cannon
     default: false
-  cannons.player.help:
-    description: Allows a player to request help with a cannon
-    default: true
   cannons.player.reset:
     description: Allows a player to delete all of his build cannons.
     default: false
