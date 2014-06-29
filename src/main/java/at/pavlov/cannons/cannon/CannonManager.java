@@ -631,10 +631,10 @@ public class CannonManager
 		if (player == null) return Integer.MAX_VALUE;
 		if (player.getName() == null) return Integer.MAX_VALUE;
 
-		// both limitA/B and cannons.player.limit.5 work
+		// both limitA/B and cannons.limit.5 work
 		// if all notes are enabled, set limit to a high number. If no permission plugin is loaded, everything is enabled
 		int newBuiltLimit = -1;
-		if (player.hasPermission("cannons.player.limit." + Integer.MAX_VALUE))
+		if (player.hasPermission("cannons.limit." + Integer.MAX_VALUE))
 		{
 			newBuiltLimit = Integer.MAX_VALUE;
 		}
@@ -643,7 +643,7 @@ public class CannonManager
 			// else check all nodes for the player
 			for (int i = 100; i >= 0; i--)
 			{
-				if (player.hasPermission("cannons.player.limit." + i))
+				if (player.hasPermission("cannons.limit." + i))
 				{
 					newBuiltLimit = i;
 					break;
@@ -655,14 +655,15 @@ public class CannonManager
 		// config implementation
 		if (config.isBuildLimitEnabled())
 		{
-			if (player.hasPermission("cannons.player.limitB") && (newBuiltLimit > config.getBuildLimitB()))
+            plugin.logDebug("limitB: " + player.hasPermission("cannons.limit.limitB") + " build: " + newBuiltLimit);
+			if (player.hasPermission("cannons.limit.limitB") && (newBuiltLimit > config.getBuildLimitB()))
 			{
 				// return the
                 plugin.logDebug("build limitB sets the number of cannons to: " + config.getBuildLimitB());
 				return config.getBuildLimitB();
 			}
 			// limit B is stronger
-			else if (player.hasPermission("cannons.player.limitA") && (newBuiltLimit > config.getBuildLimitA()))
+			else if (player.hasPermission("cannons.limit.limitA") && (newBuiltLimit > config.getBuildLimitA()))
 			{
                 plugin.logDebug("build limitA sets the number of cannons to: " + config.getBuildLimitA());
 				return config.getBuildLimitA();

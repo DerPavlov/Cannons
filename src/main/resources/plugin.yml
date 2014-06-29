@@ -14,8 +14,8 @@ permissions:
   cannons.*:
     description: Gives  permissions for loading, adjusting, firing and recall help with cannons
     children:
-      cannons.player: true
-      cannons.admin: true
+      cannons.player.*: true
+      cannons.admin.*: true
     default: op
   
   cannons.player.*:
@@ -38,8 +38,6 @@ permissions:
       cannons.player.redstone: true
       cannons.player.list: true
       cannons.projectile.default: true
-      cannons.player.limitA: false
-      cannons.player.limitB: false
     default: op
 
   cannons.player.command:
@@ -81,12 +79,6 @@ permissions:
   cannons.player.autoreload:
     description: Allows a player to use autoreload on a cannon
     default: false
-  cannons.player.limitA:
-    description: Maximum amount of cannons a player can place
-    default: false
-  cannons.player.limitB:
-    description: Maximum amount of cannons a player can place
-    default: false
   cannons.player.help:
     description: Allows a player to request help with a cannon
     default: true
@@ -98,6 +90,13 @@ permissions:
     default: false
   cannons.projectile.default:
     description: Allows a player to use default projectiles
+    default: false
+
+  cannons.limit.limitA:
+    description: Maximum amount of cannons a player can build
+    default: false
+  cannons.limit.limitB:
+    description: Maximum amount of cannons a player can build
     default: false
 
 

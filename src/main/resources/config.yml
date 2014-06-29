@@ -139,7 +139,7 @@ database:
   url: jdbc:sqlite:{DIR}{NAME}.db
   #mysql example
   #username: {USERNAME}
+  #password: {PASSWORD}
   #isolation: SERIALIZABLE
   #driver: com.mysql.jdbc.Driver
-  #password: {PASSWORD}
   #url: jdbc:mysql://{IP}:{PORT}/{DATABASENAME}
