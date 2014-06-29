@@ -16,6 +16,7 @@ permissions:
     children:
       cannons.player.*: true
       cannons.admin.*: true
+      cannons.projectiles.*: true
     default: op
   
   cannons.player.*:
@@ -37,7 +38,6 @@ permissions:
       cannons.player.reset: true
       cannons.player.redstone: true
       cannons.player.list: true
-      cannons.projectile.default: true
     default: op
 
   cannons.player.command:
@@ -88,8 +88,22 @@ permissions:
   cannons.player.list:
     description: Allows a player to request a list of all his cannons
     default: false
+
+  cannons.projectiles.*:
+    description: Gives all permissions for projectiles
+    children:
+      cannons.projectile.default: true
+    default: op
+
   cannons.projectile.default:
     description: Allows a player to use default projectiles
+    default: false
+
+  cannons.limit.*:
+    description: Resets limits
+    children:
+      cannons.limitA: false
+      cannons.limitB: false
     default: false
 
   cannons.limit.limitA:
@@ -106,6 +120,7 @@ permissions:
       cannons.admin.reload: true
       cannons.admin.reset: true
       cannons.admin.list: true
+      cannons.admin.permissions: true
     default: op
 
   cannons.admin.reload:
@@ -117,3 +132,7 @@ permissions:
   cannons.admin.list:
       description: Allows an admin to list all cannon of a player
       default: op
+  cannons.admin.permissions:
+      description: Allows an admin to list all default permissions for a player
+      default: op
+

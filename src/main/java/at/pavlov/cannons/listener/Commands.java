@@ -147,6 +147,30 @@ public class Commands implements CommandExecutor
                     }
                 }
 
+                //cannons list
+                else if(args[0].equalsIgnoreCase("permission") && (player == null || player.hasPermission("cannons.admin.permission")))
+                {
+                    if (args.length >= 2)
+                    {
+                        //additional player name
+                        sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1] + ChatColor.GREEN + ":");
+                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
+                        {
+                            if (cannon.getOwner().equalsIgnoreCase(args[1]))
+                                sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
+                        }
+                    }
+                    else
+                    {
+                        //plot all cannons
+                        sendMessage(sender, ChatColor.GREEN + "List of all cannons:");
+                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
+                        {
+                            sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + cannon.getOwner() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
+                        }
+                    }
+                }
+
 
 
                 //################### Player only commands #####################
