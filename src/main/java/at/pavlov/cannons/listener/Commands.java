@@ -58,38 +58,40 @@ public class Commands implements CommandExecutor
                 //cannons reload
                 if (args[0].equalsIgnoreCase("reload") )
                 {
-                    if (player != null && !player.hasPermission("cannons.admin.reload"))
+                    if (player == null || player.hasPermission("cannons.admin.reload"))
                     {
-                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                        // reload config
+                        config.loadConfig();
+                        sendMessage(sender, ChatColor.GREEN + "[Cannons] Config loaded");
                     }
-                    // reload config
-                    config.loadConfig();
-                    sendMessage(sender, ChatColor.GREEN + "[Cannons] Config loaded");
+                    else
+                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
                     return true;
                 }
                 //cannons save
                 else if (args[0].equalsIgnoreCase("save"))
                 {
-                    if (player != null && !player.hasPermission("cannons.admin.reload"))
+                    if (player == null || player.hasPermission("cannons.admin.reload"))
                     {
-                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                        // save database
+                        persistenceDatabase.saveAllCannonsAsync();
+                        sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
                     }
-                    // save database
-                    persistenceDatabase.saveAllCannonsAsync();
-                    sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
+                    else
+                        plugin.logDebug("No permission for command /cannons " + args[0]);
                     return true;
                 }
                 //cannons load
                 else if (args[0].equalsIgnoreCase("load"))
                 {
-                    if (player != null && !player.hasPermission("cannons.admin.reload"))
+                    if (player == null || player.hasPermission("cannons.admin.reload"))
                     {
-                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
-                        return true;
+                        // load database
+                        persistenceDatabase.loadCannonsAsync();
+                        sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
                     }
-                    // load database
-                    persistenceDatabase.loadCannonsAsync();
-                    sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
+                    else
+                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
                     return true;
                 }
                 //cannons reset
@@ -151,24 +153,29 @@ public class Commands implements CommandExecutor
                 }
 
                 //cannons permissions
-                else if(args[0].equalsIgnoreCase("permissions") && (player == null || player.hasPermission("cannons.admin.permissions")))
+                else if(args[0].equalsIgnoreCase("permissions"))
                 {
-                    //given name in args[1]
-                    if (args.length >= 2 && args[1]!=null)
+                    if (player == null || player.hasPermission("cannons.admin.permissions"))
                     {
-                        Player permPlayer = Bukkit.getPlayer(args[1]);
-                        if (permPlayer!=null)
-                            sendAllPermissions(sender,permPlayer);
+                        //given name in args[1]
+                        if (args.length >= 2 && args[1]!=null)
+                        {
+                            Player permPlayer = Bukkit.getPlayer(args[1]);
+                            if (permPlayer!=null)
+                                sendAllPermissions(sender,permPlayer);
+                            else
+                                sendMessage(sender, ChatColor.GREEN + "Player not found. Usage: " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
+                        }
+                        //the command sender is also a player - return the permissions of the sender
+                        else if (player != null)
+                        {
+                            sendAllPermissions(sender, player);
+                        }
                         else
-                            sendMessage(sender, ChatColor.GREEN + "Player not found. Usage: " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
-                    }
-                    //the command sender is also a player - return the permissions of the sender
-                    else if (player != null)
-                    {
-                        sendAllPermissions(sender, player);
+                            sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
                     }
                     else
-                        sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
+                        plugin.logDebug("Missing permission 'cannons.admin.permissions' for this command");
                     return true;
                 }
 
@@ -245,6 +252,7 @@ public class Commands implements CommandExecutor
                         }
                         else
                             sendMessage(sender, ChatColor.RED + "Usage '/cannons rename <OLD_NAME> <NEW_NAME>'");
+                        return true;
                     }
                     //add observer for cannon
                     else if(args[0].equalsIgnoreCase("observer"))
