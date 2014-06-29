@@ -89,7 +89,7 @@ permissions:
     description: Allows a player to request a list of all his cannons
     default: false
 
-  cannons.projectiles.*:
+  cannons.projectile.*:
     description: Gives all permissions for projectiles
     children:
       cannons.projectile.default: true
