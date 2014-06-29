@@ -472,14 +472,18 @@ public class CannonManager
 
                     CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
                 	Bukkit.getServer().getPluginManager().callEvent(caceEvent);
-               }
+                }
                 else
                 {
                     //send messages
                     if (!silent)
+                    {
                         userMessages.sendMessage(player, message);
+                        CannonsUtil.playErrorSound(player);
+                    }
 
-                    plugin.logDebug("Creating a cannon event was canceled by a plugin: " + message);
+
+                    plugin.logDebug("Creating a cannon event was canceled: " + message);
                     return null;
                 }
             }

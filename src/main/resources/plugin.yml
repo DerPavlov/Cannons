@@ -17,7 +17,7 @@ permissions:
       cannons.player.*: true
       cannons.admin.*: true
       cannons.projectiles.*: true
-    default: op
+    default: false
   
   cannons.player.*:
     description: Gives single permissions for loading, adjusting, firing and recall help with cannons
@@ -102,8 +102,8 @@ permissions:
   cannons.limit.*:
     description: Resets limits
     children:
-      cannons.limitA: false
-      cannons.limitB: false
+      cannons.limit.limitA: false
+      cannons.limit.limitB: false
     default: false
 
   cannons.limit.limitA:

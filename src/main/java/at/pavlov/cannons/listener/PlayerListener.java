@@ -335,7 +335,7 @@ public class PlayerListener implements Listener
             final Location barrel = clickedBlock.getLocation();
 
             // find cannon or add it to the list
-            final Cannon cannon = cannonManager.getCannon(barrel, player.getName(), true);
+            final Cannon cannon = cannonManager.getCannon(barrel, player.getName(), false);
 
             //no cannon found - maybe the player has click into the air to stop aiming
             if(cannon == null)
