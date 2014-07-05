@@ -580,7 +580,7 @@ public class CannonManager
 	 */
 	public int getNumberOfCannons(String player)
 	{
-		int i = 1;
+		int i = 0;
 		for (Cannon cannon : cannonList.values())
 		{
 			if (cannon.getOwner() == null)
@@ -626,14 +626,13 @@ public class CannonManager
 	/**
 	 * returns the amount of cannons a player can build
 	 * 
-	 * @param player
-	 * @return
+	 * @param player check the number of cannon this player can build
+	 * @return the maximum number of cannons
 	 */
-    int getCannonBuiltLimit(Player player)
+    public int getCannonBuiltLimit(Player player)
 	{
 		// the player is not valid - no limit check
 		if (player == null) return Integer.MAX_VALUE;
-		if (player.getName() == null) return Integer.MAX_VALUE;
 
 		// both limitA/B and cannons.limit.5 work
 		// if all notes are enabled, set limit to a high number. If no permission plugin is loaded, everything is enabled
@@ -643,6 +642,7 @@ public class CannonManager
 		// config implementation
 		if (config.isBuildLimitEnabled())
 		{
+            plugin.logDebug("BuildLimit: limitA and limitB are enabled");
 			if (player.hasPermission("cannons.limit.limitB") && (newBuiltLimit > config.getBuildLimitB()))
 			{
 				// return the
@@ -678,6 +678,7 @@ public class CannonManager
         if (player.hasPermission("cannons.limit." + Integer.MAX_VALUE))
         {
             //all nodes are enabled
+            plugin.logDebug("BuildLimit: all entries for cannons.limit.x are TRUE. Returning max build limit.");
             return Integer.MAX_VALUE;
         }
         else
@@ -687,12 +688,14 @@ public class CannonManager
             {
                 if (player.hasPermission("cannons.limit." + i))
                 {
+                    plugin.logDebug("BuildLimit: entry for cannons.limit."+i+" found");
                     return i;
                 }
             }
         }
         //no build limit found
-        return -1;
+        plugin.logDebug("BuildLimit: no entry for cannons.limit.x found");
+        return Integer.MAX_VALUE;
     }
 	/**
 	 * checks if the player can build a cannon (permission, builtLimit)
@@ -716,7 +719,7 @@ public class CannonManager
 			return MessageEnum.PermissionErrorBuild;
 		}
 		// player does not have too many guns
-		if (getNumberOfCannons(owner) > getCannonBuiltLimit(player))
+		if (getNumberOfCannons(owner) >= getCannonBuiltLimit(player))
 		{
 			return MessageEnum.ErrorCannonBuiltLimit;
 		}

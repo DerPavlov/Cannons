@@ -510,10 +510,16 @@ public class Commands implements CommandExecutor
         displayPermission(sender, permPlayer, "cannons.limit.limitA");
         displayPermission(sender, permPlayer, "cannons.limit.limitB");
         int newBuildlimit = plugin.getCannonManager().getNewBuildLimit(permPlayer);
-        if (newBuildlimit==-1||newBuildlimit==Integer.MAX_VALUE)
+        if (newBuildlimit==Integer.MAX_VALUE)
             sendMessage(sender, ChatColor.YELLOW + "no Permission cannons.limit.x (with 0<=x<=100)");
         else
             displayPermission(sender, permPlayer, "cannons.limit."+newBuildlimit);
+        int numberCannons = plugin.getCannonManager().getNumberOfCannons(permPlayer.getName());
+        int maxCannons = plugin.getCannonManager().getCannonBuiltLimit(permPlayer);
+        if (maxCannons == Integer.MAX_VALUE)
+            sendMessage(sender, ChatColor.YELLOW + "Built cannons: " + ChatColor.GOLD + numberCannons);
+        else
+            sendMessage(sender, ChatColor.YELLOW + "Built cannons: " + ChatColor.GOLD + numberCannons + "/" + maxCannons);
         displayPermission(sender, permPlayer, "cannons.admin.reload");
         displayPermission(sender, permPlayer, "cannons.admin.reset");
         displayPermission(sender, permPlayer, "cannons.admin.list");
