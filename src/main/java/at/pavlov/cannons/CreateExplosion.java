@@ -781,8 +781,8 @@ public class CreateExplosion {
                 living.damage(damage);
 
                 //if player wears armor reduce damage if the player has take damage
-                if (living instanceof Player && health > living.getHealth())
-                    CannonsUtil.reduceArmorDurability((Player) living);
+                if (living instanceof HumanEntity && health > living.getHealth())
+                    CannonsUtil.reduceArmorDurability((HumanEntity) living);
             }
         }
 
