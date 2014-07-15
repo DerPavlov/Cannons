@@ -19,6 +19,7 @@ import org.bukkit.Note.Tone;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
@@ -305,16 +306,16 @@ public class CannonsUtil
 
     /**
      * Armor would reduce the damage the player receives
-     * @param player - the affected player
+     * @param entity - the affected human player
      * @return - how much the damage is reduced by the armor
      */
-    public static double getArmorDamageReduced(Player player)
+    public static double getArmorDamageReduced(HumanEntity entity)
     {
         // http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
 
-        if (player == null) return 0.0;
+        if (entity == null) return 0.0;
 
-        org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+        org.bukkit.inventory.PlayerInventory inv = entity.getInventory();
         if (inv == null) return 0.0;
 
         ItemStack boots = inv.getBoots();
@@ -362,15 +363,15 @@ public class CannonsUtil
 
     /**
      * returns the total blast protection of the player
-     * @param player - the affected player
+     * @param entity - the affected human player
      */
-    public static double getBlastProtection(Player player)
+    public static double getBlastProtection(HumanEntity entity)
     {
         //http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
 
-        if (player == null) return 0.0;
+        if (entity == null) return 0.0;
 
-        org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+        org.bukkit.inventory.PlayerInventory inv = entity.getInventory();
         if (inv == null) return 0.0;
 
         ItemStack boots = inv.getBoots();
@@ -433,15 +434,15 @@ public class CannonsUtil
 
     /**
      * returns the total projectile protection of the player
-     * @param player - the affected player
+     * @param entity - the affected human player
      */
-    public static double getProjectileProtection(Player player)
+    public static double getProjectileProtection(HumanEntity entity)
     {
         //http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
 
-        if (player == null) return 0.0;
+        if (entity == null) return 0.0;
 
-        org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+        org.bukkit.inventory.PlayerInventory inv = entity.getInventory();
         if (inv == null) return 0.0;
         ItemStack boots = inv.getBoots();
         ItemStack helmet = inv.getHelmet();
@@ -503,11 +504,11 @@ public class CannonsUtil
 
     /**
      * reduces the durability of the player's armor
-     * @param player - the affected player
+     * @param entity - the affected human player
      */
-    public static void reduceArmorDurability(Player player)
+    public static void reduceArmorDurability(HumanEntity entity)
     {
-        org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+        org.bukkit.inventory.PlayerInventory inv = entity.getInventory();
         if (inv == null) return;
 
         Random r = new Random();

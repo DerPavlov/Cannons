@@ -505,11 +505,11 @@ public class CreateExplosion {
 
             //calculate the armor reduction
             double reduction = 1.0;
-            if (living instanceof Player)
+            if (living instanceof HumanEntity)
             {
-                Player player = (Player) living;
+                HumanEntity human = (HumanEntity) living;
                 double armorPiercing = Math.max(projectile.getPenetration(),0);
-                reduction *= (1-CannonsUtil.getArmorDamageReduced(player)/(armorPiercing+1)) * (1-CannonsUtil.getBlastProtection(player));
+                reduction *= (1-CannonsUtil.getArmorDamageReduced(human)/(armorPiercing+1)) * (1-CannonsUtil.getBlastProtection(human));
             }
 
             plugin.logDebug("PlayerDamage " + living.getType() + ":" + String.format("%.2f", damage) + ",reduct:" + String.format("%.2f", reduction) + ",dist:"+ String.format("%.2f", dist));
@@ -551,11 +551,11 @@ public class CreateExplosion {
 
             //calculate the armor reduction
             double reduction = 1.0;
-            if (living instanceof Player)
+            if (living instanceof HumanEntity)
             {
-                Player player = (Player) living;
+                HumanEntity human = (HumanEntity) living;
                 double armorPiercing = Math.max(projectile.getPenetration(),0);
-                reduction *= (1-CannonsUtil.getArmorDamageReduced(player)/(armorPiercing+1)) * (1-CannonsUtil.getProjectileProtection(player)/(armorPiercing+1));
+                reduction *= (1-CannonsUtil.getArmorDamageReduced(human)/(armorPiercing+1)) * (1-CannonsUtil.getProjectileProtection(human)/(armorPiercing+1));
             }
 
             plugin.logDebug("DirectHitDamage " + living.getType() + ": " + String.format("%.2f", damage) + ", reduction: " + String.format("%.2f", reduction));
@@ -764,7 +764,6 @@ public class CreateExplosion {
                 //add explosion damage
                 damage += getPlayerDamage(impactLoc, next, cannonball);
                 damageMap.put(next, damage);
-
             }
         }
 
