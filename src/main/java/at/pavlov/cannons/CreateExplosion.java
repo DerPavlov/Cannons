@@ -146,7 +146,8 @@ public class CreateExplosion {
                 // if block can be destroyed the the iterator will check the next block. Else the projectile will explode
                 if (!breakBlock(next, blocklist, superbreaker, doesBlockDamage))
                 {
-                    //found undestroyable block - set impactloc
+                    plugin.logDebug("Indestructible block found at " + next.getLocation());
+                    //found indestructible block - set impactloc
                     break;
                 }
                 impactLoc = next.getLocation();
@@ -179,7 +180,7 @@ public class CreateExplosion {
             //handle with bukkit
             plugin.getServer().getPluginManager().callEvent(event);
 
-            plugin.logDebug("explode event canceled: " + event.isCancelled());
+            plugin.logDebug("was the cannons explode event canceled: " + event.isCancelled());
             //if not canceled break all given blocks
             if(!event.isCancelled())
             {
