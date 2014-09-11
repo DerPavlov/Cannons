@@ -18,6 +18,5 @@ public class CreateCannon extends BukkitRunnable {
     @Override
     public void run() {
         plugin.getCannonManager().createCannon(cannon);
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
