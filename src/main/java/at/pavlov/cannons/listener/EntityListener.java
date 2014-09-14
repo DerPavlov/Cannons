@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.event.CannonsEntityDeathEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
@@ -142,7 +143,5 @@ public class EntityListener implements Listener
 		//now remove all invalid cannons
         for (UUID id : remove)
 		    plugin.getCannonManager().removeCannon(id, false, true, BreakCause.Explosion);
-	}		
-
-	
+	}
 }

@@ -4,9 +4,11 @@ import java.util.*;
 
 
 import at.pavlov.cannons.Enum.FakeBlockType;
+import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
+import at.pavlov.cannons.event.CannonsEntityDeathEvent;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
@@ -33,9 +35,10 @@ public class CreateExplosion {
     private final Cannons plugin;
     private final Config config;
 
-    private HashSet<UUID> transmittedEntities = new HashSet<UUID>();
+    private HashSet<Entity> affectedEntities = new HashSet<Entity>();
     //the entity is used in 1 tick. There should be no garbage collector problem
     private HashMap<Entity,Double> damageMap = new HashMap<Entity, Double>();
+
 
     //################### Constructor ############################################
     public CreateExplosion (Cannons plugin, Config config)
@@ -566,6 +569,12 @@ public class CreateExplosion {
         return 0.0;
     }
 
+    public void addAffectedEntity(Entity entity)
+    {
+        if (!entity.isDead() && entity instanceof LivingEntity)
+            affectedEntities.add(entity);
+    }
+
     /**
      * the given entity was hit by a cannonball
      * @param cannonball cannonball which hit the entity
@@ -576,6 +585,7 @@ public class CreateExplosion {
         //add damage to map - it will be applied later to the player
         double directHit = getDirectHitDamage(cannonball, entity);
         damageMap.put(entity, directHit);
+        addAffectedEntity(entity);
         //explode the cannonball
         detonate(cannonball);
 
@@ -644,7 +654,12 @@ public class CreateExplosion {
         boolean notCanceled = true;
         //if the explosion power is negative there will be only a arrow impact sound
         if (explosion_power>=0)
+            //get affected entities
+            for (Entity cEntity : projectile_entity.getNearbyEntities(explosion_power, explosion_power, explosion_power))
+                addAffectedEntity(cEntity);
+            //make the explosion
             notCanceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
+
 
         //send a message about the impact (only if the projectile has enabled this feature)
         if (projectile.isImpactMessage())
@@ -670,10 +685,36 @@ public class CreateExplosion {
             //make some additional explosion around the impact
             clusterExplosions(cannonball);
 
+            //fire event for all kill entities
+            fireEntityDeathEvent(cannonball);
 
-            //check which entities are affected by the event
-            //List<Entity> EntitiesAfterExplosion = projectile_entity.getNearbyEntities(effectRange, effectRange, effectRange);
-            //transmittingEntities(EntitiesAfterExplosion, cannonball.getShooter());//place blocks around the impact like webs, lava, water
+
+
+
+        }
+    }
+
+
+    private void fireEntityDeathEvent(FlyingProjectile cannonball)
+    {
+        LinkedList<LivingEntity> lEntities = new LinkedList<LivingEntity>();
+        //check which entities are affected by the event
+        for (Entity entity : affectedEntities)
+        {
+            if (entity != null)
+            {
+                //entity has died
+                if (entity.isDead() && entity instanceof LivingEntity)
+                    lEntities.add((LivingEntity) entity);
+            }
+        }
+        affectedEntities.clear();
+
+        //fire entityDeathEvent
+        for (LivingEntity entity : lEntities)
+        {
+            CannonsEntityDeathEvent entityDeathEvent = new CannonsEntityDeathEvent(entity, cannonball.getProjectile(), cannonball.getCannonID(), cannonball.getShooter());
+            Bukkit.getServer().getPluginManager().callEvent(entityDeathEvent);
         }
     }
 
@@ -842,7 +883,8 @@ public class CreateExplosion {
 
                         //don't spawn the projectile in the center
                         Location spawnLoc = impactLoc.clone().add(vect.clone().normalize().multiply(3.0));
-                        plugin.getProjectileManager().spawnProjectile(newProjectiles, player, cannonball.getCannonOwner(), spawnLoc, vect);
+
+                        plugin.getProjectileManager().spawnProjectile(newProjectiles, player, spawnLoc, vect, cannonball.getCannonID());
                     }
                 }
             }
@@ -892,73 +934,6 @@ public class CreateExplosion {
         }, 1L);
     }
 
-
-    /**
-     * event for all entities which died in the explosion
-     */
-    private void transmittingEntities(List<Entity> after, Entity shooter)
-    {
-        //exit now
-        shooter = null;
-
-        //check if there is a shooter, redstone cannons are not counted
-        if (shooter == null) return;
-        if (!(shooter instanceof Player)) return;
-
-        //return if the list before is empty
-        if (after.size() == 0) return;
-
-        //calculate distance form the shooter location to the first monster
-        double distance = 0.0;
-
-        //check which entities have been killed
-        List<LivingEntity> killedEntities = new LinkedList<LivingEntity>();
-        Iterator<Entity> iter = after.iterator();
-        while (iter.hasNext())
-        {
-            Entity entity = iter.next();
-            if (entity instanceof LivingEntity)
-            {
-                // killed by the explosion
-                if (entity.isDead())
-                {
-                    LivingEntity LivEntity = (LivingEntity) entity;
-                    //check if the entity has not been transmitted
-                    if(!hasBeenTransmitted(LivEntity.getUniqueId()))
-                    {
-                        //calculate distance form the shooter location to the first monster
-                        distance = shooter.getLocation().distance(LivEntity.getLocation());
-                        killedEntities.add(LivEntity);
-                        transmittedEntities.add(LivEntity.getUniqueId());
-                    }
-
-                }
-
-            }
-        }
-
-        // list should not be empty
-        if (killedEntities.size() > 0)
-        {
-            try {
-                //handler.updateGunnerReputation((Player) shooter, killedEntities, distance);
-            } catch (Exception e) {
-                plugin.logSevere("Error adding reputation to player");
-            }
-        }
-    }
-
-
-    //############### hasBeenTransmitted ########################
-    private boolean hasBeenTransmitted(UUID id)
-    {
-        return transmittedEntities.contains(id);
-    }
-
-    /**
-     * creates a imitated explosion made of blocks which is transmitted to player in a give distance
-     * @param loc location of the explosion
-     */
     public void sendExplosionToPlayers(Location loc, SoundHolder sound)
     {
         CannonsUtil.imitateSound(loc, sound, config.getImitatedSoundMaximumDistance());

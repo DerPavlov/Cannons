@@ -1,7 +1,9 @@
 package at.pavlov.cannons.projectile;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.utils.DelayedTask;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -24,8 +26,9 @@ public class ProjectileManager
         this.plugin = plugin;
     }
 
-    public org.bukkit.entity.Projectile spawnProjectile(Projectile projectile, Player shooter, String cannonOwner, Location spawnLoc, Vector velocity)
+    public org.bukkit.entity.Projectile spawnProjectile(Projectile projectile, Player shooter, Location spawnLoc, Vector velocity, UUID cannonId)
     {
+        Validate.notNull(shooter, "shooter for the projectile can't be null");
         World world = spawnLoc.getWorld();
 
         //set yaw, pitch for fireballs
@@ -53,12 +56,8 @@ public class ProjectileManager
         projectileEntity.setVelocity(velocity);
 
         //create a new flying projectile container
-        FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter, cannonOwner);
-        //set shooter to the cannonball
-        if (shooter != null)
-        {
-            cannonball.setShooter(shooter);
-        }
+        FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter, cannonId);
+
 
         flyingProjectilesMap.put(cannonball.getUID(), cannonball);
 

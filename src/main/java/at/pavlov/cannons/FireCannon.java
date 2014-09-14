@@ -138,6 +138,10 @@ public class FireCannon {
      */
     public MessageEnum fire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo, InteractAction action)
     {
+        //set some valid shoote is none is given
+        if (player == null)
+            player = Bukkit.getPlayer(cannon.getOwner());
+            plugin.logDebug("Firing: Set shooter to " + player.getName() + " because it was null");
         //fire event
         CannonUseEvent useEvent = new CannonUseEvent(cannon, player, action);
         Bukkit.getServer().getPluginManager().callEvent(useEvent);
@@ -203,6 +207,7 @@ public class FireCannon {
 
         if (fireEvent.isCancelled())
             return null;
+
 
         //ignite the cannon
         delayedFire(cannon, player);
@@ -296,7 +301,7 @@ public class FireCannon {
         for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
         {
             Vector vect = cannon.getFiringVector(shooter, true);
-            org.bukkit.entity.Projectile projectileEntity = plugin.getProjectileManager().spawnProjectile(projectile, shooter, cannon.getOwner(), firingLoc, vect);
+            org.bukkit.entity.Projectile projectileEntity = plugin.getProjectileManager().spawnProjectile(projectile, shooter, firingLoc, vect, cannon.getUID());
 
             if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
                 projectileEntity.setPassenger(shooter);

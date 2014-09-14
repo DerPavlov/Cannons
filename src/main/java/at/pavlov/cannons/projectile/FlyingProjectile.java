@@ -1,7 +1,9 @@
 package at.pavlov.cannons.projectile;
 
+import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.container.MovingObject;
 import at.pavlov.cannons.utils.CannonsUtil;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -19,7 +21,6 @@ public class FlyingProjectile
 	
 	private final org.bukkit.entity.Projectile projectile_entity;
     private String shooter;
-    private String cannonOwner;
 	private final Projectile projectile;
     //location of the shooter before firing - important for teleporting the player back - observer property
     private final Location firingLocation;
@@ -27,21 +28,24 @@ public class FlyingProjectile
     //Important for visual splash effect when the cannonball hits the water surface
     private boolean inWater;
     private boolean wasInWater;
+    private UUID cannonID;
 
     private MovingObject predictor;
 
 
 	
-	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, Player shooter, String cannonOwner)
+	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, Player shooter, UUID cannonId)
 	{
-		this.projectile_entity = projectile_entity;
+        Validate.notNull(shooter, "shooter for the projectile can't be null");
+        this.projectile_entity = projectile_entity;
         this.wasInWater = this.isInWater();
 		this.projectile = projectile;
-        this.cannonOwner = cannonOwner;
+        this.cannonID = cannonId;
         if (shooter != null)
         {
             this.shooter = shooter.getName();
             this.firingLocation = shooter.getLocation();
+            this.projectile_entity.setShooter(shooter);
         }
         else
         {
@@ -60,10 +64,6 @@ public class FlyingProjectile
 		    return Bukkit.getPlayer(shooter);
         else
             return null;
-	}
-	public void setShooter(Player shooter)
-	{
-		this.projectile_entity.setShooter(shooter);
 	}
 
 	public org.bukkit.entity.Projectile getProjectileEntity()
@@ -234,11 +234,11 @@ public class FlyingProjectile
         this.impactLocation = impactLocation;
     }
 
-    public String getCannonOwner() {
-        return cannonOwner;
+    public UUID getCannonID() {
+        return cannonID;
     }
 
-    public void setCannonOwner(String cannonOwner) {
-        this.cannonOwner = cannonOwner;
+    public void setCannonID(UUID cannonID) {
+        this.cannonID = cannonID;
     }
 }
