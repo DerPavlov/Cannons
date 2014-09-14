@@ -141,7 +141,7 @@ public class FireCannon {
         //set some valid shoote is none is given
         if (player == null)
             player = Bukkit.getPlayer(cannon.getOwner());
-            plugin.logDebug("Firing: Set shooter to " + player.getName() + " because it was null");
+            plugin.logDebug("Firing: Set shooter to cannonOwner, because it was null");
         //fire event
         CannonUseEvent useEvent = new CannonUseEvent(cannon, player, action);
         Bukkit.getServer().getPluginManager().callEvent(useEvent);
