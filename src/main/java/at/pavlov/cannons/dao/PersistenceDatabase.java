@@ -140,16 +140,21 @@ public class PersistenceDatabase
 		// get list of all cannons
 		ConcurrentHashMap<UUID, Cannon> cannonList = plugin.getCannonManager().getCannonList();
 
-		// save all cannon to database
-		for (Cannon cannon : cannonList.values())
-		{
-			boolean noError = saveCannon(cannon);
-			if (!noError)
-			{
-				//if a error occurs while save the cannon, stop it
-				return;
-			}
-		}
+        plugin.getDatabase().beginTransaction();
+        // save all cannon to database
+        for (Cannon cannon : cannonList.values())
+        {
+            boolean noError = saveCannon(cannon);
+            if (!noError)
+            {
+                //if a error occurs while save the cannon, stop it
+                plugin.getDatabase().endTransaction();
+                return;
+            }
+        }
+        plugin.getDatabase().commitTransaction();
+        plugin.getDatabase().endTransaction();
+
 	}
 
     /**
@@ -283,21 +288,34 @@ public class PersistenceDatabase
 		// create a query that returns CannonBean
 		List<CannonBean> beans = plugin.getDatabase().find(CannonBean.class).where().eq("owner", owner).findList();
 
-		// process the result
-		if (beans == null || beans.size() == 0)
-		{
-			// nothing found; list is empty
-			return false;
-		}
-		else
-		{
-			// found cannons - load them
-			for (CannonBean bean : beans)
-			{
-				plugin.getDatabase().delete(CannonBean.class, bean.getId());
-			}
-            return true;
-		}
+
+
+        // process the result
+        if (beans == null || beans.size() == 0)
+        {
+            // nothing found; list is empty
+            return false;
+        }
+        else
+        {
+            plugin.getDatabase().beginTransaction();
+            try
+            {
+                // found cannons - load them
+                for (CannonBean bean : beans)
+                {
+                    plugin.getDatabase().delete(CannonBean.class, bean.getId());
+                }
+                plugin.getDatabase().commitTransaction();
+
+            }
+            finally
+            {   plugin.getDatabase().endTransaction();
+                return true;
+            }
+        }
+
+
 	}
 
     /**
