@@ -36,6 +36,7 @@ public class CannonDesign
 	private boolean ammoInfiniteForPlayer;
     private boolean ammoInfiniteForRedstone;
     private boolean autoreloadRedstone;
+	private boolean removeChargeAfterFiring;
     
     //barrelProperties
 	private int maxLoadableGunpowder;
@@ -1420,4 +1421,12 @@ public class CannonDesign
     public void setSoundDestroy(SoundHolder soundDestroy) {
         this.soundDestroy = soundDestroy;
     }
+
+	public boolean isRemoveChargeAfterFiring() {
+		return removeChargeAfterFiring;
+	}
+
+	public void setRemoveChargeAfterFiring(boolean removeChargeAfterFiring) {
+		this.removeChargeAfterFiring = removeChargeAfterFiring;
+	}
 }

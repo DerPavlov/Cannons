@@ -31,6 +31,8 @@ ammunition:
   ammoInfiniteForRedstone: false
   #whether the cannon can reload from a chest
   autoreloadRedstone: true
+  #after firing the projectile are usually gone, but you can set this to false to keep the cannon loaded. Just load the cannon once and it stays loaded until you break it.
+  removeChargeAfterFiring: true
 
 
 barrelProperties:

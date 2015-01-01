@@ -22,7 +22,6 @@ import org.bukkit.util.Vector;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.projectile.Projectile;
@@ -333,8 +332,9 @@ public class FireCannon {
             cannon.setFiring(false);
 
             plugin.logDebug("fire event complete, charge removed from the cannon");
-            //removes the gunpowder and projectile loaded in the cannon
-            cannon.removeCharge();
+            //removes the gunpowder and projectile loaded in the cannon if not set otherwise
+            if (design.isRemoveChargeAfterFiring())
+                cannon.removeCharge();
         }
     }
 

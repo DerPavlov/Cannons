@@ -10,7 +10,6 @@ Install:
     Copy 'Cannons.jar' into your 'plugins/' folder.
     Load your server
     Edit the newly created 'config.yml' in 'plugins/Cannons/' and set your preferences
-    
 
 
 Uninstall:
