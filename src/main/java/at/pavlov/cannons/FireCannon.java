@@ -278,7 +278,7 @@ public class FireCannon {
         if (cannon.getLoadedGunpowder() <= 0) return;
 
         //increased fired cannonballs
-        cannon.imcrementFiredCannonballs();
+        cannon.incrementFiredCannonballs();
 
         //get firing location
         Location firingLoc = design.getMuzzle(cannon);
@@ -291,7 +291,8 @@ public class FireCannon {
         world.playEffect(firingLoc, Effect.SMOKE, cannon.getCannonDirection());
 
         //increase heat of the cannon
-        cannon.setTemperature(cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
+        if (design.isHeatManagementEnabled())
+            cannon.setTemperature(cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
         //automatic cool down
         if (design.isAutomaticCooling())
             cannon.automaticCoolingFromChest(shooter);
@@ -314,11 +315,6 @@ public class FireCannon {
             }
         }
 
-        //reset after firing
-        cannon.setLastFired(System.currentTimeMillis());
-        cannon.setSoot(cannon.getSoot() + design.getSootPerGunpowder()*cannon.getLoadedGunpowder());
-        cannon.setProjectilePushed(design.getProjectilePushing());
-
         //check if the temperature exceeds the limit and overloading
         if (cannon.checkHeatManagement() || cannon.isExplodedDueOverloading())
         {
@@ -326,8 +322,14 @@ public class FireCannon {
             return;
         }
 
+        //reset after firing
+        cannon.setLastFired(System.currentTimeMillis());
+        cannon.setSoot(cannon.getSoot() + design.getSootPerGunpowder()*cannon.getLoadedGunpowder());
+        
         if (removeCharge)
         {
+            cannon.setProjectilePushed(design.getProjectilePushing());
+            
             //finished firing
             cannon.setFiring(false);
 

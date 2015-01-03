@@ -2090,7 +2090,7 @@ public class Cannon
         this.firedCannonballs = firedCannonballs;
     }
 
-    public void imcrementFiredCannonballs(){
+    public void incrementFiredCannonballs(){
         this.firedCannonballs++;
     }
 }
