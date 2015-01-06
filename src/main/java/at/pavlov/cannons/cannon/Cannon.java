@@ -25,6 +25,7 @@ import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.utils.InventoryManagement;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.sign.CannonSign;
+import sun.plugin2.message.Message;
 
 public class Cannon
 {
@@ -548,6 +549,10 @@ public class Cannon
         //if the player is not the owner of this gun
         if (player!=null &&!this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
             return MessageEnum.ErrorNotTheOwner;
+        if (isFiring())
+        {
+            return MessageEnum.ErrorFiringInProgress;
+        }
         //if the barrel is dirty clean it
         if (!isClean())
         {
