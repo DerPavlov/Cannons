@@ -51,7 +51,7 @@ public class SignListener implements Listener
 			
 
 			//get cannon from location and creates a cannon if not existing
-	        Cannon cannon = cannonManager.getCannon(cannonBlock.getLocation(), event.getPlayer().getName());
+	        Cannon cannon = cannonManager.getCannon(cannonBlock.getLocation(), event.getPlayer().getUniqueId());
 			
 	        //get cannon from the sign
 			Cannon cannonFromSign = cannonManager.getCannon(event.getLine(0));

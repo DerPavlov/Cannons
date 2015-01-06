@@ -12,7 +12,7 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name ="cannonlist_2_2")
+@Table(name ="cannonlist_2_2_4")
 public class CannonBean
 {
 	@Id
@@ -21,8 +21,7 @@ public class CannonBean
     @Length(max=20)
 	private String name;
 
-    @Length(max=20)
-	private String owner;
+	private UUID owner;
 
 	@NotEmpty
     @Length(max=20)
@@ -138,11 +137,11 @@ public class CannonBean
 	{
 		this.verticalAngle = verticalAngle;
 	}
-	public String getOwner()
+	public UUID getOwner()
 	{
 		return owner;
 	}
-	public void setOwner(String owner)
+	public void setOwner(UUID owner)
 	{
 		this.owner = owner;
 	}

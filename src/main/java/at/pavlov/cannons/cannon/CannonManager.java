@@ -328,7 +328,7 @@ public class CannonManager
      * @param silent - no messages will be displayed if silent is true
      * @return - list of all cannons in this sphere
      */
-    public HashSet<Cannon> getCannons(List<Location> locations, String player, boolean silent)
+    public HashSet<Cannon> getCannons(List<Location> locations, UUID player, boolean silent)
     {
         HashSet<Cannon> newCannonList = new HashSet<Cannon>();
         for (Location loc : locations)
@@ -385,7 +385,7 @@ public class CannonManager
 	 * @param owner - the owner of the cannon (important for message notification). Can't be null
 	 * @return
 	 */
-	public Cannon getCannon(Location cannonBlock, String owner)
+	public Cannon getCannon(Location cannonBlock, UUID owner)
 	{
 		return getCannon(cannonBlock, owner, false);
 	}
@@ -397,7 +397,7 @@ public class CannonManager
 	 * @param owner - the owner of the cannon (important for message notification). Can't be null
 	 * @return the cannon at this location
 	 */
-	public Cannon getCannon(Location cannonBlock, String owner, boolean silent)
+	public Cannon getCannon(Location cannonBlock, UUID owner, boolean silent)
 	{
         long startTime = System.nanoTime();
 
@@ -513,7 +513,7 @@ public class CannonManager
 	 * @param owner
 	 * @return
 	 */
-    private Cannon checkCannon(Location cannonBlock, String owner)
+    private Cannon checkCannon(Location cannonBlock, UUID owner)
 	{
 		// get world
 		World world = cannonBlock.getWorld();
@@ -578,7 +578,7 @@ public class CannonManager
 	 * @param player
 	 * @return
 	 */
-	public int getNumberOfCannons(String player)
+	public int getNumberOfCannons(UUID player)
 	{
 		int i = 0;
 		for (Cannon cannon : cannonList.values())
@@ -587,7 +587,7 @@ public class CannonManager
 			{
 				plugin.logSevere("Cannon has no owner. Contact the plugin developer");
 			}
-			else if (cannon.getOwner().equalsIgnoreCase(player))
+			else if (cannon.getOwner().equals(player))
 			{
 				i++;
 			}
@@ -704,7 +704,7 @@ public class CannonManager
 	 * @param owner
 	 * @return
 	 */
-	private MessageEnum canBuildCannon(Cannon cannon, String owner)
+	private MessageEnum canBuildCannon(Cannon cannon, UUID owner)
 	{
 		CannonDesign design = cannon.getCannonDesign();
 		

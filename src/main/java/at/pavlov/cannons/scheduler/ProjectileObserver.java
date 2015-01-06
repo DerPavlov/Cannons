@@ -2,15 +2,14 @@ package at.pavlov.cannons.scheduler;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
-import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
 import at.pavlov.cannons.utils.CannonsUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -49,17 +48,18 @@ public class ProjectileObserver {
                 while(iter.hasNext())
                 {
                     FlyingProjectile cannonball = iter.next().getValue();
+                    org.bukkit.entity.Projectile projectile_entity = cannonball.getProjectileEntity();
                     //remove an not valid projectile
-                    if (cannonball.getProjectileEntity() == null)
+                    if (projectile_entity == null)
                     {
                         iter.remove();
                         continue;
                     }
 
                     //update the cannonball
-                    checkWaterImpact(cannonball);
-                    updateTeleporter(cannonball);
-                    if (updateProjectileLocation(cannonball)) {
+                    checkWaterImpact(cannonball, projectile_entity);
+                    updateTeleporter(cannonball, projectile_entity);
+                    if (updateProjectileLocation(cannonball, projectile_entity)) {
                         iter.remove();
                         continue;
                     }
@@ -73,15 +73,15 @@ public class ProjectileObserver {
      * if cannonball enters water it will spawn a splash effect
      * @param cannonball the projectile to check
      */
-    private void checkWaterImpact(FlyingProjectile cannonball)
+    private void checkWaterImpact(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity)
     {
 
         //the projectile has passed the water surface, make a splash
-        if (cannonball.updateWaterSurfaceCheck())
+        if (cannonball.updateWaterSurfaceCheck(projectile_entity))
         {
             //go up until there is air and place the same liquid
-            Location startLoc = cannonball.getProjectileEntity().getLocation().clone();
-            Vector vel = cannonball.getProjectileEntity().getVelocity().clone();
+            Location startLoc = projectile_entity.getLocation().clone();
+            Vector vel = projectile_entity.getVelocity().clone();
             MaterialHolder liquid = new MaterialHolder(startLoc.getBlock().getTypeId(), startLoc.getBlock().getData());
 
             for (int i = 0; i<5; i++)
@@ -123,22 +123,21 @@ public class ProjectileObserver {
      * teleports the player to new position of the cannonball
      * @param cannonball the FlyingProjectile to check
      */
-    private void updateTeleporter(FlyingProjectile cannonball)
+    private void updateTeleporter(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity)
     {
         //if projectile has HUMAN_CANNONBALL or OBSERVER - update player position
         Projectile projectile = cannonball.getProjectile();
         if (projectile.hasProperty(ProjectileProperties.HUMAN_CANNONBALL) || projectile.hasProperty(ProjectileProperties.OBSERVER))
         {
-            LivingEntity shooter = cannonball.getShooter();
+            Player shooter = Bukkit.getPlayer(cannonball.getShooterUID());
             if(shooter == null)
                 return;
 
-            org.bukkit.entity.Projectile ball = cannonball.getProjectileEntity();
             //set some distance to the snowball to prevent a collision
-            Location optiLoc = ball.getLocation().clone().subtract(ball.getVelocity().normalize().multiply(20.0));
+            Location optiLoc = projectile_entity.getLocation().clone().subtract(projectile_entity.getVelocity().normalize().multiply(20.0));
 
             Vector distToOptimum = optiLoc.toVector().subtract(shooter.getLocation().toVector());
-            Vector playerVel = ball.getVelocity().add(distToOptimum.multiply(0.1));
+            Vector playerVel = projectile_entity.getVelocity().add(distToOptimum.multiply(0.1));
             //cap for maximum speed
             if (playerVel.getX() > 5.0)
                 playerVel.setX(5.0);
@@ -165,16 +164,16 @@ public class ProjectileObserver {
      * @param cannonball projectile to update
      * @return true if the projectile must be removed
      */
-    private boolean updateProjectileLocation(FlyingProjectile cannonball)
+    private boolean updateProjectileLocation(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity)
     {
         if (!plugin.getMyConfig().isKeepAliveEnabled())
             return false;
 
-        if (cannonball.distanceToProjectile() > plugin.getMyConfig().getKeepAliveTeleportDistance())
+        if (cannonball.distanceToProjectile(projectile_entity) > plugin.getMyConfig().getKeepAliveTeleportDistance())
         {
             Location toLoc = cannonball.getExpectedLocation();
             plugin.logDebug("teleported projectile to: " +  toLoc.getBlockX() + "," + toLoc.getBlockY() + "," + toLoc.getBlockZ());
-            cannonball.teleportToPrediction();
+            cannonball.teleportToPrediction(projectile_entity);
         }
 
 
@@ -183,9 +182,9 @@ public class ProjectileObserver {
         if (!block.isEmpty() && !block.isLiquid())
         {
             cannonball.revertUpdate();
-            cannonball.teleportToPrediction();
-            plugin.getExplosion().detonate(cannonball);
-            cannonball.getProjectileEntity().remove();
+            cannonball.teleportToPrediction(projectile_entity);
+            plugin.getExplosion().detonate(cannonball, projectile_entity);
+            projectile_entity.remove();
             return true;
         }
         cannonball.update();

@@ -136,7 +136,7 @@ public class Commands implements CommandExecutor
                         sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1] + ChatColor.GREEN + ":");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
-                            if (cannon.getOwner().equalsIgnoreCase(args[1]))
+                            if (cannon.getOwner().equals(args[1]))
                                 sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
                         }
                     }
@@ -289,7 +289,7 @@ public class Commands implements CommandExecutor
                         sendMessage(sender, ChatColor.GREEN +"Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
-                            if (cannon.getOwner().equalsIgnoreCase(player.getName()))
+                            if (cannon.getOwner().equals(player.getName()))
                                 sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
                                         ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
                         }
@@ -514,7 +514,7 @@ public class Commands implements CommandExecutor
             sendMessage(sender, ChatColor.YELLOW + "no Permission cannons.limit.x (with 0<=x<=100)");
         else
             displayPermission(sender, permPlayer, "cannons.limit."+newBuildlimit);
-        int numberCannons = plugin.getCannonManager().getNumberOfCannons(permPlayer.getName());
+        int numberCannons = plugin.getCannonManager().getNumberOfCannons(permPlayer.getUniqueId());
         int maxCannons = plugin.getCannonManager().getCannonBuiltLimit(permPlayer);
         if (maxCannons == Integer.MAX_VALUE)
             sendMessage(sender, ChatColor.YELLOW + "Built cannons: " + ChatColor.GOLD + numberCannons);

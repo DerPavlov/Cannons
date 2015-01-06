@@ -1,16 +1,15 @@
 package at.pavlov.cannons.utils;
 
-import org.bukkit.entity.Player;
-
 import at.pavlov.cannons.cannon.Cannon;
+import java.util.UUID;
 
 
 public class FireTaskWrapper{
 	private Cannon cannon;
-    private Player player;
+    private UUID player;
     private boolean removeCharge;
 
-	public FireTaskWrapper(Cannon cannon, Player player, boolean removeCharge)
+	public FireTaskWrapper(Cannon cannon, UUID player, boolean removeCharge)
     {
         this.cannon = cannon;
         this.player = player;
@@ -25,11 +24,11 @@ public class FireTaskWrapper{
         this.cannon = cannon;
     }
 
-    public Player getPlayer() {
+    public UUID getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(UUID player) {
         this.player = player;
     }
 

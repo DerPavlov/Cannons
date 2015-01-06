@@ -66,7 +66,7 @@ public class CannonsAPI {
      */
     public Cannon getCannon(Location location, Player player)
     {
-        return plugin.getCannonManager().getCannon(location, player.getName());
+        return plugin.getCannonManager().getCannon(location, player.getUniqueId());
     }
 
     /**
@@ -102,7 +102,7 @@ public class CannonsAPI {
      */
     public HashSet<Cannon> getCannons(List<Location> locations, Player player, boolean silent)
     {
-        return plugin.getCannonManager().getCannons(locations, player.getName(), silent);
+        return plugin.getCannonManager().getCannons(locations, player.getUniqueId(), silent);
     }
 
     /**
@@ -113,7 +113,7 @@ public class CannonsAPI {
      */
     public HashSet<Cannon> getCannons(List<Location> locations, Player player)
     {
-        return plugin.getCannonManager().getCannons(locations, player.getName(), true);
+        return plugin.getCannonManager().getCannons(locations, player.getUniqueId(), true);
     }
 
     /**

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.UUID;
 
 import at.pavlov.cannons.Enum.MessageEnum;
 import org.bukkit.Bukkit;
@@ -162,7 +163,7 @@ public class UserMessages {
 	 * @param messageEnum
 	 * @param cannon
 	 */
-	public void sendMessage(String player, MessageEnum messageEnum, Cannon cannon)
+	public void sendMessage(UUID player, MessageEnum messageEnum, Cannon cannon)
 	{
 		//no player no message
 		if (player != null)
@@ -307,7 +308,7 @@ public class UserMessages {
 		{
 			//replace the number of cannons
             message = message.replace("PLAYER", player.getName());
-			message = message.replace("CANNONS", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getName())));
+			message = message.replace("CANNONS", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getUniqueId())));
 		}
 		return message;
 	}

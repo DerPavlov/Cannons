@@ -75,13 +75,17 @@ public class Cannon
     private HashMap<String, Boolean> observerMap = new HashMap<String, Boolean>();
 
     // player who has build this cannon
-    private String owner;
+    private UUID owner;
     // designID of the cannon, for different types of cannons - not in use
     private boolean isValid;
     // true if the cannon if firing
     private boolean isFiring;
+    // time point of the last start of the firing sequence (used in combination with isFiring)
+    private long lastIgnited;
     //the player which has used the cannon last, important for firing with redstone button
-    private String lastUser;
+    private UUID lastUser;
+    //spread multiplier from the last operator of the cannon
+    private double lastPlayerSpreadMultiplier;
 
     //cannon temperature
     private double tempValue;
@@ -98,7 +102,7 @@ public class Cannon
     private String firingButtonActivator;
 
 
-    public Cannon(CannonDesign design, String world, Vector cannonOffset, BlockFace cannonDirection, String owner)
+    public Cannon(CannonDesign design, String world, Vector cannonOffset, BlockFace cannonDirection, UUID owner)
     {
 
         this.design = design;
@@ -111,6 +115,8 @@ public class Cannon
 
         this.horizontalAngle = (design.getMaxHorizontalAngleNormal()+design.getMinHorizontalAngleNormal())/2.0;
         this.verticalAngle = (design.getMaxVerticalAngleNormal()+design.getMinVerticalAngleNormal())/2.0;
+
+        lastPlayerSpreadMultiplier = 1.0;
 
         // reset
         if (design.isGunpowderNeeded())
@@ -249,10 +255,9 @@ public class Cannon
 
     /**
      * removes cooling item form the chest attached to the cannon, returns true if it was enough to cool down the cannon
-     * @param player - player operating the cannon
      * @return - true if the cannon has been cooled down
      */
-    public boolean automaticCoolingFromChest(Player player)
+    public boolean automaticCoolingFromChest()
     {
 
         List<Inventory> invlist = getInventoryList();
@@ -1017,7 +1022,7 @@ public class Cannon
      * @param player player operating the cannon
      * @return
      */
-    public MessageEnum checkRedstonePermission(String player)
+    public MessageEnum checkRedstonePermission(UUID player)
     {
         Player playerBukkit = null;
         if (player != null) playerBukkit = Bukkit.getPlayer(player);
@@ -1282,17 +1287,22 @@ public class Cannon
 
     /**
      * return the firing vector of the cannon. The spread depends on the cannon, the projectile and the player
-     * @param player
+     * @param addSpread
+     * @param usePlayerSpread
      * @return
      */
-    public Vector getFiringVector(Player player, boolean addSpread)
+    public Vector getFiringVector(boolean addSpread, boolean usePlayerSpread)
     {
         // get projectile
         // set direction of the snowball
         Vector vect = new Vector(1f, 0f, 0f);
         Random r = new Random();
 
-        final double spread = design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*getPlayerSpreadMultiplier(player);
+        double playerSpread = 1.0;
+        if (usePlayerSpread)
+            playerSpread = getLastPlayerSpreadMultiplier();
+
+        final double spread = design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpread;
         double deviation = 0.0;
 
         if (addSpread)
@@ -1492,8 +1502,12 @@ public class Cannon
                 return cannonName;
             case 1 :
                 // Cannon owner in the second
-                if (owner == null) owner = "missing Owner";
-                return owner;
+                if (owner == null)
+                    return "missing Owner";
+                Player bPlayer = Bukkit.getPlayer(owner);
+                if (bPlayer == null)
+                    return "not found";
+                return bPlayer.toString();
             case 2 :
                 // loaded Gunpowder/Projectile
                 if (loadedProjectile != null) return "p: " + loadedGunpowder + " c: " + loadedProjectile.toString();
@@ -1747,12 +1761,12 @@ public class Cannon
     }
 
 
-    public String getOwner()
+    public UUID getOwner()
     {
         return owner;
     }
 
-    public void setOwner(String owner)
+    public void setOwner(UUID owner)
     {
         this.owner = owner;
     }
@@ -1817,23 +1831,36 @@ public class Cannon
         this.lastAimed = lastAimed;
     }
 
-    public String getLastUser()
+    public UUID getLastUser()
     {
         return lastUser;
     }
 
-    public void setLastUser(String lastUser)
+    public void setLastUser(UUID lastUser)
     {
         this.lastUser = lastUser;
         if(design.isLastUserBecomesOwner()) owner = lastUser;
     }
 
-    public boolean isFiring() {
+    public boolean isFiring()
+    {
+        if (isFiring)
+        {
+            //check if firing is finished and not reseted (after server restart)
+            Projectile projectile = getLoadedProjectile();
+            //delayTime is the time how long the firing should take
+            Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + (projectile.getAutomaticFiringMagazineSize()-1)*projectile.getAutomaticFiringDelay()*20.0);
+            if (lastIgnited + delayTime < System.currentTimeMillis())
+                //System.out.println("reseted isFiring");
+                isFiring = false;
+        }
         return isFiring;
     }
 
     public void setFiring(boolean firing) {
         isFiring = firing;
+        if (firing)
+            lastIgnited = System.currentTimeMillis();
     }
 
     /**
@@ -2097,5 +2124,17 @@ public class Cannon
 
     public void incrementFiredCannonballs(){
         this.firedCannonballs++;
+    }
+
+    public double getLastPlayerSpreadMultiplier() {
+        return lastPlayerSpreadMultiplier;
+    }
+
+    public void setLastPlayerSpreadMultiplier(Player player) {
+        this.lastPlayerSpreadMultiplier = getPlayerSpreadMultiplier(player);
+    }
+
+    public void resetLastPlayerSpreadMultiplier(){
+        this.lastPlayerSpreadMultiplier = 1.0;
     }
 }

@@ -79,7 +79,7 @@ public class PersistenceDatabase
 					String world = bean.getWorld();
 					Vector offset = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
 					BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
-					String owner = bean.getOwner();
+                    UUID owner = bean.getOwner();
 					
 					//make a cannon
 					Cannon cannon = new Cannon(design, world, offset, cannonDirection, owner);

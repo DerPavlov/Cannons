@@ -1,17 +1,16 @@
 package at.pavlov.cannons.projectile;
 
-import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.container.MovingObject;
-import at.pavlov.cannons.utils.CannonsUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Flying;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
-import java.rmi.server.UID;
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 
@@ -19,11 +18,13 @@ public class FlyingProjectile
 {
 	private final long spawnTime;
 	
-	private final org.bukkit.entity.Projectile projectile_entity;
-    private String shooter;
+	private final UUID entityUID;
+    private UUID shooterUID;
+    private UUID worldUID;
 	private final Projectile projectile;
-    //location of the shooter before firing - important for teleporting the player back - observer property
-    private final Location firingLocation;
+    private final ProjectileSource source;
+    //location of the shooterUID before firing - important for teleporting the player back - observer property
+    private final Location playerlocation;
     private Location impactLocation;
     //Important for visual splash effect when the cannonball hits the water surface
     private boolean inWater;
@@ -34,41 +35,49 @@ public class FlyingProjectile
 
 
 	
-	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, Player shooter, UUID cannonId)
+	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, UUID shooterUID, ProjectileSource source, Location playerLoc, UUID cannonId)
 	{
-        Validate.notNull(shooter, "shooter for the projectile can't be null");
-        this.projectile_entity = projectile_entity;
+        Validate.notNull(shooterUID, "shooterUID for the projectile can't be null");
+        this.entityUID = projectile_entity.getUniqueId();
+        this.worldUID = projectile_entity.getWorld().getUID();
+
         this.wasInWater = this.isInWater();
 		this.projectile = projectile;
         this.cannonID = cannonId;
-        if (shooter != null)
-        {
-            this.shooter = shooter.getName();
-            this.firingLocation = shooter.getLocation();
-            this.projectile_entity.setShooter(shooter);
-        }
-        else
-        {
-            this.firingLocation = projectile_entity.getLocation();
-        }
+        this.shooterUID = shooterUID;
+        this.playerlocation = playerLoc;
+        this.source = source;
+        projectile_entity.setShooter(source);
+
 		this.spawnTime = System.currentTimeMillis();
 
         //set location and speed
         Location new_loc = projectile_entity.getLocation();
         predictor = new MovingObject(new_loc, projectile_entity.getVelocity());
 	}
-	
-	public Player getShooter()
-	{
-        if (shooter != null)
-		    return Bukkit.getPlayer(shooter);
-        else
-            return null;
-	}
 
+    public UUID getShooterUID()
+    {
+        return shooterUID;
+    }
+
+    /*
+     * Returns the entity of the flying projectile
+     * This is time consuming, the projectile should be cached
+     * @return
+     */
 	public org.bukkit.entity.Projectile getProjectileEntity()
 	{
-		return projectile_entity;
+        long startTime = System.nanoTime();
+        World world = Bukkit.getWorld(worldUID);
+        for (Entity entity : world.getEntitiesByClass(org.bukkit.entity.Projectile.class)) {
+            if (entity instanceof org.bukkit.entity.Projectile && entity.getUniqueId().equals(entityUID)) {
+                System.out.println("Time to find projectile: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime) / 1000000.0) + "ms");
+                return (org.bukkit.entity.Projectile) entity;
+            }
+        }
+        System.out.println("Projectile not found: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime) / 1000000.0) + "ms");
+        return null;
 	}
 
 	public Projectile getProjectile()
@@ -81,15 +90,15 @@ public class FlyingProjectile
 		return spawnTime;
 	}
 
-    public Location getFiringLocation() {
-        return firingLocation;
+    public Location getPlayerlocation() {
+        return playerlocation;
     }
 
     /**
      * check if the projectile in in a liquid
      * @return true if the projectile is in a liquid
      */
-    private boolean isInWaterCheck()
+    private boolean isInWaterCheck(org.bukkit.entity.Projectile projectile_entity)
     {
         if(projectile_entity!=null)
         {
@@ -110,18 +119,18 @@ public class FlyingProjectile
      * if the projectile has entered the water surface
      * @return true if the projectile has entered the water surface
      */
-    public boolean isWaterSurface(){
-        return !wasInWater&&isInWaterCheck();
+    public boolean isWaterSurface(org.bukkit.entity.Projectile projectile_entity){
+        return !wasInWater&&isInWaterCheck(projectile_entity);
     }
 
     /**
      * returns if the projectile has entered the water surface and updates also inWater
      * @return true if the projectile has entered water
      */
-    public boolean updateWaterSurfaceCheck()
+    public boolean updateWaterSurfaceCheck(org.bukkit.entity.Projectile projectile_entity)
     {
-        boolean isSurface = isWaterSurface();
-        inWater = isInWaterCheck();
+        boolean isSurface = isWaterSurface(projectile_entity);
+        inWater = isInWaterCheck(projectile_entity);
         wasInWater = inWater;
         return isSurface;
     }
@@ -135,10 +144,20 @@ public class FlyingProjectile
     }
 
     /**
-     * if the projectile is still alive and valid
+     * searches for the projectile and checks if the projectile is still alive and valid
+     *
      * @return returns false if the projectile entity is null
      */
     public boolean isValid()
+    {
+        return isValid(getProjectileEntity());
+    }
+
+    /**
+     * if the projectile is still alive and valid
+     * @return returns false if the projectile entity is null
+     */
+    public boolean isValid(org.bukkit.entity.Projectile projectile_entity)
     {
         return projectile_entity!=null;
     }
@@ -172,16 +191,16 @@ public class FlyingProjectile
      * returns actual location of the projectile
      * @return momentary position of the projectile
      */
-    public Location getActualLocation()
+    public Location getActualLocation(org.bukkit.entity.Projectile projectile_entity)
     {
-        return this.projectile_entity.getLocation();
+        return projectile_entity.getLocation();
     }
 
     /**
      * returns the distance of the projectile location to the calculated location
      * @return distance of the projectile location to the calculated location
      */
-    public double distanceToProjectile()
+    public double distanceToProjectile(org.bukkit.entity.Projectile projectile_entity)
     {
         return projectile_entity.getLocation().toVector().distance(predictor.getLoc());
     }
@@ -189,7 +208,7 @@ public class FlyingProjectile
     /**
      * teleports the projectile to the predicted location
      */
-    public void teleportToPrediction()
+    public void teleportToPrediction(org.bukkit.entity.Projectile projectile_entity)
     {
         projectile_entity.teleport(predictor.getLocation());
         projectile_entity.setVelocity(predictor.getVel());
@@ -204,13 +223,13 @@ public class FlyingProjectile
     {
         this.predictor.setLocation(loc);
         this.predictor.setVel(vel);
-        teleportToPrediction();
+        teleportToPrediction(getProjectileEntity());
     }
 
     @Override
     public int hashCode() {
         //compare projectile entities
-        return projectile_entity.hashCode();
+        return entityUID.hashCode();
     }
 
     @Override
@@ -218,12 +237,12 @@ public class FlyingProjectile
     {
         //equal if the projectile entities are equal
         FlyingProjectile obj2 = (FlyingProjectile) obj;
-        return this.projectile_entity.equals(obj2.getProjectileEntity());
+        return this.getUID().equals(obj2.getUID());
     }
 
     public UUID getUID()
     {
-        return projectile_entity.getUniqueId();
+        return entityUID;
     }
 
     public Location getImpactLocation() {
@@ -241,4 +260,19 @@ public class FlyingProjectile
     public void setCannonID(UUID cannonID) {
         this.cannonID = cannonID;
     }
+
+    public ProjectileSource getSource() {
+        return source;
+    }
+
+    public UUID getWorldUID()
+    {
+        return worldUID;
+    }
+
+    public World getWorld()
+    {
+        return Bukkit.getWorld(worldUID);
+    }
+
 }

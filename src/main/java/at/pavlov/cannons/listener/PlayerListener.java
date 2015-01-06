@@ -82,7 +82,7 @@ public class PlayerListener implements Listener
         // if player loads a lava/water bucket in the cannon
         Location blockLoc = event.getBlockClicked().getLocation();
 
-        Cannon cannon = cannonManager.getCannon(blockLoc, event.getPlayer().getName());
+        Cannon cannon = cannonManager.getCannon(blockLoc, event.getPlayer().getUniqueId());
 
         // check if it is a cannon
         if (cannon != null)
@@ -107,7 +107,7 @@ public class PlayerListener implements Listener
         Location blockLoc = block.getLocation();
 
         // setup a new cannon
-        cannonManager.getCannon(blockLoc, event.getPlayer().getName());
+        cannonManager.getCannon(blockLoc, event.getPlayer().getUniqueId());
 
         // delete placed projectile or gunpowder if clicked against the barrel
         if (event.getBlockAgainst() != null)
@@ -115,7 +115,7 @@ public class PlayerListener implements Listener
             Location barrel = event.getBlockAgainst().getLocation();
 
             // check if block is cannonblock
-            Cannon cannon = cannonManager.getCannon(barrel, event.getPlayer().getName(), true);
+            Cannon cannon = cannonManager.getCannon(barrel, event.getPlayer().getUniqueId(), true);
             if (cannon != null)
             {
                 // delete projectile
@@ -145,7 +145,7 @@ public class PlayerListener implements Listener
         {
             // check cannon
             Location loc = event.getBlock().getRelative(BlockFace.UP).getLocation();
-            Cannon cannon = cannonManager.getCannon(loc, event.getPlayer().getName(), true);
+            Cannon cannon = cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true);
             if (cannon != null)
             {
                 // check permissions
@@ -168,7 +168,7 @@ public class PlayerListener implements Listener
             for (Block b : CannonsUtil.HorizontalSurroundingBlocks(event.getBlock()))
             {
                 Location loc = b.getLocation();
-                Cannon cannon = cannonManager.getCannon(loc, event.getPlayer().getName(), true);
+                Cannon cannon = cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true);
                 if (cannon != null)
                 {
                     // check permissions
@@ -190,7 +190,7 @@ public class PlayerListener implements Listener
         {
             // check cannon
             Location loc = event.getBlockAgainst().getLocation();
-            if (cannonManager.getCannon(loc, event.getPlayer().getName(), true) != null)
+            if (cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true) != null)
             {
                 event.setCancelled(true);
             }
@@ -294,10 +294,10 @@ public class PlayerListener implements Listener
                     //no last cannon user
                     return;
 
-                if (cannon.getLastUser().isEmpty() || player == null)
+                if (cannon.getLastUser() == null || player == null)
                     return;
                 //reset user
-                cannon.setLastUser("");
+                cannon.setLastUser(null);
 
                 plugin.logDebug("Redfire with button by " + player.getName());
 
@@ -335,7 +335,7 @@ public class PlayerListener implements Listener
             final Location barrel = clickedBlock.getLocation();
 
             // find cannon or add it to the list
-            final Cannon cannon = cannonManager.getCannon(barrel, player.getName(), false);
+            final Cannon cannon = cannonManager.getCannon(barrel, player.getUniqueId(), false);
 
             //no cannon found - maybe the player has click into the air to stop aiming
             if(cannon == null)
@@ -487,7 +487,7 @@ public class PlayerListener implements Listener
             if(cannon.isRestoneTrigger(clickedBlock.getLocation()))
             {
                 plugin.logDebug("interact event: fire redstone trigger");
-                cannon.setLastUser(player.getName());
+                cannon.setLastUser(player.getUniqueId());
 
                 return;
             }

@@ -7,6 +7,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -26,7 +27,7 @@ public class ProjectileManager
         this.plugin = plugin;
     }
 
-    public org.bukkit.entity.Projectile spawnProjectile(Projectile projectile, Player shooter, Location spawnLoc, Vector velocity, UUID cannonId)
+    public org.bukkit.entity.Projectile spawnProjectile(Projectile projectile, UUID shooter, ProjectileSource source, Location playerLoc, Location spawnLoc, Vector velocity, UUID cannonId)
     {
         Validate.notNull(shooter, "shooter for the projectile can't be null");
         World world = spawnLoc.getWorld();
@@ -56,7 +57,7 @@ public class ProjectileManager
         projectileEntity.setVelocity(velocity);
 
         //create a new flying projectile container
-        FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter, cannonId);
+        FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter, source, playerLoc, cannonId);
 
 
         flyingProjectilesMap.put(cannonball.getUID(), cannonball);
@@ -88,8 +89,9 @@ public class ProjectileManager
 
                     if(fproj != null) {
                         //detonate timefuse
-                        plugin.getExplosion().detonate(cannonball);
-                        cannonball.getProjectileEntity().remove();
+                        org.bukkit.entity.Projectile projectile_entity = fproj.getProjectileEntity();
+                        plugin.getExplosion().detonate(cannonball, projectile_entity);
+                        projectile_entity.remove();
                         flyingProjectilesMap.remove(cannonball.getUID());
                     }
                 }}, (long) (cannonball.getProjectile().getTimefuse()*20));
@@ -108,8 +110,9 @@ public class ProjectileManager
         FlyingProjectile fproj = flyingProjectilesMap.get(projectile.getUniqueId());
         if (fproj!=null)
         {
-            plugin.getExplosion().detonate(fproj);
-            fproj.getProjectileEntity().remove();
+            org.bukkit.entity.Projectile projectile_entity = fproj.getProjectileEntity();
+            plugin.getExplosion().detonate(fproj, projectile_entity);
+            projectile_entity.remove();
             flyingProjectilesMap.remove(fproj.getUID());
         }
     }
@@ -126,9 +129,9 @@ public class ProjectileManager
         FlyingProjectile fproj = flyingProjectilesMap.get(projectile.getUniqueId());
         if (fproj != null)
         {
-
-            plugin.getExplosion().directHit(fproj, target);
-            fproj.getProjectileEntity().remove();
+            org.bukkit.entity.Projectile projectile_entity = fproj.getProjectileEntity();
+            plugin.getExplosion().directHit(fproj, projectile_entity, target);
+            projectile_entity.remove();
             flyingProjectilesMap.remove(fproj.getUID());
         }
     }

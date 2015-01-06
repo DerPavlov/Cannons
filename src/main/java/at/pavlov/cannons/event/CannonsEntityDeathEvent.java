@@ -16,10 +16,10 @@ public class CannonsEntityDeathEvent extends Event
     private LivingEntity killedEntity;
     private Projectile projectile;
     private UUID cannonID;
-    private Player shooter;
+    private UUID shooter;
     private boolean cancelled;
 
-    public CannonsEntityDeathEvent(LivingEntity killedEntity, Projectile projectile, UUID cannonID, Player shooter)
+    public CannonsEntityDeathEvent(LivingEntity killedEntity, Projectile projectile, UUID cannonID, UUID shooter)
     {
         this.killedEntity = killedEntity;
         this.projectile = projectile;
@@ -60,11 +60,11 @@ public class CannonsEntityDeathEvent extends Event
         this.cannonID = cannonID;
     }
 
-    public Player getShooter() {
+    public UUID getShooter() {
         return shooter;
     }
 
-    public void setShooter(Player shooter) {
+    public void setShooter(UUID shooter) {
         this.shooter = shooter;
     }
 

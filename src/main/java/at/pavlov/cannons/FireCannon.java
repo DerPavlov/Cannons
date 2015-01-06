@@ -2,6 +2,7 @@ package at.pavlov.cannons;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.Enum.FakeBlockType;
@@ -17,6 +18,7 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import at.pavlov.cannons.cannon.Cannon;
@@ -148,7 +150,6 @@ public class FireCannon {
         if (useEvent.isCancelled())
             return null;
 
-        Projectile projectile = cannon.getLoadedProjectile();
         CannonDesign design = cannon.getCannonDesign();
 
 
@@ -226,6 +227,10 @@ public class FireCannon {
 
         //reset after firing
         cannon.setLastFired(System.currentTimeMillis());
+        //this cannon is now firing
+        cannon.setFiring(true);
+        //store spread of cannon operator
+        cannon.setLastPlayerSpreadMultiplier(player);
 
         //Set up smoke effects on the torch
         for (Location torchLoc : design.getFiringIndicator(cannon))
@@ -238,18 +243,13 @@ public class FireCannon {
             CannonsUtil.playSound(torchLoc, design.getSoundIgnite());
         }
 
-        //this cannon is now firing
-        cannon.setFiring(true);
-
-        //boolean removeCharge = cannon.getCannonDesign().isGunpowderNeeded();
-
         //set up delayed task with automatic firing. Several bullets with time delay for one loaded projectile
         for(int i=0; i < projectile.getAutomaticFiringMagazineSize(); i++)
         {
             //charge is only removed in the last round fired
             boolean lastRound = i==(projectile.getAutomaticFiringMagazineSize()-1);
             Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
-            FireTaskWrapper fireTask = new FireTaskWrapper(cannon, player, lastRound);
+            FireTaskWrapper fireTask = new FireTaskWrapper(cannon, player.getUniqueId(), lastRound);
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
             {
                 public void run(Object object)
@@ -267,10 +267,13 @@ public class FireCannon {
      * @param shooter - the player firing the cannon
      * @param removeCharge - if the charge is removed after firing
      */
-    private void fireTask(Cannon cannon, Player shooter, boolean removeCharge)
+    private void fireTask(Cannon cannon, UUID shooter, boolean removeCharge)
     {
         CannonDesign design = cannon.getCannonDesign();
         Projectile projectile = cannon.getLoadedProjectile();
+
+        //the player might be null if not online
+        Player onlinePlayer = Bukkit.getPlayer(shooter);
 
         // no projectile no cannon firing
         if (projectile == null) return;
@@ -295,16 +298,24 @@ public class FireCannon {
             cannon.setTemperature(cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
         //automatic cool down
         if (design.isAutomaticCooling())
-            cannon.automaticCoolingFromChest(shooter);
+            cannon.automaticCoolingFromChest();
 
         //for each bullet, but at least once
         for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
         {
-            Vector vect = cannon.getFiringVector(shooter, true);
-            org.bukkit.entity.Projectile projectileEntity = plugin.getProjectileManager().spawnProjectile(projectile, shooter, firingLoc, vect, cannon.getUID());
+            ProjectileSource source = null;
+            Location playerLoc = null;
+            if (onlinePlayer != null)
+            {
+                source = onlinePlayer;
+                playerLoc = onlinePlayer.getLocation();
+            }
 
-            if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER))
-                projectileEntity.setPassenger(shooter);
+            Vector vect = cannon.getFiringVector(true, true);
+            org.bukkit.entity.Projectile projectileEntity = plugin.getProjectileManager().spawnProjectile(projectile, shooter, source, playerLoc, firingLoc, vect, cannon.getUID());
+
+            if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER) && onlinePlayer != null)
+                projectileEntity.setPassenger(onlinePlayer);
 
             //confuse all entity which wear no helmets due to the blast of the cannon
             List<Entity> living = projectileEntity.getNearbyEntities(8, 8, 8);

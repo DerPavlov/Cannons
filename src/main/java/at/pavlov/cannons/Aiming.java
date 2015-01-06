@@ -714,7 +714,7 @@ public class Aiming {
             return null;
 
         Location muzzle = cannon.getMuzzle();
-        Vector vel = cannon.getFiringVector(null, false);
+        Vector vel = cannon.getFiringVector(false, false);
 
         MovingObject predictor = new MovingObject(muzzle, vel);
         Vector start = muzzle.toVector();
