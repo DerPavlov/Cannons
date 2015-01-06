@@ -68,15 +68,12 @@ public class FlyingProjectile
      */
 	public org.bukkit.entity.Projectile getProjectileEntity()
 	{
-        long startTime = System.nanoTime();
         World world = Bukkit.getWorld(worldUID);
         for (Entity entity : world.getEntitiesByClass(org.bukkit.entity.Projectile.class)) {
             if (entity instanceof org.bukkit.entity.Projectile && entity.getUniqueId().equals(entityUID)) {
-                System.out.println("Time to find projectile: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime) / 1000000.0) + "ms");
                 return (org.bukkit.entity.Projectile) entity;
             }
         }
-        System.out.println("Projectile not found: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime) / 1000000.0) + "ms");
         return null;
 	}
 
