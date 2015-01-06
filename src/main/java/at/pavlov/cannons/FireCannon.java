@@ -231,6 +231,10 @@ public class FireCannon {
         cannon.setFiring(true);
         //store spread of cannon operator
         cannon.setLastPlayerSpreadMultiplier(player);
+        // get uid from player, if player is offline use Owner
+        UUID playerUID = cannon.getOwner();
+        if (player != null)
+            player.getUniqueId();
 
         //Set up smoke effects on the torch
         for (Location torchLoc : design.getFiringIndicator(cannon))
@@ -249,7 +253,7 @@ public class FireCannon {
             //charge is only removed in the last round fired
             boolean lastRound = i==(projectile.getAutomaticFiringMagazineSize()-1);
             Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
-            FireTaskWrapper fireTask = new FireTaskWrapper(cannon, player.getUniqueId(), lastRound);
+            FireTaskWrapper fireTask = new FireTaskWrapper(cannon, playerUID, lastRound);
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
             {
                 public void run(Object object)
