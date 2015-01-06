@@ -207,8 +207,6 @@ public class PlayerListener implements Listener
         Block block = event.getBlock();
         if (block == null) return;
 
-        plugin.logDebug("Redstone event was fired by " + block.getType());
-
         // ##########  redstone torch fire
         // off because it turn form off to on
         if (block.getType() == Material.REDSTONE_TORCH_ON)
