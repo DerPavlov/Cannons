@@ -2,7 +2,6 @@ package at.pavlov.cannons.cannon;
 
 import java.util.*;
 
-import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
@@ -25,7 +24,6 @@ import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.utils.InventoryManagement;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.sign.CannonSign;
-import sun.plugin2.message.Message;
 
 public class Cannon
 {

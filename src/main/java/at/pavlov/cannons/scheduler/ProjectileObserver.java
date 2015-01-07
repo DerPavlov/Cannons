@@ -50,8 +50,10 @@ public class ProjectileObserver {
                     FlyingProjectile cannonball = iter.next().getValue();
                     org.bukkit.entity.Projectile projectile_entity = cannonball.getProjectileEntity();
                     //remove an not valid projectile
-                    if (cannonball.isValid(projectile_entity))
+                    if (!cannonball.isValid(projectile_entity))
                     {
+                        Location l = projectile_entity.getLocation();
+                        plugin.logDebug("removed Projectile at " + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ() + " because it was not valid.");
                         iter.remove();
                         continue;
                     }

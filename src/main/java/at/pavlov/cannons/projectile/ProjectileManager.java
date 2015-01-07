@@ -85,13 +85,16 @@ public class ProjectileManager
                 public void run(Object object)
                 {
                     //find given UID in list
-                    FlyingProjectile fproj = flyingProjectilesMap.get((UUID) object);
+                    FlyingProjectile fproj = flyingProjectilesMap.get(object);
 
                     if(fproj != null) {
                         //detonate timefuse
                         org.bukkit.entity.Projectile projectile_entity = fproj.getProjectileEntity();
-                        plugin.getExplosion().detonate(cannonball, projectile_entity);
-                        projectile_entity.remove();
+                        //the projectile might be null
+                        if (projectile_entity != null) {
+                            plugin.getExplosion().detonate(cannonball, projectile_entity);
+                            projectile_entity.remove();
+                        }
                         flyingProjectilesMap.remove(cannonball.getUID());
                     }
                 }}, (long) (cannonball.getProjectile().getTimefuse()*20));
@@ -105,33 +108,35 @@ public class ProjectileManager
      */
     public void detonateProjectile(Entity projectile)
     {
-        if(projectile == null) return;
+        if(projectile == null || !(projectile instanceof org.bukkit.entity.Projectile))
+            return;
 
         FlyingProjectile fproj = flyingProjectilesMap.get(projectile.getUniqueId());
         if (fproj!=null)
         {
-            org.bukkit.entity.Projectile projectile_entity = fproj.getProjectileEntity();
-            plugin.getExplosion().detonate(fproj, projectile_entity);
-            projectile_entity.remove();
+            plugin.getExplosion().detonate(fproj, (org.bukkit.entity.Projectile) projectile);
+            projectile.remove();
             flyingProjectilesMap.remove(fproj.getUID());
         }
     }
 
     /**
      * detonates the given projectile entity
-     * @param projectile - the projectile with this entity
+     * @param cannonball - the projectile with this entity
      * @param target the entity hit by the projectile
      */
-    public void directHitProjectile(Entity projectile, Entity target)
+    public void directHitProjectile(Entity cannonball, Entity target)
     {
-        if(projectile == null || target == null) return;
+        if(cannonball == null || target == null) return;
 
-        FlyingProjectile fproj = flyingProjectilesMap.get(projectile.getUniqueId());
+        FlyingProjectile fproj = flyingProjectilesMap.get(cannonball.getUniqueId());
         if (fproj != null)
         {
             org.bukkit.entity.Projectile projectile_entity = fproj.getProjectileEntity();
-            plugin.getExplosion().directHit(fproj, projectile_entity, target);
-            projectile_entity.remove();
+            if (cannonball.isValid()) {
+                plugin.getExplosion().directHit(fproj, projectile_entity, target);
+                projectile_entity.remove();
+            }
             flyingProjectilesMap.remove(fproj.getUID());
         }
     }

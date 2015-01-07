@@ -156,7 +156,7 @@ public class FlyingProjectile
      */
     public boolean isValid(org.bukkit.entity.Projectile projectile_entity)
     {
-        return projectile_entity!=null;
+        return (projectile_entity != null && projectile_entity.getLocation().getBlockY() > -64);
     }
 
     /**
@@ -207,6 +207,8 @@ public class FlyingProjectile
      */
     public void teleportToPrediction(org.bukkit.entity.Projectile projectile_entity)
     {
+        if (projectile_entity == null)
+            return;
         projectile_entity.teleport(predictor.getLocation());
         projectile_entity.setVelocity(predictor.getVel());
     }

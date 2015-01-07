@@ -12,7 +12,6 @@ import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.*;
-import org.bukkit.Note.Tone;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;

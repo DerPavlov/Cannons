@@ -124,7 +124,7 @@ public class Config
         //imitated effects
         setImitatedBlockMinimumDistance(plugin.getConfig().getInt("imitatedEffects.minimumBlockDistance", 40));
         setImitatedBlockMaximumDistance(plugin.getConfig().getInt("imitatedEffects.maximumBlockDistance", 200));
-        setImitatedSoundMaximumDistance((int) plugin.getConfig().getInt("imitatedEffects.maximumSoundDistance", 200));
+        setImitatedSoundMaximumDistance(plugin.getConfig().getInt("imitatedEffects.maximumSoundDistance", 200));
 
         //imitated explosions
         setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));

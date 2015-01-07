@@ -143,9 +143,10 @@ public class FireCannon {
     public MessageEnum fire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo, InteractAction action)
     {
         //set some valid shooter is none is given
-        if (player == null)
+        if (player == null) {
             player = Bukkit.getPlayer(cannon.getOwner());
             plugin.logDebug("Firing: Set shooter to cannonOwner, because it was null");
+        }
         //fire event
         CannonUseEvent useEvent = new CannonUseEvent(cannon, player, action);
         Bukkit.getServer().getPluginManager().callEvent(useEvent);
