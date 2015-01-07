@@ -10,7 +10,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
-import java.text.DecimalFormat;
 import java.util.UUID;
 
 
@@ -21,6 +20,7 @@ public class FlyingProjectile
 	private final UUID entityUID;
     private UUID shooterUID;
     private UUID worldUID;
+    private UUID cannonUID;
 	private final Projectile projectile;
     private final ProjectileSource source;
     //location of the shooterUID before firing - important for teleporting the player back - observer property
@@ -29,7 +29,7 @@ public class FlyingProjectile
     //Important for visual splash effect when the cannonball hits the water surface
     private boolean inWater;
     private boolean wasInWater;
-    private UUID cannonID;
+
 
     private MovingObject predictor;
 
@@ -43,7 +43,7 @@ public class FlyingProjectile
 
         this.wasInWater = this.isInWater();
 		this.projectile = projectile;
-        this.cannonID = cannonId;
+        this.cannonUID = cannonId;
         this.shooterUID = shooterUID;
         this.playerlocation = playerLoc;
         this.source = source;
@@ -252,12 +252,12 @@ public class FlyingProjectile
         this.impactLocation = impactLocation;
     }
 
-    public UUID getCannonID() {
-        return cannonID;
+    public UUID getCannonUID() {
+        return cannonUID;
     }
 
-    public void setCannonID(UUID cannonID) {
-        this.cannonID = cannonID;
+    public void setCannonUID(UUID cannonUID) {
+        this.cannonUID = cannonUID;
     }
 
     public ProjectileSource getSource() {

@@ -19,7 +19,6 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
@@ -707,7 +706,7 @@ public class CreateExplosion {
         //fire entityDeathEvent
         for (LivingEntity entity : lEntities)
         {
-            CannonsEntityDeathEvent entityDeathEvent = new CannonsEntityDeathEvent(entity, cannonball.getProjectile(), cannonball.getCannonID(), cannonball.getShooterUID());
+            CannonsEntityDeathEvent entityDeathEvent = new CannonsEntityDeathEvent(entity, cannonball.getProjectile(), cannonball.getCannonUID(), cannonball.getShooterUID());
             Bukkit.getServer().getPluginManager().callEvent(entityDeathEvent);
         }
     }
@@ -880,7 +879,7 @@ public class CreateExplosion {
                         //don't spawn the projectile in the center
                         Location spawnLoc = impactLoc.clone().add(vect.clone().normalize().multiply(3.0));
 
-                        plugin.getProjectileManager().spawnProjectile(newProjectiles, cannonball.getShooterUID(), cannonball.getSource(), null, spawnLoc, vect, cannonball.getCannonID());
+                        plugin.getProjectileManager().spawnProjectile(newProjectiles, cannonball.getShooterUID(), cannonball.getSource(), null, spawnLoc, vect, cannonball.getCannonUID());
                     }
                 }
             }
