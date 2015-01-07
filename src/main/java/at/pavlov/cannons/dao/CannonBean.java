@@ -22,10 +22,7 @@ public class CannonBean
 	private String name;
 
 	private UUID owner;
-
-	@NotEmpty
-    @Length(max=20)
-	private String world;
+	private UUID world;
 
     @Length(max=20)
 	private String cannonDirection;
@@ -65,11 +62,11 @@ public class CannonBean
 	{
 		this.name = name;
 	}
-	public String getWorld()
+	public UUID getWorld()
 	{
 		return world;
 	}
-	public void setWorld(String world)
+	public void setWorld(UUID world)
 	{
 		this.world = world;
 	}

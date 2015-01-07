@@ -148,7 +148,7 @@ public class Aiming {
         if (player != null)
         {
             //if the player is not the owner of this gun
-            if (!cannon.getOwner().equals(player.getName())  && design.isAccessForOwnerOnly())
+            if (!cannon.getOwner().equals(player.getUniqueId())  && design.isAccessForOwnerOnly())
             {
                 return MessageEnum.ErrorNotTheOwner;
             }
@@ -758,7 +758,7 @@ public class Aiming {
                 last.setValue(last.getValue() - design.getPredictorDelay() + design.getPredictorUpdate());
 
                 //find all the watching players
-                HashMap<String, Boolean> nameList = cannon.getObserverMap();
+                HashMap<UUID, Boolean> nameList = cannon.getObserverMap();
                 if ( nameList.isEmpty())
                 {
                     //remove wrong entries and cannon with no observer (we don't need to update them)
@@ -767,10 +767,10 @@ public class Aiming {
                 }
 
                 Location impact = impactPredictor(cannon);
-                Iterator<Map.Entry<String, Boolean>> entry = nameList.entrySet().iterator();
+                Iterator<Map.Entry<UUID, Boolean>> entry = nameList.entrySet().iterator();
                 while(entry.hasNext())
                 {
-                    Map.Entry<String, Boolean> nextName = entry.next();
+                    Map.Entry<UUID, Boolean> nextName = entry.next();
                     Player player = Bukkit.getPlayer(nextName.getKey());
                     //show impact to the player
                     if (player != null && cannon != null && impact != null && plugin.getFakeBlockHandler().belowMaxLimit(player, impact)) {

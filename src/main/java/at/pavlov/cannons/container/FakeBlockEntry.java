@@ -6,18 +6,20 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class FakeBlockEntry implements Cloneable{
     private final int locX;
     private final int locY;
     private final int locZ;
-    private final String world;
+    private final UUID world;
 
     private long startTime;
     //how long the block stays in ticks
     private final long duration;
 
     //fake block will only be shown to this player
-    private final String player;
+    private final UUID player;
     //only one type effect will be shown (aiming, explosion,...)
     private final FakeBlockType type;
 
@@ -29,9 +31,9 @@ public class FakeBlockEntry implements Cloneable{
         this.locX = loc.getBlockX();
         this.locY = loc.getBlockY();
         this.locZ = loc.getBlockZ();
-        this.world = loc.getWorld().getName();
+        this.world = loc.getWorld().getUID();
 
-        this.player = player.getName();
+        this.player = player.getUniqueId();
         this.type = type;
 
         this.startTime = System.currentTimeMillis();
@@ -51,7 +53,7 @@ public class FakeBlockEntry implements Cloneable{
         return locZ;
     }
 
-    public String getWorld() {
+    public UUID getWorld() {
         return world;
     }
 
@@ -84,7 +86,7 @@ public class FakeBlockEntry implements Cloneable{
         return (System.currentTimeMillis() > getStartTime() + getDuration()*50);
     }
 
-    public String getPlayer() {
+    public UUID getPlayer() {
         return player;
     }
 

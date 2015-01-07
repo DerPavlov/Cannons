@@ -7,6 +7,7 @@ import at.pavlov.cannons.cannon.Cannon;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,7 +28,7 @@ public class Commands implements CommandExecutor
     private final PersistenceDatabase persistenceDatabase;
 
     //<player,command to be performed>;
-    private HashMap<String,SelectCannon> cannonSelector = new HashMap<String,SelectCannon>();
+    private HashMap<UUID,SelectCannon> cannonSelector = new HashMap<UUID,SelectCannon>();
 
 
 
@@ -109,17 +110,22 @@ public class Commands implements CommandExecutor
                     else if (args.length >= 2 && args[1] != null)
                     {
                         // delete all cannon entries for this player
-                        boolean b1 = plugin.getCannonManager().deleteCannons(args[1]);
-                        persistenceDatabase.deleteCannonsAsync(args[1]);
-                        if (b1)
+                        OfflinePlayer offplayer = Bukkit.getOfflinePlayer(args[1]);
+                        if (offplayer != null)
                         {
-                            //there was an entry in the list
-                            sendMessage(sender, ChatColor.GREEN + userMessages.getMessage(MessageEnum.CannonsReseted).replace("PLAYER", args[1]));
+                            boolean b1 = plugin.getCannonManager().deleteCannons(offplayer.getUniqueId());
+                            persistenceDatabase.deleteCannonsAsync(offplayer.getUniqueId());
+                            if (b1)
+                            {
+                                //there was an entry in the list
+                                sendMessage(sender, ChatColor.GREEN + userMessages.getMessage(MessageEnum.CannonsReseted).replace("PLAYER", args[1]));
+                            }
+                            else
+                            {
+                                sendMessage(sender, ChatColor.GREEN + "Player " + ChatColor.GOLD + args[1] + ChatColor.GREEN + " not found in the storage");
+                            }
                         }
-                        else
-                        {
-                            sendMessage(sender, ChatColor.GREEN + "Player " + ChatColor.GOLD + args[1] + ChatColor.GREEN + " not found in the storage");
-                        }
+
                     }
                     else
                     {
@@ -133,11 +139,13 @@ public class Commands implements CommandExecutor
                     if (args.length >= 2)
                     {
                         //additional player name
-                        sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + args[1] + ChatColor.GREEN + ":");
-                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
-                        {
-                            if (cannon.getOwner().equals(args[1]))
-                                sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
+                        OfflinePlayer offplayer = Bukkit.getOfflinePlayer(args[1]);
+                        if (offplayer != null) {
+                            sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + offplayer.getName() + ChatColor.GREEN + ":");
+                            for (Cannon cannon : plugin.getCannonManager().getCannonList().values()) {
+                                if (cannon.getOwner().equals(offplayer.getUniqueId()))
+                                    sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " location:" + ChatColor.GOLD + cannon.getOffset().toString());
+                            }
                         }
                     }
                     else
@@ -146,7 +154,8 @@ public class Commands implements CommandExecutor
                         sendMessage(sender, ChatColor.GREEN + "List of all cannons:");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
-                            sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + cannon.getOwner() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
+                            OfflinePlayer owner = Bukkit.getOfflinePlayer(cannon.getOwner());
+                            sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + owner.getName() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
                         }
                     }
                     return true;
@@ -278,6 +287,16 @@ public class Commands implements CommandExecutor
                         else
                             sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
                     }
+                    //get name of cannon
+                    else if(args[0].equalsIgnoreCase("get"))
+                    {
+                        if (!player.hasPermission("cannons.player.get"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
+                        toggleCannonSelector(player, SelectCannon.GET);
+                    }
                     //list cannons of this player name
                     else if(args[0].equalsIgnoreCase("list"))
                     {
@@ -289,7 +308,7 @@ public class Commands implements CommandExecutor
                         sendMessage(sender, ChatColor.GREEN +"Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
-                            if (cannon.getOwner().equals(player.getName()))
+                            if (cannon.getOwner().equals(player.getUniqueId()))
                                 sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
                                         ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
                         }
@@ -303,8 +322,8 @@ public class Commands implements CommandExecutor
                             return true;
                         }
                         // delete all cannon entries for this player
-                        persistenceDatabase.deleteCannonsAsync(player.getName());
-                        plugin.getCannonManager().deleteCannons(player.getName());
+                        persistenceDatabase.deleteCannonsAsync(player.getUniqueId());
+                        plugin.getCannonManager().deleteCannons(player.getUniqueId());
                         userMessages.sendMessage(player, MessageEnum.CannonsReseted);
                     }
                     //no help message if it is forbidden for this player
@@ -385,7 +404,7 @@ public class Commands implements CommandExecutor
 
         if (!isSelectingMode(player))
         {
-            cannonSelector.put(player.getName(),cmd);
+            cannonSelector.put(player.getUniqueId(),cmd);
             userMessages.sendMessage(player, MessageEnum.CmdSelectCannon);
         }
     }
@@ -401,7 +420,7 @@ public class Commands implements CommandExecutor
 
         if (isSelectingMode(player))
         {
-            cannonSelector.remove(player.getName());
+            cannonSelector.remove(player.getUniqueId());
             userMessages.sendMessage(player, MessageEnum.CmdSelectCanceled);
         }
     }
@@ -433,7 +452,7 @@ public class Commands implements CommandExecutor
         if (player == null)
             return false;
 
-        return cannonSelector.containsKey(player.getName());
+        return cannonSelector.containsKey(player.getUniqueId());
     }
 
     /**
@@ -446,7 +465,7 @@ public class Commands implements CommandExecutor
         if (player == null || cannon == null)
             return;
 
-        SelectCannon cmd = cannonSelector.get(player.getName());
+        SelectCannon cmd = cannonSelector.get(player.getUniqueId());
         if (cmd != null)
         {
             switch (cmd){
@@ -455,9 +474,14 @@ public class Commands implements CommandExecutor
                     userMessages.sendMessage(player, cannon, message);
                     break;
                 }
+                case GET:{
+                    MessageEnum message = cannon.toggleObserver(player,false);
+                    userMessages.sendMessage(player, cannon, message);
+                    break;
+                }
             }
         }
-        cannonSelector.remove(player.getName());
+        cannonSelector.remove(player.getUniqueId());
     }
 
     /**

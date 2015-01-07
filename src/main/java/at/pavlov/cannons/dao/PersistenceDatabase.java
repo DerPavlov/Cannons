@@ -76,7 +76,7 @@ public class PersistenceDatabase
 				else
 				{
 					//load values for the cannon
-					String world = bean.getWorld();
+                    UUID world = bean.getWorld();
 					Vector offset = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
 					BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
                     UUID owner = bean.getOwner();
@@ -267,11 +267,11 @@ public class PersistenceDatabase
      * @param owner
      *
      */
-    public void deleteCannonsAsync(String owner)
+    public void deleteCannonsAsync(UUID owner)
     {
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new DelayedTask(owner) {
             public void run(Object object) {
-                String owner = (String) object;
+                UUID owner = (UUID) object;
                 deleteCannons(owner);
             }
         });
@@ -283,7 +283,7 @@ public class PersistenceDatabase
 	 * @param owner
      * @return returns true is there is an entry of this player in the database
 	 */
-	private boolean deleteCannons(String owner)
+	private boolean deleteCannons(UUID owner)
 	{
 		// create a query that returns CannonBean
 		List<CannonBean> beans = plugin.getDatabase().find(CannonBean.class).where().eq("owner", owner).findList();

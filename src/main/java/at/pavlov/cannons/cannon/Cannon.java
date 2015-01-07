@@ -39,7 +39,7 @@ public class Cannon
     // the location is describe by the offset of the cannon and the design
     private Vector offset;
     // world of the cannon
-    private String world;
+    private UUID world;
     // if the cannon is on a ship, the operation might be limited (e.g smaller angles to adjust the cannon)
     private boolean onShip;
 
@@ -70,7 +70,7 @@ public class Cannon
 
     //observer will see the impact of the target predictor
     //<Player name, remove after showing impact>
-    private HashMap<String, Boolean> observerMap = new HashMap<String, Boolean>();
+    private HashMap<UUID, Boolean> observerMap = new HashMap<UUID, Boolean>();
 
     // player who has build this cannon
     private UUID owner;
@@ -100,7 +100,7 @@ public class Cannon
     private String firingButtonActivator;
 
 
-    public Cannon(CannonDesign design, String world, Vector cannonOffset, BlockFace cannonDirection, UUID owner)
+    public Cannon(CannonDesign design, UUID world, Vector cannonOffset, BlockFace cannonDirection, UUID owner)
     {
 
         this.design = design;
@@ -489,7 +489,7 @@ public class Cannon
         if (player != null)
         {
             //if the player is not the owner of this gun
-            if (design.isAccessForOwnerOnly() && !this.getOwner().equals(player.getName()))
+            if (design.isAccessForOwnerOnly() && !this.getOwner().equals(player.getUniqueId()))
                 return MessageEnum.ErrorNotTheOwner;
             // player can't load cannon
             if (!player.hasPermission(design.getPermissionLoad()))
@@ -519,7 +519,7 @@ public class Cannon
         if (player != null)
         {
             //if the player is not the owner of this gun
-            if (!this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
+            if (!this.getOwner().equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
                 return MessageEnum.ErrorNotTheOwner;
             // no permission for this projectile
             if (!projectile.hasPermission(player))
@@ -550,7 +550,7 @@ public class Cannon
         if (player!=null && !player.hasPermission(design.getPermissionRamrod()))
             return MessageEnum.PermissionErrorRamrod;
         //if the player is not the owner of this gun
-        if (player!=null &&!this.getOwner().equals(player.getName()) && design.isAccessForOwnerOnly())
+        if (player!=null &&!this.getOwner().equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
             return MessageEnum.ErrorNotTheOwner;
         if (isFiring())
         {
@@ -1650,12 +1650,12 @@ public class Cannon
         this.cannonDirection = cannonDirection;
     }
 
-    public String getWorld()
+    public UUID getWorld()
     {
         return world;
     }
 
-    public void setWorld(String world)
+    public void setWorld(UUID world)
     {
         this.world = world;
     }
@@ -2013,7 +2013,7 @@ public class Cannon
         this.aimingPitch = aimingPitch;
     }
 
-    public HashMap<String, Boolean> getObserverMap() {
+    public HashMap<UUID, Boolean> getObserverMap() {
         return observerMap;
     }
 
@@ -2033,8 +2033,8 @@ public class Cannon
 
         //the player might have an entry which allows unlimited observing (e.g. observer)
         //removeAfterShowing == true is weaker
-        if (observerMap.get(player.getName()) == null || observerMap.get(player.getName()))
-            observerMap.put(player.getName(), removeAfterShowing);
+        if (observerMap.get(player.getUniqueId()) == null || observerMap.get(player.getUniqueId()))
+            observerMap.put(player.getUniqueId(), removeAfterShowing);
         return MessageEnum.CannonObserverAdded;
     }
 
@@ -2047,7 +2047,7 @@ public class Cannon
     {
         Validate.notNull(player, "player must not be null");
 
-        observerMap.remove(player.getName());
+        observerMap.remove(player.getUniqueId());
         return MessageEnum.CannonObserverRemoved;
     }
 
@@ -2061,7 +2061,7 @@ public class Cannon
     {
         Validate.notNull(player, "player must not be null");
 
-        if (observerMap.containsKey(player.getName()))
+        if (observerMap.containsKey(player.getUniqueId()))
             return removeObserver(player);
         else
             return addObserver(player, removeAfterShowing);

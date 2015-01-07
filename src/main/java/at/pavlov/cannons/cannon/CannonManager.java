@@ -204,7 +204,6 @@ public class CannonManager
 				return cannonName;
 			}
 		}
-
 		return "no unique name";
 	}
 
@@ -214,7 +213,7 @@ public class CannonManager
         Validate.notNull(cannon, "cannon must not be null");
 
         //check some permissions
-        if (!player.getName().equals(cannon.getOwner()))
+        if (!player.getUniqueId().equals(cannon.getOwner()))
             return MessageEnum.ErrorNotTheOwner;
         if (!player.hasPermission(cannon.getCannonDesign().getPermissionRename()))
             return MessageEnum.PermissionErrorRename;
@@ -256,8 +255,6 @@ public class CannonManager
         plugin.logDebug("added cannon to the list");
 		
 		cannon.updateCannonSigns();
-
-        return;
 	}
 
     /**
@@ -295,7 +292,7 @@ public class CannonManager
         {
             Location newLoc = cannon.getCannonDesign().getBarrelBlocks(cannon).get(0);
             Vector box = newLoc.subtract(center).toVector();
-            if (cannon.getWorld().equals(center.getWorld().getName()) && Math.abs(box.getX())<lengthX/2 && Math.abs(box.getY())<lengthY/2 && Math.abs(box.getZ())<lengthZ/2)
+            if (cannon.getWorld().equals(center.getWorld().getUID()) && Math.abs(box.getX())<lengthX/2 && Math.abs(box.getY())<lengthY/2 && Math.abs(box.getZ())<lengthZ/2)
                 newCannonList.add(cannon);
         }
         return newCannonList;
@@ -558,7 +555,7 @@ public class CannonManager
 						if (isCannon)
 						{
                            // cannon
-							return new Cannon(cannonDesign, world.getName(), offset, cannonDirection, owner);
+							return new Cannon(cannonDesign, world.getUID(), offset, cannonDirection, owner);
 						}
 					}
 				}
@@ -748,7 +745,7 @@ public class CannonManager
 	 * @param owner the owner of the cannon
      * @return returns true if there was an entry of this player in the list
 	 */
-	public boolean deleteCannons(String owner)
+	public boolean deleteCannons(UUID owner)
 	{
 		Iterator<Cannon> iter = cannonList.values().iterator();
         boolean inList = false;
