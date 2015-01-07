@@ -52,8 +52,15 @@ public class ProjectileObserver {
                     //remove an not valid projectile
                     if (!cannonball.isValid(projectile_entity))
                     {
-                        Location l = projectile_entity.getLocation();
-                        plugin.logDebug("removed Projectile at " + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ() + " because it was not valid.");
+                        if (projectile_entity != null)
+                        {
+                            Location l = projectile_entity.getLocation();
+                            projectile_entity.remove();
+                            plugin.logDebug("removed Projectile at " + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ() + " because it was not valid.");
+                        }
+                        else
+                            plugin.logDebug("removed Projectile at because the entity was missing");
+                        //remove entry in hashmap
                         iter.remove();
                         continue;
                     }
