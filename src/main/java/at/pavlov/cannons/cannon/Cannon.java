@@ -1504,10 +1504,10 @@ public class Cannon
                 // Cannon owner in the second
                 if (owner == null)
                     return "missing Owner";
-                Player bPlayer = Bukkit.getPlayer(owner);
+                OfflinePlayer bPlayer = Bukkit.getOfflinePlayer(owner);
                 if (bPlayer == null)
                     return "not found";
-                return bPlayer.toString();
+                return bPlayer.getName();
             case 2 :
                 // loaded Gunpowder/Projectile
                 if (loadedProjectile != null) return "p: " + loadedGunpowder + " c: " + loadedProjectile.toString();

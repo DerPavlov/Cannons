@@ -108,6 +108,8 @@ public class FireCannon {
      */
     public MessageEnum redstoneFiring(Cannon cannon, InteractAction action)
     {
+        plugin.logDebug("redstone Firing");
+
         CannonDesign design = cannon.getCannonDesign();
         return this.fire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !design.isAmmoInfiniteForRedstone(), action);
     }
@@ -122,6 +124,7 @@ public class FireCannon {
      */
     public MessageEnum playerFiring(Cannon cannon, Player player, InteractAction action)
     {
+        plugin.logDebug("playerFiring " + player);
 
         CannonDesign design = cannon.getCannonDesign();
         boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
@@ -139,7 +142,7 @@ public class FireCannon {
      */
     public MessageEnum fire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo, InteractAction action)
     {
-        //set some valid shoote is none is given
+        //set some valid shooter is none is given
         if (player == null)
             player = Bukkit.getPlayer(cannon.getOwner());
             plugin.logDebug("Firing: Set shooter to cannonOwner, because it was null");
