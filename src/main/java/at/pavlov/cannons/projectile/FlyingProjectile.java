@@ -30,7 +30,6 @@ public class FlyingProjectile
     private boolean inWater;
     private boolean wasInWater;
 
-
     private MovingObject predictor;
 
 
@@ -152,15 +151,16 @@ public class FlyingProjectile
 
     /**
      * if the projectile is still alive and valid
+     * a projectile is valid if it has an entity, is not below -64 and younger than 1h (60*60*1000)
      * @return returns false if the projectile entity is null
      */
     public boolean isValid(org.bukkit.entity.Projectile projectile_entity)
     {
-        return (projectile_entity != null && projectile_entity.getLocation().getBlockY() > -64);
+        return (projectile_entity != null && projectile_entity.getLocation().getBlockY() > -64 && System.currentTimeMillis() < getSpawnTime() + 3600000);
     }
 
     /**
-     * updated the location and speed of the projectile
+     * updated the location and speed of the projectile to the expected values
      */
     public void update()
     {
@@ -273,5 +273,4 @@ public class FlyingProjectile
     {
         return Bukkit.getWorld(worldUID);
     }
-
 }
