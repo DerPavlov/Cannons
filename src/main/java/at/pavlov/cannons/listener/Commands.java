@@ -475,8 +475,7 @@ public class Commands implements CommandExecutor
                     break;
                 }
                 case GET:{
-                    MessageEnum message = cannon.toggleObserver(player,false);
-                    userMessages.sendMessage(player, cannon, message);
+                    userMessages.sendMessage(player, cannon, MessageEnum.CannonGetName);
                     break;
                 }
             }

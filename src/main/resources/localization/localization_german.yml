@@ -46,6 +46,7 @@ Cannon:
   Reseted: 'GREEN [Cannons] Alle Kanonen von GOLD PLAYER GREEN wurden aus der Datenbank entfernt.'
   ObserverAdded: 'GREEN [Cannons] Du wurdest als Beobachter bei GOLD CANNON_NAME GRENN hinzugefügt.'
   ObserverRemoved: 'RED [Cannons] Du bist nicht mehr Beobachter für GOLD CANNON_NAME.'
+  GetName: 'GREEN [Cannons] Der Name der GOLD CANNON GREEN ist GOLD CANNON_NAME.'
   RenameSuccess: 'GREEN [Cannons] Die Kanone wurde umbenannt in GOLD CANNON_NAME.'
   RenameFail: 'RED [Cannons] Der Name für die Kanone ist nicht einzigartig.'
 
