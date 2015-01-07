@@ -925,7 +925,7 @@ public class CreateExplosion {
         {
             public void run(Object object) {
                 Firework fw = (Firework) object;
-                //fw.detonate();
+                fw.detonate();
             }
         }, 1L);
     }
