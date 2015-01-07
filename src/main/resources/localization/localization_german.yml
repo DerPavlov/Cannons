@@ -22,7 +22,7 @@ Commands:
 
 
 Aiming:
-  EnableAimingMode: 'GREEN [Cannons] Zielmodus aktiviert'
+  EnableAimingMode: 'GREEN [Cannons] Zielmodus aktiviert. Drücke SHIFT zum Zielen.'
   DisableAimingMode: 'RED [Cannons] Zielmodus deaktiviert'
   TooFarForAimingMode: 'YELLOW [Cannons] Zu weit entfernt für den Zielmodus'
   SettingCombinedAngle: 'YELLOW [Cannons] Neuer Winkel h: HDEGREE° YELLOW und v: GOLD VDEGREE°'

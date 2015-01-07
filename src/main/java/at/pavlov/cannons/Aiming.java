@@ -59,11 +59,11 @@ public class Aiming {
     private final Config config;
 
     //<Player,cannon name>
-    private HashMap<String, UUID> inAimingMode = new HashMap<String, UUID>();
+    private HashMap<UUID, UUID> inAimingMode = new HashMap<UUID, UUID>();
     //<Player>
-    private HashSet<String> imitatedEffectsOff = new HashSet<String>();
+    private HashSet<UUID> imitatedEffectsOff = new HashSet<UUID>();
 
-    //<cannon name, timespamp>
+    //<cannon uid, timespamp>
     private HashMap<UUID, Long> lastAimed = new HashMap<UUID, Long>();
 
 
@@ -365,7 +365,7 @@ public class Aiming {
         if (player == null)
             return null;
         //return the cannon of the player if he is in aiming mode
-        return plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
+        return plugin.getCannonManager().getCannon(inAimingMode.get(player.getUniqueId()));
     }
 
 	
@@ -403,10 +403,10 @@ public class Aiming {
     private void updateAimingMode()
 	{
 		//player in map change the angle to the angle the player is looking
-    	Iterator<Map.Entry<String, UUID>> iter = inAimingMode.entrySet().iterator();
+    	Iterator<Map.Entry<UUID, UUID>> iter = inAimingMode.entrySet().iterator();
         while(iter.hasNext())
         {
-            Map.Entry<String, UUID> entry = iter.next();
+            Map.Entry<UUID, UUID> entry = iter.next();
     		Player player = Bukkit.getPlayer(entry.getKey());
             if (player == null) {
                 iter.remove();
@@ -453,11 +453,11 @@ public class Aiming {
         if (player == null)
             return;
 
-        boolean isAimingMode = inAimingMode.containsKey(player.getName());
+        boolean isAimingMode = inAimingMode.containsKey(player.getUniqueId());
 		if (isAimingMode)
 		{
             if (cannon == null)
-                cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getName()));
+                cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getUniqueId()));
 
             //this player is already in aiming mode, he might fire the cannon or turn the aiming mode off
 		    if (fire)
@@ -506,7 +506,7 @@ public class Aiming {
         if (!player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
             return MessageEnum.PermissionErrorAutoaim;
 
-        inAimingMode.put(player.getName(), cannon.getUID());
+        inAimingMode.put(player.getUniqueId(), cannon.getUID());
 
         if (cannon != null)
         {
@@ -545,10 +545,10 @@ public class Aiming {
         if (player == null)
             return null;
 
-		if (inAimingMode.containsKey(player.getName()))
+		if (inAimingMode.containsKey(player.getUniqueId()))
 		{
 			//player in map -> remove
-			inAimingMode.remove(player.getName());
+			inAimingMode.remove(player.getUniqueId());
 
             if (cannon!=null)
             {
@@ -626,7 +626,7 @@ public class Aiming {
     public void showAimingVector(Cannon cannon, Player player)
     {
         // Imitation of angle
-        if(config.isImitatedAimingEnabled() && isImitatingEnabled(player.getName()))
+        if(config.isImitatedAimingEnabled() && isImitatingEnabled(player.getUniqueId()))
         {
             plugin.getFakeBlockHandler().imitateLine(player, cannon.getMuzzle(), cannon.getAimingVector(), 0,
                     config.getImitatedAimingLineLength(), config.getImitatedAimingMaterial(), FakeBlockType.AIMING, config.getImitatedAimingTime());
@@ -635,7 +635,7 @@ public class Aiming {
 
     public void toggleImitating(Player player)
     {
-        if(!isImitatingEnabled(player.getName()))
+        if(!isImitatingEnabled(player.getUniqueId()))
         {
             enableImitating(player);
         }
@@ -648,18 +648,18 @@ public class Aiming {
     public void disableImitating(Player player){
         userMessages.sendMessage(player,MessageEnum.ImitatedEffectsDisabled);
         //it is enabled on default, adding to this list will stop the aiming effect
-        imitatedEffectsOff.add(player.getName());
+        imitatedEffectsOff.add(player.getUniqueId());
     }
 
-    public boolean isImitatingEnabled(String name){
+    public boolean isImitatingEnabled(UUID playerUID){
         //it is enabled on default, adding to this list will stop the aiming effect
-        return !imitatedEffectsOff.contains(name);
+        return !imitatedEffectsOff.contains(playerUID);
     }
 
     public void enableImitating(Player player){
         userMessages.sendMessage(player,MessageEnum.ImitatedEffectsEnabled);
         //it is enabled on default, adding to this list will stop the aiming effect
-        imitatedEffectsOff.remove(player.getName());
+        imitatedEffectsOff.remove(player.getUniqueId());
     }
 
     /**

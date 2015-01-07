@@ -17,7 +17,7 @@ Error:
 
 
 Aiming:
-  EnableAimingMode: 'GREEN [Cannons] Entering aiming mode'
+  EnableAimingMode: 'GREEN [Cannons] Entering aiming mode. Hold SHIFT to aim.'
   DisableAimingMode: 'RED [Cannons] Leaving aiming mode'
   TooFarForAimingMode: 'YELLOW [Cannons] You need to be closer to the CANNON for the aiming mode'
   SettingCombinedAngle: 'YELLOW [Cannons] New angle h: GOLD HDEGREE degree YELLOW and v: GOLD VDEGREE degree'
