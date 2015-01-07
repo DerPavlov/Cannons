@@ -161,4 +161,19 @@ public class ProjectileManager
     {
         return flyingProjectilesMap;
     }
+
+    /**
+     * returns the projectile of which the player is passenger
+     * if the player is attached to a projectile he will follow its movement
+     * @param player is the passenger
+     * @return the projectile or null
+     */
+    public FlyingProjectile getAttachedProjectile(Player player)
+    {
+        if (player != null)
+            for (FlyingProjectile proj : flyingProjectilesMap.values())
+                if (proj.getShooterUID().equals(player.getUniqueId()))
+                    return proj;
+        return null;
+    }
 }

@@ -11,6 +11,9 @@ import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
+import at.pavlov.cannons.projectile.FlyingProjectile;
+import at.pavlov.cannons.projectile.Projectile;
+import at.pavlov.cannons.projectile.ProjectileProperties;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -715,5 +718,37 @@ public class CannonsUtil
     {
         Random r = new Random();
         return r.nextInt(max+1-min) + min;
+    }
+
+    /**
+     * teleports the player back to the starting point if the cannonball has the property 'observer'
+     * @param cannonball the flying projectile
+     */
+    public static void teleportBack(FlyingProjectile cannonball)
+    {
+        if (cannonball == null)
+            return;
+
+        Player player = Bukkit.getPlayer(cannonball.getShooterUID());
+        if (player == null)
+            return;
+
+        Projectile projectile = cannonball.getProjectile();
+
+        Location teleLoc = null;
+        //teleport the player back to the location before firing
+        if(projectile.hasProperty(ProjectileProperties.OBSERVER))
+        {
+            teleLoc = cannonball.getPlayerlocation();
+        }
+        //teleport to this location
+        if (teleLoc != null)
+        {
+            teleLoc.setYaw(player.getLocation().getYaw());
+            teleLoc.setPitch(player.getLocation().getPitch());
+            player.teleport(teleLoc);
+            player.setVelocity(new Vector(0,0,0));
+            cannonball.setTeleported(true);
+        }
     }
 }

@@ -29,6 +29,8 @@ public class FlyingProjectile
     //Important for visual splash effect when the cannonball hits the water surface
     private boolean inWater;
     private boolean wasInWater;
+    //if the teleport was already performed
+    private boolean teleported;
 
     private MovingObject predictor;
 
@@ -49,6 +51,7 @@ public class FlyingProjectile
         projectile_entity.setShooter(source);
 
 		this.spawnTime = System.currentTimeMillis();
+        this.teleported = false;
 
         //set location and speed
         Location new_loc = projectile_entity.getLocation();
@@ -272,5 +275,13 @@ public class FlyingProjectile
     public World getWorld()
     {
         return Bukkit.getWorld(worldUID);
+    }
+
+    public boolean isTeleported() {
+        return teleported;
+    }
+
+    public void setTeleported(boolean teleported) {
+        this.teleported = teleported;
     }
 }

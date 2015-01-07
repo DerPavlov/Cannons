@@ -739,13 +739,13 @@ public class CreateExplosion {
     }
 
     /**
-     * teleport the player to the impact or to the starting point, depending on the given projectile properties
+     * teleports the player to the impact, depending on the given projectile properties
      * @param cannonball the flying projectile
      * @param player the one to teleport
      */
     private void teleportPlayer(FlyingProjectile cannonball, Player player)
     {
-        if (player == null)
+        if (player == null || cannonball == null)
             return;
 
         Projectile projectile = cannonball.getProjectile();
@@ -769,6 +769,7 @@ public class CreateExplosion {
             teleLoc.setPitch(player.getLocation().getPitch());
             player.teleport(teleLoc);
             player.setVelocity(new Vector(0,0,0));
+            cannonball.setTeleported(true);
         }
     }
 

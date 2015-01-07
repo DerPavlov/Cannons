@@ -52,6 +52,8 @@ public class ProjectileObserver {
                     //remove an not valid projectile
                     if (!cannonball.isValid(projectile_entity))
                     {
+                        //teleport the observer back to its start position
+                        CannonsUtil.teleportBack(cannonball);
                         if (projectile_entity != null)
                         {
                             Location l = projectile_entity.getLocation();
@@ -134,6 +136,10 @@ public class ProjectileObserver {
      */
     private void updateTeleporter(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity)
     {
+        //do nothing if the teleport was already performed
+        if (cannonball.isTeleported())
+            return;
+
         //if projectile has HUMAN_CANNONBALL or OBSERVER - update player position
         Projectile projectile = cannonball.getProjectile();
         if (projectile.hasProperty(ProjectileProperties.HUMAN_CANNONBALL) || projectile.hasProperty(ProjectileProperties.OBSERVER))

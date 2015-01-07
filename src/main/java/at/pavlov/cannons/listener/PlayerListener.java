@@ -1,6 +1,7 @@
 package at.pavlov.cannons.listener;
 
 import at.pavlov.cannons.Enum.InteractAction;
+import at.pavlov.cannons.projectile.FlyingProjectile;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -511,6 +512,9 @@ public class PlayerListener implements Listener
         //fire cannon
         else if(event.getAction().equals(Action.LEFT_CLICK_AIR)) //|| event.getAction().equals(Action.LEFT_CLICK_BLOCK))
         {
+            //check if the player is passenger of a projectile, if so he can teleport back by left clicking
+            CannonsUtil.teleportBack(plugin.getProjectileManager().getAttachedProjectile(event.getPlayer()));
+
         	aiming.aimingMode(event.getPlayer(), null, true);
         }
     }
