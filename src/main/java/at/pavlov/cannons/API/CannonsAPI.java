@@ -61,12 +61,12 @@ public class CannonsAPI {
     /**
      * returns the cannon on the given location
      * @param location - location of a cannon block
-     * @param player - player searching for the cannon. If there is no cannon he will be the owner. If null no new Cannon can be created.
+     * @param playerUID - player UID searching for the cannon. If there is no cannon he will be the owner. If null no new Cannon can be created.
      * @return - null if there is no cannon, else the cannon
      */
-    public Cannon getCannon(Location location, Player player)
+    public Cannon getCannon(Location location, UUID playerUID)
     {
-        return plugin.getCannonManager().getCannon(location, player.getUniqueId());
+        return plugin.getCannonManager().getCannon(location, playerUID);
     }
 
     /**
@@ -96,24 +96,24 @@ public class CannonsAPI {
     /**
      * returns all cannons for a list of locations - this will update all cannon locations
      * @param locations - a list of location to search for cannons
-     * @param player - player which operates the cannon
+     * @param playerUID - player UID which operates the cannon
      * @param silent - no messages will be displayed if silent is true
      * @return - list of all cannons in this sphere
      */
-    public HashSet<Cannon> getCannons(List<Location> locations, Player player, boolean silent)
+    public HashSet<Cannon> getCannons(List<Location> locations, UUID playerUID, boolean silent)
     {
-        return plugin.getCannonManager().getCannons(locations, player.getUniqueId(), silent);
+        return plugin.getCannonManager().getCannons(locations, playerUID, silent);
     }
 
     /**
      * returns all cannons for a list of locations - this will update all cannon locations
      * @param locations - a list of location to search for cannons
-     * @param player - player which operates the cannon
+     * @param playerUID - player UID which operates the cannon
      * @return - list of all cannons in this sphere
      */
-    public HashSet<Cannon> getCannons(List<Location> locations, Player player)
+    public HashSet<Cannon> getCannons(List<Location> locations, UUID playerUID)
     {
-        return plugin.getCannonManager().getCannons(locations, player.getUniqueId(), true);
+        return plugin.getCannonManager().getCannons(locations, playerUID, true);
     }
 
     /**
