@@ -390,11 +390,10 @@ public class PlayerListener implements Listener
             // ############ cooling a hot cannon ####################
             if(design.isCoolingTool(player.getItemInHand()))
             {
-                plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
-                userMessages.sendMessage(player, cannon, MessageEnum.HeatManagementCooling);
-
-                cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation());
-
+                if (cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation())) {
+                    plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
+                    userMessages.sendMessage(player, cannon, MessageEnum.HeatManagementCooling);
+                }
                 event.setCancelled(true);
             }
 
