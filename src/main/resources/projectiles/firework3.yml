@@ -91,7 +91,7 @@ clusterExplosion:
 #spawn blocks, entities or/and new projectiles on impact
 spawnOnExplosion:
   #enable this feature
-  enabled: false
+  enabled: true
   #the radius where blocks will be placed. If the radius is too small there might be no air gap to spawn a block.
   blockRadius: 2.0
   #the radius where entities will be placed. If the radius is too small there might be no air gap to spawn a block.
@@ -104,16 +104,16 @@ spawnOnExplosion:
   #spawn an block with (id:data minAmount-maxAmount)
   block:
     #this is a cobweb to slow the enemy
-    - '30:0 1-3'
+    #- '30:0 1-3'
   #spawn entity with the name. (Formatting 'NAME min-max')
   #http://jd.bukkit.org/rb/apidocs/org/bukkit/entity/EntityType.html
   entity:
-    - 'PRIMED_TNT 1-3'
+    #- 'PRIMED_TNT 1-3'
   #spawns a new projectiles after the explosion of this projectile with the given name (file name)
   #spawning the same projectile more than once results in a endless loop
   #the number of spawned projectile depends on 'numberOfBullets' of the spawned projectile
   projectiles:
-    - firework2
+    - firework4
 
 spawnFireworks:
   #if true fireworks will be spawned on projectile explosion

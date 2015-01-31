@@ -131,13 +131,12 @@ public class CreateExplosion {
         plugin.logDebug("Impact surface: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
 
         //the cannonball will only break blocks if it has penetration.
-        if (cannonball.getProjectile().getPenetration() > 0)
+        Random r = new Random();
+        double randomness = (1+r.nextGaussian()/5.0);
+        int penetration = (int) Math.round(randomness*(cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
+
+        if (penetration > 0)
         {
-            Random r = new Random();
-            double randomness = (1+r.nextGaussian()/5.0);
-            int penetration = (int) Math.round(randomness*(cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
-
-
             BlockIterator iter = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, penetration);
 
             while (iter.hasNext())
@@ -199,8 +198,8 @@ public class CreateExplosion {
 
     /***
      * Breaks a block with a certain yield
-     * @param block
-     * @param yield
+     * @param block block to be break
+     * @param yield chance to get the block item
      */
     private void BreakBreakNaturally(Block block, float yield)
     {
@@ -856,8 +855,6 @@ public class CreateExplosion {
                 FlyingProjectile cannonball = (FlyingProjectile) object;
 
                 Projectile projectile = cannonball.getProjectile();
-                UUID shooterUID = cannonball.getShooterUID();
-                Player player = Bukkit.getPlayer(shooterUID);
                 Location impactLoc = cannonball.getImpactLocation();
 
 

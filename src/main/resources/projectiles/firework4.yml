@@ -113,7 +113,7 @@ spawnOnExplosion:
   #spawning the same projectile more than once results in a endless loop
   #the number of spawned projectile depends on 'numberOfBullets' of the spawned projectile
   projectiles:
-    - firework2
+    - firework5
 
 spawnFireworks:
   #if true fireworks will be spawned on projectile explosion

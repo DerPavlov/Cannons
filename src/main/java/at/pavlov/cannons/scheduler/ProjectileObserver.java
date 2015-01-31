@@ -50,6 +50,7 @@ public class ProjectileObserver {
                     FlyingProjectile cannonball = iter.next().getValue();
                     org.bukkit.entity.Projectile projectile_entity = cannonball.getProjectileEntity();
                     //remove an not valid projectile
+                    plugin.logDebug("projectile alive");
                     if (!cannonball.isValid(projectile_entity))
                     {
                         //teleport the observer back to its start position
