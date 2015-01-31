@@ -135,21 +135,22 @@ public class FireCannon {
     /**
      * checks if all preconditions for firing are fulfilled and fires the cannon
      * @param cannon the cannon which is fired
-     * @param player player operating the cannon
+     * @param playerUid player operating the cannon
      * @param autoload the cannon will autoreload before firing
      * @param consumesAmmo if true ammo will be removed from chest inventories
      * @return message for the player
      */
-    public MessageEnum fire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo, InteractAction action)
+    public MessageEnum fire(Cannon cannon, UUID playerUid, boolean autoload, boolean consumesAmmo, InteractAction action)
     {
         plugin.logDebug("fire cannon");
         //set some valid shooter is none is given
-        if (player == null) {
-            player = Bukkit.getPlayer(cannon.getOwner());
-            plugin.logDebug("Firing: Set shooter to cannonOwner, because it was null. New player: " + player);
+        if (playerUid == null) {
+            playerUid = cannon.getOwner();
+            plugin.logDebug("Firing: Set shooter to cannonOwner, because it was null. ");
         }
+        Player player = Bukkit.getPlayer(playerUid);
         //fire event
-        CannonUseEvent useEvent = new CannonUseEvent(cannon, player, action);
+        CannonUseEvent useEvent = new CannonUseEvent(cannon, playerUid, action);
         Bukkit.getServer().getPluginManager().callEvent(useEvent);
 
         if (useEvent.isCancelled())
@@ -207,7 +208,7 @@ public class FireCannon {
         if (message != MessageEnum.CannonFire)
             return message;
 
-        CannonFireEvent fireEvent = new CannonFireEvent(cannon, player);
+        CannonFireEvent fireEvent = new CannonFireEvent(cannon, playerUid);
         Bukkit.getServer().getPluginManager().callEvent(fireEvent);
 
         if (fireEvent.isCancelled())
@@ -220,10 +221,6 @@ public class FireCannon {
         cannon.setFiring(true);
         //store spread of cannon operator
         cannon.setLastPlayerSpreadMultiplier(player);
-        // get uid from player, if player is offline use Owner
-        UUID playerUID = cannon.getOwner();
-        if (player != null)
-            player.getUniqueId();
 
         //Set up smoke effects on the torch
         for (Location torchLoc : design.getFiringIndicator(cannon))
@@ -242,7 +239,7 @@ public class FireCannon {
             //charge is only removed in the last round fired
             boolean lastRound = i==(projectile.getAutomaticFiringMagazineSize()-1);
             Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
-            FireTaskWrapper fireTask = new FireTaskWrapper(cannon, playerUID, lastRound);
+            FireTaskWrapper fireTask = new FireTaskWrapper(cannon, playerUid, lastRound);
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
             {
                 public void run(Object object)

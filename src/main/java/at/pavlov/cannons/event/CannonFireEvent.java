@@ -1,17 +1,18 @@
 package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.cannon.Cannon;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import java.util.UUID;
 
 public class CannonFireEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Cannon cannon;
-    private final Player player;
+    private final UUID player;
     private boolean cancelled;
 
-    public CannonFireEvent(Cannon cannon, Player player)
+    public CannonFireEvent(Cannon cannon, UUID player)
     {
         this.cannon = cannon;
         this.player = player;
@@ -22,7 +23,7 @@ public class CannonFireEvent extends Event {
         return cannon;
     }
 
-    public Player getPlayer() {
+    public UUID getPlayer() {
         return player;
     }
 

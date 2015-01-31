@@ -168,7 +168,7 @@ public class Cannon
      * @param consumesAmmo - if true ammo will be removed from chest inventories
      * @return - true if the cannon has been reloaded. False if there is not enough ammunition
      */
-    public boolean reloadFromChests(Player player, boolean consumesAmmo)
+    public boolean reloadFromChests(UUID player, boolean consumesAmmo)
     {
         List<Inventory> invlist = getInventoryList();
 
@@ -363,7 +363,7 @@ public class Cannon
     {
 
         //fire event
-        CannonUseEvent useEvent = new CannonUseEvent(this, player, InteractAction.loadGunpowder);
+        CannonUseEvent useEvent = new CannonUseEvent(this, player.getUniqueId(), InteractAction.loadGunpowder);
         Bukkit.getServer().getPluginManager().callEvent(useEvent);
 
         if (useEvent.isCancelled())
@@ -442,7 +442,7 @@ public class Cannon
     public MessageEnum loadProjectile(Projectile projectile, Player player)
     {
         //fire event
-        CannonUseEvent useEvent = new CannonUseEvent(this, player, InteractAction.loadProjectile);
+        CannonUseEvent useEvent = new CannonUseEvent(this, player.getUniqueId(), InteractAction.loadProjectile);
         Bukkit.getServer().getPluginManager().callEvent(useEvent);
 
         if (useEvent.isCancelled())
@@ -506,6 +506,16 @@ public class Cannon
         }
         // loading successful
         return MessageEnum.loadGunpowder;
+    }
+
+    /**
+     * Check the if the cannons can be loaded
+     *
+     * @param playerUid - whose permissions are checked
+     * @return true if the player and cannons can load the projectile
+     */
+    private MessageEnum CheckPermProjectile(Projectile projectile, UUID playerUid) {
+        return CheckPermProjectile(projectile, Bukkit.getPlayer(playerUid));
     }
 
     /**
@@ -1238,9 +1248,12 @@ public class Cannon
      * cools down a cannon by using the item in hand of a player
      * @param player player using the cannon
      */
-    public void coolCannon(Player player)
+    public boolean coolCannon(Player player)
     {
         int toCool = (int) Math.ceil((this.getTemperature() - design.getWarningTemperature())/design.getCoolingAmount());
+        System.out.println("to cool: " + toCool);
+        if (toCool <= 0)
+            return false;
 
         //if the player is sneaking the maximum gunpowder is loaded, but at least 1
         int amount = 1;
@@ -1261,7 +1274,7 @@ public class Cannon
         else
             player.setItemInHand(newItem);
 
-        return;
+        return true;
     }
 
     /**
@@ -1271,17 +1284,15 @@ public class Cannon
      */
     public boolean coolCannon(Player player, Location effectLoc)
     {
-        if (effectLoc !=null && getTemperature() > design.getWarningTemperature())
+        boolean cooled = coolCannon(player);
+        if (cooled && effectLoc !=null && getTemperature() > design.getWarningTemperature())
         {
-            coolCannon(player);
-
             effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
             //effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
             System.out.println("design sound: " + design.getSoundCool());
             CannonsUtil.playSound(effectLoc, design.getSoundCool());
-            return true;
         }
-        return false;
+        return cooled;
     }
 
 
