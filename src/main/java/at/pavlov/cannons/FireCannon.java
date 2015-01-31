@@ -129,7 +129,7 @@ public class FireCannon {
         CannonDesign design = cannon.getCannonDesign();
         boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
 
-        return this.fire(cannon, player, autoreload, !design.isAmmoInfiniteForPlayer(), action);
+        return this.fire(cannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
     }
 
     /**
@@ -174,7 +174,7 @@ public class FireCannon {
             if (autoload)
             {
                 //try to load some projectiles
-                boolean hasReloaded =  cannon.reloadFromChests(player, consumesAmmo);
+                boolean hasReloaded =  cannon.reloadFromChests(playerUid, consumesAmmo);
                 if (!hasReloaded)
                 {
                     //there is not enough gunpowder or no projectile in the chest

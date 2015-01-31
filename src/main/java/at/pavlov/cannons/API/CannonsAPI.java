@@ -31,7 +31,7 @@ public class CannonsAPI {
      */
     public MessageEnum fireCannon(Cannon cannon, Player player, boolean autoreload, boolean consumesAmmo, InteractAction interaction)
     {
-        return plugin.getFireCannon().fire(cannon, player, autoreload, consumesAmmo, interaction);
+        return plugin.getFireCannon().fire(cannon, player.getUniqueId(), autoreload, consumesAmmo, interaction);
     }
 
     /**
