@@ -49,6 +49,7 @@ public class Projectile implements Cloneable{
 	private double potionDuration;
 	private int potionAmplifier;
 	private List<PotionEffectType> potionsEffectList = new ArrayList<PotionEffectType>();
+	private boolean impactIndicator;
 
     //cluster
     private boolean clusterExplosionsEnabled;
@@ -681,4 +682,12 @@ public class Projectile implements Cloneable{
     public void setSoundImpactProtected(SoundHolder soundImpactProtected) {
         this.soundImpactProtected = soundImpactProtected;
     }
+
+	public boolean isImpactIndicator() {
+		return impactIndicator;
+	}
+
+	public void setImpactIndicator(boolean impactIndicator) {
+		this.impactIndicator = impactIndicator;
+	}
 }

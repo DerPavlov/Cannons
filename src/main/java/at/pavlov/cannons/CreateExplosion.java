@@ -636,7 +636,7 @@ public class CreateExplosion {
         {
             //event canceled, make some effects - even if the area is protected by a plugin
             world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
-            sendExplosionToPlayers(impactLoc, projectile.getSoundImpactProtected());
+            sendExplosionToPlayers(projectile, impactLoc, projectile.getSoundImpactProtected());
             return;
         }
 
@@ -661,7 +661,7 @@ public class CreateExplosion {
         if (notCanceled)
         {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
-            sendExplosionToPlayers(impactLoc, projectile.getSoundImpact());
+            sendExplosionToPlayers(projectile, impactLoc, projectile.getSoundImpact());
             //place blocks around the impact like webs, lava, water
             spreadBlocks(cannonball);
             //place blocks around the impact like webs, lava, water
@@ -679,10 +679,6 @@ public class CreateExplosion {
 
             //fire event for all kill entities
             fireEntityDeathEvent(cannonball);
-
-
-
-
         }
     }
 
@@ -927,7 +923,7 @@ public class CreateExplosion {
         }, 1L);
     }
 
-    public void sendExplosionToPlayers(Location loc, SoundHolder sound)
+    public void sendExplosionToPlayers(Projectile projectile, Location loc, SoundHolder sound)
     {
         CannonsUtil.imitateSound(loc, sound, config.getImitatedSoundMaximumDistance());
 
@@ -946,7 +942,7 @@ public class CreateExplosion {
             Location pl = p.getLocation();
             double distance = pl.distance(loc);
 
-            if(distance >= minDist  && distance <= maxDist)
+            if(projectile.isImpactIndicator() && distance >= minDist  && distance <= maxDist)
             {
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, r, mat, FakeBlockType.EXPLOSION, delay);
             }

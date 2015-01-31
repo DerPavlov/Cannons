@@ -70,6 +70,8 @@ explosion:
   potionEffects:
    - harm
    - slow
+  #marks the impact with blocks (default: glowstone)
+  impactIndicator: false
 
 #spawns additional delayed explosions around the explosion
 clusterExplosion:

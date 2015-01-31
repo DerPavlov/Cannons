@@ -185,8 +185,9 @@ public class ProjectileStorage
 		projectile.setPotionDuration(projectileConfig.getDouble("explosion.potionDuration", 1.0));
 		projectile.setPotionAmplifier(projectileConfig.getInt("explosion.potionAmplifier", 0));
 		projectile.setPotionsEffectList(toPotionEffect(projectileConfig.getStringList("explosion.potionEffects")));
+		projectile.setImpactIndicator(projectileConfig.getBoolean("explosion.impactIndicator", true));
 
-        //cluster
+		//cluster
         projectile.setClusterExplosionsEnabled(projectileConfig.getBoolean("clusterExplosion.enabled", false));
         projectile.setClusterExplosionsInBlocks(projectileConfig.getBoolean("clusterExplosion.explosionInBlocks", false));
         projectile.setClusterExplosionsAmount(projectileConfig.getInt("clusterExplosion.amount", 5));
