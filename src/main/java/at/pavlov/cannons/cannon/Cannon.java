@@ -1269,17 +1269,19 @@ public class Cannon
      * @param player player using the cannon
      * @param effectLoc location of the smoke effects
      */
-    public void coolCannon(Player player, Location effectLoc)
+    public boolean coolCannon(Player player, Location effectLoc)
     {
-        coolCannon(player);
-
         if (effectLoc !=null && getTemperature() > design.getWarningTemperature())
         {
+            coolCannon(player);
+
             effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
             //effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
+            System.out.println("design sound: " + design.getSoundCool());
             CannonsUtil.playSound(effectLoc, design.getSoundCool());
+            return true;
         }
-        return;
+        return false;
     }
 
 
@@ -1847,10 +1849,12 @@ public class Cannon
             //check if firing is finished and not reseted (after server restart)
             Projectile projectile = getLoadedProjectile();
             //delayTime is the time how long the firing should take
-            Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + (projectile.getAutomaticFiringMagazineSize()-1)*projectile.getAutomaticFiringDelay()*20.0);
-            if (lastIgnited + delayTime < System.currentTimeMillis())
-                //System.out.println("reseted isFiring");
+            Long delayTime = (long) ((design.getFuseBurnTime() + (projectile.getAutomaticFiringMagazineSize()-1)*projectile.getAutomaticFiringDelay())*1000.0);
+            if ((lastIgnited + delayTime) < System.currentTimeMillis())
+            {
+                System.out.println("reseted isFiring " + delayTime + " " + design.getFuseBurnTime());
                 isFiring = false;
+            }
         }
         return isFiring;
     }

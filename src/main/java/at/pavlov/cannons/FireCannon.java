@@ -142,10 +142,11 @@ public class FireCannon {
      */
     public MessageEnum fire(Cannon cannon, Player player, boolean autoload, boolean consumesAmmo, InteractAction action)
     {
+        plugin.logDebug("fire cannon");
         //set some valid shooter is none is given
         if (player == null) {
             player = Bukkit.getPlayer(cannon.getOwner());
-            plugin.logDebug("Firing: Set shooter to cannonOwner, because it was null");
+            plugin.logDebug("Firing: Set shooter to cannonOwner, because it was null. New player: " + player);
         }
         //fire event
         CannonUseEvent useEvent = new CannonUseEvent(cannon, player, action);
@@ -212,23 +213,7 @@ public class FireCannon {
         if (fireEvent.isCancelled())
             return null;
 
-
-        //ignite the cannon
-        delayedFire(cannon, player);
-
-        return message;
-    }
-
-    /**
-     * delays the firing by the fuse burn time
-     * @param cannon cannon to be fired
-     * @param player player operating the cannon
-     */
-    private void delayedFire(Cannon cannon, Player player)
-    {
-        CannonDesign design = designStorage.getDesign(cannon);
         Projectile projectile = cannon.getLoadedProjectile();
-
         //reset after firing
         cannon.setLastFired(System.currentTimeMillis());
         //this cannon is now firing
@@ -267,7 +252,10 @@ public class FireCannon {
                 }
             }, delayTime);
         }
+
+        return message;
     }
+
 
     /**
      * fires a cannon and removes the charge from the player
