@@ -1,20 +1,21 @@
 package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.Enum.MessageEnum;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import at.pavlov.cannons.cannon.Cannon;
 
+import java.util.UUID;
+
 public class CannonBeforeCreateEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private final Cannon cannon;
     private MessageEnum message;
-	private final Player player;
+	private final UUID player;
 	private boolean cancelled;
 	
-	public CannonBeforeCreateEvent(Cannon cannon, MessageEnum message, Player player) {
+	public CannonBeforeCreateEvent(Cannon cannon, MessageEnum message, UUID player) {
 
         this.cannon = cannon;
         this.message = message;
@@ -42,7 +43,7 @@ public class CannonBeforeCreateEvent extends Event {
         return cannon;
     }
 
-    public Player getPlayer() {
+    public UUID getPlayer() {
         return player;
     }
 

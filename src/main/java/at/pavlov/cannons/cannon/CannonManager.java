@@ -447,7 +447,7 @@ public class CannonManager
                     message = MessageEnum.ErrorMissingSign;
 
 
-                CannonBeforeCreateEvent cbceEvent = new CannonBeforeCreateEvent(cannon, message, player);
+                CannonBeforeCreateEvent cbceEvent = new CannonBeforeCreateEvent(cannon, message, player.getUniqueId());
                 Bukkit.getServer().getPluginManager().callEvent(cbceEvent);
 
 
@@ -467,7 +467,7 @@ public class CannonManager
                         //player.getWorld().playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 1F, 0.5F);
                     }
 
-                    CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player);
+                    CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player.getUniqueId());
                 	Bukkit.getServer().getPluginManager().callEvent(caceEvent);
                 }
                 else

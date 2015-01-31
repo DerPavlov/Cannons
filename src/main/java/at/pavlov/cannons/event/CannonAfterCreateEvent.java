@@ -6,12 +6,14 @@ import org.bukkit.event.HandlerList;
 
 import at.pavlov.cannons.cannon.Cannon;
 
+import java.util.UUID;
+
 public class CannonAfterCreateEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private final Cannon cannon;
-	private final Player player;
+	private final UUID player;
 	
-	public CannonAfterCreateEvent(Cannon cannon, Player player) {
+	public CannonAfterCreateEvent(Cannon cannon, UUID player) {
 		
 		this.cannon = cannon;
 		this.player = player;
@@ -29,7 +31,7 @@ public class CannonAfterCreateEvent extends Event {
         return cannon;
     }
 
-    public Player getPlayer() {
+    public UUID getPlayer() {
         return player;
     }
 
