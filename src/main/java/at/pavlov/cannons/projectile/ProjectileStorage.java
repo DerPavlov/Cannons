@@ -22,7 +22,7 @@ public class ProjectileStorage
 	private final Cannons plugin;
 
 
-    private static List<Projectile> projectileList = new ArrayList<Projectile>();
+    private static List<Projectile> projectileList;
 	
 	public ProjectileStorage(Cannons plugin)
 	{

@@ -80,9 +80,9 @@ public class Config
     private final UserMessages userMessage;
 	private final Cannons plugin;
 	private final DesignStorage designStorage;
-	private ProjectileStorage projectileStorage;
-    private CannonManager cannonManager;
-    private ProjectileManager projectileManager;
+	private final ProjectileStorage projectileStorage;
+    private final CannonManager cannonManager;
+    private final ProjectileManager projectileManager;
 
 	public Config(Cannons plugin)
 	{
@@ -172,7 +172,7 @@ public class Config
 		//load other configs	
 		projectileStorage.loadProjectiles();
 		designStorage.loadCannonDesigns();
-        cannonManager.updateCannonDesigns();
+        cannonManager.updateCannons();
 		userMessage.loadLanguage();
 
 	}
@@ -195,11 +195,6 @@ public class Config
 	public ProjectileStorage getProjectileStorage()
 	{
 		return projectileStorage;
-	}
-
-	public void setProjectileStorage(ProjectileStorage projectileStorage)
-	{
-		this.projectileStorage = projectileStorage;
 	}
 
 	public boolean isBuildLimitEnabled()
@@ -303,16 +298,8 @@ public class Config
         return cannonManager;
     }
 
-    public void setCannonManager(CannonManager cannonManager) {
-        this.cannonManager = cannonManager;
-    }
-
     public ProjectileManager getProjectileManager() {
         return projectileManager;
-    }
-
-    public void setProjectileManager(ProjectileManager projectileManager) {
-        this.projectileManager = projectileManager;
     }
 
     public MaterialHolder getToolThermometer() {

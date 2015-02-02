@@ -6,7 +6,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
+import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
+import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -766,11 +768,15 @@ public class CannonManager
     /**
      * reloads designs from the design list and updates all entries in the cannon
      */
-    public void updateCannonDesigns()
+    public void updateCannons()
     {
         for (Cannon cannon : cannonList.values())
         {
             cannon.setCannonDesign(plugin.getCannonDesign(cannon));
+            if (cannon.getLoadedProjectile() != null) {
+                MaterialHolder item = cannon.getLoadedProjectile().getLoadingItem();
+                cannon.setLoadedProjectile(plugin.getProjectile(cannon, item.getId(), item.getData()));
+            }
         }
     }
 
