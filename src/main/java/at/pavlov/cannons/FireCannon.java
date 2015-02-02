@@ -288,7 +288,7 @@ public class FireCannon {
 
         //increase heat of the cannon
         if (design.isHeatManagementEnabled())
-            cannon.setTemperature(cannon.getTemperature()+design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder());
+            cannon.setTemperature(cannon.getTemperature()+design.getHeatIncreasePerGunpowder()/projectile.getAutomaticFiringMagazineSize()*cannon.getLoadedGunpowder());
         //automatic cool down
         if (design.isAutomaticCooling())
             cannon.automaticCoolingFromChest();
