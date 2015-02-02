@@ -1,7 +1,7 @@
 name: Cannons
 main: at.pavlov.cannons.Cannons
 version: ${version}
-softdepend: [WorldEdit]
+depend: [WorldEdit]
 author: DerPavlov
 description: Fire block build cannons and smash your enemies
 
