@@ -712,7 +712,7 @@ public class CreateExplosion {
      */
     private void clusterExplosions(FlyingProjectile cannonball)
     {
-        Projectile projectile = cannonball.getProjectile();
+        final Projectile projectile = cannonball.getProjectile();
         if (projectile.isClusterExplosionsEnabled())
         {
             for (int i=0; i < projectile.getClusterExplosionsAmount(); i++)
@@ -726,7 +726,10 @@ public class CreateExplosion {
                         Location expLoc = CannonsUtil.randomPointInSphere(cannonball.getImpactLocation(),proj.getClusterExplosionsRadius());
                         //only do if explosion in blocks are allowed
                         if (proj.isClusterExplosionsInBlocks()||expLoc.getBlock().isEmpty()||(expLoc.getBlock().isLiquid()&&proj.isUnderwaterDamage()))
+                        {
                             expLoc.getWorld().createExplosion(expLoc,(float) proj.getClusterExplosionsPower());
+                            sendExplosionToPlayers(null, expLoc, projectile.getSoundImpact());
+                        }
                     }
                 }, (long) (delay*20.0));
             }
@@ -923,6 +926,12 @@ public class CreateExplosion {
         }, 1L);
     }
 
+    /**
+     * Broadcasts an explosion with higher volume to the player. Also adds an impact indicator
+     * @param projectile Which type of projectile exploded. Can be null to suppress the impact indicator
+     * @param loc Location of the explosion
+     * @param sound Which sound is broadcasted
+     */
     public void sendExplosionToPlayers(Projectile projectile, Location loc, SoundHolder sound)
     {
         CannonsUtil.imitateSound(loc, sound, config.getImitatedSoundMaximumDistance());
@@ -942,14 +951,11 @@ public class CreateExplosion {
             Location pl = p.getLocation();
             double distance = pl.distance(loc);
 
-            if(projectile.isImpactIndicator() && distance >= minDist  && distance <= maxDist)
+            if(projectile != null && projectile.isImpactIndicator() && distance >= minDist  && distance <= maxDist)
             {
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, r, mat, FakeBlockType.EXPLOSION, delay);
             }
         }
 
     }
-
-
-
 }
