@@ -1,5 +1,6 @@
 package at.pavlov.cannons.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import at.pavlov.cannons.scheduler.CreateCannon;
 import at.pavlov.cannons.utils.DelayedTask;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -61,6 +63,7 @@ public class PersistenceDatabase
 		}
 		else
 		{
+            ArrayList<UUID> invalid = new ArrayList<UUID>();
             int i = 0;
 			// found cannons - load them
 			for (CannonBean bean : beans)
@@ -71,12 +74,21 @@ public class PersistenceDatabase
 				if (design == null)
 				{
 					plugin.logSevere("Design " + bean.getDesignId() + " not found in plugin/designs");
-                    deleteCannon(bean.getId());
+                    invalid.add(bean.getId());
+                    //deleteCannon(bean.getId());
 				}
 				else
 				{
 					//load values for the cannon
                     UUID world = bean.getWorld();
+                    //test if world is valid
+                    World w = Bukkit.getWorld(world);
+                    if (w == null)
+                    {
+                        plugin.logDebug("World of cannon " + bean.getId() + " is not valid");
+                        invalid.add(bean.getId());
+                        continue;
+                    }
 					Vector offset = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
 					BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
                     UUID owner = bean.getOwner();
@@ -113,6 +125,15 @@ public class PersistenceDatabase
 				}
 
 			}
+            plugin.getDatabase().beginTransaction();
+            //remove invalid cannons form the database
+            for (UUID inv : invalid)
+            {
+                deleteCannon(inv);
+            }
+            plugin.getDatabase().commitTransaction();
+            plugin.getDatabase().endTransaction();
+
             plugin.logDebug(i + " cannons loaded from the database");
 			return true;
 		}
