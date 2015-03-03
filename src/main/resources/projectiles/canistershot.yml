@@ -40,6 +40,16 @@ cannonball:
   #possible properties are: superbreaker, incendiary, human_cannonball, teleport, observer
   properties:
 
+smokeTrail:
+  #the projectile has a smoke trail which makes it easier to spot
+  enabled: false
+  #distance between two smoke clouds
+  distance: 10
+  #material the smoke is made of
+  material: '30:0'
+  #how long the smoke will stay in seconds
+  duration: 10
+
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
   #for comparison, the explosion power of a creeper is 3. anything above 50 will cause lag on smaller servers

@@ -8,7 +8,8 @@ public enum FakeBlockType {
     EXPLOSION("Explosion"),
     MUZZLE_FIRE("Muzzle fire"),
     IMPACT_PREDICTOR("Impact predictor"),
-    WATER_SPLASH("Water splash");
+    WATER_SPLASH("Water splash"),
+    SMOKE_TRAIL("Smoke trail");
 
     private final String str;
 

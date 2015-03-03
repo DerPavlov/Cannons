@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.pavlov.cannons.container.SoundHolder;
+import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -172,6 +173,12 @@ public class ProjectileStorage
 		projectile.setNumberOfBullets(projectileConfig.getInt("cannonball.numberOfBullets", 1));
 		projectile.setSpreadMultiplier(projectileConfig.getDouble("cannonball.spreadMultiplier", 1.0));
 		projectile.setPropertyList(toProperties(projectileConfig.getStringList("cannonball.properties")));
+
+        //smokeTrail
+        projectile.setSmokeTrailEnabled(projectileConfig.getBoolean("smokeTrail.enabled", false));
+        projectile.setSmokeTrailDistance(projectileConfig.getInt("smokeTrail.distance", 10));
+        projectile.setSmokeTrailMaterial(new MaterialHolder(projectileConfig.getString("smokeTrail.material", "30:0")));
+        projectile.setSmokeTrailDuration(projectileConfig.getDouble("smokeTrail.duration", 20.0));
 		
 		//explosion
 		projectile.setExplosionPower(projectileConfig.getInt("explosion.explosionPower", 2));

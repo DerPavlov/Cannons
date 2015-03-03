@@ -17,6 +17,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -70,6 +71,7 @@ public class ProjectileObserver {
                     //update the cannonball
                     checkWaterImpact(cannonball, projectile_entity);
                     updateTeleporter(cannonball, projectile_entity);
+                    updateSmokeTrail(cannonball, projectile_entity);
                     if (updateProjectileLocation(cannonball, projectile_entity)) {
                         iter.remove();
                         continue;
@@ -204,6 +206,40 @@ public class ProjectileObserver {
         }
         cannonball.update();
         return false;
+    }
+
+
+    /**
+     * spawn smoke clouds behind the projectile to improve the visibility
+     * @param cannonball the cannonball entity entry of cannons
+     * @param projectile_entity the entity of the projectile
+     */
+    private void updateSmokeTrail(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity)
+    {
+        Random r = new Random();
+        Projectile proj = cannonball.getProjectile();
+        int maxDist = (int) plugin.getMyConfig().getImitatedBlockMaximumDistance();
+        double smokeDist = proj.getSmokeTrailDistance()*(0.5 + r.nextDouble());
+        double smokeDuration = proj.getSmokeTrailDuration()*(0.5 + r.nextGaussian());
+
+        if (proj.isSmokeTrailEnabled() && cannonball.getExpectedLocation().distance(cannonball.getLastSmokeTrailLocation()) > smokeDist)
+        {
+            //create a new smoke trail cloud
+            Location newLoc = cannonball.getExpectedLocation();
+            cannonball.setLastSmokeTrailLocation(newLoc);
+            plugin.logDebug("smoke trail at: " +  newLoc.getBlockX() + "," + newLoc.getBlockY() + "," + newLoc.getBlockZ());
+
+            for(Player p : newLoc.getWorld().getPlayers())
+            {
+                Location pl = p.getLocation();
+                double distance = pl.distance(newLoc);
+
+                if(distance <= maxDist)
+                    plugin.getFakeBlockHandler().imitatedSphere(p, newLoc, 0, proj.getSmokeTrailMaterial(), FakeBlockType.SMOKE_TRAIL, smokeDuration);
+
+            }
+        }
+
     }
 
 }

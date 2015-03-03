@@ -15,6 +15,16 @@ general:
   alternativeId:
     - '1:0'
 
+smokeTrail:
+  #the projectile has a smoke trail which makes it easier to spot
+  enabled: true
+  #distance between two smoke clouds
+  distance: 10
+  #material the smoke is made of
+  material: '30:0'
+  #how long the smoke will stay in seconds
+  duration: 5.0
+
 cannonball:
   #the type of the projectile entity
   #Arrow, Egg, EnderPearl, Fireball, Fish, LargeFireball, SmallFireball, Snowball, ThrownExpBottle, ThrownPotion, WitherSkull

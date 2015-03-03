@@ -43,6 +43,16 @@ cannonball:
     #this property sets the impact area on fire. range is determined by the explosion power property
     - incendiary
 
+smokeTrail:
+  #the projectile has a smoke trail which makes it easier to spot
+  enabled: true
+  #distance between two smoke clouds
+  distance: 10
+  #material the smoke is made of
+  material: '30:0'
+  #how long the smoke will stay in seconds
+  duration: 5.0
+
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
   #for comparison, the explosion power of a creeper is 3. anything above 50 will cause lag on smaller servers

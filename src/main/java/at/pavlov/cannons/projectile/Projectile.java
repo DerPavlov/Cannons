@@ -35,6 +35,12 @@ public class Projectile implements Cloneable{
 	private int numberOfBullets;
 	private double spreadMultiplier;
 	private List<ProjectileProperties> propertyList = new ArrayList<ProjectileProperties>();
+
+    //smokeTrail
+    private boolean smokeTrailEnabled;
+    private int smokeTrailDistance;
+    private MaterialHolder smokeTrailMaterial;
+    private double smokeTrailDuration;
 	
 	//explosion
 	private float explosionPower;
@@ -690,4 +696,36 @@ public class Projectile implements Cloneable{
 	public void setImpactIndicator(boolean impactIndicator) {
 		this.impactIndicator = impactIndicator;
 	}
+
+    public boolean isSmokeTrailEnabled() {
+        return smokeTrailEnabled;
+    }
+
+    public void setSmokeTrailEnabled(boolean smokeTrailEnabled) {
+        this.smokeTrailEnabled = smokeTrailEnabled;
+    }
+
+    public MaterialHolder getSmokeTrailMaterial() {
+        return smokeTrailMaterial;
+    }
+
+    public void setSmokeTrailMaterial(MaterialHolder smokeTrailMaterial) {
+        this.smokeTrailMaterial = smokeTrailMaterial;
+    }
+
+    public double getSmokeTrailDuration() {
+        return smokeTrailDuration;
+    }
+
+    public void setSmokeTrailDuration(double smokeTrailDuration) {
+        this.smokeTrailDuration = smokeTrailDuration;
+    }
+
+    public int getSmokeTrailDistance() {
+        return smokeTrailDistance;
+    }
+
+    public void setSmokeTrailDistance(int smokeTrailDistance) {
+        this.smokeTrailDistance = smokeTrailDistance;
+    }
 }

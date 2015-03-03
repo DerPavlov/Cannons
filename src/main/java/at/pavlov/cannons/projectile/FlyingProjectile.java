@@ -26,6 +26,7 @@ public class FlyingProjectile
     //location of the shooterUID before firing - important for teleporting the player back - observer property
     private final Location playerlocation;
     private Location impactLocation;
+    private Location lastSmokeTrailLocation;
     //Important for visual splash effect when the cannonball hits the water surface
     private boolean inWater;
     private boolean wasInWater;
@@ -33,6 +34,7 @@ public class FlyingProjectile
     private boolean teleported;
 
     private MovingObject predictor;
+
 
 
 	
@@ -56,7 +58,9 @@ public class FlyingProjectile
         //set location and speed
         Location new_loc = projectile_entity.getLocation();
         predictor = new MovingObject(new_loc, projectile_entity.getVelocity());
-	}
+
+        this.lastSmokeTrailLocation = new_loc;
+    }
 
     public UUID getShooterUID()
     {
@@ -283,5 +287,13 @@ public class FlyingProjectile
 
     public void setTeleported(boolean teleported) {
         this.teleported = teleported;
+    }
+
+    public Location getLastSmokeTrailLocation() {
+        return lastSmokeTrailLocation;
+    }
+
+    public void setLastSmokeTrailLocation(Location lastSmokeTrailLocation) {
+        this.lastSmokeTrailLocation = lastSmokeTrailLocation;
     }
 }

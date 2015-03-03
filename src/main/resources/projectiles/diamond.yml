@@ -1,6 +1,6 @@
 general:
   #the name of the projectile displayed in game
-  projectileName: hardenrf cannonball
+  projectileName: hardened cannonball
   #a short description of the projectile
   description: "This cannonball contains a diamond and will even break obsidian."
   #the name of the item to load this projectile
@@ -44,6 +44,16 @@ cannonball:
     - superbreaker
     #this property sets the impact area on fire. range is determined by the explosion power property
     - incendiary
+
+smokeTrail:
+  #the projectile has a smoke trail which makes it easier to spot
+  enabled: true
+  #distance between two smoke clouds
+  distance: 10
+  #material the smoke is made of
+  material: '30:0'
+  #how long the smoke will stay in seconds
+  duration: 5.0
 
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
