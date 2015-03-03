@@ -48,7 +48,7 @@ smokeTrail:
   #material the smoke is made of
   material: '30:0'
   #how long the smoke will stay in seconds
-  duration: 10
+  duration: 5.0
 
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
