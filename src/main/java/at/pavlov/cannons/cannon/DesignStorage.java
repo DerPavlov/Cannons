@@ -244,6 +244,7 @@ public class DesignStorage
         cannonDesign.setPermissionRename(cannonDesignConfig.getString("permissions.rename", "cannons.player.rename"));
 		cannonDesign.setPermissionLoad(cannonDesignConfig.getString("permissions.load", "cannons.player.load"));
 		cannonDesign.setPermissionFire(cannonDesignConfig.getString("permissions.fire", "cannons.player.fire"));
+        cannonDesign.setPermissionAdjust(cannonDesignConfig.getString("permissions.adjust", "cannons.player.adjust"));
 		cannonDesign.setPermissionAutoaim(cannonDesignConfig.getString("permissions.autoaim", "cannons.player.autoaim"));
         cannonDesign.setPermissionObserver(cannonDesignConfig.getString("permissions.observer", "cannons.player.observer"));
 		cannonDesign.setPermissionTargetTracking(cannonDesignConfig.getString("permissions.targetTracking", "cannons.player.targetTracking"));
