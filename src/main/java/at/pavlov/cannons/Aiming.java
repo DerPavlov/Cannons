@@ -153,7 +153,7 @@ public class Aiming {
                 return MessageEnum.ErrorNotTheOwner;
             }
             //if the player has the permission to adjust this gun
-            if (!player.hasPermission("cannons.player.adjust"))
+            if (!player.hasPermission(cannon.getCannonDesign().getPermissionAdjust()))
             {
                 return  MessageEnum.PermissionErrorAdjust;
             }
