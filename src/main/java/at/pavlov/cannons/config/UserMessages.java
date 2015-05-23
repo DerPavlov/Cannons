@@ -201,7 +201,7 @@ public class UserMessages {
 		sendMessage(message, player);
 	}
 
-    public void sendImpactMessage(Player player, Location impact, boolean notCanceled)
+    public void sendImpactMessage(Player player, Location impact, boolean canceled)
     {
         //no player no message
         if (player == null)
@@ -215,27 +215,23 @@ public class UserMessages {
         String message;
         MessageEnum messageEnum;
 
-        if (notCanceled)
-        {
+        if (!canceled) {
             //the projectile exploded
             messageEnum = MessageEnum.ProjectileExplosion;
         }
-        else
-        {
+        else {
             //the explosion was canceled
             messageEnum = MessageEnum.ProjectileCanceled;
         }
 
         message = messageMap.get(messageEnum.getString());
 
-        if (message == null)
-        {
+        if (message == null){
             plugin.logSevere("No " + messageEnum.getString() + " in localization file");
             return;
         }
         //if the message is something like this Explosion: '' it will pass quietly
-        if (message.isEmpty())
-        {
+        if (message.isEmpty()) {
             return;
         }
         //replace tags

@@ -17,6 +17,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
@@ -107,7 +109,7 @@ public class CreateExplosion {
     /**
      * breaks blocks that are on the trajectory of the projectile. The projectile is stopped by impenetratable blocks (obsidian)
      * @param cannonball
-     * @return
+     * @return the location after the piercing event. null if the location is protected by a plugin.
      */
     private Location blockBreaker(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity)
     {
@@ -130,23 +132,29 @@ public class CreateExplosion {
         impactLoc = CannonsUtil.findSurface(impactLoc, vel);
         plugin.logDebug("Impact surface: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
 
+        //test if area is protected
+        BlockIterator iter1 = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, 4);
+        while (iter1.hasNext())
+            blocklist.add(iter1.next());
+        EntityExplodeEvent tevent = new EntityExplodeEvent(null, impactLoc, blocklist, 1.0f);
+        plugin.getServer().getPluginManager().callEvent(tevent);
+        if (tevent.isCancelled())
+            return null;
+
         //the cannonball will only break blocks if it has penetration.
         Random r = new Random();
         double randomness = (1+r.nextGaussian()/5.0);
         int penetration = (int) Math.round(randomness*(cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
 
+        blocklist.clear();
         if (penetration > 0)
         {
-            BlockIterator iter = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, penetration);
-
-            while (iter.hasNext())
-            {
-                Block next = iter.next();
+            BlockIterator iter2 = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, penetration);
+            while (iter2.hasNext()) {
+                Block next = iter2.next();
                 // if block can be destroyed the the iterator will check the next block. Else the projectile will explode
-                if (!breakBlock(next, blocklist, superbreaker, doesBlockDamage))
-                {
-                    plugin.logDebug("Indestructible block found at " + next.getLocation());
-                    //found indestructible block - set impactloc
+                if (!breakBlock(next, blocklist, superbreaker, doesBlockDamage)) {
+                    //found indestructible block
                     break;
                 }
                 impactLoc = next.getLocation();
@@ -158,13 +166,13 @@ public class CreateExplosion {
         {
             //small explosion on impact
             Block block = impactLoc.getBlock();
-            breakBlock(block, blocklist, superbreaker, doesBlockDamage);
-            breakBlock(block.getRelative(BlockFace.UP), blocklist, superbreaker, doesBlockDamage);
-            breakBlock(block.getRelative(BlockFace.DOWN), blocklist, superbreaker, doesBlockDamage);
-            breakBlock(block.getRelative(BlockFace.SOUTH), blocklist, superbreaker, doesBlockDamage);
-            breakBlock(block.getRelative(BlockFace.WEST), blocklist, superbreaker, doesBlockDamage);
-            breakBlock(block.getRelative(BlockFace.EAST), blocklist, superbreaker, doesBlockDamage);
-            breakBlock(block.getRelative(BlockFace.NORTH), blocklist, superbreaker, doesBlockDamage);
+            breakBlock(block, blocklist, true, doesBlockDamage);
+            breakBlock(block.getRelative(BlockFace.UP), blocklist, true, doesBlockDamage);
+            breakBlock(block.getRelative(BlockFace.DOWN), blocklist, true, doesBlockDamage);
+            breakBlock(block.getRelative(BlockFace.SOUTH), blocklist, true, doesBlockDamage);
+            breakBlock(block.getRelative(BlockFace.WEST), blocklist, true, doesBlockDamage);
+            breakBlock(block.getRelative(BlockFace.EAST), blocklist, true, doesBlockDamage);
+            breakBlock(block.getRelative(BlockFace.NORTH), blocklist, true, doesBlockDamage);
         }
 
         //no eventhandling if the list is empty
@@ -176,14 +184,12 @@ public class CreateExplosion {
 
             //create bukkit event
             EntityExplodeEvent event = new EntityExplodeEvent(null, impactLoc, piercingEvent.getBlockList(), 1.0f);
-            //handle with bukkit
             plugin.getServer().getPluginManager().callEvent(event);
 
             plugin.logDebug("was the cannons explode event canceled: " + event.isCancelled());
             //if not canceled break all given blocks
             if(!event.isCancelled())
             {
-                plugin.logDebug("breaking block for penetration event");
                 // break water, lava, obsidian if cannon projectile
                 for (int i = 0; i < event.blockList().size(); i++)
                 {
@@ -192,6 +198,10 @@ public class CreateExplosion {
                     BreakBreakNaturally(pBlock,event.getYield());
                 }
             }
+            else{
+                return null;
+            }
+
         }
         return impactLoc;
     }
@@ -596,14 +606,17 @@ public class CreateExplosion {
         plugin.logDebug("detonate cannonball");
 
         Projectile projectile = cannonball.getProjectile().clone();
-
         Player player = Bukkit.getPlayer(cannonball.getShooterUID());
 
+
+        boolean canceled = false;
         //breaks blocks from the impact of the projectile to the location of the explosion
         Location impactLoc = blockBreaker(cannonball, projectile_entity);
+        if (impactLoc == null){
+            canceled = true;
+            impactLoc = projectile_entity.getLocation();
+        }
         cannonball.setImpactLocation(impactLoc);
-
-        //get world
         World world = impactLoc.getWorld();
 
         //teleport snowball to impact
@@ -632,33 +645,37 @@ public class CreateExplosion {
         Bukkit.getServer().getPluginManager().callEvent(impactEvent);
 
         //if canceled then exit
-        if (impactEvent.isCancelled())
+        if (impactEvent.isCancelled() || canceled)
         {
             //event canceled, make some effects - even if the area is protected by a plugin
             world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
             sendExplosionToPlayers(projectile, impactLoc, projectile.getSoundImpactProtected());
+            //send a message about the impact (only if the projectile has enabled this feature)
+            if (projectile.isImpactMessage())
+                plugin.sendImpactMessage(player, impactLoc, true);
             return;
         }
 
         //explosion event
         boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
         boolean blockDamage = projectile.getExplosionDamage();
-        boolean notCanceled = true;
+
         //if the explosion power is negative there will be only a arrow impact sound
-        if (explosion_power>=0)
+        if (explosion_power>=0) {
             //get affected entities
             for (Entity cEntity : projectile_entity.getNearbyEntities(explosion_power, explosion_power, explosion_power))
                 addAffectedEntity(cEntity);
             //make the explosion
-            notCanceled = world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
+            canceled = !world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
+        }
 
 
         //send a message about the impact (only if the projectile has enabled this feature)
         if (projectile.isImpactMessage())
-            plugin.sendImpactMessage(player, impactLoc, notCanceled);
+            plugin.sendImpactMessage(player, impactLoc, canceled);
 
         // do nothing if the projectile impact was canceled or it is underwater with deactivated
-        if (notCanceled)
+        if (!canceled)
         {
             //if the player is too far away, there will be a imitated explosion made of fake blocks
             sendExplosionToPlayers(projectile, impactLoc, projectile.getSoundImpact());
