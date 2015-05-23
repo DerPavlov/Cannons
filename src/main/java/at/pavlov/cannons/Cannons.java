@@ -36,8 +36,8 @@ import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.dao.CannonBean;
 import at.pavlov.cannons.dao.MyDatabase;
 import at.pavlov.cannons.dao.PersistenceDatabase;
-import at.pavlov.cannons.mcstats.Metrics;
 import at.pavlov.cannons.projectile.Projectile;
+import org.mcstats.Metrics;
 
 public final class Cannons extends JavaPlugin
 {
