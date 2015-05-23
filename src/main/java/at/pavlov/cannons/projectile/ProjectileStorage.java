@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.pavlov.cannons.container.SoundHolder;
-import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
