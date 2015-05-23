@@ -29,6 +29,8 @@ import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Set;
+
 public class PlayerListener implements Listener
 {
     private final Config config;
@@ -324,7 +326,7 @@ public class PlayerListener implements Listener
             if(event.getClickedBlock() == null)
             {
                 // no clicked block - get block player is looking at
-                clickedBlock = event.getPlayer().getTargetBlock(null, 4);
+                clickedBlock = event.getPlayer().getTargetBlock((Set<Material>) null, 4);
             }
             else
             {

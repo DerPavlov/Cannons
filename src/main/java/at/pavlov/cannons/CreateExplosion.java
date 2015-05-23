@@ -109,7 +109,7 @@ public class CreateExplosion {
     /**
      * breaks blocks that are on the trajectory of the projectile. The projectile is stopped by impenetratable blocks (obsidian)
      * @param cannonball
-     * @return the location after the piercing event. null if the location is protected by a plugin.
+     * @return the location after the piercing event
      */
     private Location blockBreaker(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity)
     {
@@ -131,15 +131,6 @@ public class CreateExplosion {
         //find surface and set this as new impact location
         impactLoc = CannonsUtil.findSurface(impactLoc, vel);
         plugin.logDebug("Impact surface: " + impactLoc.getBlockX() + ", "+ impactLoc.getBlockY() + ", " + impactLoc.getBlockZ());
-
-        //test if area is protected
-        BlockIterator iter1 = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, 4);
-        while (iter1.hasNext())
-            blocklist.add(iter1.next());
-        EntityExplodeEvent tevent = new EntityExplodeEvent(null, impactLoc, blocklist, 1.0f);
-        plugin.getServer().getPluginManager().callEvent(tevent);
-        if (tevent.isCancelled())
-            return null;
 
         //the cannonball will only break blocks if it has penetration.
         Random r = new Random();
@@ -197,9 +188,6 @@ public class CreateExplosion {
                     // break the block, no matter what it is
                     BreakBreakNaturally(pBlock,event.getYield());
                 }
-            }
-            else{
-                return null;
             }
 
         }
@@ -612,10 +600,7 @@ public class CreateExplosion {
         boolean canceled = false;
         //breaks blocks from the impact of the projectile to the location of the explosion
         Location impactLoc = blockBreaker(cannonball, projectile_entity);
-        if (impactLoc == null){
-            canceled = true;
-            impactLoc = projectile_entity.getLocation();
-        }
+        impactLoc = projectile_entity.getLocation();
         cannonball.setImpactLocation(impactLoc);
         World world = impactLoc.getWorld();
 
@@ -640,35 +625,31 @@ public class CreateExplosion {
             return;
         }
 
-        //fire impact event
-        ProjectileImpactEvent impactEvent = new ProjectileImpactEvent(projectile, impactLoc);
-        Bukkit.getServer().getPluginManager().callEvent(impactEvent);
-
-        //if canceled then exit
-        if (impactEvent.isCancelled() || canceled)
-        {
-            //event canceled, make some effects - even if the area is protected by a plugin
-            world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
-            sendExplosionToPlayers(projectile, impactLoc, projectile.getSoundImpactProtected());
-            //send a message about the impact (only if the projectile has enabled this feature)
-            if (projectile.isImpactMessage())
-                plugin.sendImpactMessage(player, impactLoc, true);
-            return;
-        }
-
-        //explosion event
         boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
         boolean blockDamage = projectile.getExplosionDamage();
 
-        //if the explosion power is negative there will be only a arrow impact sound
-        if (explosion_power>=0) {
-            //get affected entities
-            for (Entity cEntity : projectile_entity.getNearbyEntities(explosion_power, explosion_power, explosion_power))
-                addAffectedEntity(cEntity);
-            //make the explosion
-            canceled = !world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
-        }
+        //fire impact event
+        ProjectileImpactEvent impactEvent = new ProjectileImpactEvent(projectile, impactLoc);
+        Bukkit.getServer().getPluginManager().callEvent(impactEvent);
+        canceled = impactEvent.isCancelled();
 
+        //if canceled then exit
+        if (impactEvent.isCancelled())
+        {
+            //event cancelled, make some effects - even if the area is protected by a plugin
+            world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
+            sendExplosionToPlayers(projectile, impactLoc, projectile.getSoundImpactProtected());
+        }
+        else {
+            //if the explosion power is negative there will be only a arrow impact sound
+            if (explosion_power >= 0) {
+                //get affected entities
+                for (Entity cEntity : projectile_entity.getNearbyEntities(explosion_power, explosion_power, explosion_power))
+                    addAffectedEntity(cEntity);
+                //make the explosion
+                canceled = !world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power, incendiary, blockDamage);
+            }
+        }
 
         //send a message about the impact (only if the projectile has enabled this feature)
         if (projectile.isImpactMessage())
