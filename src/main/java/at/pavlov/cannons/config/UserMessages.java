@@ -298,9 +298,9 @@ public class UserMessages {
             //pushing projectile
             message = message.replace("PUSHING_LEFT", Integer.toString(cannon.getProjectilePushed()));
 			//economy
-			message = message.replace("BUILD_COSTS", Cannons.economy.format(cannon.getCannonDesign().getEconomyBuildingCost()));
-            message = message.replace("DISMANTLING_REFUND", Cannons.economy.format(cannon.getCannonDesign().getEconomyDismantlingRefund()));
-            message = message.replace("DISMANTLING_REFUND", Cannons.economy.format(cannon.getCannonDesign().getEconomyDestructionRefund()));
+			message = message.replace("BUILD_COSTS", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyBuildingCost()));
+            message = message.replace("DISMANTLING_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDismantlingRefund()));
+            message = message.replace("DISMANTLING_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDestructionRefund()));
 
         }
 

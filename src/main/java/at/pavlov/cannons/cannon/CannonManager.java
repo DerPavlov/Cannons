@@ -13,6 +13,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -116,6 +117,22 @@ public class CannonManager
 
         // destroy cannon (drops items, edit sign)
         MessageEnum message = cannon.destroyCannon(breakCannon, canExplode, cause);
+        OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
+
+        if (offplayer!=null && plugin.getEconomy()!=null) {
+            // return message
+            switch (cause) {
+                case Other:
+                    plugin.getEconomy().depositPlayer(offplayer, cannon.getCannonDesign().getEconomyDismantlingRefund());
+                    break;
+                case Dismantling:
+                    plugin.getEconomy().depositPlayer(offplayer, cannon.getCannonDesign().getEconomyDismantlingRefund());
+                    break;
+                default:
+                    plugin.getEconomy().depositPlayer(offplayer, cannon.getCannonDesign().getEconomyDestructionRefund());
+                    break;
+            }
+        }
 
         if (player != null)
             userMessages.sendMessage(player, cannon, message);
@@ -448,8 +465,8 @@ public class CannonManager
                     message = MessageEnum.ErrorMissingSign;
 
                 //if a sign is required to operate the cannon, there must be at least one sign
-                if (message == MessageEnum.CannonCreated && Cannons.economy != null) {
-                    EconomyResponse r = Cannons.economy.withdrawPlayer(player, cannon.getCannonDesign().getEconomyBuildingCost());
+                if (message == MessageEnum.CannonCreated && plugin.getEconomy() != null) {
+                    EconomyResponse r = plugin.getEconomy().withdrawPlayer(player, cannon.getCannonDesign().getEconomyBuildingCost());
                     if (!r.transactionSuccess())
                         message = MessageEnum.ErrorNoMoney;
                 }

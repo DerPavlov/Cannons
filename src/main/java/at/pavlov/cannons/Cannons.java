@@ -54,7 +54,7 @@ public final class Cannons extends JavaPlugin
     private final FakeBlockHandler fakeBlockHandler;
 
     private final CannonsAPI cannonsAPI;
-    public static Economy economy = null;
+    private Economy economy;
 	
 	//Listener
     private final BlockListener blockListener;
@@ -414,5 +414,9 @@ public final class Cannons extends JavaPlugin
 
     public Commands getCommandListener() {
         return commands;
+    }
+
+    public Economy getEconomy(){
+        return this.economy;
     }
 }

@@ -738,26 +738,16 @@ public class Cannon
         else
             dropCharge();
 
-        OfflinePlayer offplayer = Bukkit.getOfflinePlayer(getOwner());
-
         // return message
         switch (cause)
         {
             case Overheating:
-                if (offplayer!=null && Cannons.economy!=null)
-                    Cannons.economy.depositPlayer(offplayer, design.getEconomyDestructionRefund());
                 return MessageEnum.HeatManagementOverheated;
             case Other:
-                if (offplayer!=null && Cannons.economy!=null)
-                    Cannons.economy.depositPlayer(offplayer, design.getEconomyDismantlingRefund());
                 return null;
             case Dismantling:
-                if (offplayer!=null && Cannons.economy!=null)
-                    Cannons.economy.depositPlayer(offplayer, design.getEconomyDismantlingRefund());
                 return MessageEnum.CannonDismantled;
             default:
-                if (offplayer!=null && Cannons.economy!=null)
-                    Cannons.economy.depositPlayer(offplayer, design.getEconomyDestructionRefund());
                 return MessageEnum.CannonDestroyed;
         }
     }
