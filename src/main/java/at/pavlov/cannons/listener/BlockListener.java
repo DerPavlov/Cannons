@@ -4,6 +4,7 @@ package at.pavlov.cannons.listener;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.cannon.Cannon;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +12,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityExplodeEvent;
 
 import java.util.Iterator;
 
@@ -121,25 +123,24 @@ public class BlockListener implements Listener
     @EventHandler
     public void BlockBreak(BlockBreakEvent event)
     {
-        // breaking is only allowed when the barrel is broken - minor stuff as buttons are canceled
+
         Cannon cannon = plugin.getCannonManager().getCannon(event.getBlock().getLocation(), null);
         if (cannon != null)
         {
+            //breaking is only allowed when the barrel is broken - minor stuff as buttons are canceled
             //you can't break your own cannon in aiming mode
+            //breaking cannon while player is in selection (command) mode is not allowed
             Cannon aimingCannon = null;
             if (event.getPlayer()!=null)
                  aimingCannon = plugin.getAiming().getCannonInAimingMode(event.getPlayer());
 
-            if (cannon.isDestructibleBlock(event.getBlock().getLocation()) && (aimingCannon==null||!cannon.equals(aimingCannon)))
-            {
+            if (cannon.isDestructibleBlock(event.getBlock().getLocation()) && (aimingCannon==null||!cannon.equals(aimingCannon)) && !plugin.getCommandListener().isSelectingMode(event.getPlayer())) {
                 plugin.getCannonManager().removeCannon(cannon, false, true, BreakCause.PlayerBreak);
                 plugin.logDebug("cannon broken:  " + cannon.isDestructibleBlock(event.getBlock().getLocation()));
             }
-            else
-            {
+            else {
                 event.setCancelled(true);
-                plugin.logDebug("stop breaking: " + cannon.isDestructibleBlock(event.getBlock().getLocation()));
-
+                plugin.logDebug("cancelled cannon destruction: " + cannon.isDestructibleBlock(event.getBlock().getLocation()));
             }
         }
     }

@@ -320,23 +320,33 @@ public class PlayerListener implements Listener
     public void PlayerInteract(PlayerInteractEvent event)
     {
         Action action = event.getAction();
+
+        Block clickedBlock;
+        if(event.getClickedBlock() == null)
+        {
+            // no clicked block - get block player is looking at
+            clickedBlock = event.getPlayer().getTargetBlock((Set<Material>) null, 4);
+        }
+        else
+        {
+            clickedBlock = event.getClickedBlock();
+        }
+        final Player player = event.getPlayer();
+        final Location barrel = clickedBlock.getLocation();
+
+        // find cannon or add it to the list
+        final Cannon cannon = cannonManager.getCannon(barrel, player.getUniqueId(), false);
+
+        // ############ select a cannon ####################
+        if(plugin.getCommandListener().isSelectingMode(player))
+        {
+            plugin.getCommandListener().setSelectedCannon(player, cannon);
+            event.setCancelled(true);
+            return;
+        }
+
     	if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL)
         {
-            Block clickedBlock;
-            if(event.getClickedBlock() == null)
-            {
-                // no clicked block - get block player is looking at
-                clickedBlock = event.getPlayer().getTargetBlock((Set<Material>) null, 4);
-            }
-            else
-            {
-                clickedBlock = event.getClickedBlock();
-            }
-            final Player player = event.getPlayer();
-            final Location barrel = clickedBlock.getLocation();
-
-            // find cannon or add it to the list
-            final Cannon cannon = cannonManager.getCannon(barrel, player.getUniqueId(), false);
 
             //no cannon found - maybe the player has click into the air to stop aiming
             if(cannon == null)
@@ -357,18 +367,6 @@ public class PlayerListener implements Listener
             // prevent eggs and snowball from firing when loaded into the gun
             if(config.isCancelItem(player.getItemInHand()))
                 event.setCancelled(true);
-
-
-            plugin.logDebug("player interact event fired");
-
-
-            // ############ select a cannon ####################
-            if(plugin.getCommandListener().isSelectingMode(player))
-            {
-                plugin.getCommandListener().setSelectedCannon(player, cannon);
-                event.setCancelled(true);
-                return;
-            }
 
             // ############ touching a hot cannon will burn you ####################
             if(cannon.getTemperature() > design.getWarningTemperature())
