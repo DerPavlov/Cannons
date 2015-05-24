@@ -292,6 +292,7 @@ public class UserMessages {
             message = message.replace("CANNON", cannon.getCannonDesign().getMessageName());
             //soot left
             message = message.replace("SOOT_LEFT", Integer.toString((int) Math.floor(cannon.getSoot())));
+            message = message.replace("SOOT", String.format("%.1f", cannon.getSoot()));
             //pushing projectile
             message = message.replace("PUSHING_LEFT", Integer.toString(cannon.getProjectilePushed()));
 			//economy

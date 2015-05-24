@@ -289,14 +289,14 @@ public class Commands implements CommandExecutor
                             sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
                     }
                     //get name of cannon
-                    else if(args[0].equalsIgnoreCase("get"))
+                    else if(args[0].equalsIgnoreCase("info"))
                     {
-                        if (!player.hasPermission("cannons.player.get"))
+                        if (!player.hasPermission("cannons.player.info"))
                         {
                             plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
                             return true;
                         }
-                        toggleCannonSelector(player, SelectCannon.GET);
+                        toggleCannonSelector(player, SelectCannon.INFO);
                     }
                     //get name of cannon
                     else if(args[0].equalsIgnoreCase("dismantle"))
@@ -485,8 +485,8 @@ public class Commands implements CommandExecutor
                     userMessages.sendMessage(message, player, cannon);
                     break;
                 }
-                case GET:{
-                    userMessages.sendMessage(MessageEnum.CannonGetName, player, cannon);
+                case INFO:{
+                    userMessages.sendMessage(MessageEnum.CannonInfo, player, cannon);
                     break;
                 }
                 case DISMANTLE:{

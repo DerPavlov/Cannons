@@ -32,7 +32,7 @@ permissions:
       cannons.player.fire: true
       cannons.player.autoaim: true
       cannons.player.observer: true
-      cannons.player.get: true
+      cannons.player.info: true
       cannons.player.tracking: true
       cannons.player.autoreload: true
       cannons.player.thermometer: true
@@ -79,8 +79,8 @@ permissions:
   cannons.player.observer:
     description: Allows a player to see the impact prediction for selected cannons
     default: false
-  cannons.player.get:
-    description: Allows a player to see the impact prediction for selected cannons
+  cannons.player.info:
+    description: Allows a player to get information about the cannon
     default: false
   cannons.player.thermometer:
     description: Allows a player to measure the temperature of a cannon with the thermometer item

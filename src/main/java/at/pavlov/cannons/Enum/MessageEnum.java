@@ -49,7 +49,7 @@ public enum MessageEnum
 	CannonFire ("Cannon.Fire"),
     CannonObserverAdded ("Cannon.ObserverAdded"),
     CannonObserverRemoved ("Cannon.ObserverRemoved"),
-	CannonGetName ("Cannon.GetName"),
+	CannonInfo ("Cannon.Info"),
     CannonRenameSuccess ("Cannon.RenameSuccess"),
     CannonRenameFail ("Cannon.RenameFail"),
 

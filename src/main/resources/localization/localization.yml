@@ -49,7 +49,13 @@ Cannon:
   Reseted: 'GREEN [Cannons] All cannons of GOLD PLAYER GREEN have been deleted from the database'
   ObserverAdded: 'GREEN [Cannons] You have been added as observer to GOLD CANNON_NAME.'
   ObserverRemoved: 'RED [Cannons] You are no longer observer for GOLD CANNON_NAME.'
-  GetName: 'GREEN [Cannons] The name of this GOLD CANNON GREEN is GOLD CANNON_NAME.'
+  Info: 'NEWLINE YELLOW ========== Cannons Information ==========
+    NEWLINE YELLOW Name: GOLD CANNON_NAME
+    NEWLINE YELLOW Type: GOLD CANNON
+    NEWLINE YELLOW Gunpowder: GOLD GUNPOWDERkg YELLOW of GOLD MAX_GUNPOWDERkg
+    NEWLINE YELLOW Projectile: GOLD PROJECTILE
+    NEWLINE YELLOW Soot: GOLD SOOT
+    NEWLINE YELLOW Targeting H/V: GOLD HDEGREE YELLOW / GOLD VDEGREE'
   RenameSuccess: 'GREEN [Cannons] You have rename the cannon to GOLD CANNON_NAME.'
   RenameFail: 'RED [Cannons] New cannon name is not unique.'
 
