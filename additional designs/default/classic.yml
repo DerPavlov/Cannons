@@ -33,7 +33,7 @@ ammunition:
   autoreloadRedstone: true
   #after firing the projectile are usually gone, but you can set this to false to keep the cannon loaded. Just load the cannon once and it stays loaded until you break it.
   removeChargeAfterFiring: true
-
+  
 
 barrelProperties:
   #maximum gunpowder that can be loaded in the cannon
@@ -73,6 +73,8 @@ angles:
   angleStepSize: 1.0
   #how fast the cannons can be turned in seconds (fastest is 0.05s)
   angleUpdateSpeed: 0.1
+  #a message with the new angles is displayed to the user while aiming
+  angleUpdateMessage: false
 
 
 #the impact predictor will show the impact location of a loaded cannon
@@ -91,7 +93,7 @@ heatManagement:
   #if true the cannon will refuse to fire if the cannon temperature after firing would be higher than critical
   automaticTemperatureControl: true
   #touching a hot cannon will hurt (in full hearts)
-  burnDamage: 2.0
+  burnDamage: 0.0
   #touching a hot cannon will slow you (in seconds)
   burnSlowing: 10
   #how much firing one gunpowder will increase the temperature of the barrel
@@ -189,12 +191,11 @@ overloading:
   #Chance of explosion = 1*(6*0.1)^3 = 0.216 = 21.6%
 
 
-
 realisticBehaviour:
   #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
   isFiringItemRequired: false
   #firing a cannon produced soot (dirt) which needs to be cleaned. Cleaning is necessary if soot>=1
-  sootPerGunpowder: 0.0
+  sootPerGunpowder: 0.1
   #created cannon will have this amount of soot (0 to disable this feature)
   startingSoot: 10
   #after loading a projectile it is necessary to push the projectile against the gunpowder
@@ -212,7 +213,7 @@ realisticBehaviour:
   #cannon explodes if a loaded cannon is destroyed. Explosion power 4 (like tnt) and 0 to disable it. Will be scaled with the loaded gunpowder.
   explodingLoadedCannon: 2.0
   #fire after loading projectile with the time delay given by the fuse time. Sneaking will stop immediate firing.
-  fireAfterLoading: true
+  fireAfterLoading: false
 
 
 permissions:
@@ -260,6 +261,7 @@ allowedProjectiles:
   #they do not have to be named after an in-game item and can be named anything.
   #make sure the name matches the name of the config file of the projectile you want this cannon to be able to fire. the .yml part does not need to be included
   - cobblestone
+  - diamond
   - canistershot
   - enderpearl
   - tnt
@@ -276,8 +278,8 @@ sounds:
 
   #creating a new cannon
   create: 'ANVIL_LAND:1:0.5'
-  #destroy cannon
-  destroy: 'ZOMBIE_METAL:1:0.1'
+  #destroying a cannon
+  destroy: 'ZOMBIE_METAL:1:0.5'
   #changing the angle of a cannon
   adjust: 'IRONGOLEM_WALK:1:0.5'
   #fuse igniting sound when firing

@@ -195,6 +195,7 @@ public class DesignStorage
         cannonDesign.setMinVerticalAngleOnShip(cannonDesignConfig.getDouble("angles.minVerticalAngleOnShip", -30.0));
 		cannonDesign.setAngleStepSize(cannonDesignConfig.getDouble("angles.angleStepSize", 1.0));
 		cannonDesign.setAngleUpdateSpeed((int) (cannonDesignConfig.getDouble("angles.angleUpdateSpeed", 1.0)*1000.0));
+        cannonDesign.setAngleUpdateMessage(cannonDesignConfig.getBoolean("angles.angleUpdateMessage", false));
 
         //impactPredictor
         cannonDesign.setPredictorEnabled(cannonDesignConfig.getBoolean("impactPredictor.enabled", true));

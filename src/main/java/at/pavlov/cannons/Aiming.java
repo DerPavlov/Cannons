@@ -162,10 +162,10 @@ public class Aiming {
         gunAngles angles;
 
 		//barrel clicked to change angle
-		if (!config.getToolAdjust().equalsFuzzy(player.getItemInHand()))
+		if (player != null && !config.getToolAdjust().equalsFuzzy(player.getItemInHand()))
 		{
 			//aiming mode only if player is sneaking
-            if (player == null || player.isSneaking())
+            if (player.isSneaking())
             {
                 angles = CheckLookingDirection(cannon, player.getLocation());
                 combine = true;
@@ -175,11 +175,14 @@ public class Aiming {
 		}
 		else
 		{
-			//barrel clicked to change angle
-			angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking());
+			if (player!=null) {
+				angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking());
+				//register impact predictor
+				cannon.addObserver(player, true);
+			}
+			else
+				angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), false);
 			combine = false;
-            //register impact predictor
-            cannon.addObserver(player, true);
 		}
 
 		//Check angles
@@ -254,7 +257,10 @@ public class Aiming {
             CannonsUtil.playSound(cannon.getMuzzle(),design.getSoundAdjust());
             //predict impact marker
             updateLastAimed(cannon);
-            return message;
+			if (cannon.getCannonDesign().isAngleUpdateMessage())
+            	return message;
+			else
+				return null;
         }
 		else
 			return null;
@@ -422,10 +428,10 @@ public class Aiming {
             }
 
     		// only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
-    		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed() )
+    		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed())
     		{
     			// autoaming or fineadjusting
-    			if (distanceCheck(player, cannon)/*Player must to be in aiming mode while using current cannon, so delete this code: "config.getToolAutoaim().equalsFuzzy(player.getItemInHand())"*/ && player.isOnline() && cannon.isValid())
+    			if (distanceCheck(player, cannon) && player.isOnline() && cannon.isValid())
         		{
             		MessageEnum message = updateAngle(player, cannon, null);
                     //show impact predictor marker
@@ -493,7 +499,6 @@ public class Aiming {
 			{
 				//no Permission to aim
 				userMessages.sendMessage(player, cannon, MessageEnum.PermissionErrorAdjust);
-				return;
 			}
 		}
 	}
@@ -508,12 +513,8 @@ public class Aiming {
 
         inAimingMode.put(player.getUniqueId(), cannon.getUID());
 
-        if (cannon != null)
-        {
-            cannon.addObserver(player, false);
-            CannonsUtil.playSound(player.getEyeLocation(), cannon.getCannonDesign().getSoundEnableAimingMode());
-            //player.playSound(player.getEyeLocation(), Sound.MINECART_INSIDE, 0.25f, 0.75f);
-        }
+		cannon.addObserver(player, false);
+		CannonsUtil.playSound(player.getEyeLocation(), cannon.getCannonDesign().getSoundEnableAimingMode());
 
         return MessageEnum.AimingModeEnabled;
 

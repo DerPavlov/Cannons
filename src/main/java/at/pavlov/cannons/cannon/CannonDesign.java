@@ -61,6 +61,7 @@ public class CannonDesign
     private double minVerticalAngleOnShip;
 	private double angleStepSize;
 	private int angleUpdateSpeed;
+	private boolean angleUpdateMessage;
 
     //impactPredictor
     private boolean predictorEnabled;
@@ -425,8 +426,8 @@ public class CannonDesign
     
     /**
      * returns true if the projectile has the same Id of a allowed projectile
-     * @param projectile
-     * @return
+     * @param projectile projectile to load
+     * @return true if the projectile can be loaded in this type of cannon
      */
     public boolean canLoad(Projectile projectile)
     {
@@ -1428,5 +1429,13 @@ public class CannonDesign
 
 	public void setRemoveChargeAfterFiring(boolean removeChargeAfterFiring) {
 		this.removeChargeAfterFiring = removeChargeAfterFiring;
+	}
+
+	public boolean isAngleUpdateMessage() {
+		return angleUpdateMessage;
+	}
+
+	public void setAngleUpdateMessage(boolean angleUpdateMessage) {
+		this.angleUpdateMessage = angleUpdateMessage;
 	}
 }
