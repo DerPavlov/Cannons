@@ -115,10 +115,7 @@ public class CannonManager
         CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon);
         Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
 
-        // destroy cannon (drops items, edit sign)
-        MessageEnum message = cannon.destroyCannon(breakCannon, canExplode, cause);
         OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
-
         if (offplayer!=null && plugin.getEconomy()!=null) {
             // return message
             switch (cause) {
@@ -134,8 +131,10 @@ public class CannonManager
             }
         }
 
+        // destroy cannon (drops items, edit sign)
+        MessageEnum message = cannon.destroyCannon(breakCannon, canExplode, cause);
         if (player != null)
-            userMessages.sendMessage(player, cannon, message);
+            userMessages.sendMessage(message, player, cannon);
 
         //remove from database
         plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getUID());
@@ -262,8 +261,7 @@ public class CannonManager
 		//if the cannonName is empty make a new one
 		if (cannon.getCannonName() ==  null || cannon.getCannonName().equals(""))
 			cannon.setCannonName(newCannonName(cannon));
-		
-		
+
 		// add cannon to the list
 		cannonList.put(cannon.getUID(), cannon);
         //add cannon name to the list
@@ -483,12 +481,9 @@ public class CannonManager
                     //send messages
                     if (!silent)
                     {
-                        userMessages.sendMessage(owner, message, cannon);
-                        //make some sounds
+                        userMessages.sendMessage(message, owner, cannon);
                         CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundCreate());
-                        //player.getWorld().playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 1F, 0.5F);
                     }
-
                     CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player.getUniqueId());
                 	Bukkit.getServer().getPluginManager().callEvent(caceEvent);
                 }
@@ -497,7 +492,7 @@ public class CannonManager
                     //send messages
                     if (!silent)
                     {
-                        userMessages.sendMessage(player, message);
+                        userMessages.sendMessage(message, player, cannon);
                         CannonsUtil.playErrorSound(player);
                     }
 
@@ -528,13 +523,12 @@ public class CannonManager
 
 	/**
 	 * searches if this block is part of a cannon and create a new one
-	 * @param cannonBlock
-	 * @param owner
-	 * @return
+	 * @param cannonBlock block of the cannon
+	 * @param owner the player who will be the owner of the cannon if it is a new cannon
+	 * @return cannon if found, else null
 	 */
     private Cannon checkCannon(Location cannonBlock, UUID owner)
 	{
-		// get world
 		World world = cannonBlock.getWorld();
 
 		// check all cannon design if this block is part of the design
@@ -593,9 +587,8 @@ public class CannonManager
 
 	/**
 	 * returns the number of owned cannons of a player
-	 * 
-	 * @param player
-	 * @return
+	 * @param player the owner of the cannons
+	 * @return number of cannons
 	 */
 	public int getNumberOfCannons(UUID player)
 	{
@@ -624,8 +617,7 @@ public class CannonManager
 	}
 	
 	/**
-	 * 
-	 * @return List of cannons
+	 * List of cannons
 	 */
 	public void clearCannonList()
 	{
@@ -634,10 +626,9 @@ public class CannonManager
 
 	/**
 	 * returns the number of cannons manged by the plugin
-	 * 
-	 * @return
+	 * @return number of cannons in all world
 	 */
-	public int getcannonListSize()
+	public int getCannonListSize()
 	{
 		return cannonList.size();
 	}

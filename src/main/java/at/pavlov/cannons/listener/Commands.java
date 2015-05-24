@@ -203,7 +203,7 @@ public class Commands implements CommandExecutor
                             return true;
                         }
                         // how to build a cannon
-                        userMessages.sendMessage(player, MessageEnum.HelpBuild);
+                        userMessages.sendMessage(MessageEnum.HelpBuild, player);
                     }
                     //cannons fire
                     else if (args[0].equalsIgnoreCase("fire"))
@@ -214,7 +214,7 @@ public class Commands implements CommandExecutor
                             return true;
                         }
                         // how to fire
-                        userMessages.sendMessage(player, MessageEnum.HelpFire);
+                        userMessages.sendMessage(MessageEnum.HelpFire, player);
                     }
                     //cannons adjust
                     else if (args[0].equalsIgnoreCase("adjust"))
@@ -225,7 +225,7 @@ public class Commands implements CommandExecutor
                             return true;
                         }
                         // how to adjust
-                        userMessages.sendMessage(player, MessageEnum.HelpAdjust);
+                        userMessages.sendMessage(MessageEnum.HelpAdjust, player);
                     }
                     //cannons imitating toggle
                     else if (args[0].equalsIgnoreCase("imitate") && config.isImitatedAimingEnabled())
@@ -257,7 +257,7 @@ public class Commands implements CommandExecutor
                             if (cannon != null)
                             {
                                 MessageEnum message = plugin.getCannonManager().renameCannon(player, cannon, args[2]);
-                                userMessages.sendMessage(player, cannon, message);
+                                userMessages.sendMessage(message, player, cannon);
                             }
                         }
                         else
@@ -283,7 +283,7 @@ public class Commands implements CommandExecutor
                             if (cannon!=null)
                                 cannon.toggleObserver(player, false);
                             else
-                                userMessages.sendMessage(player, MessageEnum.CmdCannonNotFound);
+                                userMessages.sendMessage(MessageEnum.CmdCannonNotFound, player);
                         }
                         else
                             sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
@@ -335,7 +335,7 @@ public class Commands implements CommandExecutor
                         // delete all cannon entries for this player
                         persistenceDatabase.deleteCannonsAsync(player.getUniqueId());
                         plugin.getCannonManager().deleteCannons(player.getUniqueId());
-                        userMessages.sendMessage(player, MessageEnum.CannonsReseted);
+                        userMessages.sendMessage(MessageEnum.CannonsReseted, player);
                     }
                     //no help message if it is forbidden for this player
                     else
@@ -346,7 +346,7 @@ public class Commands implements CommandExecutor
                             return true;
                         }
                         // display help
-                        userMessages.sendMessage(player, MessageEnum.HelpText);
+                        userMessages.sendMessage(MessageEnum.HelpText, player);
                         return true;
                     }
                 }
@@ -368,7 +368,7 @@ public class Commands implements CommandExecutor
                     if(player.hasPermission("cannons.player.command"))
                     {
                         // display help
-                        userMessages.sendMessage(player, MessageEnum.HelpText);
+                        userMessages.sendMessage(MessageEnum.HelpText, player);
                     }
                     else
                     {
@@ -416,7 +416,7 @@ public class Commands implements CommandExecutor
         if (!isSelectingMode(player))
         {
             cannonSelector.put(player.getUniqueId(),cmd);
-            userMessages.sendMessage(player, MessageEnum.CmdSelectCannon);
+            userMessages.sendMessage(MessageEnum.CmdSelectCannon, player);
         }
     }
 
@@ -432,7 +432,7 @@ public class Commands implements CommandExecutor
         if (isSelectingMode(player))
         {
             cannonSelector.remove(player.getUniqueId());
-            userMessages.sendMessage(player, MessageEnum.CmdSelectCanceled);
+            userMessages.sendMessage(MessageEnum.CmdSelectCanceled, player);
         }
     }
 
@@ -482,11 +482,11 @@ public class Commands implements CommandExecutor
             switch (cmd){
                 case OBSERVER:{
                     MessageEnum message = cannon.toggleObserver(player,false);
-                    userMessages.sendMessage(player, cannon, message);
+                    userMessages.sendMessage(message, player, cannon);
                     break;
                 }
                 case GET:{
-                    userMessages.sendMessage(player, cannon, MessageEnum.CannonGetName);
+                    userMessages.sendMessage(MessageEnum.CannonGetName, player, cannon);
                     break;
                 }
                 case DISMANTLE:{

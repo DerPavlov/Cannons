@@ -111,6 +111,7 @@ public class Cannon
         this.cannonDirection = cannonDirection;
         this.owner = owner;
         this.isValid = true;
+        this.cannonName = null;
 
         this.horizontalAngle = (design.getMaxHorizontalAngleNormal()+design.getMinHorizontalAngleNormal())/2.0;
         this.verticalAngle = (design.getMaxVerticalAngleNormal()+design.getMinVerticalAngleNormal())/2.0;

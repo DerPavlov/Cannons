@@ -1,6 +1,5 @@
 package at.pavlov.cannons;
 
-import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.Enum.MessageEnum;
@@ -13,14 +12,12 @@ import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
 
-import java.text.DecimalFormat;
 import java.util.*;
 
 
@@ -436,13 +433,13 @@ public class Aiming {
             		MessageEnum message = updateAngle(player, cannon, null);
                     //show impact predictor marker
                     //impactPredictor(cannon, player);
-            		userMessages.sendMessage(player, cannon, message);
+            		userMessages.sendMessage(message, player, cannon);
         		}		
         		else
         		{
         			//leave aiming Mode
         			MessageEnum message = disableAimingMode(player, cannon);
-                    userMessages.sendMessage(player, cannon, message);
+                    userMessages.sendMessage(message, player, cannon);
         		}
     		}	
     	}
@@ -469,13 +466,13 @@ public class Aiming {
 		    if (fire)
             {
                 MessageEnum message = plugin.getFireCannon().playerFiring(cannon, player, InteractAction.fireAutoaim);
-                userMessages.sendMessage(player, cannon, message);
+                userMessages.sendMessage(message, player, cannon);
             }
             else
             {
                 //turn off the aiming mode
                 MessageEnum message = disableAimingMode(player, cannon);
-                userMessages.sendMessage(player, cannon, message);
+                userMessages.sendMessage(message, player, cannon);
             }
         }
 		else if(cannon != null)
@@ -487,18 +484,18 @@ public class Aiming {
                 if (distanceCheck(player, cannon))
                 {
                     MessageEnum message = enableAimingMode(player, cannon);
-                    userMessages.sendMessage(player, cannon, message);
+                    userMessages.sendMessage(message, player, cannon);
                 }
                 else
                 {
-                    userMessages.sendMessage(player, cannon, MessageEnum.AimingModeTooFarAway);
+                    userMessages.sendMessage(MessageEnum.AimingModeTooFarAway, player, cannon);
                 }
 
 			}
 			else
 			{
 				//no Permission to aim
-				userMessages.sendMessage(player, cannon, MessageEnum.PermissionErrorAdjust);
+				userMessages.sendMessage(MessageEnum.PermissionErrorAdjust, player, cannon);
 			}
 		}
 	}
@@ -647,7 +644,7 @@ public class Aiming {
     }
 
     public void disableImitating(Player player){
-        userMessages.sendMessage(player,MessageEnum.ImitatedEffectsDisabled);
+        userMessages.sendMessage(MessageEnum.ImitatedEffectsDisabled, player);
         //it is enabled on default, adding to this list will stop the aiming effect
         imitatedEffectsOff.add(player.getUniqueId());
     }
@@ -658,7 +655,7 @@ public class Aiming {
     }
 
     public void enableImitating(Player player){
-        userMessages.sendMessage(player,MessageEnum.ImitatedEffectsEnabled);
+        userMessages.sendMessage(MessageEnum.ImitatedEffectsEnabled, player);
         //it is enabled on default, adding to this list will stop the aiming effect
         imitatedEffectsOff.remove(player.getUniqueId());
     }
@@ -700,7 +697,7 @@ public class Aiming {
         {
             cannon.removeObserver(player);
         }
-        userMessages.sendMessage(player, MessageEnum.CannonObserverRemoved);
+        userMessages.sendMessage(MessageEnum.CannonObserverRemoved, player);
 
     }
 

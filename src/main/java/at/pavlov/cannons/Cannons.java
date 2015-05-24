@@ -379,7 +379,7 @@ public final class Cannons extends JavaPlugin
 	
 	public void sendMessage(Player player, Cannon cannon, MessageEnum message)
 	{
-		this.config.getUserMessages().sendMessage(player, cannon, message);
+		this.config.getUserMessages().sendMessage(message, player, cannon);
 	}
 
     public void sendImpactMessage(Player player, Location impact, boolean canceled)

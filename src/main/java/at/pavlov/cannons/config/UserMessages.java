@@ -58,7 +58,7 @@ public class UserMessages {
 	 */
 	private void loadCustom(String filename)
 	{
-		reloadcustomLanguage(filename);
+		reloadCustomLanguage(filename);
 		customLanguage.options().copyDefaults(true);
 		saveCustomLanguage();
 		
@@ -118,7 +118,7 @@ public class UserMessages {
 
 
 
-	private void reloadcustomLanguage(String filename) 
+	private void reloadCustomLanguage(String filename)
 	{
 	    if (customLanguageFile == null) 
 	    {
@@ -159,43 +159,41 @@ public class UserMessages {
 
 	/**
 	 * sends a message to the player
-	 * @param player
-	 * @param messageEnum
-	 * @param cannon
-	 */
-	public void sendMessage(UUID player, MessageEnum messageEnum, Cannon cannon)
+     * @param messageEnum message to display
+     * @param player which player gets this message
+     * @param cannon which cannon parameter will be displayed
+     */
+	public void sendMessage(MessageEnum messageEnum, UUID player, Cannon cannon)
 	{
 		//no player no message
 		if (player != null)
-		{
-            sendMessage(Bukkit.getPlayer(player), cannon, messageEnum);
-		}
+            sendMessage(messageEnum, Bukkit.getPlayer(player), cannon);
 	}
 	
 	/**
 	 * sends a message to the player
-	 * @param player
-	 * @param messageEnum
-	 */
-	public void sendMessage(Player player, MessageEnum messageEnum)
+     * @param messageEnum message to display
+     * @param player which player gets this message
+     */
+	public void sendMessage(MessageEnum messageEnum, Player player)
 	{
-        sendMessage(player, null, messageEnum);
+        sendMessage(messageEnum, player, null);
 	}
 	
 	/**
 	 * sends a message to the player
-	 * @param player
-	 * @param messageEnum
-	 * @param cannon
-	 */
-	public void sendMessage(Player player, Cannon cannon, MessageEnum messageEnum)
+     * @param messageEnum message to display
+     * @param player which player gets this message
+     * @param cannon which cannon parameter will be displayed
+     */
+	public void sendMessage(MessageEnum messageEnum, Player player, Cannon cannon)
 	{
 		//no player no message
 		if (player == null) return;
 		if (messageEnum == null) return;
 		
 		//get message from map
-		String message = getMessage(messageEnum, cannon, player);
+		String message = getMessage(messageEnum, player, cannon);
 		
 		//send message to player
 		sendMessage(message, player);
@@ -247,12 +245,12 @@ public class UserMessages {
 	
 	/**
 	 * returns the message from the Map
-	 * @param messageEnum
-	 * @param cannon
-	 * @param player
-	 * @return
+	 * @param messageEnum message to display
+	 * @param player which player gets this message
+	 * @param cannon which cannon parameter will be displayed
+	 * @return the requested message from the localization file
 	 */
-    String getMessage(MessageEnum messageEnum, Cannon cannon, Player player)
+    String getMessage(MessageEnum messageEnum, Player player, Cannon cannon)
 	{
 		//no message
 		if (messageEnum == null) return null;
@@ -267,9 +265,7 @@ public class UserMessages {
 		}
         //if the message is something like this Explosion: '' it will pass quietly
         if (message.isEmpty())
-        {
             return null;
-        }
 		
 		if (cannon != null)
 		{
@@ -291,7 +287,8 @@ public class UserMessages {
             message = message.replace("CRIT_TEMP", String.format("%.1f", cannon.getCannonDesign().getCriticalTemperature()));
             message = message.replace("WARN_TEMP", String.format("%.1f", cannon.getCannonDesign().getWarningTemperature()));
             //cannon message name
-            message = message.replace("CANNON_NAME", cannon.getCannonName());
+            if (cannon.getCannonName()!=null)
+                message = message.replace("CANNON_NAME", cannon.getCannonName());
             message = message.replace("CANNON", cannon.getCannonDesign().getMessageName());
             //soot left
             message = message.replace("SOOT_LEFT", Integer.toString((int) Math.floor(cannon.getSoot())));
@@ -317,8 +314,8 @@ public class UserMessages {
 	
 	/**
 	 * returns a message from the map
-	 * @param messageEnum
-	 * @return
+	 * @param messageEnum message to display
+	 * @return the requested message from the localization file
 	 */
 	public String getMessage(MessageEnum messageEnum)
 	{
@@ -327,8 +324,8 @@ public class UserMessages {
 	
 	/**
 	 * sends a message to the player which can span several lines. Line break with '\n'.
-	 * @param string
-	 * @param player
+	 * @param string message to send
+	 * @param player which player gets this message
 	 */
 	private void sendMessage(String string, Player player)
 	{
@@ -343,7 +340,5 @@ public class UserMessages {
             plugin.logDebug("Message for " + player.getName() + ": " + message[x]);
 			player.sendMessage(message[x]); // Send each argument in the message
 		}
-
 	}
-	
 }
