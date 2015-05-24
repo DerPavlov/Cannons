@@ -725,7 +725,10 @@ public class Cannon
         if (breakBlocks)
             breakAllCannonBlocks();
 
-        CannonsUtil.playSound(getRandomBarrelBlock(),design.getSoundDestroy());
+        if (cause == BreakCause.Dismantling || cause == BreakCause.Other)
+            CannonsUtil.playSound(getRandomBarrelBlock(),design.getSoundDismantle());
+        else
+            CannonsUtil.playSound(getRandomBarrelBlock(),design.getSoundDestroy());
 
         //loaded cannon can exploded (80% chance)
         if (canExplode && design.getExplodingLoadedCannons() > 0 && getLoadedGunpowder() > 0 && Math.random() > 0.2)

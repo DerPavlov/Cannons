@@ -132,6 +132,7 @@ public class CannonDesign
     //sounds
     private SoundHolder soundCreate;
     private SoundHolder soundDestroy;
+	private SoundHolder soundDismantle;
     private SoundHolder soundAdjust;
     private SoundHolder soundIgnite;
     private SoundHolder soundFiring;
@@ -1465,5 +1466,13 @@ public class CannonDesign
 
 	public void setEconomyDestructionRefund(double economyDestructionRefund) {
 		this.economyDestructionRefund = economyDestructionRefund;
+	}
+
+	public SoundHolder getSoundDismantle() {
+		return soundDismantle;
+	}
+
+	public void setSoundDismantle(SoundHolder soundDismantle) {
+		this.soundDismantle = soundDismantle;
 	}
 }
