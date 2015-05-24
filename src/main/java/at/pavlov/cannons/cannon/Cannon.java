@@ -2,6 +2,7 @@ package at.pavlov.cannons.cannon;
 
 import java.util.*;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
@@ -737,14 +738,26 @@ public class Cannon
         else
             dropCharge();
 
+        OfflinePlayer offplayer = Bukkit.getOfflinePlayer(getOwner());
+
         // return message
         switch (cause)
         {
             case Overheating:
+                if (offplayer!=null && Cannons.economy!=null)
+                    Cannons.economy.depositPlayer(offplayer, design.getEconomyDestructionRefund());
                 return MessageEnum.HeatManagementOverheated;
             case Other:
+                if (offplayer!=null && Cannons.economy!=null)
+                    Cannons.economy.depositPlayer(offplayer, design.getEconomyDismantlingRefund());
                 return null;
+            case Dismantling:
+                if (offplayer!=null && Cannons.economy!=null)
+                    Cannons.economy.depositPlayer(offplayer, design.getEconomyDismantlingRefund());
+                return MessageEnum.CannonDismantled;
             default:
+                if (offplayer!=null && Cannons.economy!=null)
+                    Cannons.economy.depositPlayer(offplayer, design.getEconomyDestructionRefund());
                 return MessageEnum.CannonDestroyed;
         }
     }

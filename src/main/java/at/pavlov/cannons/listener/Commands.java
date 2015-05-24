@@ -2,6 +2,7 @@ package at.pavlov.cannons.listener;
 
 import java.util.*;
 
+import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.Enum.SelectCannon;
 import at.pavlov.cannons.cannon.Cannon;
 
@@ -297,6 +298,16 @@ public class Commands implements CommandExecutor
                         }
                         toggleCannonSelector(player, SelectCannon.GET);
                     }
+                    //get name of cannon
+                    else if(args[0].equalsIgnoreCase("dismantle"))
+                    {
+                        if (!player.hasPermission("cannons.player.dismantle"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
+                        toggleCannonSelector(player, SelectCannon.DISMANTLE);
+                    }
                     //list cannons of this player name
                     else if(args[0].equalsIgnoreCase("list"))
                     {
@@ -305,7 +316,7 @@ public class Commands implements CommandExecutor
                             plugin.logDebug("[Cannons] Missing permission 'cannons.player.list' for command /cannons " + args[0]);
                             return true;
                         }
-                        sendMessage(sender, ChatColor.GREEN +"Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");
+                        sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");
                         for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
                         {
                             if (cannon.getOwner().equals(player.getUniqueId()))
@@ -478,6 +489,10 @@ public class Commands implements CommandExecutor
                     userMessages.sendMessage(player, cannon, MessageEnum.CannonGetName);
                     break;
                 }
+                case DISMANTLE:{
+                    plugin.getCannonManager().removeCannon(cannon, false, false, BreakCause.Dismantling);
+                    break;
+                }
             }
         }
         cannonSelector.remove(player.getUniqueId());
@@ -517,6 +532,7 @@ public class Commands implements CommandExecutor
         displayPermission(sender, permPlayer, "cannons.player.help");
         displayPermission(sender, permPlayer, "cannons.player.rename");
         displayPermission(sender, permPlayer, "cannons.player.build");
+        displayPermission(sender, permPlayer, "cannons.player.dismantle");
         displayPermission(sender, permPlayer, "cannons.player.redstone");
         displayPermission(sender, permPlayer, "cannons.player.load");
         displayPermission(sender, permPlayer, "cannons.player.adjust");

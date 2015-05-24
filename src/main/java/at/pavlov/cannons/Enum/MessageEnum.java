@@ -18,6 +18,7 @@ public enum MessageEnum
 	ErrorCannonBuiltLimit ("Error.CannonBuiltLimit", true),
 	ErrorNotTheOwner ("Error.NotTheOwner", true),
     ErrorMissingSign ("Error.MissingSign", true),
+	ErrorNoMoney ("Error.NoMoney", true),
 
     //Commands
     CmdSelectCannon ("Commands.SelectCannon"),
@@ -42,6 +43,7 @@ public enum MessageEnum
 	
 	//cannon
 	CannonCreated ("Cannon.Created"),
+	CannonDismantled ("Cannon.Dismantled"),
 	CannonDestroyed ("Cannon.Destroyed"),
     CannonsReseted ("Cannon.Reseted"),
 	CannonFire ("Cannon.Fire"),

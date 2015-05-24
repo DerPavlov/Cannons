@@ -14,6 +14,7 @@ Error:
   CannonBuiltLimit: 'RED [Cannons] You cant build more than GOLD CANNONS YELLOW guns'
   NotTheOwner: 'RED [Cannons] This CANNON is locked and can only used by its owner'
   MissingSign: 'RED [Cannons] This CANNON needs a sign to operate.'
+  NoMoney: 'RED [Cannons] You need BUILD_COSTS to create this cannon.'
 
 
 Aiming:
@@ -44,6 +45,7 @@ Cannon:
   Fire: 'YELLOW [Cannons] FIRE!'
   Created: 'GREEN [Cannons] You created a GOLD CANNON'
   Destroyed: 'RED [Cannons] One of your cannons has been destroyed'
+  Dismantled: 'GREEN [Cannons] One of your cannons has been dismantled'
   Reseted: 'GREEN [Cannons] All cannons of GOLD PLAYER GREEN have been deleted from the database'
   ObserverAdded: 'GREEN [Cannons] You have been added as observer to GOLD CANNON_NAME.'
   ObserverRemoved: 'RED [Cannons] You are no longer observer for GOLD CANNON_NAME.'

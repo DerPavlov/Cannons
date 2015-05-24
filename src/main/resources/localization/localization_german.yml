@@ -13,6 +13,7 @@ Error:
   CannonBuiltLimit: 'RED [Cannons] Du darfst nicht mehr als GOLD CANNONS Kanone(n) YELLOW bauen.'
   NotTheOwner: 'RED [Cannons] Diese CANNON kann nur vom Besitzer benutzt werden.'
   MissingSign: 'RED [Cannons] Diese CANNON benötigt ein Sign um zu funktioinieren.'
+  NoMoney: 'RED [Cannons] Du brauchst mindestens BUILD_COSTS um diese Kanone zu erstellen.'
 
 
 Commands:
@@ -43,6 +44,7 @@ Cannon:
   Fire: 'YELLOW [Cannons] FEUER!'
   Created: 'GREEN [Cannons] Eine GOLD CANNON GREEN wurde erstellt.'
   Destroyed: 'RED [Cannons] Eine deiner Kanonen wurde zerstört.'
+  Dismantled: 'GREEN [Cannons] Eine deiner Kanonen wurde abgebaut.'
   Reseted: 'GREEN [Cannons] Alle Kanonen von GOLD PLAYER GREEN wurden aus der Datenbank entfernt.'
   ObserverAdded: 'GREEN [Cannons] Du wurdest als Beobachter bei GOLD CANNON_NAME GRENN hinzugefügt.'
   ObserverRemoved: 'RED [Cannons] Du bist nicht mehr Beobachter für GOLD CANNON_NAME.'

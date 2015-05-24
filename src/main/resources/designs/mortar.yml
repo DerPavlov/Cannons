@@ -141,6 +141,15 @@ overloading:
   #exploding change = 1 * ((2+1)*0.1)^2 = 9%
 
 
+economy:
+  #the money the is withdrawn from your account when you build a cannon. If you have not enough - no cannon will be created
+  buildingCosts: 100.0
+  #how much money you receive if your cannon was deconstructed
+  dismantlingRefund: 90.0
+  #how much money you receive if your cannon was destroyed
+  destructionRefund: 10.0
+
+
 realisticBehaviour:
   #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
   isFiringItemRequired: false

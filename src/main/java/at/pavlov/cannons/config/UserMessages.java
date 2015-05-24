@@ -297,10 +297,14 @@ public class UserMessages {
             message = message.replace("SOOT_LEFT", Integer.toString((int) Math.floor(cannon.getSoot())));
             //pushing projectile
             message = message.replace("PUSHING_LEFT", Integer.toString(cannon.getProjectilePushed()));
+			//economy
+			message = message.replace("BUILD_COSTS", Cannons.economy.format(cannon.getCannonDesign().getEconomyBuildingCost()));
+            message = message.replace("DISMANTLING_REFUND", Cannons.economy.format(cannon.getCannonDesign().getEconomyDismantlingRefund()));
+            message = message.replace("DISMANTLING_REFUND", Cannons.economy.format(cannon.getCannonDesign().getEconomyDestructionRefund()));
 
-		}
+        }
 
-		if (player != null)
+        if (player != null)
 		{
 			//replace the number of cannons
             message = message.replace("PLAYER", player.getName());

@@ -92,6 +92,10 @@ public class CannonDesign
     private double overloadingChanceOfExplosionPerGunpowder;
     private boolean overloadingDependsOfTemperature;
 
+	private double economyBuildingCost;
+	private double economyDismantlingRefund;
+	private double economyDestructionRefund;
+
 	//realisticBehaviour
 	private boolean FiringItemRequired;
     private double sootPerGunpowder;
@@ -1437,5 +1441,29 @@ public class CannonDesign
 
 	public void setAngleUpdateMessage(boolean angleUpdateMessage) {
 		this.angleUpdateMessage = angleUpdateMessage;
+	}
+
+	public double getEconomyBuildingCost() {
+		return economyBuildingCost;
+	}
+
+	public void setEconomyBuildingCost(double economyBuildingCost) {
+		this.economyBuildingCost = economyBuildingCost;
+	}
+
+	public double getEconomyDismantlingRefund() {
+		return economyDismantlingRefund;
+	}
+
+	public void setEconomyDismantlingRefund(double economyDismantlingRefund) {
+		this.economyDismantlingRefund = economyDismantlingRefund;
+	}
+
+	public double getEconomyDestructionRefund() {
+		return economyDestructionRefund;
+	}
+
+	public void setEconomyDestructionRefund(double economyDestructionRefund) {
+		this.economyDestructionRefund = economyDestructionRefund;
 	}
 }

@@ -2,6 +2,7 @@ name: Cannons
 main: at.pavlov.cannons.Cannons
 version: ${version}
 depend: [WorldEdit]
+softdepend: [Vault]
 author: DerPavlov
 description: Fire block build cannons and smash your enemies
 
@@ -25,6 +26,7 @@ permissions:
       cannons.player.command: true
       cannons.player.rename: true
       cannons.player.build: true
+      cannons.player.dismantle: true
       cannons.player.load: true
       cannons.player.adjust: true
       cannons.player.fire: true
@@ -52,6 +54,9 @@ permissions:
     default: false
   cannons.player.build:
     description: Allows a player to build a cannon
+    default: false
+  cannons.player.dismantle:
+    description: Allows a player to deconstruct a cannon
     default: false
   cannons.player.redstone:
     description: Allows a player to use redstone with a cannon

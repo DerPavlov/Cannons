@@ -228,6 +228,11 @@ public class DesignStorage
         cannonDesign.setOverloadingChanceOfExplosionPerGunpowder(cannonDesignConfig.getDouble("overloading.chanceOfExplosionPerGunpowder",0.01));
         cannonDesign.setOverloadingDependsOfTemperature(cannonDesignConfig.getBoolean("overloading.dependsOfTemperature",false));
 
+        //economy
+        cannonDesign.setEconomyBuildingCost(cannonDesignConfig.getDouble("economy.buildingCosts", 0.0));
+        cannonDesign.setEconomyDismantlingRefund(cannonDesignConfig.getDouble("economy.dismantlingRefund", 0.0));
+        cannonDesign.setEconomyDestructionRefund(cannonDesignConfig.getDouble("economy.destructionRefund", 0.0));
+
         // realisticBehaviour
 		cannonDesign.setFiringItemRequired(cannonDesignConfig.getBoolean("realisticBehaviour.isFiringItemRequired", false));
         cannonDesign.setSootPerGunpowder(cannonDesignConfig.getDouble("realisticBehaviour.sootPerGunpowder", 0.0));

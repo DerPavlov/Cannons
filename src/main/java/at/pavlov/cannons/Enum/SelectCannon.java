@@ -2,5 +2,6 @@ package at.pavlov.cannons.Enum;
 
 public enum SelectCannon {
     OBSERVER,
-    GET
+    GET,
+    DISMANTLE
 }

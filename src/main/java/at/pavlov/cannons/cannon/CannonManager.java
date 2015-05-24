@@ -8,12 +8,11 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
-import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -82,7 +81,7 @@ public class CannonManager
 	 * removes a cannon from the list
 	 * @param cannon cannon to remove
      * @param breakCannon the cannon will explode and all cannon blocks will drop
-     @param canExplode if the cannon can explode when loaded with gunpowder
+     * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
 	 */
 	public void removeCannon(Cannon cannon, boolean breakCannon, boolean canExplode, BreakCause cause)
@@ -232,7 +231,7 @@ public class CannonManager
 
 	/**
 	 * adds a new cannon to the list of cannons
-	 * @param cannon
+	 * @param cannon create this cannon
 	 */
 	public void createCannon(Cannon cannon)
 	{
@@ -448,15 +447,19 @@ public class CannonManager
                 if (message == MessageEnum.CannonCreated && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
                     message = MessageEnum.ErrorMissingSign;
 
+                //if a sign is required to operate the cannon, there must be at least one sign
+                if (message == MessageEnum.CannonCreated && Cannons.economy != null) {
+                    EconomyResponse r = Cannons.economy.withdrawPlayer(player, cannon.getCannonDesign().getEconomyBuildingCost());
+                    if (!r.transactionSuccess())
+                        message = MessageEnum.ErrorNoMoney;
+                }
 
                 CannonBeforeCreateEvent cbceEvent = new CannonBeforeCreateEvent(cannon, message, player.getUniqueId());
                 Bukkit.getServer().getPluginManager().callEvent(cbceEvent);
 
-
                 //add cannon to the list if everything was fine and return the cannon
                 if (!cbceEvent.isCancelled() && cbceEvent.getMessage() != null && cbceEvent.getMessage() == MessageEnum.CannonCreated)
                 {
-
                     plugin.logDebug("a new cannon was created by " + cannon.getOwner());
                     createCannon(cannon);
 

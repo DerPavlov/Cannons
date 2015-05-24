@@ -17,6 +17,7 @@ import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.FakeBlockHandler;
 import at.pavlov.cannons.scheduler.ProjectileObserver;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -27,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
@@ -52,6 +54,7 @@ public final class Cannons extends JavaPlugin
     private final FakeBlockHandler fakeBlockHandler;
 
     private final CannonsAPI cannonsAPI;
+    public static Economy economy = null;
 	
 	//Listener
     private final BlockListener blockListener;
@@ -63,7 +66,6 @@ public final class Cannons extends JavaPlugin
 	// database
 	private final PersistenceDatabase persistenceDatabase;
 	private MyDatabase database;
-
 
 
 	public Cannons()
@@ -121,6 +123,7 @@ public final class Cannons extends JavaPlugin
 			pm.disablePlugin(this);
 			return;
 		}
+        setupEconomy();
 		
 
 		try
@@ -172,10 +175,6 @@ public final class Cannons extends JavaPlugin
 
             // Plugin succesfully enabled
             logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been enabled");
-			
-
-
-
 		}
 		catch (Exception ex)
 		{
@@ -195,7 +194,18 @@ public final class Cannons extends JavaPlugin
 				t = t.getCause();
 			}
 		}
+    }
 
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        economy = rsp.getProvider();
+        return economy != null;
     }
 
 	// set up ebean database
