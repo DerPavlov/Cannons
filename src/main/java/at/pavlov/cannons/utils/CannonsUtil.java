@@ -18,6 +18,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -750,5 +751,35 @@ public class CannonsUtil
             player.setVelocity(new Vector(0,0,0));
             cannonball.setTeleported(true);
         }
+    }
+
+    /**
+     * returns all entity in a given radius
+     * @param l center location
+     * @param minRadius minium radius for search
+     * @param maxRadius radius for search
+     * @return array of Entities in area
+     */
+    public static HashMap<UUID, Entity> getNearbyEntities(Location l, int minRadius, int maxRadius){
+        int chunkRadius = maxRadius < 16 ? 1 : (maxRadius - (maxRadius % 16))/16;
+        HashMap<UUID, Entity> radiusEntities = new HashMap<UUID, Entity>();
+        for (int chX = 0 -chunkRadius; chX <= chunkRadius; chX ++){
+            for (int chZ = 0 -chunkRadius; chZ <= chunkRadius; chZ++){
+                int x=(int) l.getX(),y=(int) l.getY(),z=(int) l.getZ();
+                for (Entity e : new Location(l.getWorld(),x+(chX*16),y,z+(chZ*16)).getChunk().getEntities()){
+                    double dist = e.getLocation().distance(l);
+                    if (minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock()) radiusEntities.put(e.getUniqueId(), e);
+                }
+            }
+        }
+        return radiusEntities;
+    }
+
+    public static double vectorToYaw(Vector vector){
+        return Math.atan2(-vector.getX(), vector.getZ())*180./Math.PI;
+    }
+
+    public static double vectorToPitch(Vector vector){
+        return -Math.asin(vector.normalize().getY())*180./Math.PI;
     }
 }

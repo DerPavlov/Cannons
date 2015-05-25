@@ -2,7 +2,6 @@ package at.pavlov.cannons.cannon;
 
 import java.util.*;
 
-import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
@@ -14,6 +13,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -48,6 +48,8 @@ public class Cannon
     private long lastFired;
     // time it was last aimed
     private long lastAimed;
+    // last time the sentry mode solution was updated
+    private long lastSentryUpdate;
 
     // amount of loaded gunpowder
     private int loadedGunpowder;
@@ -65,9 +67,14 @@ public class Cannon
     // additional angle if the cannon is mounted e.g. a ship which is facing a different angle
     private double additionalHorizontalAngle;
     private double additionalVerticalAngle;
-    // autoaiming angles the cannon tries to reach
-    private double aimingYaw;
+    // sentry aiming angles the cannon tries to reach
     private double aimingPitch;
+    private double aimingYaw;
+
+    // tracking entity
+    private UUID sentryEntity;
+    // how long this entity is targeted by this cannon
+    private long sentryTargetingTime;
 
     //observer will see the impact of the target predictor
     //<Player name, remove after showing impact>
@@ -81,16 +88,16 @@ public class Cannon
     private boolean isFiring;
     // time point of the last start of the firing sequence (used in combination with isFiring)
     private long lastIgnited;
-    //the player which has used the cannon last, important for firing with redstone button
+    // the player which has used the cannon last, important for firing with redstone button
     private UUID lastUser;
-    //spread multiplier from the last operator of the cannon
+    // spread multiplier from the last operator of the cannon
     private double lastPlayerSpreadMultiplier;
 
-    //cannon temperature
+    // cannon temperature
     private double tempValue;
     private long tempTimestamp;
 
-    //amount of fired cannonballs with this cannon
+    // amount of fired cannonballs with this cannon
     private long firedCannonballs;
 
     private CannonDesign design;
@@ -112,9 +119,13 @@ public class Cannon
         this.owner = owner;
         this.isValid = true;
         this.cannonName = null;
+        this.sentryEntity = null;
 
-        this.horizontalAngle = (design.getMaxHorizontalAngleNormal()+design.getMinHorizontalAngleNormal())/2.0;
-        this.verticalAngle = (design.getMaxVerticalAngleNormal()+design.getMinVerticalAngleNormal())/2.0;
+        this.horizontalAngle = getHomeHorizontalAngle();
+        this.verticalAngle = getHomeVerticalAngle();
+
+        this.aimingPitch = 0.0;
+        this.aimingYaw = 0.0;
 
         lastPlayerSpreadMultiplier = 1.0;
 
@@ -142,7 +153,7 @@ public class Cannon
 
     /**
      * returns the location of the muzzle
-     * @return
+     * @return location of the muzzle
      */
     public Location getMuzzle()
     {
@@ -208,10 +219,6 @@ public class Cannon
             if (getLoadedGunpowder() <= design.getMaxLoadableGunpowderNormal())
                 loadedGunpowder = design.getMaxLoadableGunpowderNormal();
         }
-
-
-
-
 
         // find a loadable projectile in the chests
         for (Inventory inv : invlist)
@@ -1931,6 +1938,33 @@ public class Cannon
         this.tempTimestamp = temperatureTimeStamp;
     }
 
+    public boolean isOverheated(){
+        return getTemperature() > design.getCriticalTemperature();
+    }
+
+    /**
+     * checks if the cannon will be overheated after firing the loaded charge
+     * @return true if the cannon reaches the crital limit
+     */
+    public boolean isOverheatedAfterFiring(){
+        return getTemperature() > design.getCriticalTemperature()  + design.getHeatIncreasePerGunpowder()*getLoadedGunpowder();
+    }
+
+    /**
+     * if the cannon can be fired or if it is too hot
+     * @return true if the cannon can be loaded
+     */
+    public boolean isReadyToFire(){
+        return !isOverheatedAfterFiring() && !isFiring() && isClean() && !barrelTooHot();
+    }
+
+    /**
+     * if the barrel is still cooling down from the last time fired
+     * @return true if the barrel it too hot
+     */
+    public boolean barrelTooHot(){
+        return getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis();
+    }
 
     public boolean isClean()
     {
@@ -2010,6 +2044,39 @@ public class Cannon
         return design.getDefaultVerticalAngle() + this.verticalAngle + this.additionalVerticalAngle;
     }
 
+    /**
+     * get the default horizontal home position of the cannon
+     * @return default horizontal home position
+     */
+    public double getHomeHorizontalAngle(){
+        return (design.getMaxHorizontalAngleNormal()+design.getMinHorizontalAngleNormal())/2.0;
+    }
+
+    /**
+     * get the default vertical home position of the cannon
+     * @return default vertical home position
+     */
+    public double getHomeVerticalAngle(){
+        return (design.getMaxVerticalAngleNormal()+design.getMinVerticalAngleNormal())/2.0;
+    }
+
+    /**
+     * whenever the cannon can aim in this direction or not
+     * @param yaw horizontal angle
+     * @param pitch vertical angle
+     * @return true if it can aim this direction
+     */
+    public boolean canAimDirection(double yaw, double pitch){
+        double vertical = -pitch - design.getDefaultVerticalAngle() - this.additionalVerticalAngle;
+        double horizontal = yaw - CannonsUtil.directionToYaw(getCannonDirection()) - this.additionalHorizontalAngle;
+
+        horizontal = horizontal % 360;
+        while(horizontal < -180)
+            horizontal = horizontal + 360;
+
+        return (vertical > getMinVerticalAngle() && vertical < getMaxVerticalAngle() && horizontal > getMinHorizontalAngle() && horizontal < getMaxHorizontalAngle());
+    }
+
 
     public boolean isOnShip() {
         return onShip;
@@ -2019,20 +2086,20 @@ public class Cannon
         this.onShip = onShip;
     }
 
-    public double getAimingYaw() {
-        return aimingYaw;
-    }
-
-    public void setAimingYaw(double aimingYaw) {
-        this.aimingYaw = aimingYaw;
-    }
-
     public double getAimingPitch() {
         return aimingPitch;
     }
 
     public void setAimingPitch(double aimingPitch) {
         this.aimingPitch = aimingPitch;
+    }
+
+    public double getAimingYaw() {
+        return aimingYaw;
+    }
+
+    public void setAimingYaw(double aimingYaw) {
+        this.aimingYaw = aimingYaw;
     }
 
     public HashMap<UUID, Boolean> getObserverMap() {
@@ -2156,5 +2223,34 @@ public class Cannon
 
     public void resetLastPlayerSpreadMultiplier(){
         this.lastPlayerSpreadMultiplier = 1.0;
+    }
+
+    public long getLastSentryUpdate() {
+        return lastSentryUpdate;
+    }
+
+    public void setLastSentryUpdate(long lastSentryUpdate) {
+        this.lastSentryUpdate = lastSentryUpdate;
+    }
+
+    public boolean isChunkLoaded(){
+        Chunk chunk = getLocation().getChunk();
+        return chunk != null && chunk.isLoaded();
+    }
+
+    public UUID getSentryEntity() {
+        return sentryEntity;
+    }
+
+    public void setSentryEntity(UUID sentryEntity) {
+        this.sentryEntity = sentryEntity;
+    }
+
+    public long getSentryTargetingTime() {
+        return sentryTargetingTime;
+    }
+
+    public void setSentryTargetingTime(long sentryTargetingTime) {
+        this.sentryTargetingTime = sentryTargetingTime;
     }
 }

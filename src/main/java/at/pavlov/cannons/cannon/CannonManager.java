@@ -140,6 +140,9 @@ public class CannonManager
         plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getUID());
         //remove cannon name
         cannonNameMap.remove(cannon.getCannonName());
+        //remove sentry
+        if (cannon.getCannonDesign().isSentry())
+            plugin.getAiming().removeSentryCannon(cannon.getUID());
         //remove all entries for this cannon in the aiming class
         plugin.getAiming().removeCannon(cannon);
 
@@ -187,16 +190,13 @@ public class CannonManager
 
 		// try to find this in the map
         //there is no such cannon name
-        if (cannonNameMap.get(name)==null)
-            return true;
         //there is such a cannon name
-        else
-            return false;
+        return cannonNameMap.get(name) == null;
 	}
 
 	/**
 	 * generates a new unique cannon name
-	 * @return
+	 * @return name string for the new cannon
 	 */
 	private String newCannonName(Cannon cannon)
 	{		
@@ -266,6 +266,8 @@ public class CannonManager
 		cannonList.put(cannon.getUID(), cannon);
         //add cannon name to the list
         cannonNameMap.put(cannon.getCannonName(), cannon.getUID());
+        if (cannon.getCannonDesign().isSentry())
+            plugin.getAiming().addSentryCannon(cannon.getUID());
 
         plugin.getPersistenceDatabase().saveCannonAsync(cannon);
         plugin.logDebug("added cannon to the list");

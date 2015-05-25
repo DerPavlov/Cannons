@@ -7,6 +7,7 @@ public enum InteractAction
     loadProjectile,
     pushingProjectile,
     fireAutoaim,
+    fireSentry,
     fireRedstoneTrigger,
     fireRightClickTigger,
     fireRedstone,

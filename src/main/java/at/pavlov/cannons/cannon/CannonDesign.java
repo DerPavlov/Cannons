@@ -68,6 +68,13 @@ public class CannonDesign
     private int predictorDelay;         //in ms
     private int predictorUpdate;        //in ms
 
+	//sentry
+	private boolean sentry;
+    private int sentryMinRange;
+    private int sentryMaxRange;
+	private int sentryUpdateTime;				//in ms
+    private int sentrySwapTime;				    //in ms
+
     //heatManagment
     private boolean heatManagementEnabled;
     private boolean automaticTemperatureControl;
@@ -1475,4 +1482,44 @@ public class CannonDesign
 	public void setSoundDismantle(SoundHolder soundDismantle) {
 		this.soundDismantle = soundDismantle;
 	}
+
+	public boolean isSentry() {
+		return sentry;
+	}
+
+	public void setSentry(boolean sentry) {
+		this.sentry = sentry;
+	}
+
+	public int getSentryUpdateTime() {
+		return sentryUpdateTime;
+	}
+
+	public void setSentryUpdateTime(int sentryUpdateTime) {
+		this.sentryUpdateTime = sentryUpdateTime;
+	}
+
+    public int getSentryMaxRange() {
+        return sentryMaxRange;
+    }
+
+    public void setSentryMaxRange(int sentryMaxRange) {
+        this.sentryMaxRange = sentryMaxRange;
+    }
+
+    public int getSentrySwapTime() {
+        return sentrySwapTime;
+    }
+
+    public void setSentrySwapTime(int sentrySwapTime) {
+        this.sentrySwapTime = sentrySwapTime;
+    }
+
+    public int getSentryMinRange() {
+        return sentryMinRange;
+    }
+
+    public void setSentryMinRange(int sentryMinRange) {
+        this.sentryMinRange = sentryMinRange;
+    }
 }

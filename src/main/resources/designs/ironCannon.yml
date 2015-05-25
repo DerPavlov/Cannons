@@ -87,6 +87,20 @@ impactPredictor:
   update: 0.2
 
 
+#sentry mode allows the gun to search and destroy targets automatically.
+sentry:
+  #this gun is a sentry gun. It will operate on its own.
+  isSentry: false
+  #at which distance the sentry will stop firing because it is too close
+  minRange: 5
+  #at which distance the sentry will detected enemies
+  maxRange: 50
+  #how long the cannon updating firing solutions. Higher delays result in worse tracking of a moving target. [s]
+  update: 1.0
+  #the cannon will switch to the next target after some time [s]
+  swapTime: 10.0
+
+
 heatManagement:
   #if heat management is used or not
   enabled: true

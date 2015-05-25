@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
@@ -57,6 +58,8 @@ public class Aiming {
 
     //<Player,cannon name>
     private HashMap<UUID, UUID> inAimingMode = new HashMap<UUID, UUID>();
+	//<Cannon>
+	private HashSet<UUID> sentryCannons = new HashSet<UUID>();
     //<Player>
     private HashSet<UUID> imitatedEffectsOff = new HashSet<UUID>();
 
@@ -77,20 +80,21 @@ public class Aiming {
     /**
      * starts the aiming mode scheduler
      */
-	public void initAimingMode()
-	{
-		//changing angles for aiming mode
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() 
-		{
-			public void run() 
-			    {
-                    //long startTime = System.nanoTime();
-			    	updateAimingMode();
-                    updateImpactPredictor();
-                    //plugin.logDebug("Time update aiming: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
-			    }
-		}, 1L, 1L);	
-	}
+    public void initAimingMode()
+    {
+        //changing angles for aiming mode
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
+        {
+            public void run()
+            {
+                //long startTime = System.nanoTime();
+                updateAimingMode();
+                updateImpactPredictor();
+                updateSentryMode();
+                //plugin.logDebug("Time update aiming: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+            }
+        }, 1L, 1L);
+    }
 
     /**
      * player click interaction with cannon
@@ -131,9 +135,12 @@ public class Aiming {
      * @param clickedFace which side was clicked (up, down, left, right)
      * @return message for the player
      */
-	private MessageEnum updateAngle(Player player, Cannon cannon, BlockFace clickedFace)
-	{
-		CannonDesign design = cannon.getCannonDesign();
+	private MessageEnum updateAngle(Player player, Cannon cannon, BlockFace clickedFace) {
+        if (cannon == null)
+            return null;
+
+        CannonDesign design = cannon.getCannonDesign();
+        boolean isSentry = design.isSentry();
 
 		//both horizontal and vertical angle will be displayed in one message
 		boolean combine;
@@ -146,25 +153,31 @@ public class Aiming {
         {
             //if the player is not the owner of this gun
             if (!cannon.getOwner().equals(player.getUniqueId())  && design.isAccessForOwnerOnly())
-            {
                 return MessageEnum.ErrorNotTheOwner;
-            }
             //if the player has the permission to adjust this gun
             if (!player.hasPermission(cannon.getCannonDesign().getPermissionAdjust()))
-            {
                 return  MessageEnum.PermissionErrorAdjust;
-            }
         }
 
         gunAngles angles;
 
-		//barrel clicked to change angle
-		if (player != null && !config.getToolAdjust().equalsFuzzy(player.getItemInHand()))
+        if (isSentry){
+            // sentry mode
+            if (cannon.isChunkLoaded()) {
+                angles = getGunAngle(cannon, cannon.getAimingYaw(), cannon.getAimingPitch());
+                combine = true;
+            }
+            else{
+                plugin.logDebug("chunk not loaded. ignore cannon: " + cannon.getLocation());
+                return null;
+            }
+        }
+		else if (player != null && !config.getToolAdjust().equalsFuzzy(player.getItemInHand()))
 		{
 			//aiming mode only if player is sneaking
             if (player.isSneaking())
             {
-                angles = CheckLookingDirection(cannon, player.getLocation());
+                angles = getGunAngle(cannon, player.getLocation().getYaw(), player.getLocation().getPitch());
                 combine = true;
             }
             else
@@ -172,14 +185,15 @@ public class Aiming {
 		}
 		else
 		{
+            //barrel clicked to change angle
 			if (player!=null) {
 				angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking());
 				//register impact predictor
 				cannon.addObserver(player, true);
+                combine = false;
 			}
 			else
-				angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), false);
-			combine = false;
+			    return null;
 		}
 
 		//Check angles
@@ -260,27 +274,27 @@ public class Aiming {
 				return null;
         }
 		else
-			return null;
+            //no change in angle
+            return null;
 	}
 
 
     /**
      * evaluates the difference between actual cannon direction and the given direction
      * @param cannon operated cannon
-     * @param loc yaw and pitch will be used
+     * @param yaw yaw of the direction to aim
+     * @param pitch pitch of the direction to aim
      * @return new cannon aiming direction
      */
-	private gunAngles CheckLookingDirection(Cannon cannon, Location loc)
+	private gunAngles getGunAngle(Cannon cannon, double yaw, double pitch)
 	{
 		gunAngles returnValue = new gunAngles(0.0 ,0.0);
 		
 		//calc vertical angle difference
-		returnValue.setVertical(-loc.getPitch() - cannon.getTotalVerticalAngle());
+		returnValue.setVertical(-pitch - cannon.getTotalVerticalAngle());
 		
-		//get yaws of cannon and player
-		double cannonYaw = CannonsUtil.directionToYaw(cannon.getCannonDirection());
-		double yaw = loc.getYaw();
-        double horizontal = yaw - cannonYaw - cannon.getTotalHorizontalAngle();
+		//get yaws of cannon
+        double horizontal = yaw - CannonsUtil.directionToYaw(cannon.getCannonDirection()) - cannon.getTotalHorizontalAngle();
 		
         horizontal = horizontal % 360;
 		while(horizontal < -180)
@@ -288,14 +302,8 @@ public class Aiming {
 		
 		//set horizontal angle
 		returnValue.setHorizontal(horizontal);
-
-        plugin.logDebug("Yaw: " + yaw + " cannonYaw: " + horizontal);
-		
 		return returnValue;
-		
 	}
-	
-
 
     /**
      * returns the angle to change by the given block face
@@ -431,8 +439,6 @@ public class Aiming {
     			if (distanceCheck(player, cannon) && player.isOnline() && cannon.isValid())
         		{
             		MessageEnum message = updateAngle(player, cannon, null);
-                    //show impact predictor marker
-                    //impactPredictor(cannon, player);
             		userMessages.sendMessage(message, player, cannon);
         		}		
         		else
@@ -444,6 +450,86 @@ public class Aiming {
     		}	
     	}
 	}
+
+    private void updateSentryMode(){
+        Iterator<UUID> iter = sentryCannons.iterator();
+        while(iter.hasNext()) {
+            Cannon cannon = plugin.getCannonManager().getCannon(iter.next());
+            if (cannon == null) {
+                //this cannon does not exist
+                iter.remove();
+                continue;
+            }
+            double oldHAngle = cannon.getHorizontalAngle();
+            double oldVAngle = cannon.getVerticalAngle();
+            // only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
+            if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()) {
+                // autoaming or fineadjusting
+                if (cannon.isValid()) {
+                    updateAngle(null, cannon, null);
+                    //no change in angle - ready to fire
+                    if (oldHAngle == cannon.getHorizontalAngle() && oldVAngle == cannon.getVerticalAngle()) {
+                        if (cannon.isReadyToFire() && cannon.getSentryEntity() != null) {
+                            MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
+                            if (messageEnum != null)
+                            plugin.logDebug("Sentry Task message: " + messageEnum);
+                        }
+                    }
+                }
+            }
+            if (cannon.isChunkLoaded() && System.currentTimeMillis() > cannon.getLastSentryUpdate() + cannon.getCannonDesign().getSentryUpdateTime()) {
+                cannon.setLastSentryUpdate(System.currentTimeMillis());
+
+                //find a suitable target
+                HashMap<UUID, Entity> entities = CannonsUtil.getNearbyEntities(cannon.getMuzzle(), cannon.getCannonDesign().getSentryMinRange(), cannon.getCannonDesign().getSentryMaxRange());
+                if (cannon.getSentryEntity() != null) {
+                    //old target - is this still valid?
+                    if (System.currentTimeMillis() > cannon.getSentryTargetingTime() + cannon.getCannonDesign().getSentrySwapTime() || !entities.containsKey(cannon.getSentryEntity())) {
+                        cannon.setSentryEntity(null);
+                    }
+                    else{
+                        //hopefully we can aim at this target
+                        if (!findSentrySolution(cannon, entities.get(cannon.getSentryEntity()))){
+                            cannon.setSentryEntity(null);
+                        }
+                    }
+                }
+                if (cannon.getSentryEntity() == null){
+                    for (Entity entity : entities.values()) {
+                        if (entity instanceof Player) {
+                            Player player = (Player) entity;
+                            plugin.logDebug(cannon.getCannonName() + " tracking player: " + player.getName());
+                            if (findSentrySolution(cannon, entity))
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * find a possible solution to fire the cannon
+     * @param cannon the cannon which is operated
+     * @param entity target
+     * @return true if the cannon can fire on this target
+     */
+    private boolean findSentrySolution(Cannon cannon, Entity entity){
+        Vector direction = entity.getLocation().toVector().subtract(cannon.getMuzzle().toVector());
+        double yaw = CannonsUtil.vectorToYaw(direction);
+        double pitch = CannonsUtil.vectorToPitch(direction);
+        //can the cannon fire on this player
+        if (cannon.canAimDirection(yaw, pitch)) {
+            plugin.logDebug("can aim at this target");
+            cannon.setAimingYaw(yaw);
+            cannon.setAimingPitch(pitch);
+            cannon.setSentryEntity(entity.getUniqueId());
+            cannon.setSentryTargetingTime(System.currentTimeMillis());
+            //todo fancy algorithm for aiming
+            return true;
+        }
+        return false;
+    }
 
 
     /**
@@ -475,7 +561,8 @@ public class Aiming {
                 userMessages.sendMessage(message, player, cannon);
             }
         }
-		else if(cannon != null)
+        //enable aiming mode. Sentry cannons can't be opertated by players
+		else if(cannon != null && !cannon.getCannonDesign().isSentry())
 		{
 			//check if player has permission to aim
 			if (player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
@@ -500,9 +587,19 @@ public class Aiming {
 		}
 	}
 
+    /**
+     * enable the aiming mode
+     * @param player player how operates the cannon
+     * @param cannon the cannon in aiming mode
+     * @return message for the user
+     */
     public MessageEnum enableAimingMode(Player player, Cannon cannon)
     {
         if (player == null)
+            return null;
+
+        //sentry can't be in aiming mode
+        if (cannon == null || cannon.getCannonDesign().isSentry())
             return null;
 
         if (!player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
@@ -568,15 +665,14 @@ public class Aiming {
         if (cannon == null)
             return;
 
-        cannon.setAimingPitch(loc.getPitch());
-        cannon.setAimingYaw(loc.getYaw());
-
+        cannon.setAimingYaw(loc.getPitch());
+        cannon.setAimingPitch(loc.getYaw());
     }
 	
 	/**
 	 * finds the right message for the horizontal angle change
-	 * @param cannon
-	 * @return
+	 * @param cannon operated cannon
+	 * @return message from the cannon
 	 */
     private MessageEnum setMessageHorizontal(Cannon cannon, boolean combinedAngle)
 	{
@@ -623,6 +719,9 @@ public class Aiming {
      */
     public void showAimingVector(Cannon cannon, Player player)
     {
+        if (player == null || cannon == null)
+            return;
+
         // Imitation of angle
         if(config.isImitatedAimingEnabled() && isImitatingEnabled(player.getUniqueId()))
         {
@@ -746,8 +845,10 @@ public class Aiming {
         {
             Map.Entry<UUID, Long> last = iter.next();
             Cannon cannon = plugin.getCannonManager().getCannon(last.getKey());
-            if (cannon == null)
+            if (cannon == null) {
                 iter.remove();
+                continue;
+            }
 
             CannonDesign design = cannon.getCannonDesign();
             if (last.getValue()+design.getPredictorDelay() < System.currentTimeMillis())
@@ -771,7 +872,7 @@ public class Aiming {
                     Map.Entry<UUID, Boolean> nextName = entry.next();
                     Player player = Bukkit.getPlayer(nextName.getKey());
                     //show impact to the player
-                    if (player != null && cannon != null && impact != null && plugin.getFakeBlockHandler().belowMaxLimit(player, impact)) {
+                    if (player != null && impact != null && plugin.getFakeBlockHandler().belowMaxLimit(player, impact)) {
                         plugin.getFakeBlockHandler().imitatedSphere(player, impact, 1, config.getImitatedPredictorMaterial(), FakeBlockType.IMPACT_PREDICTOR, config.getImitatedPredictorTime());
                     }
                     //remove entry if there removeEntry enabled, or player is offline
@@ -784,8 +885,6 @@ public class Aiming {
             }
         }
     }
-
-
 
     /**
      * calculated the impact of the projectile and make a sphere with fakeBlocks at the impact for the given player
@@ -800,4 +899,33 @@ public class Aiming {
         return surface;
     }
 
+    /**
+     * adds the cannon to the list of sentry guns. This cannons will be operate on its own.
+     * @param cannonId cannon to add
+     */
+    public void addSentryCannon(UUID cannonId){
+        if (cannonId!=null){
+            sentryCannons.add(cannonId);
+        }
+    }
+
+    /**
+     * removes the cannon from the list of sentry guns. This cannons will be operate on its own.
+     * @param cannonId cannon to add
+     */
+    public void removeSentryCannon(UUID cannonId){
+        if (cannonId!=null){
+            sentryCannons.remove(cannonId);
+        }
+    }
+
+    /**
+     * calculates the new solution for the sentry cannons
+     * @param cannon sentry cannon
+     * @param target target of the cannon
+     * @return angles for the cannon
+     */
+    private gunAngles calctSentrySolution(Cannon cannon, Location target){
+        return new gunAngles(0., 0.);
+    }
 }

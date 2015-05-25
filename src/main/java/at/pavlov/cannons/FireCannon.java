@@ -75,14 +75,13 @@ public class FireCannon {
         if (cannon.isFiring())
             return MessageEnum.ErrorFiringInProgress;
         //Barrel too hot
-        if(cannon.getLastFired() + design.getBarrelCooldownTime()*1000 >= System.currentTimeMillis())
+        if(cannon.barrelTooHot())
             return MessageEnum.ErrorBarrelTooHot;
         //automatic temperature control, prevents overheating of the cannon
-        if(design.isAutomaticTemperatureControl() && cannon.getTemperature() + design.getHeatIncreasePerGunpowder()*cannon.getLoadedGunpowder() > design.getCriticalTemperature())
+        if(design.isAutomaticTemperatureControl() && cannon.isOverheatedAfterFiring())
             return MessageEnum.ErrorBarrelTooHot;
         if (player!= null)
         {
-
             //if the player has permission to fire
             if (!player.hasPermission(design.getPermissionFire()))
                 return MessageEnum.PermissionErrorFire;
@@ -108,8 +107,6 @@ public class FireCannon {
      */
     public MessageEnum redstoneFiring(Cannon cannon, InteractAction action)
     {
-        plugin.logDebug("redstone Firing");
-
         CannonDesign design = cannon.getCannonDesign();
         return this.fire(cannon, null, cannon.getCannonDesign().isAutoreloadRedstone(), !design.isAmmoInfiniteForRedstone(), action);
     }
@@ -124,12 +121,23 @@ public class FireCannon {
      */
     public MessageEnum playerFiring(Cannon cannon, Player player, InteractAction action)
     {
-        plugin.logDebug("playerFiring " + player);
-
         CannonDesign design = cannon.getCannonDesign();
         boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
 
         return this.fire(cannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
+    }
+
+    /**
+     * checks if all preconditions for firing are fulfilled and fires the cannon
+     * Default fire event for players
+     * @param cannon - cannon to fire
+     * @return - message for the player
+     */
+    public MessageEnum sentryFiring(Cannon cannon)
+    {
+        CannonDesign design = cannon.getCannonDesign();
+
+        return this.fire(cannon, null, true, !design.isAmmoInfiniteForPlayer(), InteractAction.fireSentry);
     }
 
     /**
@@ -146,7 +154,6 @@ public class FireCannon {
         //set some valid shooter is none is given
         if (playerUid == null) {
             playerUid = cannon.getOwner();
-            plugin.logDebug("Firing: Set shooter to cannonOwner, because it was null. ");
         }
         Player player = Bukkit.getPlayer(playerUid);
         //fire event
@@ -189,7 +196,6 @@ public class FireCannon {
                 {
                     //everything went fine - next click on torch wil fire the cannon
                     plugin.logDebug("Charge loaded from chest");
-                    //cannon.getWorldBukkit().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_THROW, 5F, 0.5F);
                     CannonsUtil.playSound(cannon.getMuzzle(), cannon.getLoadedProjectile().getSoundLoading());
                     //if fire after reloading is active, if will fire automatically. This can be a problem for the impact predictor
                     if (!design.isFireAfterLoading())
@@ -201,7 +207,7 @@ public class FireCannon {
         //check for all permissions
         MessageEnum message = getPrepareFireMessage(cannon, player);
 
-        if (message.isError())
+        if (message != null && message.isError())
             CannonsUtil.playErrorSound(player);
 
         //return if there are permission missing
