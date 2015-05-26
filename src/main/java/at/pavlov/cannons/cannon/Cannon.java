@@ -43,6 +43,8 @@ public class Cannon
     private UUID world;
     // if the cannon is on a ship, the operation might be limited (e.g smaller angles to adjust the cannon)
     private boolean onShip;
+    // with which velocity the canno is moving (set by other plugins)
+    private Vector velocity;
 
     // time the cannon was last time fired
     private long lastFired;
@@ -55,6 +57,8 @@ public class Cannon
     private int loadedGunpowder;
     // the loaded projectile - can be null
     private Projectile loadedProjectile;
+    // the projectile which was loaded previously
+    private Projectile lastFiredProjectile;
 
     // cleaning after firing (clicking with the stick several times
     private double soot;
@@ -73,8 +77,12 @@ public class Cannon
 
     // tracking entity
     private UUID sentryEntity;
+    // store older targets, so we do not target the same all the time
+    private ArrayList<UUID> sentryEntityHistory;
     // how long this entity is targeted by this cannon
     private long sentryTargetingTime;
+    // last time loading was tried and failed. Wait some time before trying again
+    private long sentryLastLoadingFailed;
 
     //observer will see the impact of the target predictor
     //<Player name, remove after showing impact>
@@ -119,7 +127,14 @@ public class Cannon
         this.owner = owner;
         this.isValid = true;
         this.cannonName = null;
+
+        //the cannon is not moving
+        this.velocity = new Vector(0, 0, 0);
+
         this.sentryEntity = null;
+        sentryEntityHistory = new ArrayList<UUID>();
+        sentryTargetingTime = 0;
+        sentryLastLoadingFailed = 0;
 
         this.horizontalAngle = getHomeHorizontalAngle();
         this.verticalAngle = getHomeVerticalAngle();
@@ -135,6 +150,7 @@ public class Cannon
         else
             this.setLoadedGunpowder(design.getMaxLoadableGunpowderNormal());
         this.setLoadedProjectile(null);
+        lastFiredProjectile = null;
         this.setSoot(design.getStartingSoot());
         this.setProjectilePushed(design.getProjectilePushing());
 
@@ -181,12 +197,12 @@ public class Cannon
      * @param consumesAmmo - if true ammo will be removed from chest inventories
      * @return - true if the cannon has been reloaded. False if there is not enough ammunition
      */
-    public boolean reloadFromChests(UUID player, boolean consumesAmmo)
+    public MessageEnum reloadFromChests(UUID player, boolean consumesAmmo)
     {
         List<Inventory> invlist = getInventoryList();
 
-        //clean the cannon
-        //setSoot(0.0);
+        if (!isClean())
+            return MessageEnum.ErrorNotCleaned;
 
         //load gunpowder if there is nothing in the barrel
         if (design.isGunpowderConsumption()&&design.isGunpowderNeeded()&&consumesAmmo)
@@ -209,7 +225,7 @@ public class Cannon
                     //not enough gunpowder, put it back
                     gunpowder.setAmount(toLoad-gunpowder.getAmount());
                     InventoryManagement.addItemInChests(invlist, gunpowder);
-                    return false;
+                    return MessageEnum.ErrorNoGunpowderInChest;
                 }
             }
 
@@ -235,7 +251,6 @@ public class Cannon
                 {
                     // everything went fine, so remove it from the chest remove projectile
                     loadedProjectile = projectile;
-
                     if(design.isProjectileConsumption()&&consumesAmmo)
                     {
                         if (item.getAmount() == 1)
@@ -252,12 +267,12 @@ public class Cannon
 
                     //push projectile and done
                     setProjectilePushed(0);
-                    return true;
+                    CannonsUtil.playSound(getMuzzle(), getLoadedProjectile().getSoundLoading());
+                    return MessageEnum.loadProjectile;
                 }
             }
         }
-
-        return false;
+        return MessageEnum.ErrorNoProjectileInChest;
     }
 
     /**
@@ -411,7 +426,6 @@ public class Cannon
 	        case loadGunpowder:
 	        {
 	        	// take item from the player
-	            //player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 1.5f);
                 CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderLoading());
 	            if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
 	                InventoryManagement.takeFromPlayerHand(player, gunpowder);
@@ -419,7 +433,6 @@ public class Cannon
 	        }
 	        case loadGunpowderNormalLimit:
 	        {
-	        	//player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SAND, 1F, 0.5f);
                 CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderLoading());
 	            if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
 	                InventoryManagement.takeFromPlayerHand(player, gunpowder);
@@ -427,7 +440,6 @@ public class Cannon
 	        }
 	        case loadOverloadedGunpowder:
 	        {
-	        	//player.getWorld().playSound(this.getMuzzle(), Sound.DIG_GRASS, 1F, 1.5f);
                 CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderOverloading());
 	            if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
 	                InventoryManagement.takeFromPlayerHand(player, gunpowder);
@@ -438,7 +450,6 @@ public class Cannon
 	            CannonsUtil.playErrorSound(player);
 	        }
         }
-
         return returnVal;
 
     }
@@ -711,6 +722,7 @@ public class Cannon
         //delete charge for human gunner
         if (design.isGunpowderNeeded())
             this.setLoadedGunpowder(0);
+        lastFiredProjectile = this.getLoadedProjectile();
         this.setLoadedProjectile(null);
 
         //update Sign
@@ -1430,18 +1442,14 @@ public class Cannon
         return 1.0;
     }
 
-
-
     /**
      * returns the speed of the cannonball depending on the cannon, projectile,
-     * loaded gunpowder the dependency on the gunpowder is (1-2^(-4*loaded/max))
-     *
-     * @return
+     * @return the velocity of the load projectile, 0 if nothing is loaded
      */
-    double getCannonballVelocity()
+    public double getCannonballVelocity()
     {
-        if (loadedProjectile == null || design == null) return 0.0;
-        return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowderNormal()));
+        if ((loadedProjectile == null && lastFiredProjectile == null) || design == null) return 0.0;
+        return ((loadedProjectile == null) ? lastFiredProjectile.getVelocity() : loadedProjectile.getVelocity()) * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowderNormal()));
     }
 
     /**
@@ -1955,7 +1963,7 @@ public class Cannon
      * @return true if the cannon can be loaded
      */
     public boolean isReadyToFire(){
-        return !isOverheatedAfterFiring() && !isFiring() && isClean() && !barrelTooHot();
+        return isLoaded() && !isOverheatedAfterFiring() && !isFiring() && isClean() && !barrelTooHot();
     }
 
     /**
@@ -2244,13 +2252,49 @@ public class Cannon
 
     public void setSentryEntity(UUID sentryEntity) {
         this.sentryEntity = sentryEntity;
+        setSentryTargetingTime(System.currentTimeMillis());
+        if (sentryEntity != null){
+            //store only 5
+            if (sentryEntityHistory.size() > 5)
+                sentryEntityHistory.remove(0);
+            sentryEntityHistory.add(sentryEntity);
+        }
+    }
+
+    /**
+     * was this entity targeted in the last time
+     * @param entityId ID of the entity
+     * @return true if it was target
+     */
+    public boolean wasSentryTarget(UUID entityId){
+        return entityId != null && sentryEntityHistory.contains(entityId);
     }
 
     public long getSentryTargetingTime() {
         return sentryTargetingTime;
     }
 
-    public void setSentryTargetingTime(long sentryTargetingTime) {
+    private void setSentryTargetingTime(long sentryTargetingTime) {
         this.sentryTargetingTime = sentryTargetingTime;
+    }
+
+    public Vector getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector velocity) {
+        this.velocity = velocity;
+    }
+
+    public long getSentryLastLoadingFailed() {
+        return sentryLastLoadingFailed;
+    }
+
+    public void setSentryLastLoadingFailed(long sentryLastLoadingFailed) {
+        this.sentryLastLoadingFailed = sentryLastLoadingFailed;
+    }
+
+    public Projectile getLastFiredProjectile() {
+        return lastFiredProjectile;
     }
 }

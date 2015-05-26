@@ -7,10 +7,9 @@ import java.io.OutputStream;
 import java.util.*;
 
 import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.container.MaterialHolder;
-import at.pavlov.cannons.container.SoundHolder;
-import at.pavlov.cannons.container.SpawnEntityHolder;
-import at.pavlov.cannons.container.SpawnMaterialHolder;
+import at.pavlov.cannons.cannon.Cannon;
+import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.container.*;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
@@ -20,6 +19,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
@@ -604,6 +604,7 @@ public class CannonsUtil
             }
         }
     }
+
     /**
      * creates a imitated error sound (called when played doing something wrong)
      * @param p player
@@ -637,6 +638,39 @@ public class CannonsUtil
         			}
         		}
         	, 3);
+        }
+    }
+
+    /**
+     * creates a imitated error sound (called when played doing something wrong)
+     * @param location location of the error sound
+     */
+    public static void playErrorSound(final Location location)
+    {
+        try
+        {
+            location.getWorld().playSound(location, Sound.SUCCESSFUL_HIT, 0.25f, 0.75f);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
+            {
+                @Override public void run()
+                {
+                    location.getWorld().playSound(location, Sound.SUCCESSFUL_HIT, 0.25f, 0.1f);
+                }
+            }
+                    , 3);
+        }
+        catch(Exception e)
+        {
+            //Fired if bukkit doen't have this sound, try/catch block is not neccesury
+            location.getWorld().playSound(location, Sound.NOTE_PIANO, 0.25f, 2f);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
+            {
+                @Override public void run()
+                {
+                    location.getWorld().playSound(location, Sound.NOTE_PIANO, 0.25f, 0.75f);
+                }
+            }
+                    , 3);
         }
     }
 
@@ -774,6 +808,33 @@ public class CannonsUtil
         }
         return radiusEntities;
     }
+
+    /**
+     * returns all targets (entity and cannons) in a given radius
+     * @param l center location
+     * @param minRadius minium radius for search
+     * @param maxRadius radius for search
+     * @return array of Entities in area
+     */
+    public static HashMap<UUID, Target> getNearbyTargets(Location l, int minRadius, int maxRadius){
+        int chunkTargets = maxRadius < 16 ? 1 : (maxRadius - (maxRadius % 16))/16;
+        HashMap<UUID, Target> radiusTargets = new HashMap<UUID, Target>();
+        for (int chX = 0 -chunkTargets; chX <= chunkTargets; chX ++){
+            for (int chZ = 0 -chunkTargets; chZ <= chunkTargets; chZ++){
+                int x=(int) l.getX(),y=(int) l.getY(),z=(int) l.getZ();
+                for (Entity e : new Location(l.getWorld(),x+(chX*16),y,z+(chZ*16)).getChunk().getEntities()){
+                    double dist = e.getLocation().distance(l);
+                    if (e instanceof LivingEntity && minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock())
+                        radiusTargets.put(e.getUniqueId(), new Target(e));
+                }
+            }
+        }
+        for (Cannon cannon : CannonManager.getCannonsInSphere(l, maxRadius))
+            if (cannon.getMuzzle().distance(l) > minRadius)
+                radiusTargets.put(cannon.getUID(), new Target(cannon));
+        return radiusTargets;
+    }
+
 
     public static double vectorToYaw(Vector vector){
         return Math.atan2(-vector.getX(), vector.getZ())*180./Math.PI;

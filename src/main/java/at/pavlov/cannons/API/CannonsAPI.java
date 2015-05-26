@@ -5,6 +5,7 @@ import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.cannon.CannonManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -55,9 +56,6 @@ public class CannonsAPI {
         return plugin.getFireCannon().redstoneFiring(cannon, interaction);
     }
 
-
-
-
     /**
      * returns the cannon on the given location
      * @param location - location of a cannon block
@@ -75,9 +73,9 @@ public class CannonsAPI {
      * @param sphereRadius - radius of the sphere in blocks
      * @return - list of all cannons in this sphere
      */
-    public HashSet<Cannon> getCannonsInSphere(Location center, double sphereRadius)
+    public static HashSet<Cannon> getCannonsInSphere(Location center, double sphereRadius)
     {
-        return plugin.getCannonManager().getCannonsInSphere(center, sphereRadius);
+        return CannonManager.getCannonsInSphere(center, sphereRadius);
     }
 
     /**
@@ -88,9 +86,9 @@ public class CannonsAPI {
      * @param lengthZ - box length in Z
      * @return - list of all cannons in this sphere
      */
-    public HashSet<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
+    public static HashSet<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
     {
-        return plugin.getCannonManager().getCannonsInBox(center, lengthX, lengthY, lengthZ);
+        return CannonManager.getCannonsInBox(center, lengthX, lengthY, lengthZ);
     }
 
     /**
@@ -121,9 +119,9 @@ public class CannonsAPI {
      * @param uid UUID of the cannon
      * @return the cannon from the storage
      */
-    public Cannon getCannon(UUID uid)
+    public static Cannon getCannon(UUID uid)
     {
-        return plugin.getCannonManager().getCannon(uid);
+        return CannonManager.getCannon(uid);
     }
 
 

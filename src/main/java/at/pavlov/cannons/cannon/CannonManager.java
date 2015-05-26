@@ -29,8 +29,8 @@ import at.pavlov.cannons.event.CannonBeforeCreateEvent;
 
 public class CannonManager
 {
-	private final ConcurrentHashMap<UUID, Cannon> cannonList = new ConcurrentHashMap<UUID, Cannon>();
-    private final ConcurrentHashMap<String, UUID> cannonNameMap = new ConcurrentHashMap<String, UUID>();
+	private static final ConcurrentHashMap<UUID, Cannon> cannonList = new ConcurrentHashMap<UUID, Cannon>();
+    private static final ConcurrentHashMap<String, UUID> cannonNameMap = new ConcurrentHashMap<String, UUID>();
 
 
     private final Cannons plugin;
@@ -183,7 +183,7 @@ public class CannonManager
 	 * @param name name of the cannon
 	 * @return true if the name is unique
 	 */
-	private boolean isCannonNameUnique(String name)
+	private static boolean isCannonNameUnique(String name)
 	{
         if (name == null)
             return false;
@@ -281,7 +281,7 @@ public class CannonManager
      * @param sphereRadius - radius of the sphere in blocks
      * @return - list of all cannons in this sphere
      */
-    public HashSet<Cannon> getCannonsInSphere(Location center, double sphereRadius)
+    public static HashSet<Cannon> getCannonsInSphere(Location center, double sphereRadius)
     {
         HashSet<Cannon> newCannonList = new HashSet<Cannon>();
 
@@ -302,7 +302,7 @@ public class CannonManager
      * @param lengthZ - box length in Z
      * @return - list of all cannons in this sphere
      */
-    public HashSet<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
+    public static HashSet<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
     {
         HashSet<Cannon> newCannonList = new HashSet<Cannon>();
 
@@ -321,7 +321,7 @@ public class CannonManager
      * @param locations - a list of location to search for cannons
      * @return - list of all cannons in this sphere
      */
-    public HashSet<Cannon> getCannonsByLocations(List<Location> locations)
+    public static HashSet<Cannon> getCannonsByLocations(List<Location> locations)
     {
         HashSet<Cannon> newCannonList = new HashSet<Cannon>();
         for (Cannon cannon : getCannonList().values())
@@ -360,10 +360,10 @@ public class CannonManager
 
 	/**
 	 * get cannon by cannonName and Owner - used for Signs
-	 * @param cannonName
-	 * @return
+	 * @param cannonName name of the cannon
+	 * @return the cannon with this name
 	 */
-	public Cannon getCannon(String cannonName)
+	public static Cannon getCannon(String cannonName)
 	{
 		if (cannonName == null) return null;
 
@@ -378,8 +378,8 @@ public class CannonManager
 	/**
 	 * Searches the storage if there is already a cannonblock on this location
 	 * and returns the cannon
-	 * @param loc
-	 * @return
+	 * @param loc location of one cannon block
+	 * @return the cannon at this location
 	 */
 	private Cannon getCannonFromStorage(Location loc)
 	{
@@ -395,10 +395,9 @@ public class CannonManager
 
 	/**
 	 * searches for a cannon and creates a new entry if it does not exist
-	 * 
 	 * @param cannonBlock - one block of the cannon
 	 * @param owner - the owner of the cannon (important for message notification). Can't be null
-	 * @return
+	 * @return the cannon at this location
 	 */
 	public Cannon getCannon(Location cannonBlock, UUID owner)
 	{
@@ -515,7 +514,7 @@ public class CannonManager
      * @param uid UUID of the cannon
      * @return the cannon from the storage
      */
-    public Cannon getCannon(UUID uid)
+    public static Cannon getCannon(UUID uid)
     {
         if (uid == null)
             return null;
@@ -613,7 +612,7 @@ public class CannonManager
 	 * 
 	 * @return List of cannons
 	 */
-	public ConcurrentHashMap<UUID,Cannon> getCannonList()
+	public static ConcurrentHashMap<UUID,Cannon> getCannonList()
 	{
 		return cannonList;
 	}

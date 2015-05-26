@@ -5,9 +5,11 @@ import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
+import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.container.MovingObject;
+import at.pavlov.cannons.container.Target;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
@@ -15,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
@@ -288,21 +291,15 @@ public class Aiming {
      */
 	private gunAngles getGunAngle(Cannon cannon, double yaw, double pitch)
 	{
-		gunAngles returnValue = new gunAngles(0.0 ,0.0);
-		
-		//calc vertical angle difference
-		returnValue.setVertical(-pitch - cannon.getTotalVerticalAngle());
-		
+        plugin.logDebug(" yaw: "+ yaw + "pitch: " + pitch);
 		//get yaws of cannon
         double horizontal = yaw - CannonsUtil.directionToYaw(cannon.getCannonDirection()) - cannon.getTotalHorizontalAngle();
 		
         horizontal = horizontal % 360;
 		while(horizontal < -180)
             horizontal = horizontal + 360;
-		
-		//set horizontal angle
-		returnValue.setHorizontal(horizontal);
-		return returnValue;
+
+		return new gunAngles(horizontal, -pitch - cannon.getTotalVerticalAngle());
 	}
 
     /**
@@ -454,12 +451,69 @@ public class Aiming {
     private void updateSentryMode(){
         Iterator<UUID> iter = sentryCannons.iterator();
         while(iter.hasNext()) {
-            Cannon cannon = plugin.getCannonManager().getCannon(iter.next());
+            Cannon cannon = CannonManager.getCannon(iter.next());
             if (cannon == null) {
                 //this cannon does not exist
                 iter.remove();
                 continue;
             }
+            // calculate a firing solution
+            if (cannon.isChunkLoaded() && System.currentTimeMillis() > cannon.getLastSentryUpdate() + cannon.getCannonDesign().getSentryUpdateTime()) {
+                cannon.setLastSentryUpdate(System.currentTimeMillis());
+
+                //find a suitable target
+                HashMap<UUID, Target> targets = CannonsUtil.getNearbyTargets(cannon.getMuzzle(), cannon.getCannonDesign().getSentryMinRange(), cannon.getCannonDesign().getSentryMaxRange());
+                if (cannon.getSentryEntity() != null) {
+                    //old target - is this still valid?
+                    if (System.currentTimeMillis() > cannon.getSentryTargetingTime() + cannon.getCannonDesign().getSentrySwapTime() || !targets.containsKey(cannon.getSentryEntity())) {
+                        cannon.setSentryEntity(null);
+                    }
+                    else{
+                        //hopefully we can aim at this target
+						Target target = targets.get(cannon.getSentryEntity());
+                        if (!canFindTargetSolution(cannon, target.getLocation(), target.getVelocity())){
+                            cannon.setSentryEntity(null);
+                        }
+                    }
+                }
+				ArrayList<Target> possibleTargets = new ArrayList<Target>();
+                if (cannon.getSentryEntity() == null){
+                    for (Target target : targets.values()) {
+                        // todo now it is just players, for testing
+                        if (target.getType() == EntityType.PLAYER) {
+                            plugin.logDebug("targeting at: " + target.getName());
+                            if (canFindTargetSolution(cannon, target.getLocation(), target.getVelocity())){
+								plugin.logDebug("aiming at: " + target.getName());
+                                possibleTargets.add(target);
+							}
+                        }
+                    }
+                }
+                //so we have some targets
+                if (possibleTargets.size()>0){
+                    Target target = null;
+                    for (Target t : possibleTargets) {
+                        //select one target
+                        if (!cannon.wasSentryTarget(t.getUniqueId())){
+                            target = t;
+                            break;
+                        }
+                    }
+                    if (target == null)
+                        target = possibleTargets.get(0);
+
+                    // find exact solution for the cannon
+                    if (calculateTargetSolution(cannon, target.getLocation(), target.getVelocity())){
+                        cannon.setSentryEntity(target.getUniqueId());
+                    }
+                    else {
+                        //no exact solution found for this target. So skip it and try it again in the next run
+                        cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
+                    }
+                }
+            }
+
+            //aim at the found solution
             double oldHAngle = cannon.getHorizontalAngle();
             double oldVAngle = cannon.getVerticalAngle();
             // only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
@@ -469,38 +523,21 @@ public class Aiming {
                     updateAngle(null, cannon, null);
                     //no change in angle - ready to fire
                     if (oldHAngle == cannon.getHorizontalAngle() && oldVAngle == cannon.getVerticalAngle()) {
+                        //load from chest
+                        if (!cannon.isLoaded() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
+                            MessageEnum messageEnum = cannon.reloadFromChests(cannon.getOwner(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
+                            if (messageEnum.isError()) {
+                                cannon.setSentryLastLoadingFailed(System.currentTimeMillis());
+                                CannonsUtil.playErrorSound(cannon.getMuzzle());
+                                plugin.logDebug("Sentry " + cannon.getCannonName() + " loading message: " + messageEnum);
+                            }
+                            else
+                                cannon.setSentryLastLoadingFailed(System.currentTimeMillis()-2000);
+                        }
                         if (cannon.isReadyToFire() && cannon.getSentryEntity() != null) {
                             MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
                             if (messageEnum != null)
-                            plugin.logDebug("Sentry Task message: " + messageEnum);
-                        }
-                    }
-                }
-            }
-            if (cannon.isChunkLoaded() && System.currentTimeMillis() > cannon.getLastSentryUpdate() + cannon.getCannonDesign().getSentryUpdateTime()) {
-                cannon.setLastSentryUpdate(System.currentTimeMillis());
-
-                //find a suitable target
-                HashMap<UUID, Entity> entities = CannonsUtil.getNearbyEntities(cannon.getMuzzle(), cannon.getCannonDesign().getSentryMinRange(), cannon.getCannonDesign().getSentryMaxRange());
-                if (cannon.getSentryEntity() != null) {
-                    //old target - is this still valid?
-                    if (System.currentTimeMillis() > cannon.getSentryTargetingTime() + cannon.getCannonDesign().getSentrySwapTime() || !entities.containsKey(cannon.getSentryEntity())) {
-                        cannon.setSentryEntity(null);
-                    }
-                    else{
-                        //hopefully we can aim at this target
-                        if (!findSentrySolution(cannon, entities.get(cannon.getSentryEntity()))){
-                            cannon.setSentryEntity(null);
-                        }
-                    }
-                }
-                if (cannon.getSentryEntity() == null){
-                    for (Entity entity : entities.values()) {
-                        if (entity instanceof Player) {
-                            Player player = (Player) entity;
-                            plugin.logDebug(cannon.getCannonName() + " tracking player: " + player.getName());
-                            if (findSentrySolution(cannon, entity))
-                                break;
+                                plugin.logDebug("Sentry " + cannon.getCannonName() + " firing message: " + messageEnum);
                         }
                     }
                 }
@@ -509,26 +546,60 @@ public class Aiming {
     }
 
     /**
-     * find a possible solution to fire the cannon
+     * find a possible solution to fire the cannon - this is just an estimation
      * @param cannon the cannon which is operated
-     * @param entity target
+     * @param target lcoation of the target
+	 * @param targetVelocity how fast the target is moving
      * @return true if the cannon can fire on this target
      */
-    private boolean findSentrySolution(Cannon cannon, Entity entity){
-        Vector direction = entity.getLocation().toVector().subtract(cannon.getMuzzle().toVector());
+    private boolean canFindTargetSolution(Cannon cannon, Location target, Vector targetVelocity){
+        if (!cannon.getWorld().equals(target.getWorld().getUID()))
+            return false;
+
+        //plugin.logDebug("old target " + target);
+        Location newTarget = target.clone();
+        double distance = target.distance(cannon.getMuzzle());
+        double velocity = cannon.getCannonballVelocity();
+        if (velocity > 0) {
+            double time = distance / velocity;
+            //indirect fire needs longer
+            if (cannon.getCannonDesign().isSentryIndirectFire())
+                time *= 3.0;
+            time += (cannon.getCannonDesign().getFuseBurnTime()+cannon.getCannonDesign().getSentryUpdateTime())/20.0;
+            //plugin.logDebug("time: " + time);
+            //plugin.logDebug("distance: " + distance);
+            //plugin.logDebug("velocity: " + targetVelocity);
+            newTarget.add(targetVelocity.multiply(time));
+        }
+        //plugin.logDebug("new target " + newTarget);
+
+        Vector direction = newTarget.toVector().subtract(cannon.getMuzzle().toVector());
         double yaw = CannonsUtil.vectorToYaw(direction);
         double pitch = CannonsUtil.vectorToPitch(direction);
         //can the cannon fire on this player
         if (cannon.canAimDirection(yaw, pitch)) {
-            plugin.logDebug("can aim at this target");
-            cannon.setAimingYaw(yaw);
-            cannon.setAimingPitch(pitch);
-            cannon.setSentryEntity(entity.getUniqueId());
-            cannon.setSentryTargetingTime(System.currentTimeMillis());
-            //todo fancy algorithm for aiming
+			cannon.setAimingYaw(yaw);
+			cannon.setAimingPitch(pitch);
             return true;
         }
         return false;
+    }
+
+    /**
+     * find exact solution to fire the cannon
+     * @param cannon the cannon which is operated
+     * @param target lcoation of the target
+     * @param targetVelocity how fast the target is moving
+     * @return true if a solution was found
+     */
+    private boolean calculateTargetSolution(Cannon cannon, Location target, Vector targetVelocity){
+        canFindTargetSolution(cannon, target, targetVelocity);
+        cannon.setAimingPitch(cannon.getAimingPitch());
+        plugin.logDebug("pitch: " + cannon.getAimingPitch());
+        //todo fancy algorithm for aiming
+        plugin.logDebug("caluclate Target solution");
+
+        return true;
     }
 
 
@@ -546,7 +617,7 @@ public class Aiming {
 		if (isAimingMode)
 		{
             if (cannon == null)
-                cannon = plugin.getCannonManager().getCannon(inAimingMode.get(player.getUniqueId()));
+                cannon = CannonManager.getCannon(inAimingMode.get(player.getUniqueId()));
 
             //this player is already in aiming mode, he might fire the cannon or turn the aiming mode off
 		    if (fire)

@@ -70,6 +70,7 @@ public class CannonDesign
 
 	//sentry
 	private boolean sentry;
+	private boolean sentryIndirectFire;
     private int sentryMinRange;
     private int sentryMaxRange;
 	private int sentryUpdateTime;				//in ms
@@ -1522,4 +1523,12 @@ public class CannonDesign
     public void setSentryMinRange(int sentryMinRange) {
         this.sentryMinRange = sentryMinRange;
     }
+
+	public boolean isSentryIndirectFire() {
+		return sentryIndirectFire;
+	}
+
+	public void setSentryIndirectFire(boolean sentryIndirectFire) {
+		this.sentryIndirectFire = sentryIndirectFire;
+	}
 }

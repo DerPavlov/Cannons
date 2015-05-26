@@ -49,6 +49,12 @@ public class SoundHolder {
         }
     }
 
+    public SoundHolder(Sound sound, float volume, float pitch) {
+        this.sound = sound;
+        this.volume = volume;
+        this.pitch = pitch;
+    }
+
     public Sound getSound() {
         return sound;
     }

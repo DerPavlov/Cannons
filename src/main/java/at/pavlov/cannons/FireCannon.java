@@ -165,42 +165,29 @@ public class FireCannon {
 
         CannonDesign design = cannon.getCannonDesign();
 
+        //if there is no gunpowder needed we set it to the maximum
+        if (!design.isGunpowderNeeded() && cannon.getLoadedGunpowder() == 0)
+            cannon.setLoadedGunpowder(design.getMaxLoadableGunpowderNormal());
+
 
         //no charge try some autoreload from chests
-        if (cannon.getLoadedGunpowder() == 0 || !cannon.isProjectileLoaded())
+        if (!cannon.isLoaded() && autoload)
         {
-            //check if the cannon needs to be cleaned
-            if (!cannon.isClean())
-                return MessageEnum.ErrorNotCleaned;
-
-            //if there is no gunpowder needed we set it to the maximum
-            if (!design.isGunpowderNeeded())
-                cannon.setLoadedGunpowder(design.getMaxLoadableGunpowderNormal());
-
-            //this cannon will try to find some gunpowder and projectile in the chest
-            if (autoload)
+            MessageEnum messageEnum = cannon.reloadFromChests(playerUid, consumesAmmo);
+            //try to load some projectiles
+            if (messageEnum.isError())
             {
-                //try to load some projectiles
-                boolean hasReloaded =  cannon.reloadFromChests(playerUid, consumesAmmo);
-                if (!hasReloaded)
-                {
-                    //there is not enough gunpowder or no projectile in the chest
-                    plugin.logDebug("Can't reload cannon, because there is no valid charge in the chests");
-                    CannonsUtil.playErrorSound(player);
-
-                    if (cannon.getLoadedGunpowder() > 0)
-                        return MessageEnum.ErrorNoProjectileInChest;
-                    return MessageEnum.ErrorNoGunpowderInChest;
-                }
-                else
-                {
-                    //everything went fine - next click on torch wil fire the cannon
-                    plugin.logDebug("Charge loaded from chest");
-                    CannonsUtil.playSound(cannon.getMuzzle(), cannon.getLoadedProjectile().getSoundLoading());
-                    //if fire after reloading is active, if will fire automatically. This can be a problem for the impact predictor
-                    if (!design.isFireAfterLoading())
-                        return MessageEnum.loadProjectile;
-                }
+                //there is not enough gunpowder or no projectile in the chest
+                plugin.logDebug("Can't reload cannon, because there is no valid charge in the chests");
+                CannonsUtil.playErrorSound(player);
+                return messageEnum;
+            }
+            else
+            {
+                //everything went fine - next click on torch wil fire the cannon
+                //if fire after reloading is active, if will fire automatically. This can be a problem for the impact predictor
+                if (!design.isFireAfterLoading())
+                    return MessageEnum.loadProjectile;
             }
         }
 
