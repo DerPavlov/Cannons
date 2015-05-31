@@ -1449,7 +1449,10 @@ public class Cannon
     public double getCannonballVelocity()
     {
         if ((loadedProjectile == null && lastFiredProjectile == null) || design == null) return 0.0;
-        return ((loadedProjectile == null) ? lastFiredProjectile.getVelocity() : loadedProjectile.getVelocity()) * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowderNormal()));
+        if (loadedProjectile == null)
+            return lastFiredProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4));
+        else
+            return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowderNormal()));
     }
 
     /**
@@ -2071,20 +2074,63 @@ public class Cannon
     /**
      * whenever the cannon can aim in this direction or not
      * @param yaw horizontal angle
-     * @param pitch vertical angle
      * @return true if it can aim this direction
      */
-    public boolean canAimDirection(double yaw, double pitch){
-        double vertical = -pitch - design.getDefaultVerticalAngle() - this.additionalVerticalAngle;
+    public boolean canAimYaw(double yaw){
         double horizontal = yaw - CannonsUtil.directionToYaw(getCannonDirection()) - this.additionalHorizontalAngle;
 
         horizontal = horizontal % 360;
         while(horizontal < -180)
             horizontal = horizontal + 360;
-
-        return (vertical > getMinVerticalAngle() && vertical < getMaxVerticalAngle() && horizontal > getMinHorizontalAngle() && horizontal < getMaxHorizontalAngle());
+        return (horizontal > getMinHorizontalAngle() && horizontal < getMaxHorizontalAngle());
     }
 
+    /**
+     * whenever the cannon can aim in this direction or not
+     * @param pitch vertical angle
+     * @return true if it can aim this direction
+     */
+    public boolean canAimPitch(double pitch){
+        double vertical = -pitch - design.getDefaultVerticalAngle() - this.additionalVerticalAngle;
+        return (vertical > getMinVerticalAngle() && vertical < getMaxVerticalAngle());
+    }
+
+    public double verticalAngleToPitch(double vertical){
+        return -vertical - design.getDefaultVerticalAngle() - this.additionalVerticalAngle;
+    }
+
+    public double getMaxVerticalPitch(){
+        return verticalAngleToPitch(getMaxVerticalAngle());
+    }
+
+    public double getMinVerticalPitch(){
+        return verticalAngleToPitch(getMinVerticalAngle());
+    }
+
+    public double getVerticalPitch(){
+        return verticalAngleToPitch(getVerticalAngle());
+    }
+
+    public double horizontalAngleToPitch(double horizontal){
+        double yaw = horizontal - CannonsUtil.directionToYaw(getCannonDirection()) - this.additionalHorizontalAngle;
+
+        yaw = yaw % 360;
+        while(yaw < -180)
+            yaw = yaw + 360;
+        return yaw;
+    }
+
+    public double getMaxHorizontalYaw(){
+        return horizontalAngleToPitch(getMaxHorizontalAngle());
+    }
+
+    public double getMinHorizontalYaw(){
+        return horizontalAngleToPitch(getMinHorizontalAngle());
+    }
+
+    public double getHorizontalYaw(){
+        return horizontalAngleToPitch(getHorizontalAngle());
+    }
 
     public boolean isOnShip() {
         return onShip;
@@ -2248,6 +2294,10 @@ public class Cannon
 
     public UUID getSentryEntity() {
         return sentryEntity;
+    }
+
+    public boolean hasSentryEntity(){
+        return sentryEntity != null;
     }
 
     public void setSentryEntity(UUID sentryEntity) {

@@ -843,4 +843,8 @@ public class CannonsUtil
     public static double vectorToPitch(Vector vector){
         return -Math.asin(vector.normalize().getY())*180./Math.PI;
     }
+
+    public static Vector directionToVector(double yaw, double pitch, double speed){
+        return new Vector(-Math.sin(yaw*Math.PI/180.), Math.sin(-pitch*Math.PI/180.), Math.cos(yaw*Math.PI/180.)).multiply(speed);
+    }
 }
