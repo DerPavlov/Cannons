@@ -922,7 +922,7 @@ public class Aiming {
      */
     public Location impactPredictor(Cannon cannon)
     {
-        if (!cannon.isLoaded() || !config.isImitatedPredictorEnabled() || !cannon.getCannonDesign().isPredictorEnabled())
+        if (cannon == null || cannon.getCannonballVelocity()<0.01 || !config.isImitatedPredictorEnabled() || !cannon.getCannonDesign().isPredictorEnabled())
             return null;
 
         Location muzzle = cannon.getMuzzle();
@@ -951,7 +951,7 @@ public class Aiming {
     }
 
     /**
-     *  impact effects will be only be shown if the cannon is not moved for a while
+     *  impact effects will be only be shown if the cannon is not adjusted (aiming) for a while
      */
     public void updateImpactPredictor()
     {

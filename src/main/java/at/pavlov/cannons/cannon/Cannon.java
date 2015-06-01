@@ -59,6 +59,7 @@ public class Cannon
     private Projectile loadedProjectile;
     // the projectile which was loaded previously
     private Projectile lastFiredProjectile;
+    private int lastFiredGunpowder;
 
     // cleaning after firing (clicking with the stick several times
     private double soot;
@@ -151,6 +152,7 @@ public class Cannon
             this.setLoadedGunpowder(design.getMaxLoadableGunpowderNormal());
         this.setLoadedProjectile(null);
         lastFiredProjectile = null;
+        lastFiredGunpowder = 0;
         this.setSoot(design.getStartingSoot());
         this.setProjectilePushed(design.getProjectilePushing());
 
@@ -719,10 +721,11 @@ public class Cannon
      */
     public void removeCharge()
     {
+        lastFiredProjectile = this.getLoadedProjectile();
+        lastFiredGunpowder = this.getLoadedGunpowder();
         //delete charge for human gunner
         if (design.isGunpowderNeeded())
             this.setLoadedGunpowder(0);
-        lastFiredProjectile = this.getLoadedProjectile();
         this.setLoadedProjectile(null);
 
         //update Sign
@@ -1324,14 +1327,18 @@ public class Cannon
 
     /**
      * return the firing vector of the cannon. The spread depends on the cannon, the projectile and the player
-     * @param addSpread
-     * @param usePlayerSpread
-     * @return
+     * @param addSpread if there is spread added to the firing vector
+     * @param usePlayerSpread if additional spread of the player will be added
+     * @return firing vector
      */
     public Vector getFiringVector(boolean addSpread, boolean usePlayerSpread)
     {
-        // get projectile
-        // set direction of the snowball
+        if (lastFiredProjectile == null && loadedProjectile == null)
+            return new Vector(0, 0, 0);
+        Projectile projectile = loadedProjectile;
+        if (projectile == null)
+            projectile = lastFiredProjectile;
+
         Vector vect = new Vector(1f, 0f, 0f);
         Random r = new Random();
 
@@ -1339,7 +1346,7 @@ public class Cannon
         if (usePlayerSpread)
             playerSpread = getLastPlayerSpreadMultiplier();
 
-        final double spread = design.getSpreadOfCannon() * loadedProjectile.getSpreadMultiplier()*playerSpread;
+        final double spread = design.getSpreadOfCannon() * projectile.getSpreadMultiplier()*playerSpread;
         double deviation = 0.0;
 
         if (addSpread)
@@ -1416,8 +1423,8 @@ public class Cannon
 
     /**
      * etracts the spreadMultiplier from the permissions
-     * @param player
-     * @return
+     * @param player player operating the cannon
+     * @return spread multiplier
      */
     private double getPlayerSpreadMultiplier(Player player)
     {
@@ -1448,9 +1455,10 @@ public class Cannon
      */
     public double getCannonballVelocity()
     {
-        if ((loadedProjectile == null && lastFiredProjectile == null) || design == null) return 0.0;
+        if ((loadedProjectile == null && lastFiredProjectile == null) || design == null)
+            return 0.0;
         if (loadedProjectile == null)
-            return lastFiredProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4));
+            return lastFiredProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * lastFiredGunpowder / design.getMaxLoadableGunpowderNormal()));
         else
             return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowderNormal()));
     }
@@ -2346,5 +2354,9 @@ public class Cannon
 
     public Projectile getLastFiredProjectile() {
         return lastFiredProjectile;
+    }
+
+    public int getLastFiredGunpowder() {
+        return lastFiredGunpowder;
     }
 }
