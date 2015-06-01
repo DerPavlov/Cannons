@@ -4,6 +4,7 @@ import java.util.*;
 
 
 import at.pavlov.cannons.Enum.FakeBlockType;
+import at.pavlov.cannons.Enum.ProjectileCause;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
@@ -17,8 +18,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
@@ -651,8 +650,8 @@ public class CreateExplosion {
             }
         }
 
-        //send a message about the impact (only if the projectile has enabled this feature)
-        if (projectile.isImpactMessage())
+        //send a message about the impact (only if the projectile has enabled this feature and a player fired this projectile)
+        if (projectile.isImpactMessage() && cannonball.getProjectileCause() == ProjectileCause.PlayerFired)
             plugin.sendImpactMessage(player, impactLoc, canceled);
 
         // do nothing if the projectile impact was canceled or it is underwater with deactivated
@@ -874,7 +873,7 @@ public class CreateExplosion {
                         //don't spawn the projectile in the center
                         Location spawnLoc = impactLoc.clone().add(vect.clone().normalize().multiply(3.0));
 
-                        plugin.getProjectileManager().spawnProjectile(newProjectiles, cannonball.getShooterUID(), cannonball.getSource(), null, spawnLoc, vect, cannonball.getCannonUID());
+                        plugin.getProjectileManager().spawnProjectile(newProjectiles, cannonball.getShooterUID(), cannonball.getSource(), null, spawnLoc, vect, cannonball.getCannonUID(), ProjectileCause.SpawnedProjectile);
                     }
                 }
             }

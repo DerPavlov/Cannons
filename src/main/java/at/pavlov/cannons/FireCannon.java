@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import at.pavlov.cannons.Enum.BreakCause;
-import at.pavlov.cannons.Enum.FakeBlockType;
+import at.pavlov.cannons.Enum.*;
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
-import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.FireTaskWrapper;
@@ -18,14 +16,12 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.cannon.DesignStorage;
-import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
 
@@ -226,19 +222,52 @@ public class FireCannon {
             CannonsUtil.playSound(torchLoc, design.getSoundIgnite());
         }
 
+        final ProjectileCause projectileCause;
+        switch (action){
+            case fireRightClickTigger:{
+                projectileCause = ProjectileCause.PlayerFired;
+                break;
+            }
+            case fireAutoaim:{
+                projectileCause = ProjectileCause.PlayerFired;
+                break;
+            }
+            case fireRedstoneTrigger:{
+                projectileCause = ProjectileCause.PlayerFired;
+                break;
+            }
+            case fireAfterLoading:{
+                projectileCause = ProjectileCause.PlayerFired;
+                break;
+            }
+            case fireRedstone:{
+                projectileCause = ProjectileCause.RedstoneFired;
+                break;
+            }
+            case fireSentry:{
+                projectileCause = ProjectileCause.SentryFired;
+                break;
+            }
+            default:{
+                projectileCause = ProjectileCause.UnknownFired;
+                break;
+            }
+
+        }
+
         //set up delayed task with automatic firing. Several bullets with time delay for one loaded projectile
         for(int i=0; i < projectile.getAutomaticFiringMagazineSize(); i++)
         {
             //charge is only removed in the last round fired
             boolean lastRound = i==(projectile.getAutomaticFiringMagazineSize()-1);
             Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
-            FireTaskWrapper fireTask = new FireTaskWrapper(cannon, playerUid, lastRound);
+            FireTaskWrapper fireTask = new FireTaskWrapper(cannon, playerUid, lastRound, projectileCause);
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
             {
                 public void run(Object object)
                 {
                     FireTaskWrapper fireTask = (FireTaskWrapper) object;
-                    fireTask(fireTask.getCannon(), fireTask.getPlayer(), fireTask.isRemoveCharge());
+                    fireTask(fireTask.getCannon(), fireTask.getPlayer(), fireTask.isRemoveCharge(), projectileCause);
                 }
             }, delayTime);
         }
@@ -252,8 +281,9 @@ public class FireCannon {
      * @param cannon - the fired cannon
      * @param shooter - the player firing the cannon
      * @param removeCharge - if the charge is removed after firing
+     * @param projectileCause - how the projectile was fired (by a player, redstone, or sentry)
      */
-    private void fireTask(Cannon cannon, UUID shooter, boolean removeCharge)
+    private void fireTask(Cannon cannon, UUID shooter, boolean removeCharge, ProjectileCause projectileCause)
     {
         CannonDesign design = cannon.getCannonDesign();
         Projectile projectile = cannon.getLoadedProjectile();
@@ -289,7 +319,7 @@ public class FireCannon {
         //for each bullet, but at least once
         for (int i=0; i < Math.max(projectile.getNumberOfBullets(), 1); i++)
         {
-            ProjectileSource source = null;
+            org.bukkit.projectiles.ProjectileSource source = null;
             Location playerLoc = null;
             if (onlinePlayer != null)
             {
@@ -298,7 +328,8 @@ public class FireCannon {
             }
 
             Vector vect = cannon.getFiringVector(true, true);
-            org.bukkit.entity.Projectile projectileEntity = plugin.getProjectileManager().spawnProjectile(projectile, shooter, source, playerLoc, firingLoc, vect, cannon.getUID());
+
+            org.bukkit.entity.Projectile projectileEntity = plugin.getProjectileManager().spawnProjectile(projectile, shooter, source, playerLoc, firingLoc, vect, cannon.getUID(), projectileCause);
 
             if (i == 0 && projectile.hasProperty(ProjectileProperties.SHOOTER_AS_PASSENGER) && onlinePlayer != null)
                 projectileEntity.setPassenger(onlinePlayer);
@@ -306,8 +337,7 @@ public class FireCannon {
             //confuse all entity which wear no helmets due to the blast of the cannon
             List<Entity> living = projectileEntity.getNearbyEntities(8, 8, 8);
             //do only once
-            if (i == 0)
-            {
+            if (i == 0) {
                 confuseShooter(living, firingLoc, design.getBlastConfusion());
             }
         }

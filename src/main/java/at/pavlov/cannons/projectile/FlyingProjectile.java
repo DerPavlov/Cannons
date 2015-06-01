@@ -1,5 +1,6 @@
 package at.pavlov.cannons.projectile;
 
+import at.pavlov.cannons.Enum.ProjectileCause;
 import at.pavlov.cannons.container.MovingObject;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -7,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class FlyingProjectile
     private UUID worldUID;
     private UUID cannonUID;
 	private final Projectile projectile;
-    private final ProjectileSource source;
+    private final org.bukkit.projectiles.ProjectileSource source;
     //location of the shooterUID before firing - important for teleporting the player back - observer property
     private final Location playerlocation;
     private Location impactLocation;
@@ -32,13 +32,15 @@ public class FlyingProjectile
     private boolean wasInWater;
     //if the teleport was already performed
     private boolean teleported;
+    //was the projectile fired by a player, redstone or a sentry
+    private ProjectileCause projectileCause;
 
     private MovingObject predictor;
 
 
 
 	
-	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, UUID shooterUID, ProjectileSource source, Location playerLoc, UUID cannonId)
+	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, UUID shooterUID, org.bukkit.projectiles.ProjectileSource source, Location playerLoc, UUID cannonId, ProjectileCause projectileCause)
 	{
         Validate.notNull(shooterUID, "shooterUID for the projectile can't be null");
         this.entityUID = projectile_entity.getUniqueId();
@@ -51,6 +53,7 @@ public class FlyingProjectile
         this.playerlocation = playerLoc;
         this.source = source;
         projectile_entity.setShooter(source);
+        this.projectileCause = projectileCause;
 
 		this.spawnTime = System.currentTimeMillis();
         this.teleported = false;
@@ -267,7 +270,7 @@ public class FlyingProjectile
         this.cannonUID = cannonUID;
     }
 
-    public ProjectileSource getSource() {
+    public org.bukkit.projectiles.ProjectileSource getSource() {
         return source;
     }
 
@@ -295,5 +298,9 @@ public class FlyingProjectile
 
     public void setLastSmokeTrailLocation(Location lastSmokeTrailLocation) {
         this.lastSmokeTrailLocation = lastSmokeTrailLocation;
+    }
+
+    public ProjectileCause getProjectileCause() {
+        return projectileCause;
     }
 }

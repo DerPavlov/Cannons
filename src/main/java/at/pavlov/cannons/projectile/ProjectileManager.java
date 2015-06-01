@@ -1,13 +1,12 @@
 package at.pavlov.cannons.projectile;
 
 import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.cannon.Cannon;
+import at.pavlov.cannons.Enum.ProjectileCause;
 import at.pavlov.cannons.utils.DelayedTask;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
-import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -27,7 +26,7 @@ public class ProjectileManager
         this.plugin = plugin;
     }
 
-    public org.bukkit.entity.Projectile spawnProjectile(Projectile projectile, UUID shooter, ProjectileSource source, Location playerLoc, Location spawnLoc, Vector velocity, UUID cannonId)
+    public org.bukkit.entity.Projectile spawnProjectile(Projectile projectile, UUID shooter, org.bukkit.projectiles.ProjectileSource source, Location playerLoc, Location spawnLoc, Vector velocity, UUID cannonId, ProjectileCause projectileCause)
     {
         Validate.notNull(shooter, "shooter for the projectile can't be null");
         World world = spawnLoc.getWorld();
@@ -57,7 +56,7 @@ public class ProjectileManager
         projectileEntity.setVelocity(velocity);
 
         //create a new flying projectile container
-        FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter, source, playerLoc, cannonId);
+        FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter, source, playerLoc, cannonId, projectileCause);
 
 
         flyingProjectilesMap.put(cannonball.getUID(), cannonball);
