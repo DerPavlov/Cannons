@@ -125,7 +125,7 @@ public class Aiming {
 			else
 			{
 				//barrel clicked to change angle
-				return updateAngle(player, cannon, clickedFace);
+				return updateAngle(player, cannon, clickedFace, InteractAction.adjustPlayer);
 			}
 		}
 		return null;
@@ -138,7 +138,7 @@ public class Aiming {
      * @param clickedFace which side was clicked (up, down, left, right)
      * @return message for the player
      */
-	private MessageEnum updateAngle(Player player, Cannon cannon, BlockFace clickedFace) {
+	private MessageEnum updateAngle(Player player, Cannon cannon, BlockFace clickedFace, InteractAction action) {
         if (cannon == null)
             return null;
 
@@ -164,7 +164,7 @@ public class Aiming {
 
         gunAngles angles;
 
-        if (isSentry){
+        if (action == InteractAction.adjustSentry && isSentry){
             // sentry mode
             if (cannon.isChunkLoaded()) {
                 angles = getGunAngle(cannon, cannon.getAimingYaw(), cannon.getAimingPitch());
@@ -175,7 +175,7 @@ public class Aiming {
                 return null;
             }
         }
-		else if (player != null && !config.getToolAdjust().equalsFuzzy(player.getItemInHand()))
+		else if (action == InteractAction.adjustAutoaim && player != null && inAimingMode.containsKey(player.getUniqueId()))
 		{
 			//aiming mode only if player is sneaking
             if (player.isSneaking())
@@ -432,7 +432,7 @@ public class Aiming {
     			// autoaming or fineadjusting
     			if (distanceCheck(player, cannon) && player.isOnline() && cannon.isValid())
         		{
-            		MessageEnum message = updateAngle(player, cannon, null);
+            		MessageEnum message = updateAngle(player, cannon, null, InteractAction.adjustAutoaim);
             		userMessages.sendMessage(message, player, cannon);
         		}		
         		else
@@ -519,8 +519,6 @@ public class Aiming {
                         cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
                     }
                 }
-                else
-                    plugin.logDebug("no target found");
             }
 
             //aim at the found solution
@@ -530,7 +528,7 @@ public class Aiming {
             if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()) {
                 // autoaming or fineadjusting
                 if (cannon.isValid()) {
-                    updateAngle(null, cannon, null);
+                    updateAngle(null, cannon, null, InteractAction.adjustSentry);
                     //no change in angle - ready to fire
                     if (oldHAngle == cannon.getHorizontalAngle() && oldVAngle == cannon.getVerticalAngle()) {
                         //load from chest

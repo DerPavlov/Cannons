@@ -15,6 +15,7 @@ public enum InteractAction
     fireOther,
     adjustPlayer,
     adjustAutoaim,
+    adjustSentry,
     adjustOther
 
 
