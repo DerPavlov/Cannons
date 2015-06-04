@@ -12,7 +12,7 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name ="cannonlist_2_2_4")
+@Table(name ="cannonlist_2_3")
 public class CannonBean
 {
 	@Id
@@ -31,8 +31,7 @@ public class CannonBean
 	private int locZ;
     private double soot;
 	private int gunpowder;
-	private int projectileID;
-	private int projectileData;
+	private String projectileID;
     private int projectilePushed;
     private double cannonTemperature;
     private long cannonTemperatureTimestamp;
@@ -102,21 +101,13 @@ public class CannonBean
 	{
 		this.gunpowder = gunpowder;
 	}
-	public int getProjectileID()
+	public String getProjectileID()
 	{
 		return projectileID;
 	}
-	public void setProjectileID(int projectileID)
+	public void setProjectileID(String projectileID)
 	{
 		this.projectileID = projectileID;
-	}
-	public int getProjectileData()
-	{
-		return projectileData;
-	}
-	public void setProjectileData(int projectileData)
-	{
-		this.projectileData = projectileData;
 	}
 	public double getHorizontalAngle()
 	{

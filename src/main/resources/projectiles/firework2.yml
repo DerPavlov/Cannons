@@ -8,10 +8,11 @@ general:
   #the item which is associated with the projectile.
   #items can be assigned to many different projectiles which are used with different cannons
   #example: one cannon can be loaded with stone but will fire an armor piercing round, while a different cannon
-  #can be loaded with stone and it will fire an explosive projectile
+  #can be loaded with stone and it will fire an explosive projectile (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
   loadingItem: '500:0'
   #some item create a block when placed e.g. redstone dust makes a wire if placed on ground. 
   #if you load the dust, type in the wire id and data, else there is a wire on the cannon.
+  #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
   alternativeId:
     - '1:0'
 

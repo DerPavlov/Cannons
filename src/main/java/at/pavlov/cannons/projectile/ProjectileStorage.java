@@ -32,30 +32,45 @@ public class ProjectileStorage
 	
 	/**
 	 * returns the projectile that can be loaded with this item. If data=-1 the data is ignored
-	 * @param item
-	 * @return
+	 * @param item ItemStack of projectile
+	 * @return true if there is a projectile with this material
 	 */
 	public static Projectile getProjectile(Cannon cannon, ItemStack item)
 	{
-		if (item == null) return null;
-		return getProjectile(cannon, item.getTypeId(), item.getData().getData());
+        MaterialHolder materialHolder = new MaterialHolder(item);
+        return getProjectile(cannon, materialHolder);
 	}
 	
 	/**
-	 * returns the projectiles that can be loaded int the cannon with this id and data. If data=-1 the data is ignored
-	 * @param id
-	 * @param data
-	 * @return
+	 * returns the projectiles that can be loaded in the cannon with this id and data. If data=-1 the data is ignored
+	 * @param materialHolder material of the projectile
+	 * @return true if there is a projectile with this material
 	 */
-	public static Projectile getProjectile(Cannon cannon, int id, int data)
+	public static Projectile getProjectile(Cannon cannon, MaterialHolder materialHolder)
 	{
 		for (Projectile projectile : projectileList)
 		{
-            if (cannon.getCannonDesign().canLoad(projectile) && projectile.equalsFuzzy(id, data))
+            if (cannon.getCannonDesign().canLoad(projectile) && projectile.equals(materialHolder))
 				return projectile;
 		}
 		return null;
 	}
+
+
+    /**
+     * returns the projectiles that can be loaded in the cannon id
+     * @param projectileId id of the projectile
+     * @return true if there is a projectile with this id
+     */
+    public static Projectile getProjectile(Cannon cannon, String projectileId)
+    {
+        for (Projectile projectile : projectileList)
+        {
+            if (cannon.getCannonDesign().canLoad(projectile) && projectile.equals(projectileId))
+                return projectile;
+        }
+        return null;
+    }
 	
 	/**
 	 * loads all projectile designs from the disk or copys the defaults if there is no design
@@ -87,17 +102,16 @@ public class ProjectileStorage
 		{
 			//load .yml
 			Projectile projectile = loadYml(file);
-
-			plugin.logDebug("load projectile " + file + " item " + projectile.getLoadingItem().toString());
-			// add to the list if valid
-			if (projectile != null)
+			if (projectile != null) {
+				plugin.logDebug("load projectile " + file + " item " + projectile.getLoadingItem().toString());
 				projectileList.add(projectile);
+			}
 		}	
 	}
 	
 	/**
 	 * get all projectile file names form /projectiles
-	 * @return
+	 * @return list of all projectiles files
 	 */
 	private ArrayList<String> getProjectilesFiles()
 	{
@@ -116,13 +130,10 @@ public class ProjectileStorage
                 return projectileList;
             }
 
-			for (int i = 0; i < listOfFiles.length; i++)
-			{
-				if (listOfFiles[i].isFile())
-				{
-					ymlFile = listOfFiles[i].getName();
-					if (ymlFile.endsWith(".yml") || ymlFile.endsWith(".yaml"))
-					{
+			for (File listOfFile : listOfFiles) {
+				if (listOfFile.isFile()) {
+					ymlFile = listOfFile.getName();
+					if (ymlFile.endsWith(".yml") || ymlFile.endsWith(".yaml")) {
 						// there is a shematic file and a .yml file
 						projectileList.add(ymlFile);
 					}

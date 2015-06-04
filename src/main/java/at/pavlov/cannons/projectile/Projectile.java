@@ -100,16 +100,6 @@ public class Projectile implements Cloneable{
 	{
 		this.projectileID = id;
 	}
-	
-	/**
-	 * returns true if both projectiles have the same identifier
-	 * @param projectile
-	 * @return
-	 */
-	public boolean equals(Projectile projectile)
-	{
-		return projectile.getProjectileID().equals(projectileID); 
-	}
 
     @Override
     public Projectile clone(){
@@ -127,28 +117,38 @@ public class Projectile implements Cloneable{
 	
 	/**
 	 * returns true if both the id and data are equivalent of data == -1
-	 * @param id
-	 * @param data
-	 * @return
+	 * @param materialHolder the material of the loaded item
+	 * @return true if the materials match
 	 */
-	public boolean equalsFuzzy(int id, int data)
+	public boolean equals(MaterialHolder materialHolder)
 	{
-        return id == loadingItem.getId() && (data == loadingItem.getData() || data == -1 || loadingItem.getData() == -1);
+        return loadingItem.equalsFuzzy(materialHolder);
     }
-	
+
+	/**
+	 * returns true if both the id and data are equivalent of data == -1
+	 * @param projectileID the file name id of the projectile
+	 * @return true if the id matches
+	 */
+	public boolean equals(String projectileID)
+	{
+		return this.projectileID.equals(projectileID);
+	}
+
+
 
 	/**
 	 * returns the ID and Data of the projectile
 	 */
 	public String toString()
 	{
-		return loadingItem.getId() + ":" + loadingItem.getData();
+		return loadingItem.toString();
 	}
 	
 	/**
 	 * returns true if the projectile has this property
-	 * @param properties
-	 * @return
+	 * @param properties properties of the projectile
+	 * @return true if the projectile has this property
 	 */
 	public boolean hasProperty(ProjectileProperties properties)
 	{
@@ -162,8 +162,8 @@ public class Projectile implements Cloneable{
 	
 	/**
 	 * returns true if the player has permission to use that projectile
-	 * @param player
-	 * @return
+	 * @param player who tried to load this projectile
+	 * @return true if the player can load this projectile
 	 */
 	public boolean hasPermission(Player player)
 	{

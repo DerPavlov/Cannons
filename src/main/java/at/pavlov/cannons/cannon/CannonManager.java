@@ -787,7 +787,7 @@ public class CannonManager
             cannon.setCannonDesign(plugin.getCannonDesign(cannon));
             if (cannon.getLoadedProjectile() != null) {
                 MaterialHolder item = cannon.getLoadedProjectile().getLoadingItem();
-                cannon.setLoadedProjectile(plugin.getProjectile(cannon, item.getId(), item.getData()));
+                cannon.setLoadedProjectile(plugin.getProjectile(cannon, item));
             }
         }
     }

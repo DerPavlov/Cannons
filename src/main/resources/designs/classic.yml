@@ -17,7 +17,7 @@ signs:
 ammunition:
   #what the gunpowder is called
   gunpowderName: gunpowder
-  #what item is used as gunpowder
+  #what item is used as gunpowder (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
   gunpowderType: '289:0'
   #does this cannon need gunpowder. If false you can directly load the projectile
   needsGunpowder: true
@@ -126,13 +126,13 @@ heatManagement:
   criticalTemperature: 150.0
   #if the cannon exceeds this temperature it will explode
   maximumTemperature: 300.0
-  #items to cool down a cannon
+  #items to cool down a cannon (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
   coolingItems:
     - '326:0'
     - '79:0'
     - '80:0'
   #items which are returned after cooling the cannon. The order is the same like above.
-  #setting a item to AIR (0:0) means it will only remove one item instead of replacing the item
+  #setting a item to AIR (0:0) means it will only remove one item instead of replacing the item (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
   coolingItemsUsed:
     - '325:0'
     - '0:0'

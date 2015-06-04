@@ -18,18 +18,24 @@ keepProjectileAlive:
 
 
 tools:
-  #the item a player needs to be holding to adjust the aim of a cannon. Default is none.
+  #the item a player needs to be holding to adjust the aim of a cannon. Default is air.
+  #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
   ajust: '0:0'
   #the item used to autoaim a cannon. Default is clock
+  #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
   autoaim: '347:0'
   #the item used to fire a cannon. Default is flint and steel. Not every cannon needs a FiringItem.
   #a data value of -1 means that every durability is accepted for flint and steel
+  #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
   firing: '259:-1'
   #required for cleaning a cannon after firing and pushing a projectile against the gunpowder
+  #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
   ramrod: '280:0'
   #item used to rotate a cannon 90 degrees. Not implemented yet
+  #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
   rotatingItem: '350:0'
   #item to measure the cannon temperature. Default is a gold nugget
+  #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
   thermometer: '371:0'
 
 

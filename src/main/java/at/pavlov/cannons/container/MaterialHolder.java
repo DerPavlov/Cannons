@@ -5,38 +5,67 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import com.sk89q.worldedit.blocks.BaseBlock;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.Exception;
-import java.lang.Integer;
 import java.lang.String;
 import java.lang.System;
-import java.util.Scanner;
-import java.util.regex.MatchResult;
+import java.util.*;
 
 //small class as at.pavlov.cannons.container for item id and data
 public class MaterialHolder
 {
 	private int id;
 	private int data;
+	private String displayName;
+	private List<String> lore;
 
 
 	public MaterialHolder(ItemStack item)
 	{
 		id = item.getTypeId();
 		data = item.getData().getData();
+		ItemMeta meta = item.getItemMeta();
+		if (meta != null){
+			if (meta.hasDisplayName())
+				displayName = meta.getDisplayName();
+			else
+				displayName = "";
+			if (meta.hasLore())
+				lore = meta.getLore();
+			else
+				lore = new ArrayList<String>();
+		}
 	}
-	
-	public MaterialHolder(int _id, int _data)
+
+    public MaterialHolder(int id, int data)
+    {
+        this.id = id;
+        this.data = data;
+        this.displayName = "";
+        this.lore = new ArrayList<String>();
+    }
+
+	public MaterialHolder(int id, int data, String description, List<String> lore)
 	{
-		id = _id;
-		data = _data;
+		this.id = id;
+		this.data = data;
+		if (description != null)
+			this.displayName = description;
+		else
+			this.displayName = "";
+
+		if (lore != null)
+			this.lore = lore;
+		else
+			this.lore = new ArrayList<String>();
 	}
-	
+
 	public MaterialHolder(String str)
 	{
         // data structure:
-        // data:id
-        // 10:0
+        // data:id:DESCRIPTION:LORE1:LORE2
+        // 10:0:COOL Item:Looks so cool:Fancy
         try
         {
             id = 0;
@@ -49,6 +78,19 @@ public class MaterialHolder
 
             if (s.hasNext())
                 data = s.nextInt();
+
+			if (s.hasNext())
+				displayName = s.next();
+			else
+				displayName = "";
+
+			lore = new ArrayList<String>();
+			while (s.hasNext()){
+                String nextStr = s.next();
+                if (!nextStr.equals(""))
+				    lore.add(nextStr);
+			}
+
             s.close();
         }
         catch(Exception e)
@@ -64,7 +106,13 @@ public class MaterialHolder
 	
 	public ItemStack toItemStack(int amount)
 	{
-		return new ItemStack(id, amount, (short) data);
+		ItemStack item = new ItemStack(id, amount, (short) data);
+        ItemMeta meta = item.getItemMeta();
+        if (!this.displayName.equals(""))
+            meta.getDisplayName();
+        meta.setLore(this.lore);
+        item.setItemMeta(meta);
+        return item;
 	}
 	
 	public int getId()
@@ -86,8 +134,8 @@ public class MaterialHolder
 
     /**
      * compares the id of two Materials
-     * @param material
-     * @return
+     * @param material material to compare
+     * @return true if both material are equal
      */
 	public boolean equals(Material material)
 	{
@@ -103,6 +151,32 @@ public class MaterialHolder
 	{
 		if (item != null)
 		{
+            if (!item.hasItemMeta() && (this.hasDisplayName() || this.hasLore()))
+                return false;
+            if (item.hasItemMeta()) {
+                ItemMeta meta = item.getItemMeta();
+                //Item does not have the required display name
+                if (this.hasDisplayName() && !meta.hasDisplayName())
+                    return false;
+                //Display name do not match
+                if (meta.hasDisplayName() && this.hasDisplayName() && !meta.getDisplayName().equals(displayName))
+                    return false;
+
+
+                if (this.hasLore()) {
+                    //does Item have a Lore
+                    if (!meta.hasLore())
+                        return false;
+
+                    Collection<String> similar = new HashSet<String>(this.lore);
+
+                    int size = similar.size();
+                    similar.retainAll(meta.getLore());
+                    if (similar.size() < size)
+                        return false;
+                }
+            }
+
 			if (item.getTypeId() == id)
 			{
 				return (item.getData().getData() == data || data == -1 || item.getData().getData() == -1);
@@ -121,6 +195,26 @@ public class MaterialHolder
 	{
 		if (item != null)
 		{
+            //Item does not have the required display name
+            if (this.hasDisplayName() && !item.hasDisplayName())
+                return false;
+            //Display name do not match
+            if (item.hasDisplayName() && this.hasDisplayName() && !item.getDisplayName().equals(displayName))
+                return false;
+
+
+            if (this.hasLore()) {
+                //does Item have a Lore
+                if (!item.hasLore())
+                    return false;
+
+                Collection<String> similar = new HashSet<String>(this.lore);
+
+                int size = similar.size();
+                similar.retainAll(item.getLore());
+                if (similar.size() < size)
+                    return false;
+            }
 			if (item.getId() == id)
 			{
 				return (item.getData() == data || data == -1 || item.getData() == -1);
@@ -149,11 +243,23 @@ public class MaterialHolder
 	
 	public String toString()
 	{
-		return id + ":" + data;
+		return this.id + ":" + this.data + ":" + this.displayName + ":" + String.join(":", this.lore);
 	}
 
 
+	public String getDisplayName() {
+		return displayName;
+	}
 
+    public boolean hasDisplayName(){
+        return !this.displayName.equals("");
+    }
 
+	public List<String> getLore() {
+		return lore;
+	}
 
+    public boolean hasLore(){
+        return this.lore.size()>0;
+    }
 }

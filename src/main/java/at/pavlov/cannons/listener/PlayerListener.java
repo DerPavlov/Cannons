@@ -1,6 +1,7 @@
 package at.pavlov.cannons.listener;
 
 import at.pavlov.cannons.Enum.InteractAction;
+import at.pavlov.cannons.container.MaterialHolder;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -90,7 +91,7 @@ public class PlayerListener implements Listener
         if (cannon != null)
         {
             // data =-1 means no data check, all buckets are allowed
-            Projectile projectile = plugin.getProjectile(cannon, event.getBucket().getId(), -1);
+            Projectile projectile = plugin.getProjectile(cannon, event.getItemStack());
             if (projectile != null) event.setCancelled(true);
         }
     }
@@ -98,8 +99,7 @@ public class PlayerListener implements Listener
     /**
      * Create a cannon if the building process is finished Deletes a projectile
      * if loaded Checks for redstone torches if built
-     *
-     * @param event
+     * @param event BlockPlaceEvent
      */
     @EventHandler
     public void BlockPlace(BlockPlaceEvent event)
@@ -121,7 +121,8 @@ public class PlayerListener implements Listener
             if (cannon != null)
             {
                 // delete projectile
-                Projectile projectile = plugin.getProjectile(cannon, block.getTypeId(), block.getData());
+
+                Projectile projectile = plugin.getProjectile(cannon, event.getItemInHand());
                 if (projectile != null && cannon.getCannonDesign().canLoad(projectile))
                 {
                     // check if the placed block is not part of the cannon

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.CreateCannon;
 import at.pavlov.cannons.utils.DelayedTask;
 import org.bukkit.Bukkit;
@@ -102,7 +103,7 @@ public class PersistenceDatabase
 					cannon.setLoadedGunpowder(bean.getGunpowder());
 					
 					//load projectile
-					cannon.setLoadedProjectile(plugin.getProjectile(cannon, bean.getProjectileID(), bean.getProjectileData()));
+					cannon.setLoadedProjectile(ProjectileStorage.getProjectile(cannon, bean.getProjectileID()));
 
                     cannon.setProjectilePushed(bean.getProjectilePushed());
 
@@ -247,13 +248,7 @@ public class PersistenceDatabase
 			Projectile projectile = cannon.getLoadedProjectile();
 			if (projectile != null)
 			{
-				bean.setProjectileID(projectile.getLoadingItem().getId());
-				bean.setProjectileData(projectile.getLoadingItem().getData());	
-			}
-			else
-			{
-				bean.setProjectileID(0);
-				bean.setProjectileData(0);	
+				bean.setProjectileID(projectile.getProjectileID());
 			}
             //is the projectile already pushed in the barrel
             bean.setProjectilePushed(cannon.getProjectilePushed());
@@ -284,8 +279,7 @@ public class PersistenceDatabase
 
     /**
      * removes all cannon of this player from the database
-     *
-     * @param owner
+     * @param owner the unique id of the owner of the cannon
      *
      */
     public void deleteCannonsAsync(UUID owner)
@@ -300,8 +294,7 @@ public class PersistenceDatabase
 
 	/**
 	 * removes all cannon of this player from the database
-	 * 
-	 * @param owner
+	 * @param owner the unique id of the owner of the cannon
      * @return returns true is there is an entry of this player in the database
 	 */
 	private boolean deleteCannons(UUID owner)
@@ -330,10 +323,10 @@ public class PersistenceDatabase
                 plugin.getDatabase().commitTransaction();
 
             }
-            finally
-            {   plugin.getDatabase().endTransaction();
-                return true;
+            finally {
+                plugin.getDatabase().endTransaction();
             }
+            return true;
         }
 
 
