@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.CreateCannon;
 import at.pavlov.cannons.utils.DelayedTask;
@@ -160,7 +161,7 @@ public class PersistenceDatabase
 	{
 
 		// get list of all cannons
-		ConcurrentHashMap<UUID, Cannon> cannonList = plugin.getCannonManager().getCannonList();
+		ConcurrentHashMap<UUID, Cannon> cannonList = CannonManager.getCannonList();
 
         plugin.getDatabase().beginTransaction();
         // save all cannon to database
@@ -181,8 +182,7 @@ public class PersistenceDatabase
 
     /**
      * saves this cannon in the database
-     *
-     * @param cannon
+     * @param cannon the cannon to store
      */
     public void saveCannonAsync(Cannon cannon)
     {
@@ -196,8 +196,7 @@ public class PersistenceDatabase
 
 	/**
 	 * saves this cannon in the database
-	 * 
-	 * @param cannon
+	 * @param cannon the cannon to store
 	 */
     private boolean saveCannon(Cannon cannon)
 	{
