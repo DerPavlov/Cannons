@@ -12,6 +12,7 @@ Error:
   ProjectileAlreadyLoaded: 'YELLOW [Cannons] Es wurde bereits eine Kanonenkugel aus GOLD PROJECTILE YELLOW mit GOLD GUNPOWDERkg YELLOW Pulver geladen. Feuere die Kanone endlich ab!'
   CannonBuiltLimit: 'RED [Cannons] Du darfst nicht mehr als GOLD CANNONS Kanone(n) YELLOW bauen.'
   NotTheOwner: 'RED [Cannons] Diese CANNON kann nur vom Besitzer benutzt werden.'
+  DismantlingNotOwner: 'RED [Cannons] Nur der Besitzer kann eine Kanone abbauen.'
   MissingSign: 'RED [Cannons] Diese CANNON benötigt ein Sign um zu funktioinieren.'
   NoMoney: 'RED [Cannons] Du brauchst mindestens BUILD_COSTS um diese Kanone zu erstellen.'
 

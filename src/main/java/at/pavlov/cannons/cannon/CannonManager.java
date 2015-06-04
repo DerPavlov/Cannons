@@ -73,15 +73,15 @@ public class CannonManager
     {
         //only the owner of the cannon can dismantle a cannon
         if (cannon != null && (player==null || cannon.getOwner().equals(player.getUniqueId())))
-            removeCannon(cannon, false, false, BreakCause.Dismantling);
+            removeCannon(cannon, true, false, BreakCause.Dismantling);
         else if (player != null)
-            userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
+            userMessages.sendMessage(MessageEnum.ErrorDismantlingNotOwner, player, cannon);
     }
 
 	/**
 	 * removes a cannon from the list
 	 * @param loc location of the cannon
-     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param breakCannon all cannon blocks will drop
      * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
 	 */
@@ -94,7 +94,7 @@ public class CannonManager
 	/**
 	 * removes a cannon from the list
 	 * @param cannon cannon to remove
-     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param breakCannon all cannon blocks will drop
      * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
 	 */
@@ -105,8 +105,35 @@ public class CannonManager
 
     /**
      * removes a cannon from the list
+     * @param uid UID of the cannon
+     * @param breakCannon all cannon blocks will drop
+     * @param canExplode if the cannon can explode when loaded with gunpowder
+     * @param cause the reason way the cannon was broken
+     */
+    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause)
+    {
+        removeCannon(uid, breakCannon, canExplode, cause, true);
+    }
+
+    /**
+     * removes a cannon from the list
+     * @param uid UID of the cannon
+     * @param breakCannon all cannon blocks will drop
+     * @param canExplode if the cannon can explode when loaded with gunpowder
+     * @param cause the reason way the cannon was broken
+     * @param removeEntry should the cannon be removed from the list
+     */
+    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause, boolean removeEntry)
+    {
+        Cannon cannon = cannonList.get(uid);
+        removeCannon(cannon, breakCannon, canExplode, cause, removeEntry, true);
+    }
+
+
+    /**
+     * removes a cannon from the list
      * @param cannon cannon to remove
-     * @param breakCannon the cannon will explode and all cannon blocks will drop
+     * @param breakCannon all cannon blocks will drop
      * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
      * @param ignoreInvalid if true invalid cannons will be skipped and not removed
@@ -165,31 +192,6 @@ public class CannonManager
 
     }
 
-    /**
-     * removes a cannon from the list
-     * @param uid UID of the cannon
-     * @param breakCannon the cannon will explode and all cannon blocks will drop
-     * @param canExplode if the cannon can explode when loaded with gunpowder
-     * @param cause the reason way the cannon was broken
-     */
-    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause)
-    {
-        removeCannon(uid, breakCannon, canExplode, cause, true);
-    }
-
-    /**
-     * removes a cannon from the list
-     * @param uid UID of the cannon
-     * @param breakCannon the cannon will explode and all cannon blocks will drop #
-     * @param canExplode if the cannon can explode when loaded with gunpowder
-     * @param cause the reason way the cannon was broken
-     * @param removeEntry should the cannon be removed from the list
-     */
-    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause, boolean removeEntry)
-    {
-        Cannon cannon = cannonList.get(uid);
-        removeCannon(cannon, breakCannon, canExplode, cause, removeEntry, true);
-    }
 
 	/**
 	 * Checks if the name of a cannon is unique

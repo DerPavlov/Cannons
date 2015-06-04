@@ -17,6 +17,7 @@ public enum MessageEnum
 	ErrorProjectileAlreadyLoaded ("Error.ProjectileAlreadyLoaded", true),
 	ErrorCannonBuiltLimit ("Error.CannonBuiltLimit", true),
 	ErrorNotTheOwner ("Error.NotTheOwner", true),
+	ErrorDismantlingNotOwner ("Error.DismantlingNotOwner", true),
     ErrorMissingSign ("Error.MissingSign", true),
 	ErrorNoMoney ("Error.NoMoney", true),
 
