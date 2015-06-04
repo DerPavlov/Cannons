@@ -490,7 +490,7 @@ public class Commands implements CommandExecutor
                     break;
                 }
                 case DISMANTLE:{
-                    plugin.getCannonManager().removeCannon(cannon, false, false, BreakCause.Dismantling);
+                    plugin.getCannonManager().dismantleCannon(cannon, player);
                     break;
                 }
             }

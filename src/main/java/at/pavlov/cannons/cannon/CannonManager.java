@@ -65,6 +65,19 @@ public class CannonManager
 		}
 	}
 
+    /**
+     * deconstructs a cannon without the risk of explosion
+     * @param cannon cannon to remove
+     */
+    public void dismantleCannon(Cannon cannon, Player player)
+    {
+        //only the owner of the cannon can dismantle a cannon
+        if (cannon != null && (player==null || cannon.getOwner().equals(player.getUniqueId())))
+            removeCannon(cannon, false, false, BreakCause.Dismantling);
+        else if (player != null)
+            userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
+    }
+
 	/**
 	 * removes a cannon from the list
 	 * @param loc location of the cannon
