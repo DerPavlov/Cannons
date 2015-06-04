@@ -481,7 +481,7 @@ public class CannonManager
                     message = MessageEnum.ErrorMissingSign;
 
                 //if a sign is required to operate the cannon, there must be at least one sign
-                if (message == MessageEnum.CannonCreated && plugin.getEconomy() != null) {
+                if (message == MessageEnum.CannonCreated && plugin.getEconomy() != null && cannon.getCannonDesign().getEconomyBuildingCost() > 0) {
                     EconomyResponse r = plugin.getEconomy().withdrawPlayer(player, cannon.getCannonDesign().getEconomyBuildingCost());
                     if (!r.transactionSuccess())
                         message = MessageEnum.ErrorNoMoney;
