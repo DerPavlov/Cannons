@@ -158,17 +158,19 @@ public class CannonManager
         OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
         if (offplayer!=null && plugin.getEconomy()!=null) {
             // return message
+            double funds;
             switch (cause) {
                 case Other:
-                    plugin.getEconomy().depositPlayer(offplayer, cannon.getCannonDesign().getEconomyDismantlingRefund());
+                    funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
                     break;
                 case Dismantling:
-                    plugin.getEconomy().depositPlayer(offplayer, cannon.getCannonDesign().getEconomyDismantlingRefund());
+                    funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
                     break;
                 default:
-                    plugin.getEconomy().depositPlayer(offplayer, cannon.getCannonDesign().getEconomyDestructionRefund());
+                    funds = cannon.getCannonDesign().getEconomyDestructionRefund();
                     break;
             }
+            plugin.getEconomy().depositPlayer(offplayer, funds);
         }
 
         // destroy cannon (drops items, edit sign)
