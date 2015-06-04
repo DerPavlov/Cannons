@@ -661,7 +661,7 @@ public class Aiming {
 		if (isAimingMode)
 		{
             if (cannon == null)
-                cannon = CannonManager.getCannon(inAimingMode.get(player.getUniqueId()));
+                cannon = getCannonInAimingMode(player);
 
             //this player is already in aiming mode, he might fire the cannon or turn the aiming mode off
 		    if (fire)
