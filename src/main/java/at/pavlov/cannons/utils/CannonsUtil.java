@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.util.*;
 
 import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.TargetManager;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.container.*;
@@ -832,6 +833,10 @@ public class CannonsUtil
         for (Cannon cannon : CannonManager.getCannonsInSphere(l, maxRadius))
             if (cannon.getMuzzle().distance(l) > minRadius)
                 radiusTargets.put(cannon.getUID(), new Target(cannon));
+
+        for (Target target : TargetManager.getTargetsInSphere(l, maxRadius))
+            if (target.getLocation().distance(l) > minRadius)
+                radiusTargets.put(target.getUniqueId(), target);
         return radiusTargets;
     }
 

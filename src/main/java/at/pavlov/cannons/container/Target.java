@@ -1,9 +1,9 @@
 package at.pavlov.cannons.container;
 
+import at.pavlov.cannons.Enum.TargetType;
 import at.pavlov.cannons.cannon.Cannon;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -11,16 +11,16 @@ import java.util.UUID;
 public class Target {
 
     private String name;
+    private TargetType targetType;
     private EntityType type;
-    private boolean isCannon;
     private UUID uid;
     private Location location;
     private Vector velocity;
 
-    public Target(String name, EntityType type, boolean isCannon, UUID uid, Location location, Vector velocity) {
+    public Target(String name, TargetType targetType, EntityType type, UUID uid, Location location, Vector velocity) {
         this.name = name;
+        this.targetType = targetType;
         this.type = type;
-        this.isCannon = false;
         this.uid = uid;
         this.location = location;
         this.velocity = velocity;
@@ -28,16 +28,23 @@ public class Target {
 
     public Target(Entity entity) {
         this.name = entity.getName();
+        if (entity instanceof Player)
+            this.targetType = TargetType.PLAYER;
+        else if (entity instanceof Monster)
+            this.targetType = TargetType.MONSTER;
+        else if (entity instanceof Animals)
+            this.targetType = TargetType.ANIMAL;
+        else
+            this.targetType = TargetType.OTHER;
         this.type = entity.getType();
-        this.isCannon = false;
         this.uid = entity.getUniqueId();
         this.location = entity.getLocation();
         this.velocity = entity.getVelocity();
     }
     public Target(Cannon cannon) {
         this.name = cannon.getCannonName();
+        this.targetType = TargetType.CANNON;
         this.type = null;
-        this.isCannon = true;
         this.uid = cannon.getUID();
         this.location = cannon.getLocation();
         this.velocity = cannon.getVelocity();
@@ -67,7 +74,7 @@ public class Target {
         return type;
     }
 
-    public boolean isCannon() {
-        return isCannon;
+    public TargetType getTargetType() {
+        return targetType;
     }
 }
