@@ -1,8 +1,6 @@
 package at.pavlov.cannons.config;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -133,12 +131,14 @@ public class UserMessages {
 	    customLanguage = YamlConfiguration.loadConfiguration(customLanguageFile);
 	 
 	    // Look for defaults in the jar
-	    InputStream defConfigStream = plugin.getResource("localization/" + filename + ".yml");
-	    if (defConfigStream != null) 
-	    {
-	        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-	        customLanguage.setDefaults(defConfig);
-	    }
+        try {
+            Reader defConfigStream = new InputStreamReader(plugin.getResource("localization/" + filename + ".yml"), "UTF8");
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+            customLanguage.setDefaults(defConfig);
+        } catch (UnsupportedEncodingException e) {
+            plugin.logSevere("Unsupported encoding: " + e);
+        }
+
 	}
 
 
@@ -282,6 +282,8 @@ public class UserMessages {
 			//replace the loaded projectile
 			if (cannon.getLoadedProjectile()!=null)
 				message = message.replace("PROJECTILE", cannon.getLoadedProjectile().getProjectileName());
+            else
+                message = message.replace("PROJECTILE", "none");
 			//replace the horizontal angle
 			message = message.replace("HDEGREE", String.format("%.1f", cannon.getHorizontalAngle()));
 			//replace the vertical angle
