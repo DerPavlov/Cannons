@@ -1,5 +1,6 @@
 package at.pavlov.cannons.container;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
@@ -51,7 +52,7 @@ public class MaterialHolder
 		this.id = id;
 		this.data = data;
 		if (description != null)
-			this.displayName = description;
+			this.displayName = ChatColor.translateAlternateColorCodes('&',description);
 		else
 			this.displayName = "";
 
@@ -80,7 +81,7 @@ public class MaterialHolder
                 data = s.nextInt();
 
 			if (s.hasNext())
-				displayName = s.next();
+				displayName = ChatColor.translateAlternateColorCodes('&', s.next());
 			else
 				displayName = "";
 
@@ -149,40 +150,8 @@ public class MaterialHolder
 	 */
 	public boolean equalsFuzzy(ItemStack item)
 	{
-		if (item != null)
-		{
-            if (!item.hasItemMeta() && (this.hasDisplayName() || this.hasLore()))
-                return false;
-            if (item.hasItemMeta()) {
-                ItemMeta meta = item.getItemMeta();
-                //Item does not have the required display name
-                if (this.hasDisplayName() && !meta.hasDisplayName())
-                    return false;
-                //Display name do not match
-                if (meta.hasDisplayName() && this.hasDisplayName() && !meta.getDisplayName().equals(displayName))
-                    return false;
-
-
-                if (this.hasLore()) {
-                    //does Item have a Lore
-                    if (!meta.hasLore())
-                        return false;
-
-                    Collection<String> similar = new HashSet<String>(this.lore);
-
-                    int size = similar.size();
-                    similar.retainAll(meta.getLore());
-                    if (similar.size() < size)
-                        return false;
-                }
-            }
-
-			if (item.getTypeId() == id)
-			{
-				return (item.getData().getData() == data || data == -1 || item.getData().getData() == -1);
-			}
-		}	
-		return false;
+		MaterialHolder materialHolder = new MaterialHolder(item);
+		return equalsFuzzy(materialHolder);
 	}
 	
 	
