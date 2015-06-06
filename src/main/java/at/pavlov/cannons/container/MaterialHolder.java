@@ -24,15 +24,24 @@ public class MaterialHolder
 
 	public MaterialHolder(ItemStack item)
 	{
+        if (item == null){
+            id=0;
+            data=0;
+            displayName="";
+            lore = new ArrayList<String>();
+            return;
+        }
+
 		id = item.getTypeId();
 		data = item.getData().getData();
-		ItemMeta meta = item.getItemMeta();
-		if (meta != null){
-			if (meta.hasDisplayName())
+
+		if (item.hasItemMeta()){
+            ItemMeta meta = item.getItemMeta();
+			if (meta.hasDisplayName() && meta.getDisplayName()!=null)
 				displayName = meta.getDisplayName();
 			else
 				displayName = "";
-			if (meta.hasLore())
+			if (meta.hasLore() && meta.getLore()!=null)
 				lore = meta.getLore();
 			else
 				lore = new ArrayList<String>();
@@ -221,7 +230,7 @@ public class MaterialHolder
 	}
 
     public boolean hasDisplayName(){
-        return !this.displayName.equals("");
+        return this.displayName!= null && !this.displayName.equals("");
     }
 
 	public List<String> getLore() {
@@ -229,6 +238,6 @@ public class MaterialHolder
 	}
 
     public boolean hasLore(){
-        return this.lore.size()>0;
+        return this.lore!=null && this.lore.size()>0;
     }
 }
