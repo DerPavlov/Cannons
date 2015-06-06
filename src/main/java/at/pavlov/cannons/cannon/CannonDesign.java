@@ -118,6 +118,7 @@ public class CannonDesign
 	
 	//permissions
 	private String permissionBuild;
+	private String permissionDismantle;
     private String permissionRename;
 	private String permissionLoad;
 	private String permissionFire;
@@ -1530,5 +1531,13 @@ public class CannonDesign
 
 	public void setSentryIndirectFire(boolean sentryIndirectFire) {
 		this.sentryIndirectFire = sentryIndirectFire;
+	}
+
+	public String getPermissionDismantle() {
+		return permissionDismantle;
+	}
+
+	public void setPermissionDismantle(String permissionDismantle) {
+		this.permissionDismantle = permissionDismantle;
 	}
 }

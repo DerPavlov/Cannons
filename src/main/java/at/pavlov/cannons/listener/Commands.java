@@ -6,6 +6,7 @@ import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.Enum.SelectCannon;
 import at.pavlov.cannons.cannon.Cannon;
 
+import at.pavlov.cannons.cannon.CannonManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -253,7 +254,7 @@ public class Commands implements CommandExecutor
                         if (args.length >= 3 && args[1]!=null  && args[2]!=null)
                         {
                             //selection done by a string '/cannons rename OLD NEW'
-                            Cannon cannon = plugin.getCannonManager().getCannon(args[1]);
+                            Cannon cannon = CannonManager.getCannon(args[1]);
                             if (cannon != null)
                             {
                                 MessageEnum message = plugin.getCannonManager().renameCannon(player, cannon, args[2]);
@@ -279,7 +280,7 @@ public class Commands implements CommandExecutor
                         else if (args.length >= 2 && args[1]!=null)
                         {
                             //selection done by a string '/cannons observer CANNON_NAME'
-                            Cannon cannon = plugin.getCannonManager().getCannon(args[1]);
+                            Cannon cannon = CannonManager.getCannon(args[1]);
                             if (cannon!=null)
                                 cannon.toggleObserver(player, false);
                             else
@@ -301,7 +302,7 @@ public class Commands implements CommandExecutor
                     //get name of cannon
                     else if(args[0].equalsIgnoreCase("dismantle"))
                     {
-                        if (!player.hasPermission("cannons.player.dismantle"))
+                        if (!player.hasPermission("cannons.player.dismantle") && !player.hasPermission("cannons.admin.dismantle"))
                         {
                             plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
                             return true;
@@ -317,7 +318,7 @@ public class Commands implements CommandExecutor
                             return true;
                         }
                         sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");
-                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
+                        for (Cannon cannon : CannonManager.getCannonList().values())
                         {
                             if (cannon.getOwner().equals(player.getUniqueId()))
                                 sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
@@ -529,6 +530,7 @@ public class Commands implements CommandExecutor
     {
         sendMessage(sender, ChatColor.GREEN + "Permissions for " + ChatColor.GOLD + permPlayer.getName() + ChatColor.GREEN + ":");
         displayPermission(sender, permPlayer, "cannons.player.command");
+        displayPermission(sender, permPlayer, "cannons.player.info");
         displayPermission(sender, permPlayer, "cannons.player.help");
         displayPermission(sender, permPlayer, "cannons.player.rename");
         displayPermission(sender, permPlayer, "cannons.player.build");
@@ -562,6 +564,7 @@ public class Commands implements CommandExecutor
         displayPermission(sender, permPlayer, "cannons.admin.reload");
         displayPermission(sender, permPlayer, "cannons.admin.reset");
         displayPermission(sender, permPlayer, "cannons.admin.list");
+        displayPermission(sender, permPlayer, "cannons.admin.dismantle");
         displayPermission(sender, permPlayer, "cannons.admin.permissions");
     }
 }

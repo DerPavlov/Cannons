@@ -831,9 +831,6 @@ public class Cannon
     void breakAllCannonBlocks()
     {
         List<Location> locList = design.getAllCannonBlocks(this);
-
-        Bukkit.getWorld(world).createExplosion(locList.get(0), 2);
-        //Bukkit.getWorld(world).createExplosion(locList.get(r.nextInt(locList.size())),getLoadedGunpowder()/design.getMaxLoadableGunpowder()*4,true);
         for (Location loc : locList)
         {
             loc.getBlock().breakNaturally();

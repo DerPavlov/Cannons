@@ -90,6 +90,7 @@ ImitatedEffects:
 Permission:
   ErrorRedstone: 'RED [Cannons] You are not allowed to control this with redstone.'
   ErrorBuild: 'RED [Cannons] You have no permission to build a CANNON.'
+  ErrorDismantle: 'RED [Cannons] You are not allow to deconstruct this CANNON.'
   ErrorRename: 'RED [Cannons] You have no permission to rename CANNON.'
   ErrorFire: 'RED [Cannons] You have no idea how to fire this CANNON.'
   ErrorLoad: 'RED [Cannons] No permission to load this CANNON.'

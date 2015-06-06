@@ -77,6 +77,7 @@ public enum MessageEnum
 	
 	//Permission
 	PermissionErrorRedstone ("Permission.ErrorRedstone", true),
+	PermissionErrorDismantle ("Permission.ErrorDismantle", true),
 	PermissionErrorBuild ("Permission.ErrorBuild", true),
     PermissionErrorRename ("Permission.ErrorRename", true),
 	PermissionErrorFire ("Permission.ErrorFire", true),

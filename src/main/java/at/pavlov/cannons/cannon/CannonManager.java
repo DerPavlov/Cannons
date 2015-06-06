@@ -71,11 +71,26 @@ public class CannonManager
      */
     public void dismantleCannon(Cannon cannon, Player player)
     {
-        //only the owner of the cannon can dismantle a cannon
-        if (cannon != null && (player==null || cannon.getOwner().equals(player.getUniqueId())))
+        if (cannon == null)
+            return;
+        if (player==null){
             removeCannon(cannon, true, false, BreakCause.Dismantling);
-        else if (player != null)
+            return;
+        }
+        // admins can dismantle all cannons
+        if (player.hasPermission("cannons.admin.dismantle"))
+            removeCannon(cannon, true, false, BreakCause.Dismantling);
+        else if (player.hasPermission(cannon.getCannonDesign().getPermissionDismantle())) {
+            //only the owner of the cannon can dismantle a cannon
+            if (cannon.getOwner().equals(player.getUniqueId()))
+                removeCannon(cannon, true, false, BreakCause.Dismantling);
+            else
             userMessages.sendMessage(MessageEnum.ErrorDismantlingNotOwner, player, cannon);
+        }
+        else{
+            userMessages.sendMessage(MessageEnum.PermissionErrorDismantle, player, cannon);
+        }
+
     }
 
 	/**
@@ -173,7 +188,6 @@ public class CannonManager
             plugin.getEconomy().depositPlayer(offplayer, funds);
         }
 
-        // destroy cannon (drops items, edit sign)
         MessageEnum message = cannon.destroyCannon(breakCannon, canExplode, cause);
         if (player != null)
             userMessages.sendMessage(message, player, cannon);

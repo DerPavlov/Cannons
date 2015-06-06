@@ -91,6 +91,8 @@ impactPredictor:
 sentry:
   #this gun is a sentry gun. It will operate on its own.
   isSentry: false
+  #does this fire like a mortar (indirect - from above) or like a cannon
+  indirectFire: false
   #at which distance the sentry will stop firing because it is too close
   minRange: 5
   #at which distance the sentry will detected enemies
@@ -243,6 +245,8 @@ permissions:
   #all the permissions required for a player to use certain parts of the cannon
   #more information can be found here: http://dev.bukkit.org/bukkit-plugins/cannons/pages/installation-and-configuration/cannons-2-0-and-up/permissions/
   build: cannons.player.build
+  #for deconstructing a cannon you need to be the owner and have this permission
+  dismantle: cannons.player.dismantle
   #give the cannon a new name
   rename: cannons.player.rename
   #permission for loading gunpowder and projectiles

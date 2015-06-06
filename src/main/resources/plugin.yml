@@ -56,7 +56,7 @@ permissions:
     description: Allows a player to build a cannon
     default: false
   cannons.player.dismantle:
-    description: Allows a player to deconstruct a cannon
+    description: Allows a player to deconstruct a cannon when he is the owner
     default: false
   cannons.player.redstone:
     description: Allows a player to use redstone with a cannon
@@ -129,6 +129,7 @@ permissions:
       cannons.admin.reload: true
       cannons.admin.reset: true
       cannons.admin.list: true
+      cannons.admin.dismantle: true
       cannons.admin.permissions: true
     default: op
 
@@ -140,6 +141,9 @@ permissions:
       default: op
   cannons.admin.list:
       description: Allows an admin to list all cannon of a player
+      default: op
+  cannons.admin.dismantle:
+      description: Allows to deconstruct a cannon without being its owner
       default: op
   cannons.admin.permissions:
       description: Allows an admin to list all default permissions for a player
