@@ -10,6 +10,7 @@ import at.pavlov.cannons.Enum.MessageEnum;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -295,6 +296,9 @@ public class UserMessages {
             if (cannon.getCannonName()!=null)
                 message = message.replace("CANNON_NAME", cannon.getCannonName());
             message = message.replace("CANNON", cannon.getCannonDesign().getMessageName());
+            OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
+            if (offplayer != null)
+                message = message.replace("OWNER", offplayer.getName());
             //soot left
             message = message.replace("SOOT_LEFT", Integer.toString((int) Math.floor(cannon.getSoot())));
             message = message.replace("SOOT", String.format("%.1f", cannon.getSoot()));
