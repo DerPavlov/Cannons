@@ -910,8 +910,8 @@ public class Aiming {
         for (Cannon cannon : CannonManager.getCannonList().values())
         {
             cannon.removeObserver(player);
+			userMessages.sendMessage(MessageEnum.CannonObserverRemoved, player, cannon);
         }
-        userMessages.sendMessage(MessageEnum.CannonObserverRemoved, player);
 
     }
 
