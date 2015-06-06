@@ -67,7 +67,7 @@ public class UserMessages {
 		{
 			String key = keyEnum.getString();
 			String entry = getEntry(key);
-			if (entry != null && !entry.equals(""))
+			if (!entry.equals(""))
 			{
 				messageMap.put(key, entry);
 			}
@@ -78,8 +78,13 @@ public class UserMessages {
 			}
 		}
 	}
-		
-	String getEntry(String key)
+
+	/**
+	 * get a message string from the user messages
+	 * @param key the requested message
+	 * @return the message
+	 */
+	private String getEntry(String key)
 	{
 		String entry = customLanguage.getString(key);
 		String replace;
@@ -113,7 +118,7 @@ public class UserMessages {
 		replace = "\n ";
 		entry =  entry.replace("NEWLINE ", replace);
 		//plugin.logDebug(entry);
-		return entry;
+		return ChatColor.translateAlternateColorCodes('&', entry);
 	}
 
 
@@ -136,7 +141,7 @@ public class UserMessages {
 	}
 
 
-	private final String getDataFolder()
+	private String getDataFolder()
 	{
 		return "plugins/Cannons/localization/";
 	}
