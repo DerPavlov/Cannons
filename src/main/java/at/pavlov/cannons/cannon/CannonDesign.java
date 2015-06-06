@@ -115,6 +115,7 @@ public class CannonDesign
     private int startingSoot;
     private double explodingLoadedCannons;
     private boolean fireAfterLoading;
+    private double dismantlingDelay;
 	
 	//permissions
 	private String permissionBuild;
@@ -1540,4 +1541,12 @@ public class CannonDesign
 	public void setPermissionDismantle(String permissionDismantle) {
 		this.permissionDismantle = permissionDismantle;
 	}
+
+    public double getDismantlingDelay() {
+        return dismantlingDelay;
+    }
+
+    public void setDismantlingDelay(double dismantlingDelay) {
+        this.dismantlingDelay = dismantlingDelay;
+    }
 }

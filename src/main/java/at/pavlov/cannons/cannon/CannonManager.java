@@ -9,6 +9,8 @@ import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
+import at.pavlov.cannons.utils.DelayedTask;
+import at.pavlov.cannons.utils.RemoveTaskWrapper;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -159,53 +161,71 @@ public class CannonManager
         if (cannon == null || (!cannon.isValid() && ignoreInvalid))
             return;
 
-        // send message to the owner
-        Player player = null;
-        if (cannon.getOwner() != null)
-        {
-            player = Bukkit.getPlayer(cannon.getOwner());
+        long delay = 0;
+        if (cause == BreakCause.Dismantling || cause == BreakCause.Other) {
+            CannonsUtil.playSound(cannon.getRandomBarrelBlock(), cannon.getCannonDesign().getSoundDismantle());
+            delay = (long) (cannon.getCannonDesign().getDismantlingDelay()*20.0);
         }
+        else
+            CannonsUtil.playSound(cannon.getRandomBarrelBlock(), cannon.getCannonDesign().getSoundDestroy());
 
-        //fire and an event that this cannon is destroyed
-        CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon);
-        Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
+        //delay the remove task, so it fits to the sound
+        RemoveTaskWrapper task = new RemoveTaskWrapper(cannon, breakCannon, canExplode, cause, removeEntry, ignoreInvalid);
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(task) {
+            public void run(Object object) {
+                RemoveTaskWrapper task = (RemoveTaskWrapper) object;
+                Cannon cannon = task.getCannon();
+                BreakCause cause = task.getCause();
 
-        OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
-        if (offplayer!=null && plugin.getEconomy()!=null) {
-            // return message
-            double funds;
-            switch (cause) {
-                case Other:
-                    funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
-                    break;
-                case Dismantling:
-                    funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
-                    break;
-                default:
-                    funds = cannon.getCannonDesign().getEconomyDestructionRefund();
-                    break;
+                // send message to the owner
+                Player player = null;
+                if (cannon.getOwner() != null)
+                {
+                    player = Bukkit.getPlayer(cannon.getOwner());
+                }
+
+                //fire and an event that this cannon is destroyed
+                CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon);
+                Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
+
+                OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
+                if (offplayer!=null && plugin.getEconomy()!=null) {
+                    // return message
+                    double funds;
+                    switch (cause) {
+                        case Other:
+                            funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
+                            break;
+                        case Dismantling:
+                            funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
+                            break;
+                        default:
+                            funds = cannon.getCannonDesign().getEconomyDestructionRefund();
+                            break;
+                    }
+                    plugin.getEconomy().depositPlayer(offplayer, funds);
+                }
+
+                MessageEnum message = cannon.destroyCannon(task.breakCannon(), task.canExplode(), cause);
+                if (player != null)
+                    userMessages.sendMessage(message, player, cannon);
+
+                //remove from database
+                plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getUID());
+                //remove cannon name
+                cannonNameMap.remove(cannon.getCannonName());
+                //remove sentry
+                if (cannon.getCannonDesign().isSentry())
+                    plugin.getAiming().removeSentryCannon(cannon.getUID());
+                //remove all entries for this cannon in the aiming class
+                plugin.getAiming().removeCannon(cannon);
+
+                //remove entry
+                if (task.removeEntry())
+                    cannonList.remove(cannon.getUID());
+
             }
-            plugin.getEconomy().depositPlayer(offplayer, funds);
-        }
-
-        MessageEnum message = cannon.destroyCannon(breakCannon, canExplode, cause);
-        if (player != null)
-            userMessages.sendMessage(message, player, cannon);
-
-        //remove from database
-        plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getUID());
-        //remove cannon name
-        cannonNameMap.remove(cannon.getCannonName());
-        //remove sentry
-        if (cannon.getCannonDesign().isSentry())
-            plugin.getAiming().removeSentryCannon(cannon.getUID());
-        //remove all entries for this cannon in the aiming class
-        plugin.getAiming().removeCannon(cannon);
-
-        //remove entry
-        if (removeEntry)
-            cannonList.remove(cannon.getUID());
-
+        }, delay);
     }
 
 

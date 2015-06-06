@@ -187,6 +187,8 @@ realisticBehaviour:
   explodingLoadedCannon: 2.0
   #fire after loading projectile with the time delay given by the fuse time. Sneaking will stop immediate firing.
   fireAfterLoading: false
+  #dismantling takes some time (fits to the sound) [s]
+  dismantlingDelay: 1.75
 
 
 permissions:
