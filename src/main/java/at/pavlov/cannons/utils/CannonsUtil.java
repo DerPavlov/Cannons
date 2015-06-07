@@ -31,12 +31,6 @@ import org.bukkit.util.Vector;
 
 public class CannonsUtil
 {
-	public static boolean hasIdData(Block block, int id, int data)
-	{
-		if (block.getTypeId() == id && block.getData() == data) { return true; }
-		return false;
-	}
-
 	// ################# CheckAttachedButton ###########################
 	public static boolean CheckAttachedButton(Block block, BlockFace face)
 	{
@@ -176,23 +170,11 @@ public class CannonsUtil
         if (face.equals(BlockFace.WEST)) return BlockFace.SOUTH;
         return BlockFace.UP;
     }
-	
-	/**
-	 * returns a new Itemstack
-	 * @param id
-	 * @param data
-	 * @param amount
-	 * @return
-	 */
-	public static ItemStack newItemStack(int id, int data, int amount)
-	{
-		return new ItemStack(id, amount, (short) data);
-	}
-	
+
 	/**
 	 * returns a list of MaterialHolder. Formatting id:data
-	 * @param stringList
-	 * @return
+	 * @param stringList list of Materials as strings
+	 * @return list of MaterialHolders
 	 */
 	public static List<MaterialHolder> toMaterialHolderList(List<String> stringList)
 	{
@@ -202,8 +184,7 @@ public class CannonsUtil
 		{
 			MaterialHolder material = new MaterialHolder(str); 
 			//if id == -1 the str was invalid
-			if (material.getId() >= 0)
-				materialList.add(material);
+            materialList.add(material);
 		}
 		
 		return materialList;
@@ -222,8 +203,7 @@ public class CannonsUtil
         {
             SpawnMaterialHolder material = new SpawnMaterialHolder(str);
             //if id == -1 the str was invalid
-            if (material.getMaterial().getId() >= 0)
-                materialList.add(material);
+            materialList.add(material);
         }
 
         return materialList;

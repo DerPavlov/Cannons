@@ -140,7 +140,7 @@ public class DesignStorage
 
 	/**
 	 * loads the config for one cannon from the .yml file
-     * @param cannonDesign
+     * @param cannonDesign design of the cannon
 	 * @param ymlFile of the cannon config file
 	 */
 	private void loadDesignYml(CannonDesign cannonDesign, String ymlFile)
@@ -315,9 +315,8 @@ public class DesignStorage
 
 	/**
 	 * loads the schematic of the config file
-	 * @param cannonDesign
-	 * @param schematicFile
-	 *            path of the schematic file
+	 * @param cannonDesign design of the cannon
+	 * @param schematicFile path of the schematic file
 	 */
 	private boolean loadDesignSchematic(CannonDesign cannonDesign, String schematicFile)
 	{
@@ -399,7 +398,7 @@ public class DesignStorage
 					for (int z = 0; z < length; ++z)
 					{
 						BlockVector pt = new BlockVector(x, y, z);
-						BaseBlock block = cc.getPoint(pt);
+						BaseBlock block = cc.getBlock(pt);
 
 						// ignore if block is AIR or the IgnoreBlock type
 						if (block.getId() != 0 && !block.equalsFuzzy(blockIgnore))
@@ -424,7 +423,7 @@ public class DesignStorage
 									maxMuzzle = findMaximum(x, y, z, maxMuzzle);
 								}
 								//muzzle blocks need to be air - else the projectile would spawn in a block
-								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, Material.AIR.getId(), 0));
+								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, Material.AIR, 0));
 								
 							}
 							
@@ -449,7 +448,7 @@ public class DesignStorage
 								cannonBlocks.getRedstoneTorches().add(new Vector(x, y, z));
 							// #############  redstoneWire and Repeater
 							else if (block.equalsFuzzy(blockRedstoneWireAndRepeater))
-								cannonBlocks.getRedstoneWiresAndRepeater().add(new SimpleBlock(x, y, z, Material.DIODE.getId(), block.getData()%4));
+								cannonBlocks.getRedstoneWiresAndRepeater().add(new SimpleBlock(x, y, z, Material.DIODE, block.getData()%4));
 							// #############  redstoneTrigger
 							else if (block.equalsFuzzy(blockRedstoneTrigger))
 							{
@@ -467,7 +466,7 @@ public class DesignStorage
                                 //can be also a sign
                                 if (block.equalsFuzzy(blockChestAndSign))
                                     // the id does not matter, but the data is important for signs
-                                    cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN.getId(), block.getData()));
+                                    cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN, block.getData()));
 								// firing blocks are also part of the cannon are
 								// part of the cannon
 								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, replaceRightClickTrigger));
@@ -479,7 +478,7 @@ public class DesignStorage
                             else if (block.equalsFuzzy(blockChestAndSign))
                             {
                                 // the id does not matter, but the data is important for signs
-                                cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN.getId(), block.getData()));
+                                cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN, block.getData()));
                             }
 							// #############  loading Interface is a cannonblock that is non of
 							// the previous blocks
@@ -551,9 +550,8 @@ public class DesignStorage
 			blockRightClickTrigger.rotate90();
 			replaceRedstoneTrigger.rotate90();
 			replaceRightClickTrigger.rotate90();
-			for (int k=0; k < blockProtectedList.size(); k++)
-			{
-				blockProtectedList.get(k).rotate90();
+			for (BaseBlock aBlockProtectedList : blockProtectedList) {
+				aBlockProtectedList.rotate90();
 			}
 			
 			//rotate clipboard

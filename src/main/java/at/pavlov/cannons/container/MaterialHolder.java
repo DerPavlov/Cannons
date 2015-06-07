@@ -16,7 +16,7 @@ import java.util.*;
 //small class as at.pavlov.cannons.container for item id and data
 public class MaterialHolder
 {
-	private int id;
+	private Material material;
 	private int data;
 	private String displayName;
 	private List<String> lore;
@@ -25,14 +25,14 @@ public class MaterialHolder
 	public MaterialHolder(ItemStack item)
 	{
         if (item == null){
-            id=0;
+            material=Material.AIR;
             data=0;
             displayName="";
             lore = new ArrayList<String>();
             return;
         }
 
-		id = item.getTypeId();
+		material = item.getType();
 		data = item.getData().getData();
 
 		if (item.hasItemMeta()){
@@ -48,17 +48,23 @@ public class MaterialHolder
 		}
 	}
 
+    @Deprecated
     public MaterialHolder(int id, int data)
     {
-        this.id = id;
-        this.data = data;
-        this.displayName = "";
-        this.lore = new ArrayList<String>();
+        this(Material.getMaterial(id), data);
     }
 
-	public MaterialHolder(int id, int data, String description, List<String> lore)
+    public MaterialHolder(Material material, int data)
+    {
+        this(material, data, null, null);
+    }
+
+	public MaterialHolder(Material material, int data, String description, List<String> lore)
 	{
-		this.id = id;
+        if (material != null)
+		    this.material = material;
+        else
+            this.material = Material.AIR;
 		this.data = data;
 		if (description != null)
 			this.displayName = ChatColor.translateAlternateColorCodes('&',description);
@@ -78,13 +84,18 @@ public class MaterialHolder
         // 10:0:COOL Item:Looks so cool:Fancy
         try
         {
-            id = 0;
+            material = Material.AIR;
             data = -1;
             Scanner s = new Scanner(str).useDelimiter("\\s*:\\s*");
-            if (s.hasNext())
-                id = s.nextInt();
-            else
-                System.out.println("missing id value in: " + str);
+            if (s.hasNext()) {
+                String next = s.next();
+                if (next != null)
+                    this.material = Material.matchMaterial(next);
+                if (this.material == null) {
+                    System.out.println("missing id value in: " + str);
+                    this.material = Material.AIR;
+                }
+            }
 
             if (s.hasNext())
                 data = s.nextInt();
@@ -111,36 +122,22 @@ public class MaterialHolder
 	
 	public BaseBlock toBaseBlock()
 	{
-		return new BaseBlock(id, data);
+		return new BaseBlock(material.getId(), data);
 	}
 	
 	public ItemStack toItemStack(int amount)
 	{
-		ItemStack item = new ItemStack(id, amount, (short) data);
+		ItemStack item = new ItemStack(material, amount, (short) data);
         ItemMeta meta = item.getItemMeta();
-        if (!this.displayName.equals(""))
+        if (this.hasDisplayName())
             meta.getDisplayName();
-        meta.setLore(this.lore);
+        if (this.hasLore())
+            meta.setLore(this.lore);
         item.setItemMeta(meta);
         return item;
 	}
 	
-	public int getId()
-	{
-		return id;
-	}
-	public void setId(int id)
-	{
-		this.id = id;
-	}
-	public int getData()
-	{
-		return data;
-	}
-	public void setData(int data)
-	{
-		this.data = data;
-	}
+
 
     /**
      * compares the id of two Materials
@@ -149,7 +146,7 @@ public class MaterialHolder
      */
 	public boolean equals(Material material)
 	{
-        return material != null && material.getId() == id;
+        return material != null && material.equals(this.material);
     }
 	
 	/**
@@ -193,7 +190,7 @@ public class MaterialHolder
                 if (similar.size() < size)
                     return false;
             }
-			if (item.getId() == id)
+			if (item.getType().equals(this.material))
 			{
 				return (item.getData() == data || data == -1 || item.getData() == -1);
 			}
@@ -211,7 +208,7 @@ public class MaterialHolder
 		//System.out.println("id:" + item.getId() + "-" + id + " data:" + item.getData() + "-" + data);
 		if (item != null)
 		{
-			if (item.getTypeId() == id)
+			if (item.getType().equals(this.material))
 			{
 				return (item.getData() == data || data == -1 || item.getData() == -1);
 			}
@@ -221,9 +218,25 @@ public class MaterialHolder
 	
 	public String toString()
 	{
-		return this.id + ":" + this.data + ":" + this.displayName + ":" + String.join(":", this.lore);
+		return this.material + ":" + this.data + ":" + this.displayName + ":" + String.join(":", this.lore);
 	}
 
+	public Material getType()
+	{
+		return this.material;
+	}
+	public void setType(Material material)
+	{
+		this.material = material;
+	}
+	public int getData()
+	{
+		return data;
+	}
+	public void setData(int data)
+	{
+		this.data = data;
+	}
 
 	public String getDisplayName() {
 		return displayName;

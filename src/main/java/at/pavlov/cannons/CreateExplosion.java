@@ -299,14 +299,14 @@ public class CreateExplosion {
 
     /**
      * spawns a falling block with the id and data that is slinged away from the impact
-     * @param impactLoc
-     * @param placeLoc
-     * @param entityVelocity
-     * @param item
+     * @param impactLoc location of the impact
+     * @param placeLoc spawn location of the falling block
+     * @param entityVelocity velocity of the falling block
+     * @param item type of the falling block
      */
     private void spawnFallingBlock(Location impactLoc, Location placeLoc, double entityVelocity, MaterialHolder item)
     {
-        FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getId(), (byte) item.getData());
+        FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getType(), (byte) item.getData());
 
         //give the blocks some velocity
         if (entity != null)
@@ -323,13 +323,13 @@ public class CreateExplosion {
         }
         else
         {
-            plugin.logSevere("Item id:" + item.getId() + " data:" + item.getData() + " can't be spawned as falling block.");
+            plugin.logSevere("Item id:" + item.getType() + " data:" + item.getData() + " can't be spawned as falling block.");
         }
     }
 
     /**
      * performs the block spawning for the given projectile
-     * @param cannonball
+     * @param cannonball the fired cannonball
      */
     private void spreadBlocks(FlyingProjectile cannonball)
     {

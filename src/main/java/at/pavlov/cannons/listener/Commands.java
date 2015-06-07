@@ -102,8 +102,8 @@ public class Commands implements CommandExecutor
                 {
                     //try first if there is no player "all" or "all_players"
                     if (args.length >= 2 && (
-                            (args[1].equals("all")&&Bukkit.getPlayer("all")==null)||
-                            (args[1].equals("all_players")&&Bukkit.getPlayer("all_players")==null)))
+                            (args[1].equals("all")&&Bukkit.getOfflinePlayer("all")==null)||
+                            (args[1].equals("all_players")&&Bukkit.getOfflinePlayer("all_players")==null)))
                     {
                         //remove all cannons
                         persistenceDatabase.deleteAllCannonsAsync();
@@ -144,7 +144,7 @@ public class Commands implements CommandExecutor
                         OfflinePlayer offplayer = Bukkit.getOfflinePlayer(args[1]);
                         if (offplayer != null) {
                             sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + offplayer.getName() + ChatColor.GREEN + ":");
-                            for (Cannon cannon : plugin.getCannonManager().getCannonList().values()) {
+                            for (Cannon cannon : CannonManager.getCannonList().values()) {
                                 if (cannon.getOwner().equals(offplayer.getUniqueId()))
                                     sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " location:" + ChatColor.GOLD + cannon.getOffset().toString());
                             }
@@ -154,7 +154,7 @@ public class Commands implements CommandExecutor
                     {
                         //plot all cannons
                         sendMessage(sender, ChatColor.GREEN + "List of all cannons:");
-                        for (Cannon cannon : plugin.getCannonManager().getCannonList().values())
+                        for (Cannon cannon : CannonManager.getCannonList().values())
                         {
                             OfflinePlayer owner = Bukkit.getOfflinePlayer(cannon.getOwner());
                             sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + owner.getName() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());

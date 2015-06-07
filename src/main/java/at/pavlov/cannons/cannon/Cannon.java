@@ -781,7 +781,7 @@ public class Cannon
         for (SimpleBlock cBlock : design.getAllCannonBlocks(this.getCannonDirection()))
         {
             Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
-            wBlock.setType(cBlock.getMaterial());
+            wBlock.setType(cBlock.getType());
             wBlock.setData((byte) cBlock.getData());
         }
     }
@@ -1463,7 +1463,7 @@ public class Cannon
         // search all possible sign locations
         for (Location signLoc : design.getChestsAndSigns(this))
         {
-            if (signLoc.getBlock().getTypeId() == Material.WALL_SIGN.getId())
+            if (signLoc.getBlock().getType().equals(Material.WALL_SIGN))
                 return true;
         }
         return false;
@@ -1485,13 +1485,10 @@ public class Cannon
 
     /**
      * updates the selected sign
-     *
-     * @param block
+     * @param block sign block
      */
     private void updateSign(Block block)
     {
-
-
         Sign sign = (Sign) block.getState();
 
         if (isValid)
@@ -1522,9 +1519,8 @@ public class Cannon
 
     /**
      * returns the strings for the sign
-     *
-     * @param index
-     * @return
+     * @param index line on sign
+     * @return line on the sign
      */
     public String getSignString(int index)
     {

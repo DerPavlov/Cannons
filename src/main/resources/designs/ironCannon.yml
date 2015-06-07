@@ -18,7 +18,7 @@ ammunition:
   #what the gunpowder is called
   gunpowderName: gunpowder
   #what item is used as gunpowder (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
-  gunpowderType: '289:0'
+  gunpowderType: 'SULPHUR:0'
   #does this cannon need gunpowder. If false you can directly load the projectile
   needsGunpowder: true
   #gunpowder will be removed from inventories. If false you have to click the cannon until it is reloaded
@@ -126,15 +126,15 @@ heatManagement:
   maximumTemperature: 300.0
   #items to cool down a cannon (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
   coolingItems:
-    - '326:0'
-    - '79:0'
-    - '80:0'
+    - 'WATER_BUCKET:0'
+    - 'ICE:0'
+    - 'SNOW_BLOCK:0'
   #items which are returned after cooling the cannon. The order is the same like above.
   #setting a item to AIR (0:0) means it will only remove one item instead of replacing the item (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
   coolingItemsUsed:
-    - '325:0'
-    - '0:0'
-    - '0:0'
+    - 'BUCKET:0'
+    - 'AIR:0'
+    - 'AIR:0'
 
 
 #cannon can be loaded with more gunpowder, but might explode after firing
@@ -287,33 +287,33 @@ sounds:
 
 constructionBlocks:
   #blocks of the cannon schematic which are ignored and not required to build the cannon. Default is sand
-  ignore: '12:0'
+  ignore: 'SAND:0'
   #the block which the projectile is fired from the cannon, direction can be adjusted using the defaultHorizontalFacing property. Default is block of snow
-  muzzle: '80:0'
+  muzzle: 'SNOW_BLOCK:0'
   #the block used to indicate when a cannon has been fired. default is torch. Makes fancy smoke on this location
-  firingIndicator: '50:5'
+  firingIndicator: 'TORCH:5'
   #the block used to indicate where the player can place chests or signs on the cannon. Default is a blank wall sign
-  chestAndSign: '68:-1'
+  chestAndSign: 'WALL_SIGN:-1'
   #indicates where redstone torches can be placed for redstone autoload and firing to work. Default is redstone torch
-  redstoneTorch: '76:5'
+  redstoneTorch: 'REDSTONE_TORCH_ON:5'
   #the block used to indicate where redstone wiring needs to be placed for redstone autoloading and firing to work. Default is redstone repeater
-  restoneWireAndRepeater: '93:-1'
+  restoneWireAndRepeater: 'DIODE_BLOCK_OFF:-1'
   #options for where a redstone signal needs to lead to in order to activate redstone autoloading and firing
   redstoneTrigger: 
     #the block used by the schematic to indicate where the redstone signal needs to lead to. Default is a lever
-    schematic: '69:3'
+    schematic: 'LEVER:3'
     #the block used in game where the redstone signal needs to lead to. Default is stone button
-    ingame: '77:3'
+    ingame: 'STONE_BUTTON:3'
   #the blocks which a player right clicks in order to fire a cannon
   rightClickTrigger: 
     #the block used in the cannons schematic which is used to fire the cannon when right clicked by a player. Default is torch
-    schematic: '50:5'
+    schematic: 'TORCH:5'
     #the block used in game to fire the cannon when right clicked by a player. Default is torch
-    ingame: '50:5'
+    ingame: 'TORCH:5'
   #list of blocks in the schematic that will be protected from explosions (e.g. buttons, because they break easily)
   protectedBlocks:
-    - '50:5'
-    - '69:-1'
-    - '77:-1'
+    - 'TORCH:5'
+    - 'LEVER:-1'
+    - 'STONE_BUTTON:-1'
 
 

@@ -16,7 +16,7 @@ public class SimpleBlock
 	private int locY;
 	private int locZ;
 	
-	private int id;
+	private Material material;
 	private int data;
 	
 	public SimpleBlock(int x, int y, int z, BaseBlock block)
@@ -25,7 +25,7 @@ public class SimpleBlock
 		locY = y;
 		locZ = z;
 		
-		id = block.getId();
+		material = Material.getMaterial(block.getId());
 		data = block.getData();
 	}
 	
@@ -35,45 +35,45 @@ public class SimpleBlock
 		locY = y;
 		locZ = z;
 		
-		id = material.getId();
+		this.material = material.getType();
 		data = material.getData();
 	}
 	
-	public SimpleBlock(int x, int y, int z, int id, int data)
+	public SimpleBlock(int x, int y, int z, Material material, int data)
 	{
 		locX = x;
 		locY = y;
 		locZ = z;
 		
-		this.id = id;
+		this.material = material;
 		this.data = data;
 	}
 	
-	private SimpleBlock(Vector vect, int id, int data)
+	private SimpleBlock(Vector vect, Material material, int data)
 	{
 		locX = vect.getBlockX();
 		locY = vect.getBlockY();
 		locZ = vect.getBlockZ();
 		
-		this.id = id;
+		this.material = material;
 		this.data = data;
 	}
 	
-	public SimpleBlock(Location loc, int id, int data)
+	public SimpleBlock(Location loc, Material material, int data)
 	{
 		locX = loc.getBlockX();
 		locY = loc.getBlockY();
 		locZ = loc.getBlockZ();
 		
-		this.id = id;
+		this.material = material;
 		this.data = data;
 	}
 
 	
 	/**
 	 * to location with offset
-	 * @param world
-	 * @return
+	 * @param world bukkit world
+	 * @return location of the block
 	 */
 	public Location toLocation(World world, Vector offset)
 	{
@@ -90,10 +90,8 @@ public class SimpleBlock
 	public boolean compareBlockFuzzy(World world, Vector offset)
 	{		
 		Block block = toLocation(world, offset).getBlock();
-		if (compareBlockFuzzy(block)) 
-			return true;
-		return false;
-	}
+        return compareBlockFuzzy(block);
+    }
 
 	/**
 	 * compare the location of the block and the id and data or data = -1
@@ -134,7 +132,7 @@ public class SimpleBlock
 	 */
 	public boolean compareBlockFuzzy(Block block)
 	{
-		if (block.getTypeId() == id)
+		if (block.getType().equals(this.material))
 		{
 			if (block.getData() == data || data == -1 || block.getData() == -1)
 			{
@@ -152,7 +150,7 @@ public class SimpleBlock
 	 */
     boolean compareBlock(Block block)
 	{
-		if (block.getTypeId() == id)
+		if (block.getType().equals(this.material))
 		{
 			if (block.getData() == data)
 			{
@@ -173,7 +171,7 @@ public class SimpleBlock
 		if (this.getLocX() == block.getLocX() && this.getLocY() == block.getLocY() && this.getLocZ() == block.getLocZ())
 		{
 			//compare the id and data
-			if (this.getID() == block.getID())
+			if (block.getType().equals(this.material))
 			{
 				if (this.getData() == block.getData() || this.getData()==-1 || block.getData()==-1)
 					return true;
@@ -190,7 +188,7 @@ public class SimpleBlock
 	 */
 	public SimpleBlock add(Location loc)
 	{
-		return new SimpleBlock(locX + loc.getBlockX(), locY + loc.getBlockY(), locZ + loc.getBlockZ(), id, data);
+		return new SimpleBlock(locX + loc.getBlockX(), locY + loc.getBlockY(), locZ + loc.getBlockZ(), this.material, data);
 	}
 	
 	/** 
@@ -200,7 +198,7 @@ public class SimpleBlock
 	 */
 	public SimpleBlock add(SimpleBlock block)
 	{
-		return new SimpleBlock(locX + block.getLocX(), locY + block.getLocY(), locZ + block.getLocZ(), id, data);
+		return new SimpleBlock(locX + block.getLocX(), locY + block.getLocY(), locZ + block.getLocZ(), this.material, data);
 	}
 	
 	/** 
@@ -210,7 +208,7 @@ public class SimpleBlock
 	 */
 	public SimpleBlock add(Vector vect)
 	{
-		return new SimpleBlock(toVector().add(vect), id, data);
+		return new SimpleBlock(toVector().add(vect), this.material, data);
 	}
 	
 	/** 
@@ -220,7 +218,7 @@ public class SimpleBlock
 	 */
 	public SimpleBlock subtract(Vector vect)
 	{
-		return new SimpleBlock(vect.getBlockX() - locX, vect.getBlockY() - locY, vect.getBlockZ() - locZ, id, data);
+		return new SimpleBlock(vect.getBlockX() - locX, vect.getBlockY() - locY, vect.getBlockZ() - locZ, this.material, data);
 	}
 
     /**
@@ -243,7 +241,7 @@ public class SimpleBlock
 	 */
 	public SimpleBlock subtractInverted(Location loc)
 	{
-		return new SimpleBlock(loc.getBlockX() - locX, loc.getBlockY() - locY, loc.getBlockZ() - locZ, id, data);
+		return new SimpleBlock(loc.getBlockX() - locX, loc.getBlockY() - locY, loc.getBlockZ() - locZ, this.material, data);
 	}
 	
 
@@ -255,7 +253,7 @@ public class SimpleBlock
 	 */
 	public SimpleBlock subtract(Location loc)
 	{
-		return new SimpleBlock(locX - loc.getBlockX() , locY - loc.getBlockY(), locZ - loc.getBlockZ(), id, data);
+		return new SimpleBlock(locX - loc.getBlockX() , locY - loc.getBlockY(), locZ - loc.getBlockZ(), material, data);
 	}
 	
 	/**
@@ -297,19 +295,14 @@ public class SimpleBlock
 		this.locZ = locZ;
 	}
 
-	public int getID()
+	public void setType(Material material)
 	{
-		return id;
+		this.material = material;
 	}
 
-    public Material getMaterial()
-    {
-        return Material.getMaterial(id);
-    }
-
-	public void setID(int id)
+	public Material getType()
 	{
-		this.id = id;
+		return this.material;
 	}
 
 	public int getData()
@@ -324,7 +317,7 @@ public class SimpleBlock
 	
 	public String toString()
 	{
-		return "x:" + locX + " y:" + locY + " z:" + locZ +" id:" + id + " data:" + data;
+		return "x:" + locX + " y:" + locY + " z:" + locZ +" id:" + this.getType() + " data:" + data;
 	}
 
 

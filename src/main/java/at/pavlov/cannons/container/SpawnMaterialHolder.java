@@ -18,7 +18,7 @@ public class SpawnMaterialHolder {
             Scanner s = new Scanner(str);
             s.findInLine("(\\d+):(\\d+)\\s+(\\d+)-(\\d+)");
             MatchResult result = s.match();
-            material = new MaterialHolder(Integer.parseInt(result.group(1)), Integer.parseInt(result.group(2)));
+            material = new MaterialHolder(result.group(1) + ":" + result.group(2));
             setMinAmount(Integer.parseInt(result.group(3)));
             setMaxAmount(Integer.parseInt(result.group(4)));
             s.close();

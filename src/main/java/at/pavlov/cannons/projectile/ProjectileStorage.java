@@ -6,6 +6,7 @@ import java.util.List;
 
 import at.pavlov.cannons.container.SoundHolder;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -50,7 +51,7 @@ public class ProjectileStorage
 	{
 		for (Projectile projectile : projectileList)
 		{
-            if (cannon.getCannonDesign().canLoad(projectile) && projectile.equals(materialHolder))
+            if (cannon.getCannonDesign().canLoad(projectile) && !projectile.getLoadingItem().equals(Material.AIR) && projectile.equals(materialHolder))
 				return projectile;
 		}
 		return null;

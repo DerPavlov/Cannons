@@ -197,7 +197,7 @@ public class FakeBlockHandler {
             if (!found)
             {
                 plugin.logDebug("new block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
-                player.sendBlockChange(loc, material.getId(), (byte) material.getData());
+                player.sendBlockChange(loc, material.getType(), (byte) material.getData());
                 list.add(fakeBlockEntry);
             }
 
