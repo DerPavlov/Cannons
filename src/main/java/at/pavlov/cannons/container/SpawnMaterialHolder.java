@@ -1,5 +1,7 @@
 package at.pavlov.cannons.container;
 
+import org.bukkit.Material;
+
 import java.util.Scanner;
 import java.util.regex.MatchResult;
 
@@ -16,7 +18,7 @@ public class SpawnMaterialHolder {
         try
         {
             Scanner s = new Scanner(str);
-            s.findInLine("(\\d+):(\\d+)\\s+(\\d+)-(\\d+)");
+            s.findInLine("(\\w+):(\\d+)\\s+(\\d+)-(\\d+)");
             MatchResult result = s.match();
             material = new MaterialHolder(result.group(1) + ":" + result.group(2));
             setMinAmount(Integer.parseInt(result.group(3)));
@@ -27,7 +29,7 @@ public class SpawnMaterialHolder {
         catch(Exception e)
         {
             System.out.println("Error while converting " + str + ". Check formatting (10:0 1-2)");
-            material = new MaterialHolder(-1,0);
+            material = new MaterialHolder(Material.AIR,0);
             setMinAmount(0);
             setMaxAmount(0);
         }
