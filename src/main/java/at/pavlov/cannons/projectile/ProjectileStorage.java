@@ -169,7 +169,7 @@ public class ProjectileStorage
 		projectile.setProjectileName(projectileConfig.getString("general.projectileName", "noProjectileName"));
         projectile.setDescription(projectileConfig.getString("general.description", "no description for this projectile"));
 		projectile.setItemName(projectileConfig.getString("general.itemName", "noItemName"));
-		projectile.setLoadingItem(new MaterialHolder(projectileConfig.getString("general.loadingItem", "1:0")));	
+		projectile.setLoadingItem(new MaterialHolder(projectileConfig.getString("general.loadingItem", "STONE:0")));
 		projectile.setAlternativeItemList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("general.alternativeId")));
 		
 		//cannonball
@@ -188,7 +188,7 @@ public class ProjectileStorage
         //smokeTrail
         projectile.setSmokeTrailEnabled(projectileConfig.getBoolean("smokeTrail.enabled", false));
         projectile.setSmokeTrailDistance(projectileConfig.getInt("smokeTrail.distance", 10));
-        projectile.setSmokeTrailMaterial(new MaterialHolder(projectileConfig.getString("smokeTrail.material", "30:0")));
+        projectile.setSmokeTrailMaterial(new MaterialHolder(projectileConfig.getString("smokeTrail.material", "WEB:0")));
         projectile.setSmokeTrailDuration(projectileConfig.getDouble("smokeTrail.duration", 20.0));
 		
 		//explosion

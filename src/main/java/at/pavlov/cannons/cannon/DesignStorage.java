@@ -163,7 +163,7 @@ public class DesignStorage
 
 		// ammunition
 		cannonDesign.setGunpowderName(cannonDesignConfig.getString("ammunition.gunpowderName", "gunpowder"));
-		cannonDesign.setGunpowderType(new MaterialHolder(cannonDesignConfig.getString("ammunition.gunpowderType", "289:0")));
+		cannonDesign.setGunpowderType(new MaterialHolder(cannonDesignConfig.getString("ammunition.gunpowderType", "SULPHUR:0")));
         cannonDesign.setNeedsGunpowder(cannonDesignConfig.getBoolean("ammunition.needsGunpowder", true));
         cannonDesign.setGunpowderConsumption(cannonDesignConfig.getBoolean("ammunition.gunpowderConsumption", true));
         cannonDesign.setProjectileConsumption(cannonDesignConfig.getBoolean("ammunition.projectileConsumption", true));
@@ -296,19 +296,19 @@ public class DesignStorage
         cannonDesign.setSoundDisableAimingMode(new SoundHolder(cannonDesignConfig.getString("sounds.disableAimingMode","NONE:1:1")));
 
 		// constructionBlocks
-		cannonDesign.setSchematicBlockTypeIgnore(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.ignore", "12:0")));
-		cannonDesign.setSchematicBlockTypeMuzzle(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.muzzle", "80:0")));
-		cannonDesign.setSchematicBlockTypeFiringIndicator(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.firingIndicator", "50:5")));
-		cannonDesign.setSchematicBlockTypeRotationCenter(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.rotationCenter", "73:0")));
-		cannonDesign.setSchematicBlockTypeChestAndSign(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.chestAndSign", "63:-1")));
-		cannonDesign.setSchematicBlockTypeRedstoneTorch(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.redstoneTorch", "76:5")));
-		cannonDesign.setSchematicBlockTypeRedstoneWireAndRepeater(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.restoneWireAndRepeater", "55:-1")));
+		cannonDesign.setSchematicBlockTypeIgnore(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.ignore", "SAND:0")));
+		cannonDesign.setSchematicBlockTypeMuzzle(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.muzzle", "SNOW_BLOCK:0")));
+		cannonDesign.setSchematicBlockTypeFiringIndicator(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.firingIndicator", "TORCH:5")));
+		cannonDesign.setSchematicBlockTypeRotationCenter(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.rotationCenter", "REDSTONE_ORE:0")));
+		cannonDesign.setSchematicBlockTypeChestAndSign(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.chestAndSign", "WALL_SIGN:-1")));
+		cannonDesign.setSchematicBlockTypeRedstoneTorch(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.redstoneTorch", "REDSTONE_TORCH_ON:5")));
+		cannonDesign.setSchematicBlockTypeRedstoneWireAndRepeater(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.restoneWireAndRepeater", "DIODE_BLOCK_OFF:-1")));
 		// RedstoneTrigger
-		cannonDesign.setSchematicBlockTypeRedstoneTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.schematic", "69:1")));
-		cannonDesign.setIngameBlockTypeRedstoneTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.ingame", "77:1")));
+		cannonDesign.setSchematicBlockTypeRedstoneTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.schematic", "LEVER:1")));
+		cannonDesign.setIngameBlockTypeRedstoneTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.ingame", "STONE_BUTTON:1")));
 		// rightClickTrigger
-		cannonDesign.setSchematicBlockTypeRightClickTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.schematic", "50:5")));
-		cannonDesign.setIngameBlockTypeRightClickTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.ingame", "50:5")));
+		cannonDesign.setSchematicBlockTypeRightClickTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.schematic", "TORCH:5")));
+		cannonDesign.setIngameBlockTypeRightClickTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.ingame", "TORCH:5")));
 		// protected Blocks
 		cannonDesign.setSchematicBlockTypeProtected(CannonsUtil.toMaterialHolderList(cannonDesignConfig.getStringList("constructionBlocks.protectedBlocks")));
 	}
