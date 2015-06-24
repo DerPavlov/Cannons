@@ -2,7 +2,7 @@ general:
   #sets debug mode on or off. Turn off if you do not want to see as much info on in the server console or log files
   debugMode: false
   #relays the new BlockExplodeEvent to the old EntityExplodeEvent for protection plugins, which don't support this feature
-  RelayExplosionEvent: false
+  relayExplosionEvent: false
 
 
 cannonLimits:

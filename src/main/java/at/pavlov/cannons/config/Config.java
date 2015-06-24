@@ -105,7 +105,7 @@ public class Config
 		
 		//general
 		setDebugMode(plugin.getConfig().getBoolean("general.debugMode", false));
-        setRelayExplosionEvent(plugin.getConfig().getBoolean("general.RelayExplosionEvent", false));
+        setRelayExplosionEvent(plugin.getConfig().getBoolean("general.relayExplosionEvent", false));
 		
 		//limitOfCannons
 		setBuildLimitEnabled(plugin.getConfig().getBoolean("cannonLimits.useLimits", true));
