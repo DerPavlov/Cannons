@@ -67,21 +67,22 @@ public class FakeBlockHandler {
             Player player = next.getPlayerBukkit();
 
             //if player is offline remove this one
-            if (player == null)
+            if (player == null) {
                 iter.remove();
+                continue;
+            }
 
             if (next.isExpired())
             {
                 //send real block to player
                 Location loc = next.getLocation();
-                if (player != null && loc != null)
+                if (loc != null)
                 {
                     player.sendBlockChange(loc, loc.getBlock().getType(), loc.getBlock().getData());
+                    plugin.logDebug("expired fake block: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + next.getType().toString());
                 }
-
                 //remove this entry
                 iter.remove();
-                plugin.logDebug("expired fake block: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + next.getType().toString());
             }
         }
     }
