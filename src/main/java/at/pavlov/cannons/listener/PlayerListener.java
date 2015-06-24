@@ -52,16 +52,6 @@ public class PlayerListener implements Listener
         this.aiming = this.plugin.getAiming();
     }
 
-    @EventHandler
-    public void blockExplodeEvent(BlockExplodeEvent event)
-    {
-        if (config.isRelayExplosionEvent()){
-            EntityExplodeEvent explodeEvent = new EntityExplodeEvent(null, event.getBlock().getLocation(), event.blockList(), event.getYield());
-            Bukkit.getServer().getPluginManager().callEvent(explodeEvent);
-            event.setCancelled(explodeEvent.isCancelled());
-        }
-    }
-
 
     @EventHandler
     public void PlayerMove(PlayerMoveEvent event)

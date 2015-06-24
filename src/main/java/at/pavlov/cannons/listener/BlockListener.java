@@ -25,6 +25,17 @@ public class BlockListener implements Listener
 		this.plugin = plugin;
 	}
 
+
+    @EventHandler
+    public void blockExplodeEvent(BlockExplodeEvent event)
+    {
+        if (plugin.getMyConfig().isRelayExplosionEvent()){
+            EntityExplodeEvent explodeEvent = new EntityExplodeEvent(null, event.getBlock().getLocation(), event.blockList(), event.getYield());
+            Bukkit.getServer().getPluginManager().callEvent(explodeEvent);
+            event.setCancelled(explodeEvent.isCancelled());
+        }
+    }
+
     /**
      * Water will not destroy button and torches
      * @param event
