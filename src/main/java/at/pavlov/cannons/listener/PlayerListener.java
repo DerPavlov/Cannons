@@ -9,8 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -48,6 +50,16 @@ public class PlayerListener implements Listener
         this.cannonManager = this.plugin.getCannonManager();
         this.fireCannon = this.plugin.getFireCannon();
         this.aiming = this.plugin.getAiming();
+    }
+
+    @EventHandler
+    public void blockExplodeEvent(BlockExplodeEvent event)
+    {
+        if (config.isRelayExplosionEvent()){
+            EntityExplodeEvent explodeEvent = new EntityExplodeEvent(null, event.getBlock().getLocation(), event.blockList(), event.getYield());
+            Bukkit.getServer().getPluginManager().callEvent(explodeEvent);
+            event.setCancelled(explodeEvent.isCancelled());
+        }
     }
 
 

@@ -25,6 +25,7 @@ public class Config
 {
 	//general
 	private boolean debugMode;
+    private boolean relayExplosionEvent;
 	
 	//build limits
 	private boolean buildLimitEnabled;
@@ -104,6 +105,7 @@ public class Config
 		
 		//general
 		setDebugMode(plugin.getConfig().getBoolean("general.debugMode", false));
+        setRelayExplosionEvent(plugin.getConfig().getBoolean("general.RelayExplosionEvent", false));
 		
 		//limitOfCannons
 		setBuildLimitEnabled(plugin.getConfig().getBoolean("cannonLimits.useLimits", true));
@@ -510,5 +512,13 @@ public class Config
 
     public void setImitatedPredictorTime(double imitatedPredictorTime) {
         this.imitatedPredictorTime = imitatedPredictorTime;
+    }
+
+    public boolean isRelayExplosionEvent() {
+        return relayExplosionEvent;
+    }
+
+    public void setRelayExplosionEvent(boolean relayExplosionEvent) {
+        this.relayExplosionEvent = relayExplosionEvent;
     }
 }
