@@ -3,6 +3,7 @@ package at.pavlov.cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.Enum.TargetType;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
@@ -458,6 +459,7 @@ public class Aiming {
             if (cannon.isChunkLoaded() && System.currentTimeMillis() > cannon.getLastSentryUpdate() + cannon.getCannonDesign().getSentryUpdateTime()) {
                 cannon.setLastSentryUpdate(System.currentTimeMillis());
 
+                plugin.logDebug("first cannon sentry entity: " + cannon.getSentryEntity());
                 HashMap<UUID, Target> targets = CannonsUtil.getNearbyTargets(cannon.getMuzzle(), cannon.getCannonDesign().getSentryMinRange(), cannon.getCannonDesign().getSentryMaxRange());
                 //old target - is this still valid?
                 if (cannon.hasSentryEntity()) {
@@ -482,8 +484,8 @@ public class Aiming {
                 if (!cannon.hasSentryEntity()){
                     ArrayList<Target> possibleTargets = new ArrayList<Target>();
                     for (Target t : targets.values()) {
-                        // todo now it is just players, for testing
-                        if (t.getType() == EntityType.PLAYER) {
+                        if (t.getTargetType() == TargetType.MONSTER) {
+							plugin.logDebug("found: " + t.getLocation().toVector());
                             if (canFindTargetSolution(cannon, t.getLocation(), t.getVelocity())){
                                 possibleTargets.add(t);
 							}
@@ -492,45 +494,48 @@ public class Aiming {
                     //so we have some targets
                     if (possibleTargets.size()>0) {
                         for (Target t : possibleTargets) {
+                            plugin.logDebug("found possible Target at: " + t.getLocation());
                             //select one target
                             if (!cannon.wasSentryTarget(t.getUniqueId())) {
+                                plugin.logDebug("set Target: " + t.getLocation());
                                 cannon.setSentryEntity(t.getUniqueId());
                                 break;
                             }
                         }
-                        if (!cannon.hasSentryEntity())
+                        if (!cannon.hasSentryEntity()) {
+                            plugin.logDebug("forced to");
                             cannon.setSentryEntity(possibleTargets.get(0).getUniqueId());
+                        }
                     }
                 }
 
-                //find target solution at target
-                if (cannon.getSentryEntity() != null){
+                //find target solution
+                plugin.logDebug("cannon sentry entity: " + cannon.getSentryEntity());
+                if (cannon.hasSentryEntity()){
                     Target target = targets.get(cannon.getSentryEntity());
-					plugin.logDebug("targeting: " + target.getName());
 
                     // find exact solution for the cannon
                     if (calculateTargetSolution(cannon, target.getLocation(), target.getVelocity())){
+                        plugin.logDebug("found solution");
                         cannon.setSentryEntity(target.getUniqueId());
                     }
                     else {
                         //no exact solution found for this target. So skip it and try it again in the next run
-                        plugin.logDebug("no solution found");
+                        plugin.logDebug("failed to find solution");
                         cannon.setSentryEntity(null);
-                        cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
+                        //cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
                     }
                 }
             }
 
             //aim at the found solution
-            double oldHAngle = cannon.getHorizontalAngle();
-            double oldVAngle = cannon.getVerticalAngle();
             // only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
             if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()) {
                 // autoaming or fineadjusting
                 if (cannon.isValid()) {
                     updateAngle(null, cannon, null, InteractAction.adjustSentry);
-                    //no change in angle - ready to fire
-                    if (oldHAngle == cannon.getHorizontalAngle() && oldVAngle == cannon.getVerticalAngle()) {
+                    //no further change in angle required - ready to fire
+                    if (cannon.targetInSight()) {
                         //load from chest
                         if (!cannon.isLoaded() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
                             MessageEnum messageEnum = cannon.reloadFromChests(cannon.getOwner(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
@@ -581,6 +586,10 @@ public class Aiming {
 //            newTarget.add(targetVelocity.multiply(time));
 //        }
         //plugin.logDebug("new target " + newTarget);
+        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), target, 5)) {
+            plugin.logDebug("no line of sight");
+            return false;
+        }
 
         Vector direction = newTarget.toVector().subtract(cannon.getMuzzle().toVector());
         double yaw = CannonsUtil.vectorToYaw(direction);
@@ -602,20 +611,29 @@ public class Aiming {
      * @return true if a solution was found
      */
     private boolean calculateTargetSolution(Cannon cannon, Location target, Vector targetVelocity){
-        canFindTargetSolution(cannon, target, targetVelocity);
+        if (!canFindTargetSolution(cannon, target, targetVelocity))
+            return false;
+
+        if (cannon.getCannonballVelocity() < 0.01)
+            return false;
+
         //todo fancy algorithm for aiming
-        plugin.logDebug("calculate Target solution ");
+        plugin.logDebug("calculate Target solution for target at: " + target.toVector());
         for (int i=0; i<60; i++){
             Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
             double diffY = simulateShot(fvector, cannon.getMuzzle(), target);
             plugin.logDebug("diff " + diffY);
+			if (Math.abs(diffY) > 1000.0){
+                plugin.logDebug("diffY too large: " + diffY);
+				return false;
+			}
+
             if (!cannon.getCannonDesign().isSentryIndirectFire()) {
-                if (diffY < 0) {
-                    cannon.setAimingPitch(cannon.getAimingPitch()-cannon.getCannonDesign().getAngleStepSize());
-                    plugin.logDebug("new aiming pitch " + cannon.getAimingPitch());
-                }
-                else
+				if (diffY < 0) {
+					cannon.setAimingPitch(cannon.getAimingPitch() - cannon.getCannonDesign().getAngleStepSize());
+				} else {
                     return true;
+                }
             }
         }
 
@@ -629,20 +647,19 @@ public class Aiming {
         for (int i=0; i<100; i++){
             cannonball.updateProjectileLocation(false);
             Vector cLoc = cannonball.getLoc();
-            if (Math.sqrt(Math.pow(cLoc.getX() - muzzle.getX(), 2)+Math.pow(cLoc.getZ()-muzzle.getZ(),2)) > target_distance) {
+            if (Math.sqrt(Math.pow(cLoc.getX() - muzzle.getX(), 2) + Math.pow(cLoc.getZ()-muzzle.getZ(),2)) > target_distance) {
                 //calculate intersection
-                plugin.logDebug("oldLoc " + oldLoc);
-                if (oldLoc==null)
+                if (oldLoc == null)
                     return cLoc.getY() - target.getY();
                 Vector vel = cannonball.getVel().clone();
                 double dist1 = vel.getX()+vel.getY()+vel.getZ();
                 double dist2 = oldLoc.distance(target.toVector());
                 Vector inter = oldLoc.add(vel.multiply(dist2 /dist1));
-                plugin.logDebug("inter " + inter);
                 return inter.getY() - target.getY();
             }
             oldLoc = cLoc.clone();
         }
+        //could not find an intersection
         return -1000000000000.0;
     }
 

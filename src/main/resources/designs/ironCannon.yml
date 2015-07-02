@@ -91,6 +91,8 @@ impactPredictor:
 sentry:
   #this gun is a sentry gun. It will operate on its own.
   isSentry: false
+  #does this fire like a mortar (indirect - from above) or like a cannon
+  indirectFire: false
   #at which distance the sentry will stop firing because it is too close
   minRange: 5
   #at which distance the sentry will detected enemies

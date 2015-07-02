@@ -704,6 +704,28 @@ public class CannonsUtil
         return surface;
     }
 
+
+    /**
+     * checks if the line of sight is clear
+     * @param start start point
+     * @param stop end point
+     * @param ignoredBlocks how many solid non transparent blocks are acceptable
+     * @return true if there is a line of sight
+     */
+    public static boolean hasLineOfSight(Location start, Location stop, int ignoredBlocks){
+        BlockIterator iter = new BlockIterator(start.getWorld(), start.clone().toVector(), stop.clone().subtract(start).toVector().normalize(), 0, (int) start.distance(stop));
+
+        int nontransparent = 0;
+        while (iter.hasNext()) {
+            Block next = iter.next();
+            // search for a solid non transparent block (liquids are ignored)
+            if (next.getType().isSolid() && !next.getType().isTransparent()) {
+                nontransparent ++;
+            }
+        }
+        return nontransparent < ignoredBlocks;
+    }
+
     /**
      * returns a random point in a sphere
      * @param center center location

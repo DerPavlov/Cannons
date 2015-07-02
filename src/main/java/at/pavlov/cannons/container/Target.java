@@ -38,7 +38,8 @@ public class Target {
             this.targetType = TargetType.OTHER;
         this.type = entity.getType();
         this.uid = entity.getUniqueId();
-        this.location = entity.getLocation();
+        // aim for center of mass
+        this.location = entity.getLocation().clone().add(0, 0, 1);
         this.velocity = entity.getVelocity();
     }
     public Target(Cannon cannon) {

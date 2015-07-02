@@ -2072,7 +2072,7 @@ public class Cannon
      * @return true if aiminig is finished
      */
     public boolean targetInSight(){
-        return Math.abs(getAimingYaw() - this.getHorizontalYaw()) < design.getAngleStepSize() &&  Math.abs(getAimingPitch() - this.getVerticalPitch()) < design.getAngleStepSize();
+        return Math.abs(getAimingYaw() - getHorizontalYaw()) < design.getAngleStepSize() &&  Math.abs(getAimingPitch() - getVerticalPitch()) < design.getAngleStepSize();
     }
 
     /**
@@ -2116,11 +2116,13 @@ public class Cannon
     }
 
     public double horizontalAngleToPitch(double horizontal){
-        double yaw = horizontal - CannonsUtil.directionToYaw(getCannonDirection()) - this.additionalHorizontalAngle;
+        double yaw = horizontal + this.additionalHorizontalAngle + CannonsUtil.directionToYaw(getCannonDirection()) ;
 
         yaw = yaw % 360;
         while(yaw < -180)
             yaw = yaw + 360;
+        while(yaw > 180)
+            yaw = yaw - 360;
         return yaw;
     }
 
