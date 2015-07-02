@@ -1954,7 +1954,7 @@ public class Cannon
      * @return true if the cannon reaches the crital limit
      */
     public boolean isOverheatedAfterFiring(){
-        return getTemperature() > design.getCriticalTemperature()  + design.getHeatIncreasePerGunpowder()*getLoadedGunpowder();
+        return getTemperature() + design.getHeatIncreasePerGunpowder()*getLoadedGunpowder() > design.getCriticalTemperature();
     }
 
     /**
