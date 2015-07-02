@@ -171,7 +171,7 @@ public class MaterialHolder
 		if (item != null)
 		{
             //Item does not have the required display name
-            if (this.hasDisplayName() && !item.hasDisplayName())
+            if ((this.hasDisplayName() && !item.hasDisplayName()) || (!this.hasDisplayName() && item.hasDisplayName()))
                 return false;
             //Display name do not match
             if (item.hasDisplayName() && this.hasDisplayName() && !item.getDisplayName().equals(displayName))
@@ -200,17 +200,17 @@ public class MaterialHolder
 	
 	/**
 	 * compares id and data, but skips data comparison if one is -1
-	 * @param item item to compare
+	 * @param block item to compare
 	 * @return true if both items are equal in data and id or only the id if one data = -1
 	 */
-	public boolean equalsFuzzy(Block item)
+	public boolean equalsFuzzy(Block block)
 	{
 		//System.out.println("id:" + item.getId() + "-" + id + " data:" + item.getData() + "-" + data);
-		if (item != null)
+		if (block != null)
 		{
-			if (item.getType().equals(this.material))
+			if (block.getType().equals(this.material))
 			{
-				return (item.getData() == data || data == -1 || item.getData() == -1);
+				return (block.getData() == data || data == -1 || block.getData() == -1);
 			}
 		}	
 		return false;
