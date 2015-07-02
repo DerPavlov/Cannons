@@ -2068,6 +2068,14 @@ public class Cannon
     }
 
     /**
+     * if the cannon has the target in sight and angles are set correctly
+     * @return true if aiminig is finished
+     */
+    public boolean targetInSight(){
+        return Math.abs(getAimingYaw() - this.getHorizontalYaw()) < design.getAngleStepSize() &&  Math.abs(getAimingPitch() - this.getVerticalPitch()) < design.getAngleStepSize();
+    }
+
+    /**
      * whenever the cannon can aim in this direction or not
      * @param yaw horizontal angle
      * @return true if it can aim this direction

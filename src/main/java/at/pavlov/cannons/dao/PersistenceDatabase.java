@@ -163,6 +163,9 @@ public class PersistenceDatabase
 		// get list of all cannons
 		ConcurrentHashMap<UUID, Cannon> cannonList = CannonManager.getCannonList();
 
+        if (plugin == null || plugin.getDatabase() == null)
+            return;
+
         plugin.getDatabase().beginTransaction();
         // save all cannon to database
         for (Cannon cannon : cannonList.values())
@@ -177,7 +180,6 @@ public class PersistenceDatabase
         }
         plugin.getDatabase().commitTransaction();
         plugin.getDatabase().endTransaction();
-
 	}
 
     /**
