@@ -193,7 +193,8 @@ public class DesignStorage
         cannonDesign.setMinHorizontalAngleOnShip(cannonDesignConfig.getDouble("angles.minHorizontalAngleOnShip", -20.0));
         cannonDesign.setMaxVerticalAngleOnShip(cannonDesignConfig.getDouble("angles.maxVerticalAngleOnShip", 30.0));
         cannonDesign.setMinVerticalAngleOnShip(cannonDesignConfig.getDouble("angles.minVerticalAngleOnShip", -30.0));
-		cannonDesign.setAngleStepSize(cannonDesignConfig.getDouble("angles.angleStepSize", 1.0));
+		cannonDesign.setAngleStepSize(cannonDesignConfig.getDouble("angles.angleStepSize", 0.1));
+		cannonDesign.setAngleLargeStepSize(cannonDesignConfig.getDouble("angles.largeStepSize", 1.0));
 		cannonDesign.setAngleUpdateSpeed((int) (cannonDesignConfig.getDouble("angles.angleUpdateSpeed", 1.0)*1000.0));
         cannonDesign.setAngleUpdateMessage(cannonDesignConfig.getBoolean("angles.angleUpdateMessage", false));
 

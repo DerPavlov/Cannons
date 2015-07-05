@@ -70,7 +70,9 @@ angles:
   maxVerticalAngleOnShip: 45.0
   minVerticalAngleOnShip: -45.0
   #each change of the angles will change angle by this amount
-  angleStepSize: 1.0
+  angleStepSize: 0.1
+  #rougher steps to change cannon direction more quickly
+  largeStepSize: 1.0
   #how fast the cannons can be turned in seconds (fastest is 0.05s)
   angleUpdateSpeed: 0.1
   #a message with the new angles is displayed to the user while aiming

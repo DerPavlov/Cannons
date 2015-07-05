@@ -19,7 +19,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
@@ -29,12 +28,12 @@ import java.util.*;
 
 public class Aiming {
 
-    private class gunAngles
+    private class GunAngles
 	{
 		private double horizontal;
 		private double vertical;
 
-		public gunAngles(double horizontal, double vertical)
+		public GunAngles(double horizontal, double vertical)
 		{
 			this.setHorizontal(horizontal);
 			this.setVertical(vertical);
@@ -164,7 +163,7 @@ public class Aiming {
                 return  MessageEnum.PermissionErrorAdjust;
         }
 
-        gunAngles angles;
+        GunAngles angles;
 
         if (action == InteractAction.adjustSentry && isSentry){
             // sentry mode
@@ -192,7 +191,7 @@ public class Aiming {
 		{
             //barrel clicked to change angle
 			if (player!=null) {
-				angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking());
+				angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking(), design.getAngleStepSize());
 				//register impact predictor
 				cannon.addObserver(player, true);
                 combine = false;
@@ -201,63 +200,41 @@ public class Aiming {
 			    return null;
 		}
 
-		//Check angles
-		if (Math.abs(angles.getHorizontal()) >= design.getAngleStepSize()/2.)
+		hasChanged = false;
+		boolean largeChange = false;
+		//larger step
+		if (Math.abs(angles.getHorizontal()) >= design.getAngleLargeStepSize())
 		{
-			if (angles.getHorizontal() >= 0)
-			{
-				// right 
-				if (cannon.getHorizontalAngle() + design.getAngleStepSize() <= cannon.getMaxHorizontalAngle())
-				{
-                    //if smaller than minimum -> set to minimum
-                    if (cannon.getHorizontalAngle() < cannon.getMinHorizontalAngle())
-                        cannon.setHorizontalAngle(cannon.getMinHorizontalAngle());
-                    cannon.setHorizontalAngle(cannon.getHorizontalAngle() + design.getAngleStepSize());
-					hasChanged = true;
-					message = setMessageHorizontal(cannon, combine);
-				}
-			}
-			else
-			{
-				// left 
-				if (cannon.getHorizontalAngle() - design.getAngleStepSize() >= cannon.getMinHorizontalAngle())
-				{
-                    //if smaller than maximum -> set to maximum
-                    if (cannon.getHorizontalAngle() > cannon.getMaxHorizontalAngle())
-                        cannon.setHorizontalAngle(cannon.getMaxHorizontalAngle());
-					cannon.setHorizontalAngle(cannon.getHorizontalAngle() - design.getAngleStepSize());
-					hasChanged = true;
-					message = setMessageHorizontal(cannon, combine);
-				}
+			if (setHorizontalAngle(cannon, angles, design.getAngleLargeStepSize())){
+				hasChanged = true;
+				largeChange = true;
+				message = setMessageHorizontal(cannon, combine);
 			}
 		}
-		
-		if (Math.abs(angles.getVertical()) >= design.getAngleStepSize()/2.)
+		//small step if no large step was possible
+		if (!largeChange && Math.abs(angles.getHorizontal()) >= design.getAngleStepSize()/2.)
 		{
-			if (angles.getVertical() >= 0.0)
-			{
-				// up
-				if (cannon.getVerticalAngle() + design.getAngleStepSize() <= cannon.getMaxVerticalAngle())
-				{
-                    //if smaller than minimum -> set to minimum
-                    if (cannon.getVerticalAngle() < cannon.getMinVerticalAngle())
-                        cannon.setVerticalAngle(cannon.getMinVerticalAngle());
-					cannon.setVerticalAngle(cannon.getVerticalAngle() + design.getAngleStepSize());
-					hasChanged = true;
-					message = setMessageVertical(cannon, combine);
-				}
+			if (setHorizontalAngle(cannon, angles, design.getAngleStepSize())){
+				hasChanged = true;
+				message = setMessageHorizontal(cannon, combine);
 			}
-			else
-			{
-				// down
-				if (cannon.getVerticalAngle() - design.getAngleStepSize() >= cannon.getMinVerticalAngle())
-				{
-                    if (cannon.getVerticalAngle() > cannon.getMaxVerticalAngle())
-                        cannon.setVerticalAngle(cannon.getMaxVerticalAngle());
-					cannon.setVerticalAngle(cannon.getVerticalAngle() - design.getAngleStepSize());
-					hasChanged = true;
-					message = setMessageVertical(cannon, combine);
-				}
+		}
+		//larger step
+		largeChange = false;
+		if (Math.abs(angles.getVertical()) >= design.getAngleLargeStepSize())
+		{
+			if (setVerticalAngle(cannon, angles, design.getAngleLargeStepSize())){
+				hasChanged = true;
+				largeChange = true;
+				message = setMessageVertical(cannon, combine);
+			}
+		}
+		//small step if no large step was possible
+		if (!largeChange && Math.abs(angles.getVertical()) >= design.getAngleStepSize()/2.)
+		{
+			if (setVerticalAngle(cannon, angles, design.getAngleStepSize())){
+				hasChanged = true;
+				message = setMessageVertical(cannon, combine);
 			}
 		}
 		
@@ -283,22 +260,83 @@ public class Aiming {
             return null;
 	}
 
+	private boolean setHorizontalAngle(Cannon cannon, GunAngles angles, double step){
+		step = Math.abs(step);
 
-    /**
-     * evaluates the difference between actual cannon direction and the given direction
-     * @param cannon operated cannon
-     * @param yaw yaw of the direction to aim
-     * @param pitch pitch of the direction to aim
-     * @return new cannon aiming direction
-     */
-	private gunAngles getGunAngle(Cannon cannon, double yaw, double pitch)
+		if (angles.getHorizontal() >= 0)
+		{
+			// right
+			if (cannon.getHorizontalAngle() + step <= cannon.getMaxHorizontalAngle() + 0.001)
+			{
+				//if smaller than minimum -> set to minimum
+				if (cannon.getHorizontalAngle() < cannon.getMinHorizontalAngle())
+					cannon.setHorizontalAngle(cannon.getMinHorizontalAngle());
+				cannon.setHorizontalAngle(cannon.getHorizontalAngle() + step);
+				return true;
+
+			}
+		}
+		else
+		{
+			// left
+			if (cannon.getHorizontalAngle() - step >= cannon.getMinHorizontalAngle() - 0.001)
+			{
+				//if smaller than maximum -> set to maximum
+				if (cannon.getHorizontalAngle() > cannon.getMaxHorizontalAngle())
+					cannon.setHorizontalAngle(cannon.getMaxHorizontalAngle());
+				cannon.setHorizontalAngle(cannon.getHorizontalAngle() - step);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean setVerticalAngle(Cannon cannon, GunAngles angles, double step) {
+		step = Math.abs(step);
+
+		if (angles.getVertical() >= 0.0)
+		{
+			// up
+			if (cannon.getVerticalAngle() + step <= cannon.getMaxVerticalAngle() + 0.001)
+			{
+				//if smaller than minimum -> set to minimum
+				if (cannon.getVerticalAngle() < cannon.getMinVerticalAngle())
+					cannon.setVerticalAngle(cannon.getMinVerticalAngle());
+				cannon.setVerticalAngle(cannon.getVerticalAngle() + step);
+				return true;
+
+			}
+		}
+		else
+		{
+			// down
+			if (cannon.getVerticalAngle() - step >= cannon.getMinVerticalAngle() - 0.001)
+			{
+				if (cannon.getVerticalAngle() > cannon.getMaxVerticalAngle())
+					cannon.setVerticalAngle(cannon.getMaxVerticalAngle());
+				cannon.setVerticalAngle(cannon.getVerticalAngle() - step);
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+		/**
+         * evaluates the difference between actual cannon direction and the given direction
+         * @param cannon operated cannon
+         * @param yaw yaw of the direction to aim
+         * @param pitch pitch of the direction to aim
+         * @return new cannon aiming direction
+         */
+	private GunAngles getGunAngle(Cannon cannon, double yaw, double pitch)
 	{
         double horizontal = yaw - CannonsUtil.directionToYaw(cannon.getCannonDirection()) - cannon.getTotalHorizontalAngle();
         horizontal = horizontal % 360;
 		while(horizontal < -180)
             horizontal = horizontal + 360;
 
-		return new gunAngles(horizontal, -pitch - cannon.getTotalVerticalAngle());
+		return new GunAngles(horizontal, -pitch - cannon.getTotalVerticalAngle());
 	}
 
     /**
@@ -312,53 +350,53 @@ public class Aiming {
      * @param isSneaking - is the player sneaking (will revert all options)
      * @return - angle to change
      */
-    private gunAngles CheckBlockFace(BlockFace clickedFace, BlockFace cannonDirection, boolean isSneaking)
+    private GunAngles CheckBlockFace(BlockFace clickedFace, BlockFace cannonDirection, boolean isSneaking, double step)
 	{
         if (clickedFace == null || cannonDirection == null)
-            return new gunAngles(0.0, 0.0);
+            return new GunAngles(0.0, 0.0);
 
 		//check up or down
 		if (clickedFace.equals(BlockFace.DOWN)) 
 		{
 			if (isSneaking)
-				return new gunAngles(0.0, 1000.0);
+				return new GunAngles(0.0, step);
 			else
-				return new gunAngles(0.0, -1000.0);
+				return new GunAngles(0.0, -step);
 		}
 		if (clickedFace.equals(BlockFace.UP)) 
 		{
 			if (isSneaking)
-				return new gunAngles(0.0, -1000.0);
+				return new GunAngles(0.0, -step);
 			else
-				return new gunAngles(0.0, 1000.0);
+				return new GunAngles(0.0, step);
 		}
 		//check left 
 		BlockFace rightFace = CannonsUtil.roatateFace(cannonDirection);
 		if (clickedFace.equals(rightFace.getOppositeFace())) 
 		{
 			if (isSneaking)
-				return new gunAngles(1000.0, 0.0);
+				return new GunAngles(step, 0.0);
 			else
-				return new gunAngles(-1000.0, 0.0);
+				return new GunAngles(-step, 0.0);
 		}
 		//check right
 		if (clickedFace.equals(rightFace)) 
 		{
 			if (isSneaking)
-				return new gunAngles(-1000.0, 0.0);
+				return new GunAngles(-step, 0.0);
 			else
-				return new gunAngles(1000.0, 0.0);
+				return new GunAngles(step, 0.0);
 		}
 		//check front or back
 		if (clickedFace.equals(cannonDirection) || clickedFace.equals(cannonDirection.getOppositeFace()) ) 
 		{
 			if (isSneaking)
-				return new gunAngles(0.0, -1000.0);
+				return new GunAngles(0.0, -step);
 			else
-				return new gunAngles(0.0, 1000.0);
+				return new GunAngles(0.0, step);
 		}
 		
-		return new gunAngles(0.0, 0.0);
+		return new GunAngles(0.0, 0.0);
 	}
 
     /**
@@ -1088,7 +1126,7 @@ public class Aiming {
      * @param target target of the cannon
      * @return angles for the cannon
      */
-    private gunAngles calctSentrySolution(Cannon cannon, Location target){
-        return new gunAngles(0., 0.);
+    private GunAngles calctSentrySolution(Cannon cannon, Location target){
+        return new GunAngles(0., 0.);
     }
 }

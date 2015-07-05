@@ -60,6 +60,7 @@ public class CannonDesign
     private double maxVerticalAngleOnShip;
     private double minVerticalAngleOnShip;
 	private double angleStepSize;
+	private double angleLargeStepSize;
 	private int angleUpdateSpeed;
 	private boolean angleUpdateMessage;
 
@@ -1549,4 +1550,12 @@ public class CannonDesign
     public void setDismantlingDelay(double dismantlingDelay) {
         this.dismantlingDelay = dismantlingDelay;
     }
+
+	public double getAngleLargeStepSize() {
+		return angleLargeStepSize;
+	}
+
+	public void setAngleLargeStepSize(double angleLargeStepSize) {
+		this.angleLargeStepSize = angleLargeStepSize;
+	}
 }
