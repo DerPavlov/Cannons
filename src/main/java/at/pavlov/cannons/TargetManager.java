@@ -23,7 +23,7 @@ public class TargetManager {
         HashSet<Target> newTargetList = new HashSet<Target>();
 
         for (Target target : targets.values()) {
-            if (target.getLocation().distance(center) < radius)
+            if (target.getCenterLocation().distance(center) < radius)
                 newTargetList.add(target);
         }
         return newTargetList;
@@ -33,7 +33,7 @@ public class TargetManager {
         HashSet<Target> newTargetList = new HashSet<Target>();
 
         for (Target target : targets.values()) {
-            Location newLoc = target.getLocation();
+            Location newLoc = target.getCenterLocation();
             Vector box = newLoc.subtract(center).toVector();
             if (newLoc.getWorld().equals(center.getWorld().getUID()) && Math.abs(box.getX())<lengthX/2 && Math.abs(box.getY())<lengthY/2 && Math.abs(box.getZ())<lengthZ/2)
                 newTargetList.add(target);

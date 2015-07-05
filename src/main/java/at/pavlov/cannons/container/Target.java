@@ -14,15 +14,17 @@ public class Target {
     private TargetType targetType;
     private EntityType type;
     private UUID uid;
-    private Location location;
+    private Location groundLocation;
+    private Location centerLocation;
     private Vector velocity;
 
-    public Target(String name, TargetType targetType, EntityType type, UUID uid, Location location, Vector velocity) {
+    public Target(String name, TargetType targetType, EntityType type, UUID uid, Location groundLocation, Location centerLocation, Vector velocity) {
         this.name = name;
         this.targetType = targetType;
         this.type = type;
         this.uid = uid;
-        this.location = location;
+        this.groundLocation = groundLocation;
+        this.centerLocation = centerLocation;
         this.velocity = velocity;
     }
 
@@ -39,7 +41,11 @@ public class Target {
         this.type = entity.getType();
         this.uid = entity.getUniqueId();
         // aim for center of mass
-        this.location = entity.getLocation().clone().add(0, 0, 1);
+        if (entity instanceof LivingEntity)
+            this.centerLocation = ((LivingEntity) entity).getEyeLocation().clone().add(0., -0.5, 0.);
+        else
+            this.centerLocation = entity.getLocation().clone().add(0., 0.5, 0.);
+        this.groundLocation = entity.getLocation().clone();
         this.velocity = entity.getVelocity();
     }
     public Target(Cannon cannon) {
@@ -47,20 +53,25 @@ public class Target {
         this.targetType = TargetType.CANNON;
         this.type = null;
         this.uid = cannon.getUID();
-        this.location = cannon.getLocation();
+        this.groundLocation = cannon.getLocation().clone().add(0.5, 0.5, 0.5);
+        this.centerLocation = cannon.getLocation().clone().add(0.5, 0.0, 0.5);
         this.velocity = cannon.getVelocity();
     }
 
     public String toString() {
-        return "name: " + this.name + "UID: " + this.uid + "location: " + this.location.toString() + " velocity: " + velocity.toString();
+        return "name: " + this.name + "UID: " + this.uid + "location: " + this.centerLocation.toString() + " velocity: " + velocity.toString();
     }
 
     public String getName() {
         return name;
     }
 
-    public Location getLocation() {
-        return location;
+    public Location getCenterLocation() {
+        return centerLocation;
+    }
+
+    public Location getGroundLocation() {
+        return groundLocation;
     }
 
     public Vector getVelocity() {
@@ -78,4 +89,6 @@ public class Target {
     public TargetType getTargetType() {
         return targetType;
     }
+
+
 }

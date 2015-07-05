@@ -504,15 +504,10 @@ public class Aiming {
                         cannon.setSentryEntity(null);
                     }
                     else{
-                        //hopefully we can aim at this target
-						Target target = targets.get(cannon.getSentryEntity());
-                        if (!canFindTargetSolution(cannon, target.getLocation(), target.getVelocity())){
+                        //is the previous target still valid
+                        Target target = targets.get(cannon.getSentryEntity());
+                        if (!canFindTargetSolution(cannon, target.getCenterLocation(), target.getVelocity())) {
                             cannon.setSentryEntity(null);
-                        }
-                        //is it still an entity
-                        else{
-                            if (!targets.containsKey(cannon.getSentryEntity()))
-                                cannon.setSentryEntity(null);
                         }
                     }
                 }
@@ -521,8 +516,8 @@ public class Aiming {
                 if (!cannon.hasSentryEntity()){
                     ArrayList<Target> possibleTargets = new ArrayList<Target>();
                     for (Target t : targets.values()) {
-                        if (t.getTargetType() == TargetType.MONSTER) {
-                            if (canFindTargetSolution(cannon, t.getLocation(), t.getVelocity())){
+                        if (t.getTargetType() == TargetType.PLAYER) {
+                            if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
                                 possibleTargets.add(t);
 							}
                         }
@@ -545,7 +540,6 @@ public class Aiming {
                 //find target solution
                 if (cannon.hasSentryEntity()){
                     Target target = targets.get(cannon.getSentryEntity());
-
                     // find exact solution for the cannon
                     if (calculateTargetSolution(cannon, target, target.getVelocity())){
 
@@ -570,9 +564,7 @@ public class Aiming {
             //aim at the found solution
             // only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
             if (cannon.hasSentryEntity() && System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()) {
-				plugin.logDebug("change angle: " + cannon.getLastAimed());
                 // autoaming or fineadjusting
-				plugin.logDebug("----------- hasEntity " + cannon.hasSentryEntity() + " is " + cannon.getSentryEntity());
                 if (cannon.isValid()) {
                     updateAngle(null, cannon, null, InteractAction.adjustSentry);
                     //no further change in angle required - ready to fire
@@ -627,7 +619,7 @@ public class Aiming {
 //            newTarget.add(targetVelocity.multiply(time));
 //        }
         //plugin.logDebug("new target " + newTarget);
-        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), target, 2)) {
+        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), target, 3)) {
             return false;
         }
 
@@ -651,16 +643,21 @@ public class Aiming {
      * @return true if a solution was found
      */
     private boolean calculateTargetSolution(Cannon cannon, Target target, Vector targetVelocity){
-        if (!canFindTargetSolution(cannon, target.getLocation(), targetVelocity))
+        Location targetLoc = target.getGroundLocation();
+        //aim for the center of the target if there is no area effect for the projectile
+        if (cannon.getLoadedProjectile() != null && cannon.getLoadedProjectile().getExplosionPower() < 0.1 && cannon.getLoadedProjectile().getPlayerDamage() < 0.1)
+            targetLoc = target.getCenterLocation();
+
+        if (!canFindTargetSolution(cannon, targetLoc, targetVelocity))
             return false;
 
         if (cannon.getCannonballVelocity() < 0.01)
             return false;
 
-        plugin.logDebug("calculate Target solution for target at: " + target.getLocation().toVector());
+        plugin.logDebug("calculate Target solution for target at: " + targetLoc.toVector());
         for (int i=0; i<60; i++){
             Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
-            double diffY = simulateShot(fvector, cannon.getMuzzle(), target.getLocation());
+            double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc);
 			if (Math.abs(diffY) > 1000.0){
                 plugin.logDebug("diffY too large: " + diffY);
 				return false;

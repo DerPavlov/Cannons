@@ -837,7 +837,7 @@ public class CannonsUtil
                 radiusTargets.put(cannon.getUID(), new Target(cannon));
 
         for (Target target : TargetManager.getTargetsInSphere(l, maxRadius))
-            if (target.getLocation().distance(l) > minRadius)
+            if (target.getCenterLocation().distance(l) > minRadius)
                 radiusTargets.put(target.getUniqueId(), target);
         return radiusTargets;
     }
