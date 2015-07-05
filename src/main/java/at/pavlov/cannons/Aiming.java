@@ -516,7 +516,7 @@ public class Aiming {
                 if (!cannon.hasSentryEntity()){
                     ArrayList<Target> possibleTargets = new ArrayList<Target>();
                     for (Target t : targets.values()) {
-                        if (t.getTargetType() == TargetType.PLAYER) {
+                        if (t.getTargetType() == TargetType.MONSTER) {
                             if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
                                 possibleTargets.add(t);
 							}
@@ -567,25 +567,25 @@ public class Aiming {
                 // autoaming or fineadjusting
                 if (cannon.isValid()) {
                     updateAngle(null, cannon, null, InteractAction.adjustSentry);
-                    //no further change in angle required - ready to fire
-                    if (cannon.targetInSight()) {
-                        //load from chest
-                        if (!cannon.isLoaded() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
-                            MessageEnum messageEnum = cannon.reloadFromChests(cannon.getOwner(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
-                            if (messageEnum.isError()) {
-                                cannon.setSentryLastLoadingFailed(System.currentTimeMillis());
-                                CannonsUtil.playErrorSound(cannon.getMuzzle());
-                                plugin.logDebug("Sentry " + cannon.getCannonName() + " loading message: " + messageEnum);
-                            }
-                            else
-                                cannon.setSentryLastLoadingFailed(System.currentTimeMillis()-2000);
-                        }
-                        if (cannon.isReadyToFire() && cannon.getSentryEntity() != null) {
-                            MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
-                            if (messageEnum != null)
-                                plugin.logDebug("Sentry " + cannon.getCannonName() + " firing message: " + messageEnum);
-                        }
+                }
+            }
+            //ready to fire
+            if (cannon.hasSentryEntity() && cannon.targetInSight()) {
+                //load from chest
+                if (!cannon.isLoaded() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
+                    MessageEnum messageEnum = cannon.reloadFromChests(cannon.getOwner(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
+                    if (messageEnum.isError()) {
+                        cannon.setSentryLastLoadingFailed(System.currentTimeMillis());
+                        CannonsUtil.playErrorSound(cannon.getMuzzle());
+                        plugin.logDebug("Sentry " + cannon.getCannonName() + " loading message: " + messageEnum);
                     }
+                    else
+                        cannon.setSentryLastLoadingFailed(System.currentTimeMillis()-2000);
+                }
+                if (cannon.isReadyToFire()) {
+                    MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
+                    if (messageEnum != null)
+                        plugin.logDebug("Sentry " + cannon.getCannonName() + " firing message: " + messageEnum);
                 }
             }
         }
@@ -648,7 +648,7 @@ public class Aiming {
         if (cannon.getLoadedProjectile() != null && cannon.getLoadedProjectile().getExplosionPower() < 0.1 && cannon.getLoadedProjectile().getPlayerDamage() < 0.1)
             targetLoc = target.getCenterLocation();
 
-        if (!canFindTargetSolution(cannon, targetLoc, targetVelocity))
+        if (!canFindTargetSolution(cannon, target.getCenterLocation(), targetVelocity))
             return false;
 
         if (cannon.getCannonballVelocity() < 0.01)

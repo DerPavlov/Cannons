@@ -723,7 +723,7 @@ public class CannonsUtil
                 nontransparent ++;
             }
         }
-        return nontransparent < ignoredBlocks;
+        return nontransparent <= ignoredBlocks;
     }
 
     /**
