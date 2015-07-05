@@ -643,10 +643,10 @@ public class Aiming {
      * @return true if a solution was found
      */
     private boolean calculateTargetSolution(Cannon cannon, Target target, Vector targetVelocity){
-        Location targetLoc = target.getGroundLocation();
-        //aim for the center of the target if there is no area effect for the projectile
-        if (cannon.getLoadedProjectile() != null && cannon.getLoadedProjectile().getExplosionPower() < 0.1 && cannon.getLoadedProjectile().getPlayerDamage() < 0.1)
-            targetLoc = target.getCenterLocation();
+        Location targetLoc = target.getCenterLocation();
+        //aim for the center of the target if there is an area effect of the projectile
+        if (cannon.getLoadedProjectile() != null && (cannon.getLoadedProjectile().getExplosionPower() > 2. || (cannon.getLoadedProjectile().getPlayerDamage() > 1. && cannon.getLoadedProjectile().getPlayerDamageRange() > 2.)))
+            targetLoc = target.getGroundLocation();
 
         if (!canFindTargetSolution(cannon, target.getCenterLocation(), targetVelocity))
             return false;
