@@ -6,16 +6,12 @@ import java.util.UUID;
 
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
-import at.pavlov.cannons.event.CannonsEntityDeathEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
@@ -27,6 +23,15 @@ public class EntityListener implements Listener
 	public EntityListener(Cannons plugin)
 	{
 		this.plugin = plugin;
+	}
+
+	/**
+	 * The projectile has hit an entity
+	 * @param event
+	 */
+	@EventHandler
+	public void onEntiyDeathEvent(EntityDeathEvent event) {
+		plugin.getAiming().removeTarget(event.getEntity());
 	}
 
 

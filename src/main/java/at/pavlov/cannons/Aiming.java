@@ -11,6 +11,7 @@ import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.container.MovingObject;
 import at.pavlov.cannons.container.Target;
+import at.pavlov.cannons.event.CannonTargetEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
@@ -459,7 +460,6 @@ public class Aiming {
             if (cannon.isChunkLoaded() && System.currentTimeMillis() > cannon.getLastSentryUpdate() + cannon.getCannonDesign().getSentryUpdateTime()) {
                 cannon.setLastSentryUpdate(System.currentTimeMillis());
 
-                plugin.logDebug("first cannon sentry entity: " + cannon.getSentryEntity());
                 HashMap<UUID, Target> targets = CannonsUtil.getNearbyTargets(cannon.getMuzzle(), cannon.getCannonDesign().getSentryMinRange(), cannon.getCannonDesign().getSentryMaxRange());
                 //old target - is this still valid?
                 if (cannon.hasSentryEntity()) {
@@ -485,7 +485,6 @@ public class Aiming {
                     ArrayList<Target> possibleTargets = new ArrayList<Target>();
                     for (Target t : targets.values()) {
                         if (t.getTargetType() == TargetType.MONSTER) {
-							plugin.logDebug("found: " + t.getLocation().toVector());
                             if (canFindTargetSolution(cannon, t.getLocation(), t.getVelocity())){
                                 possibleTargets.add(t);
 							}
@@ -494,34 +493,37 @@ public class Aiming {
                     //so we have some targets
                     if (possibleTargets.size()>0) {
                         for (Target t : possibleTargets) {
-                            plugin.logDebug("found possible Target at: " + t.getLocation());
                             //select one target
                             if (!cannon.wasSentryTarget(t.getUniqueId())) {
-                                plugin.logDebug("set Target: " + t.getLocation());
                                 cannon.setSentryEntity(t.getUniqueId());
                                 break;
                             }
                         }
                         if (!cannon.hasSentryEntity()) {
-                            plugin.logDebug("forced to");
                             cannon.setSentryEntity(possibleTargets.get(0).getUniqueId());
                         }
                     }
                 }
 
                 //find target solution
-                plugin.logDebug("cannon sentry entity: " + cannon.getSentryEntity());
                 if (cannon.hasSentryEntity()){
                     Target target = targets.get(cannon.getSentryEntity());
 
                     // find exact solution for the cannon
-                    if (calculateTargetSolution(cannon, target.getLocation(), target.getVelocity())){
-                        plugin.logDebug("found solution");
-                        cannon.setSentryEntity(target.getUniqueId());
+                    if (calculateTargetSolution(cannon, target, target.getVelocity())){
+
+						CannonTargetEvent targetEvent = new CannonTargetEvent(cannon, target);
+						Bukkit.getServer().getPluginManager().callEvent(targetEvent);
+						if (!targetEvent.isCancelled()) {
+							cannon.setSentryEntity(target.getUniqueId());
+						}
+						else {
+							//event cancelled
+							cannon.setSentryEntity(null);
+						}
                     }
                     else {
                         //no exact solution found for this target. So skip it and try it again in the next run
-                        plugin.logDebug("failed to find solution");
                         cannon.setSentryEntity(null);
                         //cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
                     }
@@ -530,8 +532,10 @@ public class Aiming {
 
             //aim at the found solution
             // only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
-            if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()) {
+            if (cannon.hasSentryEntity() && System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()) {
+				plugin.logDebug("change angle: " + cannon.getLastAimed());
                 // autoaming or fineadjusting
+				plugin.logDebug("----------- hasEntity " + cannon.hasSentryEntity() + " is " + cannon.getSentryEntity());
                 if (cannon.isValid()) {
                     updateAngle(null, cannon, null, InteractAction.adjustSentry);
                     //no further change in angle required - ready to fire
@@ -586,8 +590,7 @@ public class Aiming {
 //            newTarget.add(targetVelocity.multiply(time));
 //        }
         //plugin.logDebug("new target " + newTarget);
-        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), target, 5)) {
-            plugin.logDebug("no line of sight");
+        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), target, 2)) {
             return false;
         }
 
@@ -610,25 +613,23 @@ public class Aiming {
      * @param targetVelocity how fast the target is moving
      * @return true if a solution was found
      */
-    private boolean calculateTargetSolution(Cannon cannon, Location target, Vector targetVelocity){
-        if (!canFindTargetSolution(cannon, target, targetVelocity))
+    private boolean calculateTargetSolution(Cannon cannon, Target target, Vector targetVelocity){
+        if (!canFindTargetSolution(cannon, target.getLocation(), targetVelocity))
             return false;
 
         if (cannon.getCannonballVelocity() < 0.01)
             return false;
 
-        //todo fancy algorithm for aiming
-        plugin.logDebug("calculate Target solution for target at: " + target.toVector());
+        plugin.logDebug("calculate Target solution for target at: " + target.getLocation().toVector());
         for (int i=0; i<60; i++){
             Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
-            double diffY = simulateShot(fvector, cannon.getMuzzle(), target);
-            plugin.logDebug("diff " + diffY);
+            double diffY = simulateShot(fvector, cannon.getMuzzle(), target.getLocation());
 			if (Math.abs(diffY) > 1000.0){
                 plugin.logDebug("diffY too large: " + diffY);
 				return false;
 			}
 
-            if (!cannon.getCannonDesign().isSentryIndirectFire()) {
+            if (true) {// !cannon.getCannonDesign().isSentryIndirectFire()) {
 				if (diffY < 0) {
 					cannon.setAimingPitch(cannon.getAimingPitch() - cannon.getCannonDesign().getAngleStepSize());
 				} else {
@@ -662,6 +663,22 @@ public class Aiming {
         //could not find an intersection
         return -1000000000000.0;
     }
+
+	/**
+	 * remove entity as sentry target (e.g. in case of death)
+	 * @param entity entity to remove
+	 */
+	public void removeTarget(Entity entity){
+		if (entity == null)
+			return;
+
+		for (UUID sentryCannon : sentryCannons) {
+			Cannon cannon = CannonManager.getCannon(sentryCannon);
+			if (cannon.getSentryEntity() != null && cannon.getSentryEntity().equals(entity.getUniqueId())) {
+				cannon.setSentryEntity(null);
+			}
+		}
+	}
 
 
     /**
@@ -788,7 +805,7 @@ public class Aiming {
 	}
 
     /**
-     * set a new aiming target for the given cannon
+     * set a new aiming target for the given cannon by direction
      * @param cannon operated cannon
      * @param loc new yaw and pitch angles
      */
@@ -800,6 +817,21 @@ public class Aiming {
         cannon.setAimingYaw(loc.getPitch());
         cannon.setAimingPitch(loc.getYaw());
     }
+
+	/**
+	 * set a new aiming target for the given cannon
+	 * @param cannon operated cannon
+	 * @param yaw new yaw
+	 * @param pitch new pitch
+	 */
+	public void setAimingTarget(Cannon cannon, double yaw, double pitch)
+	{
+		if (cannon == null)
+			return;
+
+		cannon.setAimingYaw(yaw);
+		cannon.setAimingPitch(pitch);
+	}
 	
 	/**
 	 * finds the right message for the horizontal angle change

@@ -2308,8 +2308,8 @@ public class Cannon
 
     public void setSentryEntity(UUID sentryEntity) {
         this.sentryEntity = sentryEntity;
-        setSentryTargetingTime(System.currentTimeMillis());
         if (sentryEntity != null){
+            setSentryTargetingTime(System.currentTimeMillis());
             //store only 5
             if (sentryEntityHistory.size() > 5)
                 sentryEntityHistory.remove(0);
