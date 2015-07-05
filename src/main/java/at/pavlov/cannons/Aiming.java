@@ -202,7 +202,7 @@ public class Aiming {
 		}
 
 		//Check angles
-		if (Math.abs(angles.getHorizontal()) >= 1.0)
+		if (Math.abs(angles.getHorizontal()) >= design.getAngleStepSize()/2.)
 		{
 			if (angles.getHorizontal() >= 0)
 			{
@@ -232,7 +232,7 @@ public class Aiming {
 			}
 		}
 		
-		if (Math.abs(angles.getVertical()) >= 1.0)
+		if (Math.abs(angles.getVertical()) >= design.getAngleStepSize()/2.)
 		{
 			if (angles.getVertical() >= 0.0)
 			{
@@ -317,46 +317,45 @@ public class Aiming {
         if (clickedFace == null || cannonDirection == null)
             return new gunAngles(0.0, 0.0);
 
-
 		//check up or down
 		if (clickedFace.equals(BlockFace.DOWN)) 
 		{
 			if (isSneaking)
-				return new gunAngles(0.0, 1.0);
+				return new gunAngles(0.0, 1000.0);
 			else
-				return new gunAngles(0.0, -1.0);
+				return new gunAngles(0.0, -1000.0);
 		}
 		if (clickedFace.equals(BlockFace.UP)) 
 		{
 			if (isSneaking)
-				return new gunAngles(0.0, -1.0);
+				return new gunAngles(0.0, -1000.0);
 			else
-				return new gunAngles(0.0, 1.0);
+				return new gunAngles(0.0, 1000.0);
 		}
 		//check left 
 		BlockFace rightFace = CannonsUtil.roatateFace(cannonDirection);
 		if (clickedFace.equals(rightFace.getOppositeFace())) 
 		{
 			if (isSneaking)
-				return new gunAngles(1.0, 0.0);
+				return new gunAngles(1000.0, 0.0);
 			else
-				return new gunAngles(-1.0, 0.0);
+				return new gunAngles(-1000.0, 0.0);
 		}
 		//check right
 		if (clickedFace.equals(rightFace)) 
 		{
 			if (isSneaking)
-				return new gunAngles(-1.0, 0.0);
+				return new gunAngles(-1000.0, 0.0);
 			else
-				return new gunAngles(1.0, 0.0);
+				return new gunAngles(1000.0, 0.0);
 		}
 		//check front or back
 		if (clickedFace.equals(cannonDirection) || clickedFace.equals(cannonDirection.getOppositeFace()) ) 
 		{
 			if (isSneaking)
-				return new gunAngles(0.0, -1.0);
+				return new gunAngles(0.0, -1000.0);
 			else
-				return new gunAngles(0.0, 1.0);
+				return new gunAngles(0.0, 1000.0);
 		}
 		
 		return new gunAngles(0.0, 0.0);
