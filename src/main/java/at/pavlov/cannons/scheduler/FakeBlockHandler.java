@@ -79,7 +79,7 @@ public class FakeBlockHandler {
                 if (loc != null)
                 {
                     player.sendBlockChange(loc, loc.getBlock().getType(), loc.getBlock().getData());
-                    plugin.logDebug("expired fake block: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + next.getType().toString());
+                    // plugin.logDebug("expired fake block: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + next.getType().toString());
                 }
                 //remove this entry
                 iter.remove();
@@ -197,7 +197,7 @@ public class FakeBlockHandler {
             }
             if (!found)
             {
-                plugin.logDebug("new block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
+                //plugin.logDebug("new block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
                 player.sendBlockChange(loc, material.getType(), (byte) material.getData());
                 list.add(fakeBlockEntry);
             }
