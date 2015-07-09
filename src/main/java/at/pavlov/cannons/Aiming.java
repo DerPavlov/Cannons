@@ -493,6 +493,19 @@ public class Aiming {
                 iter.remove();
                 continue;
             }
+
+			//load from chest
+			if (!cannon.isLoaded() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
+				MessageEnum messageEnum = cannon.reloadFromChests(cannon.getOwner(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
+				if (messageEnum.isError()) {
+					cannon.setSentryLastLoadingFailed(System.currentTimeMillis());
+					CannonsUtil.playErrorSound(cannon.getMuzzle());
+					plugin.logDebug("Sentry " + cannon.getCannonName() + " loading message: " + messageEnum);
+				}
+				else
+					cannon.setSentryLastLoadingFailed(System.currentTimeMillis()-2000);
+			}
+
             // calculate a firing solution
             if (cannon.isChunkLoaded() && System.currentTimeMillis() > cannon.getLastSentryUpdate() + cannon.getCannonDesign().getSentryUpdateTime()) {
                 cannon.setLastSentryUpdate(System.currentTimeMillis());
@@ -550,6 +563,7 @@ public class Aiming {
 						}
 						else {
 							//event cancelled
+							plugin.logDebug("can't find solution for target");
 							cannon.setSentryEntity(null);
 						}
                     }
@@ -571,17 +585,6 @@ public class Aiming {
             }
             //ready to fire
             if (cannon.hasSentryEntity() && cannon.targetInSight()) {
-                //load from chest
-                if (!cannon.isLoaded() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
-                    MessageEnum messageEnum = cannon.reloadFromChests(cannon.getOwner(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
-                    if (messageEnum.isError()) {
-                        cannon.setSentryLastLoadingFailed(System.currentTimeMillis());
-                        CannonsUtil.playErrorSound(cannon.getMuzzle());
-                        plugin.logDebug("Sentry " + cannon.getCannonName() + " loading message: " + messageEnum);
-                    }
-                    else
-                        cannon.setSentryLastLoadingFailed(System.currentTimeMillis()-2000);
-                }
                 if (cannon.isReadyToFire()) {
                     MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
                     if (messageEnum != null)
@@ -655,18 +658,22 @@ public class Aiming {
             return false;
 
         plugin.logDebug("calculate Target solution for target at: " + targetLoc.toVector());
-        for (int i=0; i<60; i++){
-            Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
+        for (int i=0; i<100; i++){
+			Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
             double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc);
 			if (Math.abs(diffY) > 1000.0){
                 plugin.logDebug("diffY too large: " + diffY);
 				return false;
 			}
-
             if (true) {// !cannon.getCannonDesign().isSentryIndirectFire()) {
 				if (diffY < 0) {
-					cannon.setAimingPitch(cannon.getAimingPitch() - cannon.getCannonDesign().getAngleStepSize());
-				} else {
+					double newPitch = cannon.getAimingPitch() - cannon.getCannonDesign().getAngleStepSize();
+					if (cannon.canAimPitch(newPitch))
+						cannon.setAimingPitch(newPitch);
+					else
+						return false;
+				}
+				else {
                     return true;
                 }
             }
@@ -687,7 +694,7 @@ public class Aiming {
                 if (oldLoc == null)
                     return cLoc.getY() - target.getY();
                 Vector vel = cannonball.getVel().clone();
-                double dist1 = vel.getX()+vel.getY()+vel.getZ();
+                double dist1 = Math.sqrt(vel.getX()*vel.getX()+vel.getY()*vel.getY()+vel.getZ()*vel.getZ());
                 double dist2 = oldLoc.distance(target.toVector());
                 Vector inter = oldLoc.add(vel.multiply(dist2 /dist1));
                 return inter.getY() - target.getY();
