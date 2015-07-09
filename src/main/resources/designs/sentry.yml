@@ -1,0 +1,321 @@
+general:
+  #name of the cannon. This will show of on the cannon sign - therefore keep it short
+  designName: "sentry"
+  #This will be used for messages and will replace CANNON in all messages. (e.g. You created a classic cannon)
+  messageName: "sentry cannon"
+  #a short description of the cannon
+  description: "Sentry cannon will target mobs automatically."
+  #last user of cannon becomes to it's owner (cannon is public)
+  lastUserBecomesOwner: false
+
+
+signs:
+  #this cannon needs a sign to operate. Important for moving cannons.
+  isSignRequired: false
+
+
+ammunition:
+  #what the gunpowder is called
+  gunpowderName: gunpowder
+  #what item is used as gunpowder (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
+  gunpowderType: 'SULPHUR:0'
+  #does this cannon need gunpowder. If false you can directly load the projectile
+  needsGunpowder: true
+  #gunpowder will be removed from inventories. If false you have to click the cannon until it is reloaded
+  gunpowderConsumption: true
+  #if false the cannons will not remove the projectile form the inventory but you still need a projectile
+  projectileConsumption: true
+  #if true, no item is removed from the players inventory
+  ammoInfiniteForPlayer: false
+  #if true, the cannons does not consume ammunition for autoreloading with redstone
+  ammoInfiniteForRedstone: false
+  #whether the cannon can reload from a chest
+  autoreloadRedstone: true
+  #after firing the projectile are usually gone, but you can set this to false to keep the cannon loaded. Just load the cannon once and it stays loaded until you break it.
+  removeChargeAfterFiring: true
+
+
+barrelProperties:
+  #maximum gunpowder that can be loaded in the cannon
+  maxLoadableGunpowder: 3
+  #how much faster the loaded projectile will fired for each gunpowder loaded
+  multiplierVelocity: 1.0
+  #the angle of which a fired projectile spreads when fired. Basically the lower this is, the more accurate the cannon is
+  spreadOfCannon: 1.0
+
+
+timings:
+  #how long anyone near the cannon without a helmet will be confused when the cannon is fired
+  blastConfusion: 5
+  #the delay in seconds between when someone fires a cannon and when the actual projectiles fired from the cannon
+  fuseBurnTime: 1
+  #the time in seconds before the cannon can be fired again. Outdated due to heat management
+  barrelCooldownTime: 0
+
+
+angles:
+  #used to adjust in what direction a projectile is fired from a cannon. adjust this if your cannon is firing sideways or at itself
+  defaultHorizontalFacing: north
+  #the default angle vertical angle which the cannon aims at when built. this is good for mortars and similar upwards firing weapons
+  defaultVerticalAngle: 0.0
+  #min and max horizontal angles determine how far to the left and right the cannon can be aim
+  maxHorizontalAngle: 45.0
+  minHorizontalAngle: -45.0
+  #min and max vertical angles determine how far upwards or downwards the cannon can be aimed
+  maxVerticalAngle: 45.0
+  minVerticalAngle: -45.0
+  #if the cannon is on a ship the angles might be smaller
+  maxHorizontalAngleOnShip: 10.0
+  minHorizontalAngleOnShip: -10.0
+  maxVerticalAngleOnShip: 45.0
+  minVerticalAngleOnShip: -45.0
+  #each change of the angles will change angle by this amount
+  angleStepSize: 0.1
+  #rougher steps to change cannon direction more quickly
+  largeStepSize: 5.0
+  #how fast the cannons can be turned in seconds (fastest is 0.05s)
+  angleUpdateSpeed: 0.1
+  #a message with the new angles is displayed to the user while aiming
+  angleUpdateMessage: true
+
+
+#the impact predictor will show the impact location of a loaded cannon
+impactPredictor:
+  #enable the impact predictor
+  enabled: true
+  #the impact location will be shown after the last angle change of the cannon [s]
+  delay: 0.5
+  #update rate. How often the impact predictor will be calculated per second
+  update: 0.2
+
+
+#sentry mode allows the gun to search and destroy targets automatically.
+sentry:
+  #this gun is a sentry gun. It will operate on its own.
+  isSentry: true
+  #at which distance the sentry will stop firing because it is too close
+  minRange: 5
+  #at which distance the sentry will detected enemies
+  maxRange: 100
+  #how long the cannon updating firing solutions. Higher delays result in worse tracking of a moving target. [s]
+  update: 1.0
+  #the cannon will switch to the next target after some time [s]
+  swapTime: 10.0
+
+
+heatManagement:
+  #if heat management is used or not
+  enabled: true
+  #if true the cannon will refuse to fire if the cannon temperature after firing would be higher than critical
+  automaticTemperatureControl: true
+  #touching a hot cannon will hurt (in full hearts)
+  burnDamage: 0.0
+  #touching a hot cannon will slow you (in seconds)
+  burnSlowing: 10
+  #how much firing one gunpowder will increase the temperature of the barrel
+  heatIncreasePerGunpowder: 5.0
+  #heat dissipation time coefficient. Smaller time coefficient means it cools down faster
+  coolingTimeCoefficient: 10.0
+  #how much cooling with the cooling item (config.yml e.g. water bucket) will cool the cannon
+  coolingAmount: 50.0
+  #searchs for cooling items in chests and cools the cannon if the cannon temperature above the warning temperature
+  automaticCooling: true
+  #the barrel is hot and you will notice this effect
+  warningTemperature: 60.0
+  #the barrel damage is critical and the cannon can explode
+  criticalTemperature: 150.0
+  #if the cannon exceeds this temperature it will explode
+  maximumTemperature: 300.0
+  #items to cool down a cannon (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
+  coolingItems:
+    - 'WATER_BUCKET:0'
+    - 'ICE:0'
+    - 'SNOW_BLOCK:0'
+  #items which are returned after cooling the cannon. The order is the same like above.
+  #setting a item to AIR (0:0) means it will only remove one item instead of replacing the item (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
+  coolingItemsUsed:
+    - 'BUCKET:0'
+    - 'AIR:0'
+    - 'AIR:0'
+
+
+#cannon can be loaded with more gunpowder, but might explode after firing
+overloading:
+  #cannon can explode if overloaded with gunpowder
+  #chance = chanceInc * ((all loaded gunpowder - maximum loadable gunpowder without overloading) * ChanceOfExplosionPerGunpowder)^Exponent
+  enabled: true
+  #in real mode cannon can also explode when not overloaded
+  #chance = chanceInc * (all loaded gunpowder * ChanceOfExplosionPerGunpowder)^Exponent
+  realMode: false
+  exponent: 2
+  chanceInc: 1
+  maxOverloadableGunpowder: 1
+  chanceOfExplosionPerGunpowder: 0.05
+  #the explosion chance will be multiplied by cannon's temperature / maximumTemperature
+  dependsOfTemperature: true
+  #loaded gunpowder = 3 normal + 1 overloaded
+  #exploding change = 1 * ((3+1)*0.05)^2 = 4%
+
+
+economy:
+  #the money the is withdrawn from your account when you build a cannon. If you have not enough - no cannon will be created
+  buildingCosts: 100.0
+  #how much money you receive if your cannon was deconstructed
+  dismantlingRefund: 90.0
+  #how much money you receive if your cannon was destroyed
+  destructionRefund: 10.0
+
+
+realisticBehaviour:
+  #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
+  isFiringItemRequired: false
+  #firing a cannon produced soot (dirt) which needs to be cleaned. Cleaning is necessary if soot>=1
+  sootPerGunpowder: 0.1
+  #created cannon will have this amount of soot (0 to disable this feature)
+  startingSoot: 10
+  #after loading a projectile it is necessary to push the projectile against the gunpowder
+  projectilePushing: 2
+  #the cannon move one block back after firing (not implemented yet)
+  hasRecoil: false
+  #whether you have to load the cannon from the same place the projectile is fired (aka muzzle loading) (not implemented yet)
+  isFrontloader: false
+  #whether the whole cannon can be rotated 90 degrees (not implemented yet)
+  isRotatable: false
+  #whether the cannon can be used with fire missions to bombarded a certain location (not implemented yet)
+  supportsFireMission: false
+  #the mass in kilogram of a cannon is important for moving objects e.g. ships
+  massOfCannon: 500
+  #cannon explodes if a loaded cannon is destroyed. Explosion power 4 (like tnt) and 0 to disable it. Will be scaled with the loaded gunpowder.
+  explodingLoadedCannon: 2.0
+  #fire after loading projectile with the time delay given by the fuse time. Sneaking will stop immediate firing.
+  fireAfterLoading: false
+  #dismantling takes some time (fits to the sound) [s]
+  dismantlingDelay: 1.75
+
+
+permissions:
+  #all the permissions required for a player to use certain parts of the cannon
+  #more information can be found here: http://dev.bukkit.org/bukkit-plugins/cannons/pages/installation-and-configuration/cannons-2-0-and-up/permissions/
+  build: cannons.player.build
+  #for deconstructing a cannon you need to be the owner and have this permission
+  dismantle: cannons.player.dismantle
+  #give the cannon a new name
+  rename: cannons.player.rename
+  #permission for loading gunpowder and projectiles
+  load: cannons.player.load
+  #permission for firing a cannon
+  fire: cannons.player.fire
+  #permission for aiming with a cannon
+  adjust: cannons.player.adjust
+  #permission to used the ramrod (stick) to clean and push the projectile
+  ramrod: cannons.player.ramrod
+  #the cannon will follow the looking direction of the player if the aiming item is used (default: clock)
+  autoaim: cannons.player.autoaim
+  #player can add himself as an observer of a cannon with the cmd: '/cannons observer'
+  observer: cannons.player.observer
+  #not implemented yet
+  targetTracking: cannons.player.tracking
+  #if a player has no permission for redstone, it is not possible to wire a cannon with redstone or uses torches.
+  #firing a prewired cannon however is possible.
+  redstone: cannons.player.redstone
+  #this player can use a thermometer to measure the temperature of a cannon (default item for thermometer is a gold nugget)
+  redstone: cannons.player.thermometer
+  #cannon will autoreload if the player is sneaking and fires the cannon.
+  #The ammunition comes from the chest next to the cannon
+  autoreload: cannons.player.autoreload
+  #how much better the player can handle the cannon.
+  #possible values are cannons.player.spreadmultiplier.1 - cannons.player.spreadmultiplier.10 for a multiplier of 0.1 - 1.0
+  spreadMultiplier: cannons.player.spreadmultiplier
+
+
+accessRestriction:
+  #whether only the owner of the cannon can use it or not (not implemented yet)
+  ownerOnly: false
+allowedProjectiles:
+  #these are the list of projectiles a cannon can fire. The projectiles are taken from the config files in the projectiles folder.
+  #they do not have to be named after an in-game item and can be named anything.
+  #make sure the name matches the name of the config file of the projectile you want this cannon to be able to fire. the .yml part does not need to be included
+  - cobblestone
+  - diamond
+  - canistershot
+  - enderpearl
+  - tnt
+  - firework1
+
+
+sounds:
+  #sound effects for this cannon.
+  #You can enter new sounds in the following way 'NAME:VOLUME:PITCH'. Like 'IRONGOLEM_WALK:1:0.5'
+  #NAME: You can find valid names here: http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html
+  #VOLUME: How far you will hear this sound
+  #PITCH: How fast it is played. (0.5-2)
+  #USE: 'none:1:1' to disable this sound
+
+  #creating a new cannon
+  create: 'ANVIL_LAND:1:0.5'
+  #destroying a cannon
+  destroy: 'ZOMBIE_METAL:1:0.5'
+  #dismantling a cannon
+  dismantle: 'ANVIL_BREAK:1:0.5'
+  #changing the angle of a cannon
+  adjust: 'IRONGOLEM_WALK:1:0.5'
+  #fuse igniting sound when firing
+  ignite: 'FUSE:5:1'
+  #firing sound
+  firing: 'EXPLODE:20:1.5'
+  #loading gunpowder
+  gunpowderLoading: 'DIG_SAND:1:1.5'
+  #loading gunpowder
+  gunpowderOverloading: 'DIG_GRASS:1:1.5'
+  #cooling a cannon
+  cool: 'FIZZ:1:1'
+  #smoke effects for touching a hot barrel
+  hot: 'FIZZ:1:1'
+  #cleaning with the ramrod
+  ramrodCleaning: 'DIG_SNOW:0.5:0'
+  #cleaning with ramrod done
+  ramrodCleaningDone: 'DIG_SNOW:0.5:1'
+  #pushing projectile into the barrel
+  ramrodPushing: 'DIG_STONE:0.5:0'
+  #pushing projectile done
+  ramrodPushingDone: 'ANVIL_LAND:0.5:0'
+  #measuring the cannon temperature with a thermometer
+  thermometer: 'ANVIL_LAND:1:1'
+  #enabling the aiming mode with a clock
+  enableAimingMode: 'NONE:1:1'
+  #disabling aiming mode
+  disableAimingMode: 'NONE:1:1'
+
+
+constructionBlocks:
+  #blocks of the cannon schematic which are ignored and not required to build the cannon. Default is sand
+  ignore: 'SAND:0'
+  #the block which the projectile is fired from the cannon, direction can be adjusted using the defaultHorizontalFacing property. Default is block of snow
+  muzzle: 'SNOW_BLOCK:0'
+  #the block used to indicate when a cannon has been fired. default is torch. Makes fancy smoke on this location
+  firingIndicator: 'TORCH:5'
+  #the block used to indicate where the player can place chests or signs on the cannon. Default is a blank wall sign
+  chestAndSign: 'WALL_SIGN:-1'
+  #indicates where redstone torches can be placed for redstone autoload and firing to work. Default is redstone torch
+  redstoneTorch: 'REDSTONE_TORCH_ON:5'
+  #the block used to indicate where redstone wiring needs to be placed for redstone autoloading and firing to work. Default is redstone repeater
+  restoneWireAndRepeater: 'DIODE_BLOCK_OFF:-1'
+  #options for where a redstone signal needs to lead to in order to activate redstone autoloading and firing
+  redstoneTrigger: 
+    #the block used by the schematic to indicate where the redstone signal needs to lead to. Default is a lever
+    schematic: 'LEVER:3'
+    #the block used in game where the redstone signal needs to lead to. Default is stone button
+    ingame: 'STONE_BUTTON:3'
+  #the blocks which a player right clicks in order to fire a cannon
+  rightClickTrigger: 
+    #the block used in the cannons schematic which is used to fire the cannon when right clicked by a player. Default is torch
+    schematic: 'TORCH:5'
+    #the block used in game to fire the cannon when right clicked by a player. Default is torch
+    ingame: 'TORCH:5'
+  #list of blocks in the schematic that will be protected from explosions (e.g. buttons, because they break easily)
+  protectedBlocks:
+    - 'TORCH:5'
+    - 'LEVER:-1'
+    - 'STONE_BUTTON:-1'
+
+
