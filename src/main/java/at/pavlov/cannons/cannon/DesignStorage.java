@@ -601,6 +601,7 @@ public class DesignStorage
 		copyFile("classic");
         copyFile("mortar");
         copyFile("ironCannon");
+		copyFile("sentry");
 	}
 
     /**
