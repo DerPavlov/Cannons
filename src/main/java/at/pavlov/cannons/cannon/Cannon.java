@@ -86,6 +86,8 @@ public class Cannon
     private long sentryTargetingTime;
     // last time loading was tried and failed. Wait some time before trying again
     private long sentryLastLoadingFailed;
+    // last time firing failed. Wait some time before trying again
+    private long sentryLastFiringFailed;
 
     //observer will see the impact of the target predictor
     //<Player name, remove after showing impact>
@@ -341,14 +343,21 @@ public class Cannon
      */
     MessageEnum loadGunpowder(int amountToLoad)
     {
+        //this cannon does not need gunpowder
+        if (!design.isGunpowderNeeded())
+            return MessageEnum.ErrorNoGunpowderNeeded;
         // this cannon needs to be cleaned first
         if (!isClean())
             return MessageEnum.ErrorNotCleaned;
+        if (isLoading())
+            return MessageEnum.ErrorLoadingInProgress;
+        if (isFiring())
+            return MessageEnum.ErrorFiringInProgress;
         //projectile pushing necessary
         if (isLoaded()&&!isProjectilePushed())
             return MessageEnum.ErrorNotPushed;
         // projectile already loaded
-        if (isLoaded()&&isProjectilePushed())
+        if (isLoaded())
             return MessageEnum.ErrorProjectileAlreadyLoaded;
         // maximum gunpowder already loaded
         if (getLoadedGunpowder() >= design.getMaxLoadableGunpowderOverloaded())
@@ -516,15 +525,6 @@ public class Cannon
             // player can't load cannon
             if (!player.hasPermission(design.getPermissionLoad()))
                 return MessageEnum.PermissionErrorLoad;
-            //this cannon does not need gunpowder
-            if (!design.isGunpowderNeeded())
-                return MessageEnum.ErrorNoGunpowderNeeded;
-            // already loaded with a projectile
-            if (isLoaded())
-                return MessageEnum.ErrorProjectileAlreadyLoaded;
-            // is cannon cleaned with ramrod?
-            if (!isClean())
-                return MessageEnum.ErrorNotCleaned;
         }
         // loading successful
         return MessageEnum.loadGunpowder;
@@ -560,6 +560,10 @@ public class Cannon
         // no gunpowder loaded
         if (!isGunpowderLoaded())
             return MessageEnum.ErrorNoGunpowder;
+        if (isLoading())
+            return MessageEnum.ErrorLoadingInProgress;
+        if (isFiring())
+            return MessageEnum.ErrorFiringInProgress;
         // already loaded with a projectile
         if (isLoaded())
             return MessageEnum.ErrorProjectileAlreadyLoaded;
@@ -584,10 +588,10 @@ public class Cannon
         //if the player is not the owner of this gun
         if (player!=null &&!this.getOwner().equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
             return MessageEnum.ErrorNotTheOwner;
+        if (isLoading())
+            return MessageEnum.ErrorLoadingInProgress;
         if (isFiring())
-        {
             return MessageEnum.ErrorFiringInProgress;
-        }
         //if the barrel is dirty clean it
         if (!isClean())
         {
@@ -598,16 +602,16 @@ public class Cannon
                 return MessageEnum.RamrodCleaning;
         }
         //if clean load the gunpowder
-        if (isClean()&&!isGunpowderLoaded())
+        if (!isGunpowderLoaded())
         {
             cleanCannon(1);
             return MessageEnum.ErrorNoGunpowder;
         }
         //if no projectile
-        if (isGunpowderLoaded()&&!isLoaded())
+        if (!isLoaded())
             return MessageEnum.ErrorNoProjectile;
         //if the projectile is loaded
-        if (isLoaded() && !isProjectilePushed())
+        if (!isProjectilePushed())
         {
             pushProjectile(1);
             if (isProjectilePushed())
@@ -1962,7 +1966,7 @@ public class Cannon
      * @return true if the cannon can be loaded
      */
     public boolean isReadyToFire(){
-        return isLoaded() && !isOverheatedAfterFiring() && !isFiring() && isClean() && !barrelTooHot();
+        return isLoaded() && !isOverheatedAfterFiring() && !isFiring() && isClean() && !barrelTooHot() && isProjectilePushed();
     }
 
     /**
@@ -2364,5 +2368,13 @@ public class Cannon
 
     public void setLastLoaded(long lastLoaded) {
         this.lastLoaded = lastLoaded;
+    }
+
+    public long getSentryLastFiringFailed() {
+        return sentryLastFiringFailed;
+    }
+
+    public void setSentryLastFiringFailed(long sentryLastFiringFailed) {
+        this.sentryLastFiringFailed = sentryLastFiringFailed;
     }
 }

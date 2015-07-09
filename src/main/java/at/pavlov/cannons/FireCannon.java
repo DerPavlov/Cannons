@@ -55,6 +55,9 @@ public class FireCannon {
         //if the player is not the owner of this gun
         if (player != null && !cannon.getOwner().equals(player.getUniqueId())  && design.isAccessForOwnerOnly())
             return MessageEnum.ErrorNotTheOwner;
+        //Loading in progress
+        if (cannon.isLoading())
+            return MessageEnum.ErrorLoadingInProgress;
         // is the cannon already cleaned?
         if (!cannon.isClean())
             return MessageEnum.ErrorNotCleaned;
@@ -67,9 +70,6 @@ public class FireCannon {
         // after cleaning the projectile needs to pushed in the barrel
         if (!cannon.isProjectilePushed())
             return MessageEnum.ErrorNotPushed;
-        //Loading in progress
-        if (cannon.isLoading())
-            return MessageEnum.ErrorLoadingInProgress;
         //Firing in progress
         if (cannon.isFiring())
             return MessageEnum.ErrorFiringInProgress;
@@ -170,7 +170,7 @@ public class FireCannon {
 
 
         //no charge try some autoreload from chests
-        if (!cannon.isLoaded() && autoload)
+        if (!cannon.isLoaded() && !cannon.isLoading() && autoload)
         {
             MessageEnum messageEnum = cannon.reloadFromChests(playerUid, consumesAmmo);
             //try to load some projectiles

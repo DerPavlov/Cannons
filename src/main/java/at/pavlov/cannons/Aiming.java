@@ -502,8 +502,6 @@ public class Aiming {
 					CannonsUtil.playErrorSound(cannon.getMuzzle());
 					plugin.logDebug("Sentry " + cannon.getCannonName() + " loading message: " + messageEnum);
 				}
-				else
-					cannon.setSentryLastLoadingFailed(System.currentTimeMillis()-2000);
 			}
 
             // calculate a firing solution
@@ -585,10 +583,15 @@ public class Aiming {
             }
             //ready to fire
             if (cannon.hasSentryEntity() && cannon.targetInSight()) {
-                if (cannon.isReadyToFire()) {
+                if (cannon.isReadyToFire()  && System.currentTimeMillis() > cannon.getSentryLastFiringFailed() + 2000) {
                     MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
-                    if (messageEnum != null)
-                        plugin.logDebug("Sentry " + cannon.getCannonName() + " firing message: " + messageEnum);
+                    if (messageEnum != null) {
+						plugin.logDebug("Sentry " + cannon.getCannonName() + " firing message: " + messageEnum);
+						if (messageEnum.isError()) {
+							cannon.setSentryLastFiringFailed(System.currentTimeMillis());
+							CannonsUtil.playErrorSound(cannon.getMuzzle());
+						}
+					}
                 }
             }
         }
@@ -694,7 +697,7 @@ public class Aiming {
                 if (oldLoc == null)
                     return cLoc.getY() - target.getY();
                 Vector vel = cannonball.getVel().clone();
-                double dist1 = Math.sqrt(vel.getX()*vel.getX()+vel.getY()*vel.getY()+vel.getZ()*vel.getZ());
+                double dist1 = Math.sqrt(vel.getX() * vel.getX() + vel.getY() * vel.getY() + vel.getZ() * vel.getZ());
                 double dist2 = oldLoc.distance(target.toVector());
                 Vector inter = oldLoc.add(vel.multiply(dist2 /dist1));
                 return inter.getY() - target.getY();
