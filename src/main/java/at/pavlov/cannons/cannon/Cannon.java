@@ -1276,7 +1276,6 @@ public class Cannon
     public boolean coolCannon(Player player)
     {
         int toCool = (int) Math.ceil((this.getTemperature() - design.getWarningTemperature())/design.getCoolingAmount());
-        System.out.println("to cool: " + toCool);
         if (toCool <= 0)
             return false;
 
@@ -1314,7 +1313,6 @@ public class Cannon
         {
             effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
             //effectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 1, 1);
-            System.out.println("design sound: " + design.getSoundCool());
             CannonsUtil.playSound(effectLoc, design.getSoundCool());
         }
         return cooled;
