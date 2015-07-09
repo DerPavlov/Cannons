@@ -208,6 +208,15 @@ public class Cannon
         if (!isClean())
             return MessageEnum.ErrorNotCleaned;
 
+        if (!isLoading())
+            return MessageEnum.ErrorLoadingInProgress;
+
+        if (!isFiring())
+            return  MessageEnum.ErrorFiringInProgress;
+
+        if (!isLoaded())
+            return MessageEnum.ErrorProjectileAlreadyLoaded;
+
         //load gunpowder if there is nothing in the barrel
         if (design.isGunpowderConsumption()&&design.isGunpowderNeeded()&&consumesAmmo)
         {
@@ -232,7 +241,6 @@ public class Cannon
                     return MessageEnum.ErrorNoGunpowderInChest;
                 }
             }
-
         }
         else {
             //no ammo consumption - only load if there is less gunpowder then normal in the barrel
