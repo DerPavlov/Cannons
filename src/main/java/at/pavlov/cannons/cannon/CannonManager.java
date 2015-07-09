@@ -592,6 +592,12 @@ public class CannonManager
 			{
 				// for all blocks for the design
 				List<SimpleBlock> designBlockList = cannonDesign.getAllCannonBlocks(cannonDirection);
+                //check for empty entries
+                if (designBlockList.size() == 0)
+                {
+                    plugin.logSevere("There are empty cannon design schematics in your design folder. Please check it.");
+                    return null;
+                }
 				for (SimpleBlock designBlock : designBlockList)
 				{
 					// compare blocks
@@ -602,12 +608,7 @@ public class CannonManager
 
 						// check all other blocks of the cannon
 						boolean isCannon = true;
-                        //check for empty entries
-                        if (designBlockList.size() == 0)
-                        {
-                            isCannon = false;
-                            plugin.logSevere("There are empty cannon design schematics in your design folder. Please check it.");
-                        }
+
 						for (SimpleBlock checkBlocks : designBlockList)
 						{
 							if (!checkBlocks.compareBlockFuzzy(world, offset))
