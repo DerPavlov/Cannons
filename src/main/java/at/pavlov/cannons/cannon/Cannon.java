@@ -480,7 +480,6 @@ public class Cannon
         {
             // load projectile
             loadedProjectile = projectile;
-            //player.getWorld().playSound(this.getMuzzle(), Sound.IRONGOLEM_THROW, 1F, 0.5F);
             CannonsUtil.playSound(getMuzzle(), projectile.getSoundLoading());
 
             // remove from player
