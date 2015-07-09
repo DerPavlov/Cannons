@@ -628,13 +628,11 @@ public class CannonManager
 						}
 					}
 				}
-
 				// rotate cannon direction
 				cannonDirection = CannonsUtil.roatateFace(cannonDirection);
 			}
 
 		}
-
 		return null;
 	}
 

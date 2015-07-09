@@ -298,6 +298,7 @@ public class UserMessages {
             if (cannon.getCannonName()!=null)
                 message = message.replace("CANNON_NAME", cannon.getCannonName());
             message = message.replace("CANNON", cannon.getCannonDesign().getMessageName());
+			message = message.replace("DESCRIPTION", cannon.getCannonDesign().getDescription());
             OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
             if (offplayer != null)
                 message = message.replace("OWNER", offplayer.getName());
