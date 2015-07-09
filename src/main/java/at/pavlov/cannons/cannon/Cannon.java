@@ -50,6 +50,8 @@ public class Cannon
     private long lastFired;
     // time it was last aimed
     private long lastAimed;
+    // it was loaded for the last time
+    private long lastLoaded;
     // last time the sentry mode solution was updated
     private long lastSentryUpdate;
 
@@ -93,8 +95,6 @@ public class Cannon
     private UUID owner;
     // designID of the cannon, for different types of cannons - not in use
     private boolean isValid;
-    // true if the cannon if firing
-    private boolean isFiring;
     // time point of the last start of the firing sequence (used in combination with isFiring)
     private long lastIgnited;
     // the player which has used the cannon last, important for firing with redstone button
@@ -270,6 +270,7 @@ public class Cannon
                     //push projectile and done
                     setProjectilePushed(0);
                     CannonsUtil.playSound(getMuzzle(), getLoadedProjectile().getSoundLoading());
+                    lastLoaded = System.currentTimeMillis();
                     return MessageEnum.loadProjectile;
                 }
             }
@@ -674,7 +675,7 @@ public class Cannon
      */
     public boolean isLoaded()
     {
-        return isProjectileLoaded()&&isGunpowderLoaded();
+        return isProjectileLoaded()&&isGunpowderLoaded()&&!isLoading();
     }
 
     /**
@@ -1876,25 +1877,25 @@ public class Cannon
 
     public boolean isFiring()
     {
-        if (isFiring)
-        {
-            //check if firing is finished and not reseted (after server restart)
-            Projectile projectile = getLoadedProjectile();
-            //delayTime is the time how long the firing should take
-            Long delayTime = (long) ((design.getFuseBurnTime() + (projectile.getAutomaticFiringMagazineSize()-1)*projectile.getAutomaticFiringDelay())*1000.0);
-            if ((lastIgnited + delayTime) < System.currentTimeMillis())
-            {
-                System.out.println("reseted isFiring " + delayTime + " " + design.getFuseBurnTime());
-                isFiring = false;
-            }
-        }
-        return isFiring;
+        //check if firing is finished and not reseted (after server restart)
+        Projectile projectile = getLoadedProjectile();
+        //delayTime is the time how long the firing should take
+        Long delayTime = (long) (design.getFuseBurnTime()*1000.);
+        if (projectile != null)
+            delayTime += (long) (((projectile.getAutomaticFiringMagazineSize()-1)*projectile.getAutomaticFiringDelay())*1000.0);
+
+        return (lastIgnited + delayTime) >= System.currentTimeMillis();
     }
 
-    public void setFiring(boolean firing) {
-        isFiring = firing;
-        if (firing)
-            lastIgnited = System.currentTimeMillis();
+    public void setFiring() {
+        lastIgnited = System.currentTimeMillis();
+    }
+
+    public boolean isLoading()
+    {
+        //delayTime is the time how long the loading should take
+        Long delayTime = (long) (design.getLoadTime()*1000.0);
+        return (lastLoaded + delayTime) > System.currentTimeMillis();
     }
 
     /**
@@ -2356,5 +2357,13 @@ public class Cannon
 
     public int getLastFiredGunpowder() {
         return lastFiredGunpowder;
+    }
+
+    public long getLastLoaded() {
+        return lastLoaded;
+    }
+
+    public void setLastLoaded(long lastLoaded) {
+        this.lastLoaded = lastLoaded;
     }
 }

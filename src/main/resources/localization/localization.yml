@@ -1,5 +1,6 @@
 Error:
   FiringInProgress: 'RED [Cannons] CANNON is firing. Step back.'
+  LoadingInProgress: 'RED [Cannons] CANNON is loading a projectile.'
   BarrelTooHot: 'RED [Cannons] The barrel is too hot and must cool down.'
   NotCleaned: 'RED [Cannons] The barrel must be cleaned before firing.'
   NoGunpowder: 'RED [Cannons] No gunpowder. Please load the barrel.'

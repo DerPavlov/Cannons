@@ -2,9 +2,9 @@ general:
   #name of the cannon. This will show of on the cannon sign - therefore keep it short
   designName: "sentry"
   #This will be used for messages and will replace CANNON in all messages. (e.g. You created a classic cannon)
-  messageName: "sentry cannon"
+  messageName: "sentry"
   #a short description of the cannon
-  description: "Sentry cannon will target mobs automatically."
+  description: "Sentry cannon which targets mobs automatically"
   #last user of cannon becomes to it's owner (cannon is public)
   lastUserBecomesOwner: false
 
@@ -37,20 +37,22 @@ ammunition:
 
 barrelProperties:
   #maximum gunpowder that can be loaded in the cannon
-  maxLoadableGunpowder: 3
+  maxLoadableGunpowder: 1
   #how much faster the loaded projectile will fired for each gunpowder loaded
-  multiplierVelocity: 1.0
+  multiplierVelocity: 0.8
   #the angle of which a fired projectile spreads when fired. Basically the lower this is, the more accurate the cannon is
   spreadOfCannon: 1.0
 
 
 timings:
   #how long anyone near the cannon without a helmet will be confused when the cannon is fired
-  blastConfusion: 5
+  blastConfusion: 5.0
   #the delay in seconds between when someone fires a cannon and when the actual projectiles fired from the cannon
-  fuseBurnTime: 1
+  fuseBurnTime: 1.0
   #the time in seconds before the cannon can be fired again. Outdated due to heat management
-  barrelCooldownTime: 0
+  barrelCooldownTime: 0.0
+  #time to load gunpowder and projectile for autoreload
+  loadTime: 3.0
 
 
 angles:
@@ -70,13 +72,13 @@ angles:
   maxVerticalAngleOnShip: 45.0
   minVerticalAngleOnShip: -45.0
   #each change of the angles will change angle by this amount
-  angleStepSize: 0.1
+  angleStepSize: 0.5
   #rougher steps to change cannon direction more quickly
-  largeStepSize: 5.0
+  largeStepSize: 2.0
   #how fast the cannons can be turned in seconds (fastest is 0.05s)
   angleUpdateSpeed: 0.1
   #a message with the new angles is displayed to the user while aiming
-  angleUpdateMessage: true
+  angleUpdateMessage: false
 
 
 #the impact predictor will show the impact location of a loaded cannon
@@ -93,10 +95,12 @@ impactPredictor:
 sentry:
   #this gun is a sentry gun. It will operate on its own.
   isSentry: true
+  #does this fire like a mortar (indirect - from above) or like a cannon
+  indirectFire: false
   #at which distance the sentry will stop firing because it is too close
   minRange: 5
   #at which distance the sentry will detected enemies
-  maxRange: 100
+  maxRange: 50
   #how long the cannon updating firing solutions. Higher delays result in worse tracking of a moving target. [s]
   update: 1.0
   #the cannon will switch to the next target after some time [s]
@@ -170,7 +174,7 @@ realisticBehaviour:
   #whether a player has to right click while holding the firing item (e.g flint and steel) for the cannon to be fired
   isFiringItemRequired: false
   #firing a cannon produced soot (dirt) which needs to be cleaned. Cleaning is necessary if soot>=1
-  sootPerGunpowder: 0.1
+  sootPerGunpowder: 0.0
   #created cannon will have this amount of soot (0 to disable this feature)
   startingSoot: 10
   #after loading a projectile it is necessary to push the projectile against the gunpowder

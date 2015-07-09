@@ -181,6 +181,7 @@ public class DesignStorage
 		cannonDesign.setBlastConfusion(cannonDesignConfig.getDouble("timings.blastConfusion", 5.0));
 		cannonDesign.setFuseBurnTime(cannonDesignConfig.getDouble("timings.fuseBurnTime", 1.0));
 		cannonDesign.setBarrelCooldownTime(cannonDesignConfig.getDouble("timings.barrelCooldownTime", 1.0));
+		cannonDesign.setLoadTime(cannonDesignConfig.getDouble("timings.loadTime", 3.0));
 
 		// angles
 		cannonDesign.setDefaultHorizontalFacing(BlockFace.valueOf(cannonDesignConfig.getString("angles.defaultHorizontalFacing", "NORTH").toUpperCase()));

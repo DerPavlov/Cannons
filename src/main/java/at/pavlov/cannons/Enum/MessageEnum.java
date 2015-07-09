@@ -4,6 +4,7 @@ public enum MessageEnum
 {
 	//Error Messages
     ErrorFiringInProgress ("Error.FiringInProgress", true),
+	ErrorLoadingInProgress ("Error.LoadingInProgress", true),
 	ErrorBarrelTooHot ("Error.BarrelTooHot", true),
     ErrorNotCleaned ("Error.NotCleaned", true),
 	ErrorNoGunpowder ("Error.NoGunpowder", true),

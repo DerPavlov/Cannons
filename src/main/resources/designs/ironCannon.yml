@@ -51,6 +51,8 @@ timings:
   fuseBurnTime: 1.0
   #the time in seconds before the cannon can be fired again. Outdated due to heat management
   barrelCooldownTime: 0.0
+  #time to load gunpowder and projectile for autoreload
+  loadTime: 3.0
 
 
 angles:

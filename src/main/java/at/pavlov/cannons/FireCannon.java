@@ -67,6 +67,9 @@ public class FireCannon {
         // after cleaning the projectile needs to pushed in the barrel
         if (!cannon.isProjectilePushed())
             return MessageEnum.ErrorNotPushed;
+        //Loading in progress
+        if (cannon.isLoading())
+            return MessageEnum.ErrorLoadingInProgress;
         //Firing in progress
         if (cannon.isFiring())
             return MessageEnum.ErrorFiringInProgress;
@@ -207,7 +210,7 @@ public class FireCannon {
         //reset after firing
         cannon.setLastFired(System.currentTimeMillis());
         //this cannon is now firing
-        cannon.setFiring(true);
+        cannon.setFiring();
         //store spread of cannon operator
         cannon.setLastPlayerSpreadMultiplier(player);
 
@@ -356,9 +359,6 @@ public class FireCannon {
         if (removeCharge)
         {
             cannon.setProjectilePushed(design.getProjectilePushing());
-            
-            //finished firing
-            cannon.setFiring(false);
 
             plugin.logDebug("fire event complete, charge removed from the cannon");
             //removes the gunpowder and projectile loaded in the cannon if not set otherwise

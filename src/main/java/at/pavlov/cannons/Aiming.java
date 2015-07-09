@@ -495,7 +495,7 @@ public class Aiming {
             }
 
 			//load from chest
-			if (!cannon.isLoaded() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
+			if (!cannon.isLoaded() && !cannon.isLoading() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
 				MessageEnum messageEnum = cannon.reloadFromChests(cannon.getOwner(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
 				if (messageEnum.isError()) {
 					cannon.setSentryLastLoadingFailed(System.currentTimeMillis());

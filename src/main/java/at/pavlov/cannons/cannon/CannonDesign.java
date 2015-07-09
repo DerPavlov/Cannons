@@ -47,6 +47,7 @@ public class CannonDesign
 	private double blastConfusion;
 	private double fuseBurnTime;
     private double barrelCooldownTime;
+	private double loadTime;
 	
     //angles
 	private BlockFace defaultHorizontalFacing;
@@ -1557,5 +1558,13 @@ public class CannonDesign
 
 	public void setAngleLargeStepSize(double angleLargeStepSize) {
 		this.angleLargeStepSize = angleLargeStepSize;
+	}
+
+	public double getLoadTime() {
+		return loadTime;
+	}
+
+	public void setLoadTime(double loadTime) {
+		this.loadTime = loadTime;
 	}
 }

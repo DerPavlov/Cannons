@@ -1,4 +1,6 @@
 Error:
+  FiringInProgress: 'RED [Cannons] CANNON feuert. Zurücktreten!'
+  LoadingInProgress: 'RED [Cannons] CANNON lädt nach.'
   BarrelTooHot: 'RED [Cannons] Das Rohr ist zu heiss'
   NotCleaned: 'RED [Cannons] Das Rohr muss noch geputzt werden.'
   NoGunpowder: 'RED [Cannons] Kein Schwarzpulver. Lade zuerst die Treibladung!'
