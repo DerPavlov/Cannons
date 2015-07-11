@@ -660,7 +660,7 @@ public class Aiming {
         if (cannon.getCannonballVelocity() < 0.01)
             return false;
 
-        plugin.logDebug("calculate Target solution for target at: " + targetLoc.toVector());
+        //plugin.logDebug("calculate Target solution for target at: " + targetLoc.toVector());
 
 		//starting values
 		if (cannon.getCannonDesign().isSentryIndirectFire())
@@ -672,11 +672,7 @@ public class Aiming {
 			Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
             double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc);
 
-			plugin.logDebug("run: " + i +  " pitch " + cannon.getAimingPitch() + " step " + step);
-            plugin.logDebug("firing vector: " + fvector);
-
             if (!cannon.getCannonDesign().isSentryIndirectFire()) {
-                plugin.logDebug("direct fire");
 				if (Math.abs(diffY) > 1000.0){
 					plugin.logDebug("diffY too large: " + diffY);
 					return false;
@@ -703,7 +699,6 @@ public class Aiming {
                 }
             }
 			else{
-                plugin.logDebug("diffY: " + diffY);
 				//indirect fire
 				if (diffY < 0){
 					cannon.setAimingPitch(cannon.getAimingPitch() + step);
