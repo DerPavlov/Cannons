@@ -13,7 +13,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -2081,7 +2080,7 @@ public class Cannon
         return verticalAngleToPitch(getVerticalAngle());
     }
 
-    public double horizontalAngleToPitch(double horizontal){
+    public double horizontalAngleToYaw(double horizontal){
         double yaw = horizontal + this.additionalHorizontalAngle + CannonsUtil.directionToYaw(getCannonDirection()) ;
 
         yaw = yaw % 360;
@@ -2093,15 +2092,15 @@ public class Cannon
     }
 
     public double getMaxHorizontalYaw(){
-        return horizontalAngleToPitch(getMaxHorizontalAngle());
+        return horizontalAngleToYaw(getMaxHorizontalAngle());
     }
 
     public double getMinHorizontalYaw(){
-        return horizontalAngleToPitch(getMinHorizontalAngle());
+        return horizontalAngleToYaw(getMinHorizontalAngle());
     }
 
     public double getHorizontalYaw(){
-        return horizontalAngleToPitch(getHorizontalAngle());
+        return horizontalAngleToYaw(getHorizontalAngle());
     }
 
     public boolean isOnShip() {
