@@ -663,65 +663,47 @@ public class Aiming {
         //plugin.logDebug("calculate Target solution for target at: " + targetLoc.toVector());
 
 		//starting values
+		boolean found = false;
+		double step = 10.;
 		int maxInterations = 100;
+		double sign = 1.;
 		if (cannon.getCannonDesign().isSentryIndirectFire()) {
+			sign = -1.;
 			cannon.setAimingPitch(cannon.getMaxVerticalPitch());
 			maxInterations = 500;
 		}
+		// do the first step, because the starting solution is always true
+		cannon.setAimingPitch(cannon.getAimingPitch() - sign*step);
 
-
-		double step = 10.;
         for (int i=0; i<100; i++){
 			Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
             double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc, maxInterations);
 
-            if (!cannon.getCannonDesign().isSentryIndirectFire()) {
-				if (Math.abs(diffY) > 1000.0){
-					plugin.logDebug("diffY too large: " + diffY);
-					return false;
+			if (!cannon.getCannonDesign().isSentryIndirectFire() && Math.abs(diffY) > 1000.0){
+				plugin.logDebug("diffY too large: " + diffY);
+				return false;
+			}
+			//direct fire
+			if (diffY < 0) {
+				//below target
+				if (found)
+					step /= 2.;
+				cannon.setAimingPitch(cannon.getAimingPitch() - sign*step);
+			}
+			else {
+				//aiming above target - valid solution
+				found = true;
+				step /= 2.;
+				cannon.setAimingPitch(cannon.getAimingPitch() + sign * step);
+			}
+
+			if (step < cannon.getCannonDesign().getAngleStepSize()) {
+				//can the cannon aim at this solution
+				if (cannon.canAimPitch(cannon.getAimingPitch())) {
+					return true;
 				}
-				//direct fire
-				if (diffY < 0) {
-					cannon.setAimingPitch(cannon.getAimingPitch() - step);
-				}
-				else {
-					//aiming above target - valid solution
-					if (step > cannon.getCannonDesign().getAngleStepSize()){
-						// solution is not accurate enough, go one step back and redo with finer step size
-						cannon.setAimingPitch(cannon.getAimingPitch() + step);
-						step /= 5.;
-					}
-					else{
-						//can the cannon aim at this solution
-						if (cannon.canAimPitch(cannon.getAimingPitch())) {
-							return true;
-						}
-						// can't aim at this solution
-						return false;
-					}
-                }
-            }
-			else{
-				//indirect fire
-				if (diffY < 0){
-					cannon.setAimingPitch(cannon.getAimingPitch() + step);
-				}
-				else {
-					//aiming above target - valid solution
-					if (step > cannon.getCannonDesign().getAngleStepSize()){
-						// solution is not accurate enough, go one step back and redo with finer step size
-						cannon.setAimingPitch(cannon.getAimingPitch() - step);
-						step /= 5.;
-					}
-					else{
-						//can the cannon aim at this solution
-						if (cannon.canAimPitch(cannon.getAimingPitch())) {
-							return true;
-						}
-						// can't aim at this solution
-						return false;
-					}
-				}
+				// can't aim at this solution
+				return false;
 			}
         }
         return false;
