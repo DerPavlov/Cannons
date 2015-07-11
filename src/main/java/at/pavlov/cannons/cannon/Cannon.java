@@ -208,13 +208,13 @@ public class Cannon
         if (!isClean())
             return MessageEnum.ErrorNotCleaned;
 
-        if (!isLoading())
+        if (isLoading())
             return MessageEnum.ErrorLoadingInProgress;
 
-        if (!isFiring())
+        if (isFiring())
             return  MessageEnum.ErrorFiringInProgress;
 
-        if (!isLoaded())
+        if (isLoaded())
             return MessageEnum.ErrorProjectileAlreadyLoaded;
 
         //load gunpowder if there is nothing in the barrel

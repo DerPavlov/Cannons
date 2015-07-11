@@ -661,35 +661,86 @@ public class Aiming {
             return false;
 
         plugin.logDebug("calculate Target solution for target at: " + targetLoc.toVector());
+
+		//starting values
+		if (cannon.getCannonDesign().isSentryIndirectFire())
+			cannon.setAimingPitch(cannon.getMaxVerticalPitch());
+
+
+		double step = 10.;
         for (int i=0; i<100; i++){
 			Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
             double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc);
-			if (Math.abs(diffY) > 1000.0){
-                plugin.logDebug("diffY too large: " + diffY);
-				return false;
-			}
-            if (true) {// !cannon.getCannonDesign().isSentryIndirectFire()) {
+
+			plugin.logDebug("run: " + i +  " pitch " + cannon.getAimingPitch() + " step " + step);
+            plugin.logDebug("firing vector: " + fvector);
+
+            if (!cannon.getCannonDesign().isSentryIndirectFire()) {
+                plugin.logDebug("direct fire");
+				if (Math.abs(diffY) > 1000.0){
+					plugin.logDebug("diffY too large: " + diffY);
+					return false;
+				}
+				//direct fire
 				if (diffY < 0) {
-					double newPitch = cannon.getAimingPitch() - cannon.getCannonDesign().getAngleStepSize();
-					if (cannon.canAimPitch(newPitch))
-						cannon.setAimingPitch(newPitch);
-					else
-						return false;
+					cannon.setAimingPitch(cannon.getAimingPitch() - step);
 				}
 				else {
-                    return true;
+					//aiming above target - valid solution
+					if (step > cannon.getCannonDesign().getAngleStepSize()){
+						// solution is not accurate enough, go one step back and redo with finer step size
+						cannon.setAimingPitch(cannon.getAimingPitch() + step);
+						step /= 5.;
+					}
+					else{
+						//can the cannon aim at this solution
+						if (cannon.canAimPitch(cannon.getAimingPitch())) {
+							return true;
+						}
+						// can't aim at this solution
+						return false;
+					}
                 }
             }
+			else{
+                plugin.logDebug("diffY: " + diffY);
+				//indirect fire
+				if (diffY < 0){
+					cannon.setAimingPitch(cannon.getAimingPitch() + step);
+				}
+				else {
+					//aiming above target - valid solution
+					if (step > cannon.getCannonDesign().getAngleStepSize()){
+						// solution is not accurate enough, go one step back and redo with finer step size
+						cannon.setAimingPitch(cannon.getAimingPitch() - step);
+						step /= 5.;
+					}
+					else{
+						//can the cannon aim at this solution
+						if (cannon.canAimPitch(cannon.getAimingPitch())) {
+							return true;
+						}
+						// can't aim at this solution
+						return false;
+					}
+				}
+			}
         }
-
         return false;
     }
 
+    /**
+     * calculates the height of the proctile at the target distance
+     * @param vector firing vector
+     * @param muzzle start point of the cannonball
+     * @param target target for the cannonball
+     * @return distance how much above/below the projectile will hit
+     */
     private double simulateShot(Vector vector, Location muzzle, Location target){
         MovingObject cannonball = new MovingObject(muzzle, vector);
         double target_distance = Math.sqrt(Math.pow(target.getX() - muzzle.getX(), 2)+Math.pow(target.getZ()-muzzle.getZ(),2));
         Vector oldLoc = null;
-        for (int i=0; i<100; i++){
+        for (int i=0; i<500; i++){
             cannonball.updateProjectileLocation(false);
             Vector cLoc = cannonball.getLoc();
             if (Math.sqrt(Math.pow(cLoc.getX() - muzzle.getX(), 2) + Math.pow(cLoc.getZ()-muzzle.getZ(),2)) > target_distance) {

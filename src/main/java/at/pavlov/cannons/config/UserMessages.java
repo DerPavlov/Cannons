@@ -313,7 +313,6 @@ public class UserMessages {
 			message = message.replace("BUILD_COSTS", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyBuildingCost()));
             message = message.replace("DISMANTLING_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDismantlingRefund()));
             message = message.replace("DISMANTLING_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDestructionRefund()));
-
         }
 
         if (player != null)
