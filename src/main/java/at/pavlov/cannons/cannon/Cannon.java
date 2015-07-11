@@ -528,7 +528,7 @@ public class Cannon
         if (player != null)
         {
             //if the player is not the owner of this gun
-            if (design.isAccessForOwnerOnly() && !this.getOwner().equals(player.getUniqueId()))
+            if (design.isAccessForOwnerOnly() && this.getOwner()!=null && !this.getOwner().equals(player.getUniqueId()))
                 return MessageEnum.ErrorNotTheOwner;
             // player can't load cannon
             if (!player.hasPermission(design.getPermissionLoad()))
@@ -559,7 +559,7 @@ public class Cannon
         if (player != null)
         {
             //if the player is not the owner of this gun
-            if (!this.getOwner().equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
+            if (this.getOwner()!=null && !this.getOwner().equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
                 return MessageEnum.ErrorNotTheOwner;
             // no permission for this projectile
             if (!projectile.hasPermission(player))
@@ -594,7 +594,7 @@ public class Cannon
         if (player!=null && !player.hasPermission(design.getPermissionRamrod()))
             return MessageEnum.PermissionErrorRamrod;
         //if the player is not the owner of this gun
-        if (player!=null &&!this.getOwner().equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
+        if (player!=null && this.getOwner()!=null && !this.getOwner().equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
             return MessageEnum.ErrorNotTheOwner;
         if (isLoading())
             return MessageEnum.ErrorLoadingInProgress;

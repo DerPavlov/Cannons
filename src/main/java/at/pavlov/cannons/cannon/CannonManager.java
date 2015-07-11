@@ -84,7 +84,7 @@ public class CannonManager
             removeCannon(cannon, true, false, BreakCause.Dismantling);
         else if (player.hasPermission(cannon.getCannonDesign().getPermissionDismantle())) {
             //only the owner of the cannon can dismantle a cannon
-            if (cannon.getOwner().equals(player.getUniqueId()))
+            if (cannon.getOwner()!=null && cannon.getOwner().equals(player.getUniqueId()))
                 removeCannon(cannon, true, false, BreakCause.Dismantling);
             else
             userMessages.sendMessage(MessageEnum.ErrorDismantlingNotOwner, player, cannon);
@@ -179,31 +179,33 @@ public class CannonManager
 
                 // send message to the owner
                 Player player = null;
-                if (cannon.getOwner() != null)
-                {
+                if (cannon.getOwner() != null) {
                     player = Bukkit.getPlayer(cannon.getOwner());
                 }
+
 
                 //fire and an event that this cannon is destroyed
                 CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon);
                 Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
 
-                OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
-                if (offplayer!=null && plugin.getEconomy()!=null) {
-                    // return message
-                    double funds;
-                    switch (cause) {
-                        case Other:
-                            funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
-                            break;
-                        case Dismantling:
-                            funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
-                            break;
-                        default:
-                            funds = cannon.getCannonDesign().getEconomyDestructionRefund();
-                            break;
+                if (cannon.getOwner() != null) {
+                    OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
+                    if (offplayer != null && plugin.getEconomy() != null) {
+                        // return message
+                        double funds;
+                        switch (cause) {
+                            case Other:
+                                funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
+                                break;
+                            case Dismantling:
+                                funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
+                                break;
+                            default:
+                                funds = cannon.getCannonDesign().getEconomyDestructionRefund();
+                                break;
+                        }
+                        plugin.getEconomy().depositPlayer(offplayer, funds);
                     }
-                    plugin.getEconomy().depositPlayer(offplayer, funds);
                 }
 
                 MessageEnum message = cannon.destroyCannon(task.breakCannon(), task.canExplode(), cause);
@@ -281,7 +283,7 @@ public class CannonManager
         Validate.notNull(cannon, "cannon must not be null");
 
         //check some permissions
-        if (!player.getUniqueId().equals(cannon.getOwner()))
+        if (cannon.getOwner() != null && !player.getUniqueId().equals(cannon.getOwner()))
             return MessageEnum.ErrorNotTheOwner;
         if (!player.hasPermission(cannon.getCannonDesign().getPermissionRename()))
             return MessageEnum.PermissionErrorRename;
@@ -818,7 +820,7 @@ public class CannonManager
 		while (iter.hasNext())
 		{
 			Cannon next = iter.next();
-			if (next.getOwner().equals(owner))
+			if (next.getOwner() != null && next.getOwner().equals(owner))
 			{
                 inList = true;
 				next.destroyCannon(false, false, BreakCause.Other);

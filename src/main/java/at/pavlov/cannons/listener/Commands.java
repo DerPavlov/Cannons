@@ -145,7 +145,7 @@ public class Commands implements CommandExecutor
                         if (offplayer != null) {
                             sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + offplayer.getName() + ChatColor.GREEN + ":");
                             for (Cannon cannon : CannonManager.getCannonList().values()) {
-                                if (cannon.getOwner().equals(offplayer.getUniqueId()))
+                                if (cannon.getOwner() != null && cannon.getOwner().equals(offplayer.getUniqueId()))
                                     sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " location:" + ChatColor.GOLD + cannon.getOffset().toString());
                             }
                         }
@@ -156,8 +156,10 @@ public class Commands implements CommandExecutor
                         sendMessage(sender, ChatColor.GREEN + "List of all cannons:");
                         for (Cannon cannon : CannonManager.getCannonList().values())
                         {
-                            OfflinePlayer owner = Bukkit.getOfflinePlayer(cannon.getOwner());
-                            sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + owner.getName() +  ChatColor.GREEN +" location:" + ChatColor.GOLD + cannon.getOffset().toString());
+                            if (cannon.getOwner() != null) {
+                                OfflinePlayer owner = Bukkit.getOfflinePlayer(cannon.getOwner());
+                                sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + owner.getName() + ChatColor.GREEN + " location:" + ChatColor.GOLD + cannon.getOffset().toString());
+                            }
                         }
                     }
                     return true;
@@ -320,7 +322,7 @@ public class Commands implements CommandExecutor
                         sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");
                         for (Cannon cannon : CannonManager.getCannonList().values())
                         {
-                            if (cannon.getOwner().equals(player.getUniqueId()))
+                            if (cannon.getOwner() != null && cannon.getOwner().equals(player.getUniqueId()))
                                 sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
                                         ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
                         }

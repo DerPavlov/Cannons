@@ -156,7 +156,7 @@ public class Aiming {
         if (player != null)
         {
             //if the player is not the owner of this gun
-            if (!cannon.getOwner().equals(player.getUniqueId())  && design.isAccessForOwnerOnly())
+            if (cannon.getOwner()!=null && !cannon.getOwner().equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
                 return MessageEnum.ErrorNotTheOwner;
             //if the player has the permission to adjust this gun
             if (!player.hasPermission(cannon.getCannonDesign().getPermissionAdjust()))
@@ -496,7 +496,7 @@ public class Aiming {
 
 			//load from chest
 			if (!cannon.isLoaded() && !cannon.isLoading() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
-				MessageEnum messageEnum = cannon.reloadFromChests(cannon.getOwner(), !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
+				MessageEnum messageEnum = cannon.reloadFromChests(null, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
 				if (messageEnum.isError()) {
 					cannon.setSentryLastLoadingFailed(System.currentTimeMillis());
 					CannonsUtil.playErrorSound(cannon.getMuzzle());
