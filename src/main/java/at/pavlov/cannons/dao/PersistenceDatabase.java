@@ -260,6 +260,10 @@ public class PersistenceDatabase
 			{
 				bean.setProjectileID(projectile.getProjectileID());
 			}
+            else
+            {
+                bean.setProjectileID("none");
+            }
             //is the projectile already pushed in the barrel
             bean.setProjectilePushed(cannon.getProjectilePushed());
 
