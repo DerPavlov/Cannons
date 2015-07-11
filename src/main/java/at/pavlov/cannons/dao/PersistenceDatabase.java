@@ -91,26 +91,31 @@ public class PersistenceDatabase
                         invalid.add(bean.getId());
                         continue;
                     }
+                    UUID owner = bean.getOwner();
+                    if (owner == null) {
+                        plugin.logDebug("Owner of cannon " + bean.getId() + " is null");
+                        invalid.add(bean.getId());
+                        continue;
+                    }
 					Vector offset = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
 					BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
-                    UUID owner = bean.getOwner();
-					
-					//make a cannon
-					Cannon cannon = new Cannon(design, world, offset, cannonDirection, owner);
-					// cannon created - load properties
-					cannon.setUID(bean.getId());
-					cannon.setCannonName(bean.getName());
+
+                    //make a cannon
+                    Cannon cannon = new Cannon(design, world, offset, cannonDirection, owner);
+                    // cannon created - load properties
+                    cannon.setUID(bean.getId());
+                    cannon.setCannonName(bean.getName());
                     cannon.setSoot(bean.getSoot());
-					cannon.setLoadedGunpowder(bean.getGunpowder());
-					
-					//load projectile
-					cannon.setLoadedProjectile(ProjectileStorage.getProjectile(cannon, bean.getProjectileID()));
+                    cannon.setLoadedGunpowder(bean.getGunpowder());
+
+                    //load projectile
+                    cannon.setLoadedProjectile(ProjectileStorage.getProjectile(cannon, bean.getProjectileID()));
 
                     cannon.setProjectilePushed(bean.getProjectilePushed());
 
-					//angles
-					cannon.setHorizontalAngle(bean.getHorizontalAngle());
-					cannon.setVerticalAngle(bean.getVerticalAngle());
+                    //angles
+                    cannon.setHorizontalAngle(bean.getHorizontalAngle());
+                    cannon.setVerticalAngle(bean.getVerticalAngle());
 
                     //temperature
                     cannon.setTemperature(bean.getCannonTemperature());
@@ -119,13 +124,11 @@ public class PersistenceDatabase
                     //amount of fired cannonballs
                     cannon.setFiredCannonballs(bean.getFiredCannonballs());
 
-					//add a cannon to the cannon list
+                    //add a cannon to the cannon list
                     BukkitTask task = new CreateCannon(plugin, cannon).runTask(plugin);
                     //plugin.createCannon(cannon);
-
                     i++;
 				}
-
 			}
             plugin.getDatabase().beginTransaction();
             //remove invalid cannons form the database
@@ -225,6 +228,12 @@ public class PersistenceDatabase
 			{
 				plugin.logDebug("saving cannon: " + cannon.getUID());
 			}
+
+            if (cannon.getOwner() == null){
+                plugin.logDebug("Owner of cannon is null");
+                return false;
+            }
+
 
 			// fill the bean with values to store
 			// since bukkit manages the bean, we do not need to set

@@ -299,9 +299,11 @@ public class UserMessages {
                 message = message.replace("CANNON_NAME", cannon.getCannonName());
             message = message.replace("CANNON", cannon.getCannonDesign().getMessageName());
 			message = message.replace("DESCRIPTION", cannon.getCannonDesign().getDescription());
-            OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
-            if (offplayer != null)
-                message = message.replace("OWNER", offplayer.getName());
+			if (cannon.getOwner() != null){
+				OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
+				if (offplayer != null)
+					message = message.replace("OWNER", offplayer.getName());
+			}
             //soot left
             message = message.replace("SOOT_LEFT", Integer.toString((int) Math.floor(cannon.getSoot())));
             message = message.replace("SOOT", String.format("%.1f", cannon.getSoot()));

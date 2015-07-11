@@ -218,7 +218,7 @@ public class Cannon
             return MessageEnum.ErrorProjectileAlreadyLoaded;
 
         //load gunpowder if there is nothing in the barrel
-        if (design.isGunpowderConsumption()&&design.isGunpowderNeeded()&&consumesAmmo)
+        if (design.isGunpowderConsumption() && design.isGunpowderNeeded() && consumesAmmo)
         {
 
             //gunpowder will be consumed from the inventory

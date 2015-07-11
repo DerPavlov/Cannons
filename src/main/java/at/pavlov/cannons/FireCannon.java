@@ -28,7 +28,6 @@ import at.pavlov.cannons.projectile.ProjectileProperties;
 public class FireCannon {
 
     private final Config config;
-    private final DesignStorage designStorage;
     private final Cannons plugin;
 
 
@@ -38,7 +37,6 @@ public class FireCannon {
     {
         this.plugin = plugin;
         this.config = config;
-        this.designStorage = plugin.getDesignStorage();
     }
 
 
@@ -53,7 +51,7 @@ public class FireCannon {
         CannonDesign design = cannon.getCannonDesign();
         if (design == null) return null;
         //if the player is not the owner of this gun
-        if (player != null && !cannon.getOwner().equals(player.getUniqueId())  && design.isAccessForOwnerOnly())
+        if (player != null && cannon.getOwner() != null && !cannon.getOwner().equals(player.getUniqueId())  && design.isAccessForOwnerOnly())
             return MessageEnum.ErrorNotTheOwner;
         //Loading in progress
         if (cannon.isLoading())

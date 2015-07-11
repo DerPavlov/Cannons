@@ -500,7 +500,8 @@ public class CannonManager
             else
             {
                 //search for a player, because owner == null is not valid
-                if (owner == null) return null;
+                if (owner == null)
+                    return null;
                 Player player = Bukkit.getPlayer(owner);
 
                 //can this player can build one more cannon
