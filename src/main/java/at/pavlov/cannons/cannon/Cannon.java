@@ -214,7 +214,12 @@ public class Cannon
         if (isFiring())
             return  MessageEnum.ErrorFiringInProgress;
 
-        if (isLoaded())
+        if (!isProjectilePushed() && isLoaded()){
+            this.setProjectilePushed(0);
+            return MessageEnum.RamrodPushingProjectileDone;
+        }
+
+        if (isProjectilePushed() && isLoaded())
             return MessageEnum.ErrorProjectileAlreadyLoaded;
 
         //load gunpowder if there is nothing in the barrel
@@ -247,13 +252,11 @@ public class Cannon
             if (getLoadedGunpowder() <= design.getMaxLoadableGunpowderNormal())
                 loadedGunpowder = design.getMaxLoadableGunpowderNormal();
         }
-
         // find a loadable projectile in the chests
         for (Inventory inv : invlist)
         {
             for (ItemStack item : inv.getContents())
             {
-                //try to load it and see what happens
                 Projectile projectile = ProjectileStorage.getProjectile(this, item);
                 if (projectile == null)
                     continue;
@@ -276,7 +279,6 @@ public class Cannon
                             item.setAmount(item.getAmount() - 1);
                         }
                     }
-
                     //push projectile and done
                     setProjectilePushed(0);
                     CannonsUtil.playSound(getMuzzle(), getLoadedProjectile().getSoundLoading());
@@ -545,6 +547,7 @@ public class Cannon
      * @return true if the player and cannons can load the projectile
      */
     private MessageEnum CheckPermProjectile(Projectile projectile, UUID playerUid) {
+        Validate.notNull(playerUid);
         return CheckPermProjectile(projectile, Bukkit.getPlayer(playerUid));
     }
 
@@ -1341,7 +1344,6 @@ public class Cannon
         if (projectile == null)
             projectile = lastFiredProjectile;
 
-        Vector vect = new Vector(1f, 0f, 0f);
         Random r = new Random();
 
         double playerSpread = 1.0;
@@ -1353,32 +1355,11 @@ public class Cannon
 
         if (addSpread)
             deviation = r.nextGaussian() * spread;
-        double azi = (getTotalHorizontalAngle() + deviation) * Math.PI / 180;
+        double h = (getTotalHorizontalAngle() + deviation + CannonsUtil.directionToYaw(cannonDirection));
 
         if (addSpread)
             deviation = r.nextGaussian() * spread;
-        double polar = (-getTotalVerticalAngle() + 90.0 + deviation)* Math.PI / 180;
-
-        double hx = Math.sin(polar)*Math.sin(azi);
-        double hy = Math.sin(polar)*Math.cos(azi);
-        double hz = Math.cos(polar);
-
-        if (cannonDirection.equals(BlockFace.WEST))
-        {
-            vect = new Vector(-hy, hz, -hx);
-        }
-        else if (cannonDirection.equals(BlockFace.NORTH))
-        {
-            vect = new Vector(hx, hz, -hy);
-        }
-        else if (cannonDirection.equals(BlockFace.EAST))
-        {
-            vect = new Vector(hy, hz, hx);
-        }
-        else if (cannonDirection.equals(BlockFace.SOUTH))
-        {
-            vect = new Vector(-hx, hz, hy);
-        }
+        double v = (-getTotalVerticalAngle() + deviation);
 
         double multi = getCannonballVelocity();
         if (multi < 0.1) multi = 0.1;
@@ -1386,41 +1367,16 @@ public class Cannon
         double randomness = 1.0;
         if (addSpread)
             randomness = (1.0 + r.nextGaussian()*spread/180.0);
-        return vect.multiply(multi*randomness);
+        return CannonsUtil.directionToVector(h, v, multi*randomness);
     }
 
     public Vector getAimingVector()
     {
-        Vector vect = new Vector(0.0f, 0.0f, 0.0f);
-        double azi = (getTotalHorizontalAngle() ) * Math.PI / 180;
-        double polar = (-getTotalVerticalAngle() + 90.0)* Math.PI / 180;
-
-        double hx = Math.sin(polar)*Math.sin(azi);
-        double hy = Math.sin(polar)*Math.cos(azi);
-        double hz = Math.cos(polar);
-
-        if (cannonDirection.equals(BlockFace.WEST))
-        {
-            vect = new Vector(-hy, hz, -hx);
-        }
-        else if (cannonDirection.equals(BlockFace.NORTH))
-        {
-            vect = new Vector(hx, hz, -hy);
-        }
-        else if (cannonDirection.equals(BlockFace.EAST))
-        {
-            vect = new Vector(hy, hz, hx);
-        }
-        else if (cannonDirection.equals(BlockFace.SOUTH))
-        {
-            vect = new Vector(-hx, hz, hy);
-        }
-
         double multi = getCannonballVelocity();
-        if (multi < 0.1) multi = 0.1;
+        if (multi < 0.1)
+            multi = 0.1;
 
-        return vect.multiply(multi);
-
+        return CannonsUtil.directionToVector(getTotalHorizontalAngle()  + CannonsUtil.directionToYaw(cannonDirection), -getTotalVerticalAngle(), multi);
     }
 
     /**

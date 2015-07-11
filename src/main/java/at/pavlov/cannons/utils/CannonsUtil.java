@@ -852,8 +852,11 @@ public class CannonsUtil
     }
 
     public static Vector directionToVector(double yaw, double pitch, double speed){
-        double rpitch = -pitch*Math.PI/180.;
-        double ryaw = yaw*Math.PI/180.;
-        return new Vector(-Math.sin(ryaw)*Math.cos(rpitch), Math.sin(rpitch), Math.cos(ryaw)*Math.cos(rpitch)).normalize().multiply(speed);
+        double hx = -Math.cos(pitch * Math.PI / 180.)*Math.sin(yaw*Math.PI/180.);
+        double hy = -Math.sin(pitch * Math.PI / 180.);
+        double hz = Math.cos(pitch*Math.PI/180.)*Math.cos(yaw*Math.PI/180.);
+//        System.out.println("yaw: " + yaw + " pitch " + pitch);
+//        System.out.println("vector: " + (new Vector(hx, hy, hz)));
+        return new Vector(hx, hy, hz).multiply(speed);
     }
 }
