@@ -663,14 +663,17 @@ public class Aiming {
         //plugin.logDebug("calculate Target solution for target at: " + targetLoc.toVector());
 
 		//starting values
-		if (cannon.getCannonDesign().isSentryIndirectFire())
+		int maxInterations = 100;
+		if (cannon.getCannonDesign().isSentryIndirectFire()) {
 			cannon.setAimingPitch(cannon.getMaxVerticalPitch());
+			maxInterations = 500;
+		}
 
 
 		double step = 10.;
         for (int i=0; i<100; i++){
 			Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
-            double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc);
+            double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc, maxInterations);
 
             if (!cannon.getCannonDesign().isSentryIndirectFire()) {
 				if (Math.abs(diffY) > 1000.0){
@@ -731,7 +734,7 @@ public class Aiming {
      * @param target target for the cannonball
      * @return distance how much above/below the projectile will hit
      */
-    private double simulateShot(Vector vector, Location muzzle, Location target){
+    private double simulateShot(Vector vector, Location muzzle, Location target, int maxInterations){
         MovingObject cannonball = new MovingObject(muzzle, vector);
         double target_distance = Math.sqrt(Math.pow(target.getX() - muzzle.getX(), 2)+Math.pow(target.getZ()-muzzle.getZ(),2));
         Vector oldLoc = null;
