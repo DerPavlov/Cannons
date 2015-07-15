@@ -1,5 +1,6 @@
 package at.pavlov.cannons.container;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -218,7 +219,7 @@ public class MaterialHolder
 	
 	public String toString()
 	{
-		return this.material + ":" + this.data + ":" + this.displayName + ":" + String.join(":", this.lore);
+		return this.material + ":" + this.data + ":" + this.displayName + ":" + StringUtils.join(this.lore, ":");
 	}
 
 	public Material getType()
