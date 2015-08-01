@@ -103,6 +103,12 @@ Permission:
   ErrorRamrod: 'RED [Cannons] Du würdest dich nur selbst verletzen.'
 
 
+Death:
+  message1: 'RED PLAYER wurde von SHOOTER CANNON getötet'
+  message2: 'RED SHOOTER erwischte PLAYER mit PROJECTILE'
+  message3: 'RED PLAYER fing SHOOTERs CBALL'
+
+
 Help:
   Text: 'NEWLINE RED Cannons plugin NEWLINE RED /cannons build GREEN - Wie man eine Kanone baut NEWLINE RED /cannons fire GREEN - Wie man eine Kanone abfeuert NEWLINE RED /cannons adjust GREEN - Wie man mit Kanonen zielt'
   Build: 'NEWLINE RED Wie baut man eine Kanone? NEWLINE GREEN Plaziere 3 Block schwarze Wolle hintereinander für das Kanonenrohr. NEWLINE GREEN Auf jeder Seite des Rohrs ein Knopf. NEWLINE GREEN Zum Abschluss noch eine Fackel auf den ersten Block des Rohrs. NEWLINE GREEN Jetzt sollte eine Meldung erschienen sein.'

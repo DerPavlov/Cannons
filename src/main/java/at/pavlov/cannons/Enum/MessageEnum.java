@@ -89,6 +89,11 @@ public enum MessageEnum
 	PermissionErrorProjectile ("Permission.ErrorProjectile", true),
     PermissionErrorThermometer ("Permission.ErrorThermometer", true),
     PermissionErrorRamrod ("Permission.ErrorRamrod", true),
+
+	//Death
+	DeathMessage1 ("Death.message1"),
+	DeathMessage2 ("Death.message2"),
+	DeathMessage3 ("Death.message3"),
 	
 	//Help
 	HelpText ("Help.Text"),

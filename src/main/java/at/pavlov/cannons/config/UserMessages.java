@@ -2,9 +2,11 @@ package at.pavlov.cannons.config;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.projectile.Projectile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -323,6 +325,48 @@ public class UserMessages {
             message = message.replace("PLAYER", player.getName());
 			message = message.replace("CANNONS", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getUniqueId())));
 		}
+		return message;
+	}
+
+	/**
+	 * returns a random death message
+	 * @param killed killed player
+	 * @param shooter shooter of the cannon
+	 * @param cannon cannon that was used
+	 * @param projectile fired projectile
+	 * @return death message
+	 */
+	public String getDeathMessage(UUID killed, UUID shooter, Cannon cannon, Projectile projectile){
+		Random rand = new Random();
+		MessageEnum messageEnum;
+		switch (rand.nextInt(3)){
+			case 1:
+				messageEnum = MessageEnum.DeathMessage2;
+				break;
+			case 2:
+				messageEnum = MessageEnum.DeathMessage3;
+				break;
+			default:
+				messageEnum = MessageEnum.DeathMessage1;
+		}
+		Player killedPlayer = null;
+		if (killed != null) {
+			killedPlayer = Bukkit.getPlayer(killed);
+		}
+
+		String shooterStr = "none";
+		if (shooter != null){
+			Player shooterPlayer = Bukkit.getPlayer(shooter);
+			if (shooterPlayer != null)
+				shooterStr = shooterPlayer.getName();
+		}
+		String projectileStr = "none";
+		if (projectile != null)
+			projectileStr = projectile.getProjectileName();
+
+		String message = getMessage(messageEnum, killedPlayer, cannon);
+		message = message.replace("SHOOTER", shooterStr);
+		message = message.replace("CBALL", projectileStr);
 		return message;
 	}
 

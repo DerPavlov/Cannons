@@ -104,6 +104,12 @@ Permission:
   ErrorRamrod: 'RED [Cannons] No permission for the ramrod.'
 
 
+Death:
+  message1: 'RED PLAYER has been killed by CANNON of player SHOOTER'
+  message2: 'RED SHOOTER killed PLAYER with a CANNON'
+  message3: 'RED PLAYER catched SHOOTERs CBALL'
+
+
 Help:
   Text: 'NEWLINE RED Cannons plugin NEWLINE RED /cannons build GREEN - How to build a cannon NEWLINE RED /cannons fire GREEN - How to load and fire a cannon NEWLINE RED /cannons adjust GREEN - A small guide aim with a cannon'
   Build: 'NEWLINE RED How to build a cannon: NEWLINE GREEN To make the barrel place 3 black wool blocks in x or z. NEWLINE GREEN Place a button on each end of the barrel NEWLINE GREEN Finish it by placing a torch on the first block of the barrel. NEWLINE GREEN To check if the cannon works right click the torch and you NEWLINE GREEN will get a message.'

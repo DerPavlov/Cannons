@@ -1,6 +1,7 @@
 package at.pavlov.cannons.listener;
 
 import at.pavlov.cannons.Enum.InteractAction;
+import at.pavlov.cannons.container.DeathCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -13,6 +14,7 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -32,6 +34,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class PlayerListener implements Listener
 {
@@ -52,20 +55,34 @@ public class PlayerListener implements Listener
         this.aiming = this.plugin.getAiming();
     }
 
+    @EventHandler
+    public void PlayerDeath(PlayerDeathEvent event)
+    {
+        UUID killedUID = event.getEntity().getUniqueId();
+        if (plugin.getExplosion().isKilledByCannons(killedUID)){
+            DeathCause cause = plugin.getExplosion().getDeathCause(killedUID);
+            plugin.getExplosion().removeKilledPlayer(killedUID);
+
+            Player shooter = null;
+            if (cause.getShooterUID() != null)
+                shooter = Bukkit.getPlayer(cause.getShooterUID());
+            Cannon cannon = plugin.getCannon(cause.getCannonUID());
+            String message = userMessages.getDeathMessage(killedUID, cause.getShooterUID(), cannon, cause.getProjectile());
+            if (message != null && !message.equals(" "))
+                event.setDeathMessage(message);
+        }
+    }
 
     @EventHandler
     public void PlayerMove(PlayerMoveEvent event)
     {
         // only active if the player is in aiming mode
         Cannon cannon =  aiming.getCannonInAimingMode(event.getPlayer());
-        if (!aiming.distanceCheck(event.getPlayer(), cannon))
-        {
+        if (!aiming.distanceCheck(event.getPlayer(), cannon)) {
             userMessages.sendMessage(MessageEnum.AimingModeTooFarAway, event.getPlayer());
             MessageEnum message = aiming.disableAimingMode(event.getPlayer(), cannon);
             userMessages.sendMessage(message, event.getPlayer());
         }
-
-
     }
     /*
     * remove Player from auto aiming list

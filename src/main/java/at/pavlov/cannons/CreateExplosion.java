@@ -1,13 +1,12 @@
 package at.pavlov.cannons;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.ProjectileCause;
-import at.pavlov.cannons.container.SoundHolder;
-import at.pavlov.cannons.container.SpawnEntityHolder;
-import at.pavlov.cannons.container.SpawnMaterialHolder;
+import at.pavlov.cannons.container.*;
 import at.pavlov.cannons.event.CannonsEntityDeathEvent;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
@@ -24,7 +23,6 @@ import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
@@ -37,6 +35,8 @@ public class CreateExplosion {
     private HashSet<Entity> affectedEntities = new HashSet<Entity>();
     //the entity is used in 1 tick. There should be no garbage collector problem
     private HashMap<Entity,Double> damageMap = new HashMap<Entity, Double>();
+    //players killed by cannons <Player, Cannon>
+    private HashMap<UUID, DeathCause> killedPlayers = new HashMap<UUID, DeathCause>();
 
 
     //################### Constructor ############################################
@@ -689,8 +689,10 @@ public class CreateExplosion {
             if (entity != null)
             {
                 //entity has died
-                if (entity.isDead() && entity instanceof LivingEntity)
+                if (entity.isDead() && entity instanceof LivingEntity) {
                     lEntities.add((LivingEntity) entity);
+                    killedPlayers.put(entity.getUniqueId(), new DeathCause(cannonball.getProjectile(), cannonball.getCannonUID(), cannonball.getShooterUID()));
+                }
             }
         }
         affectedEntities.clear();
@@ -953,6 +955,31 @@ public class CreateExplosion {
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, r, mat, FakeBlockType.EXPLOSION, delay);
             }
         }
+    }
 
+    /**
+     * returns true if the player was killed by a cannon explosion
+     * @param playerUID killed player
+     * @return true if player was killed by a cannonball
+     */
+    public boolean isKilledByCannons(UUID playerUID){
+        return this.killedPlayers.containsKey(playerUID);
+    }
+
+    /**
+     * returns death cause when the player was killed by a cannon explosion
+     * @param playerUID killed player
+     * @return death cause
+     */
+    public DeathCause getDeathCause(UUID playerUID){
+        return this.killedPlayers.get(playerUID);
+    }
+
+    /**
+     * removes player form the list of cannons killed players
+     * @param playerUID killed player
+     */
+    public void removeKilledPlayer(UUID playerUID){
+        this.killedPlayers.remove(playerUID);
     }
 }
