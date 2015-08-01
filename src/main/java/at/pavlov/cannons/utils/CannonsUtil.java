@@ -831,8 +831,14 @@ public class CannonsUtil
                 for (Entity e : new Location(l.getWorld(),x+(chX*16),y,z+(chZ*16)).getChunk().getEntities()){
                     if (e.getWorld().equals(l.getWorld())) {
                         double dist = e.getLocation().distance(l);
-                        if (e instanceof LivingEntity && !e.isDead() && minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock())
+                        if (e instanceof LivingEntity && !e.isDead() && minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock()) {
+                            if ((e instanceof Player)){
+                                Player p = (Player) e;
+                                if (p.getGameMode() == GameMode.SPECTATOR || p.getGameMode() == GameMode.CREATIVE)
+                                    continue;
+                            }
                             radiusTargets.put(e.getUniqueId(), new Target(e));
+                        }
                     }
                 }
             }
