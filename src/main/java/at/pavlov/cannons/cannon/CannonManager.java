@@ -310,6 +310,10 @@ public class CannonManager
 			plugin.logInfo("can't save a cannon when the owner is null");
 			return;
 		}
+
+        //add owner to whitelist for sentry
+        if (cannon.getCannonDesign().isSentry())
+            cannon.addWhitelistPlayer(cannon.getOwner());
 		
 		//if the cannonName is empty make a new one
 		if (cannon.getCannonName() ==  null || cannon.getCannonName().equals(""))

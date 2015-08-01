@@ -1,18 +1,15 @@
 package at.pavlov.cannons.dao;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.avaje.ebean.validation.Length;
-import com.avaje.ebean.validation.NotEmpty;
-import org.bukkit.block.BlockFace;
 
+import java.util.List;
 import java.util.UUID;
 
 
 @Entity
-@Table(name ="cannonlist_2_3")
+@Table(name ="cannonlist_2_3_4")
 public class CannonBean
 {
 	@Id
@@ -42,9 +39,13 @@ public class CannonBean
 	private String designId;
 
     private long firedCannonballs;
-	
-	
-	
+
+	@OneToMany(cascade= CascadeType.ALL)
+	private List<WhitelistBean> whitelist;
+
+
+
+
 	public UUID getId()
 	{
 		return id;
@@ -181,4 +182,12 @@ public class CannonBean
     public void setFiredCannonballs(long firedCannonballs) {
         this.firedCannonballs = firedCannonballs;
     }
+
+	public List<WhitelistBean> getWhitelist() {
+		return whitelist;
+	}
+
+	public void setWhitelist(List<WhitelistBean> whitelist) {
+		this.whitelist = whitelist;
+	}
 }

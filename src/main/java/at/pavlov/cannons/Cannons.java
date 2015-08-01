@@ -13,6 +13,7 @@ import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.config.*;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.dao.WhitelistBean;
 import at.pavlov.cannons.listener.*;
 import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
@@ -220,6 +221,7 @@ public final class Cannons extends JavaPlugin
 			{
 				List<Class<?>> list = new ArrayList<Class<?>>();
 				list.add(CannonBean.class);
+				list.add(WhitelistBean.class);
 
 				return list;
 			}

@@ -532,7 +532,7 @@ public class Aiming {
                                 possibleTargets.add(t);
 							}
                         }
-						else if (t.getTargetType() == TargetType.PLAYER) {
+						else if (t.getTargetType() == TargetType.PLAYER && !cannon.isWhitelisted(t.getUniqueId())) {
 							if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
 								possibleTargets.add(t);
 							}

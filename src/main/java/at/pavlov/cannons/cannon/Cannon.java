@@ -91,6 +91,8 @@ public class Cannon
     //observer will see the impact of the target predictor
     //<Player name, remove after showing impact>
     private HashMap<UUID, Boolean> observerMap = new HashMap<UUID, Boolean>();
+    //a sentry cannon will not target a whitelisted player
+    private HashSet<UUID> whitelist = new HashSet<UUID>();
 
     // player who has build this cannon
     private UUID owner;
@@ -2350,5 +2352,21 @@ public class Cannon
 
     public void setSentryLastFiringFailed(long sentryLastFiringFailed) {
         this.sentryLastFiringFailed = sentryLastFiringFailed;
+    }
+
+    public HashSet<UUID> getWhitelist() {
+        return whitelist;
+    }
+
+    public void addWhitelistPlayer(UUID playerUID){
+        whitelist.add(playerUID);
+    }
+
+    public void removeWhitelistPlayer(UUID playerUID){
+        whitelist.remove(playerUID);
+    }
+
+    public boolean isWhitelisted(UUID playerUID){
+        return whitelist.contains(playerUID);
     }
 }

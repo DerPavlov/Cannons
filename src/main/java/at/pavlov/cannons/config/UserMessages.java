@@ -1,12 +1,12 @@
 package at.pavlov.cannons.config;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.projectile.Projectile;
+import com.avaje.ebean.enhance.ant.OfflineFileTransform;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -317,6 +317,15 @@ public class UserMessages {
 				message = message.replace("DISMANTLING_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDismantlingRefund()));
 				message = message.replace("DISMANTLING_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDestructionRefund()));
 			}
+			if (cannon.getWhitelist() != null){
+				List<String> names = new ArrayList<String>();
+				for (UUID playerUID : cannon.getWhitelist()){
+					OfflinePlayer offplayer = Bukkit.getOfflinePlayer(playerUID);
+					if (offplayer != null)
+						names.add(offplayer.getName());
+				}
+				message = message.replace("WHITELIST", "  - " + StringUtils.join(names, "/n  - "));
+			}
         }
 
         if (player != null)
@@ -395,10 +404,9 @@ public class UserMessages {
 		
 		String[] message = string.split("\n "); // Split everytime the "\n" into a new array value
 
-		for (int x = 0; x < message.length; x++)
-		{
-            plugin.logDebug("Message for " + player.getName() + ": " + message[x]);
-			player.sendMessage(message[x]); // Send each argument in the message
+		for (String aMessage : message) {
+			plugin.logDebug("Message for " + player.getName() + ": " + aMessage);
+			player.sendMessage(aMessage); // Send each argument in the message
 		}
 	}
 }

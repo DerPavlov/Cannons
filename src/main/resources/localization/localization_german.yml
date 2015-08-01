@@ -59,7 +59,8 @@ Cannon:
     NEWLINE YELLOW Ladung: GOLD GUNPOWDERkg YELLOW of GOLD MAX_GUNPOWDERkg
     NEWLINE YELLOW Projektil: GOLD PROJECTILE
     NEWLINE YELLOW Russ: GOLD SOOT
-    NEWLINE YELLOW Ausrichtung H/V: GOLD HDEGREE YELLOW / GOLD VDEGREE'
+    NEWLINE YELLOW Ausrichtung H/V: GOLD HDEGREE YELLOW / GOLD VDEGREE
+    NEWLINE YELLOW Whitelist: NEWLINE GOLD WHITELIST '
   RenameSuccess: 'GREEN [Cannons] Die Kanone wurde umbenannt in GOLD CANNON_NAME.'
   RenameFail: 'RED [Cannons] Der Name für die Kanone ist nicht einzigartig.'
 

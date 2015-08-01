@@ -1,7 +1,6 @@
 package at.pavlov.cannons.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -278,6 +277,14 @@ public class PersistenceDatabase
             //load fired cannonballs
             bean.setFiredCannonballs(cannon.getFiredCannonballs());
 
+            List<WhitelistBean> whitelist = new ArrayList<WhitelistBean>();
+            for (UUID player : cannon.getWhitelist()) {
+                WhitelistBean white = new WhitelistBean();
+                white.setPlayer(player);
+                whitelist.add(white);
+            }
+            bean.setWhitelist(whitelist);
+
 
 			// store the bean
 			plugin.getDatabase().save(bean);
@@ -392,14 +399,12 @@ public class PersistenceDatabase
      */
     private void deleteAllCannons()
     {
-        List<CannonBean> bean = plugin.getDatabase().find(CannonBean.class).findList();
+        List<CannonBean> cbean = plugin.getDatabase().find(CannonBean.class).findList();
         // if the database id is null, it is not saved in the database
-        if (bean != null)
+        if (cbean != null)
         {
-            //plugin.logDebug("removing cannon " + .toString());
-            plugin.getDatabase().delete(bean);
+            plugin.getDatabase().delete(cbean);
         }
-
     }
 
 }
