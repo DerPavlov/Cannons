@@ -557,8 +557,7 @@ public class Aiming {
                 if (cannon.hasSentryEntity()){
                     Target target = targets.get(cannon.getSentryEntity());
                     // find exact solution for the cannon
-                    if (calculateTargetSolution(cannon, target, target.getVelocity())){
-
+                    if (calculateTargetSolution(cannon, target, target.getVelocity(), true)){
 						CannonTargetEvent targetEvent = new CannonTargetEvent(cannon, target);
 						Bukkit.getServer().getPluginManager().callEvent(targetEvent);
 						if (!targetEvent.isCancelled()) {
@@ -653,7 +652,7 @@ public class Aiming {
      * @param targetVelocity how fast the target is moving
      * @return true if a solution was found
      */
-    private boolean calculateTargetSolution(Cannon cannon, Target target, Vector targetVelocity){
+    private boolean calculateTargetSolution(Cannon cannon, Target target, Vector targetVelocity, boolean addSpread){
         Location targetLoc = target.getCenterLocation();
         //aim for the center of the target if there is an area effect of the projectile
         if (cannon.getLoadedProjectile() != null && (cannon.getLoadedProjectile().getExplosionPower() > 2. || (cannon.getLoadedProjectile().getPlayerDamage() > 1. && cannon.getLoadedProjectile().getPlayerDamageRange() > 2.)))
@@ -704,7 +703,12 @@ public class Aiming {
 
 			if (step < cannon.getCannonDesign().getAngleStepSize()) {
 				//can the cannon aim at this solution
-				if (cannon.canAimPitch(cannon.getAimingPitch())) {
+				if (addSpread){
+					Random rand = new Random();
+					cannon.setAimingPitch(cannon.getAimingPitch() + cannon.getCannonDesign().getSentrySpread()*rand.nextGaussian());
+					cannon.setAimingYaw(cannon.getAimingYaw() + cannon.getCannonDesign().getSentrySpread()*rand.nextGaussian());
+				}
+				if (cannon.canAimPitch(cannon.getAimingPitch()) && cannon.canAimYaw(cannon.getAimingYaw())) {
 					return true;
 				}
 				// can't aim at this solution

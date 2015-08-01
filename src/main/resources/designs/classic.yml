@@ -101,6 +101,8 @@ sentry:
   minRange: 5
   #at which distance the sentry will detected enemies
   maxRange: 50
+  #how acurate can the final angle be calculated. The smaller the better
+  spread: 0.5
   #how long the cannon updating firing solutions. Higher delays result in worse tracking of a moving target. [s]
   update: 1.0
   #the cannon will switch to the next target after some time [s]

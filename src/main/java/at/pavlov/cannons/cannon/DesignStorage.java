@@ -209,6 +209,7 @@ public class DesignStorage
 		cannonDesign.setSentryIndirectFire(cannonDesignConfig.getBoolean("sentry.indirectFire", false));
         cannonDesign.setSentryMinRange(cannonDesignConfig.getInt("sentry.minRange", 5));
         cannonDesign.setSentryMaxRange(cannonDesignConfig.getInt("sentry.maxRange", 40));
+		cannonDesign.setSentrySpread(cannonDesignConfig.getDouble("sentry.spread", 0.5));
         cannonDesign.setSentryUpdateTime((int) (cannonDesignConfig.getDouble("sentry.update", 1.0)*1000.0));
         cannonDesign.setSentrySwapTime((int) (cannonDesignConfig.getDouble("sentry.swapTime", 10.0)*1000.0));
 

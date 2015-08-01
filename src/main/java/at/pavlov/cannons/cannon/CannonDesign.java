@@ -75,6 +75,7 @@ public class CannonDesign
 	private boolean sentryIndirectFire;
     private int sentryMinRange;
     private int sentryMaxRange;
+	private double sentrySpread;
 	private int sentryUpdateTime;				//in ms
     private int sentrySwapTime;				    //in ms
 
@@ -1566,5 +1567,13 @@ public class CannonDesign
 
 	public void setLoadTime(double loadTime) {
 		this.loadTime = loadTime;
+	}
+
+	public double getSentrySpread() {
+		return sentrySpread;
+	}
+
+	public void setSentrySpread(double sentrySpread) {
+		this.sentrySpread = sentrySpread;
 	}
 }
