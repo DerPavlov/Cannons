@@ -225,3 +225,6 @@ pip-log.txt
 .idea/
 target/
 *.iml
+.idea/artifacts/Cannons_jar.xml
+.idea/misc.xml
+*.iml
