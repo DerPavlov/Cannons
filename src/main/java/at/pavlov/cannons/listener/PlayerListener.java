@@ -130,37 +130,37 @@ public class PlayerListener implements Listener
         // setup a new cannon
         cannonManager.getCannon(blockLoc, event.getPlayer().getUniqueId());
 
-        // delete placed projectile or gunpowder if clicked against the barrel
-        if (event.getBlockAgainst() != null)
-        {
-            Location barrel = event.getBlockAgainst().getLocation();
-
-            // check if block is cannonblock
-            Cannon cannon = cannonManager.getCannon(barrel, event.getPlayer().getUniqueId(), true);
-            if (cannon != null)
-            {
-                // delete projectile
-
-                Projectile projectile = plugin.getProjectile(cannon, event.getItemInHand());
-                if (projectile != null && cannon.getCannonDesign().canLoad(projectile))
-                {
-                    // check if the placed block is not part of the cannon
-                    if (!cannon.isCannonBlock(event.getBlock()))
-                    {
-                        event.setCancelled(true);
-                    }
-                }
-                // delete gunpowder block
-                if (cannon.getCannonDesign().getGunpowderType().equalsFuzzy(event.getBlock()))
-                {
-                    // check if the placed block is not part of the cannon
-                    if (!cannon.isCannonBlock(event.getBlock()))
-                    {
-                        event.setCancelled(true);
-                    }
-                }
-            }
-        }
+//        // delete placed projectile or gunpowder if clicked against the barrel
+//        if (event.getBlockAgainst() != null)
+//        {
+//            Location barrel = event.getBlockAgainst().getLocation();
+//
+//            // check if block is cannonblock
+//            Cannon cannon = cannonManager.getCannon(barrel, event.getPlayer().getUniqueId(), true);
+//            if (cannon != null)
+//            {
+//                // delete projectile
+//
+//                Projectile projectile = plugin.getProjectile(cannon, event.getItemInHand());
+//                if (projectile != null && cannon.getCannonDesign().canLoad(projectile))
+//                {
+//                    // check if the placed block is not part of the cannon
+//                    if (!cannon.isCannonBlock(event.getBlock()))
+//                    {
+//                        event.setCancelled(true);
+//                    }
+//                }
+//                // delete gunpowder block
+//                if (cannon.getCannonDesign().getGunpowderType().equalsFuzzy(event.getBlock()))
+//                {
+//                    // check if the placed block is not part of the cannon
+//                    if (!cannon.isCannonBlock(event.getBlock()))
+//                    {
+//                        event.setCancelled(true);
+//                    }
+//                }
+//            }
+//        }
 
         // Place redstonetorch under to the cannon
         if (event.getBlockPlaced().getType() == Material.REDSTONE_TORCH_ON || event.getBlockPlaced().getType() == Material.REDSTONE_TORCH_OFF)
@@ -410,11 +410,11 @@ public class PlayerListener implements Listener
             // ############ cooling a hot cannon ####################
             if(design.isCoolingTool(player.getItemInHand()))
             {
+                event.setCancelled(true);
                 if (cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation())) {
                     plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
                     userMessages.sendMessage(MessageEnum.HeatManagementCooling, player, cannon);
                 }
-                event.setCancelled(true);
             }
 
 
@@ -424,6 +424,7 @@ public class PlayerListener implements Listener
                 if (player.hasPermission(design.getPermissionThermometer()))
                 {
                     plugin.logDebug("measure temperature");
+                    event.setCancelled(true);
                     userMessages.sendMessage(MessageEnum.HeatManagementInfo, player, cannon);
                     //player.playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 10f, 1f);
                     CannonsUtil.playSound(cannon.getMuzzle(), design.getSoundThermometer());
@@ -439,6 +440,7 @@ public class PlayerListener implements Listener
             if((config.getToolAdjust().equalsFuzzy(player.getItemInHand()) || config.getToolAutoaim().equalsFuzzy(player.getItemInHand())) && cannon.isLoadingBlock(clickedBlock.getLocation()))
             {
                 plugin.logDebug("change cannon angle");
+                event.setCancelled(true);
 
 
                 MessageEnum message = aiming.changeAngle(cannon, event.getAction(), event.getBlockFace(), player);
@@ -455,6 +457,7 @@ public class PlayerListener implements Listener
             Projectile projectile = plugin.getProjectile(cannon, event.getItem());
             if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null) {
                 plugin.logDebug("load projectile");
+                event.setCancelled(true);
 
                 // load projectile
                 MessageEnum message = cannon.loadProjectile(projectile, player);
@@ -466,6 +469,7 @@ public class PlayerListener implements Listener
                     fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
 
 
+
                 if(message!=null)
                     return;
             }
@@ -475,7 +479,7 @@ public class PlayerListener implements Listener
             if(cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(event.getItem()))
             {
                 plugin.logDebug("load gunpowder");
-
+                event.setCancelled(true);
                 // load gunpowder
                 MessageEnum message = cannon.loadGunpowder(player);
 
@@ -491,6 +495,7 @@ public class PlayerListener implements Listener
             if(cannon.isRightClickTrigger(clickedBlock.getLocation()))
             {
                 plugin.logDebug("fire torch");
+                event.setCancelled(true);
 
                 MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireRightClickTigger);
                 // display message
@@ -505,6 +510,7 @@ public class PlayerListener implements Listener
             if(cannon.isRestoneTrigger(clickedBlock.getLocation()))
             {
                 plugin.logDebug("interact event: fire redstone trigger");
+                event.setCancelled(true);
                 cannon.setLastUser(player.getUniqueId());
 
                 return;
@@ -515,6 +521,7 @@ public class PlayerListener implements Listener
             if(config.getToolRamrod().equalsFuzzy(player.getItemInHand()) && cannon.isLoadingBlock(clickedBlock.getLocation()))
             {
                 plugin.logDebug("Ramrod used");
+                event.setCancelled(true);
                 MessageEnum message = cannon.useRamRod(player);
                 userMessages.sendMessage(message, player, cannon);
 
@@ -525,7 +532,6 @@ public class PlayerListener implements Listener
                 if(message!=null)
                     return;
             }
-
         }
 
         //fire cannon
