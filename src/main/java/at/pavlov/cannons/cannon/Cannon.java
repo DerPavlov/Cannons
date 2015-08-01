@@ -853,11 +853,13 @@ public class Cannon
      */
     public boolean isCannonBlock(Block block)
     {
-        for (SimpleBlock designBlock : design.getAllCannonBlocks(cannonDirection))
-        {
-            if (designBlock.compareBlockAndLocFuzzy(block, offset))
+        if (getWorld().equals(block.getWorld().getUID())){
+            for (SimpleBlock designBlock : design.getAllCannonBlocks(cannonDirection))
             {
-                return true;
+                if (designBlock.compareBlockAndLocFuzzy(block, offset))
+                {
+                    return true;
+                }
             }
         }
         return false;
