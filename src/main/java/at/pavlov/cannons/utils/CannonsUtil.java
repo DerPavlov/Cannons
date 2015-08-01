@@ -567,7 +567,7 @@ public class CannonsUtil
     {
         //https://forums.bukkit.org/threads/playsound-parameters-volume-and-pitch.151517/
         World w = loc.getWorld();
-        w.playSound(loc,sound.getSound(), 15F, sound.getPitch());
+        w.playSound(loc, sound.getSound(), 15F, sound.getPitch());
 
         for(Player p : w.getPlayers())
         {
@@ -804,8 +804,11 @@ public class CannonsUtil
             for (int chZ = 0 -chunkRadius; chZ <= chunkRadius; chZ++){
                 int x=(int) l.getX(),y=(int) l.getY(),z=(int) l.getZ();
                 for (Entity e : new Location(l.getWorld(),x+(chX*16),y,z+(chZ*16)).getChunk().getEntities()){
-                    double dist = e.getLocation().distance(l);
-                    if (minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock()) radiusEntities.put(e.getUniqueId(), e);
+                    if (e.getWorld().equals(l.getWorld())) {
+                        double dist = e.getLocation().distance(l);
+                        if (minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock())
+                            radiusEntities.put(e.getUniqueId(), e);
+                    }
                 }
             }
         }
