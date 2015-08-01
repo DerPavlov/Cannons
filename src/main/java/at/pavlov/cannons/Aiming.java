@@ -532,6 +532,11 @@ public class Aiming {
                                 possibleTargets.add(t);
 							}
                         }
+						else if (t.getTargetType() == TargetType.PLAYER) {
+							if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
+								possibleTargets.add(t);
+							}
+						}
                     }
                     //so we have some targets
                     if (possibleTargets.size()>0) {
