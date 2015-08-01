@@ -211,10 +211,11 @@ public class PlayerListener implements Listener
         if (event.getBlock().getType() == Material.FIRE)
         {
             // check cannon
-            Location loc = event.getBlockAgainst().getLocation();
-            if (cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true) != null)
-            {
-                event.setCancelled(true);
+            if (event.getBlockAgainst() != null) {
+                Location loc = event.getBlockAgainst().getLocation();
+                if (cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true) != null) {
+                    event.setCancelled(true);
+                }
             }
         }
     }
