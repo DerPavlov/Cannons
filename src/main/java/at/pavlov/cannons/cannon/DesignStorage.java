@@ -196,13 +196,13 @@ public class DesignStorage
         cannonDesign.setMinVerticalAngleOnShip(cannonDesignConfig.getDouble("angles.minVerticalAngleOnShip", -30.0));
 		cannonDesign.setAngleStepSize(cannonDesignConfig.getDouble("angles.angleStepSize", 0.1));
 		cannonDesign.setAngleLargeStepSize(cannonDesignConfig.getDouble("angles.largeStepSize", 1.0));
-		cannonDesign.setAngleUpdateSpeed((int) (cannonDesignConfig.getDouble("angles.angleUpdateSpeed", 1.0)*1000.0));
+		cannonDesign.setAngleUpdateSpeed((int) (cannonDesignConfig.getDouble("angles.angleUpdateSpeed", 1.0) * 1000.0));
         cannonDesign.setAngleUpdateMessage(cannonDesignConfig.getBoolean("angles.angleUpdateMessage", false));
 
         //impactPredictor
         cannonDesign.setPredictorEnabled(cannonDesignConfig.getBoolean("impactPredictor.enabled", true));
-        cannonDesign.setPredictorDelay((int) (cannonDesignConfig.getDouble("impactPredictor.delay", 1.0)*1000.0));
-        cannonDesign.setPredictorUpdate((int) (cannonDesignConfig.getDouble("impactPredictor.update", 0.1)*1000.0));
+        cannonDesign.setPredictorDelay((int) (cannonDesignConfig.getDouble("impactPredictor.delay", 1.0) * 1000.0));
+        cannonDesign.setPredictorUpdate((int) (cannonDesignConfig.getDouble("impactPredictor.update", 0.1) * 1000.0));
 
 		//sentry
 		cannonDesign.setSentry(cannonDesignConfig.getBoolean("sentry.isSentry", false));
@@ -210,7 +210,7 @@ public class DesignStorage
         cannonDesign.setSentryMinRange(cannonDesignConfig.getInt("sentry.minRange", 5));
         cannonDesign.setSentryMaxRange(cannonDesignConfig.getInt("sentry.maxRange", 40));
 		cannonDesign.setSentrySpread(cannonDesignConfig.getDouble("sentry.spread", 0.5));
-        cannonDesign.setSentryUpdateTime((int) (cannonDesignConfig.getDouble("sentry.update", 1.0)*1000.0));
+        cannonDesign.setSentryUpdateTime((int) (cannonDesignConfig.getDouble("sentry.update", 1.0) * 1000.0));
         cannonDesign.setSentrySwapTime((int) (cannonDesignConfig.getDouble("sentry.swapTime", 10.0)*1000.0));
 
         //heatManagement

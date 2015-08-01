@@ -1051,6 +1051,18 @@ public class Cannon
     }
 
     /**
+     * returns true if the sentry is in automatic mode, false if in manual mode
+     * @return true if sentry is in automatic mode
+     */
+    public boolean isSentryAutomatic(){
+        for (Location loc : design.getBarrelBlocks(this)){
+            if (loc.getBlock().isBlockIndirectlyPowered())
+                return false;
+        }
+        return true;
+    }
+
+    /**
      * returns the first block of the cannon
      * @return - first block of the cannon
      */

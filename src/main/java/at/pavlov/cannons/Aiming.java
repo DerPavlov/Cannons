@@ -495,7 +495,7 @@ public class Aiming {
             }
 
 			//load from chest
-			if (!cannon.isLoaded() && !cannon.isLoading() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 2000) {
+			if (!cannon.isLoaded() && !cannon.isLoading() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 5000) {
 				MessageEnum messageEnum = cannon.reloadFromChests(null, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
 				if (messageEnum.isError()) {
 					cannon.setSentryLastLoadingFailed(System.currentTimeMillis());
@@ -505,7 +505,7 @@ public class Aiming {
 			}
 
             // calculate a firing solution
-            if (cannon.isChunkLoaded() && System.currentTimeMillis() > cannon.getLastSentryUpdate() + cannon.getCannonDesign().getSentryUpdateTime()) {
+            if (cannon.isChunkLoaded() && System.currentTimeMillis() > (cannon.getLastSentryUpdate() + cannon.getCannonDesign().getSentryUpdateTime())) {
                 cannon.setLastSentryUpdate(System.currentTimeMillis());
 
                 HashMap<UUID, Target> targets = CannonsUtil.getNearbyTargets(cannon.getMuzzle(), cannon.getCannonDesign().getSentryMinRange(), cannon.getCannonDesign().getSentryMaxRange());
@@ -524,7 +524,7 @@ public class Aiming {
                 }
 
                 //find a suitable target
-                if (!cannon.hasSentryEntity()){
+                if (!cannon.hasSentryEntity() && cannon.isSentryAutomatic()){
                     ArrayList<Target> possibleTargets = new ArrayList<Target>();
                     for (Target t : targets.values()) {
                         if (t.getTargetType() == TargetType.MONSTER) {
@@ -586,7 +586,7 @@ public class Aiming {
                 }
             }
             //ready to fire
-            if (cannon.hasSentryEntity() && cannon.targetInSight()) {
+            if (cannon.hasSentryEntity() && cannon.targetInSight() && cannon.isSentryAutomatic()) {
                 if (cannon.isReadyToFire()  && System.currentTimeMillis() > cannon.getSentryLastFiringFailed() + 2000) {
                     MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
                     if (messageEnum != null) {
