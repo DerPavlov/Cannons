@@ -691,7 +691,8 @@ public class CreateExplosion {
                 //entity has died
                 if (entity.isDead() && entity instanceof LivingEntity) {
                     lEntities.add((LivingEntity) entity);
-                    killedPlayers.put(entity.getUniqueId(), new DeathCause(cannonball.getProjectile(), cannonball.getCannonUID(), cannonball.getShooterUID()));
+                    if (entity instanceof Player)
+                        killedPlayers.put(entity.getUniqueId(), new DeathCause(cannonball.getProjectile(), cannonball.getCannonUID(), cannonball.getShooterUID()));
                 }
             }
         }
