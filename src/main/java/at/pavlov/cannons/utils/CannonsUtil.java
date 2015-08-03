@@ -844,7 +844,7 @@ public class CannonsUtil
             }
         }
         for (Cannon cannon : CannonManager.getCannonsInSphere(l, maxRadius))
-            if (cannon.getMuzzle().distance(l) > minRadius)
+            if (cannon.getRandomBarrelBlock().distance(l) > minRadius)
                 radiusTargets.put(cannon.getUID(), new Target(cannon));
 
         for (Target target : TargetManager.getTargetsInSphere(l, maxRadius))

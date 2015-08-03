@@ -537,6 +537,15 @@ public class Aiming {
 								possibleTargets.add(t);
 							}
 						}
+						else if (t.getTargetType() == TargetType.CANNON) {
+							Cannon tCannon = CannonManager.getCannon(t.getUniqueId());
+							//check if the owner is whitelisted
+							if (tCannon != null && !cannon.isWhitelisted(tCannon.getOwner())){
+								if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
+									possibleTargets.add(t);
+								}
+							}
+						}
                     }
                     //so we have some targets
                     if (possibleTargets.size()>0) {
@@ -580,8 +589,8 @@ public class Aiming {
             //aim at the found solution
             // only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
             if (cannon.hasSentryEntity() && System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()) {
-                // autoaming or fineadjusting
-                if (cannon.isValid()) {
+				// autoaming or fineadjusting
+				if (cannon.isValid()) {
                     updateAngle(null, cannon, null, InteractAction.adjustSentry);
                 }
             }
