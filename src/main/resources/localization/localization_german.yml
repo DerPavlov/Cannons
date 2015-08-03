@@ -17,12 +17,15 @@ Error:
   DismantlingNotOwner: 'RED [Cannons] Nur der Besitzer kann eine Kanone abbauen.'
   MissingSign: 'RED [Cannons] Diese CANNON benötigt ein Sign um zu funktioinieren.'
   NoMoney: 'RED [Cannons] Du brauchst mindestens BUILD_COSTS um diese Kanone zu erstellen.'
+  PlayerNotFound: 'RED [Cannons] Spielername nicht vorhanden.'
 
 
 Commands:
   SelectCannon: 'YELLOW [Cannons] Bitte Kanone auswählen.'
   SelectCanceled: 'RED [Cannons] Auswahl abgebrochen.'
   CannonNotFound: 'RED [Cannons] Kanone existiert nicht.'
+  AddedWhitelist: 'GREEN [Cannons] PLAYER zur whitelist von CANNON hinzugefügt'
+  RemovedWhitelist: 'GREEN [Cannons] PLAYER von whitelist entfernt'
 
 
 Aiming:
@@ -60,7 +63,7 @@ Cannon:
     NEWLINE YELLOW Projektil: GOLD PROJECTILE
     NEWLINE YELLOW Russ: GOLD SOOT
     NEWLINE YELLOW Ausrichtung H/V: GOLD HDEGREE YELLOW / GOLD VDEGREE
-    NEWLINE YELLOW Whitelist: NEWLINE GOLD WHITELIST '
+    NEWLINE YELLOW Whitelist: WHITELIST '
   RenameSuccess: 'GREEN [Cannons] Die Kanone wurde umbenannt in GOLD CANNON_NAME.'
   RenameFail: 'RED [Cannons] Der Name für die Kanone ist nicht einzigartig.'
 
@@ -111,7 +114,23 @@ Death:
 
 
 Help:
-  Text: 'NEWLINE RED Cannons plugin NEWLINE RED /cannons build GREEN - Wie man eine Kanone baut NEWLINE RED /cannons fire GREEN - Wie man eine Kanone abfeuert NEWLINE RED /cannons adjust GREEN - Wie man mit Kanonen zielt'
-  Build: 'NEWLINE RED Wie baut man eine Kanone? NEWLINE GREEN Plaziere 3 Block schwarze Wolle hintereinander für das Kanonenrohr. NEWLINE GREEN Auf jeder Seite des Rohrs ein Knopf. NEWLINE GREEN Zum Abschluss noch eine Fackel auf den ersten Block des Rohrs. NEWLINE GREEN Jetzt sollte eine Meldung erschienen sein.'
-  Fire: 'NEWLINE RED Wie lädt man eine Kanone? NEWLINE GREEN 1) Lade Schwarzpuvler in das Kanonenrohr NEWLINE GREEN in dem du auf das Rohr rechts klickst. NEWLINE GREEN 2) Rechtsklick auf das Rohr mit dem Projektil (e.g. cobblestone). NEWLINE GREEN 3) Zum Feuern Rechtsklick an der Fackel.'
-  Adjust: 'NEWLINE RED Du hast das Ziel verfehlt? Lerne wie man richtig zielt NEWLINE GREEN Rechtsklick auf das Rohr dreht die Kanone. NEWLINE GREEN Shift+Rechtsklick ändert den Winkel in die andere Richtung. NEWLINE GREEN Ein Klick auf die obere oder untere Seite ändert den vertikalen Winkel NEWLINE GREEN Links- und Rechtsklicks den horizontalen Winkel.'
+  Text: 'NEWLINE GOLD Cannons plugin
+    NEWLINE GOLD /cannons build YELLOW - Wie man eine Kanone baut
+    NEWLINE GOLD /cannons fire YELLOW - Wie man eine Kanone abfeuert
+    NEWLINE GOLD /cannons adjust YELLOW - Wie man mit Kanonen zielt
+    NEWLINE GOLD /cannons commands YELLOW - Alle zugänglichen Befehle'
+  Build: 'NEWLINE GOLD Wie baut man eine Kanone?
+    NEWLINE YELLOW Plaziere 3 Block schwarze Wolle hintereinander für das Kanonenrohr.
+    NEWLINE YELLOW Auf jeder Seite des Rohrs ein Knopf.
+    NEWLINE YELLOW Zum Abschluss noch eine Fackel auf den ersten Block des Rohrs.
+    NEWLINE YELLOW Jetzt sollte eine Meldung erschienen sein.'
+  Fire: 'NEWLINE GOLD Wie lädt man eine Kanone?
+    NEWLINE YELLOW 1) Lade Schwarzpuvler in das Kanonenrohr
+    NEWLINE YELLOW in dem du auf das Rohr rechts klickst.
+    NEWLINE YELLOW 2) Rechtsklick auf das Rohr mit dem Projektil (e.g. cobblestone).
+    NEWLINE YELLOW 3) Zum Feuern Rechtsklick an der Fackel.'
+  Adjust: 'NEWLINE GOLD Du hast das Ziel verfehlt? Lerne wie man richtig zielt
+    NEWLINE YELLOW Rechtsklick auf das Rohr dreht die Kanone.
+    NEWLINE YELLOW Shift+Rechtsklick ändert den Winkel in die andere Richtung.
+    NEWLINE YELLOW Ein Klick auf die obere oder untere Seite ändert den vertikalen Winkel
+    NEWLINE YELLOW Links- und Rechtsklicks den horizontalen Winkel.'

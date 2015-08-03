@@ -37,6 +37,7 @@ permissions:
       cannons.player.autoreload: true
       cannons.player.thermometer: true
       cannons.player.ramrod: true
+      cannons.player.whitelist: true
       cannons.player.help: true
       cannons.player.reset: true
       cannons.player.redstone: true
@@ -87,6 +88,9 @@ permissions:
     default: false
   cannons.player.ramrod:
     description: Allows a player to use the ramrod tool
+    default: false
+  cannons.player.whitelist:
+    description: Allows a player to add/remove players from a cannon whitelist
     default: false
   cannons.player.autoreload:
     description: Allows a player to use autoreload on a cannon

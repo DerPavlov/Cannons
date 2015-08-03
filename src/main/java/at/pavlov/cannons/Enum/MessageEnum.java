@@ -21,11 +21,14 @@ public enum MessageEnum
 	ErrorDismantlingNotOwner ("Error.DismantlingNotOwner", true),
     ErrorMissingSign ("Error.MissingSign", true),
 	ErrorNoMoney ("Error.NoMoney", true),
+	ErrorPlayerNotFound ("Error.PlayerNotFound", true),
 
     //Commands
     CmdSelectCannon ("Commands.SelectCannon"),
     CmdSelectCanceled ("Commands.SelectCanceled"),
     CmdCannonNotFound ("Commands.CannonNotFound"),
+	CmdAddedWhitelist ("Commands.AddedWhitelist"),
+	CmdRemovedWhitelist ("Commands.RemovedWhitelist"),
 
 	//Aiming
 	SettingCombinedAngle ("Aiming.SettingCombinedAngle"),

@@ -324,7 +324,10 @@ public class UserMessages {
 					if (offplayer != null)
 						names.add(offplayer.getName());
 				}
-				message = message.replace("WHITELIST", "  - " + StringUtils.join(names, "/n  - "));
+				if (names.size() > 0)
+					message = message.replace("WHITELIST", "\n " + ChatColor.GOLD + "  - " + StringUtils.join(names,  "\n " + ChatColor.GOLD + "  - "));
+				else
+					message = message.replace("WHITELIST", ChatColor.GOLD + "none");
 			}
         }
 

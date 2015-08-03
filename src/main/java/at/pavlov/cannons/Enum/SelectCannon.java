@@ -3,5 +3,7 @@ package at.pavlov.cannons.Enum;
 public enum SelectCannon {
     OBSERVER,
     INFO,
-    DISMANTLE
+    DISMANTLE,
+    WHITELIST_ADD,
+    WHITELIST_REMOVE
 }

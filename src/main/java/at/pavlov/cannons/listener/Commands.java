@@ -31,6 +31,8 @@ public class Commands implements CommandExecutor
 
     //<player,command to be performed>;
     private HashMap<UUID,SelectCannon> cannonSelector = new HashMap<UUID,SelectCannon>();
+    //<player,playerUID>;
+    private HashMap<UUID,UUID> whitelistPlayer = new HashMap<UUID,UUID>();
 
 
 
@@ -175,14 +177,14 @@ public class Commands implements CommandExecutor
                         {
                             Player permPlayer = Bukkit.getPlayer(args[1]);
                             if (permPlayer!=null)
-                                sendAllPermissions(sender,permPlayer);
+                                displayAllPermissions(sender, permPlayer);
                             else
                                 sendMessage(sender, ChatColor.GREEN + "Player not found. Usage: " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
                         }
                         //the command sender is also a player - return the permissions of the sender
                         else if (player != null)
                         {
-                            sendAllPermissions(sender, player);
+                            displayAllPermissions(sender, player);
                         }
                         else
                             sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
@@ -229,6 +231,16 @@ public class Commands implements CommandExecutor
                         }
                         // how to adjust
                         userMessages.sendMessage(MessageEnum.HelpAdjust, player);
+                    }
+                    //cannons commands
+                    else if (args[0].equalsIgnoreCase("commands"))
+                    {
+                        if (!player.hasPermission("cannons.player.command"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
+                        displayCommands(player);
                     }
                     //cannons imitating toggle
                     else if (args[0].equalsIgnoreCase("imitate") && config.isImitatedAimingEnabled())
@@ -290,6 +302,37 @@ public class Commands implements CommandExecutor
                         }
                         else
                             sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
+                    }
+                    //add player to whitelist
+                    else if(args[0].equalsIgnoreCase("whitelist"))
+                    {
+                        if (!player.hasPermission("cannons.player.whitelist"))
+                        {
+                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            return true;
+                        }
+                        //selection done by a string '/cannons observer add|remove NAME'
+                        if (args.length >= 3 && (args[1].equalsIgnoreCase("add"))) {
+                            OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[2]);
+                            plugin.logDebug("whitelist " + args[2] + " off: " + offPlayer);
+                            if (offPlayer != null) {
+                                whitelistPlayer.put(player.getUniqueId(), offPlayer.getUniqueId());
+                                toggleCannonSelector(player, SelectCannon.WHITELIST_ADD);
+                            }
+                            else
+                                userMessages.sendMessage(MessageEnum.ErrorPlayerNotFound, player);
+                        }
+                        else  if (args.length >= 3 && (args[1].equalsIgnoreCase("remove"))) {
+                            OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[2]);
+                            if (offPlayer != null) {
+                                whitelistPlayer.put(player.getUniqueId(), offPlayer.getUniqueId());
+                                toggleCannonSelector(player, SelectCannon.WHITELIST_REMOVE);
+                            }
+                            else
+                                userMessages.sendMessage(MessageEnum.ErrorPlayerNotFound, player);
+                        }
+                        else
+                            sendMessage(sender, ChatColor.RED + "Usage '/cannons whitelist <add|remove> <NAME>'");
                     }
                     //get name of cannon
                     else if(args[0].equalsIgnoreCase("info"))
@@ -461,12 +504,8 @@ public class Commands implements CommandExecutor
      * @param player player to check
      * @return true if in selecting mode
      */
-    public boolean isSelectingMode(Player player)
-    {
-        if (player == null)
-            return false;
-
-        return cannonSelector.containsKey(player.getUniqueId());
+    public boolean isSelectingMode(Player player) {
+        return player != null && cannonSelector.containsKey(player.getUniqueId());
     }
 
     /**
@@ -496,6 +535,18 @@ public class Commands implements CommandExecutor
                     plugin.getCannonManager().dismantleCannon(cannon, player);
                     break;
                 }
+                case WHITELIST_ADD:{
+                    cannon.addWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
+                    whitelistPlayer.remove(player.getUniqueId());
+                    userMessages.sendMessage(MessageEnum.CmdAddedWhitelist, player, cannon);
+                    break;
+                }
+                case WHITELIST_REMOVE:{
+                    cannon.removeWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
+                    whitelistPlayer.remove(player.getUniqueId());
+                    userMessages.sendMessage(MessageEnum.CmdRemovedWhitelist, player, cannon);
+                    break;
+                }
             }
         }
         cannonSelector.remove(player.getUniqueId());
@@ -507,7 +558,7 @@ public class Commands implements CommandExecutor
      * @param player the permission of this player will be checked
      * @param permission permission as string
      */
-    public void displayPermission(CommandSender sender, Player player, String permission)
+    private void displayPermission(CommandSender sender, Player player, String permission)
     {
         if (player == null || permission == null) return;
 
@@ -524,11 +575,11 @@ public class Commands implements CommandExecutor
 
 
     /**
-     * sends all default permissions of the player to the sender
+     * display all default permissions of the player to the sender
      * @param sender command sender
      * @param permPlayer the permission of this player will be checked
      */
-    public void sendAllPermissions(CommandSender sender, Player permPlayer)
+    private void displayAllPermissions(CommandSender sender, Player permPlayer)
     {
         sendMessage(sender, ChatColor.GREEN + "Permissions for " + ChatColor.GOLD + permPlayer.getName() + ChatColor.GREEN + ":");
         displayPermission(sender, permPlayer, "cannons.player.command");
@@ -547,6 +598,7 @@ public class Commands implements CommandExecutor
         displayPermission(sender, permPlayer, "cannons.player.autoreload");
         displayPermission(sender, permPlayer, "cannons.player.thermometer");
         displayPermission(sender, permPlayer, "cannons.player.ramrod");
+        displayPermission(sender, permPlayer, "cannons.player.whitelist");
         displayPermission(sender, permPlayer, "cannons.player.reset");
         displayPermission(sender, permPlayer, "cannons.player.list");
         displayPermission(sender, permPlayer, "cannons.projectile.default");
@@ -556,7 +608,7 @@ public class Commands implements CommandExecutor
         if (newBuildlimit==Integer.MAX_VALUE)
             sendMessage(sender, ChatColor.YELLOW + "no Permission cannons.limit.x (with 0<=x<=100)");
         else
-            displayPermission(sender, permPlayer, "cannons.limit."+newBuildlimit);
+            displayPermission(sender, permPlayer, "cannons.limit." + newBuildlimit);
         int numberCannons = plugin.getCannonManager().getNumberOfCannons(permPlayer.getUniqueId());
         int maxCannons = plugin.getCannonManager().getCannonBuiltLimit(permPlayer);
         if (maxCannons == Integer.MAX_VALUE)
@@ -569,4 +621,47 @@ public class Commands implements CommandExecutor
         displayPermission(sender, permPlayer, "cannons.admin.dismantle");
         displayPermission(sender, permPlayer, "cannons.admin.permissions");
     }
+
+    /**
+     * displays the given permission of the player
+     * @param player the permission of this player will be checked
+     * @param permission permission as string
+     */
+    private void displayCommand(Player player, String command, String permission)
+    {
+        if (player == null) return;
+
+        if (permission == null || player.hasPermission(permission))
+            sendMessage(player, ChatColor.YELLOW + command);
+    }
+
+
+    /**
+     * displays all possible commands for the player
+     * @param player the permission of this player will be checked
+     */
+    private void displayCommands(Player player) {
+        sendMessage(player, ChatColor.GOLD + "Player commands:" + ChatColor.YELLOW);
+        displayCommand(player, "/cannons build", "cannons.player.command");
+        displayCommand(player, "/cannons fire", "cannons.player.command");
+        displayCommand(player, "/cannons adjust", "cannons.player.command");
+        displayCommand(player, "/cannons commands", "cannons.player.command");
+        displayCommand(player, "/cannons imitate", null);
+        displayCommand(player, "/cannons rename [OLD] [NEW]", "cannons.player.rename");
+        displayCommand(player, "/cannons observer", "cannons.player.observer");
+        displayCommand(player, "/cannons info", "cannons.player.info");
+        displayCommand(player, "/cannons list", "cannons.player.list");
+        displayCommand(player, "/cannons whitelist add [NAME]", "cannons.player.whitelist");
+        displayCommand(player, "/cannons whitelist remove [NAME]", "cannons.player.whitelist");
+        sendMessage(player, ChatColor.GOLD + "Admin commands:" + ChatColor.YELLOW);
+        displayCommand(player, "/cannons list [NAME]", "cannons.admin.list");
+        displayCommand(player, "/cannons dismantle", "cannons.admin.dismantle");
+        displayCommand(player, "/cannons reset", "cannons.admin.reset");
+        displayCommand(player, "/cannons reload", "cannons.admin.reload");
+        displayCommand(player, "/cannons save", "cannons.admin.save");
+        displayCommand(player, "/cannons load", "cannons.admin.load");
+        displayCommand(player, "/cannons permissions [NAME]", "cannons.admin.permissions");
+    }
+
+
 }

@@ -17,6 +17,7 @@ Error:
   DismantlingNotOwner: 'RED [Cannons] Just the owner can dismantle a cannon.'
   MissingSign: 'RED [Cannons] This CANNON needs a sign to operate.'
   NoMoney: 'RED [Cannons] You need BUILD_COSTS to create this cannon.'
+  PlayerNotFound: 'RED [Cannons] Player does not exist.'
 
 
 Aiming:
@@ -34,6 +35,8 @@ Commands:
   SelectCannon: 'YELLOW [Cannons] Please click on the cannon.'
   SelectCanceled: 'RED [Cannons] Selection canceled.'
   CannonNotFound: 'RED [Cannons] Cannon not found.'
+  AddedWhitelist: 'GREEN [Cannons] Added PLAYER to whitelist of CANNON'
+  RemovedWhitelist: 'GREEN [Cannons] Removed PLAYER from whitelist of CANNON'
 
 
 Load:  
@@ -60,7 +63,7 @@ Cannon:
     NEWLINE YELLOW Projectile: GOLD PROJECTILE
     NEWLINE YELLOW Soot: GOLD SOOT
     NEWLINE YELLOW Targeting H/V: GOLD HDEGREE YELLOW / GOLD VDEGREE
-    NEWLINE YELLOW Whitelist: NEWLINE GOLD WHITELIST'
+    NEWLINE YELLOW Whitelist: WHITELIST'
   RenameSuccess: 'GREEN [Cannons] You have rename the cannon to GOLD CANNON_NAME.'
   RenameFail: 'RED [Cannons] New cannon name is not unique.'
 
@@ -112,7 +115,23 @@ Death:
 
 
 Help:
-  Text: 'NEWLINE RED Cannons plugin NEWLINE RED /cannons build GREEN - How to build a cannon NEWLINE RED /cannons fire GREEN - How to load and fire a cannon NEWLINE RED /cannons adjust GREEN - A small guide aim with a cannon'
-  Build: 'NEWLINE RED How to build a cannon: NEWLINE GREEN To make the barrel place 3 black wool blocks in x or z. NEWLINE GREEN Place a button on each end of the barrel NEWLINE GREEN Finish it by placing a torch on the first block of the barrel. NEWLINE GREEN To check if the cannon works right click the torch and you NEWLINE GREEN will get a message.'
-  Fire: 'NEWLINE RED How to load and fire: NEWLINE GREEN 1) Load the barrel with gunpowder by right clicking a few times with it. NEWLINE GREEN 2) Right click with a projectile block (e.g. cobblestone). NEWLINE GREEN 3) When you have done everthing right right click the torch.'
-  Adjust: 'NEWLINE RED You missed the target? Learn now how to aim: NEWLINE GREEN Right clicking with empty hands will increase the angle. NEWLINE GREEN Shift right click will decrease the angle. NEWLINE GREEN Clicking on the top of the barrel will change the vertical angle.NEWLINE GREEN Clicking on the side will change the horizontal angle.'
+  Text: 'NEWLINE YELLOW Cannons plugin
+    NEWLINE GOLD /cannons build YELLOW - How to build a cannon
+    NEWLINE GOLD /cannons fire YELLOW - How to load and fire a cannon
+    NEWLINE GOLD /cannons adjust YELLOW - A small guide aim with a cannon
+    NEWLINE GOLD /cannons commands YELLOW - Shows all accessable commands'
+  Build: 'NEWLINE GOLD How to build a cannon:
+    NEWLINE YELLOW To make the barrel place 3 black wool blocks in x or z.
+    NEWLINE YELLOW Place a button on each end of the barrel
+    NEWLINE YELLOW Finish it by placing a torch on the first block of the barrel.
+    NEWLINE YELLOW To check if the cannon works right click the torch and you
+    NEWLINE YELLOW will get a message.'
+  Fire: 'NEWLINE GOLD How to load and fire: N
+    EWLINE YELLOW 1) Load the barrel with gunpowder by right clicking a few times with it.
+    NEWLINE YELLOW 2) Right click with a projectile block (e.g. cobblestone).
+    NEWLINE YELLOW 3) When you have done everthing right right click the torch.'
+  Adjust: 'NEWLINE GOLD You missed the target? Learn now how to aim:
+    NEWLINE YELLOW Right clicking with empty hands will increase the angle.
+    NEWLINE YELLOW Shift right click will decrease the angle.
+    NEWLINE YELLOW Clicking on the top of the barrel will change the vertical angle.
+    NEWLINE YELLOW Clicking on the side will change the horizontal angle.'
