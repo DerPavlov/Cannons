@@ -314,7 +314,6 @@ public class Commands implements CommandExecutor
                         //selection done by a string '/cannons observer add|remove NAME'
                         if (args.length >= 3 && (args[1].equalsIgnoreCase("add"))) {
                             OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[2]);
-                            plugin.logDebug("whitelist " + args[2] + " off: " + offPlayer);
                             if (offPlayer != null) {
                                 whitelistPlayer.put(player.getUniqueId(), offPlayer.getUniqueId());
                                 toggleCannonSelector(player, SelectCannon.WHITELIST_ADD);
