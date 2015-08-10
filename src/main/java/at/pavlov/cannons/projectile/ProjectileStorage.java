@@ -192,7 +192,7 @@ public class ProjectileStorage
         projectile.setSmokeTrailDuration(projectileConfig.getDouble("smokeTrail.duration", 20.0));
 		
 		//explosion
-		projectile.setExplosionPower(projectileConfig.getInt("explosion.explosionPower", 2));
+		projectile.setExplosionPower((float) projectileConfig.getDouble("explosion.explosionPower", 2.));
 		projectile.setExplosionPowerDependsOnVelocity(projectileConfig.getBoolean("explosion.explosionPowerDependsOnVelocity", true));
 		projectile.setExplosionDamage(projectileConfig.getBoolean("explosion.doesExplosionDamage", true));
         projectile.setUnderwaterDamage(projectileConfig.getBoolean("explosion.doesUnderwaterExplosion", false));
