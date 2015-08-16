@@ -27,9 +27,8 @@ public class BlockListener implements Listener
 
 
     @EventHandler
-    public void blockExplodeEvent(BlockExplodeEvent event)
-    {
-        if (plugin.getMyConfig().isRelayExplosionEvent()){
+    public void blockExplodeEvent(BlockExplodeEvent event) {
+        if (plugin.getMyConfig().isRelayExplosionEvent()) {
             EntityExplodeEvent explodeEvent = new EntityExplodeEvent(null, event.getBlock().getLocation(), event.blockList(), event.getYield());
             Bukkit.getServer().getPluginManager().callEvent(explodeEvent);
             event.setCancelled(explodeEvent.isCancelled());
