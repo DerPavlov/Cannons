@@ -41,7 +41,7 @@ import at.pavlov.cannons.dao.CannonBean;
 import at.pavlov.cannons.dao.MyDatabase;
 import at.pavlov.cannons.dao.PersistenceDatabase;
 import at.pavlov.cannons.projectile.Projectile;
-import org.mcstats.Metrics;
+import org.mcstats.MetricsLite;
 
 public final class Cannons extends JavaPlugin
 {
@@ -167,7 +167,7 @@ public final class Cannons extends JavaPlugin
 			}, 6000L, 6000L);
 			
 			try {
-			    Metrics metrics = new Metrics(this);
+			    MetricsLite metrics = new MetricsLite(this);
 			    metrics.start();
 			} catch (IOException e) {
 			    // Failed to submit the stats :-(

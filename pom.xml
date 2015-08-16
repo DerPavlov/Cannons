@@ -45,6 +45,7 @@
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+            <!--<url>http://repo.bukkit.org/content/groups/public/</url>-->
         </repository>
         <repository>
             <id>Plugin Metrics</id>
@@ -56,7 +57,49 @@
         </repository>
     </repositories>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldedit</artifactId>
+            <version>5.6.2</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.8.3-R0.1-SNAPSHOT</version>
+            <!--<version>1.7.9-R0.2</version>-->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mcstats.bukkit</groupId>
+            <artifactId>metrics-lite</artifactId>
+            <version>R7</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.5</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <developers>
+        <developer>
+            <id>DerPavlov</id>
+            <name>Peter Gruber</name>
+            <email>derPavlov@gmail.com</email>
+            <roles>
+                <role>author</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
     <build>
+        <finalName>${project.name}</finalName>
         <defaultGoal>clean install</defaultGoal>
         <!-- Resources -->
         <resources>
@@ -118,7 +161,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.mcstats</pattern>
-                            <shadedPattern>at.pavlov.cannons</shadedPattern>
+                            <shadedPattern>at.pavlov.cannons.mcstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -133,43 +176,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>worldedit</artifactId>
-            <version>5.6.2</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mcstats.bukkit</groupId>
-            <artifactId>metrics</artifactId>
-            <version>R7</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.5</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
-    <developers>
-        <developer>
-            <id>DerPavlov</id>
-            <name>Peter Gruber</name>
-            <email>derPavlov@gmail.com</email>
-            <roles>
-                <role>author</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-    </developers>
 </project>
