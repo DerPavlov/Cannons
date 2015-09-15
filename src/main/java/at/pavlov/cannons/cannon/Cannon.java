@@ -146,7 +146,7 @@ public class Cannon
         this.aimingPitch = 0.0;
         this.aimingYaw = 0.0;
 
-        lastPlayerSpreadMultiplier = 1.0;
+        this.lastPlayerSpreadMultiplier = 1.0;
 
         // reset
         if (design.isGunpowderNeeded())
@@ -158,6 +158,10 @@ public class Cannon
         lastFiredGunpowder = 0;
         this.setSoot(design.getStartingSoot());
         this.setProjectilePushed(design.getProjectilePushing());
+
+        // set temperature
+        this.tempValue = 0.0;
+        this.tempTimestamp = 0;
 
         this.databaseId = UUID.randomUUID();
     }
@@ -1903,7 +1907,7 @@ public class Cannon
 
     public double getTemperature(boolean update)
     {
-        return (update) ? this.getTemperature():this.tempValue;
+        return (update ? this.getTemperature():this.tempValue);
     }
 
     /**
