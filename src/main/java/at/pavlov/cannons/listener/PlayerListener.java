@@ -510,7 +510,7 @@ public class PlayerListener implements Listener
             if(cannon.isRestoneTrigger(clickedBlock.getLocation()))
             {
                 plugin.logDebug("interact event: fire redstone trigger");
-                event.setCancelled(true);
+                // do not cancel the event
                 cannon.setLastUser(player.getUniqueId());
 
                 return;
