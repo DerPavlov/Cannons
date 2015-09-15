@@ -16,11 +16,13 @@ import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -533,6 +535,14 @@ public class Aiming {
 							}
                         }
 						else if (t.getTargetType() == TargetType.PLAYER && !cannon.isWhitelisted(t.getUniqueId())) {
+							// ignore if target and player are in the same team
+							Player p = Bukkit.getPlayer(t.getUniqueId());
+							if (p != null && Bukkit.getScoreboardManager().getMainScoreboard() != null) {
+								Team team = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p);
+								if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
+									continue;
+							}
+							// get solution
 							if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
 								possibleTargets.add(t);
 							}
