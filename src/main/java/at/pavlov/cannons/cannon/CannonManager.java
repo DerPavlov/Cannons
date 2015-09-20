@@ -327,7 +327,7 @@ public class CannonManager
             plugin.getAiming().addSentryCannon(cannon.getUID());
 
         plugin.getPersistenceDatabase().saveCannonAsync(cannon);
-        plugin.logDebug("added cannon to the list");
+        plugin.logDebug("added cannon " + cannon.getCannonName());
 		
 		cannon.updateCannonSigns();
 	}
