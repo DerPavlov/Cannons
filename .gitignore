@@ -216,15 +216,14 @@ pip-log.txt
 .mr.developer.cfg
 
 
-
-#############
-## PyCharm
-#############
-*.class
-*.xml
+#################
+# Intellij
+#################
 .idea/
+*.iml
+*.iws
+#################
+# Maven
+#################
+log/
 target/
-*.iml
-.idea/artifacts/Cannons_jar.xml
-.idea/misc.xml
-*.iml
