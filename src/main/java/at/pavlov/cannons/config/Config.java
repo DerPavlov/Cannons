@@ -122,6 +122,7 @@ public class Config
 		setToolFiring(new MaterialHolder(plugin.getConfig().getString("tools.firing", "259:0")));
         setToolRamrod(new MaterialHolder(plugin.getConfig().getString("tools.ramrod", "280:0")));
 		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
+        setToolThermometer(new MaterialHolder(plugin.getConfig().getString("tools.thermometer", "371:0")));
 
         //imitated effects
         setImitatedBlockMinimumDistance(plugin.getConfig().getInt("imitatedEffects.minimumBlockDistance", 40));
