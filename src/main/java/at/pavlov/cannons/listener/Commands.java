@@ -116,7 +116,7 @@ public class Commands implements CommandExecutor
                         //remove all cannons
                         persistenceDatabase.deleteAllCannonsAsync();
                         plugin.getCannonManager().deleteAllCannons();
-                        sendMessage(sender, ChatColor.GREEN + "All cannons have be deleted");
+                        sendMessage(sender, ChatColor.GREEN + "All cannons have been deleted");
                     }
                     else if (args.length >= 2 && args[1] != null)
                     {
