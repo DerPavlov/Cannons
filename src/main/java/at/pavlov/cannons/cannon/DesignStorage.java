@@ -427,9 +427,7 @@ public class DesignStorage
 								}
 								//muzzle blocks need to be air - else the projectile would spawn in a block
 								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, Material.AIR, 0));
-								
 							}
-							
 							// #############  find the min and max for rotation blocks
 							else if (block.equalsFuzzy(blockRotationCenter))
 							{
@@ -638,7 +636,7 @@ public class DesignStorage
 		return false;
 	}
 	
-	private final String getPath()
+	private String getPath()
 	{
 		// Directory path here
 		return "plugins/Cannons/designs/";
@@ -651,8 +649,8 @@ public class DesignStorage
 	
 	/**
 	 * returns the cannon design of the cannon
-	 * @param cannon
-	 * @return
+	 * @param cannon the cannon
+	 * @return design of cannon
 	 */
 	public CannonDesign getDesign(Cannon cannon)
 	{
@@ -661,8 +659,8 @@ public class DesignStorage
 	
 	/**
 	 * returns the cannon design by its id
-	 * @param designId
-	 * @return
+	 * @param designId Name of the design
+	 * @return cannon design
 	 */
 	public CannonDesign getDesign(String designId)
 	{
@@ -672,6 +670,20 @@ public class DesignStorage
 				return cannonDesign;
 		}
 		return null;
+	}
+
+	/**
+	 * is there a cannon design with the give name
+	 * @param name name of the design
+	 * @return true if there is a cannon design with this name
+     */
+	public boolean hasDesign(String name){
+		for (CannonDesign design : cannonDesignList){
+			if (design.getDesignID().equalsIgnoreCase(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }
