@@ -318,9 +318,11 @@ public class UserMessages {
 				message = message.replace("DISMANTLING_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDestructionRefund()));
 			}
 			// show the name of the last whitelisted player
-			OfflinePlayer whiteplayer = Bukkit.getOfflinePlayer(cannon.getLastWhitelisted());
-			if (whiteplayer != null)
-				message = message.replace("LASTWHITELISTED", whiteplayer.getName());
+			if (cannon.getLastWhitelisted() != null) {
+				OfflinePlayer whiteplayer = Bukkit.getOfflinePlayer(cannon.getLastWhitelisted());
+				if (whiteplayer != null)
+					message = message.replace("LASTWHITELISTED", whiteplayer.getName());
+			}
 			// show whitelist
 			if (cannon.getWhitelist() != null){
 				List<String> names = new ArrayList<String>();
