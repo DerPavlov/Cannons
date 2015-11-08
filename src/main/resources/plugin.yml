@@ -42,6 +42,7 @@ permissions:
       cannons.player.reset: true
       cannons.player.redstone: true
       cannons.player.list: true
+      cannons.player.create: true
     default: op
 
   cannons.player.command:
@@ -133,6 +134,7 @@ permissions:
       cannons.admin.reload: true
       cannons.admin.reset: true
       cannons.admin.list: true
+      cannons.admin.create: true
       cannons.admin.dismantle: true
       cannons.admin.permissions: true
     default: op
@@ -145,6 +147,9 @@ permissions:
       default: op
   cannons.admin.list:
       description: Allows an admin to list all cannon of a player
+      default: op
+  cannons.admin.create:
+      description: Allows an admin create a cannon just with the design file name
       default: op
   cannons.admin.dismantle:
       description: Allows to deconstruct a cannon without being its owner

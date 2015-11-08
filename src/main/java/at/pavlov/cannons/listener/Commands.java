@@ -6,11 +6,14 @@ import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.Enum.SelectCannon;
 import at.pavlov.cannons.cannon.Cannon;
 
+import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -164,6 +167,23 @@ public class Commands implements CommandExecutor
                                 OfflinePlayer owner = Bukkit.getOfflinePlayer(cannon.getOwner());
                                 sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + owner.getName() + ChatColor.GREEN + " location:" + ChatColor.GOLD + cannon.getOffset().toString());
                             }
+                        }
+                    }
+                    return true;
+                }
+                //cannons create
+                else if(args[0].equalsIgnoreCase("create") && player != null && player.hasPermission("cannons.admin.create"))
+                {
+                    if (args.length >= 2)
+                    {
+                        //check if the design name is valid
+                        if (config.getDesignStorage().hasDesign(args[1])) {
+                            sendMessage(sender, ChatColor.GREEN + "[Cannons] Create design: " + ChatColor.YELLOW + args[1]);
+                            CannonDesign cannonDesign = config.getDesignStorage().getDesign(args[1]);
+
+                            Cannon cannon = new Cannon(cannonDesign, player.getWorld().getUID(), player.getLocation().toVector(), BlockFace.NORTH, player.getUniqueId());
+                            //createCannon(cannon);
+                            cannon.show();
                         }
                     }
                     return true;
@@ -619,6 +639,7 @@ public class Commands implements CommandExecutor
         displayPermission(sender, permPlayer, "cannons.admin.reload");
         displayPermission(sender, permPlayer, "cannons.admin.reset");
         displayPermission(sender, permPlayer, "cannons.admin.list");
+        displayPermission(sender, permPlayer, "cannons.admin.create");
         displayPermission(sender, permPlayer, "cannons.admin.dismantle");
         displayPermission(sender, permPlayer, "cannons.admin.permissions");
     }
@@ -656,6 +677,7 @@ public class Commands implements CommandExecutor
         displayCommand(player, "/cannons whitelist remove [NAME]", "cannons.player.whitelist");
         sendMessage(player, ChatColor.GOLD + "Admin commands:" + ChatColor.YELLOW);
         displayCommand(player, "/cannons list [NAME]", "cannons.admin.list");
+        displayCommand(player, "/cannons create [DESIGN]", "cannons.admin.create");
         displayCommand(player, "/cannons dismantle", "cannons.admin.dismantle");
         displayCommand(player, "/cannons reset", "cannons.admin.reset");
         displayCommand(player, "/cannons reload", "cannons.admin.reload");
