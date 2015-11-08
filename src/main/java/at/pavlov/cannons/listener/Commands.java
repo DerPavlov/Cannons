@@ -7,6 +7,7 @@ import at.pavlov.cannons.Enum.SelectCannon;
 import at.pavlov.cannons.cannon.Cannon;
 
 import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -103,9 +104,11 @@ public class Commands implements CommandExecutor
                 else if(args[0].equalsIgnoreCase("reset") && (player == null || player.hasPermission("cannons.admin.reset")))
                 {
                     //try first if there is no player "all" or "all_players"
+                    OfflinePlayer offall = CannonsUtil.getOfflinePlayer("all");
+                    OfflinePlayer offallplayers = CannonsUtil.getOfflinePlayer("all_players");
                     if (args.length >= 2 && (
-                            (args[1].equals("all")&&Bukkit.getOfflinePlayer("all")==null)||
-                            (args[1].equals("all_players")&&Bukkit.getOfflinePlayer("all_players")==null)))
+                            (args[1].equals("all") && (offall==null || !offall.hasPlayedBefore()))||
+                            (args[1].equals("all_players") && (offallplayers==null || !offallplayers.hasPlayedBefore()))))
                     {
                         //remove all cannons
                         persistenceDatabase.deleteAllCannonsAsync();
@@ -114,8 +117,8 @@ public class Commands implements CommandExecutor
                     else if (args.length >= 2 && args[1] != null)
                     {
                         // delete all cannon entries for this player
-                        OfflinePlayer offplayer = Bukkit.getOfflinePlayer(args[1]);
-                        if (offplayer != null)
+                        OfflinePlayer offplayer = CannonsUtil.getOfflinePlayer(args[1]);
+                        if (offplayer != null && offplayer.hasPlayedBefore())
                         {
                             boolean b1 = plugin.getCannonManager().deleteCannons(offplayer.getUniqueId());
                             persistenceDatabase.deleteCannonsAsync(offplayer.getUniqueId());
@@ -129,7 +132,6 @@ public class Commands implements CommandExecutor
                                 sendMessage(sender, ChatColor.GREEN + "Player " + ChatColor.GOLD + args[1] + ChatColor.GREEN + " not found in the storage");
                             }
                         }
-
                     }
                     else
                     {
@@ -143,8 +145,8 @@ public class Commands implements CommandExecutor
                     if (args.length >= 2)
                     {
                         //additional player name
-                        OfflinePlayer offplayer = Bukkit.getOfflinePlayer(args[1]);
-                        if (offplayer != null) {
+                        OfflinePlayer offplayer = CannonsUtil.getOfflinePlayer(args[1]);
+                        if (offplayer != null && offplayer.hasPlayedBefore()) {
                             sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + offplayer.getName() + ChatColor.GREEN + ":");
                             for (Cannon cannon : CannonManager.getCannonList().values()) {
                                 if (cannon.getOwner() != null && cannon.getOwner().equals(offplayer.getUniqueId()))
@@ -313,8 +315,8 @@ public class Commands implements CommandExecutor
                         }
                         //selection done by a string '/cannons observer add|remove NAME'
                         if (args.length >= 3 && (args[1].equalsIgnoreCase("add"))) {
-                            OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[2]);
-                            if (offPlayer != null) {
+                            OfflinePlayer offPlayer = CannonsUtil.getOfflinePlayer(args[2]);
+                            if (offPlayer != null && offPlayer.hasPlayedBefore()) {
                                 whitelistPlayer.put(player.getUniqueId(), offPlayer.getUniqueId());
                                 toggleCannonSelector(player, SelectCannon.WHITELIST_ADD);
                             }
@@ -322,8 +324,8 @@ public class Commands implements CommandExecutor
                                 userMessages.sendMessage(MessageEnum.ErrorPlayerNotFound, player);
                         }
                         else  if (args.length >= 3 && (args[1].equalsIgnoreCase("remove"))) {
-                            OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(args[2]);
-                            if (offPlayer != null) {
+                            OfflinePlayer offPlayer = CannonsUtil.getOfflinePlayer(args[2]);
+                            if (offPlayer != null && offPlayer.hasPlayedBefore()) {
                                 whitelistPlayer.put(player.getUniqueId(), offPlayer.getUniqueId());
                                 toggleCannonSelector(player, SelectCannon.WHITELIST_REMOVE);
                             }

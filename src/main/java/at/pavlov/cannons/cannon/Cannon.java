@@ -102,6 +102,8 @@ public class Cannon
     private long lastIgnited;
     // the player which has used the cannon last, important for firing with redstone button
     private UUID lastUser;
+    // the last player which was added or removed from the whitelist
+    private UUID lastWhitelisted;
     // spread multiplier from the last operator of the cannon
     private double lastPlayerSpreadMultiplier;
 
@@ -1521,7 +1523,7 @@ public class Cannon
                 if (owner == null)
                     return "missing Owner";
                 OfflinePlayer bPlayer = Bukkit.getOfflinePlayer(owner);
-                if (bPlayer == null)
+                if (bPlayer == null || !bPlayer.hasPlayedBefore())
                     return "not found";
                 return bPlayer.getName();
             case 2 :
@@ -2372,5 +2374,13 @@ public class Cannon
 
     public boolean isWhitelisted(UUID playerUID){
         return whitelist.contains(playerUID);
+    }
+
+    public UUID getLastWhitelisted() {
+        return lastWhitelisted;
+    }
+
+    public void setLastWhitelisted(UUID lastWhitelisted) {
+        this.lastWhitelisted = lastWhitelisted;
     }
 }

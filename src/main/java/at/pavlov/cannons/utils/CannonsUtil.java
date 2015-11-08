@@ -871,4 +871,19 @@ public class CannonsUtil
 //        System.out.println("vector: " + (new Vector(hx, hy, hz)));
         return new Vector(hx, hy, hz).multiply(speed);
     }
+
+    /**
+     * returns the offline player for a given player name if he played on the server
+     * @param name name of the player
+     * @return Offline player
+     */
+    public static OfflinePlayer getOfflinePlayer(String name){
+        OfflinePlayer[] players = Bukkit.getOfflinePlayers();
+        for (OfflinePlayer player : players) {
+           if (player.getName().equals(name)) {
+               return player;
+           }
+        }
+        return null;
+    }
 }

@@ -190,7 +190,7 @@ public class CannonManager
 
                 if (cannon.getOwner() != null) {
                     OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
-                    if (offplayer != null && plugin.getEconomy() != null) {
+                    if (offplayer != null && offplayer.hasPlayedBefore() && plugin.getEconomy() != null) {
                         // return message
                         double funds;
                         switch (cause) {
