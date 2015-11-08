@@ -24,8 +24,8 @@ Commands:
   SelectCannon: 'YELLOW [Cannons] Bitte Kanone auswählen.'
   SelectCanceled: 'RED [Cannons] Auswahl abgebrochen.'
   CannonNotFound: 'RED [Cannons] Kanone existiert nicht.'
-  AddedWhitelist: 'GREEN [Cannons] PLAYER zur whitelist von CANNON hinzugefügt'
-  RemovedWhitelist: 'GREEN [Cannons] PLAYER von whitelist entfernt'
+  AddedWhitelist: 'GREEN [Cannons] LASTWHITELISTED zur whitelist von CANNON hinzugefügt'
+  RemovedWhitelist: 'GREEN [Cannons] LASTWHITELISTED von whitelist entfernt'
 
 
 Aiming:

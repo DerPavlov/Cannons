@@ -2365,10 +2365,12 @@ public class Cannon
     }
 
     public void addWhitelistPlayer(UUID playerUID){
+        setLastWhitelisted(playerUID);
         whitelist.add(playerUID);
     }
 
     public void removeWhitelistPlayer(UUID playerUID){
+        setLastWhitelisted(playerUID);
         whitelist.remove(playerUID);
     }
 

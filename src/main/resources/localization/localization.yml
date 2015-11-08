@@ -35,8 +35,8 @@ Commands:
   SelectCannon: 'YELLOW [Cannons] Please click on the cannon.'
   SelectCanceled: 'RED [Cannons] Selection canceled.'
   CannonNotFound: 'RED [Cannons] Cannon not found.'
-  AddedWhitelist: 'GREEN [Cannons] Added PLAYER to whitelist of CANNON'
-  RemovedWhitelist: 'GREEN [Cannons] Removed PLAYER from whitelist of CANNON'
+  AddedWhitelist: 'GREEN [Cannons] Added LASTWHITELISTED to whitelist of CANNON'
+  RemovedWhitelist: 'GREEN [Cannons] Removed LASTWHITELISTED from whitelist of CANNON'
 
 
 Load:  
