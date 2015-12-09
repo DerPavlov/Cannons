@@ -1435,10 +1435,15 @@ public class Cannon
     {
         if ((loadedProjectile == null && lastFiredProjectile == null) || design == null)
             return 0.0;
+
+        int loadableGunpowder = design.getMaxLoadableGunpowderNormal();
+        if (loadableGunpowder <= 0)
+            loadableGunpowder = 1;
+
         if (loadedProjectile == null)
-            return lastFiredProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * lastFiredGunpowder / design.getMaxLoadableGunpowderNormal()));
+            return lastFiredProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * lastFiredGunpowder / loadableGunpowder));
         else
-            return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / design.getMaxLoadableGunpowderNormal()));
+            return loadedProjectile.getVelocity() * design.getMultiplierVelocity() * (1 - Math.pow(2, -4 * loadedGunpowder / loadableGunpowder));
     }
 
     /**
