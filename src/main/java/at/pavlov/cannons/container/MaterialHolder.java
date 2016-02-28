@@ -171,13 +171,13 @@ public class MaterialHolder
 	{
 		if (item != null)
 		{
+
             //Item does not have the required display name
             if ((this.hasDisplayName() && !item.hasDisplayName()) || (!this.hasDisplayName() && item.hasDisplayName()))
                 return false;
             //Display name do not match
             if (item.hasDisplayName() && this.hasDisplayName() && !item.getDisplayName().equals(displayName))
-                return false;
-
+				return false;
 
             if (this.hasLore()) {
                 //does Item have a Lore
