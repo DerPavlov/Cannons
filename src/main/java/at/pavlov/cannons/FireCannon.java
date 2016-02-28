@@ -84,9 +84,9 @@ public class FireCannon {
                 return MessageEnum.PermissionErrorFire;
 
             //check if the player has the permission for this projectile
-            Projectile projectile = cannon.getLoadedProjectile();
-            if(projectile != null && !projectile.hasPermission(player))
-                return MessageEnum.PermissionErrorProjectile;
+//            Projectile projectile = cannon.getLoadedProjectile();
+//            if(projectile != null && !projectile.hasPermission(player))
+//                return MessageEnum.PermissionErrorProjectile;
             //check for flint and steel
             if (design.isFiringItemRequired() && !config.getToolFiring().equalsFuzzy(player.getItemInHand()) )
                 return MessageEnum.ErrorNoFlintAndSteel;
