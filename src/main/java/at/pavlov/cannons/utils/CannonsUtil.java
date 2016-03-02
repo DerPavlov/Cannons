@@ -835,7 +835,7 @@ public class CannonsUtil
                         if (e instanceof LivingEntity && !e.isDead() && minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock()) {
                             if ((e instanceof Player)){
                                 Player p = (Player) e;
-                                if (p.getGameMode() == GameMode.SPECTATOR || p.getGameMode() == GameMode.CREATIVE)
+                                if (p.getGameMode() == GameMode.CREATIVE)
                                     continue;
                             }
                             radiusTargets.put(e.getUniqueId(), new Target(e));

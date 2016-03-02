@@ -1,6 +1,6 @@
 package at.pavlov.cannons;
 
-import java.io.IOException;
+//import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ import at.pavlov.cannons.dao.CannonBean;
 import at.pavlov.cannons.dao.MyDatabase;
 import at.pavlov.cannons.dao.PersistenceDatabase;
 import at.pavlov.cannons.projectile.Projectile;
-import org.mcstats.MetricsLite;
+//import org.mcstats.MetricsLite;
 
 public final class Cannons extends JavaPlugin
 {
@@ -166,12 +166,15 @@ public final class Cannons extends JavaPlugin
 				}
 			}, 6000L, 6000L);
 			
+			//Comment out Metrics for now
+			/*
 			try {
 			    MetricsLite metrics = new MetricsLite(this);
 			    metrics.start();
 			} catch (IOException e) {
 			    // Failed to submit the stats :-(
 			}
+			*/
 
             logDebug("Time to enable cannons: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
 
