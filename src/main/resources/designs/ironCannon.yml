@@ -257,7 +257,7 @@ sounds:
   #PITCH: How fast it is played. (0.5-2)
   #USE: 'none:1:1' to disable this sound
 
-   #creating a new cannon
+  #creating a new cannon
   create: 'BLOCK_ANVIL_LAND:1:0.5'
   #destroying a cannon
   destroy: 'ENTITY_ZOMBIE_ATTACK_IRON_DOOR:1:0.5'
