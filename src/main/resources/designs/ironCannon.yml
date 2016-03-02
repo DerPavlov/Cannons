@@ -258,35 +258,35 @@ sounds:
   #USE: 'none:1:1' to disable this sound
 
   #creating a new cannon
-  create: 'ANVIL_LAND:1:0.5'
+  create: 'BLOCK_ANVIL_LAND:1:0.5'
   #destroying a cannon
-  destroy: 'ZOMBIE_METAL:1:0.5'
+  destroy: 'ENTITY_ZOMBIE_ATTACK_IRON_DOOR:1:0.5'
   #dismantling a cannon
-  dismantle: 'ANVIL_BREAK:1:0.5'
+  dismantle: 'BLOCK_ANVIL_BREAK:1:0.5'
   #changing the angle of a cannon
-  adjust: 'IRONGOLEM_WALK:1:0.5'
+  adjust: 'ENTITY_IRONGOLEM_STEP:1:0.5'
   #fuse igniting sound when firing
-  ignite: 'FUSE:5:1'
+  ignite: 'ENTITY_TNT_PRIMED:5:1'
   #firing sound
-  firing: 'EXPLODE:20:1.5'
+  firing: 'ENTITY_GENERIC_EXPLODE:20:1.5'
   #loading gunpowder
-  gunpowderLoading: 'DIG_SAND:1:1.5'
+  gunpowderLoading: 'BLOCK_SAND_HIT:1:1.5'
   #loading gunpowder
-  gunpowderOverloading: 'DIG_GRASS:1:1.5'
+  gunpowderOverloading: 'BLOCK_GRASS_HIT:1:1.5'
   #cooling a cannon
-  cool: 'FIZZ:1:1'
+  cool: 'BLOCK_FIRE_EXTINGUISH:1:1'
   #smoke effects for touching a hot barrel
-  hot: 'FIZZ:1:1'
+  hot: 'BLOCK_FIRE_EXTINGUISH:1:1'
   #cleaning with the ramrod
-  ramrodCleaning: 'DIG_SNOW:0.5:0'
+  ramrodCleaning: 'BLOCK_SNOW_HIT:0.5:0'
   #cleaning with ramrod done
-  ramrodCleaningDone: 'DIG_SNOW:0.5:1'
+  ramrodCleaningDone: 'BLOCK_SNOW_HIT:0.5:1'
   #pushing projectile into the barrel
-  ramrodPushing: 'DIG_STONE:0.5:0'
+  ramrodPushing: 'BLOCK_STONE_HIT:0.5:0'
   #pushing projectile done
-  ramrodPushingDone: 'ANVIL_LAND:0.5:0'
+  ramrodPushingDone: 'BLOCK_ANVIL_LAND:0.5:0'
   #measuring the cannon temperature with a thermometer
-  thermometer: 'ANVIL_LAND:1:1'
+  thermometer: 'BLOCK_ANVIL_LAND:1:1'
   #enabling the aiming mode with a clock
   enableAimingMode: 'NONE:1:1'
   #disabling aiming mode

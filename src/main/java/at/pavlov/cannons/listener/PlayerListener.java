@@ -30,6 +30,7 @@ import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -333,7 +334,8 @@ public class PlayerListener implements Listener
      * Handles event if player interacts with the cannon
      * @param event
      */
-    @EventHandler
+    @SuppressWarnings("deprecation")
+	@EventHandler
     public void PlayerInteract(PlayerInteractEvent event)
     {
         Action action = event.getAction();
@@ -342,7 +344,7 @@ public class PlayerListener implements Listener
         if(event.getClickedBlock() == null)
         {
             // no clicked block - get block player is looking at
-            clickedBlock = event.getPlayer().getTargetBlock((Set<Material>) null, 4);
+            clickedBlock = event.getPlayer().getTargetBlock((HashSet<Byte>) null, 4);
         }
         else
         {
