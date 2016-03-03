@@ -25,7 +25,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
@@ -596,31 +595,7 @@ public class CannonsUtil
         if (p == null)
             return;
 
-        try
-        {
-        	p.playSound(p.getEyeLocation(), Sound.SUCCESSFUL_HIT, 0.25f, 0.75f);
-        	Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
-        	{
-        		@Override public void run()
-        		{
-        			p.playSound(p.getEyeLocation(), Sound.SUCCESSFUL_HIT, 0.25f, 0.1f);
-        			}
-        		}
-        	, 3);
-        }
-        catch(Exception e)
-        {
-        	//Fired if bukkit doen't have this sound, try/catch block is not neccesury
-        	p.playSound(p.getEyeLocation(), Sound.NOTE_PIANO, 0.25f, 2f);
-        	Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
-        	{
-        		@Override public void run()
-        		{
-        			p.playSound(p.getEyeLocation(), Sound.NOTE_PIANO, 0.25f, 0.75f);
-        			}
-        		}
-        	, 3);
-        }
+        playErrorSound(p.getLocation());
     }
 
     /**
@@ -629,31 +604,31 @@ public class CannonsUtil
      */
     public static void playErrorSound(final Location location)
     {
-        try
-        {
-            location.getWorld().playSound(location, Sound.SUCCESSFUL_HIT, 0.25f, 0.75f);
+//        try
+//        {
+            location.getWorld().playSound(location, Sound.BLOCK_NOTE_PLING  , 0.25f, 0.75f);
             Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
             {
                 @Override public void run()
                 {
-                    location.getWorld().playSound(location, Sound.SUCCESSFUL_HIT, 0.25f, 0.1f);
+                    location.getWorld().playSound(location, Sound.BLOCK_NOTE_PLING , 0.25f, 0.1f);
                 }
             }
                     , 3);
-        }
-        catch(Exception e)
-        {
-            //Fired if bukkit doen't have this sound, try/catch block is not neccesury
-            location.getWorld().playSound(location, Sound.NOTE_PIANO, 0.25f, 2f);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
-            {
-                @Override public void run()
-                {
-                    location.getWorld().playSound(location, Sound.NOTE_PIANO, 0.25f, 0.75f);
-                }
-            }
-                    , 3);
-        }
+//        }
+//        catch(Exception e)
+//        {
+//            //Fired if bukkit doen't have this sound, try/catch block is not neccesury
+//            location.getWorld().playSound(location, Sound.NOTE_PIANO, 0.25f, 2f);
+//            Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
+//            {
+//                @Override public void run()
+//                {
+//                    location.getWorld().playSound(location, Sound.NOTE_PIANO, 0.25f, 0.75f);
+//                }
+//            }
+//                    , 3);
+//        }
     }
 
     /**
