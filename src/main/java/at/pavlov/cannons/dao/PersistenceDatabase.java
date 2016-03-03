@@ -9,6 +9,7 @@ import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.CreateCannon;
 import at.pavlov.cannons.utils.DelayedTask;
+import org.apache.commons.lang.UnhandledException;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
@@ -69,7 +70,6 @@ public class PersistenceDatabase
 			// found cannons - load them
 			for (CannonBean bean : beans)
 			{
-
 				//check if cannon design exists
 				CannonDesign design = plugin.getCannonDesign(bean.getDesignId());
 				if (design == null)
@@ -80,12 +80,12 @@ public class PersistenceDatabase
 				}
 				else
 				{
-					//load values for the cannon
+                    //load values for the cannon
                     UUID world = bean.getWorld();
                     //test if world is valid
                     World w = Bukkit.getWorld(world);
-                    if (w == null)
-                    {
+
+                    if (w == null) {
                         plugin.logDebug("World of cannon " + bean.getId() + " is not valid");
                         invalid.add(bean.getId());
                         continue;
@@ -96,8 +96,8 @@ public class PersistenceDatabase
                         invalid.add(bean.getId());
                         continue;
                     }
-					Vector offset = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
-					BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
+                    Vector offset = new Vector(bean.getLocX(), bean.getLocY(), bean.getLocZ());
+                    BlockFace cannonDirection = BlockFace.valueOf(bean.getCannonDirection());
 
                     //make a cannon
                     Cannon cannon = new Cannon(design, world, offset, cannonDirection, owner);
@@ -129,14 +129,14 @@ public class PersistenceDatabase
                     i++;
 				}
 			}
-            plugin.getDatabase().beginTransaction();
+            //plugin.getDatabase().beginTransaction();
             //remove invalid cannons form the database
             for (UUID inv : invalid)
             {
                 deleteCannon(inv);
             }
-            plugin.getDatabase().commitTransaction();
-            plugin.getDatabase().endTransaction();
+            //plugin.getDatabase().commitTransaction();
+            //plugin.getDatabase().endTransaction();
 
             plugin.logDebug(i + " cannons loaded from the database");
 			return true;
