@@ -28,6 +28,7 @@ import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashSet;
@@ -334,11 +335,11 @@ public class PlayerListener implements Listener
      * Handles event if player interacts with the cannon
      * @param event
      */
-    @SuppressWarnings("deprecation")
 	@EventHandler
     public void PlayerInteract(PlayerInteractEvent event)
     {
         Action action = event.getAction();
+        System.out.println("item: " + event.getItem());
 
         Block clickedBlock;
         if(event.getClickedBlock() == null)
@@ -366,14 +367,13 @@ public class PlayerListener implements Listener
 
     	if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL)
         {
-
             //no cannon found - maybe the player has click into the air to stop aiming
             if(cannon == null)
             {
                 // all other actions will stop aiming mode
                 if(action == Action.RIGHT_CLICK_AIR)
                 {
-                    if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
+                    if (config.getToolAutoaim().equalsFuzzy(event.getItem()))
                     aiming.aimingMode(player, null, false);
                     plugin.getCommandListener().removeCannonSelector(player);
                 }
@@ -384,7 +384,7 @@ public class PlayerListener implements Listener
             final CannonDesign design = cannon.getCannonDesign();
 
             // prevent eggs and snowball from firing when loaded into the gun
-            if(config.isCancelItem(player.getItemInHand()))
+            if(config.isCancelItem(event.getItem()))
                 event.setCancelled(true);
 
             // ############ touching a hot cannon will burn you ####################
@@ -407,7 +407,7 @@ public class PlayerListener implements Listener
 
 
             // ############ cooling a hot cannon ####################
-            if(design.isCoolingTool(player.getItemInHand()))
+            if(design.isCoolingTool(event.getItem()))
             {
                 event.setCancelled(true);
                 if (cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation())) {
@@ -418,7 +418,7 @@ public class PlayerListener implements Listener
 
 
             // ############ temperature measurement ################################
-            if(config.getToolThermometer().equalsFuzzy(player.getItemInHand()))
+            if(config.getToolThermometer().equalsFuzzy(event.getItem()))
             {
                 if (player.hasPermission(design.getPermissionThermometer()))
                 {
@@ -436,7 +436,7 @@ public class PlayerListener implements Listener
 
 
             // ############ set angle ################################
-            if((config.getToolAdjust().equalsFuzzy(player.getItemInHand()) || config.getToolAutoaim().equalsFuzzy(player.getItemInHand())) && cannon.isLoadingBlock(clickedBlock.getLocation()))
+            if((config.getToolAdjust().equalsFuzzy(event.getItem()) || config.getToolAutoaim().equalsFuzzy(event.getItem())) && cannon.isLoadingBlock(clickedBlock.getLocation()))
             {
                 plugin.logDebug("change cannon angle");
                 event.setCancelled(true);
@@ -517,7 +517,7 @@ public class PlayerListener implements Listener
 
 
             // ########## Ramrod ###############################
-            if(config.getToolRamrod().equalsFuzzy(player.getItemInHand()) && cannon.isLoadingBlock(clickedBlock.getLocation()))
+            if(config.getToolRamrod().equalsFuzzy(event.getItem()) && cannon.isLoadingBlock(clickedBlock.getLocation()))
             {
                 plugin.logDebug("Ramrod used");
                 event.setCancelled(true);
