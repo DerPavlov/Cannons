@@ -156,7 +156,7 @@ messages:
 
 sounds:
   #loading sound of projectile
-  loading: 'ENTITY_SNOWBALL_THROW:5:0.5'
+  loading: 'ENTITY_IRONGOLEM_ATTACK:5:0.5'
   #impact sound
   impact: 'ENTITY_GENERIC_EXPLODE:10:0.5'
   #impact sound if the area is protected by an plugin (ProjectileImpactEvent was cancelled)
