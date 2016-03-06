@@ -29,7 +29,7 @@ public class Target {
     }
 
     public Target(Entity entity) {
-        this.name = ((Target) entity).getName();
+        this.name = entity.getName();
         if (entity instanceof Player)
             this.targetType = TargetType.PLAYER;
         else if (entity instanceof Monster)
