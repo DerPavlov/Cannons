@@ -82,4 +82,8 @@ public class SoundHolder {
     public boolean isValid(){
         return this.sound!=null;
     }
+
+    public String toString(){
+        return sound + ":" + volume + ":" + pitch;
+    }
 }
