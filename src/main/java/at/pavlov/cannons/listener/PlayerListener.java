@@ -339,18 +339,25 @@ public class PlayerListener implements Listener
     public void PlayerInteract(PlayerInteractEvent event)
     {
         Action action = event.getAction();
-        System.out.println("item: " + event.getItem());
 
         Block clickedBlock;
         if(event.getClickedBlock() == null)
         {
             // no clicked block - get block player is looking at
+            System.out.println("target block");
             clickedBlock = event.getPlayer().getTargetBlock((HashSet<Byte>) null, 4);
         }
         else
         {
+            System.out.println("event block");
             clickedBlock = event.getClickedBlock();
         }
+
+        if (clickedBlock == null){
+            System.out.println("no clicked block");
+            return;
+        }
+
         final Player player = event.getPlayer();
         final Location barrel = clickedBlock.getLocation();
 
@@ -374,7 +381,7 @@ public class PlayerListener implements Listener
                 if(action == Action.RIGHT_CLICK_AIR)
                 {
                     if (config.getToolAutoaim().equalsFuzzy(event.getItem()))
-                    aiming.aimingMode(player, null, false);
+                        aiming.aimingMode(player, null, false);
                     plugin.getCommandListener().removeCannonSelector(player);
                 }
                 return;
@@ -466,8 +473,6 @@ public class PlayerListener implements Listener
                 //this will directly fire the cannon after it was loaded
                 if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
                     fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
-
-
 
                 if(message!=null)
                     return;
