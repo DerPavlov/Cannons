@@ -344,17 +344,14 @@ public class PlayerListener implements Listener
         if(event.getClickedBlock() == null)
         {
             // no clicked block - get block player is looking at
-            System.out.println("target block");
             clickedBlock = event.getPlayer().getTargetBlock((HashSet<Byte>) null, 4);
         }
         else
         {
-            System.out.println("event block");
             clickedBlock = event.getClickedBlock();
         }
 
         if (clickedBlock == null){
-            System.out.println("no clicked block");
             return;
         }
 
