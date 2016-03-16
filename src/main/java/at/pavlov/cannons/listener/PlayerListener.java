@@ -28,6 +28,7 @@ import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
@@ -338,6 +339,10 @@ public class PlayerListener implements Listener
 	@EventHandler
     public void PlayerInteract(PlayerInteractEvent event)
     {
+        // skip event if not main hand
+        if (event.getHand() != EquipmentSlot.HAND)
+            return;
+
         Action action = event.getAction();
 
         Block clickedBlock;
