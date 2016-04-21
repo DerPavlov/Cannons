@@ -91,8 +91,8 @@ public class PersistenceDatabase
                         continue;
                     }
                     UUID owner = bean.getOwner();
-                    if (owner == null) {
-                        plugin.logDebug("Owner of cannon " + bean.getId() + " is null");
+                    if (owner == null || Bukkit.getPlayer(owner) != null) {
+                        plugin.logDebug("Owner of cannon " + bean.getId() + " does not exist");
                         invalid.add(bean.getId());
                         continue;
                     }
