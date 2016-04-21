@@ -774,6 +774,7 @@ public class Cannon
             double power = getLoadedGunpowder()/design.getMaxLoadableGunpowderNormal()*design.getExplodingLoadedCannons();
             World world = getWorldBukkit();
             if (world != null)
+                //todo fix overheating
                 world.createExplosion(getRandomBarrelBlock(),(float) power);
         }
         // drop charge
