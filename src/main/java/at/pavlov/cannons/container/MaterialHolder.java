@@ -1,6 +1,7 @@
 package at.pavlov.cannons.container;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,7 +13,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.lang.Exception;
 import java.lang.String;
 import java.lang.System;
+import java.lang.reflect.Method;
 import java.util.*;
+
+
 
 //small class as at.pavlov.cannons.container for item id and data
 public class MaterialHolder
@@ -21,10 +25,17 @@ public class MaterialHolder
 	private int data;
 	private String displayName;
 	private List<String> lore;
+	private boolean useTypeName;
+
+	private static Class localeClass = null;
+	private static Class craftItemStackClass = null, nmsItemStackClass = null, nmsItemClass = null;
+	private static String OBC_PREFIX = Bukkit.getServer().getClass().getPackage().getName();
+	private static String NMS_PREFIX = OBC_PREFIX.replace("org.bukkit.craftbukkit", "net.minecraft.server");
 
 
 	public MaterialHolder(ItemStack item)
 	{
+		useTypeName = false;
         if (item == null){
             material=Material.AIR;
             data=0;
@@ -40,6 +51,10 @@ public class MaterialHolder
             ItemMeta meta = item.getItemMeta();
 			if (meta.hasDisplayName() && meta.getDisplayName()!=null)
 				displayName = meta.getDisplayName();
+			else if (!meta.hasDisplayName()){
+				useTypeName = true;
+				displayName = getFriendlyName(item, true);
+			}
 			else
 				displayName = "";
 			if (meta.hasLore() && meta.getLore()!=null)
@@ -130,7 +145,7 @@ public class MaterialHolder
 	{
 		ItemStack item = new ItemStack(material, amount, (short) data);
         ItemMeta meta = item.getItemMeta();
-        if (this.hasDisplayName())
+        if (this.hasDisplayName() && this.useTypeName)
             meta.getDisplayName();
         if (this.hasLore())
             meta.setLore(this.lore);
@@ -171,7 +186,6 @@ public class MaterialHolder
 	{
 		if (item != null)
 		{
-
             //Item does not have the required display name
             if ((this.hasDisplayName() && !item.hasDisplayName()) || (!this.hasDisplayName() && item.hasDisplayName()))
                 return false;
@@ -254,4 +268,63 @@ public class MaterialHolder
     public boolean hasLore(){
         return this.lore!=null && this.lore.size()>0;
     }
+
+	private static String capitalizeFully(String name) {
+		if (name != null) {
+			if (name.length() > 1) {
+				if (name.contains("_")) {
+					StringBuilder sbName = new StringBuilder();
+					for (String subName : name.split("_"))
+						sbName.append(subName.substring(0, 1).toUpperCase() + subName.substring(1).toLowerCase()).append(" ");
+					return sbName.toString().substring(0, sbName.length() - 1);
+				} else {
+					return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+				}
+			} else {
+				return name.toUpperCase();
+			}
+		} else {
+			return "";
+		}
+	}
+
+	private static String getFriendlyName(Material material) {
+		return material == null ? "Air" : getFriendlyName(new ItemStack(material), false);
+	}
+
+	private static String getFriendlyName(ItemStack itemStack, boolean checkDisplayName) {
+		if (itemStack == null || itemStack.getType() == Material.AIR) return "Air";
+		try {
+			if (craftItemStackClass == null)
+				craftItemStackClass = Class.forName(OBC_PREFIX + ".inventory.CraftItemStack");
+			Method nmsCopyMethod = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class);
+
+			if (nmsItemStackClass == null) nmsItemStackClass = Class.forName(NMS_PREFIX + ".ItemStack");
+			Object nmsItemStack = nmsCopyMethod.invoke(null, itemStack);
+
+			Object itemName = null;
+			if (checkDisplayName) {
+				Method getNameMethod = nmsItemStackClass.getMethod("getName");
+				itemName = getNameMethod.invoke(nmsItemStack);
+			} else {
+				Method getItemMethod = nmsItemStackClass.getMethod("getItem");
+				Object nmsItem = getItemMethod.invoke(nmsItemStack);
+
+				if (nmsItemClass == null) nmsItemClass = Class.forName(NMS_PREFIX + ".Item");
+
+				Method getNameMethod = nmsItemClass.getMethod("getName");
+				Object localItemName = getNameMethod.invoke(nmsItem);
+
+				if (localeClass == null) localeClass = Class.forName(NMS_PREFIX + ".LocaleI18n");
+				Method getLocaleMethod = localeClass.getMethod("get", String.class);
+
+				Object localeString = localItemName == null ? "" : getLocaleMethod.invoke(null, localItemName);
+				itemName = ("" + getLocaleMethod.invoke(null, localeString.toString() + ".name")).trim();
+			}
+			return itemName != null ? itemName.toString() : capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
+	}
 }
