@@ -59,7 +59,7 @@ smokeTrail:
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.
   #for comparison, the explosion power of a creeper is 3. anything above 50 will cause lag on smaller servers
-  explosionPower: 3.
+  explosionPower: 3.0
   #explosion power depends on velocity (see kinetic energy)
   explosionPowerDependsOnVelocity: true
   #whether the explosion will destroy blocks
