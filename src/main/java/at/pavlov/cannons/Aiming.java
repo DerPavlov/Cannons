@@ -462,7 +462,7 @@ public class Aiming {
 
             //find the cannon with this id
     		Cannon cannon = CannonManager.getCannon(entry.getValue());
-            if (cannon == null) {
+            if (cannon == null ) {
                 iter.remove();
                 continue;
             }
@@ -471,10 +471,10 @@ public class Aiming {
     		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed())
     		{
     			// autoaming or fineadjusting
-    			if (distanceCheck(player, cannon) && player.isOnline() && cannon.isValid())
+    			if (distanceCheck(player, cannon) && player.isOnline() && cannon.isValid() && !(cannon.getCannonDesign().isSentry() && cannon.isSentryAutomatic()))
         		{
-            		MessageEnum message = updateAngle(player, cannon, null, InteractAction.adjustAutoaim);
-            		userMessages.sendMessage(message, player, cannon);
+                    MessageEnum message = updateAngle(player, cannon, null, InteractAction.adjustAutoaim);
+                    userMessages.sendMessage(message, player, cannon);
         		}		
         		else
         		{
@@ -707,7 +707,7 @@ public class Aiming {
             double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc, maxInterations);
 
 			if (!cannon.getCannonDesign().isSentryIndirectFire() && Math.abs(diffY) > 1000.0){
-				plugin.logDebug("diffY too large: " + diffY);
+				// plugin.logDebug("diffY too large: " + diffY);
 				return false;
 			}
 			//direct fire
@@ -787,7 +787,6 @@ public class Aiming {
 		}
 	}
 
-
     /**
      * switches aming mode for this cannon
      * @param player - player in aiming mode
@@ -817,8 +816,8 @@ public class Aiming {
                 userMessages.sendMessage(message, player, cannon);
             }
         }
-        //enable aiming mode. Sentry cannons can't be opertated by players
-		else if(cannon != null && !cannon.getCannonDesign().isSentry())
+        //enable aiming mode. Sentry cannons can't be operated by players
+		else if(cannon != null && !(cannon.getCannonDesign().isSentry() && cannon.isSentryAutomatic()))
 		{
 			//check if player has permission to aim
 			if (player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
@@ -854,8 +853,8 @@ public class Aiming {
         if (player == null)
             return null;
 
-        //sentry can't be in aiming mode
-        if (cannon == null || cannon.getCannonDesign().isSentry())
+        //sentry can't be in aiming mode if active
+        if (cannon == null || (cannon.getCannonDesign().isSentry() && cannon.isSentryAutomatic()))
             return null;
 
         if (!player.hasPermission(cannon.getCannonDesign().getPermissionAutoaim()))
