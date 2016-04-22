@@ -191,6 +191,10 @@ public class Aiming {
 		}
 		else
 		{
+            // ignore if the sentry is active
+            if (cannon.getCannonDesign().isSentry() && cannon.isSentryAutomatic())
+                return null;
+
             //barrel clicked to change angle
 			if (player!=null) {
 				angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking(), design.getAngleStepSize());
