@@ -496,7 +496,11 @@ public class Aiming {
                 continue;
             }
 
-			//load from chest
+			// ignore cannons which are not in sentry mode
+			if (!cannon.isSentryAutomatic())
+				return;
+
+			// load from chest if the cannon is in automatic mode
 			if (!cannon.isLoaded() && !cannon.isLoading() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 5000) {
 				MessageEnum messageEnum = cannon.reloadFromChests(null, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
 				if (messageEnum.isError()) {
@@ -525,8 +529,8 @@ public class Aiming {
                     }
                 }
 
-                //find a suitable target
-                if (!cannon.hasSentryEntity() && cannon.isSentryAutomatic()){
+                // find a suitable target
+                if (!cannon.hasSentryEntity()){
                     ArrayList<Target> possibleTargets = new ArrayList<Target>();
                     for (Target t : targets.values()) {
                         if (t.getTargetType() == TargetType.MONSTER) {
@@ -605,7 +609,7 @@ public class Aiming {
                 }
             }
             //ready to fire
-            if (cannon.hasSentryEntity() && cannon.targetInSight() && cannon.isSentryAutomatic()) {
+            if (cannon.hasSentryEntity() && cannon.targetInSight()) {
                 if (cannon.isReadyToFire()  && System.currentTimeMillis() > cannon.getSentryLastFiringFailed() + 2000) {
                     MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
                     if (messageEnum != null) {
