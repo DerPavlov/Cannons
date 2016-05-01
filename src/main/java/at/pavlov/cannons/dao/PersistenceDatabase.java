@@ -2,6 +2,7 @@ package at.pavlov.cannons.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,6 +12,7 @@ import at.pavlov.cannons.scheduler.CreateCannon;
 import at.pavlov.cannons.utils.DelayedTask;
 import org.apache.commons.lang.UnhandledException;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.scheduler.BukkitTask;
@@ -22,6 +24,8 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.projectile.Projectile;
+
+import static org.bukkit.Bukkit.getServer;
 
 public class PersistenceDatabase
 {
@@ -91,8 +95,19 @@ public class PersistenceDatabase
                         continue;
                     }
                     UUID owner = bean.getOwner();
-                    if (owner == null || Bukkit.getPlayer(owner) != null) {
-                        plugin.logDebug("Owner of cannon " + bean.getId() + " does not exist");
+
+                    boolean isBanned = false;
+                    if (owner != null) {
+                        for (OfflinePlayer oplayer : Bukkit.getServer().getBannedPlayers()) {
+                            if (oplayer.getUniqueId().equals(owner))
+                                isBanned = true;
+                        }
+                    }
+                    if (owner == null || Bukkit.getOfflinePlayer(owner) == null || isBanned) {
+                        if (isBanned)
+                            plugin.logDebug("Owner of cannon " + bean.getId() + " was banned");
+                        else
+                            plugin.logDebug("Owner of cannon " + bean.getId() + " does not exist");
                         invalid.add(bean.getId());
                         continue;
                     }
