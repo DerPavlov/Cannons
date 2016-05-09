@@ -315,7 +315,7 @@ public class UserMessages {
 			if (plugin.getEconomy() != null) {
 				message = message.replace("BUILD_COSTS", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyBuildingCost()));
 				message = message.replace("DISMANTLING_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDismantlingRefund()));
-				message = message.replace("DISMANTLING_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDestructionRefund()));
+				message = message.replace("DESTRUCTION_REFUND", plugin.getEconomy().format(cannon.getCannonDesign().getEconomyDestructionRefund()));
 			}
 			// show the name of the last whitelisted player
 			if (cannon.getLastWhitelisted() != null) {
