@@ -120,7 +120,7 @@ public class Aiming {
 
 
 		if (action.equals(Action.RIGHT_CLICK_BLOCK )){
-			if (config.getToolAutoaim().equalsFuzzy(player.getItemInHand()))
+			if (config.getToolAutoaim().equalsFuzzy(player.getInventory().getItemInMainHand()))
 			{
 				//aiming mode
 				aimingMode(player, cannon, false);
@@ -547,6 +547,7 @@ public class Aiming {
 							Player p = Bukkit.getPlayer(t.getUniqueId());
 							if (p != null && Bukkit.getScoreboardManager().getMainScoreboard() != null) {
 								Team team = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p);
+								//Team team = Bukkit.getScoreboardManager().getMainScoreboard().getEntryTeam(p.getName());
 								if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
 									continue;
 							}

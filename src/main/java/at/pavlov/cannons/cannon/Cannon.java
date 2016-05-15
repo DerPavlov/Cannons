@@ -1316,19 +1316,19 @@ public class Cannon
         if (player.isSneaking())
         {
             //get the amount of gunpowder that can be maximal loaded
-            amount = player.getItemInHand().getAmount();
+            amount = player.getInventory().getItemInMainHand().getAmount();
             if (amount > toCool)
                 amount = toCool;
         }
 
         setTemperature(getTemperature()-design.getCoolingAmount()*amount);
 
-        ItemStack newItem = design.getCoolingToolUsed(player.getItemInHand());
+        ItemStack newItem = design.getCoolingToolUsed(player.getInventory().getItemInMainHand());
         //remove only one item if the material is AIR else replace the item (e.g. water bucket with a bucket)
         if (newItem.getType().equals(Material.AIR))
             InventoryManagement.takeFromPlayerHand(player, 1);
         else
-            player.setItemInHand(newItem);
+            player.getInventory().setItemInMainHand(newItem);
 
         return true;
     }

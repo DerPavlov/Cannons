@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 
 import com.sk89q.worldedit.blocks.BaseBlock;
@@ -15,7 +16,8 @@ import java.lang.String;
 import java.lang.System;
 import java.lang.reflect.Method;
 import java.util.*;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 //small class as at.pavlov.cannons.container for item id and data
@@ -32,7 +34,6 @@ public class MaterialHolder
 	private static String OBC_PREFIX = Bukkit.getServer().getClass().getPackage().getName();
 	private static String NMS_PREFIX = OBC_PREFIX.replace("org.bukkit.craftbukkit", "net.minecraft.server");
 
-
 	public MaterialHolder(ItemStack item)
 	{
 		useTypeName = false;
@@ -46,6 +47,16 @@ public class MaterialHolder
 
 		material = item.getType();
 		data = item.getData().getData();
+
+//		String str = item.getItemMeta().serialize().toString();
+//		// System.out.println("data: " + str);
+//        ItemStack teststack = new ItemStack(Material.ENCHANTED_BOOK);
+//
+//        Map<String, Object> map = parseString(str);
+//        // System.out.println("deserilized data: " + map.toString());
+//        ItemMeta meta1 = (ItemMeta) ConfigurationSerialization.deserializeObject(map, ConfigurationSerialization.getClassByAlias("ItemMeta"));
+//        teststack.setItemMeta(meta1);
+
 
 		if (item.hasItemMeta()){
             ItemMeta meta = item.getItemMeta();
@@ -62,7 +73,35 @@ public class MaterialHolder
 			else
 				lore = new ArrayList<String>();
 		}
+
+        // System.out.println("displayname: " + displayName.replaceAll(String.valueOf(ChatColor.COLOR_CHAR), "&"));
 	}
+
+//    private Map<String, Object> parseString(final String input){
+//        String[] kv = input.split("\\{", 2);
+//        if (kv.length <= 1)
+//            return new HashMap<String, Object>();
+//        String strs = kv[1].substring(0,kv[1].length()-1);
+//        return parseSubString(strs);
+//    }
+//
+//    private Map<String, Object> parseSubString(final String input){
+//        final Map<String, Object> map = new HashMap<String, Object>();
+//        for (String pair : input.split(", ")) {
+//            String[] kv = pair.split("=", 2);
+//            // test if there are sub maps
+//            Pattern p = Pattern.compile("\\{([^}]*)\\}");
+//            Matcher m = p.matcher(kv[1]);
+//            if (m.find()) {
+//                Map<String, Object> sub = parseSubString(m.group(1));
+//                map.put(kv[0], sub);
+//            }
+//            else {
+//                map.put(kv[0], kv[1]);
+//            }
+//        }
+//        return map;
+//    }
 
     @Deprecated
     public MaterialHolder(int id, int data)

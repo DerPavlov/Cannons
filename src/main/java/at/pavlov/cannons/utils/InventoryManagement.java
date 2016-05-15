@@ -32,7 +32,7 @@ public class InventoryManagement
      */
     public static int takeFromPlayerHand(Player player, int itemsToRemove)
     {
-        ItemStack item = player.getInventory().getItemInHand();
+        ItemStack item = player.getInventory().getItemInMainHand();
         if (item == null)
             return itemsToRemove;
 
