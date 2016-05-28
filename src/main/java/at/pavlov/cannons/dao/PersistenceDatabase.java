@@ -103,7 +103,7 @@ public class PersistenceDatabase
                                 isBanned = true;
                         }
                     }
-                    if (owner == null || Bukkit.getOfflinePlayer(owner) == null || isBanned) {
+                    if (owner == null || !Bukkit.getOfflinePlayer(owner).hasPlayedBefore() || isBanned) {
                         if (isBanned)
                             plugin.logDebug("Owner of cannon " + bean.getId() + " was banned");
                         else
