@@ -12,7 +12,7 @@ Error:
   NotPushed: 'RED [Cannons] Push the projectile with a stick before firing.'
   MaximumGunpowderLoaded: 'YELLOW [Cannons] Maximum gunpowder of GOLD GUNPOWDERkg YELLOW already loaded.'
   ProjectileAlreadyLoaded: 'YELLOW [Cannons] Projectile GOLD PROJECTILE YELLOW and GOLD GUNPOWDER YELLOW gunpowder already loaded. Fire the damn gun before you blow yourself up.'
-  CannonBuiltLimit: 'RED [Cannons] You cant build more than GOLD CANNONS YELLOW guns'
+  CannonBuiltLimit: 'RED [Cannons] You cant build more than GOLD LIMIT YELLOW guns'
   NotTheOwner: 'RED [Cannons] This CANNON is locked and can only used by its owner'
   DismantlingNotOwner: 'RED [Cannons] Just the owner can dismantle a cannon.'
   MissingSign: 'RED [Cannons] This CANNON needs a sign to operate.'

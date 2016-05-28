@@ -342,7 +342,7 @@ public class UserMessages {
 		{
 			//replace the number of cannons
             message = message.replace("PLAYER", player.getName());
-			message = message.replace("CANNONS", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getUniqueId())));
+			message = message.replace("LIMIT", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getUniqueId())));
 		}
 		return message;
 	}
