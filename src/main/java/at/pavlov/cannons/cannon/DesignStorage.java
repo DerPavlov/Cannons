@@ -287,7 +287,7 @@ public class DesignStorage
         cannonDesign.setSoundIgnite(new SoundHolder(cannonDesignConfig.getString("sounds.ignite","ENTITY_TNT_PRIMED:5:1")));
         cannonDesign.setSoundFiring(new SoundHolder(cannonDesignConfig.getString("sounds.firing","ENTITY_GENERIC_EXPLODE:20:1.5")));
         cannonDesign.setSoundGunpowderLoading(new SoundHolder(cannonDesignConfig.getString("sounds.gunpowderLoading","BLOCK_SAND_HIT:1:1.5")));
-        cannonDesign.setSoundGunpowderOverloading(new SoundHolder(cannonDesignConfig.getString("sounds.gunpowderOverloading","BLOCK_GRASS_HIT,1,1.5")));
+        cannonDesign.setSoundGunpowderOverloading(new SoundHolder(cannonDesignConfig.getString("sounds.gunpowderOverloading","BLOCK_GRASS_HIT:1:1.5")));
         cannonDesign.setSoundCool(new SoundHolder(cannonDesignConfig.getString("sounds.cool","BLOCK_FIRE_EXTINGUISH:1:1")));
         cannonDesign.setSoundHot(new SoundHolder(cannonDesignConfig.getString("sounds.hot","BLOCK_FIRE_EXTINGUISH:1:1")));
         cannonDesign.setSoundRamrodCleaning(new SoundHolder(cannonDesignConfig.getString("sounds.ramrodCleaning","BLOCK_SNOW_HIT:0.5:0")));
