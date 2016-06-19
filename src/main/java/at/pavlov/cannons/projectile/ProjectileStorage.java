@@ -59,7 +59,7 @@ public class ProjectileStorage
 
 
     /**
-     * returns the projectiles that can be loaded in the cannon id
+     * returns the projectiles that can be loaded in the cannon by projectile id (file name)
      * @param projectileId id of the projectile
      * @return true if there is a projectile with this id
      */
@@ -72,6 +72,21 @@ public class ProjectileStorage
         }
         return null;
     }
+
+	/**
+	 * returns the projectiles for the given id (file name)
+	 * @param projectileId id of the projectile
+	 * @return true if there is a projectile with this id
+	 */
+	public static Projectile getProjectile(String projectileId)
+	{
+		for (Projectile projectile : projectileList)
+		{
+			if (projectile.equals(projectileId))
+				return projectile;
+		}
+		return null;
+	}
 	
 	/**
 	 * loads all projectile designs from the disk or copys the defaults if there is no design

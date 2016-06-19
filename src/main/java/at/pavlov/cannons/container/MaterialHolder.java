@@ -48,16 +48,6 @@ public class MaterialHolder
 		material = item.getType();
 		data = item.getData().getData();
 
-//		String str = item.getItemMeta().serialize().toString();
-//		// System.out.println("data: " + str);
-//        ItemStack teststack = new ItemStack(Material.ENCHANTED_BOOK);
-//
-//        Map<String, Object> map = parseString(str);
-//        // System.out.println("deserilized data: " + map.toString());
-//        ItemMeta meta1 = (ItemMeta) ConfigurationSerialization.deserializeObject(map, ConfigurationSerialization.getClassByAlias("ItemMeta"));
-//        teststack.setItemMeta(meta1);
-
-
 		if (item.hasItemMeta()){
             ItemMeta meta = item.getItemMeta();
 			if (meta.hasDisplayName() && meta.getDisplayName()!=null)
@@ -73,35 +63,7 @@ public class MaterialHolder
 			else
 				lore = new ArrayList<String>();
 		}
-
-        // System.out.println("displayname: " + displayName.replaceAll(String.valueOf(ChatColor.COLOR_CHAR), "&"));
 	}
-
-//    private Map<String, Object> parseString(final String input){
-//        String[] kv = input.split("\\{", 2);
-//        if (kv.length <= 1)
-//            return new HashMap<String, Object>();
-//        String strs = kv[1].substring(0,kv[1].length()-1);
-//        return parseSubString(strs);
-//    }
-//
-//    private Map<String, Object> parseSubString(final String input){
-//        final Map<String, Object> map = new HashMap<String, Object>();
-//        for (String pair : input.split(", ")) {
-//            String[] kv = pair.split("=", 2);
-//            // test if there are sub maps
-//            Pattern p = Pattern.compile("\\{([^}]*)\\}");
-//            Matcher m = p.matcher(kv[1]);
-//            if (m.find()) {
-//                Map<String, Object> sub = parseSubString(m.group(1));
-//                map.put(kv[0], sub);
-//            }
-//            else {
-//                map.put(kv[0], kv[1]);
-//            }
-//        }
-//        return map;
-//    }
 
     @Deprecated
     public MaterialHolder(int id, int data)
@@ -184,8 +146,8 @@ public class MaterialHolder
 	{
 		ItemStack item = new ItemStack(material, amount, (short) data);
         ItemMeta meta = item.getItemMeta();
-        if (this.hasDisplayName() && this.useTypeName)
-            meta.getDisplayName();
+        if (this.hasDisplayName())
+            meta.setDisplayName(this.displayName);
         if (this.hasLore())
             meta.setLore(this.lore);
         item.setItemMeta(meta);

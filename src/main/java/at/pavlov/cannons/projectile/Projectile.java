@@ -9,6 +9,7 @@ import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import at.pavlov.cannons.container.MaterialHolder;
@@ -144,7 +145,7 @@ public class Projectile implements Cloneable{
 	{
 		return loadingItem.toString();
 	}
-	
+
 	/**
 	 * returns true if the projectile has this property
 	 * @param properties properties of the projectile

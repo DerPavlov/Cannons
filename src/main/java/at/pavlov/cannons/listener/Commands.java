@@ -7,6 +7,8 @@ import at.pavlov.cannons.cannon.Cannon;
 
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.projectile.Projectile;
+import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -171,23 +173,57 @@ public class Commands implements CommandExecutor
                     return true;
                 }
                 //cannons create
-                else if(args[0].equalsIgnoreCase("create") && player != null && player.hasPermission("cannons.admin.create"))
+                else if(args[0].equalsIgnoreCase("create"))
                 {
-                    if (args.length >= 2)
-                    {
-                        //check if the design name is valid
-                        if (config.getDesignStorage().hasDesign(args[1])) {
-                            sendMessage(sender, ChatColor.GREEN + "[Cannons] Create design: " + ChatColor.YELLOW + args[1]);
-                            CannonDesign cannonDesign = config.getDesignStorage().getDesign(args[1]);
+                    if (player != null && player.hasPermission("cannons.admin.create")) {
+                        if (args.length >= 2) {
+                            //check if the design name is valid
+                            if (config.getDesignStorage().hasDesign(args[1])) {
+                                sendMessage(sender, ChatColor.GREEN + "[Cannons] Create design: " + ChatColor.GOLD + args[1]);
+                                CannonDesign cannonDesign = config.getDesignStorage().getDesign(args[1]);
 
-                            Cannon cannon = new Cannon(cannonDesign, player.getWorld().getUID(), player.getLocation().toVector(), BlockFace.NORTH, player.getUniqueId());
-                            //createCannon(cannon);
-                            cannon.show();
+                                Cannon cannon = new Cannon(cannonDesign, player.getWorld().getUID(), player.getLocation().toVector(), BlockFace.NORTH, player.getUniqueId());
+                                //createCannon(cannon);
+                                cannon.show();
+                            }
+                            else
+                                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found");
                         }
+                        else
+                            sendMessage(sender, ChatColor.RED + "[Cannons] Usage: '/cannons create <design>'");
                     }
+                    else
+                        plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                     return true;
                 }
-
+                //cannons give projectile
+                else if(args[0].equalsIgnoreCase("give"))
+                {
+                    if (player != null && player.hasPermission("cannons.admin.give")){
+                        if (args.length >= 2)
+                        {
+                            //check if the projectile id is valid
+                            Projectile projectile = ProjectileStorage.getProjectile(args[1]);
+                            if (projectile != null) {
+                                sendMessage(sender, ChatColor.GREEN + "[Cannons] Give projectile: " + ChatColor.GOLD + args[1]);
+                                int amount = 1;
+                                if (args.length >= 3)
+                                    try {
+                                        amount = Integer.parseInt(args[2]);
+                                    } catch (NumberFormatException ignored) {
+                                    }
+                                player.getInventory().addItem(projectile.getLoadingItem().toItemStack(amount));
+                            }
+                            else
+                                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found");
+                        }
+                        else
+                            sendMessage(sender, ChatColor.RED + "[Cannons] Usage: '/cannons create <design>'");
+                    }
+                    else
+                        plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
+                    return true;
+                }
                 //cannons permissions
                 else if(args[0].equalsIgnoreCase("permissions"))
                 {
@@ -211,7 +247,7 @@ public class Commands implements CommandExecutor
                             sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
                     }
                     else
-                        plugin.logDebug("Missing permission 'cannons.admin.permissions' for this command");
+                        plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                     return true;
                 }
 
@@ -677,6 +713,7 @@ public class Commands implements CommandExecutor
         displayPermission(sender, permPlayer, "cannons.admin.list");
         displayPermission(sender, permPlayer, "cannons.admin.create");
         displayPermission(sender, permPlayer, "cannons.admin.dismantle");
+        displayPermission(sender, permPlayer, "cannons.admin.give");
         displayPermission(sender, permPlayer, "cannons.admin.permissions");
     }
 
@@ -720,7 +757,7 @@ public class Commands implements CommandExecutor
         displayCommand(player, "/cannons reload", "cannons.admin.reload");
         displayCommand(player, "/cannons save", "cannons.admin.save");
         displayCommand(player, "/cannons load", "cannons.admin.load");
-        displayCommand(player, "/cannons projectile", "cannons.admin.projectile");
+        displayCommand(player, "/cannons give", "cannons.admin.give");
         displayCommand(player, "/cannons permissions [NAME]", "cannons.admin.permissions");
     }
 

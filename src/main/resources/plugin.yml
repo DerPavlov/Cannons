@@ -141,7 +141,7 @@ permissions:
       cannons.admin.create: true
       cannons.admin.dismantle: true
       cannons.admin.permissions: true
-      cannons.admin.projectile: true
+      cannons.admin.give: true
     default: op
 
   cannons.admin.reload:
@@ -162,7 +162,7 @@ permissions:
   cannons.admin.permissions:
       description: Allows an admin to list all default permissions for a player
       default: op
-  cannons.admin.projectile:
+  cannons.admin.give:
       description: Allows an admin give projectiles
       default: op
 
