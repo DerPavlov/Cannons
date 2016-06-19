@@ -138,6 +138,12 @@ public class PersistenceDatabase
                     //amount of fired cannonballs
                     cannon.setFiredCannonballs(bean.getFiredCannonballs());
 
+                    //add whitelist
+                    List<WhitelistBean> whitelist = bean.getWhitelist();
+                    for (WhitelistBean white : whitelist) {
+                        cannon.addWhitelistPlayer(white.getPlayer());
+                    }
+
                     //add a cannon to the cannon list
                     BukkitTask task = new CreateCannon(plugin, cannon).runTask(plugin);
                     //plugin.createCannon(cannon);
