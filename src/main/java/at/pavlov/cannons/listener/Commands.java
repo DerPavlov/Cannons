@@ -218,7 +218,7 @@ public class Commands implements CommandExecutor
                                 sendMessage(sender, ChatColor.RED + "[Cannons] Design not found");
                         }
                         else
-                            sendMessage(sender, ChatColor.RED + "[Cannons] Usage: '/cannons create <design>'");
+                            sendMessage(sender, ChatColor.RED + "[Cannons] Usage: '/cannons give <projectile> ] {amount}'");
                     }
                     else
                         plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
