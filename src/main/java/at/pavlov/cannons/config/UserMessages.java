@@ -277,6 +277,29 @@ public class UserMessages {
 		
 		if (cannon != null)
 		{
+			// show target status
+			if (cannon.getCannonDesign().isSentry()){
+				if (cannon.isTargetMob())
+					message = message.replace("TARGET_MOB", ChatColor.GREEN + "TRUE");
+				else
+					message = message.replace("TARGET_MOB", ChatColor.RED + "FALSE");
+				if (cannon.isTargetPlayer())
+					message = message.replace("TARGET_PLAYER", ChatColor.GREEN + "TRUE");
+				else
+					message = message.replace("TARGET_PLAYER", ChatColor.RED + "FALSE");
+				if (cannon.isTargetCannon())
+					message = message.replace("TARGET_CANNON", ChatColor.GREEN + "TRUE");
+				else
+					message = message.replace("TARGET_CANNON", ChatColor.RED + "FALSE");
+			}
+			//split message for sentry info
+			String[] messages = message.split("-SENTRY-INFORMATION-");
+			if (messages.length > 1) {
+				if (cannon.getCannonDesign().isSentry())
+					message = messages[0] + messages[1];
+				else
+					message = messages[0];
+			}
 			//replace the loaded gunpowder
             message = message.replace("MAX_GUNPOWDER", Integer.toString(cannon.getCannonDesign().getMaxLoadableGunpowderNormal()));
             message = message.replace("MAX_ABSOLUTE_GUNPOWDER", Integer.toString(cannon.getCannonDesign().getMaxLoadableGunpowderOverloaded()));

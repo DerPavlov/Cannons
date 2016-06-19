@@ -29,6 +29,9 @@ public enum MessageEnum
     CmdCannonNotFound ("Commands.CannonNotFound"),
 	CmdAddedWhitelist ("Commands.AddedWhitelist"),
 	CmdRemovedWhitelist ("Commands.RemovedWhitelist"),
+	CmdToggledTargetMob ("Commands.ToggledTargetMob"),
+	CmdToggledTargetPlayer ("Commands.ToggledTargetPlayer"),
+	CmdToggledTargetCannon ("Commands.ToggledTargetCannon"),
 
 	//Aiming
 	SettingCombinedAngle ("Aiming.SettingCombinedAngle"),

@@ -2,7 +2,6 @@ package at.pavlov.cannons.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,7 +9,6 @@ import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.CreateCannon;
 import at.pavlov.cannons.utils.DelayedTask;
-import org.apache.commons.lang.UnhandledException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -24,8 +22,6 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.projectile.Projectile;
-
-import static org.bukkit.Bukkit.getServer;
 
 public class PersistenceDatabase
 {
@@ -54,7 +50,7 @@ public class PersistenceDatabase
      *
      * @return true if loading was successful
      */
-	private boolean loadCannons()
+	public boolean loadCannons()
 	{
 		plugin.getCannonManager().clearCannonList();
 		// create a query that returns CannonBean
@@ -137,6 +133,11 @@ public class PersistenceDatabase
 
                     //amount of fired cannonballs
                     cannon.setFiredCannonballs(bean.getFiredCannonballs());
+
+                    //load targets
+                    cannon.setTargetMob(bean.isTargetMob());
+                    cannon.setTargetPlayer(bean.isTargetPlayer());
+                    cannon.setTargetCannon(bean.isTargetCannon());
 
                     //add whitelist
                     List<WhitelistBean> whitelist = bean.getWhitelist();
@@ -297,6 +298,11 @@ public class PersistenceDatabase
             bean.setCannonTemperatureTimestamp(cannon.getTemperatureTimeStamp());
             //load fired cannonballs
             bean.setFiredCannonballs(cannon.getFiredCannonballs());
+
+            //save targets
+            bean.setTargetMob(cannon.isTargetMob());
+            bean.setTargetPlayer(cannon.isTargetPlayer());
+            bean.setTargetCannon(cannon.isTargetCannon());
 
             List<WhitelistBean> whitelist = new ArrayList<WhitelistBean>();
             for (UUID player : cannon.getWhitelist()) {

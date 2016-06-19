@@ -43,6 +43,7 @@ permissions:
       cannons.player.redstone: true
       cannons.player.list: true
       cannons.player.create: true
+      cannons.player.target: true
     default: op
 
   cannons.player.command:
@@ -102,6 +103,9 @@ permissions:
   cannons.player.list:
     description: Allows a player to request a list of all his cannons
     default: false
+  cannons.player.target:
+    description: Allows a owner to change the target mode of a sentry
+    default: false
 
   cannons.projectile.*:
     description: Gives all permissions for projectiles
@@ -137,6 +141,7 @@ permissions:
       cannons.admin.create: true
       cannons.admin.dismantle: true
       cannons.admin.permissions: true
+      cannons.admin.projectile: true
     default: op
 
   cannons.admin.reload:
@@ -156,5 +161,8 @@ permissions:
       default: op
   cannons.admin.permissions:
       description: Allows an admin to list all default permissions for a player
+      default: op
+  cannons.admin.projectile:
+      description: Allows an admin give projectiles
       default: op
 

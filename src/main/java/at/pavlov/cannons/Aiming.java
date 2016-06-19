@@ -537,12 +537,12 @@ public class Aiming {
                 if (!cannon.hasSentryEntity()){
                     ArrayList<Target> possibleTargets = new ArrayList<Target>();
                     for (Target t : targets.values()) {
-                        if (t.getTargetType() == TargetType.MONSTER) {
+                        if (t.getTargetType() == TargetType.MONSTER && cannon.isTargetMob()) {
                             if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
                                 possibleTargets.add(t);
 							}
                         }
-						else if (t.getTargetType() == TargetType.PLAYER && !cannon.isWhitelisted(t.getUniqueId())) {
+						else if (t.getTargetType() == TargetType.PLAYER && cannon.isTargetPlayer() && !cannon.isWhitelisted(t.getUniqueId())) {
 							// ignore if target and player are in the same team
 							Player p = Bukkit.getPlayer(t.getUniqueId());
 							if (p != null && Bukkit.getScoreboardManager().getMainScoreboard() != null) {
@@ -556,7 +556,7 @@ public class Aiming {
 								possibleTargets.add(t);
 							}
 						}
-						else if (t.getTargetType() == TargetType.CANNON) {
+						else if (t.getTargetType() == TargetType.CANNON && cannon.isTargetCannon()) {
 							Cannon tCannon = CannonManager.getCannon(t.getUniqueId());
 							//check if the owner is whitelisted
 							if (tCannon != null && !cannon.isWhitelisted(tCannon.getOwner())){

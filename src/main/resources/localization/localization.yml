@@ -37,6 +37,9 @@ Commands:
   CannonNotFound: 'RED [Cannons] Cannon not found.'
   AddedWhitelist: 'GREEN [Cannons] Added LASTWHITELISTED to whitelist of CANNON'
   RemovedWhitelist: 'GREEN [Cannons] Removed LASTWHITELISTED from whitelist of CANNON'
+  ToggledTargetMob: 'GOLD [Cannons] Changed sentry Mob targeting to: TARGET_MOB'
+  ToggledTargetPlayer: 'GOLD [Cannons] Changed sentry Player targeting to: TARGET_PLAYER'
+  ToggledTargetCannon: 'GOLD [Cannons] Changed sentry Cannon targeting to: TARGET_CANNON'
 
 
 Load:  
@@ -63,6 +66,10 @@ Cannon:
     NEWLINE YELLOW Projectile: GOLD PROJECTILE
     NEWLINE YELLOW Soot: GOLD SOOT
     NEWLINE YELLOW Targeting H/V: GOLD HDEGREE YELLOW / GOLD VDEGREE
+    -SENTRY-INFORMATION-
+    NEWLINE YELLOW Target Mob: TARGET_MOB
+    NEWLINE YELLOW Target Player: TARGET_PLAYER
+    NEWLINE YELLOW Target Cannon: TARGET_CANNON
     NEWLINE YELLOW Whitelist: WHITELIST'
   RenameSuccess: 'GREEN [Cannons] You have rename the cannon to GOLD CANNON_NAME.'
   RenameFail: 'RED [Cannons] New cannon name is not unique.'

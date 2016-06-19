@@ -2,13 +2,11 @@ package at.pavlov.cannons.listener;
 
 import java.util.*;
 
-import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.Enum.SelectCannon;
 import at.pavlov.cannons.cannon.Cannon;
 
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
-import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -74,7 +72,7 @@ public class Commands implements CommandExecutor
                         sendMessage(sender, ChatColor.GREEN + "[Cannons] Config loaded");
                     }
                     else
-                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                        plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                     return true;
                 }
                 //cannons save
@@ -87,7 +85,7 @@ public class Commands implements CommandExecutor
                         sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
                     }
                     else
-                        plugin.logDebug("No permission for command /cannons " + args[0]);
+                        plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                     return true;
                 }
                 //cannons load
@@ -100,7 +98,7 @@ public class Commands implements CommandExecutor
                         sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
                     }
                     else
-                        plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                        plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                     return true;
                 }
                 //cannons reset
@@ -227,7 +225,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.command"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         // how to build a cannon
@@ -238,7 +236,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.command"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         // how to fire
@@ -249,7 +247,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.command"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         // how to adjust
@@ -260,7 +258,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.command"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         displayCommands(player);
@@ -270,7 +268,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.command"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         if (args.length >= 2 && (args[1].equalsIgnoreCase("true")||args[1].equalsIgnoreCase("enable")))
@@ -285,7 +283,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.rename"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         if (args.length >= 3 && args[1]!=null  && args[2]!=null)
@@ -307,7 +305,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.observer"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         if (args.length >= 2 && (args[1].equalsIgnoreCase("off")||args[1].equalsIgnoreCase("disable")||args[1].equalsIgnoreCase("remove")))
@@ -331,7 +329,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.whitelist"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         //selection done by a string '/cannons observer add|remove NAME'
@@ -356,12 +354,33 @@ public class Commands implements CommandExecutor
                         else
                             sendMessage(sender, ChatColor.RED + "Usage '/cannons whitelist <add|remove> <NAME>'");
                     }
+                    //toggle sentry target
+                    else if(args[0].equalsIgnoreCase("target"))
+                    {
+                        if (!player.hasPermission("cannons.player.target"))
+                        {
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
+                            return true;
+                        }
+                        //selection done by a string '/cannons target mob|player|cannon'
+                        if (args.length >= 2 && (args[1].equalsIgnoreCase("mob"))) {
+                            toggleCannonSelector(player, SelectCannon.TARGET_MOB);
+                        }
+                        else if (args.length >= 2 && (args[1].equalsIgnoreCase("player"))) {
+                            toggleCannonSelector(player, SelectCannon.TARGET_PLAYER);
+                        }
+                        else if (args.length >= 2 && (args[1].equalsIgnoreCase("cannon"))) {
+                            toggleCannonSelector(player, SelectCannon.TARGET_CANNON);
+                        }
+                        else
+                            sendMessage(sender, ChatColor.RED + "Usage '/cannons target <mob|player|cannon>'");
+                    }
                     //get name of cannon
                     else if(args[0].equalsIgnoreCase("info"))
                     {
                         if (!player.hasPermission("cannons.player.info"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         toggleCannonSelector(player, SelectCannon.INFO);
@@ -371,7 +390,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.dismantle") && !player.hasPermission("cannons.admin.dismantle"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         toggleCannonSelector(player, SelectCannon.DISMANTLE);
@@ -397,7 +416,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.reset"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command /cannons " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         // delete all cannon entries for this player
@@ -410,7 +429,7 @@ public class Commands implements CommandExecutor
                     {
                         if (!player.hasPermission("cannons.player.command"))
                         {
-                            plugin.logDebug("[Cannons] No permission for command " + args[0]);
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
                         // display help
@@ -569,6 +588,21 @@ public class Commands implements CommandExecutor
                     userMessages.sendMessage(MessageEnum.CmdRemovedWhitelist, player, cannon);
                     break;
                 }
+                case TARGET_MOB:{
+                    cannon.toggleTargetMob();
+                    userMessages.sendMessage(MessageEnum.CmdToggledTargetMob, player, cannon);
+                    break;
+                }
+                case TARGET_PLAYER:{
+                    cannon.toggleTargetPlayer();
+                    userMessages.sendMessage(MessageEnum.CmdToggledTargetPlayer, player, cannon);
+                    break;
+                }
+                case TARGET_CANNON:{
+                    cannon.toggleTargetCannon();
+                    userMessages.sendMessage(MessageEnum.CmdToggledTargetCannon, player, cannon);
+                    break;
+                }
             }
         }
         cannonSelector.remove(player.getUniqueId());
@@ -620,6 +654,7 @@ public class Commands implements CommandExecutor
         displayPermission(sender, permPlayer, "cannons.player.autoreload");
         displayPermission(sender, permPlayer, "cannons.player.thermometer");
         displayPermission(sender, permPlayer, "cannons.player.ramrod");
+        displayPermission(sender, permPlayer, "cannons.player.target");
         displayPermission(sender, permPlayer, "cannons.player.whitelist");
         displayPermission(sender, permPlayer, "cannons.player.reset");
         displayPermission(sender, permPlayer, "cannons.player.list");
@@ -674,6 +709,7 @@ public class Commands implements CommandExecutor
         displayCommand(player, "/cannons observer", "cannons.player.observer");
         displayCommand(player, "/cannons info", "cannons.player.info");
         displayCommand(player, "/cannons list", "cannons.player.list");
+        displayCommand(player, "/cannons target", "cannons.player.target");
         displayCommand(player, "/cannons whitelist add [NAME]", "cannons.player.whitelist");
         displayCommand(player, "/cannons whitelist remove [NAME]", "cannons.player.whitelist");
         sendMessage(player, ChatColor.GOLD + "Admin commands:" + ChatColor.YELLOW);
@@ -684,6 +720,7 @@ public class Commands implements CommandExecutor
         displayCommand(player, "/cannons reload", "cannons.admin.reload");
         displayCommand(player, "/cannons save", "cannons.admin.save");
         displayCommand(player, "/cannons load", "cannons.admin.load");
+        displayCommand(player, "/cannons projectile", "cannons.admin.projectile");
         displayCommand(player, "/cannons permissions [NAME]", "cannons.admin.permissions");
     }
 

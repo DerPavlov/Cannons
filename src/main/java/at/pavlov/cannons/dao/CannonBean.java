@@ -9,7 +9,7 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name ="cannonlist_2_3_4")
+@Table(name ="cannonlist_2_4_3")
 public class CannonBean
 {
 	@Id
@@ -39,6 +39,10 @@ public class CannonBean
 	private String designId;
 
     private long firedCannonballs;
+
+	private boolean targetMob;
+	private boolean targetPlayer;
+	private boolean targetCannon;
 
 	@OneToMany(cascade= CascadeType.ALL)
 	private List<WhitelistBean> whitelist;
@@ -189,5 +193,29 @@ public class CannonBean
 
 	public void setWhitelist(List<WhitelistBean> whitelist) {
 		this.whitelist = whitelist;
+	}
+
+	public boolean isTargetMob() {
+		return targetMob;
+	}
+
+	public void setTargetMob(boolean targetMob) {
+		this.targetMob = targetMob;
+	}
+
+	public boolean isTargetPlayer() {
+		return targetPlayer;
+	}
+
+	public void setTargetPlayer(boolean targetPlayer) {
+		this.targetPlayer = targetPlayer;
+	}
+
+	public boolean isTargetCannon() {
+		return targetCannon;
+	}
+
+	public void setTargetCannon(boolean targetCannon) {
+		this.targetCannon = targetCannon;
 	}
 }

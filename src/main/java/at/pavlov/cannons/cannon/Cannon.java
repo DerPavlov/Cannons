@@ -88,6 +88,11 @@ public class Cannon
     // last time firing failed. Wait some time before trying again
     private long sentryLastFiringFailed;
 
+    //target options for cannon
+    private boolean targetMob;
+    private boolean targetPlayer;
+    private boolean targetCannon;
+
     //observer will see the impact of the target predictor
     //<Player name, remove after showing impact>
     private HashMap<UUID, Boolean> observerMap = new HashMap<UUID, Boolean>();
@@ -164,6 +169,10 @@ public class Cannon
         // set temperature
         this.tempValue = 0.0;
         this.tempTimestamp = 0;
+        
+        this.targetMob = true;
+        this.targetPlayer = false;
+        this.targetCannon = false;
 
         this.databaseId = UUID.randomUUID();
     }
@@ -2391,4 +2400,43 @@ public class Cannon
     public void setLastWhitelisted(UUID lastWhitelisted) {
         this.lastWhitelisted = lastWhitelisted;
     }
+
+    public boolean isTargetMob() {
+        return targetMob;
+    }
+
+    public void setTargetMob(boolean targetMob) {
+        this.targetMob = targetMob;
+    }
+
+    public void toggleTargetMob(){
+        this.targetMob = !this.targetMob;
+    }
+
+    public boolean isTargetPlayer() {
+        return targetPlayer;
+    }
+
+    public void setTargetPlayer(boolean targetPlayer) {
+        this.targetPlayer = targetPlayer;
+    }
+
+    public void toggleTargetPlayer(){
+        this.targetPlayer = !this.targetPlayer;
+    }
+
+    public boolean isTargetCannon() {
+        return targetCannon;
+    }
+
+    public void setTargetCannon(boolean targetCannon) {
+        this.targetCannon = targetCannon;
+    }
+
+    public void toggleTargetCannon(){
+        this.targetCannon = !this.targetCannon;
+    }
+
+
+
 }
