@@ -17,6 +17,8 @@ Error:
   DismantlingNotOwner: 'RED [Cannons] Nur der Besitzer kann eine Kanone abbauen.'
   MissingSign: 'RED [Cannons] Diese CANNON benötigt ein Sign um zu funktioinieren.'
   NoMoney: 'RED [Cannons] Du brauchst mindestens BUILD_COSTS um diese Kanone zu erstellen.'
+  NotPaid: "RED [Cannons] Die Kanonenabgabe wurde noch nicht bezahlt. Verwende GOLD '/cannons buy' RED um diese CANNON für GOLD BUILD_COSTS zu kaufen"
+  AlreadyPaid: 'RED [Cannons] Die Kanonenabgabe wurde für diese Kanone bereits bezahlt'
   PlayerNotFound: 'RED [Cannons] Spielername nicht vorhanden.'
 
 
@@ -29,6 +31,8 @@ Commands:
   ToggledTargetMob: 'GOLD [Cannons] Sentry erkennt Monster als Ziel: TARGET_MOB'
   ToggledTargetPlayer: 'GOLD [Cannons] Sentry erkennt Spieler als Ziel: TARGET_PLAYER'
   ToggledTargetCannon: 'GOLD [Cannons] Sentry erkennt Kanonen als Ziel: TARGET_CANNON'
+  BuyCannon: 'YELLOW [Cannons] Klicke die Kanone um sie zu kaufen.'
+  PaidCannon: 'GREEN [Cannons] Kanonenabgabe bezahlt. GOLD BUILD_COSTS GREEN wurde von deinem Konto abgebucht.'
 
 
 Aiming:

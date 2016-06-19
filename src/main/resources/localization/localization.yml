@@ -17,6 +17,8 @@ Error:
   DismantlingNotOwner: 'RED [Cannons] Just the owner can dismantle a cannon.'
   MissingSign: 'RED [Cannons] This CANNON needs a sign to operate.'
   NoMoney: 'RED [Cannons] You need BUILD_COSTS to create this cannon.'
+  NotPaid: "RED [Cannons] The cannon fee is not paid. Use GOLD '/cannons buy' RED to buy this CANNON for GOLD BUILD_COSTS"
+  AlreadyPaid: 'RED [Cannons] The fee for this cannon was already paid'
   PlayerNotFound: 'RED [Cannons] Player does not exist.'
 
 
@@ -40,6 +42,8 @@ Commands:
   ToggledTargetMob: 'GOLD [Cannons] Changed sentry Mob targeting to: TARGET_MOB'
   ToggledTargetPlayer: 'GOLD [Cannons] Changed sentry Player targeting to: TARGET_PLAYER'
   ToggledTargetCannon: 'GOLD [Cannons] Changed sentry Cannon targeting to: TARGET_CANNON'
+  BuyCannon: 'YELLOW [Cannons] Click the cannon buy it. This will withdraw money from your account'
+  PaidCannon: 'GREEN [Cannons] Cannon fee paid. GOLD BUILD_COSTS GREEN has be withdrawn from your bank account.'
 
 
 Load:  

@@ -258,7 +258,7 @@ public class UserMessages {
 	 * @param cannon which cannon parameter will be displayed
 	 * @return the requested message from the localization file
 	 */
-    String getMessage(MessageEnum messageEnum, Player player, Cannon cannon)
+    private String getMessage(MessageEnum messageEnum, Player player, Cannon cannon)
 	{
 		//no message
 		if (messageEnum == null) return null;

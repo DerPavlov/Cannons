@@ -8,5 +8,6 @@ public enum SelectCannon {
     WHITELIST_REMOVE,
     TARGET_MOB,
     TARGET_PLAYER,
-    TARGET_CANNON
+    TARGET_CANNON,
+    BUY_CANNON
 }

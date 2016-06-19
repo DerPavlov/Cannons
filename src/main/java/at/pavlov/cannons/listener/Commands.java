@@ -10,6 +10,7 @@ import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -24,6 +25,7 @@ import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.dao.PersistenceDatabase;
+import sun.plugin2.message.Message;
 
 
 public class Commands implements CommandExecutor
@@ -314,6 +316,17 @@ public class Commands implements CommandExecutor
                         else
                             plugin.getAiming().toggleImitating(player);
                     }
+                    //buy cannon
+                    else if(args[0].equalsIgnoreCase("buy"))
+                    {
+                        if (!player.hasPermission("cannons.player.build"))
+                        {
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
+                            return true;
+                        }
+                        toggleBuyCannon(player, SelectCannon.BUY_CANNON);
+                        return true;
+                    }
                     //rename cannon
                     else if(args[0].equalsIgnoreCase("rename"))
                     {
@@ -575,6 +588,55 @@ public class Commands implements CommandExecutor
             addCannonSelector(player, cmd);
     }
 
+    /**
+     * this player will be removed from the buying mode
+     * @param player the player will be removed
+     * @param cmd this command will be performed when the cannon is selected
+     */
+    public void addBuyCannon(Player player, SelectCannon cmd)
+    {
+        if (player == null || cmd == null)
+            return;
+
+        if (!isSelectingMode(player))
+        {
+            cannonSelector.put(player.getUniqueId(),cmd);
+            userMessages.sendMessage(MessageEnum.CmdBuyCannon, player);
+        }
+    }
+
+    /**
+     * this player will be removed from the buying mode
+     * @param player the player will be removed
+     */
+    public void removeBuyCannon(Player player)
+    {
+        if (player == null)
+            return;
+
+        if (isSelectingMode(player))
+        {
+            cannonSelector.remove(player.getUniqueId());
+            userMessages.sendMessage(MessageEnum.CmdSelectCanceled, player);
+        }
+    }
+
+    /**
+     * buying mode will be toggled
+     * @param player the player using the selecting mode
+     * @param cmd this command will be performed when the cannon is selected
+     */
+    public void toggleBuyCannon(Player player, SelectCannon cmd)
+    {
+        if (player == null)
+            return;
+
+        if (isSelectingMode(player))
+            removeBuyCannon(player);
+        else
+            addBuyCannon(player, cmd);
+    }
+
 
     /**
      * Checks if this player is in selecting mode
@@ -637,6 +699,25 @@ public class Commands implements CommandExecutor
                 case TARGET_CANNON:{
                     cannon.toggleTargetCannon();
                     userMessages.sendMessage(MessageEnum.CmdToggledTargetCannon, player, cannon);
+                    break;
+                }
+                case BUY_CANNON:{
+                    if (cannon.isPaid()){
+                        userMessages.sendMessage(MessageEnum.ErrorAlreadyPaid, player, cannon);
+                    }
+                    else{
+                        //redraw money if required
+                        if (plugin.getEconomy() != null && cannon.getCannonDesign().getEconomyBuildingCost() > 0) {
+                            EconomyResponse r = plugin.getEconomy().withdrawPlayer(player, cannon.getCannonDesign().getEconomyBuildingCost());
+                            if (!r.transactionSuccess())
+                                userMessages.sendMessage(MessageEnum.ErrorNoMoney, player, cannon);
+                            else {
+                                cannon.setPaid(true);
+                                //CannonsUtil.playSound();
+                                userMessages.sendMessage(MessageEnum.CmdPaidCannon, player, cannon);
+                            }
+                        }
+                    }
                     break;
                 }
             }

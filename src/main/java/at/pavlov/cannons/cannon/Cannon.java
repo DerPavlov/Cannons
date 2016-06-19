@@ -67,6 +67,9 @@ public class Cannon
     // pushing a projectile into the barrel after loading the projectile
     private int projectilePushed;
 
+    // was the cannon fee paid
+    private boolean paid;
+
     // angles
     private double horizontalAngle;
     private double verticalAngle;
@@ -138,6 +141,8 @@ public class Cannon
         this.owner = owner;
         this.isValid = true;
         this.cannonName = null;
+        // ignore if there is no fee
+        this.paid = design.getEconomyBuildingCost() <= 0;
 
         //the cannon is not moving
         this.velocity = new Vector(0, 0, 0);
@@ -2438,5 +2443,11 @@ public class Cannon
     }
 
 
+    public boolean isPaid() {
+        return paid;
+    }
 
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
 }

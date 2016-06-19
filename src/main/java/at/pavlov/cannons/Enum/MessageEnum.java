@@ -21,6 +21,8 @@ public enum MessageEnum
 	ErrorDismantlingNotOwner ("Error.DismantlingNotOwner", true),
     ErrorMissingSign ("Error.MissingSign", true),
 	ErrorNoMoney ("Error.NoMoney", true),
+	ErrorNotPaid ("Error.NotPaid", true),
+	ErrorAlreadyPaid ("Error.AlreadyPaid", true),
 	ErrorPlayerNotFound ("Error.PlayerNotFound", true),
 
     //Commands
@@ -32,6 +34,8 @@ public enum MessageEnum
 	CmdToggledTargetMob ("Commands.ToggledTargetMob"),
 	CmdToggledTargetPlayer ("Commands.ToggledTargetPlayer"),
 	CmdToggledTargetCannon ("Commands.ToggledTargetCannon"),
+	CmdBuyCannon ("Commands.BuyCannon"),
+	CmdPaidCannon ("Commands.PaidCannon"),
 
 	//Aiming
 	SettingCombinedAngle ("Aiming.SettingCombinedAngle"),

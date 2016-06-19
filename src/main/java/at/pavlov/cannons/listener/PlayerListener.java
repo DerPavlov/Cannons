@@ -450,6 +450,11 @@ public class PlayerListener implements Listener
                 plugin.logDebug("change cannon angle");
                 event.setCancelled(true);
 
+                if (plugin.getEconomy() != null && !cannon.isPaid()){
+                    // cannon fee is not paid
+                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    return;
+                }
 
                 MessageEnum message = aiming.changeAngle(cannon, event.getAction(), event.getBlockFace(), player);
                 userMessages.sendMessage(message, player, cannon);
@@ -466,6 +471,12 @@ public class PlayerListener implements Listener
             if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null) {
                 plugin.logDebug("load projectile");
                 event.setCancelled(true);
+
+                if (plugin.getEconomy() != null && !cannon.isPaid()){
+                    // cannon fee is not paid
+                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    return;
+                }
 
                 // load projectile
                 MessageEnum message = cannon.loadProjectile(projectile, player);
@@ -486,6 +497,13 @@ public class PlayerListener implements Listener
             {
                 plugin.logDebug("load gunpowder");
                 event.setCancelled(true);
+
+                if (plugin.getEconomy() != null && !cannon.isPaid()){
+                    // cannon fee is not paid
+                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    return;
+                }
+
                 // load gunpowder
                 MessageEnum message = cannon.loadGunpowder(player);
 
@@ -503,6 +521,12 @@ public class PlayerListener implements Listener
                 plugin.logDebug("fire torch");
                 event.setCancelled(true);
 
+                if (plugin.getEconomy() != null && !cannon.isPaid()){
+                    // cannon fee is not paid
+                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    return;
+                }
+
                 MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireRightClickTigger);
                 // display message
                 userMessages.sendMessage(message, player, cannon);
@@ -516,6 +540,13 @@ public class PlayerListener implements Listener
             if(cannon.isRestoneTrigger(clickedBlock.getLocation()))
             {
                 plugin.logDebug("interact event: fire redstone trigger");
+
+                if (plugin.getEconomy() != null && !cannon.isPaid()){
+                    // cannon fee is not paid
+                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    return;
+                }
+
                 // do not cancel the event
                 cannon.setLastUser(player.getUniqueId());
 
@@ -528,6 +559,13 @@ public class PlayerListener implements Listener
             {
                 plugin.logDebug("Ramrod used");
                 event.setCancelled(true);
+
+                if (plugin.getEconomy() != null && !cannon.isPaid()){
+                    // cannon fee is not paid
+                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    return;
+                }
+
                 MessageEnum message = cannon.useRamRod(player);
                 userMessages.sendMessage(message, player, cannon);
 
