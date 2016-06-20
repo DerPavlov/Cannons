@@ -163,6 +163,7 @@ public class CannonManager
 
         long delay = 0;
         if (cause == BreakCause.Dismantling || cause == BreakCause.Other) {
+            plugin.logDebug("Dismantling," + cannon.getCannonDesign().getSoundDismantle().toString());
             CannonsUtil.playSound(cannon.getRandomBarrelBlock(), cannon.getCannonDesign().getSoundDismantle());
             delay = (long) (cannon.getCannonDesign().getDismantlingDelay()*20.0);
         }
@@ -204,7 +205,8 @@ public class CannonManager
                                 funds = cannon.getCannonDesign().getEconomyDestructionRefund();
                                 break;
                         }
-                        plugin.getEconomy().depositPlayer(offplayer, funds);
+                        if (cannon.isPaid())
+                            plugin.getEconomy().depositPlayer(offplayer, funds);
                     }
                 }
 
