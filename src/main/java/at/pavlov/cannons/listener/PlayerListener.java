@@ -453,6 +453,7 @@ public class PlayerListener implements Listener
                 if (plugin.getEconomy() != null && !cannon.isPaid()){
                     // cannon fee is not paid
                     userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    CannonsUtil.playErrorSound(cannon.getMuzzle());
                     return;
                 }
 
@@ -475,6 +476,7 @@ public class PlayerListener implements Listener
                 if (plugin.getEconomy() != null && !cannon.isPaid()){
                     // cannon fee is not paid
                     userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    CannonsUtil.playErrorSound(cannon.getMuzzle());
                     return;
                 }
 
@@ -501,6 +503,7 @@ public class PlayerListener implements Listener
                 if (plugin.getEconomy() != null && !cannon.isPaid()){
                     // cannon fee is not paid
                     userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    CannonsUtil.playErrorSound(cannon.getMuzzle());
                     return;
                 }
 
@@ -524,6 +527,7 @@ public class PlayerListener implements Listener
                 if (plugin.getEconomy() != null && !cannon.isPaid()){
                     // cannon fee is not paid
                     userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    CannonsUtil.playErrorSound(cannon.getMuzzle());
                     return;
                 }
 
@@ -544,6 +548,7 @@ public class PlayerListener implements Listener
                 if (plugin.getEconomy() != null && !cannon.isPaid()){
                     // cannon fee is not paid
                     userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    CannonsUtil.playErrorSound(cannon.getMuzzle());
                     return;
                 }
 
@@ -563,6 +568,7 @@ public class PlayerListener implements Listener
                 if (plugin.getEconomy() != null && !cannon.isPaid()){
                     // cannon fee is not paid
                     userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+                    CannonsUtil.playErrorSound(cannon.getMuzzle());
                     return;
                 }
 

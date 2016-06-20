@@ -311,6 +311,10 @@ public class CannonManager
 			return;
 		}
 
+        //ignore paid if there is no economy
+        if (plugin.getEconomy() == null || cannon.getCannonDesign().getEconomyBuildingCost() <= 0)
+            cannon.setPaid(true);
+
         //add owner to whitelist for sentry
         if (cannon.getCannonDesign().isSentry())
             cannon.addWhitelistPlayer(cannon.getOwner());
