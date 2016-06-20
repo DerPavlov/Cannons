@@ -139,6 +139,9 @@ public class PersistenceDatabase
                     cannon.setTargetPlayer(bean.isTargetPlayer());
                     cannon.setTargetCannon(bean.isTargetCannon());
 
+                    // cannon fee
+                    cannon.setPaid(bean.isPaid());
+
                     //add whitelist
                     List<WhitelistBean> whitelist = bean.getWhitelist();
                     for (WhitelistBean white : whitelist) {
@@ -303,6 +306,9 @@ public class PersistenceDatabase
             bean.setTargetMob(cannon.isTargetMob());
             bean.setTargetPlayer(cannon.isTargetPlayer());
             bean.setTargetCannon(cannon.isTargetCannon());
+
+            //save paid fee
+            bean.setPaid(cannon.isPaid());
 
             List<WhitelistBean> whitelist = new ArrayList<WhitelistBean>();
             for (UUID player : cannon.getWhitelist()) {

@@ -261,6 +261,8 @@ sounds:
 
    #creating a new cannon
   create: 'BLOCK_ANVIL_LAND:1:0.5'
+  #paying the cannon fee of a new cannon
+  selected: 'BLOCK_ANVIL_LAND:1:2'
   #destroying a cannon
   destroy: 'ENTITY_ZOMBIE_ATTACK_IRON_DOOR:1:0.5'
   #dismantling a cannon

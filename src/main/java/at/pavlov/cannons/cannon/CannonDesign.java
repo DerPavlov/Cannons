@@ -160,6 +160,7 @@ public class CannonDesign
     private SoundHolder soundThermometer;
     private SoundHolder soundEnableAimingMode;
     private SoundHolder soundDisableAimingMode;
+	private SoundHolder soundSelected;
 
 	
 	//constructionblocks:
@@ -1575,5 +1576,13 @@ public class CannonDesign
 
 	public void setSentrySpread(double sentrySpread) {
 		this.sentrySpread = sentrySpread;
+	}
+
+	public SoundHolder getSoundSelected() {
+		return soundSelected;
+	}
+
+	public void setSoundSelected(SoundHolder soundSelected) {
+		this.soundSelected = soundSelected;
 	}
 }

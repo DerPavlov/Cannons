@@ -18,7 +18,7 @@ Error:
   MissingSign: 'RED [Cannons] This CANNON needs a sign to operate.'
   NoMoney: 'RED [Cannons] You need BUILD_COSTS to create this cannon.'
   NotPaid: "RED [Cannons] The cannon fee is not paid. Use GOLD '/cannons buy' RED to buy this CANNON for GOLD BUILD_COSTS"
-  AlreadyPaid: 'RED [Cannons] The fee for this cannon was already paid'
+  AlreadyPaid: 'RED [Cannons] The fee for this cannon has already been paid'
   PlayerNotFound: 'RED [Cannons] Player does not exist.'
 
 

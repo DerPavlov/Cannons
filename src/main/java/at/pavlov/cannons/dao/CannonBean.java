@@ -44,6 +44,8 @@ public class CannonBean
 	private boolean targetPlayer;
 	private boolean targetCannon;
 
+	private boolean paid;
+
 	@OneToMany(cascade= CascadeType.ALL)
 	private List<WhitelistBean> whitelist;
 
@@ -217,5 +219,13 @@ public class CannonBean
 
 	public void setTargetCannon(boolean targetCannon) {
 		this.targetCannon = targetCannon;
+	}
+
+	public boolean isPaid() {
+		return paid;
+	}
+
+	public void setPaid(boolean paid) {
+		this.paid = paid;
 	}
 }

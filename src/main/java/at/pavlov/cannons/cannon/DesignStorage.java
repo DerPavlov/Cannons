@@ -297,6 +297,7 @@ public class DesignStorage
         cannonDesign.setSoundThermometer(new SoundHolder(cannonDesignConfig.getString("sounds.thermometer","BLOCK_ANVIL_LAND:1:1")));
         cannonDesign.setSoundEnableAimingMode(new SoundHolder(cannonDesignConfig.getString("sounds.enableAimingMode","NONE:1:1")));
         cannonDesign.setSoundDisableAimingMode(new SoundHolder(cannonDesignConfig.getString("sounds.disableAimingMode","NONE:1:1")));
+		cannonDesign.setSoundSelected(new SoundHolder(cannonDesignConfig.getString("sounds.selected","BLOCK_ANVIL_LAND:1:2")));
 
 		// constructionBlocks
 		cannonDesign.setSchematicBlockTypeIgnore(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.ignore", "SAND:0")));
