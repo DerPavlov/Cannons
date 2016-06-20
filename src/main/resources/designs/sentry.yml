@@ -264,7 +264,7 @@ sounds:
   #destroying a cannon
   destroy: 'ENTITY_ZOMBIE_ATTACK_IRON_DOOR:1:0.5'
   #dismantling a cannon
-  dismantle: 'BLOCK_ANVIL_BREAK:1:0.5'
+  dismantle: 'BLOCK_ANVIL_USE:1:0.5'
   #changing the angle of a cannon
   adjust: 'ENTITY_IRONGOLEM_STEP:1:0.5'
   #fuse igniting sound when firing
