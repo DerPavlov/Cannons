@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
+import org.bukkit.potion.PotionType;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
@@ -858,6 +859,70 @@ public class CannonsUtil
            if (player.getName().equals(name)) {
                return player;
            }
+        }
+        return null;
+    }
+
+    /**
+     * converts a string to float. Throws NumberFormatException
+     * @param str string to convert
+     * @return returns parsed number, or MAX_Value if value is null
+     */
+    public static float parseFloat(String str) {
+        if (str != null) {
+            try {
+                return Float.parseFloat(str);
+            } catch (Exception e) {
+                throw new NumberFormatException();
+            }
+        }
+        return Float.MAX_VALUE;
+    }
+
+    /**
+     * converts a string to int. Throws NumberFormatException
+     * @param str string to convert
+     * @return returns parsed number, or MAX_Value if value is null
+     */
+    public static int parseInt(String str) {
+        if (str != null) {
+            try {
+                return Integer.parseInt(str);
+            } catch (Exception e) {
+                throw new NumberFormatException();
+            }
+        }
+        return Integer.MAX_VALUE;
+    }
+
+    /**
+     * converts a string to color. Throws NumberFormatException
+     * @param str string to convert
+     * @return returns parsed color, or null if value is null
+     */
+    public static Color parseColor(String str) {
+        if (str != null) {
+            try {
+                return Color.fromRGB(Integer.parseInt(str));
+
+            } catch (Exception e) {
+                throw new NumberFormatException();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * converts a string to float. Throws NumberFormatException
+     * @param str string to convert
+     * @return returns parsed number, or MAX_Value if value is null
+     */
+    public static PotionType parsePotionEffect(String str) {
+        if (str != null) {
+            for (PotionType pt : PotionType.values())
+                if (str.contains(pt.toString().toLowerCase())){
+                    return pt;
+                }
         }
         return null;
     }

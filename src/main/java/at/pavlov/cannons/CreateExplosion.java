@@ -1,9 +1,9 @@
 package at.pavlov.cannons;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 
+import at.pavlov.cannons.Enum.EntityDataType;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.ProjectileCause;
 import at.pavlov.cannons.container.*;
@@ -214,43 +214,124 @@ public class CreateExplosion {
 
     /**
      * places a entity on the given location and pushes it away from the impact
-     * @param impactLoc location of the impact
+     * @param cannonball the involved projectile
      * @param loc location of the spawn
      * @param entityVelocity how fast the entity is push away
-     * @param type entity type
-     * @param tntFuse time fuse for tnt
+     * @param entityHolder type of entity to spawn
      */
-    private void spawnEntity(Location impactLoc, Location loc, double entityVelocity, EntityType type, double tntFuse)
+    private void spawnEntity(FlyingProjectile cannonball, Location loc, double entityVelocity, SpawnEntityHolder entityHolder)
     {
+        Location impactLoc = cannonball.getImpactLocation();
         World world = impactLoc.getWorld();
         Random r = new Random();
 
         //spawn mob
-        Entity entity = world.spawnEntity(loc, type);
+        Entity entity = world.spawnEntity(loc, entityHolder.getType());
 
         if (entity != null)
         {
-            plugin.logDebug("Spawned entity: " + type.toString() + " at impact");
+            plugin.logDebug("Spawned entity: " + entityHolder.getType().toString() + " at impact");
             //get distance form the center + 1 to avoid division by zero
             double dist = impactLoc.distance(loc) + 1;
             //calculate veloctiy away from the impact (speed in y makes problems and entity sinks in ground)
             Vector vect = loc.clone().subtract(impactLoc).toVector().normalize().multiply(entityVelocity/dist).multiply(new Vector(1.0,0.0,1.0));
             //set the entity velocity
             entity.setVelocity(vect);
-            //for TNT only
+
+            // add some specific data values
+            // TNT
             if (entity instanceof TNTPrimed)
             {
                 TNTPrimed tnt = (TNTPrimed) entity;
-                int fuseTicks = (int)(tntFuse*20.0*(1+r.nextGaussian()/3.0));
-                plugin.logDebug("set TNT fuse ticks to: " + fuseTicks);
-                tnt.setFuseTicks(fuseTicks);
+                try {
+                    int fusetime = CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.FUSE_TIME));
+
+                    if (fusetime < Integer.MAX_VALUE) {
+                        int fuseTicks = (int) (fusetime * (1 + r.nextGaussian() / 3.0));
+                        plugin.logDebug("set TNT fuse ticks to: " + fuseTicks + " fusetime " + fusetime);
+                        tnt.setFuseTicks(fuseTicks);
+                    }
+                }
+                catch(Exception e){
+                    plugin.logSevere("error while converting parameter for TNTPrimed occurred");
+                }
+            }
+            // AreaEffectCloud
+            if (entity instanceof AreaEffectCloud)
+            {
+                AreaEffectCloud cloud = (AreaEffectCloud) entity;
+                try {
+                    //POTION_EFFECT ("Potion"),
+                    // PARTICLE ("Particle"),
+                    // EFFECTS ("Effects"),
+                    int reapplicationDelay = CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.REAPPLICATION_DELAY));
+                    float radius = CannonsUtil.parseFloat(entityHolder.getData().get(EntityDataType.RADIUS));
+                    float radiusPerTick = CannonsUtil.parseFloat(entityHolder.getData().get(EntityDataType.RADIUS_PER_TICK));
+                    float radiusOnUse = CannonsUtil.parseFloat(entityHolder.getData().get(EntityDataType.RADIUS_ON_USE));
+                    int duration = CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.DURATION));
+                    float durationOnUse = CannonsUtil.parseFloat(entityHolder.getData().get(EntityDataType.RADIUS_ON_USE));
+                    int waitTime = CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.WAIT_TIME));
+                    Color color = CannonsUtil.parseColor(entityHolder.getData().get(EntityDataType.COLOR));
+
+                    if (reapplicationDelay < Integer.MAX_VALUE) {
+                        plugin.logDebug("set ReapplicationDelay to: " + reapplicationDelay);
+                        cloud.setReapplicationDelay(reapplicationDelay);
+                    }
+                    if (radius < Float.MAX_VALUE) {
+                        plugin.logDebug("set Radius to: " + radius);
+                        cloud.setRadius(radius);
+                    }
+                    if (radiusPerTick < Float.MAX_VALUE) {
+                        plugin.logDebug("set RadiusPerTick to: " + radiusPerTick);
+                        cloud.setRadiusPerTick(radiusPerTick);
+                    }
+                    if (radiusOnUse < Float.MAX_VALUE) {
+                        plugin.logDebug("set RadiusOnUse to: " + radiusOnUse);
+                        cloud.setRadiusOnUse(radiusOnUse);
+                    }
+                    if (duration < Integer.MAX_VALUE) {
+                        plugin.logDebug("set Duration to: " + duration);
+                        cloud.setDuration(duration);
+                    }
+                    if (durationOnUse < Float.MAX_VALUE) {
+                        plugin.logDebug("set DurationOnUse to: " + durationOnUse);
+                        cloud.setDurationOnUse((int) durationOnUse);
+                    }
+                    if (waitTime < Integer.MAX_VALUE) {
+                        plugin.logDebug("set WaitTime to: " + waitTime);
+                        cloud.setWaitTime(waitTime);
+                    }
+                    if (color != null) {
+                        plugin.logDebug("set color to: " + color.toString());
+                        cloud.setColor(color);
+                    }
+                }
+                catch(Exception e){
+                    plugin.logSevere("error while converting parameter for AreaEffectCloud occurred");
+                }
             }
         }
+
+//        //get distance form the center + 1 to avoid division by zero
+//        double dist = impactLoc.distance(loc) + 1;
+//        //calculate veloctiy away from the impact (speed in y makes problems and entity sinks in ground)
+//        Vector vect = loc.clone().subtract(impactLoc).toVector().normalize().multiply(entityVelocity/dist).multiply(new Vector(1.0,0.0,1.0));
+//        String placestr = loc.getX() + " " + loc.getY() + " " + loc.getZ();
+//        String data = entityHolder.getData().replace("IMPACT_VELOCITY", "["+vect.getX()+"," +vect.getY()+","+vect.getZ()+"]");
+//        plugin.logDebug("/summon " + entityHolder.getType() + " " + placestr + " " + data);
+//        try {
+//            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "summon " + entityHolder.getType() + " " + placestr + " " + data);
+//        }
+//        catch (Exception e) {
+//            plugin.logDebug("Dispatch error: " + e);
+//        }
+
+
     }
 
     /**
      * performs the block spawning for the given projectile
-     * @param cannonball
+     * @param cannonball involved projectile
      */
     private void spreadEntities(FlyingProjectile cannonball)
     {
@@ -287,8 +368,8 @@ public class CreateExplosion {
                 if (canPlaceEntity(placeLoc.getBlock()))
                 {
                     placedEntities++;
-                    //place the block
-                    spawnEntity(impactLoc, placeLoc, projectile.getSpawnVelocity(), spawn.getType(), projectile.getSpawnTntFuseTime());
+                    //place the entity
+                    spawnEntity(cannonball, placeLoc, projectile.getSpawnVelocity(), spawn);
                 }
             } while (iterations1 < maxPlacement*10 && placedEntities < maxPlacement);
 
@@ -562,7 +643,12 @@ public class CreateExplosion {
         return 0.0;
     }
 
-    public void addAffectedEntity(Entity entity)
+
+    /**
+     * adds the affected living entities to the list
+     * @param entity only alive and living entities will be added
+     */
+    private void addAffectedEntity(Entity entity)
     {
         if (!entity.isDead() && entity instanceof LivingEntity)
             affectedEntities.add(entity);
@@ -679,6 +765,9 @@ public class CreateExplosion {
         }
     }
 
+    private void summonEntities(){
+
+    }
 
     private void fireEntityDeathEvent(FlyingProjectile cannonball)
     {
