@@ -40,6 +40,18 @@ public class DesignStorage
 	}
 
 	/**
+	 * returns a list of all cannon design names
+	 * @return list of all cannon design names
+	 */
+	public ArrayList<String> getDesignIds(){
+		ArrayList<String> list = new ArrayList<String>();
+		for (CannonDesign design : cannonDesignList){
+			list.add(design.getDesignID());
+		}
+		return list;
+	}
+
+	/**
 	 * loads all custom cannon desgins
 	 */
 	public void loadCannonDesigns()

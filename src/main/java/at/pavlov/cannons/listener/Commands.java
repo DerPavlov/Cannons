@@ -7,6 +7,7 @@ import at.pavlov.cannons.cannon.Cannon;
 
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
@@ -189,7 +190,7 @@ public class Commands implements CommandExecutor
                                 cannon.show();
                             }
                             else
-                                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found");
+                                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found Available designs are: " + StringUtils.join(plugin.getMyConfig().getDesignStorage().getDesignIds(),", "));
                         }
                         else
                             sendMessage(sender, ChatColor.RED + "[Cannons] Usage: '/cannons create <design>'");
