@@ -339,7 +339,7 @@ public class Projectile implements Cloneable{
 		this.potionsEffectList = potionsEffectList;
 	}
 
-	public String getProjectileID()
+	public String getProjectileId()
 	{
 		return projectileID;
 	}

@@ -30,7 +30,19 @@ public class ProjectileStorage
 		this.plugin = plugin;
 		projectileList = new ArrayList<Projectile>();
 	}
-	
+
+	/**
+	 * returns a list of all projectiles names
+	 * @return list of all projectiles names
+     */
+	public static ArrayList<String> getProjectileIds(){
+		ArrayList<String> list = new ArrayList<String>();
+		for (Projectile proj : projectileList){
+			list.add(proj.getProjectileId());
+		}
+		return list;
+	}
+
 	/**
 	 * returns the projectile that can be loaded with this item. If data=-1 the data is ignored
 	 * @param item ItemStack of projectile
@@ -301,7 +313,7 @@ public class ProjectileStorage
 	 * returns the path of the projectiles folder
 	 * @return
 	 */
-	final String getPath()
+	private String getPath()
 	{
 		// Directory path here
 		return "plugins/Cannons/projectiles/";
@@ -383,7 +395,7 @@ public class ProjectileStorage
     {
         for (Projectile projectile : projectileList)
         {
-            if (projectile.getProjectileID().equalsIgnoreCase(str))
+            if (projectile.getProjectileId().equalsIgnoreCase(str))
                 return projectile;
         }
         return null;

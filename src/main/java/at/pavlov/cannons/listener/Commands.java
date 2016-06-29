@@ -11,6 +11,7 @@ import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -215,8 +216,9 @@ public class Commands implements CommandExecutor
                                     }
                                 player.getInventory().addItem(projectile.getLoadingItem().toItemStack(amount));
                             }
-                            else
-                                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found");
+                            else {
+                                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found. Available designs are: " + StringUtils.join(ProjectileStorage.getProjectileIds(), ", "));
+                            }
                         }
                         else
                             sendMessage(sender, ChatColor.RED + "[Cannons] Usage: '/cannons give <projectile> ] {amount}'");

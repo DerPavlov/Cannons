@@ -282,7 +282,7 @@ public class PersistenceDatabase
 			Projectile projectile = cannon.getLoadedProjectile();
 			if (projectile != null)
 			{
-				bean.setProjectileID(projectile.getProjectileID());
+				bean.setProjectileID(projectile.getProjectileId());
 			}
             else
             {
