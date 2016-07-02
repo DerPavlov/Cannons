@@ -864,6 +864,27 @@ public class CannonsUtil
     }
 
     /**
+     * returns true if the player is playing or has been on this server before
+     * @param uuid id if the player
+     * @return true if player has played before
+     */
+    public static boolean hasPlayedBefore(UUID uuid){
+        OfflinePlayer bPlayer = Bukkit.getOfflinePlayer(uuid);
+        if (bPlayer == null)
+            return false;
+        if (bPlayer.isOnline()){
+            Player player = (Player) bPlayer;
+            if (player.isOnline())
+                return true;
+        }
+        else{
+            if(bPlayer.hasPlayedBefore())
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * converts a string to float. Throws NumberFormatException
      * @param str string to convert
      * @return returns parsed number, or MAX_Value if value is null
