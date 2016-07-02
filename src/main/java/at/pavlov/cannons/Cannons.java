@@ -270,7 +270,7 @@ public final class Cannons extends JavaPlugin
 	public void logSevere(String msg)
 	{
 		//msg = ChatColor.translateAlternateColorCodes('&', msg);
-		this.logger.severe(ChatColor.RED + getLogPrefix() + ChatColor.stripColor(msg));
+		this.logger.severe(getLogPrefix() + ChatColor.stripColor(msg));
 	}
 	
 	public void logInfo(String msg)
