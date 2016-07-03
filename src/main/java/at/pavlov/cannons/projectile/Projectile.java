@@ -71,7 +71,6 @@ public class Projectile implements Cloneable{
 	private double spawnBlockRadius;
     private double spawnEntityRadius;
     private double spawnVelocity;
-    private double spawnTntFuseTime;
 	private List<SpawnMaterialHolder> spawnBlocks = new ArrayList<SpawnMaterialHolder>();
     private List<SpawnEntityHolder> spawnEntities = new ArrayList<SpawnEntityHolder>();
     private List<String> spawnProjectiles;
@@ -607,14 +606,6 @@ public class Projectile implements Cloneable{
 
     public void setSpawnVelocity(double spawnVelocity) {
         this.spawnVelocity = spawnVelocity;
-    }
-
-    public double getSpawnTntFuseTime() {
-        return spawnTntFuseTime;
-    }
-
-    public void setSpawnTntFuseTime(double spawnTntFuseTime) {
-        this.spawnTntFuseTime = spawnTntFuseTime;
     }
 
     public List<SpawnMaterialHolder> getSpawnBlocks() {
