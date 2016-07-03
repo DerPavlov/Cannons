@@ -26,6 +26,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
 import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
@@ -940,15 +942,16 @@ public class CannonsUtil
      * @param str string to convert
      * @return returns parsed number or default
      */
-    public static PotionData parsePotionEffect(String str, PotionData default_value) {
+    public static PotionData parsePotionData(String str, PotionData default_value) {
         if (str != null) {
             str = str.toLowerCase();
-            for (PotionType pt : PotionType.values())
-                if (str.contains(pt.toString().toLowerCase())){
+            for (PotionType pt : PotionType.values()) {
+                if (str.contains(pt.toString().toLowerCase())) {
                     boolean extended = str.contains("long");
                     boolean upgraded = str.contains("strong");
                     return new PotionData(pt, extended, upgraded);
                 }
+            }
         }
         return default_value;
     }

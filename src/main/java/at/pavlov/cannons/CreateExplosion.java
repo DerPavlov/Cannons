@@ -18,7 +18,11 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
@@ -273,7 +277,7 @@ public class CreateExplosion {
                     cloud.setDurationOnUse((int) CannonsUtil.parseFloat(entityHolder.getData().get(EntityDataType.RADIUS_ON_USE), cloud.getDurationOnUse()));
                     cloud.setWaitTime(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.WAIT_TIME), cloud.getWaitTime()));
                     cloud.setColor(CannonsUtil.parseColor(entityHolder.getData().get(EntityDataType.COLOR), cloud.getColor()));
-                    cloud.setBasePotionData(CannonsUtil.parsePotionEffect(entityHolder.getData().get(EntityDataType.POTION_EFFECT), cloud.getBasePotionData()));
+                    cloud.setBasePotionData(CannonsUtil.parsePotionData(entityHolder.getData().get(EntityDataType.POTION_EFFECT), cloud.getBasePotionData()));
                     cloud.setParticle(CannonsUtil.parseParticle(entityHolder.getData().get(EntityDataType.PARTICLE), cloud.getParticle()));
                     cloud.setSource(cannonball.getSource());
                 }
@@ -297,7 +301,7 @@ public class CreateExplosion {
             {
                 TippedArrow arrow = (TippedArrow) entity;
                 try {
-                    arrow.setBasePotionData(CannonsUtil.parsePotionEffect(entityHolder.getData().get(EntityDataType.POTION_EFFECT), arrow.getBasePotionData()));
+                    arrow.setBasePotionData(CannonsUtil.parsePotionData(entityHolder.getData().get(EntityDataType.POTION_EFFECT), arrow.getBasePotionData()));
                 }
                 catch(Exception e){
                     plugin.logSevere("error while converting entity data for " + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
@@ -322,21 +326,36 @@ public class CreateExplosion {
                     plugin.logSevere("error while converting entity data for " + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
                 }
             }
-//            // ThrownPotion
-//            if (entity instanceof ThrownPotion)
-//            {
-//                ThrownPotion potion = (ThrownPotion) entity;
-//                try {
-//                    Collection<PotionEffect> effects = potion.getEffects();
-//                    PotionData eff = CannonsUtil.parsePotionEffect(entityHolder.getData().get(EntityDataType.POTION_EFFECT), null);
-//                    if (eff != null)
-//                        effects.add(eff.g);
-//
-//                }
-//                catch(Exception e){
-//                    plugin.logSevere("error while converting parameter for ThrownPotion occurred: " + e);
-//                }
-//            }
+            // ThrownPotion
+            if (entity instanceof SplashPotion)
+            {
+                SplashPotion pentity = (SplashPotion) entity;
+                try {
+                    ItemStack potion = new ItemStack(Material.SPLASH_POTION);
+                    PotionMeta meta = (PotionMeta) potion.getItemMeta();
+                    meta.setBasePotionData(CannonsUtil.parsePotionData(entityHolder.getData().get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
+                    potion.setItemMeta(meta);
+                    pentity.setItem(potion);
+                }
+                catch(Exception e){
+                    plugin.logSevere("error while converting entity data for " + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+                }
+            }
+            // LingeringPotion
+            if (entity instanceof LingeringPotion)
+            {
+                LingeringPotion pentity = (LingeringPotion) entity;
+                try {
+                    ItemStack potion = new ItemStack(Material.LINGERING_POTION);
+                    PotionMeta meta = (PotionMeta) potion.getItemMeta();
+                    meta.setBasePotionData(CannonsUtil.parsePotionData(entityHolder.getData().get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
+                    potion.setItemMeta(meta);
+                    pentity.setItem(potion);
+                }
+                catch(Exception e){
+                    plugin.logSevere("error while converting entity data for " + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+                }
+            }
         }
 
 //        //get distance form the center + 1 to avoid division by zero
