@@ -111,17 +111,18 @@ spawnOnExplosion:
   entityRadius: 2.0
   #the velocity of blocks/entities are slinged away from the impact
   velocity: 0.5
-  #the fuse time in seconds of primed TNT. You can spawn primed TNT with '383:20'
-  tntFuseTime: 1.0
   #the blocks which will be placed. does not seem to support more tha one block type at a time.
   #spawn an block with (id:data minAmount-maxAmount)
   block:
     #this is a cobweb to slow the enemy
     - 'WEB:0 1-3'
   #spawn entity with the name. (Formatting 'NAME min-max')
-  #http://jd.bukkit.org/rb/apidocs/org/bukkit/entity/EntityType.html
+  #https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
   entity:
-    - 'PRIMED_TNT 1-3'
+    - 'LINGERING_POTION 20-50 {Potion:long_poison}'
+    - 'ZOMBIE 1-4{HelmetArmorItem:Iron_Helmet, LeggingsArmorItem:IRON_LEGGINGS, ChestplateArmorItem:IRON_CHESTPLATE, BootsArmorItem:Iron_Boots, MainHandItem:IRON_AXE, OffHandItem:SHIELD}'
+    - 'AREA_EFFECT_CLOUD 1-3 {Color:16711680, Duration:100, Radius:3, Potion:poison}'
+    - 'TIPPED_ARROW 30-50 {Potion:poison}'
   #spawns a new projectiles after the explosion of this projectile with the given name (file name)
   #spawning the same projectile more than once results in a endless loop
   #the number of spawned projectile depends on 'numberOfBullets' of the spawned projectile
