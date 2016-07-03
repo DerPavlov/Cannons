@@ -44,12 +44,11 @@ public class SpawnEntityHolder{
                         boolean found = false;
                         for (EntityDataType dt : EntityDataType.values()) {
                             // add new entries
-                            if (s2[0].trim().equals(dt.getString())) {
-                                data.put(dt, s2[1]);
+                            if (s2[0].trim().equalsIgnoreCase(dt.getString())) {
+                                data.put(dt, s2[1].trim());
                                 found = true;
-                                System.out.println("[Cannons] " + dt.toString() + " found");
+                                break;
                             }
-
                         }
                         if (!found)
                             System.out.println("[Cannons] " + s2[0] + " is not supported by Cannons");

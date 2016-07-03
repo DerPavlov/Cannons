@@ -9,7 +9,6 @@ import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import at.pavlov.cannons.container.MaterialHolder;
