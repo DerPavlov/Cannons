@@ -632,11 +632,11 @@ public class Cannon
             else
                 return MessageEnum.RamrodCleaning;
         }
-        //if clean load the gunpowder
-        if (!isGunpowderLoaded())
+        //if clean show message that cleaning is done
+        if (isClean() && !isGunpowderLoaded())
         {
             cleanCannon(1);
-            return MessageEnum.ErrorNoGunpowder;
+            return MessageEnum.RamrodCleaningDone;
         }
         //if no projectile
         if (!isLoaded())
