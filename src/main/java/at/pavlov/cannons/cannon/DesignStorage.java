@@ -186,6 +186,8 @@ public class DesignStorage
 
 		// barrelProperties
 		cannonDesign.setMaxLoadableGunpowder(cannonDesignConfig.getInt("barrelProperties.maxLoadableGunpowder", 1));
+		if (cannonDesign.getMaxLoadableGunpowderNormal() <= 0)
+			cannonDesign.setMaxLoadableGunpowder(1);
 		cannonDesign.setMultiplierVelocity(cannonDesignConfig.getDouble("barrelProperties.multiplierVelocity", 1.0));
 		cannonDesign.setSpreadOfCannon(cannonDesignConfig.getDouble("barrelProperties.spreadOfCannon", 5.0));
 
