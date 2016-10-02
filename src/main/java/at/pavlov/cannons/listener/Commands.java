@@ -136,8 +136,12 @@ public class Commands implements CommandExecutor
                             }
                             else
                             {
-                                sendMessage(sender, ChatColor.GREEN + "Player " + ChatColor.GOLD + args[1] + ChatColor.GREEN + " not found in the storage");
+                                sendMessage(sender, ChatColor.RED + "Player " + ChatColor.GOLD + args[1] + ChatColor.RED + " has no cannons.");
                             }
+                        }
+                        else
+                        {
+                            sendMessage(sender, ChatColor.RED + "Player " + ChatColor.GOLD + args[1] + ChatColor.RED + " not found");
                         }
                     }
                     else
