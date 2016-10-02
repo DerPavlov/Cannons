@@ -20,6 +20,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.scoreboard.Team;
@@ -708,7 +709,7 @@ public class Aiming {
 
         for (int i=0; i<100; i++){
 			Vector fvector = CannonsUtil.directionToVector(cannon.getAimingYaw(), cannon.getAimingPitch(), cannon.getCannonballVelocity());
-            double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc, maxInterations);
+            double diffY = simulateShot(fvector, cannon.getMuzzle(), targetLoc, cannon.getProjectileEntityType(), maxInterations);
 
 			if (!cannon.getCannonDesign().isSentryIndirectFire() && Math.abs(diffY) > 1000.0){
 				// plugin.logDebug("diffY too large: " + diffY);
@@ -729,9 +730,7 @@ public class Aiming {
 			}
 
 			if (step < cannon.getCannonDesign().getAngleStepSize()) {
-				plugin.logDebug("test target solution");
 				if (verifyTargetSolution(cannon, target, 2.)) {
-					plugin.logDebug("target solution verified");
 					//can the cannon aim at this solution
 					if (addSpread) {
 						Random rand = new Random();
@@ -759,9 +758,8 @@ public class Aiming {
 	private boolean verifyTargetSolution(Cannon cannon, Target target, double maxdistance){
 		Location muzzle = cannon.getMuzzle();
 		Vector vel = cannon.getTargetVector();
-		plugin.logDebug("target vector " + vel);
 
-		MovingObject predictor = new MovingObject(muzzle, vel);
+		MovingObject predictor = new MovingObject(muzzle, vel, cannon.getProjectileEntityType());
 		Vector start = muzzle.toVector();
 
 		int maxInterations = 500;
@@ -798,8 +796,8 @@ public class Aiming {
      * @param target target for the cannonball
      * @return distance how much above/below the projectile will hit
      */
-    private double simulateShot(Vector vector, Location muzzle, Location target, int maxInterations){
-        MovingObject cannonball = new MovingObject(muzzle, vector);
+    private double simulateShot(Vector vector, Location muzzle, Location target, EntityType projectileType, int maxInterations){
+        MovingObject cannonball = new MovingObject(muzzle, vector, projectileType);
         double target_distance = Math.sqrt(Math.pow(target.getX() - muzzle.getX(), 2)+Math.pow(target.getZ()-muzzle.getZ(),2));
         Vector oldLoc = null;
         for (int i=0; i<500; i++){
@@ -1133,7 +1131,7 @@ public class Aiming {
         Location muzzle = cannon.getMuzzle();
         Vector vel = cannon.getFiringVector(false, false);
 
-        MovingObject predictor = new MovingObject(muzzle, vel);
+        MovingObject predictor = new MovingObject(muzzle, vel, cannon.getProjectileEntityType());
         Vector start = muzzle.toVector();
 
 
@@ -1151,7 +1149,7 @@ public class Aiming {
         }
 
         //nothing found
-        plugin.logDebug("impact predictor could not find the impact");
+        //plugin.logDebug("impact predictor could not find the impact");
         return null;
     }
 

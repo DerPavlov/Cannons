@@ -2,6 +2,7 @@ package at.pavlov.cannons.container;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -12,13 +13,15 @@ public class MovingObject {
     private UUID world;
     private Vector loc;
     private Vector vel;
+    private EntityType entityType;
 
 
-    public MovingObject(Location loc, Vector vel)
+    public MovingObject(Location loc, Vector vel, EntityType entityType)
     {
         world = loc.getWorld().getUID();
         this.loc = loc.toVector();
         this.vel = vel;
+        this.entityType = entityType;
     }
 
     /**
@@ -31,6 +34,15 @@ public class MovingObject {
         if (inWater)
             f2 = 0.8F;
         double f3 = 0.03F;
+        if (entityType.equals(EntityType.ARROW)){
+            f3 = 0.05000000074505806D;
+            if (inWater)
+                f2 = 0.6F;
+        }
+        if (entityType.equals(EntityType.FIREBALL) || entityType.equals(EntityType.SMALL_FIREBALL)){
+            f2 = 0.95F;
+            f3 = 0.0;
+        }
         //update location
         this.loc.add(this.vel);
         //slow down projectile

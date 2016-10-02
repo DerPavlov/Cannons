@@ -13,6 +13,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -2459,12 +2460,21 @@ public class Cannon
         this.targetCannon = !this.targetCannon;
     }
 
-
     public boolean isPaid() {
         return paid;
     }
 
     public void setPaid(boolean paid) {
         this.paid = paid;
+    }
+
+    public EntityType getProjectileEntityType(){
+        if (loadedProjectile != null){
+            return loadedProjectile.getProjectileEntity();
+        }
+        if (lastFiredProjectile != null){
+            return lastFiredProjectile.getProjectileEntity();
+        }
+        return EntityType.SNOWBALL;
     }
 }
