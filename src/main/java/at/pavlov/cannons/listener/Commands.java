@@ -461,6 +461,16 @@ public class Commands implements CommandExecutor
                                 sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
                                         ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
                         }
+                        //show cannon limit
+                        int buildlimit = plugin.getCannonManager().getCannonBuiltLimit(player);
+                        if (buildlimit < Integer.MAX_VALUE){
+                            int ncannon = plugin.getCannonManager().getNumberOfCannons(player.getUniqueId());
+                            int newcannons = buildlimit - ncannon;
+                            if (newcannons > 0)
+                                sendMessage(sender, ChatColor.GREEN + "You can build " + ChatColor.GOLD + newcannons + ChatColor.GREEN + " additional cannons");
+                            else
+                                sendMessage(sender, ChatColor.RED + "You reached your maximum number of cannons");
+                        }
                     }
                     //cannons reset
                     else if(args[0].equalsIgnoreCase("reset"))
