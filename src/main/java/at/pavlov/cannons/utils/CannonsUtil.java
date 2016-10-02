@@ -693,7 +693,8 @@ public class CannonsUtil
      * @return true if there is a line of sight
      */
     public static boolean hasLineOfSight(Location start, Location stop, int ignoredBlocks){
-        BlockIterator iter = new BlockIterator(start.getWorld(), start.clone().toVector(), stop.clone().subtract(start).toVector().normalize(), 0, (int) start.distance(stop));
+        Vector dir =  stop.clone().subtract(start).toVector().normalize();
+        BlockIterator iter = new BlockIterator(start.getWorld(), start.clone().add(dir).toVector(),dir, 0, (int) start.distance(stop));
 
         int nontransparent = 0;
         while (iter.hasNext()) {
@@ -703,6 +704,7 @@ public class CannonsUtil
                 nontransparent ++;
             }
         }
+        //System.out.println("non transperent blocks: " + nontransparent);
         return nontransparent <= ignoredBlocks;
     }
 

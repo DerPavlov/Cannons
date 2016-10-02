@@ -590,8 +590,7 @@ public class Aiming {
 						Bukkit.getServer().getPluginManager().callEvent(targetEvent);
 						if (!targetEvent.isCancelled()) {
 							cannon.setSentryEntity(target.getUniqueId());
-						}
-						else {
+						} else {
 							//event cancelled
 							plugin.logDebug("can't find solution for target");
 							cannon.setSentryEntity(null);
@@ -657,7 +656,7 @@ public class Aiming {
 //            newTarget.add(targetVelocity.multiply(time));
 //        }
         //plugin.logDebug("new target " + newTarget);
-        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), target, 3)) {
+        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), target, 0)) {
             return false;
         }
 
@@ -730,14 +729,18 @@ public class Aiming {
 			}
 
 			if (step < cannon.getCannonDesign().getAngleStepSize()) {
-				//can the cannon aim at this solution
-				if (addSpread){
-					Random rand = new Random();
-					cannon.setAimingPitch(cannon.getAimingPitch() + cannon.getCannonDesign().getSentrySpread()*rand.nextGaussian());
-					cannon.setAimingYaw(cannon.getAimingYaw() + cannon.getCannonDesign().getSentrySpread()*rand.nextGaussian());
-				}
-				if (cannon.canAimPitch(cannon.getAimingPitch()) && cannon.canAimYaw(cannon.getAimingYaw())) {
-					return true;
+				plugin.logDebug("test target solution");
+				if (verifyTargetSolution(cannon, target, 2.)) {
+					plugin.logDebug("target solution verified");
+					//can the cannon aim at this solution
+					if (addSpread) {
+						Random rand = new Random();
+						cannon.setAimingPitch(cannon.getAimingPitch() + cannon.getCannonDesign().getSentrySpread() * rand.nextGaussian());
+						cannon.setAimingYaw(cannon.getAimingYaw() + cannon.getCannonDesign().getSentrySpread() * rand.nextGaussian());
+					}
+					if (cannon.canAimPitch(cannon.getAimingPitch()) && cannon.canAimYaw(cannon.getAimingYaw())) {
+						return true;
+					}
 				}
 				// can't aim at this solution
 				return false;
@@ -746,8 +749,50 @@ public class Aiming {
         return false;
     }
 
+	/**
+	 * verifies if the trajectory is blocked by terrain
+	 * @param cannon the firing cannon
+	 * @param target the target to fire at
+	 * @param maxdistance allowed distance of the target to the impact location
+     * @return true if the target is not blocked or close to the impact
+     */
+	private boolean verifyTargetSolution(Cannon cannon, Target target, double maxdistance){
+		Location muzzle = cannon.getMuzzle();
+		Vector vel = cannon.getTargetVector();
+		plugin.logDebug("target vector " + vel);
+
+		MovingObject predictor = new MovingObject(muzzle, vel);
+		Vector start = muzzle.toVector();
+
+		int maxInterations = 500;
+		double targetDist = 100000000000000.;
+
+		//make a few iterations until we hit something
+		for (int i=0;start.distance(predictor.getLoc()) < cannon.getCannonDesign().getSentryMaxRange()*1.2 && i < maxInterations; i++)
+		{
+			//is target distance shorter than before
+			double newDist = predictor.getLocation().distance(target.getCenterLocation());
+			if (newDist < targetDist){
+				targetDist = newDist;
+			}
+			else{
+				// missed the target
+				return true;
+			}
+			//see if we hit something, but wait until the cannonball is 1 block away (safety first)
+			Block block = predictor.getLocation().getBlock();
+			if (start.distance(predictor.getLoc()) > 1. && !block.isEmpty())
+			{
+				predictor.revertProjectileLocation(false);
+				return CannonsUtil.findSurface(predictor.getLocation(), predictor.getVel()).distance(target.getCenterLocation()) < maxdistance;
+			}
+			predictor.updateProjectileLocation(false);
+		}
+		return false;
+	}
+
     /**
-     * calculates the height of the proctile at the target distance
+     * calculates the height of the projectile at the target distance
      * @param vector firing vector
      * @param muzzle start point of the cannonball
      * @param target target for the cannonball

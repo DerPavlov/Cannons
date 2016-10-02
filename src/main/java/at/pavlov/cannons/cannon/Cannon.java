@@ -1405,6 +1405,10 @@ public class Cannon
         return CannonsUtil.directionToVector(h, v, multi*randomness);
     }
 
+    /**
+     * returns the vector the cannon is currently aiming
+     * @return vector the cannon is aiming
+     */
     public Vector getAimingVector()
     {
         double multi = getCannonballVelocity();
@@ -1412,6 +1416,19 @@ public class Cannon
             multi = 0.1;
 
         return CannonsUtil.directionToVector(getTotalHorizontalAngle()  + CannonsUtil.directionToYaw(cannonDirection), -getTotalVerticalAngle(), multi);
+    }
+
+    /**
+     * returns the vector the cannon is currently targeting
+     * @return targeting vector
+     */
+    public Vector getTargetVector()
+    {
+        double multi = getCannonballVelocity();
+        if (multi < 0.1)
+            multi = 0.1;
+
+        return CannonsUtil.directionToVector(getAimingYaw(), getAimingPitch(), multi);
     }
 
     /**
