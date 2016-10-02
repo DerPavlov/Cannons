@@ -1172,7 +1172,7 @@ public class Aiming {
             if (last.getValue()+design.getPredictorDelay() < System.currentTimeMillis())
             {
                 //reset the aiming so we have the do the next update after the update time
-                last.setValue(last.getValue() - design.getPredictorDelay() + design.getPredictorUpdate());
+                last.setValue(System.currentTimeMillis() - design.getPredictorDelay() + design.getPredictorUpdate());
 
                 //find all the watching players
                 HashMap<UUID, Boolean> nameList = cannon.getObserverMap();
