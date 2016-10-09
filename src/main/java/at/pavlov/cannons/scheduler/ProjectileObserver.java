@@ -119,6 +119,7 @@ public class ProjectileObserver {
     {
         int maxDist = (int) plugin.getMyConfig().getImitatedBlockMaximumDistance();
         int maxSoundDist = plugin.getMyConfig().getImitatedSoundMaximumDistance();
+        float maxVol = plugin.getMyConfig().getImitatedSoundMaximumVolume();
 
         for(Player p : loc.getWorld().getPlayers())
         {
@@ -129,7 +130,7 @@ public class ProjectileObserver {
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getType(), 0), FakeBlockType.WATER_SPLASH, 1.0);
             
         }
-        CannonsUtil.imitateSound(loc, sound, maxSoundDist);
+        CannonsUtil.imitateSound(loc, sound, maxSoundDist, maxVol);
     }
 
     /**

@@ -45,6 +45,7 @@ public class Config
     private int imitatedBlockMinimumDistance;
     private int imitatedBlockMaximumDistance;
     private int imitatedSoundMaximumDistance;
+    private float imitatedSoundMaximumVolume;
 
     private boolean imitatedExplosionEnabled;
     private int imitatedExplosionSphereSize;
@@ -128,6 +129,7 @@ public class Config
         setImitatedBlockMinimumDistance(plugin.getConfig().getInt("imitatedEffects.minimumBlockDistance", 40));
         setImitatedBlockMaximumDistance(plugin.getConfig().getInt("imitatedEffects.maximumBlockDistance", 200));
         setImitatedSoundMaximumDistance(plugin.getConfig().getInt("imitatedEffects.maximumSoundDistance", 200));
+        setImitatedSoundMaximumVolume((float) plugin.getConfig().getDouble("imitatedEffects.maximumSoundVolume", 0.8));
 
         //imitated explosions
         setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));
@@ -521,5 +523,13 @@ public class Config
 
     public void setRelayExplosionEvent(boolean relayExplosionEvent) {
         this.relayExplosionEvent = relayExplosionEvent;
+    }
+
+    public float getImitatedSoundMaximumVolume() {
+        return imitatedSoundMaximumVolume;
+    }
+
+    public void setImitatedSoundMaximumVolume(float imitatedSoundMaximumVolume) {
+        this.imitatedSoundMaximumVolume = imitatedSoundMaximumVolume;
     }
 }

@@ -1083,7 +1083,7 @@ public class CreateExplosion {
      */
     public void sendExplosionToPlayers(Projectile projectile, Location loc, SoundHolder sound)
     {
-        CannonsUtil.imitateSound(loc, sound, config.getImitatedSoundMaximumDistance());
+        CannonsUtil.imitateSound(loc, sound, config.getImitatedSoundMaximumDistance(), config.getImitatedSoundMaximumVolume());
 
         if (!config.isImitatedExplosionEnabled())
             return;
@@ -1093,7 +1093,6 @@ public class CreateExplosion {
         int r = config.getImitatedExplosionSphereSize()/2;
         MaterialHolder mat = config.getImitatedExplosionMaterial();
         double delay = config.getImitatedExplosionTime();
-
 
         for(Player p : loc.getWorld().getPlayers())
         {

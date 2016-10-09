@@ -49,6 +49,8 @@ imitatedEffects:
   maximumBlockDistance: 200
   #if the player is above this distance, there will be no sound
   maximumSoundDistance: 200
+  #how loud the sound effects will be (possible values: 0.0-1.0)
+  maximumSoundVolume: 0.8
 
   explosion:
     #are imitated blocks enabled

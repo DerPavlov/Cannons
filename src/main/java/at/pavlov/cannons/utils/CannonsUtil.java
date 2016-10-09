@@ -567,25 +567,30 @@ public class CannonsUtil
      * @param sound sound
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location loc, SoundHolder sound, int maxDist)
+    public static void imitateSound(Location loc, SoundHolder sound, int maxDist, float maxVolume)
     {
         //https://forums.bukkit.org/threads/playsound-parameters-volume-and-pitch.151517/
         World w = loc.getWorld();
-        w.playSound(loc, sound.getSound(), 15F, sound.getPitch());
+        //w.playSound(loc, sound.getSound(), maxVolume*16f, sound.getPitch());
+        maxVolume = Math.max(0.0f, Math.min(0.95f, maxVolume));
 
         for(Player p : w.getPlayers())
         {
         	Location pl = p.getLocation();
             //readable code
             Vector v = loc.clone().subtract(pl).toVector();
-            double d = v.length();
+            float d = (float) v.length();
             if(d<=maxDist)
             {
-
                 //float volume = 2.1f-(float)(d/maxDist);
                 float newPitch = sound.getPitch()/(float) Math.sqrt(d);
                 //p.playSound(p.getEyeLocation().add(v.normalize().multiply(16)), sound, volume, newPitch);
-                p.playSound(loc, sound.getSound(), maxDist/16f, newPitch);
+                //https://bukkit.org/threads/playsound-parameters-volume-and-pitch.151517/
+                float maxv = d/(1-maxVolume)/16f;
+                maxv = Math.max(maxv, maxVolume);
+                float setvol = Math.min(maxv, (float)maxDist/16f);
+                System.out.println("distance: " + d + "maxv: " + maxv + " (float)maxDist/16f: " + (float)maxDist/16f + " setvol: " + setvol);
+                p.playSound(loc, sound.getSound(), setvol, newPitch);
             }
         }
     }
