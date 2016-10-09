@@ -91,6 +91,8 @@ public class Cannon
     private long sentryLastLoadingFailed;
     // last time firing failed. Wait some time before trying again
     private long sentryLastFiringFailed;
+    // return to default angles after firing
+    private boolean sentryHomedAfterFiring;
 
     //target options for cannon
     private boolean targetMob;
@@ -2092,6 +2094,22 @@ public class Cannon
     }
 
     /**
+     * get the default horizontal home position of the cannon
+     * @return default horizontal home position
+     */
+    public double getHomeYaw(){
+        return getHomeHorizontalAngle() + CannonsUtil.directionToYaw(cannonDirection);
+    }
+
+    /**
+     * get the default vertical home position of the cannon
+     * @return default vertical home position
+     */
+    public double getHomePitch(){
+        return getHomeVerticalAngle();
+    }
+
+    /**
      * if the cannon has the target in sight and angles are set correctly
      * @return true if aiminig is finished
      */
@@ -2476,5 +2494,13 @@ public class Cannon
             return lastFiredProjectile.getProjectileEntity();
         }
         return EntityType.SNOWBALL;
+    }
+
+    public boolean isSentryHomedAfterFiring() {
+        return sentryHomedAfterFiring;
+    }
+
+    public void setSentryHomedAfterFiring(boolean sentryHomedAfterFiring) {
+        this.sentryHomedAfterFiring = sentryHomedAfterFiring;
     }
 }

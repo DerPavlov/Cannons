@@ -16,7 +16,6 @@ import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -263,6 +262,9 @@ public class Aiming {
 				return null;
         }
 		else
+			//set homing finished flag
+			if (cannon.getCannonDesign().isSentry())
+				cannon.setSentryHomedAfterFiring(true);
             //no change in angle
             return null;
 	}
@@ -506,7 +508,7 @@ public class Aiming {
 				return;
 
 			// load from chest if the cannon is in automatic mode
-			if (!cannon.isLoaded() && !cannon.isLoading() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 5000) {
+			if (!cannon.isLoaded() && !cannon.isLoading() && !cannon.isFiring() && System.currentTimeMillis() > cannon.getSentryLastLoadingFailed() + 5000) {
 				MessageEnum messageEnum = cannon.reloadFromChests(null, !cannon.getCannonDesign().isAmmoInfiniteForRedstone());
 				if (messageEnum.isError()) {
 					cannon.setSentryLastLoadingFailed(System.currentTimeMillis());
@@ -607,7 +609,7 @@ public class Aiming {
 
             //aim at the found solution
             // only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
-            if (cannon.hasSentryEntity() && System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()) {
+            if ((cannon.hasSentryEntity() || !cannon.isSentryHomedAfterFiring()) && System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed()) {
 				// autoaming or fineadjusting
 				if (cannon.isValid()) {
                     updateAngle(null, cannon, null, InteractAction.adjustSentry);
@@ -626,6 +628,13 @@ public class Aiming {
 					}
                 }
             }
+
+			//no targets found, return to default angles
+			if (!cannon.hasSentryEntity()){
+				cannon.setAimingYaw(cannon.getHomeYaw());
+				cannon.setAimingPitch(cannon.getHomePitch());
+				cannon.setSentryHomedAfterFiring(false);
+			}
         }
     }
 
