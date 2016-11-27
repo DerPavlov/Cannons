@@ -32,11 +32,9 @@ public class SoundHolder {
                 if (scan!=null && !scan.equalsIgnoreCase("none"))
                     try {
                         soundenum = Sound.valueOf(scan);
-                        System.out.println("found enum sound: " + soundenum);
                     }
                     catch(Exception e){
                         soundstr = scan;
-                        System.out.println("found string sound: " + soundstr);
                     }
             }
             else
