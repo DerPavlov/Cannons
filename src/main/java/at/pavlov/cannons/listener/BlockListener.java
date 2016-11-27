@@ -141,7 +141,7 @@ public class BlockListener implements Listener
             //you can't break your own cannon in aiming mode
             //breaking cannon while player is in selection (command) mode is not allowed
             Cannon aimingCannon = null;
-            if (event.getPlayer()!=null)
+            if (plugin.getAiming().isInAimingMode(event.getPlayer().getUniqueId()))
                  aimingCannon = plugin.getAiming().getCannonInAimingMode(event.getPlayer());
 
             if (cannon.isDestructibleBlock(event.getBlock().getLocation()) && (aimingCannon==null||!cannon.equals(aimingCannon)) && !plugin.getCommandListener().isSelectingMode(event.getPlayer())) {
