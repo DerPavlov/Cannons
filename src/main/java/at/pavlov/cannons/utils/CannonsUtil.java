@@ -589,8 +589,11 @@ public class CannonsUtil
                 float maxv = d/(1-maxVolume)/16f;
                 maxv = Math.max(maxv, maxVolume);
                 float setvol = Math.min(maxv, (float)maxDist/16f);
-                System.out.println("distance: " + d + "maxv: " + maxv + " (float)maxDist/16f: " + (float)maxDist/16f + " setvol: " + setvol);
-                p.playSound(loc, sound.getSound(), setvol, newPitch);
+                //System.out.println("distance: " + d + "maxv: " + maxv + " (float)maxDist/16f: " + (float)maxDist/16f + " setvol: " + setvol);
+                if (sound.isSoundEnum())
+                    p.playSound(loc, sound.getSoundEnum(), setvol, newPitch);
+                if (sound.isSoundString())
+                p.playSound(loc, sound.getSoundString(), setvol, newPitch);
             }
         }
     }
@@ -650,8 +653,10 @@ public class CannonsUtil
         if (!sound.isValid())
             return;
 
-        loc.getWorld().playSound(loc,sound.getSound(),sound.getVolume(),sound.getPitch());
-
+        if (sound.isSoundString())
+            loc.getWorld().playSound(loc, sound.getSoundString(), sound.getVolume(), sound.getPitch());
+        if (sound.isSoundEnum())
+            loc.getWorld().playSound(loc, sound.getSoundEnum(), sound.getVolume(), sound.getPitch());
     }
 
     /**
