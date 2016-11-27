@@ -151,7 +151,11 @@ messages:
 
 sounds:
   #You can enter new sounds in the following way 'NAME:VOLUME:PITCH'. Like 'IRONGOLEM_WALK:1:0.5'
-  #NAME: You can find valid names here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+  #NAME: You can use minecraft sounds (block.anvil.hit), custom resource sound packs, or bukkit sound names (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html)
+  #VOLUME: How far you will hear this sound
+  #PITCH: How fast it is played. (0.5-2)
+  #USE 'none:1:1' to disable this sound
+
   #loading sound of projectile
   loading: 'ENTITY_IRONGOLEM_ATTACK:5:0.5'
   #impact sound
