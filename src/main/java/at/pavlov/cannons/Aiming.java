@@ -1255,4 +1255,13 @@ public class Aiming {
     private GunAngles calctSentrySolution(Cannon cannon, Location target){
         return new GunAngles(0., 0.);
     }
+
+	/**
+	 * returns true if the player is currently in aiming mode
+	 * @param player the player in aiming mode
+	 * @return true if the player is in aiming mode
+     */
+	public boolean isInAimingMode(UUID player) {
+		return player != null && inAimingMode.containsKey(player);
+	}
 }
