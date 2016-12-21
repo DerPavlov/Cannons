@@ -583,7 +583,8 @@ public class CannonsUtil
             if(d<=maxDist)
             {
                 //float volume = 2.1f-(float)(d/maxDist);
-                float newPitch = sound.getPitch()/(float) Math.sqrt(d);
+                //float newPitch = sound.getPitch()/(float) Math.sqrt(d);
+                float newPitch = sound.getPitch();
                 //p.playSound(p.getEyeLocation().add(v.normalize().multiply(16)), sound, volume, newPitch);
                 //https://bukkit.org/threads/playsound-parameters-volume-and-pitch.151517/
                 float maxv = d/(1-maxVolume)/16f;
@@ -593,7 +594,7 @@ public class CannonsUtil
                 if (sound.isSoundEnum())
                     p.playSound(loc, sound.getSoundEnum(), setvol, newPitch);
                 if (sound.isSoundString())
-                p.playSound(loc, sound.getSoundString(), setvol, newPitch);
+                    p.playSound(loc, sound.getSoundString(), setvol, newPitch);
             }
         }
     }
