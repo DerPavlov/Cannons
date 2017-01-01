@@ -11,7 +11,6 @@ import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.RemoveTaskWrapper;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -462,7 +461,7 @@ public class CannonManager
 	/**
 	 * searches for a cannon and creates a new entry if it does not exist
 	 * @param cannonBlock - one block of the cannon
-	 * @param owner - the owner of the cannon (important for message notification). Can't be null
+	 * @param owner - the owner of the cannon (important for message notification). Can't be null if a new cannon is created
 	 * @return the cannon at this location
 	 */
 	public Cannon getCannon(Location cannonBlock, UUID owner)

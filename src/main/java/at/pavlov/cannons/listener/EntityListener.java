@@ -76,7 +76,7 @@ public class EntityListener implements Listener
 	}
 	
 	/**
-	 * handles the explosion event. Protects the buttons and torches of a cannon, because the break easily
+	 * handles the explosion event. Protects the buttons and torches of a cannon, because they break easily
 	 * @param event
 	 */
 	@EventHandler
@@ -85,70 +85,50 @@ public class EntityListener implements Listener
 		plugin.logDebug("Explode event listener called");
 
 		//do nothing if it is cancelled
-		if (event.isCancelled()) return;
+		if (event.isCancelled())
+			return;
 		
-		List<Block> blocks = event.blockList();
+		ExplosionEventHandler(event.blockList());
+	}
+
+    /**
+     * searches for destroyed cannons in the explosion event and removes cannons parts which can't be destroyed in an explosion.
+     * @param blocklist list of blocks involved in the event
+     */
+    public void ExplosionEventHandler(List<Block> blocklist){
         HashSet<UUID> remove = new HashSet<UUID>();
 
+        // first search if a barrel block was destroyed.
+        for (Block block : blocklist) {
+            Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
 
-
-		// first search if a barrel block was destroyed. 
-		for (int i = 0; i < blocks.size(); i++)
-		{
-			Block block = blocks.get(i);
-	
-			Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
-			
-			// if it is a cannon block
-			if (cannon != null)
-			{
-				if (cannon.isDestructibleBlock(block.getLocation()))
-				{
-					//this cannon is destroyed
+            // if it is a cannon block
+            if (cannon != null) {
+                if (cannon.isDestructibleBlock(block.getLocation())) {
+                    //this cannon is destroyed
                     remove.add(cannon.getUID());
-				}			
-			}
-		}
-		
-		//iterate again and remove all block of intact cannons
-		for (int i = 0; i < blocks.size(); i++)
-		{
-			Block block = blocks.get(i);
-			
-			Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
-
-			// if it is a cannon block and the cannon is not destroyed (see above)
-			if (cannon != null && !remove.contains(cannon.getUID()))
-			{
-				if (cannon.isCannonBlock(block))
-				{
-					blocks.remove(i--);
-				}
-			}
-		}
-
-        //cannons event - remove unbreakable blocks
-        //this will also affect other plugins which spawn bukkit explosions
-        if (event.getEntity() == null)
-        {
-            for (int i = 0; i < blocks.size(); i++)
-            {
-                Block block = blocks.get(i);
-
-                for (MaterialHolder unbreakableBlock : plugin.getMyConfig().getUnbreakableBlocks())
-                {
-                    if (unbreakableBlock.equalsFuzzy(block))
-                    {
-                        blocks.remove(i--);
-                    }
                 }
             }
         }
 
-		//now remove all invalid cannons
+        //iterate again and remove all block of intact cannons
+        for (int i = 0; i < blocklist.size(); i++)
+        {
+            Block block = blocklist.get(i);
+            Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
+
+            // if it is a cannon block and the cannon is not destroyed (see above)
+            if (cannon != null && !remove.contains(cannon.getUID()))
+            {
+                if (cannon.isCannonBlock(block))
+                {
+                    blocklist.remove(i--);
+                }
+            }
+        }
+
+        //now remove all invalid cannons
         for (UUID id : remove)
-		    plugin.getCannonManager().removeCannon(id, false, true, BreakCause.Explosion);
-	}
-
-
+            plugin.getCannonManager().removeCannon(id, false, true, BreakCause.Explosion);
+    }
 }
