@@ -805,8 +805,14 @@ public class CannonManager
 
         while (iter.hasNext())
         {
-            Cannon next = iter.next();
-            next.destroyCannon(false, false, BreakCause.Other);
+            Cannon cannon = iter.next();
+            OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
+            // return money to the player if the cannon was paid
+            if (offplayer != null && offplayer.hasPlayedBefore() && plugin.getEconomy() != null) {
+                if (cannon.isPaid())
+                    plugin.getEconomy().depositPlayer(offplayer, cannon.getCannonDesign().getEconomyBuildingCost());
+            }
+            cannon.destroyCannon(false, false, BreakCause.Other);
             iter.remove();
         }
     }
