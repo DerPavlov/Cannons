@@ -54,7 +54,7 @@ public class FireCannon {
         if (player != null && cannon.getOwner() != null && !cannon.getOwner().equals(player.getUniqueId())  && design.isAccessForOwnerOnly())
             return MessageEnum.ErrorNotTheOwner;
         //Loading in progress
-        if (cannon.isLoading())
+        if (cannon.isLoading() && !design.isFireAfterLoading())
             return MessageEnum.ErrorLoadingInProgress;
         // is the cannon already cleaned?
         if (!cannon.isClean())
@@ -63,7 +63,7 @@ public class FireCannon {
         if (!cannon.isGunpowderLoaded())
             return MessageEnum.ErrorNoGunpowder;//is there a projectile
         // is there a projectile in the cannon?
-        if (!cannon.isLoaded())
+        if (!cannon.isLoaded() && !design.isFireAfterLoading())
             return MessageEnum.ErrorNoProjectile;
         // after cleaning the projectile needs to pushed in the barrel
         if (!cannon.isProjectilePushed())
@@ -185,7 +185,7 @@ public class FireCannon {
             else
             {
                 //everything went fine - next click on torch wil fire the cannon
-                //if fire after reloading is active, if will fire automatically. This can be a problem for the impact predictor
+                //if fire after reloading is active, it will fire automatically. This can be a problem for the impact predictor
                 if (!design.isFireAfterLoading())
                     return MessageEnum.loadProjectile;
             }
