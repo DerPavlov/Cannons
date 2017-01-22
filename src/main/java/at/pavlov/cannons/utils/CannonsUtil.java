@@ -679,8 +679,8 @@ public class CannonsUtil
         if (!start.getBlock().isEmpty())
             return start;
 
-        int length = (int) (direction.length()*3);
-        BlockIterator iter = new BlockIterator(world, start.toVector(), direction.clone().normalize(), 0, length);
+        //int length = (int) (direction.length()*3);
+        BlockIterator iter = new BlockIterator(world, start.toVector(), direction.clone().normalize(), 0, 10);
 
         //try to find a surface of the
         while (iter.hasNext())
@@ -692,7 +692,42 @@ public class CannonsUtil
             else
                 return surface;
         }
+        // no surface found
         return surface;
+    }
+
+    /**
+     * find the first block on the surface in the given direction
+     * @param start starting point
+     * @param direction direction
+     * @return returns the the location of one block in front of the surface or (if the surface is not found) the start location
+     */
+    public static Location findFirstBlock(Location start, Vector direction)
+    {
+        World world = start.getWorld();
+        Location surface = start.clone();
+
+        //see if there is a block already - then go back if necessary
+        if (!start.getBlock().isEmpty())
+            surface.subtract(direction);
+
+        //are we now in air - if not, something is wrong
+        if (!start.getBlock().isEmpty())
+            return start;
+
+        //int length = (int) (direction.length()*3);
+        BlockIterator iter = new BlockIterator(world, start.toVector(), direction.clone().normalize(), 0, 10);
+
+        //try to find a surface of the
+        while (iter.hasNext())
+        {
+            Block next = iter.next();
+            //if there is no block, go further until we hit the surface
+            if (!next.isEmpty())
+                return next.getLocation();
+        }
+        // no surface found
+        return null;
     }
 
 
@@ -997,5 +1032,40 @@ public class CannonsUtil
                 }
         }
         return default_value;
+    }
+
+    /**
+     * Find the closed block edge for the given direction and return the blockface normal.
+     * @param impactLocation Location of impact above the surface
+     * @param direction impact direction of the cannonball
+     * @return vector normal to plane
+     */
+    public static Vector detectImpactSurfaceNormal(Vector impactLocation, Vector direction){
+        double plane;
+        //the block location
+        Vector imb = new Vector(Math.round(impactLocation.getX()), Math.round(impactLocation.getY()), Math.round(impactLocation.getZ()));
+        //impact vector location relative to the block
+        Vector rv = impactLocation.subtract(imb);
+        //Y - vertical
+        if (direction.getY() > 0)
+            //impact was below
+            plane = 0.5;
+        else
+            //impact was above
+            plane = -0.5;
+        System.out.println("impact: " + imb + " rv: " + rv + " direction " + direction + " plane: " + plane);
+        double t = (plane - rv.getY())/direction.getY();
+        Vector is = direction.clone().multiply(t).add(rv);
+        //detect if is within bonds
+        System.out.println("isurface: " + is);
+        if (is.getX() > -0.5 && is.getX() < 0.5 && is.getZ() > -0.5 && is.getZ() < 0.5){
+            return new Vector(0,1,0);
+        }
+
+
+        //X - horizontal
+
+        //Z - horizontal
+        return new Vector (0,1,0);
     }
 }

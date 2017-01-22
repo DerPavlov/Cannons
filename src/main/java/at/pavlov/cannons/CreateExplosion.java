@@ -746,9 +746,17 @@ public class CreateExplosion {
         boolean canceled = false;
         //breaks blocks from the impact of the projectile to the location of the explosion
         Location impactLoc = blockBreaker(cannonball, projectile_entity);
-        impactLoc = projectile_entity.getLocation();
+        //impactLoc = projectile_entity.getLocation();
         cannonball.setImpactLocation(impactLoc);
         World world = impactLoc.getWorld();
+
+        //find block which caused the shell impact
+        Location impactBlock = CannonsUtil.findFirstBlock(impactLoc, cannonball.getVelocity());
+        if (impactBlock != null) {
+            cannonball.setImpactBlock(impactBlock);
+            plugin.logDebug("todo: impact block: " + impactBlock.getBlock());
+        }
+
 
         //teleport snowball to impact
         projectile_entity.teleport(impactLoc);
@@ -768,6 +776,13 @@ public class CreateExplosion {
         if (!projectile.isUnderwaterDamage() && cannonball.wasInWater())
         {
             plugin.logDebug("Underwater explosion not allowed. Event cancelled");
+            return;
+        }
+
+        //deflect cannonball
+        if (deflectProjectile(cannonball)){
+            //cannonball was deflected - no explosion
+            plugin.logDebug("Cannonball was deflected");
             return;
         }
 
@@ -984,6 +999,66 @@ public class CreateExplosion {
 
         //remove all entries in damageMap
         damageMap.clear();
+    }
+
+    /**
+     * deflect cannonball on unbreakable surface
+     * @param cannonball the flying projectile
+     */
+    private boolean deflectProjectile(FlyingProjectile cannonball)
+    {
+        //todo
+        //if (!cannonball.getProjectile().isSpawnEnabled())
+        //    return;
+
+        Random r = new Random();
+        Location impactLoc = cannonball.getImpactLocation();
+        Location impactBlock = cannonball.getImpactBlock();
+        if (impactBlock == null)
+            return false;
+
+        Vector vectdeflect = cannonball.getVelocity().clone().multiply(.5);
+        //vectdeflect.add(new Vector(vectdeflect.length()*r.nextGaussian()*0.2,vectdeflect.length()*r.nextGaussian()*0.2,vectdeflect.length()*r.nextGaussian()*0.2));
+
+        plugin.logDebug("--Deflection");
+
+        //ignore too slow cannonballs
+        if (vectdeflect.length() < 0.3)
+            return false;
+
+        //no deflection if the projectile pierces the block
+        if (cannonball.getProjectile().hasProperty(ProjectileProperties.SUPERBREAKER))
+            return false;
+
+        if (impactBlock.getBlock().getType() != Material.OBSIDIAN && impactBlock.getBlock().getType() != Material.BEDROCK)
+            return false;
+
+        plugin.logDebug("--Deflection valid");
+        //spawn a new deflected cannnonball
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(cannonball)
+        {
+            public void run(Object object) {
+                FlyingProjectile cannonball = (FlyingProjectile) object;
+
+                Projectile projectile = cannonball.getProjectile();
+
+                Random r = new Random();
+
+                Location impactBlock = cannonball.getImpactBlock();
+                Vector vnormal = CannonsUtil.detectImpactSurfaceNormal(cannonball.getImpactLocation().toVector(), cannonball.getVelocity().clone());
+
+
+                Vector vectdeflect = cannonball.getVelocity().multiply(.5);
+                Location impactLoc = cannonball.getImpactLocation().subtract(cannonball.getVelocity().normalize().multiply(0.3));
+                //vectdeflect.add(new Vector(vectdeflect.length()*r.nextGaussian()*0.2,vectdeflect.length()*r.nextGaussian()*0.2,vectdeflect.length()*r.nextGaussian()*0.2));
+                vectdeflect.setY(-vectdeflect.getY());
+                plugin.logDebug("---Deflect projectile: " + vectdeflect);
+
+                plugin.getProjectileManager().spawnProjectile(projectile, cannonball.getShooterUID(), cannonball.getSource(), cannonball.getPlayerlocation(), impactLoc.clone(), vectdeflect, cannonball.getCannonUID(), ProjectileCause.DeflectedProjectile);
+            }
+        }, 1L);
+
+        return true;
     }
 
 

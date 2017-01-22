@@ -8,6 +8,7 @@ public enum ProjectileCause {
     RedstoneFired("Redstone fired"),
     SentryFired("Sentry fired"),
     SpawnedProjectile("Spawned projectile"),
+    DeflectedProjectile("Deflected projectile"),
     UnknownFired("fired unknown cause");
 
     private final String str;

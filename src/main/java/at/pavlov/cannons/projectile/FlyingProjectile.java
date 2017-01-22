@@ -26,6 +26,8 @@ public class FlyingProjectile
     //location of the shooterUID before firing - important for teleporting the player back - observer property
     private final Location playerlocation;
     private Location impactLocation;
+    //block which caused the cannonball explosion - can be null
+    private Location impactBlock;
     private Location lastSmokeTrailLocation;
     //Important for visual splash effect when the cannonball hits the water surface
     private boolean inWater;
@@ -38,8 +40,6 @@ public class FlyingProjectile
     private MovingObject predictor;
 
 
-
-	
 	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, UUID shooterUID, org.bukkit.projectiles.ProjectileSource source, Location playerLoc, UUID cannonId, ProjectileCause projectileCause)
 	{
         Validate.notNull(shooterUID, "shooterUID for the projectile can't be null");
@@ -302,5 +302,17 @@ public class FlyingProjectile
 
     public ProjectileCause getProjectileCause() {
         return projectileCause;
+    }
+
+    public Vector getVelocity(){
+        return predictor.getVel().clone();
+    }
+
+    public Location getImpactBlock() {
+        return impactBlock;
+    }
+
+    public void setImpactBlock(Location impactBlock) {
+        this.impactBlock = impactBlock;
     }
 }
