@@ -214,7 +214,7 @@ public class CannonManager
                     userMessages.sendMessage(message, player, cannon);
 
                 //remove from database
-                plugin.getPersistenceDatabase().deleteCannonAsync(cannon.getUID());
+                plugin.getPersistenceDatabase().deleteCannon(cannon.getUID());
                 //remove cannon name
                 cannonNameMap.remove(cannon.getCannonName());
                 //remove sentry
@@ -331,7 +331,7 @@ public class CannonManager
         if (cannon.getCannonDesign().isSentry())
             plugin.getAiming().addSentryCannon(cannon.getUID());
 
-        plugin.getPersistenceDatabase().saveCannonAsync(cannon);
+        plugin.getPersistenceDatabase().saveCannon(cannon);
         plugin.logDebug("added cannon " + cannon.getCannonName());
 		
 		cannon.updateCannonSigns();

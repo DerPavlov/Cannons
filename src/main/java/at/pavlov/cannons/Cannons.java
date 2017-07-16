@@ -1,6 +1,10 @@
 package at.pavlov.cannons;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +17,6 @@ import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.config.*;
 import at.pavlov.cannons.container.MaterialHolder;
-import at.pavlov.cannons.dao.WhitelistBean;
 import at.pavlov.cannons.listener.*;
 import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
@@ -37,8 +40,6 @@ import com.avaje.ebean.EbeanServer;
 
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
-import at.pavlov.cannons.dao.CannonBean;
-import at.pavlov.cannons.dao.MyDatabase;
 import at.pavlov.cannons.dao.PersistenceDatabase;
 import at.pavlov.cannons.projectile.Projectile;
 import org.mcstats.MetricsLite;
@@ -67,7 +68,10 @@ public final class Cannons extends JavaPlugin
 	
 	// database
 	private final PersistenceDatabase persistenceDatabase;
-	private MyDatabase database;
+	private Connection connection = null;
+
+	private final String CannonDatabase = "cannonlist_2_4_3";
+	private final String WhitelistDatabase = "whitelist_2_4_3";
 
 
 	public Cannons()
@@ -100,9 +104,16 @@ public final class Cannons extends JavaPlugin
 	public void onDisable()
 	{
 		getServer().getScheduler().cancelTasks(this);
-		
+
 		// save database on shutdown
-		persistenceDatabase.saveAllCannons();
+		persistenceDatabase.saveAllCannons(false);
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
 		logger.info(getLogPrefix() + "Cannons plugin v" + getPluginDescription().getVersion() + " has been disabled");
 	}
@@ -141,15 +152,25 @@ public final class Cannons extends JavaPlugin
 			config.loadConfig();
 
 			// Initialize the database
-            getServer().getScheduler().runTaskAsynchronously(this, new Runnable()
-            {
-                public void run()
-                {
-                    initializeDatabase();
-                    // load cannons from database
-                    persistenceDatabase.loadCannonsAsync();
-                }
-            });
+			getServer().getScheduler().runTaskAsynchronously(this, new Runnable()
+			{
+				public void run()
+				{
+					try {
+						openConnection();
+						Statement statement = connection.createStatement();
+						statement.close();
+						getPlugin().logInfo("Connected to database");
+					} catch (ClassNotFoundException | SQLException e) {
+						e.printStackTrace();
+					}
+					//create the tables for the database in case they don't exist
+					persistenceDatabase.createTables();
+					// load cannons from database
+					persistenceDatabase.loadCannons();
+				}
+			});
+
 
 			// setting up Aiming Mode Task
 			aiming.initAimingMode();
@@ -162,7 +183,7 @@ public final class Cannons extends JavaPlugin
 			{
 				public void run()
 				{
-					persistenceDatabase.saveAllCannonsAsync();
+					persistenceDatabase.saveAllCannons(true);
 				}
 			}, 6000L, 6000L);
 			
@@ -210,41 +231,36 @@ public final class Cannons extends JavaPlugin
         return economy != null;
     }
 
+
+
+
 	// set up ebean database
-	private void initializeDatabase()
+	private void openConnection() throws SQLException, ClassNotFoundException
 	{
-        Configuration config = getConfig();
+		String driver = getConfig().getString("database.driver", "org.sqlite.JDBC");
+		String url = getConfig().getString("database.url", "jdbc:sqlite:{DIR}{NAME}.db");
+		String username = getConfig().getString("database.username", "bukkit");
+		String password = getConfig().getString("database.password", "walrus");
+		//String serializable = getConfig().getString("database.isolation", "SERIALIZABLE");
 
-		database = new MyDatabase(this)
-		{
-			protected java.util.List<Class<?>> getDatabaseClasses()
-			{
-				List<Class<?>> list = new ArrayList<Class<?>>();
-				list.add(CannonBean.class);
-				list.add(WhitelistBean.class);
+		url = url.replace("{DIR}{NAME}.db", "plugins/Cannons/Cannons.db");
+		logDebug("url: " + url);
 
-				return list;
+		if (connection != null && !connection.isClosed()) {
+			return;
+		}
+
+		synchronized (this) {
+			if (connection != null && !connection.isClosed()) {
+				return;
 			}
-        };
-		//.Formatter:off
-		database.initializeDatabase(config.getString("database.driver", "org.sqlite.JDBC"),
-				config.getString("database.url", "jdbc:sqlite:{DIR}{NAME}.db"), 
-				config.getString("database.username", "bukkit"), 
-				config.getString("database.password", "walrus"),
-				config.getString("database.isolation", "SERIALIZABLE"), 
-				getMyConfig().isDebugMode(),
-				false//config.getBoolean("database.rebuild", false)
-				);
-		//.Formatter:on
-		
-		//config.set("database.rebuild", false);
-		//saveConfig();
+			Class.forName(driver);
+			connection = DriverManager.getConnection(url, username, password);
+		}
     }
 
-	@Override
-	public EbeanServer getDatabase()
-	{
-		return database.getDatabase();
+	public boolean hasConnection() {
+		return this.connection != null;
 	}
 
 	public boolean isPluginEnabled()
@@ -304,6 +320,10 @@ public final class Cannons extends JavaPlugin
 		Plugin plug = pm.getPlugin("WorldEdit");
         return plug != null;
     }
+
+    public Connection getConnection(){
+		return this.connection;
+	}
 
 	public PersistenceDatabase getPersistenceDatabase()
 	{
@@ -422,4 +442,12 @@ public final class Cannons extends JavaPlugin
     public Economy getEconomy(){
         return this.economy;
     }
+
+	public String getCannonDatabase() {
+		return CannonDatabase;
+	}
+
+	public String getWhitelistDatabase() {
+		return WhitelistDatabase;
+	}
 }
