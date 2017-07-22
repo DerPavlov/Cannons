@@ -693,17 +693,29 @@ public class Commands implements CommandExecutor
                     break;
                 }
                 case WHITELIST_ADD:{
-                    cannon.addWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
-                    whitelistPlayer.remove(player.getUniqueId());
-                    userMessages.sendMessage(MessageEnum.CmdAddedWhitelist, player, cannon);
-                    CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
+                    if (!cannon.getCannonDesign().isSentry()){
+                        userMessages.sendMessage(MessageEnum.CmdNoSentryWhitelist, player, cannon);
+                        CannonsUtil.playErrorSound(cannon.getMuzzle());
+                    }
+                    else {
+                        cannon.addWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
+                        whitelistPlayer.remove(player.getUniqueId());
+                        userMessages.sendMessage(MessageEnum.CmdAddedWhitelist, player, cannon);
+                        CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
+                    }
                     break;
                 }
                 case WHITELIST_REMOVE:{
-                    cannon.removeWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
-                    whitelistPlayer.remove(player.getUniqueId());
-                    userMessages.sendMessage(MessageEnum.CmdRemovedWhitelist, player, cannon);
-                    CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
+                    if (!cannon.getCannonDesign().isSentry()){
+                        userMessages.sendMessage(MessageEnum.CmdNoSentryWhitelist, player, cannon);
+                        CannonsUtil.playErrorSound(cannon.getMuzzle());
+                    }
+                    else {
+                        cannon.removeWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
+                        whitelistPlayer.remove(player.getUniqueId());
+                        userMessages.sendMessage(MessageEnum.CmdRemovedWhitelist, player, cannon);
+                        CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
+                    }
                     break;
                 }
                 case TARGET_MOB:{

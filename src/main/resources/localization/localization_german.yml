@@ -26,6 +26,7 @@ Commands:
   SelectCannon: 'YELLOW [Cannons] Bitte Kanone auswählen.'
   SelectCanceled: 'RED [Cannons] Auswahl abgebrochen.'
   CannonNotFound: 'RED [Cannons] Kanone existiert nicht.'
+  NoSentryWhitelist: 'RED [Cannons] Whitelist funktioniert nur bei Sentrykanonen.'
   AddedWhitelist: 'GREEN [Cannons] LASTWHITELISTED zur whitelist von CANNON hinzugefügt'
   RemovedWhitelist: 'GREEN [Cannons] LASTWHITELISTED von whitelist entfernt'
   ToggledTargetMob: 'GOLD [Cannons] Sentry erkennt Monster als Ziel: TARGET_MOB'

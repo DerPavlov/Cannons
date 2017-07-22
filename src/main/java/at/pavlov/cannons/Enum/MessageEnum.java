@@ -29,6 +29,7 @@ public enum MessageEnum
     CmdSelectCannon ("Commands.SelectCannon"),
     CmdSelectCanceled ("Commands.SelectCanceled"),
     CmdCannonNotFound ("Commands.CannonNotFound"),
+	CmdNoSentryWhitelist ("Commands.NoSentryWhitelist"),
 	CmdAddedWhitelist ("Commands.AddedWhitelist"),
 	CmdRemovedWhitelist ("Commands.RemovedWhitelist"),
 	CmdToggledTargetMob ("Commands.ToggledTargetMob"),

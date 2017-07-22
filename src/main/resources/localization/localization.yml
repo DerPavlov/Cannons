@@ -37,6 +37,7 @@ Commands:
   SelectCannon: 'YELLOW [Cannons] Please click on the cannon.'
   SelectCanceled: 'RED [Cannons] Selection canceled.'
   CannonNotFound: 'RED [Cannons] Cannon not found.'
+  NoSentryWhitelist: 'RED [Cannons] Whitelist works for sentries only.'
   AddedWhitelist: 'GREEN [Cannons] Added LASTWHITELISTED to whitelist of CANNON'
   RemovedWhitelist: 'GREEN [Cannons] Removed LASTWHITELISTED from whitelist of CANNON'
   ToggledTargetMob: 'GOLD [Cannons] Changed sentry Mob targeting to: TARGET_MOB'
