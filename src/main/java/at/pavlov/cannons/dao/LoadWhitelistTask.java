@@ -21,7 +21,7 @@ public class LoadWhitelistTask extends BukkitRunnable {
         //add whitelist
         try (Statement statement = Cannons.getPlugin().getConnection().createStatement()) {
             ResultSet rs = statement.executeQuery(
-                    String.format("SELECT * FROM '%s' WHERE cannon_bean_id='%s'", Cannons.getPlugin().getWhitelistDatabase(), cannonId)
+                    String.format("SELECT * FROM %s WHERE cannon_bean_id='%s'", Cannons.getPlugin().getWhitelistDatabase(), cannonId)
             );
 
             Cannon cannon = CannonManager.getCannon(cannonId);

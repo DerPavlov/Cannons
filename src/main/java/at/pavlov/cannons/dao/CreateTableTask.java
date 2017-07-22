@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class CreateTableTask extends BukkitRunnable {
     @Override
     public void run() {
-        String sql1 = String.format("CREATE TABLE IF NOT EXISTS '%s' (" +
+        String sql1 = String.format("CREATE TABLE IF NOT EXISTS %s (" +
                         "id VARCHAR(40) PRIMARY KEY, " +
                         "name VARCHAR(20) NOT NULL," +
                         "owner VARCHAR(40) NOT NULL," +
@@ -33,12 +33,12 @@ public class CreateTableTask extends BukkitRunnable {
                         "target_cannon BOOLEAN," +
                         "paid BOOLEAN)"
                 , Cannons.getPlugin().getCannonDatabase());
-        String sql2 = String.format("CREATE TABLE IF NOT EXISTS '%s' (" +
+        String sql2 = String.format("CREATE TABLE IF NOT EXISTS %s (" +
                         "id INTEGER PRIMARY KEY, " +
                         "cannon_bean_id VARCHAR(40) NOT NULL, " +
                         "player VARCHAR(40) NOT NULL, " +
                         "CONSTRAINT UC_Whitelist UNIQUE (cannon_bean_id, player), " +
-                        "FOREIGN KEY (cannon_bean_id) REFERENCES '%s'(id) " +
+                        "FOREIGN KEY (cannon_bean_id) REFERENCES %s(id) " +
                         "ON DELETE CASCADE " +
                         "ON UPDATE CASCADE)"
                 , Cannons.getPlugin().getWhitelistDatabase(), Cannons.getPlugin().getCannonDatabase());

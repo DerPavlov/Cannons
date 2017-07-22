@@ -26,7 +26,7 @@ public class SaveCannonTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        String insert = String.format("REPLACE INTO '%s' " +
+        String insert = String.format("REPLACE INTO %s " +
                 "(id, name, owner, world, cannon_direction, loc_x, loc_y, loc_Z, soot, gunpowder, projectile_id, projectile_pushed, cannon_temperature, cannon_temperature_timestamp, horizontal_angle, vertical_angle, design_id, fired_cannonballs, target_mob, target_player, target_cannon, paid) VALUES" +
                 "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                 , Cannons.getPlugin().getCannonDatabase());
@@ -37,7 +37,7 @@ public class SaveCannonTask extends BukkitRunnable {
                     continue;
                 }
 
-                //don't save cannons which are not valid anymore
+                //dont save cannons which are not valid anymore
                 if (!cannon.isValid())
                     continue;
 
@@ -109,7 +109,7 @@ public class SaveCannonTask extends BukkitRunnable {
 
 
         //Whitelist
-        insert = String.format("REPLACE INTO '%s' " +
+        insert = String.format("REPLACE INTO %s " +
                         "(cannon_bean_id, player) VALUES" +
                         "(?,?)"
                 , Cannons.getPlugin().getWhitelistDatabase());
