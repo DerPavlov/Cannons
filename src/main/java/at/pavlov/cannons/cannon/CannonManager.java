@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.dao.LoadWhitelistTask;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
@@ -335,6 +336,8 @@ public class CannonManager
         plugin.logDebug("added cannon " + cannon.getCannonName());
 		
 		cannon.updateCannonSigns();
+        LoadWhitelistTask loadWhitelistTask = new LoadWhitelistTask(cannon.getUID());
+        loadWhitelistTask.runTaskAsynchronously(plugin);
 	}
 
     /**

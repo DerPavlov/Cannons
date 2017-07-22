@@ -139,40 +139,6 @@ public class LoadCannonTask extends BukkitRunnable{
             e.printStackTrace();
         }
 
-        invalid.clear();
-        //add whitelist
-        try (Statement statement = Cannons.getPlugin().getConnection().createStatement()) {
-            ResultSet rs = statement.executeQuery(
-                    String.format("SELECT * FROM '%s'", Cannons.getPlugin().getWhitelistDatabase())
-            );
-
-            while (rs.next()) {
-                UUID cannon_id = UUID.fromString(rs.getString("cannon_bean_id"));
-                Cannon cannon = CannonManager.getCannon(cannon_id);
-                if (cannon == null){
-                    invalid.add(cannon_id);
-                    continue;
-                }
-                Cannons.getPlugin().logDebug("Whitelisted player: " + rs.getString("player"));
-                if (rs.getString("player") !=null)
-                    cannon.addWhitelistPlayer(UUID.fromString(rs.getString("player")));
-            }
-            rs.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //delete invalid whitelist entries
-        try (Statement statement = Cannons.getPlugin().getConnection().createStatement()) {
-            for (UUID inv : invalid) {
-                statement.addBatch(String.format("DELETE FROM '%s' WHERE id='%s'", Cannons.getPlugin().getWhitelistDatabase(), inv.toString()));
-                Cannons.getPlugin().logDebug("Delete whitelist entry for cannon " + inv);
-            }
-            statement.executeBatch();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         Cannons.getPlugin().logDebug(i + " cannons loaded from the database");
 
     }

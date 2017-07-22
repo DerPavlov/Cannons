@@ -9,6 +9,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class SaveCannonTask extends BukkitRunnable {
@@ -32,7 +34,6 @@ public class SaveCannonTask extends BukkitRunnable {
             for (Cannon cannon : CannonManager.getCannonList().values()) {
                 // in case we want to save just one cannon
                 if (this.cannonId != null && cannon.getUID() != this.cannonId) {
-                    Cannons.getPlugin().logDebug("Skip entry for save in database");
                     continue;
                 }
 
@@ -106,22 +107,23 @@ public class SaveCannonTask extends BukkitRunnable {
             e.printStackTrace();
         }
 
-        //todo whitelist
 
-//        insert = String.format("REPLACE INTO '%s' " +
-//                        "(cannon_bean_id, playerid) VALUES" +
-//                        "(?,?)"
-//                , Cannons.getPlugin().getWhitelistDatabase());
-//        try (PreparedStatement preparedStatement = Cannons.getPlugin().getConnection().prepareStatement(insert)) {
-//            for (Cannon cannon : CannonManager.getCannonList().values()) {
-//                for (UUID player : cannon.getWhitelist()){
-//                    preparedStatement.setString(1,cannon.getUID().toString());
-//                    preparedStatement.setString(2,player.toString());
-//                }
-//            }
-//            preparedStatement.executeBatch();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        //Whitelist
+        insert = String.format("REPLACE INTO '%s' " +
+                        "(cannon_bean_id, player) VALUES" +
+                        "(?,?)"
+                , Cannons.getPlugin().getWhitelistDatabase());
+        try (PreparedStatement preparedStatement = Cannons.getPlugin().getConnection().prepareStatement(insert)) {
+            for (Cannon cannon : CannonManager.getCannonList().values()) {
+                for (UUID player : cannon.getWhitelist()){
+                    preparedStatement.setString(1,cannon.getUID().toString());
+                    preparedStatement.setString(2,player.toString());
+                    preparedStatement.addBatch();
+                }
+            }
+            preparedStatement.executeBatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

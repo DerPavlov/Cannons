@@ -2,6 +2,7 @@ package at.pavlov.cannons.cannon;
 
 import java.util.*;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
@@ -2484,6 +2485,13 @@ public class Cannon
 
     public void setPaid(boolean paid) {
         this.paid = paid;
+    }
+
+    public void boughtByPlayer(UUID playerID){
+        setPaid(true);
+        setOwner(playerID);
+        whitelist.clear();
+        whitelist.add(playerID);
     }
 
     public EntityType getProjectileEntityType(){

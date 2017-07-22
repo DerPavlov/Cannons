@@ -756,7 +756,7 @@ public class Commands implements CommandExecutor
                                 CannonsUtil.playErrorSound(cannon.getMuzzle());
                             }
                             else {
-                                cannon.setPaid(true);
+                                cannon.boughtByPlayer(player.getUniqueId());
                                 //CannonsUtil.playSound();
                                 userMessages.sendMessage(MessageEnum.CmdPaidCannon, player, cannon);
                                 CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());

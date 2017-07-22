@@ -21,7 +21,7 @@ public class DeleteCannonTask extends BukkitRunnable{
         this.playerId = null;
     }
 
-    public DeleteCannonTask(UUID playerId, boolean delete){
+    public DeleteCannonTask(UUID playerId, boolean player){
         this.cannonId = null;
         this.playerId = playerId;
     }

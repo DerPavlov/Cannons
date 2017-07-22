@@ -6,8 +6,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -27,7 +25,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -35,8 +32,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.avaje.ebean.EbeanServer;
 
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
@@ -70,8 +65,8 @@ public final class Cannons extends JavaPlugin
 	private final PersistenceDatabase persistenceDatabase;
 	private Connection connection = null;
 
-	private final String CannonDatabase = "cannonlist_2_4_3";
-	private final String WhitelistDatabase = "whitelist_2_4_3";
+	private final String cannonDatabase = "cannonlist_2_4_3";
+	private final String whitelistDatabase = "whitelist_2_4_6";
 
 
 	public Cannons()
@@ -244,7 +239,6 @@ public final class Cannons extends JavaPlugin
 		//String serializable = getConfig().getString("database.isolation", "SERIALIZABLE");
 
 		url = url.replace("{DIR}{NAME}.db", "plugins/Cannons/Cannons.db");
-		logDebug("url: " + url);
 
 		if (connection != null && !connection.isClosed()) {
 			return;
@@ -444,10 +438,10 @@ public final class Cannons extends JavaPlugin
     }
 
 	public String getCannonDatabase() {
-		return CannonDatabase;
+		return cannonDatabase;
 	}
 
 	public String getWhitelistDatabase() {
-		return WhitelistDatabase;
+		return whitelistDatabase;
 	}
 }

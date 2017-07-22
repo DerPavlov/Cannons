@@ -93,7 +93,7 @@ public class PersistenceDatabase
 			plugin.logSevere("No connection to database");
 			return;
 		}
-		DeleteCannonTask deleteCannonTask = new DeleteCannonTask(player_id);
+		DeleteCannonTask deleteCannonTask = new DeleteCannonTask(player_id, true);
 		deleteCannonTask.runTaskAsynchronously(plugin);
 	}
 
