@@ -504,7 +504,7 @@ public class Aiming {
             }
 
 			// ignore cannons which are not in sentry mode
-			if (!cannon.isSentryAutomatic())
+			if (!cannon.isSentryAutomatic() || !cannon.isPaid())
 				return;
 
 			// load from chest if the cannon is in automatic mode
