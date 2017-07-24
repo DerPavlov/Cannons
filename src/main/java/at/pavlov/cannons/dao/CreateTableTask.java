@@ -34,7 +34,6 @@ public class CreateTableTask extends BukkitRunnable {
                         "paid BOOLEAN)"
                 , Cannons.getPlugin().getCannonDatabase());
         String sql2 = String.format("CREATE TABLE IF NOT EXISTS %s (" +
-                        "id INTEGER PRIMARY KEY, " +
                         "cannon_bean_id VARCHAR(40) NOT NULL, " +
                         "player VARCHAR(40) NOT NULL, " +
                         "CONSTRAINT UC_Whitelist UNIQUE (cannon_bean_id, player), " +

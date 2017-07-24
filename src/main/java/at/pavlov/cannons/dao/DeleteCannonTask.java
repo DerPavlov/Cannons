@@ -34,10 +34,10 @@ public class DeleteCannonTask extends BukkitRunnable{
                 statement.executeUpdate(String.format("DELETE FROM %s", Cannons.getPlugin().getCannonDatabase()));
             }
             else if (cannonId != null) {
-                statement.executeUpdate(String.format("DELETE FROM %s WHERE id=%s", Cannons.getPlugin().getCannonDatabase(), cannonId));
+                statement.executeUpdate(String.format("DELETE FROM %s WHERE id='%s'", Cannons.getPlugin().getCannonDatabase(), cannonId));
             }
             else{
-                statement.executeUpdate(String.format("DELETE FROM %s WHERE owner=%s", Cannons.getPlugin().getCannonDatabase(), playerId));
+                statement.executeUpdate(String.format("DELETE FROM %s WHERE owner='%s'", Cannons.getPlugin().getCannonDatabase(), playerId));
             }
         } catch (Exception e) {
             e.printStackTrace();

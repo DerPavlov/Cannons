@@ -131,7 +131,7 @@ public class LoadCannonTask extends BukkitRunnable{
         try (Statement statement = Cannons.getPlugin().getConnection().createStatement()) {
 
             for (UUID inv : invalid) {
-                statement.addBatch(String.format("DELETE FROM %s WHERE id=%s", Cannons.getPlugin().getCannonDatabase(), inv.toString()));
+                statement.addBatch(String.format("DELETE FROM %s WHERE id='%s'", Cannons.getPlugin().getCannonDatabase(), inv.toString()));
                 Cannons.getPlugin().logDebug("Delete cannon " + inv);
             }
             statement.executeBatch();
