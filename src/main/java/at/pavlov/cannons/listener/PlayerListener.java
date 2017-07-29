@@ -339,10 +339,6 @@ public class PlayerListener implements Listener
 	@EventHandler
     public void PlayerInteract(PlayerInteractEvent event)
     {
-        // skip event if not main hand
-        if (event.getHand() != EquipmentSlot.HAND)
-            return;
-
         Action action = event.getAction();
 
         Block clickedBlock;
@@ -363,6 +359,15 @@ public class PlayerListener implements Listener
         final Player player = event.getPlayer();
         final Location barrel = clickedBlock.getLocation();
 
+        //if try if the player has really nothing in his hands, or minecraft is blocking it
+        final ItemStack eventitem;
+        if (event.getItem() == null) {
+            eventitem = player.getInventory().getItemInMainHand();
+        }
+        else{
+            eventitem = event.getItem();
+        }
+
         // find cannon or add it to the list
         final Cannon cannon = cannonManager.getCannon(barrel, player.getUniqueId(), false);
 
@@ -374,26 +379,13 @@ public class PlayerListener implements Listener
             return;
         }
 
-    	if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL)
+    	if((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL) && event.getHand() == EquipmentSlot.OFF_HAND)
         {
-            //no cannon found - maybe the player has click into the air to stop aiming
-            if(cannon == null)
-            {
-                // all other actions will stop aiming mode
-                if(action == Action.RIGHT_CLICK_AIR)
-                {
-                    if (config.getToolAutoaim().equalsFuzzy(event.getItem()))
-                        aiming.aimingMode(player, null, false);
-                    plugin.getCommandListener().removeCannonSelector(player);
-                }
-                return;
-            }
-
             // get cannon design
             final CannonDesign design = cannon.getCannonDesign();
 
             // prevent eggs and snowball from firing when loaded into the gun
-            if(config.isCancelItem(event.getItem()))
+            if(config.isCancelItem(eventitem))
                 event.setCancelled(true);
 
             // ############ touching a hot cannon will burn you ####################
@@ -416,7 +408,7 @@ public class PlayerListener implements Listener
 
 
             // ############ cooling a hot cannon ####################
-            if(design.isCoolingTool(event.getItem()))
+            if(design.isCoolingTool(eventitem))
             {
                 event.setCancelled(true);
                 if (cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation())) {
@@ -427,7 +419,7 @@ public class PlayerListener implements Listener
 
 
             // ############ temperature measurement ################################
-            if(config.getToolThermometer().equalsFuzzy(event.getItem()))
+            if(config.getToolThermometer().equalsFuzzy(eventitem))
             {
                 if (player.hasPermission(design.getPermissionThermometer()))
                 {
@@ -445,7 +437,7 @@ public class PlayerListener implements Listener
 
 
             // ############ set angle ################################
-            if((config.getToolAdjust().equalsFuzzy(event.getItem()) || config.getToolAutoaim().equalsFuzzy(event.getItem())) && cannon.isLoadingBlock(clickedBlock.getLocation()))
+            if((config.getToolAdjust().equalsFuzzy(eventitem) || config.getToolAutoaim().equalsFuzzy(eventitem)) && cannon.isLoadingBlock(clickedBlock.getLocation()))
             {
                 plugin.logDebug("change cannon angle");
                 event.setCancelled(true);
@@ -468,7 +460,7 @@ public class PlayerListener implements Listener
             }
 
             // ########## Load Projectile ######################
-            Projectile projectile = plugin.getProjectile(cannon, event.getItem());
+            Projectile projectile = plugin.getProjectile(cannon, eventitem);
             if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null) {
                 plugin.logDebug("load projectile");
                 event.setCancelled(true);
@@ -495,7 +487,7 @@ public class PlayerListener implements Listener
 
 
             // ########## Barrel clicked with gunpowder
-            if(cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(event.getItem()))
+            if(cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(eventitem))
             {
                 plugin.logDebug("load gunpowder");
                 event.setCancelled(true);
@@ -560,7 +552,7 @@ public class PlayerListener implements Listener
 
 
             // ########## Ramrod ###############################
-            if(config.getToolRamrod().equalsFuzzy(event.getItem()) && cannon.isLoadingBlock(clickedBlock.getLocation()))
+            if(config.getToolRamrod().equalsFuzzy(eventitem) && cannon.isLoadingBlock(clickedBlock.getLocation()))
             {
                 plugin.logDebug("Ramrod used");
                 event.setCancelled(true);
@@ -583,10 +575,20 @@ public class PlayerListener implements Listener
                     return;
             }
         }
-
+        //no cannon found - maybe the player has click into the air to stop aiming
+        else if(action == Action.RIGHT_CLICK_AIR && event.getHand() == EquipmentSlot.HAND){
+            if(cannon == null) {
+                // stop aiming mode when right clicking in the air
+                if (config.getToolAutoaim().equalsFuzzy(eventitem))
+                    aiming.aimingMode(player, null, false);
+                plugin.getCommandListener().removeCannonSelector(player);
+            }
+        }
         //fire cannon
-        else if(event.getAction().equals(Action.LEFT_CLICK_AIR)) //|| event.getAction().equals(Action.LEFT_CLICK_BLOCK))
+        else if(event.getAction().equals(Action.LEFT_CLICK_AIR) && event.getHand() == EquipmentSlot.HAND) //|| event.getAction().equals(Action.LEFT_CLICK_BLOCK))
         {
+
+
             //check if the player is passenger of a projectile, if so he can teleport back by left clicking
             CannonsUtil.teleportBack(plugin.getProjectileManager().getAttachedProjectile(event.getPlayer()));
 
