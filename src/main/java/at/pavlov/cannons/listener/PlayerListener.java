@@ -372,14 +372,14 @@ public class PlayerListener implements Listener
         final Cannon cannon = cannonManager.getCannon(barrel, player.getUniqueId(), false);
 
         // ############ select a cannon ####################
-        if(plugin.getCommandListener().isSelectingMode(player))
+        if(plugin.getCommandListener().isSelectingMode(player) && cannon != null)
         {
             plugin.getCommandListener().setSelectedCannon(player, cannon);
             event.setCancelled(true);
             return;
         }
 
-    	if((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL) && event.getHand() == EquipmentSlot.OFF_HAND)
+    	if((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL) && event.getHand() == EquipmentSlot.OFF_HAND && cannon != null)
         {
             // get cannon design
             final CannonDesign design = cannon.getCannonDesign();
@@ -576,22 +576,17 @@ public class PlayerListener implements Listener
             }
         }
         //no cannon found - maybe the player has click into the air to stop aiming
-        else if(action == Action.RIGHT_CLICK_AIR && event.getHand() == EquipmentSlot.HAND){
-            if(cannon == null) {
+        else if(cannon == null && action == Action.RIGHT_CLICK_AIR && event.getHand() == EquipmentSlot.HAND){
                 // stop aiming mode when right clicking in the air
                 if (config.getToolAutoaim().equalsFuzzy(eventitem))
                     aiming.aimingMode(player, null, false);
                 plugin.getCommandListener().removeCannonSelector(player);
-            }
         }
         //fire cannon
         else if(event.getAction().equals(Action.LEFT_CLICK_AIR) && event.getHand() == EquipmentSlot.HAND) //|| event.getAction().equals(Action.LEFT_CLICK_BLOCK))
         {
-
-
             //check if the player is passenger of a projectile, if so he can teleport back by left clicking
             CannonsUtil.teleportBack(plugin.getProjectileManager().getAttachedProjectile(event.getPlayer()));
-
         	aiming.aimingMode(event.getPlayer(), null, true);
         }
     }
