@@ -339,7 +339,6 @@ public class PlayerListener implements Listener
 	@EventHandler
     public void PlayerInteract(PlayerInteractEvent event)
     {
-        plugin.logDebug("payer interact" + event.getItem() + event.getHand());
         Action action = event.getAction();
 
         Block clickedBlock;
