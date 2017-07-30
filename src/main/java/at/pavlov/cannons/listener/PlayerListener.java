@@ -339,6 +339,7 @@ public class PlayerListener implements Listener
 	@EventHandler
     public void PlayerInteract(PlayerInteractEvent event)
     {
+        plugin.logDebug("payer interact" + event.getItem() + event.getHand());
         Action action = event.getAction();
 
         Block clickedBlock;
@@ -379,7 +380,7 @@ public class PlayerListener implements Listener
             return;
         }
 
-    	if((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL) && event.getHand() == EquipmentSlot.OFF_HAND && cannon != null)
+    	if((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL) && event.getHand() == EquipmentSlot.HAND && cannon != null)
         {
             // get cannon design
             final CannonDesign design = cannon.getCannonDesign();
