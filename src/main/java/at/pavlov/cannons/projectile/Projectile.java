@@ -137,11 +137,20 @@ public class Projectile implements Cloneable{
 
 
 	/**
-	 * returns the ID and Data of the projectile
+	 * returns ID, Data, name and lore of the projectile loading item
+	 * @return ID, Data, name and lore of the projectile loading item
 	 */
 	public String toString()
 	{
 		return loadingItem.toString();
+	}
+
+	/**
+	 * returns ID and data of the loadingItem
+	 * @return ID and data of the loadingItem
+	 */
+	public String getMaterialInformation() {
+		return loadingItem.getType().getId() + ":" + loadingItem.getData();
 	}
 
 	/**

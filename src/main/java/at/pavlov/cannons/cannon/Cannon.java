@@ -2,7 +2,6 @@ package at.pavlov.cannons.cannon;
 
 import java.util.*;
 
-import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.MaterialHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
@@ -1569,7 +1568,7 @@ public class Cannon
                 return bPlayer.getName();
             case 2 :
                 // loaded Gunpowder/Projectile
-                if (loadedProjectile != null) return "p: " + loadedGunpowder + " c: " + loadedProjectile.toString();
+                if (loadedProjectile != null) return "p: " + loadedGunpowder + " c: " + loadedProjectile.getMaterialInformation();
                 else return "p: " + loadedGunpowder + " c: " + "0:0";
             case 3 :
                 // angles
