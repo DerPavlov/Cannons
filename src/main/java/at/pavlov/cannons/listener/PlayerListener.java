@@ -345,7 +345,6 @@ public class PlayerListener implements Listener
         Block clickedBlock = null;
         if(event.getClickedBlock() == null)
         {
-            plugin.logDebug("no clicked block");
             // no clicked block - get block player is looking at
             Location location = event.getPlayer().getEyeLocation();
             BlockIterator blocksToAdd = new BlockIterator(location, 0, 5);
