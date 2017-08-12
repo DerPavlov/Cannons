@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.BlockIterator;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -341,11 +342,23 @@ public class PlayerListener implements Listener
     {
         Action action = event.getAction();
 
-        Block clickedBlock;
+        Block clickedBlock = null;
         if(event.getClickedBlock() == null)
         {
+            plugin.logDebug("no clicked block");
             // no clicked block - get block player is looking at
-            clickedBlock = event.getPlayer().getTargetBlock((HashSet<Byte>) null, 4);
+            Location location = event.getPlayer().getEyeLocation();
+            BlockIterator blocksToAdd = new BlockIterator(location, 0, 5);
+            Block block = null;
+            while(blocksToAdd.hasNext()) {
+                block = blocksToAdd.next();
+                if (block.getType() != Material.AIR){
+                    clickedBlock = block;
+                }
+            }
+            if (clickedBlock == null) {
+                clickedBlock = block;
+            }
         }
         else
         {
