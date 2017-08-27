@@ -698,10 +698,16 @@ public class Commands implements CommandExecutor
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
                     else {
-                        cannon.addWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
-                        whitelistPlayer.remove(player.getUniqueId());
-                        userMessages.sendMessage(MessageEnum.CmdAddedWhitelist, player, cannon);
-                        CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
+                        if (!player.getUniqueId().equals(cannon.getOwner())) {
+                            userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
+                            CannonsUtil.playErrorSound(cannon.getMuzzle());
+                        }
+                        else {
+                            cannon.addWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
+                            whitelistPlayer.remove(player.getUniqueId());
+                            userMessages.sendMessage(MessageEnum.CmdAddedWhitelist, player, cannon);
+                            CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
+                        }
                     }
                     break;
                 }
@@ -711,15 +717,21 @@ public class Commands implements CommandExecutor
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
                     else {
-                        cannon.removeWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
-                        whitelistPlayer.remove(player.getUniqueId());
-                        userMessages.sendMessage(MessageEnum.CmdRemovedWhitelist, player, cannon);
-                        CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
+                        if (!player.getUniqueId().equals(cannon.getOwner())) {
+                            userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
+                            CannonsUtil.playErrorSound(cannon.getMuzzle());
+                        }
+                        else {
+                            cannon.removeWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
+                            whitelistPlayer.remove(player.getUniqueId());
+                            userMessages.sendMessage(MessageEnum.CmdRemovedWhitelist, player, cannon);
+                            CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
+                        }
                     }
                     break;
                 }
                 case TARGET_MOB:{
-                    if (player.getUniqueId() != cannon.getOwner()) {
+                    if (!player.getUniqueId().equals(cannon.getOwner())) {
                         userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
@@ -731,7 +743,7 @@ public class Commands implements CommandExecutor
                     break;
                 }
                 case TARGET_PLAYER:{
-                    if (player.getUniqueId() != cannon.getOwner()) {
+                    if (!player.getUniqueId().equals(cannon.getOwner())) {
                         userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
@@ -743,7 +755,7 @@ public class Commands implements CommandExecutor
                     break;
                 }
                 case TARGET_CANNON:{
-                    if (player.getUniqueId() != cannon.getOwner()) {
+                    if (!player.getUniqueId().equals(cannon.getOwner())) {
                         userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
