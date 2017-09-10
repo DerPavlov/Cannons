@@ -34,12 +34,13 @@ public class CreateTableTask extends BukkitRunnable {
                         "paid BOOLEAN)"
                 , Cannons.getPlugin().getCannonDatabase());
         String sql2 = String.format("CREATE TABLE IF NOT EXISTS %s (" +
-                        "cannon_bean_id VARCHAR(40) NOT NULL, " +
-                        "player VARCHAR(40) NOT NULL, " +
-                        "CONSTRAINT UC_Whitelist UNIQUE (cannon_bean_id, player), " +
-                        "FOREIGN KEY (cannon_bean_id) REFERENCES %s(id) " +
-                        "ON DELETE CASCADE " +
-                        "ON UPDATE CASCADE)"
+                        "cannon_bean_id VARCHAR(40) NOT NULL," +
+                        "player VARCHAR(40) NOT NULL," +
+                        "CONSTRAINT UC_Whitelist UNIQUE (cannon_bean_id, player)," +
+                        "FOREIGN KEY (cannon_bean_id) REFERENCES %s (id) " +
+                        "ON UPDATE CASCADE " +
+                        "ON DELETE CASCADE" +
+                        ")"
                 , Cannons.getPlugin().getWhitelistDatabase(), Cannons.getPlugin().getCannonDatabase());
         try (Statement statement = Cannons.getPlugin().getConnection().createStatement()) {
             statement.execute(sql1);
