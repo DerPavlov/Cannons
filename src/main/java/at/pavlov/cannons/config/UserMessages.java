@@ -291,6 +291,10 @@ public class UserMessages {
 					message = message.replace("TARGET_CANNON", ChatColor.GREEN + "TRUE");
 				else
 					message = message.replace("TARGET_CANNON", ChatColor.RED + "FALSE");
+				if (cannon.isTargetOther())
+					message = message.replace("TARGET_OTHER", ChatColor.GREEN + "TRUE");
+				else
+					message = message.replace("TARGET_OTHER", ChatColor.RED + "FALSE");
 			}
 			//split message for sentry info
 			String[] messages = message.split("-SENTRY-INFORMATION-");

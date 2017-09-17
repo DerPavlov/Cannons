@@ -35,6 +35,7 @@ public enum MessageEnum
 	CmdToggledTargetMob ("Commands.ToggledTargetMob"),
 	CmdToggledTargetPlayer ("Commands.ToggledTargetPlayer"),
 	CmdToggledTargetCannon ("Commands.ToggledTargetCannon"),
+	CmdToggledTargetOther ("Commands.ToggledTargetOther"),
 	CmdBuyCannon ("Commands.BuyCannon"),
 	CmdPaidCannon ("Commands.PaidCannon"),
 

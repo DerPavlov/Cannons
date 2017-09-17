@@ -766,6 +766,18 @@ public class Commands implements CommandExecutor
                     }
                     break;
                 }
+                case TARGET_OTHER:{
+                    if (!player.getUniqueId().equals(cannon.getOwner())) {
+                        userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
+                        CannonsUtil.playErrorSound(cannon.getMuzzle());
+                    }
+                    else {
+                        cannon.toggleTargetOther();
+                        userMessages.sendMessage(MessageEnum.CmdToggledTargetOther, player, cannon);
+                        CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
+                    }
+                    break;
+                }
                 case BUY_CANNON:{
                     if (cannon.isPaid()){
                         userMessages.sendMessage(MessageEnum.ErrorAlreadyPaid, player, cannon);

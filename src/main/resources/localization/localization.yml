@@ -43,6 +43,7 @@ Commands:
   ToggledTargetMob: 'GOLD [Cannons] Changed sentry Mob targeting to: TARGET_MOB'
   ToggledTargetPlayer: 'GOLD [Cannons] Changed sentry Player targeting to: TARGET_PLAYER'
   ToggledTargetCannon: 'GOLD [Cannons] Changed sentry Cannon targeting to: TARGET_CANNON'
+  ToggledTargetOther: 'GOLD [Cannons] Changed sentry Other targeting to: TARGET_OTHER'
   BuyCannon: 'YELLOW [Cannons] Click the cannon buy it. This will withdraw money from your account'
   PaidCannon: 'GREEN [Cannons] Cannon fee paid. GOLD BUILD_COSTS GREEN has be withdrawn from your bank account.'
 

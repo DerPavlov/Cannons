@@ -32,6 +32,7 @@ Commands:
   ToggledTargetMob: 'GOLD [Cannons] Sentry erkennt Monster als Ziel: TARGET_MOB'
   ToggledTargetPlayer: 'GOLD [Cannons] Sentry erkennt Spieler als Ziel: TARGET_PLAYER'
   ToggledTargetCannon: 'GOLD [Cannons] Sentry erkennt Kanonen als Ziel: TARGET_CANNON'
+  ToggledTargetOther: 'GOLD [Cannons] Sentry erkennt andere Dinge als Ziel: TARGET_OTHER'
   BuyCannon: 'YELLOW [Cannons] Klicke die Kanone um sie zu kaufen.'
   PaidCannon: 'GREEN [Cannons] Kanonenabgabe bezahlt. GOLD BUILD_COSTS GREEN wurde von deinem Konto abgebucht.'
 

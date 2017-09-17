@@ -9,5 +9,6 @@ public enum SelectCannon {
     TARGET_MOB,
     TARGET_PLAYER,
     TARGET_CANNON,
+    TARGET_OTHER,
     BUY_CANNON
 }

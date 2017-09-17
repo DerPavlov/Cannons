@@ -27,8 +27,8 @@ public class SaveCannonTask extends BukkitRunnable {
     @Override
     public void run() {
         String insert = String.format("REPLACE INTO %s " +
-                "(id, name, owner, world, cannon_direction, loc_x, loc_y, loc_Z, soot, gunpowder, projectile_id, projectile_pushed, cannon_temperature, cannon_temperature_timestamp, horizontal_angle, vertical_angle, design_id, fired_cannonballs, target_mob, target_player, target_cannon, paid) VALUES" +
-                "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                "(id, name, owner, world, cannon_direction, loc_x, loc_y, loc_Z, soot, gunpowder, projectile_id, projectile_pushed, cannon_temperature, cannon_temperature_timestamp, horizontal_angle, vertical_angle, design_id, fired_cannonballs, target_mob, target_player, target_cannon, target_other, paid) VALUES" +
+                "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                 , Cannons.getPlugin().getCannonDatabase());
         try (PreparedStatement preparedStatement = Cannons.getPlugin().getConnection().prepareStatement(insert)) {
             for (Cannon cannon : CannonManager.getCannonList().values()) {
@@ -95,9 +95,10 @@ public class SaveCannonTask extends BukkitRunnable {
                 preparedStatement.setBoolean(19, cannon.isTargetMob());
                 preparedStatement.setBoolean(20,cannon.isTargetPlayer());
                 preparedStatement.setBoolean(21,cannon.isTargetCannon());
+                preparedStatement.setBoolean(22,cannon.isTargetOther());
 
                 //save paid fee
-                preparedStatement.setBoolean(22,cannon.isPaid());
+                preparedStatement.setBoolean(23,cannon.isPaid());
 
                 preparedStatement.addBatch();
 

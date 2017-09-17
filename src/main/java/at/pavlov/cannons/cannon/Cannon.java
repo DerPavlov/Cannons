@@ -98,6 +98,7 @@ public class Cannon
     private boolean targetMob;
     private boolean targetPlayer;
     private boolean targetCannon;
+    private boolean targetOther;
 
     //observer will see the impact of the target predictor
     //<Player name, remove after showing impact>
@@ -2476,6 +2477,18 @@ public class Cannon
 
     public void toggleTargetCannon(){
         this.targetCannon = !this.targetCannon;
+    }
+
+    public boolean isTargetOther() {
+        return targetOther;
+    }
+
+    public void setTargetOther(boolean targetOther) {
+        this.targetOther = targetOther;
+    }
+
+    public void toggleTargetOther(){
+        this.targetOther = !this.targetOther;
     }
 
     public boolean isPaid() {

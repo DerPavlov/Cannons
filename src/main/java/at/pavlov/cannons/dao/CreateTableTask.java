@@ -31,6 +31,7 @@ public class CreateTableTask extends BukkitRunnable {
                         "target_mob BOOLEAN," +
                         "target_player BOOLEAN," +
                         "target_cannon BOOLEAN," +
+                        "target_other BOOLEAN," +
                         "paid BOOLEAN)"
                 , Cannons.getPlugin().getCannonDatabase());
         String sql2 = String.format("CREATE TABLE IF NOT EXISTS %s (" +

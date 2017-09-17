@@ -65,8 +65,8 @@ public final class Cannons extends JavaPlugin
 	private final PersistenceDatabase persistenceDatabase;
 	private Connection connection = null;
 
-	private final String cannonDatabase = "cannonlist_2_4_3";
-	private final String whitelistDatabase = "whitelist_2_4_7";
+	private final String cannonDatabase = "cannonlist_2_4_6";
+	private final String whitelistDatabase = "whitelist_2_4_6";
 
 
 	public Cannons()

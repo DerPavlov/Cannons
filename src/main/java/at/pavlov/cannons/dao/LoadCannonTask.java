@@ -110,6 +110,7 @@ public class LoadCannonTask extends BukkitRunnable{
                     cannon.setTargetMob(rs.getBoolean("target_mob"));
                     cannon.setTargetPlayer(rs.getBoolean("target_player"));
                     cannon.setTargetCannon(rs.getBoolean("target_cannon"));
+                    cannon.setTargetOther(rs.getBoolean("target_other"));
 
                     // cannon fee
                     cannon.setPaid(rs.getBoolean("paid"));
