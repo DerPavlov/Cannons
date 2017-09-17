@@ -53,8 +53,8 @@ public class Target {
         this.targetType = TargetType.CANNON;
         this.type = null;
         this.uid = cannon.getUID();
-        this.groundLocation = cannon.getLocation().clone().add(0.5, 0.5, 0.5);
-        this.centerLocation = cannon.getLocation().clone().add(0.5, 0.0, 0.5);
+        this.groundLocation = cannon.getRandomBarrelBlock().clone().add(0.5, 0.0, 0.5);
+        this.centerLocation = cannon.getRandomBarrelBlock().clone().add(0.5, 0.5, 0.5);
         this.velocity = cannon.getVelocity();
     }
 

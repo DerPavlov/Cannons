@@ -76,6 +76,7 @@ Cannon:
     NEWLINE YELLOW Target Mob: TARGET_MOB
     NEWLINE YELLOW Target Player: TARGET_PLAYER
     NEWLINE YELLOW Target Cannon: TARGET_CANNON
+    NEWLINE YELLOW Target Other: TARGET_OTHER
     NEWLINE YELLOW Whitelist: WHITELIST'
   RenameSuccess: 'GREEN [Cannons] You have rename the cannon to GOLD CANNON_NAME.'
   RenameFail: 'RED [Cannons] New cannon name is not unique.'

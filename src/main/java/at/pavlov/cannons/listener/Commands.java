@@ -427,8 +427,11 @@ public class Commands implements CommandExecutor
                         else if (args.length >= 2 && (args[1].equalsIgnoreCase("cannon"))) {
                             toggleCannonSelector(player, SelectCannon.TARGET_CANNON);
                         }
+                        else if (args.length >= 2 && (args[1].equalsIgnoreCase("other"))) {
+                            toggleCannonSelector(player, SelectCannon.TARGET_OTHER);
+                        }
                         else
-                            sendMessage(sender, ChatColor.RED + "Usage '/cannons target <mob|player|cannon>'");
+                            sendMessage(sender, ChatColor.RED + "Usage '/cannons target <mob|player|cannon|other>'");
                     }
                     //get name of cannon
                     else if(args[0].equalsIgnoreCase("info"))

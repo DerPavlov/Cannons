@@ -530,7 +530,7 @@ public class Aiming {
                     else{
                         //is the previous target still valid
                         Target target = targets.get(cannon.getSentryEntity());
-                        if (!canFindTargetSolution(cannon, target.getCenterLocation(), target.getVelocity())) {
+                        if (!canFindTargetSolution(cannon, target, target.getCenterLocation(), target.getVelocity())) {
                             cannon.setSentryEntity(null);
                         }
                     }
@@ -540,11 +540,13 @@ public class Aiming {
                 if (!cannon.hasSentryEntity()){
                     ArrayList<Target> possibleTargets = new ArrayList<Target>();
                     for (Target t : targets.values()) {
+                    	//Monster
                         if (t.getTargetType() == TargetType.MONSTER && cannon.isTargetMob()) {
-                            if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
+                            if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())){
                                 possibleTargets.add(t);
 							}
                         }
+                        //Player
 						else if (t.getTargetType() == TargetType.PLAYER && cannon.isTargetPlayer() && !cannon.isWhitelisted(t.getUniqueId())) {
 							// ignore if target and player are in the same team
 							Player p = Bukkit.getPlayer(t.getUniqueId());
@@ -555,15 +557,42 @@ public class Aiming {
 									continue;
 							}
 							// get solution
-							if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
+							if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())){
 								possibleTargets.add(t);
 							}
 						}
+						//Cannons
 						else if (t.getTargetType() == TargetType.CANNON && cannon.isTargetCannon()) {
 							Cannon tCannon = CannonManager.getCannon(t.getUniqueId());
 							//check if the owner is whitelisted
 							if (tCannon != null && !cannon.isWhitelisted(tCannon.getOwner())){
-								if (canFindTargetSolution(cannon, t.getCenterLocation(), t.getVelocity())){
+								Player p = Bukkit.getPlayer(t.getUniqueId());
+								// check team board
+								if (p != null && Bukkit.getScoreboardManager().getMainScoreboard() != null) {
+									Team team = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p);
+									//Team team = Bukkit.getScoreboardManager().getMainScoreboard().getEntryTeam(p.getName());
+									if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
+										continue;
+								}
+								if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())){
+									possibleTargets.add(t);
+								}
+							}
+						}
+						//Other
+						else if (t.getTargetType() == TargetType.OTHER && cannon.isTargetOther()) {
+							Cannon tCannon = CannonManager.getCannon(t.getUniqueId());
+							//check if the owner is whitelisted
+							if (tCannon != null && !cannon.isWhitelisted(tCannon.getOwner())){
+								Player p = Bukkit.getPlayer(t.getUniqueId());
+								// check team board
+								if (p != null && Bukkit.getScoreboardManager().getMainScoreboard() != null) {
+									Team team = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p);
+									//Team team = Bukkit.getScoreboardManager().getMainScoreboard().getEntryTeam(p.getName());
+									if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
+										continue;
+								}
+								if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())){
 									possibleTargets.add(t);
 								}
 							}
@@ -641,16 +670,16 @@ public class Aiming {
     /**
      * find a possible solution to fire the cannon - this is just an estimation
      * @param cannon the cannon which is operated
-     * @param target lcoation of the target
+     * @param loctarget lcoation of the target
 	 * @param targetVelocity how fast the target is moving
      * @return true if the cannon can fire on this target
      */
-    private boolean canFindTargetSolution(Cannon cannon, Location target, Vector targetVelocity){
-        if (!cannon.getWorld().equals(target.getWorld().getUID()))
+    private boolean canFindTargetSolution(Cannon cannon, Target target, Location loctarget, Vector targetVelocity){
+        if (!cannon.getWorld().equals(loctarget.getWorld().getUID()))
             return false;
 
         //plugin.logDebug("old target " + target);
-        Location newTarget = target.clone();
+        Location newTarget = loctarget.clone();
 //        double distance = target.distance(cannon.getMuzzle());
 //        double velocity = cannon.getCannonballVelocity();
 //        if (velocity > 0) {
@@ -666,7 +695,10 @@ public class Aiming {
 //            newTarget.add(targetVelocity.multiply(time));
 //        }
         //plugin.logDebug("new target " + newTarget);
-        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), target, 0)) {
+		int ignoredBlocks = 0;
+		if (target.getTargetType() == TargetType.CANNON)
+			ignoredBlocks = 1;
+        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), loctarget, ignoredBlocks)) {
             return false;
         }
 
@@ -695,7 +727,7 @@ public class Aiming {
         if (cannon.getLoadedProjectile() != null && (cannon.getLoadedProjectile().getExplosionPower() > 2. || (cannon.getLoadedProjectile().getPlayerDamage() > 1. && cannon.getLoadedProjectile().getPlayerDamageRange() > 2.)))
             targetLoc = target.getGroundLocation();
 
-        if (!canFindTargetSolution(cannon, target.getCenterLocation(), targetVelocity))
+        if (!canFindTargetSolution(cannon, target, target.getCenterLocation(), targetVelocity))
             return false;
 
         if (cannon.getCannonballVelocity() < 0.01)

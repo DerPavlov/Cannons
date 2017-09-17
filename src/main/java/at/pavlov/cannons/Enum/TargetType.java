@@ -10,5 +10,5 @@ public enum TargetType {
     CANNON,
     AIRSHIP,
     BOAT,
-    UBOOT
+    SUBMARINE
 }

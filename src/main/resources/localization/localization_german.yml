@@ -76,6 +76,7 @@ Cannon:
     NEWLINE YELLOW Zielerfassung Monster: TARGET_MOB
     NEWLINE YELLOW Zielerfassung Spieler: TARGET_PLAYER
     NEWLINE YELLOW Zielerfassung Kanonen: TARGET_CANNON
+    NEWLINE YELLOW Zielerfassung Anderes: TARGET_OTHER
     NEWLINE YELLOW Whitelist: WHITELIST '
   RenameSuccess: 'GREEN [Cannons] Die Kanone wurde umbenannt in GOLD CANNON_NAME.'
   RenameFail: 'RED [Cannons] Der Name für die Kanone ist nicht einzigartig.'
