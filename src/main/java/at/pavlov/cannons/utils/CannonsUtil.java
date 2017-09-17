@@ -862,7 +862,7 @@ public class CannonsUtil
                         if (e instanceof LivingEntity && !e.isDead() && minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock()) {
                             if ((e instanceof Player)){
                                 Player p = (Player) e;
-                                if (p.getGameMode() == GameMode.CREATIVE)
+                                if (p.getGameMode() == GameMode.CREATIVE || p.hasPermission("cannons.admin.notarget"))
                                     continue;
                             }
                             radiusTargets.put(e.getUniqueId(), new Target(e));
@@ -875,6 +875,7 @@ public class CannonsUtil
             if (cannon.getRandomBarrelBlock().distance(l) > minRadius)
                 radiusTargets.put(cannon.getUID(), new Target(cannon));
 
+        // additional targets from different plugins e.g. ships
         for (Target target : TargetManager.getTargetsInSphere(l, maxRadius))
             if (target.getCenterLocation().distance(l) > minRadius)
                 radiusTargets.put(target.getUniqueId(), target);

@@ -142,6 +142,7 @@ permissions:
       cannons.admin.dismantle: true
       cannons.admin.permissions: true
       cannons.admin.give: true
+      cannons.admin.notarget: false
     default: op
 
   cannons.admin.reload:
@@ -165,4 +166,7 @@ permissions:
   cannons.admin.give:
       description: Allows an admin give projectiles
       default: op
+  cannons.admin.notarget:
+      description: Prevents the player from being target by sentry cannons
+      default: false
 
