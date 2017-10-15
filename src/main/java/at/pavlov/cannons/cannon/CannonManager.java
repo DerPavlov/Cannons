@@ -335,8 +335,10 @@ public class CannonManager
 
         if (saveToDatabase)
             plugin.getPersistenceDatabase().saveCannon(cannon);
-        else
+        else {
             cannon.setUpdated(false);
+            cannon.setWhitelistUpdated(false);
+        }
         plugin.logDebug("added cannon " + cannon.getCannonName());
 		
 		cannon.updateCannonSigns();

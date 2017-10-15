@@ -128,6 +128,7 @@ public class Cannon
 
     // has the cannon entry changed since it was last saved in the database
     private boolean updated;
+    private boolean whitelistUpdated;
 
     private CannonDesign design;
 
@@ -188,6 +189,7 @@ public class Cannon
 
         this.databaseId = UUID.randomUUID();
         this.updated = true;
+        this.whitelistUpdated = true;
     }
 
 
@@ -2455,13 +2457,13 @@ public class Cannon
     public void addWhitelistPlayer(UUID playerUID){
         setLastWhitelisted(playerUID);
         whitelist.add(playerUID);
-        this.hasUpdated();
+        this.hasWhitelistUpdated();
     }
 
     public void removeWhitelistPlayer(UUID playerUID){
         setLastWhitelisted(playerUID);
         whitelist.remove(playerUID);
-        this.hasUpdated();
+        this.hasWhitelistUpdated();
     }
 
     public boolean isWhitelisted(UUID playerUID){
@@ -2572,5 +2574,17 @@ public class Cannon
 
     public void setUpdated(boolean updated){
         this.updated = updated;
+    }
+
+    public boolean isWhitelistUpdated() {
+        return whitelistUpdated;
+    }
+
+    public void hasWhitelistUpdated() {
+        this.whitelistUpdated = true;
+    }
+
+    public void setWhitelistUpdated(boolean whitelistUpdated) {
+        this.whitelistUpdated = whitelistUpdated;
     }
 }

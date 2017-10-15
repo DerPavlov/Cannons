@@ -121,10 +121,13 @@ public class SaveCannonTask extends BukkitRunnable {
                 , Cannons.getPlugin().getWhitelistDatabase());
         try (PreparedStatement preparedStatement = Cannons.getPlugin().getConnection().prepareStatement(insert)) {
             for (Cannon cannon : CannonManager.getCannonList().values()) {
-                for (UUID player : cannon.getWhitelist()){
-                    preparedStatement.setString(1,cannon.getUID().toString());
-                    preparedStatement.setString(2,player.toString());
-                    preparedStatement.addBatch();
+                if (cannon.isWhitelistUpdated()) {
+                    cannon.setWhitelistUpdated(false);
+                    for (UUID player : cannon.getWhitelist()) {
+                        preparedStatement.setString(1, cannon.getUID().toString());
+                        preparedStatement.setString(2, player.toString());
+                        preparedStatement.addBatch();
+                    }
                 }
             }
             preparedStatement.executeBatch();
