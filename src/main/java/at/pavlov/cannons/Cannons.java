@@ -103,6 +103,15 @@ public final class Cannons extends JavaPlugin
 
 		logger.info(getLogPrefix() + "Cannons plugin shutting down 2.");
 		// save database on shutdown
+		logger.info(getLogPrefix() + "Wait until scheduler is finished");
+		while(getPlugin().getPersistenceDatabase().isSaveTaskRunning()){
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		logger.info(getLogPrefix() + "Scheduler finished");
 		persistenceDatabase.saveAllCannons(false);
 		logger.info(getLogPrefix() + "Cannons plugin shutting down 3.");
 		if (connection != null) {
@@ -408,9 +417,9 @@ public final class Cannons extends JavaPlugin
         this.config.getUserMessages().sendImpactMessage(player, impact, canceled);
     }
 	
-	public void createCannon(Cannon cannon)
+	public void createCannon(Cannon cannon, boolean saveToDatabase)
 	{
-		this.getCannonManager().createCannon(cannon);
+		this.getCannonManager().createCannon(cannon, saveToDatabase);
 	}
 
     public ProjectileObserver getProjectileObserver() {

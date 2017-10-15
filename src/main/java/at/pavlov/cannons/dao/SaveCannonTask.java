@@ -7,10 +7,6 @@ import at.pavlov.cannons.projectile.Projectile;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class SaveCannonTask extends BukkitRunnable {
@@ -26,11 +22,16 @@ public class SaveCannonTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        // check if there is a valid connection
+        if (Cannons.getPlugin().getConnection() == null)
+            return;
+
         String insert = String.format("REPLACE INTO %s " +
                 "(id, name, owner, world, cannon_direction, loc_x, loc_y, loc_Z, soot, gunpowder, projectile_id, projectile_pushed, cannon_temperature, cannon_temperature_timestamp, horizontal_angle, vertical_angle, design_id, fired_cannonballs, target_mob, target_player, target_cannon, target_other, paid) VALUES" +
                 "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                 , Cannons.getPlugin().getCannonDatabase());
         try (PreparedStatement preparedStatement = Cannons.getPlugin().getConnection().prepareStatement(insert)) {
+            Cannons.getPlugin().logDebug("[Cannons] save Task start");
             for (Cannon cannon : CannonManager.getCannonList().values()) {
                 // in case we want to save just one cannon
                 if (this.cannonId != null && cannon.getUID() != this.cannonId) {
@@ -41,7 +42,11 @@ public class SaveCannonTask extends BukkitRunnable {
                 if (!cannon.isValid())
                     continue;
 
-
+                // is the entry different from the last stored entry? Then store it
+                if (!cannon.isUpdated())
+                    continue;
+                Cannons.getPlugin().logDebug("Cannon was updated");
+                cannon.setUpdated(false);
 
 
                 if (cannon.getOwner() == null) {
@@ -101,8 +106,8 @@ public class SaveCannonTask extends BukkitRunnable {
                 preparedStatement.setBoolean(23,cannon.isPaid());
 
                 preparedStatement.addBatch();
-
             }
+            Cannons.getPlugin().logDebug("[Cannons] save Task execute");
             preparedStatement.executeBatch();
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,5 +131,6 @@ public class SaveCannonTask extends BukkitRunnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Cannons.getPlugin().logDebug("[Cannons] save Task finish");
     }
 }

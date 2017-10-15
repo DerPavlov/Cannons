@@ -9,14 +9,16 @@ public class CreateCannon extends BukkitRunnable {
 
     private final Cannons plugin;
     private Cannon cannon;
+    private Boolean saveToDatabase;
 
-    public CreateCannon(Cannons plugin, Cannon cannon){
+    public CreateCannon(Cannons plugin, Cannon cannon, boolean saveToDatabase){
         this.plugin = plugin;
         this.cannon = cannon;
+        this.saveToDatabase = saveToDatabase;
     }
 
     @Override
     public void run() {
-        plugin.getCannonManager().createCannon(cannon);
+        plugin.getCannonManager().createCannon(cannon, saveToDatabase);
     }
 }

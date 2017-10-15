@@ -8,6 +8,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import at.pavlov.cannons.container.SoundHolder;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.SchematicReader;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;

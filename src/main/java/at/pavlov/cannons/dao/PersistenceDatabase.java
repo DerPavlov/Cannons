@@ -4,10 +4,13 @@ import java.util.UUID;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
 
 public class PersistenceDatabase
 {
 	private Cannons plugin;
+	private BukkitTask saveTask = null;
 
 	public PersistenceDatabase(Cannons _plugin)
 	{
@@ -43,10 +46,9 @@ public class PersistenceDatabase
 		}
 		SaveCannonTask saveCannonTask = new SaveCannonTask();
 		if (async)
-			saveCannonTask.runTaskAsynchronously(plugin);
+			saveTask = saveCannonTask.runTaskAsynchronously(plugin);
 		else
 			saveCannonTask.run();
-
     }
 
     public void saveCannon(Cannon cannon){
@@ -55,7 +57,11 @@ public class PersistenceDatabase
 			return;
 		}
 		SaveCannonTask saveCannonTask = new SaveCannonTask(cannon.getUID());
-		saveCannonTask.runTaskAsynchronously(plugin);
+		saveTask = saveCannonTask.runTaskAsynchronously(plugin);
+	}
+
+	public boolean isSaveTaskRunning() {
+		return saveTask != null && Bukkit.getScheduler().isCurrentlyRunning(saveTask.getTaskId());
 	}
 
     public void deleteCannon(UUID cannon_id){

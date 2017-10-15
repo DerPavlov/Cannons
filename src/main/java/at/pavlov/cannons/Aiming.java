@@ -525,13 +525,13 @@ public class Aiming {
                 //old target - is this still valid?
                 if (cannon.hasSentryEntity()) {
                     if (System.currentTimeMillis() > cannon.getSentryTargetingTime() + cannon.getCannonDesign().getSentrySwapTime() || !targets.containsKey(cannon.getSentryEntity())) {
-                        cannon.setSentryEntity(null);
+                        cannon.setSentryTarget(null);
                     }
                     else{
                         //is the previous target still valid
                         Target target = targets.get(cannon.getSentryEntity());
                         if (!canFindTargetSolution(cannon, target, target.getCenterLocation(), target.getVelocity())) {
-                            cannon.setSentryEntity(null);
+                            cannon.setSentryTarget(null);
                         }
                     }
                 }
@@ -603,12 +603,12 @@ public class Aiming {
                         for (Target t : possibleTargets) {
                             //select one target
                             if (!cannon.wasSentryTarget(t.getUniqueId())) {
-                                cannon.setSentryEntity(t.getUniqueId());
+                                cannon.setSentryTarget(t.getUniqueId());
                                 break;
                             }
                         }
                         if (!cannon.hasSentryEntity()) {
-                            cannon.setSentryEntity(possibleTargets.get(0).getUniqueId());
+                            cannon.setSentryTarget(possibleTargets.get(0).getUniqueId());
                         }
                     }
                 }
@@ -621,16 +621,16 @@ public class Aiming {
 						CannonTargetEvent targetEvent = new CannonTargetEvent(cannon, target);
 						Bukkit.getServer().getPluginManager().callEvent(targetEvent);
 						if (!targetEvent.isCancelled()) {
-							cannon.setSentryEntity(target.getUniqueId());
+							cannon.setSentryTarget(target.getUniqueId());
 						} else {
 							//event cancelled
 							plugin.logDebug("can't find solution for target");
-							cannon.setSentryEntity(null);
+							cannon.setSentryTarget(null);
 						}
                     }
                     else {
                         //no exact solution found for this target. So skip it and try it again in the next run
-                        cannon.setSentryEntity(null);
+                        cannon.setSentryTarget(null);
                         //cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
                     }
                 }
@@ -871,7 +871,7 @@ public class Aiming {
 		for (UUID sentryCannon : sentryCannons) {
 			Cannon cannon = CannonManager.getCannon(sentryCannon);
 			if (cannon.getSentryEntity() != null && cannon.getSentryEntity().equals(entity.getUniqueId())) {
-				cannon.setSentryEntity(null);
+				cannon.setSentryTarget(null);
 			}
 		}
 	}

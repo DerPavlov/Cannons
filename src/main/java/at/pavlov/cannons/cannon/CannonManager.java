@@ -303,8 +303,9 @@ public class CannonManager
 	/**
 	 * adds a new cannon to the list of cannons
 	 * @param cannon create this cannon
+     * @param saveToDatabase if the cannon will be saved to the database after loading
 	 */
-	public void createCannon(Cannon cannon)
+	public void createCannon(Cannon cannon, boolean saveToDatabase)
 	{
         //the owner can't be null
 		if (cannon.getOwner() == null) 
@@ -332,7 +333,10 @@ public class CannonManager
         if (cannon.getCannonDesign().isSentry())
             plugin.getAiming().addSentryCannon(cannon.getUID());
 
-        plugin.getPersistenceDatabase().saveCannon(cannon);
+        if (saveToDatabase)
+            plugin.getPersistenceDatabase().saveCannon(cannon);
+        else
+            cannon.setUpdated(false);
         plugin.logDebug("added cannon " + cannon.getCannonName());
 		
 		cannon.updateCannonSigns();
@@ -539,7 +543,7 @@ public class CannonManager
                 if (!cbceEvent.isCancelled() && cbceEvent.getMessage() != null && cbceEvent.getMessage() == MessageEnum.CannonCreated)
                 {
                     plugin.logDebug("a new cannon was created by " + cannon.getOwner());
-                    createCannon(cannon);
+                    createCannon(cannon, true);
 
                     //send messages
                     if (!silent)

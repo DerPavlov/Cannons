@@ -126,6 +126,9 @@ public class Cannon
     // amount of fired cannonballs with this cannon
     private long firedCannonballs;
 
+    // has the cannon entry changed since it was last saved in the database
+    private boolean updated;
+
     private CannonDesign design;
 
 
@@ -184,6 +187,7 @@ public class Cannon
         this.targetCannon = false;
 
         this.databaseId = UUID.randomUUID();
+        this.updated = true;
     }
 
 
@@ -290,7 +294,7 @@ public class Cannon
                 if (message == MessageEnum.loadProjectile)
                 {
                     // everything went fine, so remove it from the chest remove projectile
-                    loadedProjectile = projectile;
+                    setLoadedProjectile(projectile);
                     if(design.isProjectileConsumption()&&consumesAmmo)
                     {
                         if (item.getAmount() == 1)
@@ -523,7 +527,7 @@ public class Cannon
         if (returnVal.equals(MessageEnum.loadProjectile))
         {
             // load projectile
-            loadedProjectile = projectile;
+            setLoadedProjectile(projectile);
             CannonsUtil.playSound(getMuzzle(), projectile.getSoundLoading());
 
             // remove from player
@@ -678,25 +682,21 @@ public class Cannon
             {
                 case RamrodCleaning:
                 {
-                    //player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SNOW, 0.5F, 0f);
                     CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodCleaning());
                     break;
                 }
                 case RamrodCleaningDone:
                 {
-                    //player.getWorld().playSound(this.getMuzzle(), Sound.DIG_SNOW, 0.5F, 1f);
                     CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodCleaningDone());
                     break;
                 }
                 case RamrodPushingProjectile:
                 {
-                    //player.getWorld().playSound(this.getMuzzle(), Sound.DIG_STONE, 0.5F, 0f);
                     CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodPushing());
                     break;
                 }
                 case RamrodPushingProjectileDone:
                 {
-                    //player.getWorld().playSound(this.getMuzzle(), Sound.ANVIL_LAND, 0.5F, 0f);
                     CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodPushingDone());
                     break;
                 }
@@ -1183,6 +1183,7 @@ public class Cannon
     public void move(Vector moved)
     {
         offset.add(moved);
+        this.hasUpdated();
     }
 
     /**
@@ -1217,6 +1218,7 @@ public class Cannon
             for (int i = 0; i<=(-angle)%90; i++)
                 cannonDirection = CannonsUtil.roatateFaceOpposite(cannonDirection);
         }
+        this.hasUpdated();
 
     }
 
@@ -1679,6 +1681,7 @@ public class Cannon
     public void setUID(UUID ID)
     {
         this.databaseId = ID;
+        this.hasUpdated();
     }
 
     public String getDesignID()
@@ -1689,6 +1692,7 @@ public class Cannon
     public void setDesignID(String designID)
     {
         this.designID = designID;
+        this.hasUpdated();
     }
 
     public String getCannonName()
@@ -1699,6 +1703,7 @@ public class Cannon
     public void setCannonName(String name)
     {
         this.cannonName = name;
+        this.hasUpdated();
     }
 
     public BlockFace getCannonDirection()
@@ -1709,6 +1714,7 @@ public class Cannon
     public void setCannonDirection(BlockFace cannonDirection)
     {
         this.cannonDirection = cannonDirection;
+        this.hasUpdated();
     }
 
     public UUID getWorld()
@@ -1719,6 +1725,7 @@ public class Cannon
     public void setWorld(UUID world)
     {
         this.world = world;
+        this.hasUpdated();
     }
 
     public long getLastFired()
@@ -1729,6 +1736,7 @@ public class Cannon
     public void setLastFired(long lastFired)
     {
         this.lastFired = lastFired;
+        this.hasUpdated();
     }
 
     public int getLoadedGunpowder()
@@ -1742,6 +1750,7 @@ public class Cannon
     public void setLoadedGunpowder(int loadedGunpowder)
     {
         this.loadedGunpowder = loadedGunpowder;
+        this.hasUpdated();
     }
 
     public double getHorizontalAngle(){
@@ -1762,6 +1771,7 @@ public class Cannon
         double minHorizontal = getMinHorizontalAngle();
         if (this.horizontalAngle < minHorizontal)
             this.horizontalAngle = minHorizontal;
+        this.hasUpdated();
     }
 
     /**
@@ -1799,6 +1809,7 @@ public class Cannon
         double minVertical = getMinVerticalAngle();
         if (this.verticalAngle < minVertical)
             this.verticalAngle = minVertical;
+        this.hasUpdated();
     }
 
     /**
@@ -1828,6 +1839,7 @@ public class Cannon
     public void setOwner(UUID owner)
     {
         this.owner = owner;
+        this.hasUpdated();
     }
 
     public boolean isValid()
@@ -1838,6 +1850,7 @@ public class Cannon
     public void setValid(boolean isValid)
     {
         this.isValid = isValid;
+        this.hasUpdated();
     }
 
     public Vector getOffset()
@@ -1848,11 +1861,13 @@ public class Cannon
     public void setOffset(Vector offset)
     {
         this.offset = offset;
+        this.hasUpdated();
     }
 
     public void setCannonDesign(CannonDesign design)
     {
         this.design = design;
+        this.hasUpdated();
     }
 
     public CannonDesign getCannonDesign()
@@ -1868,6 +1883,7 @@ public class Cannon
     public void setLoadedProjectile(Projectile loadedProjectile)
     {
         this.loadedProjectile = loadedProjectile;
+        this.hasUpdated();
     }
 
     public String getFiringButtonActivator()
@@ -1898,7 +1914,8 @@ public class Cannon
     public void setLastUser(UUID lastUser)
     {
         this.lastUser = lastUser;
-        if(design.isLastUserBecomesOwner()) owner = lastUser;
+        if(design.isLastUserBecomesOwner())
+            this.setOwner(lastUser);
     }
 
     public boolean isFiring()
@@ -1915,6 +1932,7 @@ public class Cannon
 
     public void setFiring() {
         lastIgnited = System.currentTimeMillis();
+        this.hasUpdated();
     }
 
     public boolean isLoading()
@@ -1960,6 +1978,7 @@ public class Cannon
     public void setTemperature(double temperature) {
         this.tempTimestamp = System.currentTimeMillis();
         this.tempValue = temperature;
+        this.hasUpdated();
     }
 
     public long getTemperatureTimeStamp()
@@ -1970,6 +1989,7 @@ public class Cannon
     public void setTemperatureTimeStamp(long temperatureTimeStamp)
     {
         this.tempTimestamp = temperatureTimeStamp;
+        this.hasUpdated();
     }
 
     public boolean isOverheated(){
@@ -2011,6 +2031,7 @@ public class Cannon
 
     public void setSoot(double soot) {
         this.soot = (soot>0)?soot:0;
+        this.hasUpdated();
     }
 
     /**
@@ -2027,6 +2048,7 @@ public class Cannon
 
     public void setProjectilePushed(int projectilePushed) {
         this.projectilePushed = (projectilePushed>0)?projectilePushed:0;
+        this.hasUpdated();
     }
 
     /**
@@ -2187,6 +2209,7 @@ public class Cannon
 
     public void setOnShip(boolean onShip) {
         this.onShip = onShip;
+        this.hasUpdated();
     }
 
     public double getAimingPitch() {
@@ -2195,6 +2218,7 @@ public class Cannon
 
     public void setAimingPitch(double aimingPitch) {
         this.aimingPitch = aimingPitch;
+        this.hasUpdated();
     }
 
     public double getAimingYaw() {
@@ -2203,6 +2227,7 @@ public class Cannon
 
     public void setAimingYaw(double aimingYaw) {
         this.aimingYaw = aimingYaw;
+        this.hasUpdated();
     }
 
     public HashMap<UUID, Boolean> getObserverMap() {
@@ -2310,10 +2335,12 @@ public class Cannon
 
     public void setFiredCannonballs(long firedCannonballs) {
         this.firedCannonballs = firedCannonballs;
+        this.hasUpdated();
     }
 
     public void incrementFiredCannonballs(){
         this.firedCannonballs++;
+        this.hasUpdated();
     }
 
     public double getLastPlayerSpreadMultiplier() {
@@ -2349,14 +2376,18 @@ public class Cannon
         return sentryEntity != null;
     }
 
-    public void setSentryEntity(UUID sentryEntity) {
-        this.sentryEntity = sentryEntity;
-        if (sentryEntity != null){
+    /**
+     * Set this as new sentry target and add it to the list of targeted entities
+     * @param sentryTarget
+     */
+    public void setSentryTarget(UUID sentryTarget) {
+        this.sentryEntity = sentryTarget;
+        if (sentryTarget != null){
             setSentryTargetingTime(System.currentTimeMillis());
             //store only 5
             if (sentryEntityHistory.size() > 5)
                 sentryEntityHistory.remove(0);
-            sentryEntityHistory.add(sentryEntity);
+            sentryEntityHistory.add(sentryTarget);
         }
     }
 
@@ -2424,11 +2455,13 @@ public class Cannon
     public void addWhitelistPlayer(UUID playerUID){
         setLastWhitelisted(playerUID);
         whitelist.add(playerUID);
+        this.hasUpdated();
     }
 
     public void removeWhitelistPlayer(UUID playerUID){
         setLastWhitelisted(playerUID);
         whitelist.remove(playerUID);
+        this.hasUpdated();
     }
 
     public boolean isWhitelisted(UUID playerUID){
@@ -2449,10 +2482,11 @@ public class Cannon
 
     public void setTargetMob(boolean targetMob) {
         this.targetMob = targetMob;
+        this.hasUpdated();
     }
 
     public void toggleTargetMob(){
-        this.targetMob = !this.targetMob;
+        setTargetMob(!this.targetMob);
     }
 
     public boolean isTargetPlayer() {
@@ -2461,10 +2495,11 @@ public class Cannon
 
     public void setTargetPlayer(boolean targetPlayer) {
         this.targetPlayer = targetPlayer;
+        this.hasUpdated();
     }
 
     public void toggleTargetPlayer(){
-        this.targetPlayer = !this.targetPlayer;
+        setTargetPlayer(!this.targetPlayer);
     }
 
     public boolean isTargetCannon() {
@@ -2473,10 +2508,11 @@ public class Cannon
 
     public void setTargetCannon(boolean targetCannon) {
         this.targetCannon = targetCannon;
+        this.hasUpdated();
     }
 
     public void toggleTargetCannon(){
-        this.targetCannon = !this.targetCannon;
+        setTargetCannon(!this.targetCannon);
     }
 
     public boolean isTargetOther() {
@@ -2485,10 +2521,11 @@ public class Cannon
 
     public void setTargetOther(boolean targetOther) {
         this.targetOther = targetOther;
+        this.hasUpdated();
     }
 
     public void toggleTargetOther(){
-        this.targetOther = !this.targetOther;
+        setTargetOther(!this.targetOther);
     }
 
     public boolean isPaid() {
@@ -2497,6 +2534,7 @@ public class Cannon
 
     public void setPaid(boolean paid) {
         this.paid = paid;
+        this.hasUpdated();
     }
 
     public void boughtByPlayer(UUID playerID){
@@ -2522,5 +2560,17 @@ public class Cannon
 
     public void setSentryHomedAfterFiring(boolean sentryHomedAfterFiring) {
         this.sentryHomedAfterFiring = sentryHomedAfterFiring;
+    }
+
+    public boolean isUpdated() {
+        return updated;
+    }
+
+    public void hasUpdated() {
+        this.updated = true;
+    }
+
+    public void setUpdated(boolean updated){
+        this.updated = updated;
     }
 }

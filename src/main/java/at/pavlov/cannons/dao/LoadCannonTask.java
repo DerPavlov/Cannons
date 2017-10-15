@@ -115,10 +115,8 @@ public class LoadCannonTask extends BukkitRunnable{
                     // cannon fee
                     cannon.setPaid(rs.getBoolean("paid"));
 
-
-
                     //add a cannon to the cannon list
-                    BukkitTask task = new CreateCannon(Cannons.getPlugin(), cannon).runTask(Cannons.getPlugin());
+                    BukkitTask task = new CreateCannon(Cannons.getPlugin(), cannon, false).runTask(Cannons.getPlugin());
                     //plugin.createCannon(cannon);
                     i++;
                 }

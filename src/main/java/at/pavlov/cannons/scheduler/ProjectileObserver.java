@@ -205,6 +205,7 @@ public class ProjectileObserver {
             projectile_entity.remove();
             return true;
         }
+        //todo proximity fuse
         cannonball.update();
         return false;
     }
