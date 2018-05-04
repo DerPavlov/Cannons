@@ -849,10 +849,10 @@ public class CreateExplosion {
 	} else {
 	    // if the explosion power is negative there will be only a arrow impact sound
 	    if (explosion_power >= 0) {
-		// get affected entities
-		for (Entity cEntity : projectile_entity.getNearbyEntities(explosion_power, explosion_power,
-			explosion_power)) {
-		    this.addAffectedEntity(cEntity);
+			// get affected entities
+			for (Entity cEntity : projectile_entity.getNearbyEntities(explosion_power, explosion_power,
+				explosion_power)) {
+				this.addAffectedEntity(cEntity);
 		}
 		// make the explosion
 		canceled = !world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power,
