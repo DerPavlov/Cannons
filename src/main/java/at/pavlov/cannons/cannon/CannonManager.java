@@ -333,15 +333,16 @@ public class CannonManager
         if (cannon.getCannonDesign().isSentry())
             plugin.getAiming().addSentryCannon(cannon.getUID());
 
-        if (saveToDatabase)
+        if (saveToDatabase) {
             plugin.getPersistenceDatabase().saveCannon(cannon);
+            cannon.updateCannonSigns();
+        }
         else {
             cannon.setUpdated(false);
             cannon.setWhitelistUpdated(false);
         }
         plugin.logDebug("added cannon " + cannon.getCannonName());
-		
-		cannon.updateCannonSigns();
+
         LoadWhitelistTask loadWhitelistTask = new LoadWhitelistTask(cannon.getUID());
         loadWhitelistTask.runTaskAsynchronously(plugin);
 	}

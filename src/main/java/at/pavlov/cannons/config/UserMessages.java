@@ -5,7 +5,6 @@ import java.util.*;
 
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.projectile.Projectile;
-import com.avaje.ebean.enhance.ant.OfflineFileTransform;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
