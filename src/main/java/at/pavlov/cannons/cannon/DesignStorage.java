@@ -1,27 +1,42 @@
 package at.pavlov.cannons.cannon;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import at.pavlov.cannons.container.SoundHolder;
+import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.SchematicReader;
-import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.extent.transform.BlockTransformExtent;
+import com.sk89q.worldedit.function.mask.ExistingBlockMask;
+import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.math.transform.AffineTransform;
+import com.sk89q.worldedit.util.io.Closer;
+import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.world.block.BlockState;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.util.Vector;
 
-import com.sk89q.worldedit.BlockVector;
-import com.sk89q.worldedit.CuboidClipboard;
-import com.sk89q.worldedit.blocks.BaseBlock;
-import com.sk89q.worldedit.schematic.SchematicFormat;
 
+
+
+import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.container.DesignFileName;
 import at.pavlov.cannons.container.MaterialHolder;
@@ -344,17 +359,17 @@ public class DesignStorage
         long startTime = System.nanoTime();
 		
 		// load schematic with worldedit
-		CuboidClipboard cc;
-        File file = new File(getPath() + schematicFile);
-		try
-		{
-			SchematicFormat schematic = SchematicFormat.getFormat(file);
-		    if (schematic == null) plugin.logSevere("Schematic not loadable ");
-			cc = schematic.load(file);
-		}
-		catch (Exception e)
-		{
-			plugin.logSevere("Error while loading schematic " + getPath() + schematicFile + " :" + e  + "; does file exist: " + file.exists());
+        Clipboard cc;
+        File f = new File(getPath() + schematicFile);
+		ClipboardFormat format = ClipboardFormats.findByFile(f);
+		try (Closer closer = Closer.create()) {
+			FileInputStream fis = closer.register(new FileInputStream(f));
+			BufferedInputStream bis = closer.register(new BufferedInputStream(fis));
+			ClipboardReader reader = closer.register(format.getReader(bis));
+
+			cc = reader.read();
+		} catch (IOException e) {
+			plugin.logSevere("Error while loading schematic " + getPath() + schematicFile + " :" + e  + "; does file exist: " + f.exists());
 			return false;
 		}
 		//failed to load schematic
@@ -363,44 +378,62 @@ public class DesignStorage
 			plugin.logSevere("Failed to loading schematic");
 			return false;
 		}
-		
+
+        plugin.logDebug("schematic origin: " + cc.getMinimumPoint().toString());
+        AffineTransform transform = new AffineTransform().translate(cc.getMinimumPoint().multiply(-1.)).rotateY(90);
+        BlockTransformExtent extent = new BlockTransformExtent(cc, transform);
+        ForwardExtentCopy copy = new ForwardExtentCopy(extent, cc.getRegion(), cc.getOrigin(), cc, new com.sk89q.worldedit.Vector(0, 0, 0));
+        copy.setTransform(transform);
+        try {
+            Operations.complete(copy);
+        } catch (WorldEditException e) {
+            e.printStackTrace();
+        }
+
 		// convert all schematic blocks from the config to BaseBlocks so they
 		// can be rotated
-		BaseBlock blockIgnore = cannonDesign.getSchematicBlockTypeIgnore().toBaseBlock();
-		BaseBlock blockMuzzle = cannonDesign.getSchematicBlockTypeMuzzle().toBaseBlock();
-		BaseBlock blockFiringIndicator = cannonDesign.getSchematicBlockTypeFiringIndicator().toBaseBlock();
-		BaseBlock blockRotationCenter = cannonDesign.getSchematicBlockTypeRotationCenter().toBaseBlock();
-		BaseBlock blockChestAndSign = cannonDesign.getSchematicBlockTypeChestAndSign().toBaseBlock();
-		BaseBlock blockRedstoneTorch = cannonDesign.getSchematicBlockTypeRedstoneTorch().toBaseBlock();
-		BaseBlock blockRedstoneWireAndRepeater = cannonDesign.getSchematicBlockTypeRedstoneWireAndRepeater().toBaseBlock();
-		BaseBlock blockRedstoneTrigger = cannonDesign.getSchematicBlockTypeRedstoneTrigger().toBaseBlock();
-		BaseBlock blockRightClickTrigger = cannonDesign.getSchematicBlockTypeRightClickTrigger().toBaseBlock();
-		BaseBlock replaceRedstoneTrigger = cannonDesign.getIngameBlockTypeRedstoneTrigger().toBaseBlock();
-		BaseBlock replaceRightClickTrigger = cannonDesign.getIngameBlockTypeRightClickTrigger().toBaseBlock();
-		List<BaseBlock> blockProtectedList = new ArrayList<BaseBlock>();
-		for (MaterialHolder simpleBlock : cannonDesign.getSchematicBlockTypeProtected())
-		{
-			blockProtectedList.add(simpleBlock.toBaseBlock());
-		}
+		BlockData blockIgnore = cannonDesign.getSchematicBlockTypeIgnore().toBlockData();
+		BlockData blockMuzzle = cannonDesign.getSchematicBlockTypeMuzzle().toBlockData();
+		BlockData blockFiringIndicator = cannonDesign.getSchematicBlockTypeFiringIndicator().toBlockData();
+		BlockData blockRotationCenter = cannonDesign.getSchematicBlockTypeRotationCenter().toBlockData();
+		BlockData blockChestAndSign = cannonDesign.getSchematicBlockTypeChestAndSign().toBlockData();
+		BlockData blockRedstoneTorch = cannonDesign.getSchematicBlockTypeRedstoneTorch().toBlockData();
+		BlockData blockRedstoneWireAndRepeater = cannonDesign.getSchematicBlockTypeRedstoneWireAndRepeater().toBlockData();
+		BlockData blockRedstoneTrigger = cannonDesign.getSchematicBlockTypeRedstoneTrigger().toBlockData();
+		BlockData blockRightClickTrigger = cannonDesign.getSchematicBlockTypeRightClickTrigger().toBlockData();
+		BlockData replaceRedstoneTrigger = cannonDesign.getIngameBlockTypeRedstoneTrigger().toBlockData();
+		BlockData replaceRightClickTrigger = cannonDesign.getIngameBlockTypeRightClickTrigger().toBlockData();
+		List<BlockData> blockProtectedList = new ArrayList<BlockData>();
+		for(MaterialHolder blockData : cannonDesign.getSchematicBlockTypeProtected())
+			blockProtectedList.add(blockData.toBlockData());
 		
 		
 		// get facing of the cannon
 		BlockFace cannonDirection = cannonDesign.getDefaultHorizontalFacing();
 
 		// for all directions
+
 		for (int i = 0; i < 4; i++)
 		{
+
+
+            plugin.logDebug("next direction");
 			// read out blocks
-			int width = cc.getWidth();
-			int height = cc.getHeight();
-			int length = cc.getLength();
-			
+			int width = cc.getDimensions().getBlockX();
+			int height = cc.getDimensions().getBlockY();
+			int length = cc.getDimensions().getBlockZ();
+			plugin.logDebug("schematic width, " + width + " height, " + height + " length " + length);
+            plugin.logDebug("loaded schematic with dimension: " + cc.getDimensions() + " origin: " + cc.getOrigin());
+
+            cc.setOrigin(new com.sk89q.worldedit.Vector(0, 0, 0));
+            plugin.logDebug("schematic origin: " + cc.getMinimumPoint().toString());
+
 			// to set the muzzle location the maximum and mininum x, y, z values
 			// of all muzzle blocks have to be found
 			Vector minMuzzle = new Vector(0, 0, 0);
 			Vector maxMuzzle = new Vector(0, 0, 0);
 			boolean firstEntryMuzzle = true;
-			
+
 			// to set the rotation Center maximum and mininum x, y, z values
 			// of all rotation blocks have to be found
 			// setting max to the size of the marked area is a good approximation
@@ -408,28 +441,34 @@ public class DesignStorage
 			Vector minRotation = new Vector(0, 0, 0);
 			Vector maxRotation = new Vector(width, height, length);
 			boolean firstEntryRotation = true;
-			
+
 			// create CannonBlocks entry
 			CannonBlocks cannonBlocks = new CannonBlocks();
-			
+
 			for (int x = 0; x < width; ++x)
 			{
 				for (int y = 0; y < height; ++y)
 				{
 					for (int z = 0; z < length; ++z)
 					{
+
 						BlockVector pt = new BlockVector(x, y, z);
-						BaseBlock block = cc.getBlock(pt);
+						BlockState blockState = cc.getBlock(pt.add(cc.getMinimumPoint()));
+                        plugin.logDebug("blockstate: " + blockState.getAsString());
+
+						BlockData block = Bukkit.getServer().createBlockData(blockState.getAsString());
+						// todo check
+						plugin.logDebug("baseblock : " + block.getAsString());
 
 						// ignore if block is AIR or the IgnoreBlock type
-						if (block.getId() != 0 && !block.equalsFuzzy(blockIgnore))
+						if (!block.getMaterial().equals(Material.AIR) && !block.matches(blockIgnore))
 						{
 
 							//plugin.logDebug("x:" + x + " y:" + y + " z:" + z + " blockType " + block.getId() + " blockData " + block.getData());
 
 							// #############  find the min and max for muzzle blocks so the
 							// cannonball is fired from the middle
-							if (block.equalsFuzzy(blockMuzzle))
+							if (block.getMaterial().equals(blockMuzzle.getMaterial()))
 							{
 								// reset for the first entry
 								if (firstEntryMuzzle)
@@ -444,10 +483,10 @@ public class DesignStorage
 									maxMuzzle = findMaximum(x, y, z, maxMuzzle);
 								}
 								//muzzle blocks need to be air - else the projectile would spawn in a block
-								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, Material.AIR, 0));
+								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, Material.AIR));
 							}
 							// #############  find the min and max for rotation blocks
-							else if (block.equalsFuzzy(blockRotationCenter))
+							else if (block.getMaterial().equals(blockRotationCenter.getMaterial()))
 							{
 								// reset for the first entry
 								if (firstEntryRotation)
@@ -463,13 +502,13 @@ public class DesignStorage
 								}
 							}
 							// #############  redstoneTorch
-							else if (block.equalsFuzzy(blockRedstoneTorch))
+							else if (block.getMaterial().equals(blockRedstoneTorch.getMaterial()))
 								cannonBlocks.getRedstoneTorches().add(new Vector(x, y, z));
 							// #############  redstoneWire and Repeater
-							else if (block.equalsFuzzy(blockRedstoneWireAndRepeater))
-								cannonBlocks.getRedstoneWiresAndRepeater().add(new SimpleBlock(x, y, z, Material.DIODE, block.getData()%4));
+							else if (block.getMaterial().equals(blockRedstoneWireAndRepeater.getMaterial()))
+								cannonBlocks.getRedstoneWiresAndRepeater().add(new SimpleBlock(x, y, z, Material.REPEATER));
 							// #############  redstoneTrigger
-							else if (block.equalsFuzzy(blockRedstoneTrigger))
+							else if (block.getMaterial().equals(blockRedstoneTrigger.getMaterial()))
 							{
 								cannonBlocks.getRedstoneTrigger().add(new Vector(x, y, z));
 								// buttons or levers are part of the cannon
@@ -479,13 +518,13 @@ public class DesignStorage
 									cannonBlocks.getDestructibleBlocks().add(new Vector(x, y, z));
 							}
 							// #############  rightClickTrigger
-							else if (block.equalsFuzzy(blockRightClickTrigger))
+							else if (block.matches(blockRightClickTrigger))
 							{
 								cannonBlocks.getRightClickTrigger().add(new Vector(x, y, z));
                                 //can be also a sign
-                                if (block.equalsFuzzy(blockChestAndSign))
+                                if (block.matches(blockChestAndSign))
                                     // the id does not matter, but the data is important for signs
-                                    cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN, block.getData()));
+                                    cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN));
 								// firing blocks are also part of the cannon are
 								// part of the cannon
 								cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, replaceRightClickTrigger));
@@ -494,10 +533,10 @@ public class DesignStorage
 									cannonBlocks.getDestructibleBlocks().add(new Vector(x, y, z));
 							}
                             // #############  chests and signs
-                            else if (block.equalsFuzzy(blockChestAndSign))
+                            else if (block.getMaterial().equals(blockChestAndSign.getMaterial()))
                             {
                                 // the id does not matter, but the data is important for signs
-                                cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN, block.getData()));
+                                cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN));
                             }
 							// #############  loading Interface is a cannonblock that is non of
 							// the previous blocks
@@ -513,7 +552,7 @@ public class DesignStorage
 
 							// #############  firingIndicator
 							// can be everywhere on the cannon
-							if (block.equalsFuzzy(blockFiringIndicator))
+							if (block.getMaterial().equals(blockFiringIndicator.getMaterial()))
 								cannonBlocks.getFiringIndicator().add(new Vector(x, y, z));
 						}
 					}
@@ -522,7 +561,7 @@ public class DesignStorage
 			// calculate the muzzle location
 			maxMuzzle.add(new Vector(1, 1, 1));
 			cannonBlocks.setMuzzle(maxMuzzle.add(minMuzzle).multiply(0.5));
-			
+
 			// calculate the rotation Center
 			maxRotation.add(new Vector(1, 1, 1));
 			cannonBlocks.setRotationCenter(maxRotation.add(maxRotation).multiply(0.5));
@@ -555,30 +594,41 @@ public class DesignStorage
 
 			// add blocks to the HashMap
 			cannonDesign.getCannonBlockMap().put(cannonDirection, cannonBlocks);
-			
+
 			//rotate blocks for the next iteration
-			blockIgnore.rotate90();
-			blockMuzzle.rotate90();
-			blockFiringIndicator.rotate90();
-			blockRotationCenter.rotate90();
-			blockChestAndSign.rotate90();
-			blockRedstoneTorch.rotate90();
-			if (blockRedstoneWireAndRepeater.getData() != -1)
-				blockRedstoneWireAndRepeater.rotate90();
-			blockRedstoneTrigger.rotate90();
-			blockRightClickTrigger.rotate90();
-			replaceRedstoneTrigger.rotate90();
-			replaceRightClickTrigger.rotate90();
-			for (BaseBlock aBlockProtectedList : blockProtectedList) {
-				aBlockProtectedList.rotate90();
-			}
-			
+			//todo rotation
+//			blockIgnore.rotate90();
+//			blockMuzzle.rotate90();
+//			blockFiringIndicator.rotate90();
+//			blockRotationCenter.rotate90();
+//			blockChestAndSign.rotate90();
+//			blockRedstoneTorch.rotate90();
+//			if (blockRedstoneWireAndRepeater.getData() != -1)
+//				blockRedstoneWireAndRepeater.rotate90();
+//			blockRedstoneTrigger.rotate90();
+//			blockRightClickTrigger.rotate90();
+//			replaceRedstoneTrigger.rotate90();
+//			replaceRightClickTrigger.rotate90();
+//			for (BaseBlock aBlockProtectedList : blockProtectedList) {
+//				aBlockProtectedList.rotate90();
+//			}
+
 			//rotate clipboard
-			cc.rotate2D(90);
-			
-			//rotate cannonDirection
+            transform = new AffineTransform().rotateY(90);
+            extent = new BlockTransformExtent(cc, transform);
+            copy = new ForwardExtentCopy(extent, cc.getRegion(), cc.getOrigin(), cc, cc.getOrigin());
+            copy.setSourceMask(new ExistingBlockMask(cc));
+            copy.setTransform(transform);
+            try {
+                Operations.complete(copy);
+            } catch (WorldEditException e) {
+                e.printStackTrace();
+            }
+
+
+            //rotate cannonDirection
 			cannonDirection = CannonsUtil.roatateFace(cannonDirection);
-			
+
 
 		}
         plugin.logDebug("Time to load designs: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
@@ -642,13 +692,13 @@ public class DesignStorage
         }
     }
 	
-	private boolean isInList(List<BaseBlock> list, BaseBlock block)
+	private boolean isInList(List<BlockData> list, BlockData block)
 	{
 		if (block == null) return true;
 		
-		for (BaseBlock listBlock : list)
+		for (BlockData listBlock : list)
 		{
-			if (listBlock != null && listBlock.equalsFuzzy(block))
+			if (listBlock != null && listBlock.getMaterial().equals(block.getMaterial()))
 				return true;
 		}
 		return false;

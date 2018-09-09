@@ -4,11 +4,12 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 
-import com.sk89q.worldedit.blocks.BaseBlock;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.Exception;
@@ -24,7 +25,6 @@ import java.util.regex.Pattern;
 public class MaterialHolder
 {
 	private Material material;
-	private int data;
 	private String displayName;
 	private List<String> lore;
 	private boolean useTypeName;
@@ -39,14 +39,12 @@ public class MaterialHolder
 		useTypeName = false;
         if (item == null){
             material=Material.AIR;
-            data=0;
             displayName="";
             lore = new ArrayList<String>();
             return;
         }
 
 		material = item.getType();
-		data = item.getData().getData();
 
 		if (item.hasItemMeta()){
             ItemMeta meta = item.getItemMeta();
@@ -66,23 +64,23 @@ public class MaterialHolder
 	}
 
     @Deprecated
-    public MaterialHolder(int id, int data)
+    public MaterialHolder(int id)
     {
-        this(Material.getMaterial(id), data);
+    	//not working
+        this(Material.AIR);
     }
 
-    public MaterialHolder(Material material, int data)
+    public MaterialHolder(Material material)
     {
-        this(material, data, null, null);
+        this(material, null, null);
     }
 
-	public MaterialHolder(Material material, int data, String description, List<String> lore)
+	public MaterialHolder(Material material, String description, List<String> lore)
 	{
         if (material != null)
 		    this.material = material;
         else
             this.material = Material.AIR;
-		this.data = data;
 		if (description != null)
 			this.displayName = ChatColor.translateAlternateColorCodes('&',description);
 		else
@@ -97,25 +95,22 @@ public class MaterialHolder
 	public MaterialHolder(String str)
 	{
         // data structure:
-        // data:id:DESCRIPTION:LORE1:LORE2
-        // 10:0:COOL Item:Looks so cool:Fancy
+        // id;DESCRIPTION;LORE1;LORE2
+        // HOE;COOL Item;Looks so cool;Fancy
         try
         {
-            material = Material.AIR;
-            data = -1;
-            Scanner s = new Scanner(str).useDelimiter("\\s*:\\s*");
+        	material = Material.AIR;
+            Scanner s = new Scanner(str).useDelimiter("\\s*;\\s*");
             if (s.hasNext()) {
                 String next = s.next();
                 if (next != null)
                     this.material = Material.matchMaterial(next);
                 if (this.material == null) {
-                    System.out.println("missing id value in: " + str);
+                    System.out.println("[CANNONS] missing id value in: " + str + " element: " + next);
                     this.material = Material.AIR;
                 }
             }
 
-            if (s.hasNext())
-                data = s.nextInt();
 
 			if (s.hasNext())
 				displayName = ChatColor.translateAlternateColorCodes('&', s.next());
@@ -133,18 +128,18 @@ public class MaterialHolder
         }
         catch(Exception e)
         {
-            System.out.println("Error while converting " + str + ". Check formatting (10:0)");
+            System.out.println("[CANNONS] Error while converting " + str + ". Check formatting (minecraft:clock)");
         }
 	}
 	
-	public BaseBlock toBaseBlock()
+	public SimpleBlock toSimpleBlock()
 	{
-		return new BaseBlock(material.getId(), data);
+		return new SimpleBlock(0, 0, 0, material);
 	}
 	
 	public ItemStack toItemStack(int amount)
 	{
-		ItemStack item = new ItemStack(material, amount, (short) data);
+		ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         if (this.hasDisplayName())
             meta.setDisplayName(this.displayName);
@@ -153,8 +148,24 @@ public class MaterialHolder
         item.setItemMeta(meta);
         return item;
 	}
-	
 
+	/**
+	 * Creates a new BlockData instance for this Material, with all properties initialized to unspecified defaults.
+	 * @return BlockData instance
+	 */
+	public BlockData toBlockData()
+	{
+		return this.material.createBlockData();
+	}
+
+	/**
+	 * Creates a new BlockData instance for this Material, with all properties initialized to unspecified defaults, except for those provided in data.
+	 * @return BlockData instance
+	 */
+	public BlockData toBlockData(String string)
+	{
+		return this.material.createBlockData(string);
+	}
 
     /**
      * compares the id of two Materials
@@ -206,10 +217,10 @@ public class MaterialHolder
                 if (similar.size() < size)
                     return false;
             }
-			if (item.getType().equals(this.material))
-			{
-				return (item.getData() == data || data == -1 || item.getData() == -1);
-			}
+//			if (item.getType().equals(this.material))
+//			{
+//				return (item.getData() == data || data == -1 || item.getData() == -1);
+//			}
 		}	
 		return false;
 	}
@@ -226,7 +237,7 @@ public class MaterialHolder
 		{
 			if (block.getType().equals(this.material))
 			{
-				return (block.getData() == data || data == -1 || block.getData() == -1);
+				return true;
 			}
 		}	
 		return false;
@@ -234,7 +245,7 @@ public class MaterialHolder
 	
 	public String toString()
 	{
-		return this.material + ":" + this.data + ":" + this.displayName + ":" + StringUtils.join(this.lore, ":");
+		return this.material + ":" + this.displayName + ":" + StringUtils.join(this.lore, ":");
 	}
 
 	public Material getType()
@@ -244,14 +255,6 @@ public class MaterialHolder
 	public void setType(Material material)
 	{
 		this.material = material;
-	}
-	public int getData()
-	{
-		return data;
-	}
-	public void setData(int data)
-	{
-		this.data = data;
 	}
 
 	public String getDisplayName() {

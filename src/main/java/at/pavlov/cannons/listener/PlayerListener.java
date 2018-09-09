@@ -164,7 +164,7 @@ public class PlayerListener implements Listener
 //        }
 
         // Place redstonetorch under to the cannon
-        if (event.getBlockPlaced().getType() == Material.REDSTONE_TORCH_ON || event.getBlockPlaced().getType() == Material.REDSTONE_TORCH_OFF)
+        if (event.getBlockPlaced().getType() == Material.REDSTONE_TORCH || event.getBlockPlaced().getType() == Material.REDSTONE_WALL_TORCH)
         {
             // check cannon
             Location loc = event.getBlock().getRelative(BlockFace.UP).getLocation();
@@ -233,7 +233,7 @@ public class PlayerListener implements Listener
 
         // ##########  redstone torch fire
         // off because it turn form off to on
-        if (block.getType() == Material.REDSTONE_TORCH_ON)
+        if (block.getType() == Material.LEGACY_REDSTONE_TORCH_ON)
         {
             // go one block up and check this is a cannon
             Cannon cannon = cannonManager.getCannon(block.getRelative(BlockFace.UP).getLocation(), null);
@@ -279,7 +279,7 @@ public class PlayerListener implements Listener
         }
 
         // ##########  redstone repeater and comparator fire
-        if (block.getType() == Material.DIODE_BLOCK_OFF || block.getType() == Material.REDSTONE_COMPARATOR_OFF)
+        if (block.getType() == Material.LEGACY_DIODE_BLOCK_OFF || block.getType() == Material.LEGACY_REDSTONE_COMPARATOR_OFF)
         {
             // check all block next to this if there is a cannon
             for (Block b : CannonsUtil.HorizontalSurroundingBlocks(block))

@@ -22,23 +22,23 @@ keepProjectileAlive:
 tools:
   #the item a player needs to be holding to adjust the aim of a cannon. Default is air.
   #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
-  ajust: '0:0'
+  ajust: 'minecraft:air'
   #the item used to autoaim a cannon. Default is clock
   #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
-  autoaim: '347:0'
+  autoaim: 'minecraft:clock'
   #the item used to fire a cannon. Default is flint and steel. Not every cannon needs a FiringItem.
   #a data value of -1 means that every durability is accepted for flint and steel
   #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
-  firing: '259:-1'
+  firing: 'minecraft:flint_and_steel'
   #required for cleaning a cannon after firing and pushing a projectile against the gunpowder
   #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
-  ramrod: '280:0'
+  ramrod: 'minecraft:stick'
   #item used to rotate a cannon 90 degrees. Not implemented yet
   #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
-  rotatingItem: '350:0'
+  rotatingItem: 'minecraft:rail'
   #item to measure the cannon temperature. Default is a gold nugget
   #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
-  thermometer: '371:0'
+  thermometer: 'minecraft:gold_nugget'
 
 
 #fake blocks/sound that are send to the player, to make effects visible at large distance
@@ -57,8 +57,8 @@ imitatedEffects:
     enabled: true
     #size of the impact imitated explosion
     sphereSize: 3
-    #material of the imitated explosion (default is a active redstone lamp '124:0')
-    material: '124:0'
+    #material of the imitated explosion (default is a active minecraft:glowstone)
+    material: 'minecraft:glowstone'
     #how long the effect will be displayed [s]
     time: 2
 
@@ -69,7 +69,7 @@ imitatedEffects:
     #how long the aiming vector will be. Longer means it is easier to see where you are aiming
     length: 5
     #this block will used to display the angle
-    block: '20:0'
+    block: 'minecraft:glass'
     #how long the effect will be displayed [s]
     time: 0.5
 
@@ -77,9 +77,9 @@ imitatedEffects:
     #will show fake blocks for players which are far away
     enabled: true
     #firing will show fire blocks if the player is far away
-    fireBlock: '35:14'
+    fireBlock: 'minecraft:glowstone'
     #firing will show smoke blocks if the player is far away
-    smokeBlock: '30:0'
+    smokeBlock: 'minecraft:cobweb'
     #how long the effect will be displayed [s]
     time: 2
 
@@ -91,7 +91,7 @@ imitatedEffects:
     #the predictor will work for this distance (muzzle to impact)
     maxDistance: 200.0
     #fake block which shows the impact location
-    material: '124:0'
+    material: 'minecraft:glowstone'
     #how long the effect will be displayed [s]
     time: 0.5
 

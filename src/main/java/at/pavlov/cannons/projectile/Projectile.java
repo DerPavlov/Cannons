@@ -150,7 +150,7 @@ public class Projectile implements Cloneable{
 	 * @return ID and data of the loadingItem
 	 */
 	public String getMaterialInformation() {
-		return loadingItem.getType().getId() + ":" + loadingItem.getData();
+		return loadingItem.getType().toString();
 	}
 
 	/**

@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.regex.MatchResult;
 
 public class SpawnMaterialHolder {
-    MaterialHolder material;
+    private MaterialHolder material;
     private int minAmount;
     private int maxAmount;
 
@@ -29,7 +29,7 @@ public class SpawnMaterialHolder {
         catch(Exception e)
         {
             System.out.println("Error while converting " + str + ". Check formatting (10:0 1-2)");
-            material = new MaterialHolder(Material.AIR,0);
+            material = new MaterialHolder(Material.AIR);
             setMinAmount(0);
             setMaxAmount(0);
         }

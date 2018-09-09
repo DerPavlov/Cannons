@@ -17,6 +17,7 @@ import at.pavlov.cannons.projectile.ProjectileProperties;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
@@ -35,7 +36,7 @@ import org.bukkit.util.Vector;
 
 public class CannonsUtil
 {
-	// ################# CheckAttachedButton ###########################
+    // ################# CheckAttachedButton ###########################
 	public static boolean CheckAttachedButton(Block block, BlockFace face)
 	{
 		Block attachedBlock = block.getRelative(face);
@@ -311,7 +312,7 @@ public class CannonsUtil
         if (helmet != null)
         {
             if(helmet.getType() == Material.LEATHER_HELMET)red = red + 0.04;
-            else if(helmet.getType() == Material.GOLD_HELMET)red = red + 0.08;
+            else if(helmet.getType() == Material.GOLDEN_HELMET)red = red + 0.08;
             else if(helmet.getType() == Material.CHAINMAIL_HELMET)red = red + 0.08;
             else if(helmet.getType() == Material.IRON_HELMET)red = red + 0.08;
             else if(helmet.getType() == Material.DIAMOND_HELMET)red = red + 0.12;
@@ -320,7 +321,7 @@ public class CannonsUtil
         if (boots != null)
         {
             if(boots.getType() == Material.LEATHER_BOOTS)red = red + 0.04;
-            else if(boots.getType() == Material.GOLD_BOOTS)red = red + 0.04;
+            else if(boots.getType() == Material.GOLDEN_BOOTS)red = red + 0.04;
             else if(boots.getType() == Material.CHAINMAIL_BOOTS)red = red + 0.04;
             else if(boots.getType() == Material.IRON_BOOTS)red = red + 0.08;
             else if(boots.getType() == Material.DIAMOND_BOOTS)red = red + 0.12;
@@ -329,7 +330,7 @@ public class CannonsUtil
         if (pants != null)
         {
             if(pants.getType() == Material.LEATHER_LEGGINGS)red = red + 0.08;
-            else if(pants.getType() == Material.GOLD_LEGGINGS)red = red + 0.12;
+            else if(pants.getType() == Material.GOLDEN_LEGGINGS)red = red + 0.12;
             else if(pants.getType() == Material.CHAINMAIL_LEGGINGS)red = red + 0.16;
             else if(pants.getType() == Material.IRON_LEGGINGS)red = red + 0.20;
             else if(pants.getType() == Material.DIAMOND_LEGGINGS)red = red + 0.24;
@@ -338,7 +339,7 @@ public class CannonsUtil
         if (chest != null)
         {
             if(chest.getType() == Material.LEATHER_CHESTPLATE)red = red + 0.12;
-            else if(chest.getType() == Material.GOLD_CHESTPLATE)red = red + 0.20;
+            else if(chest.getType() == Material.GOLDEN_CHESTPLATE)red = red + 0.20;
             else if(chest.getType() == Material.CHAINMAIL_CHESTPLATE)red = red + 0.20;
             else if(chest.getType() == Material.IRON_CHESTPLATE)red = red + 0.24;
             else if(chest.getType() == Material.DIAMOND_CHESTPLATE)red = red + 0.32;
@@ -619,12 +620,12 @@ public class CannonsUtil
     {
 //        try
 //        {
-            location.getWorld().playSound(location, Sound.BLOCK_NOTE_PLING  , 0.25f, 0.75f);
+            location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING  , 0.25f, 0.75f);
             Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
             {
                 @Override public void run()
                 {
-                    location.getWorld().playSound(location, Sound.BLOCK_NOTE_PLING , 0.25f, 0.1f);
+                    location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING , 0.25f, 0.1f);
                 }
             }
                     , 3);

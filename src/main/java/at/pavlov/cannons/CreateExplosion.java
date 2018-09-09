@@ -85,7 +85,7 @@ public class CreateExplosion {
      * @return true if the block can be destroyed
      */
     private boolean breakBlock(Block block, List<Block> blocklist, Boolean superBreaker, Boolean blockDamage) {
-	MaterialHolder destroyedBlock = new MaterialHolder(block.getTypeId(), block.getData());
+	MaterialHolder destroyedBlock = new MaterialHolder(block.getType());
 
 	// air is not an block to break, so ignore it
 	if (!destroyedBlock.equals(Material.AIR)) {
@@ -498,23 +498,24 @@ public class CreateExplosion {
      *            type of the falling block
      */
     private void spawnFallingBlock(Location impactLoc, Location placeLoc, double entityVelocity, MaterialHolder item) {
-	FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getType(), (byte) item.getData());
+		//FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getType(), (byte) 0);
+		FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getType().createBlockData());
 
-	// give the blocks some velocity
-	if (entity != null) {
-	    // get distance form the center + 1, to avoid division by zero
-	    double dist = impactLoc.distance(placeLoc) + 1;
-	    // calculate veloctiy away from the impact
-	    Vector vect = placeLoc.clone().subtract(impactLoc).toVector().normalize().multiply(entityVelocity / dist);
-	    // set the entity velocity
-	    entity.setVelocity(vect);
-	    // set some other properties
-	    entity.setDropItem(false);
-	    this.plugin.logDebug("Spawned block: " + item.toString() + " at impact");
-	} else {
-	    this.plugin.logSevere(
-		    "Item id:" + item.getType() + " data:" + item.getData() + " can't be spawned as falling block.");
-	}
+		// give the blocks some velocity
+		if (entity != null) {
+			// get distance form the center + 1, to avoid division by zero
+			double dist = impactLoc.distance(placeLoc) + 1;
+			// calculate veloctiy away from the impact
+			Vector vect = placeLoc.clone().subtract(impactLoc).toVector().normalize().multiply(entityVelocity / dist);
+			// set the entity velocity
+			entity.setVelocity(vect);
+			// set some other properties
+			entity.setDropItem(false);
+			this.plugin.logDebug("Spawned block: " + item.toString() + " at impact");
+		} else {
+			this.plugin.logSevere(
+				"Item id:" + item.toString() + " can't be spawned as falling block.");
+		}
     }
 
     /**

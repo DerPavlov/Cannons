@@ -95,7 +95,7 @@ public class ProjectileObserver {
             //go up until there is air and place the same liquid
             Location startLoc = projectile_entity.getLocation().clone();
             Vector vel = projectile_entity.getVelocity().clone();
-            MaterialHolder liquid = new MaterialHolder(startLoc.getBlock().getType(), startLoc.getBlock().getData());
+            MaterialHolder liquid = new MaterialHolder(startLoc.getBlock().getType());
 
             for (int i = 0; i<5; i++)
             {
@@ -127,7 +127,7 @@ public class ProjectileObserver {
             double distance = pl.distance(loc);
 
             if(distance <= maxDist)
-                plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getType(), 0), FakeBlockType.WATER_SPLASH, 1.0);
+                plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getType()), FakeBlockType.WATER_SPLASH, 1.0);
             
         }
         CannonsUtil.imitateSound(loc, sound, maxSoundDist, maxVol);

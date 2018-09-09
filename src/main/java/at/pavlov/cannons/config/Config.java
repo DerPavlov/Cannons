@@ -35,12 +35,12 @@ public class Config
     private boolean keepAliveEnabled;
     private double keepAliveTeleportDistance;
 	//tools
-	private MaterialHolder toolAdjust = new MaterialHolder(0, 0);
-	private MaterialHolder toolAutoaim = new MaterialHolder(347, 0);
-	private MaterialHolder toolFiring = new MaterialHolder(259, 0);
-    private MaterialHolder toolRamrod = new MaterialHolder(280, 0);
-	private MaterialHolder toolRotating = new MaterialHolder(350, 0);
-    private MaterialHolder toolThermometer = new MaterialHolder(371, 0);
+	private MaterialHolder toolAdjust = new MaterialHolder("minecraft:air");
+	private MaterialHolder toolAutoaim = new MaterialHolder("minecraft:clock");
+	private MaterialHolder toolFiring = new MaterialHolder("minecraft:flint_and_steel");
+    private MaterialHolder toolRamrod = new MaterialHolder("minecraft:stick");
+	private MaterialHolder toolRotating = new MaterialHolder("minecraft:rail");
+    private MaterialHolder toolThermometer = new MaterialHolder("minecraft:gold_nugget");
 
     private int imitatedBlockMinimumDistance;
     private int imitatedBlockMaximumDistance;
@@ -49,23 +49,23 @@ public class Config
 
     private boolean imitatedExplosionEnabled;
     private int imitatedExplosionSphereSize;
-    private MaterialHolder imitatedExplosionMaterial;
+    private MaterialHolder imitatedExplosionMaterial= new MaterialHolder("minecraft:glowstone");
     private double imitatedExplosionTime;
 
     private boolean imitatedAimingEnabled;
     private int imitatedAimingLineLength;
-    private MaterialHolder imitatedAimingMaterial = new MaterialHolder(20, 0);
+    private MaterialHolder imitatedAimingMaterial = new MaterialHolder("minecraft:glass");
     private double imitatedAimingTime;
 
     private boolean imitatedFiringEffectEnabled;
-    private MaterialHolder imitatedFireMaterial = new MaterialHolder(35, 14);
-    private MaterialHolder imitatedSmokeMaterial = new MaterialHolder(30, 0);
+    private MaterialHolder imitatedFireMaterial = new MaterialHolder("minecraft:glowstone");
+    private MaterialHolder imitatedSmokeMaterial = new MaterialHolder("minecraft:cobweb");
     private double imitatedFiringTime;
 
     private boolean imitatedPredictorEnabled;
     private int imitatedPredictorIterations;
     private double imitatedPredictorDistance;
-    private MaterialHolder imitatedPredictorMaterial = new MaterialHolder(35, 14);
+    private MaterialHolder imitatedPredictorMaterial = new MaterialHolder("minecraft:glowstone");
     private double imitatedPredictorTime;
 
 
@@ -118,12 +118,12 @@ public class Config
         setKeepAliveTeleportDistance(plugin.getConfig().getDouble("keepProjectileAlive.teleportProjectile", 5.0));
 
 		//tools
-		setToolAdjust(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "0:0")));
-		setToolAutoaim(new MaterialHolder(plugin.getConfig().getString("tools.autoaim", "347:0")));
-		setToolFiring(new MaterialHolder(plugin.getConfig().getString("tools.firing", "259:0")));
-        setToolRamrod(new MaterialHolder(plugin.getConfig().getString("tools.ramrod", "280:0")));
-		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "350:0")));
-        setToolThermometer(new MaterialHolder(plugin.getConfig().getString("tools.thermometer", "371:0")));
+		setToolAdjust(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "minecraft:air")));
+		setToolAutoaim(new MaterialHolder(plugin.getConfig().getString("tools.autoaim", "minecraft:clock")));
+		setToolFiring(new MaterialHolder(plugin.getConfig().getString("tools.firing", "minecraft:flint_and_steel")));
+        setToolRamrod(new MaterialHolder(plugin.getConfig().getString("tools.ramrod", "minecraft:stick")));
+		setToolRotating(new MaterialHolder(plugin.getConfig().getString("tools.adjust", "minecraft:rail")));
+        setToolThermometer(new MaterialHolder(plugin.getConfig().getString("tools.thermometer", "minecraft:gold_nugget")));
 
         //imitated effects
         setImitatedBlockMinimumDistance(plugin.getConfig().getInt("imitatedEffects.minimumBlockDistance", 40));
@@ -134,26 +134,26 @@ public class Config
         //imitated explosions
         setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));
         setImitatedExplosionSphereSize(plugin.getConfig().getInt("imitatedEffects.explosion.sphereSize", 2));
-        setImitatedExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.explosion.material", "124:0")));
+        setImitatedExplosionMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.explosion.material", "minecraft:glowstone")));
         setImitatedExplosionTime(plugin.getConfig().getDouble("imitatedEffects.explosion.time", 1.0));
 
         //imitated aiming
         setImitatedAimingEnabled(plugin.getConfig().getBoolean("imitatedEffects.aiming.enabled", false));
         setImitatedAimingLineLength(plugin.getConfig().getInt("imitatedEffects.aiming.length", 5));
-        setImitatedAimingMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.aiming.block", "35:14")));
+        setImitatedAimingMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.aiming.block", "minecraft:glass")));
         setImitatedAimingTime(plugin.getConfig().getDouble("imitatedEffects.aiming.time", 1.0));
 
         //imitated firing effects
         setImitatedFiringEffectEnabled(plugin.getConfig().getBoolean("imitatedEffects.firing.enabled", false));
-        setImitatedFireMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.fireBlock", "35:14")));
-        setImitatedSmokeMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.smokeBlock", "35:0")));
+        setImitatedFireMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.fireBlock", "minecraft:glowstone")));
+        setImitatedSmokeMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.firing.smokeBlock", "'minecraft:cobweb")));
         setImitatedFiringTime(plugin.getConfig().getDouble("imitatedEffects.firing.time", 1.0));
 
         //imitaded predictor
         setImitatedPredictorEnabled(plugin.getConfig().getBoolean("imitatedEffects.predictor.enabled", true));
         setImitatedPredictorIterations(plugin.getConfig().getInt("imitatedEffects.predictor.maxIterations", 500));
         setImitatedPredictorDistance(plugin.getConfig().getDouble("imitatedEffects.predictor.maxDistance", 400.0));
-        setImitatedPredictorMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.predictor.material", "124:0")));
+        setImitatedPredictorMaterial(new MaterialHolder(plugin.getConfig().getString("imitatedEffects.predictor.material", "minecraft:glowstone")));
         setImitatedPredictorTime(plugin.getConfig().getDouble("imitatedEffects.predictor.time", 1.0));
 
         //superbreakerBlocks

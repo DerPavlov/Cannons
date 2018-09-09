@@ -1,5 +1,6 @@
 name: Cannons
 main: at.pavlov.cannons.Cannons
+api-version: 1.13
 version: ${version}
 depend: [WorldEdit]
 softdepend: [Vault]

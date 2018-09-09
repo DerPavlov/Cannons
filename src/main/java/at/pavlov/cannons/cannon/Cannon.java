@@ -13,11 +13,13 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 import at.pavlov.cannons.Enum.MessageEnum;
@@ -823,8 +825,9 @@ public class Cannon
         for (SimpleBlock cBlock : design.getAllCannonBlocks(this.getCannonDirection()))
         {
             Block wBlock = cBlock.toLocation(getWorldBukkit(), offset).getBlock();
-            wBlock.setType(cBlock.getType());
-            wBlock.setData((byte) cBlock.getData());
+            //todo check show
+            wBlock.setBlockData(cBlock.getBlockData());
+            //wBlock.setBlockData(cBlock);
         }
     }
 
@@ -844,7 +847,7 @@ public class Cannon
             {
                 //System.out.println("hide " + wBlock.getType());
                 wBlock.setType(Material.AIR);
-                wBlock.setData((byte) 0, false);
+                //wBlock.setData((byte) 0, false);
             }
         }
 
@@ -856,7 +859,7 @@ public class Cannon
             if (wBlock.getType() != Material.AIR)
             {
                 wBlock.setType(Material.AIR);
-                wBlock.setData((byte) 0, false);
+               // wBlock.setData((byte) 0, false);
             }
         }
     }
@@ -865,7 +868,7 @@ public class Cannon
     /**
      * breaks all cannon blocks of the cannon
      */
-    void breakAllCannonBlocks()
+    private void breakAllCannonBlocks()
     {
         List<Location> locList = design.getAllCannonBlocks(this);
         for (Location loc : locList)
@@ -971,8 +974,9 @@ public class Cannon
                     Block block = loc.getBlock();
                     //compare and data
                     //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
-                    if (cannonblock.getData() == block.getData() || block.getData() == -1 || cannonblock.getData() == -1 )
-                        return true;
+                    //todo check facing
+                    //if (cannonblock.getData() == block.getData() || block.getData() == -1 || cannonblock.getData() == -1 )
+                    return true;
                 }
             }
         }
@@ -1070,9 +1074,10 @@ public class Cannon
                 {
                     Block block = loc.getBlock();
                     //compare and data
+                    //todo check facing
                     //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
-                    if (cannonblock.getData() == block.getData() %4 || block.getData() == -1 || cannonblock.getData() == -1 )
-                        return true;
+                    //if (cannonblock.getData() == block.getData() %4 || block.getData() == -1 || cannonblock.getData() == -1 )
+                    return true;
                 }
             }
         }
@@ -1130,7 +1135,7 @@ public class Cannon
         for (Location loc : design.getRedstoneTorches(this))
         {
             Material b = loc.getBlock().getType();
-            if (b == Material.REDSTONE_TORCH_ON || b == Material.REDSTONE_TORCH_OFF)
+            if (b == Material.LEGACY_REDSTONE_TORCH_ON || b == Material.LEGACY_REDSTONE_TORCH_OFF)
             {
                 removeRedstone();
                 return MessageEnum.PermissionErrorRedstone;
@@ -1141,7 +1146,7 @@ public class Cannon
         for (Location loc : design.getRedstoneWireAndRepeater(this))
         {
             Material b = loc.getBlock().getType();
-            if (b == Material.REDSTONE_WIRE || b == Material.DIODE || b == Material.DIODE_BLOCK_ON || b == Material.DIODE_BLOCK_OFF)
+            if (b == Material.REDSTONE_WIRE || b == Material.REPEATER || b == Material.LEGACY_DIODE_BLOCK_ON || b == Material.LEGACY_DIODE_BLOCK_OFF)
             {
                 removeRedstone();
                 return MessageEnum.PermissionErrorRedstone;
@@ -1161,7 +1166,7 @@ public class Cannon
         for (Location loc : design.getRedstoneTorches(this))
         {
             Block block = loc.getBlock();
-            if (block.getType() == Material.REDSTONE_TORCH_ON || block.getType() == Material.REDSTONE_TORCH_OFF)
+            if (block.getType() == Material.LEGACY_REDSTONE_TORCH_ON || block.getType() == Material.LEGACY_REDSTONE_TORCH_OFF)
             {
                 block.breakNaturally();
             }
@@ -1171,7 +1176,7 @@ public class Cannon
         for (Location loc : design.getRedstoneWireAndRepeater(this))
         {
             Block block = loc.getBlock();
-            if (block.getType() == Material.REDSTONE_WIRE || block.getType() == Material.DIODE_BLOCK_ON || block.getType() == Material.DIODE_BLOCK_OFF)
+            if (block.getType() == Material.REDSTONE_WIRE || block.getType() == Material.LEGACY_DIODE_BLOCK_ON || block.getType() == Material.LEGACY_DIODE_BLOCK_OFF)
             {
                 block.breakNaturally();
             }
