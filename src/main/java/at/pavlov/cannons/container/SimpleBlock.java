@@ -1,15 +1,14 @@
 package at.pavlov.cannons.container;
 
 
-import com.sk89q.worldedit.world.block.BaseBlock;
-import org.bukkit.Bukkit;
+import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.material.Directional;
 import org.bukkit.util.Vector;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 public class SimpleBlock
 {
@@ -70,83 +69,65 @@ public class SimpleBlock
 	 * @param offset the locations in x,y,z
 	 * @return true if both block are equal in data and id or only the id if one data = -1
 	 */
-	public boolean compareBlockFuzzy(World world, Vector offset)
+	public boolean compareMaterial(World world, Vector offset)
 	{		
 		Block block = toLocation(world, offset).getBlock();
-        return compareBlockFuzzy(block);
+        return compareMaterial(block.getBlockData());
     }
 
 	/**
 	 * compare the location of the block and the id and data or data = -1
-	 * @param block
-	 * @param offset
-	 * @return
+	 * @param block block to compare to
+	 * @param offset the offset of the cannon
+	 * @return true if both block match
 	 */
-	public boolean compareBlockAndLocFuzzy(Block block, Vector offset)
+	public boolean compareMaterialAndLoc(Block block, Vector offset)
 	{		
 		if (toVector().add(offset).equals(block.getLocation().toVector()))
 		{
-			if (compareBlockFuzzy(block)) 
+			if (compareMaterial(block.getBlockData()))
 				return true;
 		}
 		return false;
 	}
 
 	/**
-	 * return true if id and data are equal or data is -1
-	 * @param block
-	 * @return
+	 * return true if Materials match
+	 * @param block block to compare to
+	 * @return true if both block match
 	 */
-	public boolean compareBlockFuzzy(Block block)
+	public boolean compareMaterial(BlockData block)
 	{
-		return block.getType().equals(this.blockData.getMaterial());
+		return block.getMaterial().equals(this.blockData.getMaterial());
 	}
-	
-	
+
 	/**
-	 * return true if id and data are equal
-	 * @param block
-	 * @return
+	 * compares material and facing
+	 * @param blockData block to compare to
+	 * @return true if both block match
 	 */
-    boolean compareBlock(Block block)
-	{
-		System.out.println("compareBlock: " + block.toString() + " to blockdata: " + this.blockData.toString());
-		if (block.getState().equals(this.blockData))
-		{
-			System.out.println("TRUE");
-			return true;
-		}
-		System.out.println("FALSE");
-		return false;
+	public boolean compareMaterialAndFacing(BlockData blockData) {
+		// different materials
+		if (!compareMaterial(blockData))
+			return false;
+		// compare facing and face
+		return blockData instanceof Directional && this instanceof Directional && ((Directional) this).getFacing().equals(((Directional) blockData).getFacing());
 	}
-	
+
 	/**
-	 * compares two Simpleblocks. If one data=-1 the data is not compared
-	 * @param block
-	 * @return
+	 * matches all entries in this SimpleBlock to the given block
+	 * @param blockData block to compare to
+	 * @return true if both block match
 	 */
-	public boolean equalsFuzzy(SimpleBlock block)
+	public boolean compareBlockData(BlockData blockData)
 	{
-		// compare the location
-		if (this.getLocX() == block.getLocX() && this.getLocY() == block.getLocY() && this.getLocZ() == block.getLocZ())
-		{
-			System.out.println("compareBlock + Loc: " + block.toString() + " to blockdata: " + this.blockData.toString());
-			//compare the id and data
-			if (block.getBlockData().equals(this.blockData))
-			{
-				System.out.println("TRUE");
-				return true;
-			}
-		}
-		System.out.println("FALSE");
-		return false;
+		return this.blockData.matches(blockData);
 	}
-	
-	
+
 	/** 
 	 * shifts the location of the block without comparing the id
-	 * @param loc
-	 * @return
+	 * @param loc location to add
+	 * @return new Simpleblock
 	 */
 	public SimpleBlock add(Location loc)
 	{
@@ -176,7 +157,6 @@ public class SimpleBlock
     /**
      * shifts the location of the block without comparing the id
      * @param vect vector to subtract
-     * @return new block with new subtracted location
      */
     public void subtract_noCopy(Vector vect)
     {
@@ -188,7 +168,6 @@ public class SimpleBlock
 	/** 
 	 * shifts the location of the block without comparing the id
 	 * @param loc
-	 * @return
 	 */
 	public SimpleBlock subtractInverted(Location loc)
 	{
@@ -200,23 +179,32 @@ public class SimpleBlock
 	/** 
 	 * shifts the location of the block without comparing the id
 	 * @param loc
-	 * @return
 	 */
 	public SimpleBlock subtract(Location loc)
 	{
 		return new SimpleBlock(locX - loc.getBlockX() , locY - loc.getBlockY(), locZ - loc.getBlockZ(), this.blockData);
 	}
+
+	/**
+	 * rotate the block 90° degree clockwise)
+	 * @return
+	 */
+	public void rotate90(){
+		this.blockData = CannonsUtil.roateBlockFacingClockwise(this.blockData);
+		int newx = -this.locZ;
+		this.locZ = this.locX;
+		this.locX = newx;
+	}
 	
 	/**
 	 * SimpleBlock to Vector
-	 * @return
 	 */
 	public Vector toVector()
 	{
 		return new Vector(locX, locY, locZ);
 	}
-	
-	int getLocX()
+
+	public int getLocX()
 	{
 		return locX;
 	}
@@ -226,7 +214,7 @@ public class SimpleBlock
 		this.locX = locX;
 	}
 
-	int getLocY()
+	public int getLocY()
 	{
 		return locY;
 	}
@@ -236,7 +224,7 @@ public class SimpleBlock
 		this.locY = locY;
 	}
 
-	int getLocZ()
+	public int getLocZ()
 	{
 		return locZ;
 	}

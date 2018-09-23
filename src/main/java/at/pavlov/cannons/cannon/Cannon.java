@@ -13,13 +13,11 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
-import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 import at.pavlov.cannons.Enum.MessageEnum;
@@ -888,7 +886,7 @@ public class Cannon
         if (getWorld().equals(block.getWorld().getUID())){
             for (SimpleBlock designBlock : design.getAllCannonBlocks(cannonDirection))
             {
-                if (designBlock.compareBlockAndLocFuzzy(block, offset))
+                if (designBlock.compareMaterialAndLoc(block, offset))
                 {
                     return true;
                 }

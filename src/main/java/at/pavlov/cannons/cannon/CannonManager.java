@@ -619,7 +619,7 @@ public class CannonManager
 				for (SimpleBlock designBlock : designBlockList)
 				{
 					// compare blocks
-					if (designBlock.compareBlockFuzzy(cannonBlock.getBlock()))
+					if (designBlock.compareMaterial(cannonBlock.getBlock().getBlockData()))
 					{
 						// this block is same as in the design, get the offset
 						Vector offset = designBlock.subtractInverted(cannonBlock).toVector();
@@ -629,7 +629,7 @@ public class CannonManager
 
 						for (SimpleBlock checkBlocks : designBlockList)
 						{
-							if (!checkBlocks.compareBlockFuzzy(world, offset))
+							if (!checkBlocks.compareMaterial(world, offset))
 							{
 								// if the block does not match this is not the
 								// right one

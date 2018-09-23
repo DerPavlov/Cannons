@@ -18,11 +18,9 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.bukkit.material.Torch;
@@ -509,8 +507,8 @@ public class CannonsUtil
 
                 if (r.nextDouble() < breakingChance)
                 {
-                    short newDurabiltiy = (short) (item.getDurability() + 1);
-                    item.setDurability(newDurabiltiy);
+                    org.bukkit.inventory.meta.Damageable itemMeta = (org.bukkit.inventory.meta.Damageable) item.getItemMeta();
+                    itemMeta.setDamage(itemMeta.getDamage() + 1);
                 }
             }
         }
@@ -747,7 +745,7 @@ public class CannonsUtil
         while (iter.hasNext()) {
             Block next = iter.next();
             // search for a solid non transparent block (liquids are ignored)
-            if (next.getType().isSolid() && !next.getType().isTransparent()) {
+            if (next.getType().isSolid() && next.getType().isOccluding()) {
                 nontransparent ++;
             }
         }
@@ -1069,5 +1067,17 @@ public class CannonsUtil
 
         //Z - horizontal
         return new Vector (0,1,0);
+    }
+
+    /**
+     * rotates the Facing of a BlockData clockwise
+     * @param blockData blockData
+     * @return rotated blockData
+     */
+    public static BlockData roateBlockFacingClockwise(BlockData blockData){
+        if (blockData instanceof Directional){
+            ((Directional) blockData).setFacing(roatateFace(((Directional) blockData).getFacing()));
+        }
+        return blockData;
     }
 }

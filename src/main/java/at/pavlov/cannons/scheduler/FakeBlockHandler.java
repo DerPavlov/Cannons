@@ -78,7 +78,7 @@ public class FakeBlockHandler {
                 Location loc = next.getLocation();
                 if (loc != null)
                 {
-                    player.sendBlockChange(loc, loc.getBlock().getType(), loc.getBlock().getData());
+                    player.sendBlockChange(loc, loc.getBlock().getBlockData());
                     // plugin.logDebug("expired fake block: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + next.getType().toString());
                 }
                 //remove this entry
@@ -105,7 +105,7 @@ public class FakeBlockHandler {
                 Location loc = next.getLocation();
                 if (player != null && loc != null)
                 {
-                    player.sendBlockChange(loc, loc.getBlock().getType(), loc.getBlock().getData());
+                    player.sendBlockChange(loc, loc.getBlock().getBlockData());
                 }
 
                 //remove this entry
