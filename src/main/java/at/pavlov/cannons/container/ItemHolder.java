@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 
 //small class as at.pavlov.cannons.container for item id and data
-public class MaterialHolder
+public class ItemHolder
 {
 	private Material material;
 	private String displayName;
@@ -34,7 +34,7 @@ public class MaterialHolder
 	private static String OBC_PREFIX = Bukkit.getServer().getClass().getPackage().getName();
 	private static String NMS_PREFIX = OBC_PREFIX.replace("org.bukkit.craftbukkit", "net.minecraft.server");
 
-	public MaterialHolder(ItemStack item)
+	public ItemHolder(ItemStack item)
 	{
 		useTypeName = false;
         if (item == null){
@@ -64,18 +64,18 @@ public class MaterialHolder
 	}
 
     @Deprecated
-    public MaterialHolder(int id)
+    public ItemHolder(int id)
     {
     	//not working
         this(Material.AIR);
     }
 
-    public MaterialHolder(Material material)
+    public ItemHolder(Material material)
     {
         this(material, null, null);
     }
 
-	public MaterialHolder(Material material, String description, List<String> lore)
+	public ItemHolder(Material material, String description, List<String> lore)
 	{
         if (material != null)
 		    this.material = material;
@@ -92,7 +92,7 @@ public class MaterialHolder
 			this.lore = new ArrayList<String>();
 	}
 
-	public MaterialHolder(String str)
+	public ItemHolder(String str)
 	{
         // data structure:
         // id;DESCRIPTION;LORE1;LORE2
@@ -100,7 +100,7 @@ public class MaterialHolder
         try
         {
         	material = Material.AIR;
-            Scanner s = new Scanner(str).useDelimiter("\\s*;\\s*");
+            Scanner s = new Scanner(str).useDelimiter("\\s*:\\s*");
             if (s.hasNext()) {
                 String next = s.next();
                 if (next != null)
@@ -184,8 +184,8 @@ public class MaterialHolder
 	 */
 	public boolean equalsFuzzy(ItemStack item)
 	{
-		MaterialHolder materialHolder = new MaterialHolder(item);
-		return equalsFuzzy(materialHolder);
+		ItemHolder itemHolder = new ItemHolder(item);
+		return equalsFuzzy(itemHolder);
 	}
 	
 	
@@ -194,7 +194,7 @@ public class MaterialHolder
 	 * @param item the item to compare
 	 * @return true if both items are equal in data and id or only the id if one data = -1
 	 */	
-	public boolean equalsFuzzy(MaterialHolder item)
+	public boolean equalsFuzzy(ItemHolder item)
 	{
 		if (item != null)
 		{

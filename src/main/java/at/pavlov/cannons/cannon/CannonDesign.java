@@ -7,10 +7,11 @@ import java.util.List;
 import at.pavlov.cannons.container.SoundHolder;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.projectile.Projectile;
 
@@ -29,7 +30,7 @@ public class CannonDesign
 	
 	//ammunition_consumption
 	private String gunpowderName;
-	private MaterialHolder gunpowderType;
+	private ItemHolder gunpowderType;
     private boolean needsGunpowder;
     private boolean gunpowderConsumption;
     private boolean projectileConsumption;
@@ -91,8 +92,8 @@ public class CannonDesign
     private double warningTemperature;
     private double criticalTemperature;
     private double maximumTemperature;
-    private List<MaterialHolder> itemCooling = new ArrayList<MaterialHolder>();
-    private List<MaterialHolder> itemCoolingUsed = new ArrayList<MaterialHolder>();
+    private List<ItemHolder> itemCooling = new ArrayList<>();
+    private List<ItemHolder> itemCoolingUsed = new ArrayList<>();
 
     //Overloading stuff
     private boolean overloadingEnabled;
@@ -164,18 +165,18 @@ public class CannonDesign
 
 	
 	//constructionblocks:
-	private MaterialHolder schematicBlockTypeIgnore;     				//this block this is ignored in the schematic file
-    private MaterialHolder schematicBlockTypeMuzzle;					//location of the muzzle
-    private MaterialHolder schematicBlockTypeRotationCenter;			//location of the roatation
-    private MaterialHolder schematicBlockTypeChestAndSign;				//locations of the chest and sign
-    private MaterialHolder schematicBlockTypeRedstoneTorch;				//locations of the redstone torches
-    private MaterialHolder schematicBlockTypeRedstoneWireAndRepeater;	//locations of the redstone wires and repeaters
-    private MaterialHolder schematicBlockTypeRedstoneTrigger; 			//locations of button or levers
-    private MaterialHolder ingameBlockTypeRedstoneTrigger;    			//block which is placed instead of the place holder
-    private MaterialHolder schematicBlockTypeRightClickTrigger; 		//locations of the right click trigger 
-    private MaterialHolder ingameBlockTypeRightClickTrigger;   			//block type of the tigger in game
-    private MaterialHolder schematicBlockTypeFiringIndicator;			//location of the firing indicator
-    private List<MaterialHolder> schematicBlockTypeProtected;				//list of blocks that are protected from explosions (e.g. buttons)
+	private BlockData schematicBlockTypeIgnore;     				//this block this is ignored in the schematic file
+    private BlockData schematicBlockTypeMuzzle;					//location of the muzzle
+    private BlockData schematicBlockTypeRotationCenter;			//location of the roatation
+    private BlockData schematicBlockTypeChestAndSign;				//locations of the chest and sign
+    private BlockData schematicBlockTypeRedstoneTorch;				//locations of the redstone torches
+    private BlockData schematicBlockTypeRedstoneWireAndRepeater;	//locations of the redstone wires and repeaters
+    private BlockData schematicBlockTypeRedstoneTrigger; 			//locations of button or levers
+    private BlockData ingameBlockTypeRedstoneTrigger;    			//block which is placed instead of the place holder
+    private BlockData schematicBlockTypeRightClickTrigger; 		//locations of the right click trigger
+    private BlockData ingameBlockTypeRightClickTrigger;   			//block type of the tigger in game
+    private BlockData schematicBlockTypeFiringIndicator;			//location of the firing indicator
+    private List<BlockData> schematicBlockTypeProtected;				//list of blocks that are protected from explosions (e.g. buttons)
     
     //cannon design block lists for every direction (NORTH, EAST, SOUTH, WEST)
     private HashMap<BlockFace, CannonBlocks> cannonBlockMap = new HashMap<BlockFace, CannonBlocks>();
@@ -483,11 +484,11 @@ public class CannonDesign
 	{
 		this.isSignRequired = isSignRequired;
 	}
-	public MaterialHolder getGunpowderType()
+	public ItemHolder getGunpowderType()
 	{
 		return gunpowderType;
 	}
-	public void setGunpowderType(MaterialHolder gunpowderType)
+	public void setGunpowderType(ItemHolder gunpowderType)
 	{
 		this.gunpowderType = gunpowderType;
 	}
@@ -746,67 +747,67 @@ public class CannonDesign
 	{
 		this.allowedProjectiles = allowedProjectiles;
 	}
-	public MaterialHolder getSchematicBlockTypeIgnore()
+	public BlockData getSchematicBlockTypeIgnore()
 	{
 		return schematicBlockTypeIgnore;
 	}
-	public void setSchematicBlockTypeIgnore(MaterialHolder schematicBlockTypeIgnore)
+	public void setSchematicBlockTypeIgnore(BlockData schematicBlockTypeIgnore)
 	{
 		this.schematicBlockTypeIgnore = schematicBlockTypeIgnore;
 	}
-	public MaterialHolder getSchematicBlockTypeMuzzle()
+	public BlockData getSchematicBlockTypeMuzzle()
 	{
 		return schematicBlockTypeMuzzle;
 	}
-	public void setSchematicBlockTypeMuzzle(MaterialHolder schematicBlockTypeMuzzle)
+	public void setSchematicBlockTypeMuzzle(BlockData schematicBlockTypeMuzzle)
 	{
 		this.schematicBlockTypeMuzzle = schematicBlockTypeMuzzle;
 	}
-	public MaterialHolder getSchematicBlockTypeRotationCenter()
+	public BlockData getSchematicBlockTypeRotationCenter()
 	{
 		return schematicBlockTypeRotationCenter;
 	}
-	public void setSchematicBlockTypeRotationCenter(MaterialHolder schematicBlockTypeRotationCenter)
+	public void setSchematicBlockTypeRotationCenter(BlockData schematicBlockTypeRotationCenter)
 	{
 		this.schematicBlockTypeRotationCenter = schematicBlockTypeRotationCenter;
 	}
-	public MaterialHolder getSchematicBlockTypeRedstoneTorch()
+	public BlockData getSchematicBlockTypeRedstoneTorch()
 	{
 		return schematicBlockTypeRedstoneTorch;
 	}
-	public void setSchematicBlockTypeRedstoneTorch(MaterialHolder schematicBlockTypeRedstoneTorch)
+	public void setSchematicBlockTypeRedstoneTorch(BlockData schematicBlockTypeRedstoneTorch)
 	{
 		this.schematicBlockTypeRedstoneTorch = schematicBlockTypeRedstoneTorch;
 	}
-	public MaterialHolder getSchematicBlockTypeRedstoneTrigger()
+	public BlockData getSchematicBlockTypeRedstoneTrigger()
 	{
 		return schematicBlockTypeRedstoneTrigger;
 	}
-	public void setSchematicBlockTypeRedstoneTrigger(MaterialHolder schematicBlockTypeRedstoneTrigger)
+	public void setSchematicBlockTypeRedstoneTrigger(BlockData schematicBlockTypeRedstoneTrigger)
 	{
 		this.schematicBlockTypeRedstoneTrigger = schematicBlockTypeRedstoneTrigger;
 	}
-	public MaterialHolder getIngameBlockTypeRedstoneTrigger()
+	public BlockData getIngameBlockTypeRedstoneTrigger()
 	{
 		return ingameBlockTypeRedstoneTrigger;
 	}
-	public void setIngameBlockTypeRedstoneTrigger(MaterialHolder ingameBlockTypeRedstoneTrigger)
+	public void setIngameBlockTypeRedstoneTrigger(BlockData ingameBlockTypeRedstoneTrigger)
 	{
 		this.ingameBlockTypeRedstoneTrigger = ingameBlockTypeRedstoneTrigger;
 	}
-	public MaterialHolder getSchematicBlockTypeRightClickTrigger()
+	public BlockData getSchematicBlockTypeRightClickTrigger()
 	{
 		return schematicBlockTypeRightClickTrigger;
 	}
-	public void setSchematicBlockTypeRightClickTrigger(MaterialHolder schematicBlockTypeRightClickTrigger)
+	public void setSchematicBlockTypeRightClickTrigger(BlockData schematicBlockTypeRightClickTrigger)
 	{
 		this.schematicBlockTypeRightClickTrigger = schematicBlockTypeRightClickTrigger;
 	}
-	public MaterialHolder getIngameBlockTypeRightClickTrigger()
+	public BlockData getIngameBlockTypeRightClickTrigger()
 	{
 		return ingameBlockTypeRightClickTrigger;
 	}
-	public void setIngameBlockTypeRightClickTrigger(MaterialHolder ingameBlockTypeRightClickTrigger)
+	public void setIngameBlockTypeRightClickTrigger(BlockData ingameBlockTypeRightClickTrigger)
 	{
 		this.ingameBlockTypeRightClickTrigger = ingameBlockTypeRightClickTrigger;
 	}
@@ -826,37 +827,37 @@ public class CannonDesign
 	}
 
 
-	public MaterialHolder getSchematicBlockTypeChestAndSign()
+	public BlockData getSchematicBlockTypeChestAndSign()
 	{
 		return schematicBlockTypeChestAndSign;
 	}
 
 
-	public void setSchematicBlockTypeChestAndSign(MaterialHolder schematicBlockTypeChestAndSign)
+	public void setSchematicBlockTypeChestAndSign(BlockData schematicBlockTypeChestAndSign)
 	{
 		this.schematicBlockTypeChestAndSign = schematicBlockTypeChestAndSign;
 	}
 
 
-	public MaterialHolder getSchematicBlockTypeRedstoneWireAndRepeater()
+	public BlockData getSchematicBlockTypeRedstoneWireAndRepeater()
 	{
 		return schematicBlockTypeRedstoneWireAndRepeater;
 	}
 
 
-	public void setSchematicBlockTypeRedstoneWireAndRepeater(MaterialHolder schematicBlockTypeRedstoneWireAndRepeater)
+	public void setSchematicBlockTypeRedstoneWireAndRepeater(BlockData schematicBlockTypeRedstoneWireAndRepeater)
 	{
 		this.schematicBlockTypeRedstoneWireAndRepeater = schematicBlockTypeRedstoneWireAndRepeater;
 	}
 
 
-	public MaterialHolder getSchematicBlockTypeFiringIndicator()
+	public BlockData getSchematicBlockTypeFiringIndicator()
 	{
 		return schematicBlockTypeFiringIndicator;
 	}
 
 
-	public void setSchematicBlockTypeFiringIndicator(MaterialHolder schematicBlockTypeFiringIndicator)
+	public void setSchematicBlockTypeFiringIndicator(BlockData schematicBlockTypeFiringIndicator)
 	{
 		this.schematicBlockTypeFiringIndicator = schematicBlockTypeFiringIndicator;
 	}
@@ -886,13 +887,13 @@ public class CannonDesign
 	}
 
 
-	public List<MaterialHolder> getSchematicBlockTypeProtected()
+	public List<BlockData> getSchematicBlockTypeProtected()
 	{
 		return schematicBlockTypeProtected;
 	}
 
 
-	public void setSchematicBlockTypeProtected(List<MaterialHolder> schematicBlockTypeProtected)
+	public void setSchematicBlockTypeProtected(List<BlockData> schematicBlockTypeProtected)
 	{
 		this.schematicBlockTypeProtected = schematicBlockTypeProtected;
 	}
@@ -1013,19 +1014,19 @@ public class CannonDesign
         this.automaticCooling = automaticCooling;
     }
 
-    public List<MaterialHolder> getItemCooling() {
+    public List<ItemHolder> getItemCooling() {
         return itemCooling;
     }
 
-    public void setItemCooling(List<MaterialHolder> itemCooling) {
+    public void setItemCooling(List<ItemHolder> itemCooling) {
         this.itemCooling = itemCooling;
     }
 
-    public List<MaterialHolder> getItemCoolingUsed() {
+    public List<ItemHolder> getItemCoolingUsed() {
         return itemCoolingUsed;
     }
 
-    public void setItemCoolingUsed(List<MaterialHolder> itemCoolingUsed) {
+    public void setItemCoolingUsed(List<ItemHolder> itemCoolingUsed) {
         this.itemCoolingUsed = itemCoolingUsed;
     }
 
@@ -1036,7 +1037,8 @@ public class CannonDesign
      */
     public boolean isCoolingTool(ItemStack item)
     {
-        for (MaterialHolder mat : itemCooling)
+    	//todo rework tool properties
+        for (ItemHolder mat : itemCooling)
         {
             if (mat.equalsFuzzy(item))
                 return true;
@@ -1053,6 +1055,7 @@ public class CannonDesign
     {
         for (int i=0; i < itemCooling.size(); i++)
         {
+			//todo rework tool properties
             if (itemCooling.get(i).equalsFuzzy(item))
             {
                 return itemCoolingUsed.get(i).toItemStack(item.getAmount());

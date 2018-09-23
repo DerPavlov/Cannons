@@ -38,7 +38,7 @@ import org.bukkit.util.Vector;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.container.DesignFileName;
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DesignComparator;
@@ -192,7 +192,7 @@ public class DesignStorage
 
 		// ammunition
 		cannonDesign.setGunpowderName(cannonDesignConfig.getString("ammunition.gunpowderName", "gunpowder"));
-		cannonDesign.setGunpowderType(new MaterialHolder(cannonDesignConfig.getString("ammunition.gunpowderType", "SULPHUR:0")));
+		cannonDesign.setGunpowderType(new ItemHolder(cannonDesignConfig.getString("ammunition.gunpowderType", "SULPHUR:0")));
         cannonDesign.setNeedsGunpowder(cannonDesignConfig.getBoolean("ammunition.needsGunpowder", true));
         cannonDesign.setGunpowderConsumption(cannonDesignConfig.getBoolean("ammunition.gunpowderConsumption", true));
         cannonDesign.setProjectileConsumption(cannonDesignConfig.getBoolean("ammunition.projectileConsumption", true));
@@ -256,8 +256,8 @@ public class DesignStorage
         cannonDesign.setWarningTemperature(cannonDesignConfig.getDouble("heatManagement.warningTemperature", 100.0));
         cannonDesign.setCriticalTemperature(cannonDesignConfig.getDouble("heatManagement.criticalTemperature", 150.0));
         cannonDesign.setMaximumTemperature(cannonDesignConfig.getDouble("heatManagement.maximumTemperature", 200.0));
-        cannonDesign.setItemCooling(CannonsUtil.toMaterialHolderList(cannonDesignConfig.getStringList("heatManagement.coolingItems")));
-        cannonDesign.setItemCoolingUsed(CannonsUtil.toMaterialHolderList(cannonDesignConfig.getStringList("heatManagement.coolingItemsUsed")));
+        cannonDesign.setItemCooling(CannonsUtil.toItemHolderList(cannonDesignConfig.getStringList("heatManagement.coolingItems")));
+        cannonDesign.setItemCoolingUsed(CannonsUtil.toItemHolderList(cannonDesignConfig.getStringList("heatManagement.coolingItemsUsed")));
         if (cannonDesign.getItemCooling().size() != cannonDesign.getItemCoolingUsed().size())
             plugin.logSevere("CoolingItemsUsed and CoolingItems lists must have the same size. Check if both lists have the same number of entries");
 
@@ -331,21 +331,21 @@ public class DesignStorage
 		cannonDesign.setSoundSelected(new SoundHolder(cannonDesignConfig.getString("sounds.selected","BLOCK_ANVIL_LAND:1:2")));
 
 		// constructionBlocks
-		cannonDesign.setSchematicBlockTypeIgnore(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.ignore", "SAND:0")));
-		cannonDesign.setSchematicBlockTypeMuzzle(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.muzzle", "SNOW_BLOCK:0")));
-		cannonDesign.setSchematicBlockTypeFiringIndicator(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.firingIndicator", "TORCH:5")));
-		cannonDesign.setSchematicBlockTypeRotationCenter(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.rotationCenter", "REDSTONE_ORE:0")));
-		cannonDesign.setSchematicBlockTypeChestAndSign(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.chestAndSign", "WALL_SIGN:-1")));
-		cannonDesign.setSchematicBlockTypeRedstoneTorch(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.redstoneTorch", "REDSTONE_TORCH_ON:5")));
-		cannonDesign.setSchematicBlockTypeRedstoneWireAndRepeater(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.restoneWireAndRepeater", "DIODE_BLOCK_OFF:-1")));
+		cannonDesign.setSchematicBlockTypeIgnore(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.ignore", "minecraft:sand")));
+		cannonDesign.setSchematicBlockTypeMuzzle(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.muzzle", "minecraft:snow_block")));
+		cannonDesign.setSchematicBlockTypeFiringIndicator(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.firingIndicator", "minecraft:torch")));
+		cannonDesign.setSchematicBlockTypeRotationCenter(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.rotationCenter", "Rminecraft:redstone_ore")));
+		cannonDesign.setSchematicBlockTypeChestAndSign(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.chestAndSign", "minecraft:sign")));
+		cannonDesign.setSchematicBlockTypeRedstoneTorch(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTorch", "minecraft:redstone_torch")));
+		cannonDesign.setSchematicBlockTypeRedstoneWireAndRepeater(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.restoneWireAndRepeater", "minecraft:repeater")));
 		// RedstoneTrigger
-		cannonDesign.setSchematicBlockTypeRedstoneTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.schematic", "LEVER:1")));
-		cannonDesign.setIngameBlockTypeRedstoneTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.ingame", "STONE_BUTTON:1")));
+		cannonDesign.setSchematicBlockTypeRedstoneTrigger(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.schematic", "minecraft:lever")));
+		cannonDesign.setIngameBlockTypeRedstoneTrigger(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.ingame", "minecraft:stone_button")));
 		// rightClickTrigger
-		cannonDesign.setSchematicBlockTypeRightClickTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.schematic", "TORCH:5")));
-		cannonDesign.setIngameBlockTypeRightClickTrigger(new MaterialHolder(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.ingame", "TORCH:5")));
+		cannonDesign.setSchematicBlockTypeRightClickTrigger(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.schematic", "minecraft:torch")));
+		cannonDesign.setIngameBlockTypeRightClickTrigger(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.ingame", "minecraft:torch")));
 		// protected Blocks
-		cannonDesign.setSchematicBlockTypeProtected(CannonsUtil.toMaterialHolderList(cannonDesignConfig.getStringList("constructionBlocks.protectedBlocks")));
+		cannonDesign.setSchematicBlockTypeProtected(CannonsUtil.toBlockDataList(cannonDesignConfig.getStringList("constructionBlocks.protectedBlocks")));
 	}
 
 	/**
@@ -391,20 +391,19 @@ public class DesignStorage
 
 		// convert all schematic blocks from the config to BaseBlocks so they
 		// can be rotated
-		BlockData blockIgnore = cannonDesign.getSchematicBlockTypeIgnore().toBlockData();
-		BlockData blockMuzzle = cannonDesign.getSchematicBlockTypeMuzzle().toBlockData();
-		BlockData blockFiringIndicator = cannonDesign.getSchematicBlockTypeFiringIndicator().toBlockData();
-		BlockData blockRotationCenter = cannonDesign.getSchematicBlockTypeRotationCenter().toBlockData();
-		BlockData blockChestAndSign = cannonDesign.getSchematicBlockTypeChestAndSign().toBlockData();
-		BlockData blockRedstoneTorch = cannonDesign.getSchematicBlockTypeRedstoneTorch().toBlockData();
-		BlockData blockRedstoneWireAndRepeater = cannonDesign.getSchematicBlockTypeRedstoneWireAndRepeater().toBlockData();
-		BlockData blockRedstoneTrigger = cannonDesign.getSchematicBlockTypeRedstoneTrigger().toBlockData();
-		BlockData blockRightClickTrigger = cannonDesign.getSchematicBlockTypeRightClickTrigger().toBlockData();
-		BlockData replaceRedstoneTrigger = cannonDesign.getIngameBlockTypeRedstoneTrigger().toBlockData();
-		BlockData replaceRightClickTrigger = cannonDesign.getIngameBlockTypeRightClickTrigger().toBlockData();
+		BlockData blockIgnore = cannonDesign.getSchematicBlockTypeIgnore();
+		BlockData blockMuzzle = cannonDesign.getSchematicBlockTypeMuzzle();
+		BlockData blockFiringIndicator = cannonDesign.getSchematicBlockTypeFiringIndicator();
+		BlockData blockRotationCenter = cannonDesign.getSchematicBlockTypeRotationCenter();
+		BlockData blockChestAndSign = cannonDesign.getSchematicBlockTypeChestAndSign();
+		BlockData blockRedstoneTorch = cannonDesign.getSchematicBlockTypeRedstoneTorch();
+		BlockData blockRedstoneWireAndRepeater = cannonDesign.getSchematicBlockTypeRedstoneWireAndRepeater();
+		BlockData blockRedstoneTrigger = cannonDesign.getSchematicBlockTypeRedstoneTrigger();
+		BlockData blockRightClickTrigger = cannonDesign.getSchematicBlockTypeRightClickTrigger();
+		BlockData replaceRedstoneTrigger = cannonDesign.getIngameBlockTypeRedstoneTrigger();
+		BlockData replaceRightClickTrigger = cannonDesign.getIngameBlockTypeRightClickTrigger();
 		List<BlockData> blockProtectedList = new ArrayList<BlockData>();
-		for(MaterialHolder blockData : cannonDesign.getSchematicBlockTypeProtected())
-			blockProtectedList.add(blockData.toBlockData());
+		blockProtectedList.addAll(cannonDesign.getSchematicBlockTypeProtected());
 		
 		
 		// get facing of the cannon

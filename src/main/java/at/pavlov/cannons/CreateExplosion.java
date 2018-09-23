@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -44,7 +45,7 @@ import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.ProjectileCause;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.container.DeathCause;
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
@@ -85,20 +86,20 @@ public class CreateExplosion {
      * @return true if the block can be destroyed
      */
     private boolean breakBlock(Block block, List<Block> blocklist, Boolean superBreaker, Boolean blockDamage) {
-	MaterialHolder destroyedBlock = new MaterialHolder(block.getType());
+	BlockData destroyedBlock = block.getBlockData();
 
 	// air is not an block to break, so ignore it
-	if (!destroyedBlock.equals(Material.AIR)) {
+	if (!destroyedBlock.getMaterial().equals(Material.AIR)) {
 	    // if it is unbreakable, ignore it
-	    for (MaterialHolder unbreakableBlock : this.config.getUnbreakableBlocks()) {
-		if (unbreakableBlock.equalsFuzzy(destroyedBlock))
+	    for (BlockData unbreakableBlock : this.config.getUnbreakableBlocks()) {
+		if (unbreakableBlock.matches(destroyedBlock))
 		    // this block is protected and impenetrable
 		    return false;
 	    }
 
 	    // test if it needs superbreaker
-	    for (MaterialHolder superbreakerBlock : this.config.getSuperbreakerBlocks()) {
-		if ((superbreakerBlock.equalsFuzzy(destroyedBlock))) {
+	    for (BlockData superbreakerBlock : this.config.getSuperbreakerBlocks()) {
+		if ((superbreakerBlock.matches(destroyedBlock))) {
 		    if (superBreaker) {
 			// this projectile has superbreaker and can destroy this block
 
@@ -497,7 +498,7 @@ public class CreateExplosion {
      * @param item
      *            type of the falling block
      */
-    private void spawnFallingBlock(Location impactLoc, Location placeLoc, double entityVelocity, MaterialHolder item) {
+    private void spawnFallingBlock(Location impactLoc, Location placeLoc, double entityVelocity, ItemHolder item) {
 		//FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getType(), (byte) 0);
 		FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getType().createBlockData());
 
@@ -1236,7 +1237,7 @@ public class CreateExplosion {
 	double minDist = this.config.getImitatedBlockMinimumDistance();
 	double maxDist = this.config.getImitatedBlockMaximumDistance();
 	int r = this.config.getImitatedExplosionSphereSize() / 2;
-	MaterialHolder mat = this.config.getImitatedExplosionMaterial();
+	BlockData mat = this.config.getImitatedExplosionMaterial();
 	double delay = this.config.getImitatedExplosionTime();
 
 	for (Player p : loc.getWorld().getPlayers()) {

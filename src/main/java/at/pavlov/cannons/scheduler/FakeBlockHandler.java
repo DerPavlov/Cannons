@@ -4,12 +4,13 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.container.FakeBlockEntry;
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.listener.Commands;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
@@ -121,10 +122,10 @@ public class FakeBlockHandler {
      * @param player the player to be notified
      * @param loc center of the sphere
      * @param r radius of the sphere
-     * @param mat material of the fake block
+     * @param blockData material of the fake block
      * @param duration delay until the block disappears again in s
      */
-    public void imitatedSphere(Player player, Location loc, int r, MaterialHolder mat, FakeBlockType type, double duration)
+    public void imitatedSphere(Player player, Location loc, int r, BlockData blockData, FakeBlockType type, double duration)
     {
         if(loc == null || player == null)
             return;
@@ -138,7 +139,7 @@ public class FakeBlockHandler {
                     Location newL = loc.clone().add(x, y, z);
                     if(newL.distance(loc)<=r)
                     {
-                        sendBlockChangeToPlayer(player, newL, mat, type, duration);
+                        sendBlockChangeToPlayer(player, newL, blockData, type, duration);
                     }
                 }
             }
@@ -153,7 +154,7 @@ public class FakeBlockHandler {
      * @param length lenght of the line
      * @param player name of the player
      */
-    public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, MaterialHolder material, FakeBlockType type, double duration)
+    public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, BlockData blockData, FakeBlockType type, double duration)
     {
         if(loc == null || player == null)
             return;
@@ -161,7 +162,7 @@ public class FakeBlockHandler {
         BlockIterator iter = new BlockIterator(loc.getWorld(), loc.toVector(), direction, offset, length);
         while (iter.hasNext())
         {
-            sendBlockChangeToPlayer(player, iter.next().getLocation(), material, type, duration);
+            sendBlockChangeToPlayer(player, iter.next().getLocation(), blockData, type, duration);
         }
 
     }
@@ -170,10 +171,10 @@ public class FakeBlockHandler {
      * sends fake block to the given player
      * @param player player to display the blocks
      * @param loc location of the block
-     * @param material type of the block
+     * @param blockData type of the block
      * @param duration how long to remove the block in [s]
      */
-    private void sendBlockChangeToPlayer(final Player player, final Location loc, MaterialHolder material, FakeBlockType type, double duration)
+    private void sendBlockChangeToPlayer(final Player player, final Location loc, BlockData blockData, FakeBlockType type, double duration)
     {
         //only show block in air
         if(loc.getBlock().isEmpty())
@@ -199,7 +200,7 @@ public class FakeBlockHandler {
             {
                 //plugin.logDebug("new block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
                 //player.sendBlockChange(loc, material.getType(), (byte) material.getData());
-                player.sendBlockChange(loc, material.toBlockData());
+                player.sendBlockChange(loc, blockData);
                 list.add(fakeBlockEntry);
             }
 

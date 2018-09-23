@@ -2,7 +2,7 @@ package at.pavlov.cannons.scheduler;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
@@ -95,7 +95,7 @@ public class ProjectileObserver {
             //go up until there is air and place the same liquid
             Location startLoc = projectile_entity.getLocation().clone();
             Vector vel = projectile_entity.getVelocity().clone();
-            MaterialHolder liquid = new MaterialHolder(startLoc.getBlock().getType());
+            ItemHolder liquid = new ItemHolder(startLoc.getBlock().getType());
 
             for (int i = 0; i<5; i++)
             {
@@ -115,7 +115,7 @@ public class ProjectileObserver {
      * @param loc - location of the impact
      * @param liquid - material of the fake blocks
      */
-    public void sendSplashToPlayers(Location loc, MaterialHolder liquid, SoundHolder sound)
+    public void sendSplashToPlayers(Location loc, ItemHolder liquid, SoundHolder sound)
     {
         int maxDist = (int) plugin.getMyConfig().getImitatedBlockMaximumDistance();
         int maxSoundDist = plugin.getMyConfig().getImitatedSoundMaximumDistance();
@@ -127,7 +127,7 @@ public class ProjectileObserver {
             double distance = pl.distance(loc);
 
             if(distance <= maxDist)
-                plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, new MaterialHolder(liquid.getType()), FakeBlockType.WATER_SPLASH, 1.0);
+                plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, Bukkit.createBlockData(liquid.getType()), FakeBlockType.WATER_SPLASH, 1.0);
             
         }
         CannonsUtil.imitateSound(loc, sound, maxSoundDist, maxVol);

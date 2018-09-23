@@ -3,7 +3,7 @@ package at.pavlov.cannons.cannon;
 import java.util.*;
 
 import at.pavlov.cannons.Enum.BreakCause;
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.projectile.ProjectileStorage;
@@ -13,6 +13,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -338,7 +339,7 @@ public class Cannon
             return true;
 
         //do this for every cooling item
-        for (MaterialHolder mat : design.getItemCooling())
+        for (ItemHolder mat : design.getItemCooling())
         {
             item = mat.toItemStack(item.getAmount());
             item = InventoryManagement.removeItem(invlist, item);

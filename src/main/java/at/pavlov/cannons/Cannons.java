@@ -14,7 +14,7 @@ import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.config.*;
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.listener.*;
 import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
@@ -387,7 +387,7 @@ public final class Cannons extends JavaPlugin
 		return this.config.getProjectileStorage();
 	}
 
-	public Projectile getProjectile(Cannon cannon, MaterialHolder materialHolder)
+	public Projectile getProjectile(Cannon cannon, ItemHolder materialHolder)
 	{
 		return ProjectileStorage.getProjectile(cannon, materialHolder);
 	}

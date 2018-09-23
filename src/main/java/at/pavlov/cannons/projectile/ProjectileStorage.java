@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.pavlov.cannons.container.SoundHolder;
+import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,7 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.utils.CannonsUtil;
 
 public class ProjectileStorage
@@ -50,7 +51,7 @@ public class ProjectileStorage
 	 */
 	public static Projectile getProjectile(Cannon cannon, ItemStack item)
 	{
-        MaterialHolder materialHolder = new MaterialHolder(item);
+        ItemHolder materialHolder = new ItemHolder(item);
         return getProjectile(cannon, materialHolder);
 	}
 	
@@ -59,7 +60,7 @@ public class ProjectileStorage
 	 * @param materialHolder material of the projectile
 	 * @return true if there is a projectile with this material
 	 */
-	public static Projectile getProjectile(Cannon cannon, MaterialHolder materialHolder)
+	public static Projectile getProjectile(Cannon cannon, ItemHolder materialHolder)
 	{
 		for (Projectile projectile : projectileList)
 		{
@@ -196,8 +197,8 @@ public class ProjectileStorage
 		projectile.setProjectileName(projectileConfig.getString("general.projectileName", "noProjectileName"));
         projectile.setDescription(projectileConfig.getString("general.description", "no description for this projectile"));
 		projectile.setItemName(projectileConfig.getString("general.itemName", "noItemName"));
-		projectile.setLoadingItem(new MaterialHolder(projectileConfig.getString("general.loadingItem", "STONE:0")));
-		projectile.setAlternativeItemList(CannonsUtil.toMaterialHolderList(projectileConfig.getStringList("general.alternativeId")));
+		projectile.setLoadingItem(new ItemHolder(projectileConfig.getString("general.loadingItem", "STONE:0")));
+		projectile.setAlternativeItemList(CannonsUtil.toItemHolderList(projectileConfig.getStringList("general.alternativeId")));
 		
 		//cannonball
         projectile.setProjectileEntity(getProjectileEntity(projectileConfig.getString("cannonball.entityType", "SNOWBALL")));
@@ -215,7 +216,7 @@ public class ProjectileStorage
         //smokeTrail
         projectile.setSmokeTrailEnabled(projectileConfig.getBoolean("smokeTrail.enabled", false));
         projectile.setSmokeTrailDistance(projectileConfig.getInt("smokeTrail.distance", 10));
-        projectile.setSmokeTrailMaterial(new MaterialHolder(projectileConfig.getString("smokeTrail.material", "WEB:0")));
+        projectile.setSmokeTrailMaterial(Bukkit.createBlockData(projectileConfig.getString("smokeTrail.material", "WEB:0")));
         projectile.setSmokeTrailDuration(projectileConfig.getDouble("smokeTrail.duration", 20.0));
 		
 		//explosion

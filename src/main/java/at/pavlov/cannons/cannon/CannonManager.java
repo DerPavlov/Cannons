@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.dao.LoadWhitelistTask;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
@@ -860,7 +860,7 @@ public class CannonManager
         {
             cannon.setCannonDesign(plugin.getCannonDesign(cannon));
             if (cannon.getLoadedProjectile() != null) {
-                MaterialHolder item = cannon.getLoadedProjectile().getLoadingItem();
+                ItemHolder item = cannon.getLoadedProjectile().getLoadingItem();
                 cannon.setLoadedProjectile(plugin.getProjectile(cannon, item));
             }
         }

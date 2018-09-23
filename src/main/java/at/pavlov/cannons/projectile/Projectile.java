@@ -7,11 +7,12 @@ import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
 import org.bukkit.FireworkEffect;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 
 
 
@@ -20,9 +21,9 @@ public class Projectile implements Cloneable{
 	private String projectileName;
     private String description;
 	private String itemName;
-	private MaterialHolder loadingItem;
+	private ItemHolder loadingItem;
 	//list of items or blocks that can represent this this (e.g. redstone dust may for wire when you click a block)
-	private List<MaterialHolder> alternativeItemList = new ArrayList<MaterialHolder>();
+	private List<ItemHolder> alternativeItemList = new ArrayList<ItemHolder>();
 	
 	//properties of the cannonball
     private EntityType projectileEntity;
@@ -39,7 +40,7 @@ public class Projectile implements Cloneable{
     //smokeTrail
     private boolean smokeTrailEnabled;
     private int smokeTrailDistance;
-    private MaterialHolder smokeTrailMaterial;
+    private BlockData smokeTrailMaterial;
     private double smokeTrailDuration;
 	
 	//explosion
@@ -119,7 +120,7 @@ public class Projectile implements Cloneable{
 	 * @param materialHolder the material of the loaded item
 	 * @return true if the materials match
 	 */
-	public boolean equals(MaterialHolder materialHolder)
+	public boolean equals(ItemHolder materialHolder)
 	{
         return loadingItem.equalsFuzzy(materialHolder);
     }
@@ -356,22 +357,22 @@ public class Projectile implements Cloneable{
 		this.projectileID = projectileID;
 	}
 
-	public MaterialHolder getLoadingItem()
+	public ItemHolder getLoadingItem()
 	{
 		return loadingItem;
 	}
 
-	public void setLoadingItem(MaterialHolder loadingItem)
+	public void setLoadingItem(ItemHolder loadingItem)
 	{
 		this.loadingItem = loadingItem;
 	}
 
-	public List<MaterialHolder> getAlternativeItemList()
+	public List<ItemHolder> getAlternativeItemList()
 	{
 		return alternativeItemList;
 	}
 
-	public void setAlternativeItemList(List<MaterialHolder> alternativeItemList)
+	public void setAlternativeItemList(List<ItemHolder> alternativeItemList)
 	{
 		this.alternativeItemList = alternativeItemList;
 	}
@@ -705,11 +706,11 @@ public class Projectile implements Cloneable{
         this.smokeTrailEnabled = smokeTrailEnabled;
     }
 
-    public MaterialHolder getSmokeTrailMaterial() {
+    public BlockData getSmokeTrailMaterial() {
         return smokeTrailMaterial;
     }
 
-    public void setSmokeTrailMaterial(MaterialHolder smokeTrailMaterial) {
+    public void setSmokeTrailMaterial(BlockData smokeTrailMaterial) {
         this.smokeTrailMaterial = smokeTrailMaterial;
     }
 

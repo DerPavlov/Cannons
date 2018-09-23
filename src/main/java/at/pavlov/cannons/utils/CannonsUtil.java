@@ -174,18 +174,36 @@ public class CannonsUtil
         return BlockFace.UP;
     }
 
+    /**
+     * returns a list of Material
+     * @param stringList list of Materials as strings
+     * @return list of MaterialHolders
+     */
+    public static List<BlockData> toBlockDataList(List<String> stringList)
+    {
+        List<BlockData> blockDataList = new ArrayList<>();
+
+        for (String str : stringList)
+        {
+            BlockData material = Bukkit.createBlockData(str);
+            blockDataList.add(material);
+        }
+
+        return blockDataList;
+    }
+
 	/**
-	 * returns a list of MaterialHolder. Formatting id:data
+	 * returns a list of ItemHolder
 	 * @param stringList list of Materials as strings
-	 * @return list of MaterialHolders
+	 * @return list of ItemHolders
 	 */
-	public static List<MaterialHolder> toMaterialHolderList(List<String> stringList)
+	public static List<ItemHolder> toItemHolderList(List<String> stringList)
 	{
-		List<MaterialHolder> materialList = new ArrayList<MaterialHolder>();
+		List<ItemHolder> materialList = new ArrayList<>();
 		
 		for (String str : stringList)
 		{
-			MaterialHolder material = new MaterialHolder(str); 
+            ItemHolder material = new ItemHolder(str);
 			//if id == -1 the str was invalid
             materialList.add(material);
 		}
@@ -194,9 +212,9 @@ public class CannonsUtil
 	}
 
     /**
-     * returns a list of MaterialHolder. Formatting id:data min:max
+     * returns a list of ItemHolder. Formatting id:data min:max
      * @param stringList list of strings to convert
-     * @return list of converted SpawnMaterialHolder
+     * @return list of converted SpawnItemHolder
      */
     public static List<SpawnMaterialHolder> toSpawnMaterialHolderList(List<String> stringList)
     {

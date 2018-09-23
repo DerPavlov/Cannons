@@ -4,12 +4,13 @@ package at.pavlov.cannons.listener;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.container.MaterialHolder;
+import at.pavlov.cannons.container.ItemHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
@@ -41,8 +42,8 @@ public class BlockListener implements Listener
         List<Block> blocks = event.blockList();
         for (int i = 0; i < blocks.size(); i++) {
             Block block = blocks.get(i);
-            for (MaterialHolder unbreakableBlock : plugin.getMyConfig().getUnbreakableBlocks()) {
-                if (unbreakableBlock.equalsFuzzy(block)) {
+            for (BlockData unbreakableBlock : plugin.getMyConfig().getUnbreakableBlocks()) {
+                if (unbreakableBlock.matches(block.getBlockData())) {
                     blocks.remove(i--);
                 }
             }
