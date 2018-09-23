@@ -27,6 +27,7 @@ public enum MessageEnum
 
     //Commands
     CmdSelectCannon ("Commands.SelectCannon"),
+	CmdSelectBlock ("Commands.SelectBlock"),
     CmdSelectCanceled ("Commands.SelectCanceled"),
     CmdCannonNotFound ("Commands.CannonNotFound"),
 	CmdNoSentryWhitelist ("Commands.NoSentryWhitelist"),

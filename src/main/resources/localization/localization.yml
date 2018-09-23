@@ -35,6 +35,7 @@ Aiming:
 
 Commands:
   SelectCannon: 'YELLOW [Cannons] Please click on the cannon.'
+  SelectBlock: 'YELLOW [Cannons] Please click on the block.'
   SelectCanceled: 'RED [Cannons] Selection canceled.'
   CannonNotFound: 'RED [Cannons] Cannon not found.'
   NoSentryWhitelist: 'RED [Cannons] Whitelist works for sentries only.'

@@ -384,11 +384,18 @@ public class PlayerListener implements Listener
         final Cannon cannon = cannonManager.getCannon(barrel, player.getUniqueId(), false);
 
         // ############ select a cannon ####################
-        if(plugin.getCommandListener().isSelectingMode(player) && cannon != null)
+        if(plugin.getCommandListener().isSelectingMode(player))
         {
-            plugin.getCommandListener().setSelectedCannon(player, cannon);
-            event.setCancelled(true);
-            return;
+            if (plugin.getCommandListener().isBlockSelectingMode(player)){
+                plugin.getCommandListener().setSelectedBlock(player, clickedBlock);
+                event.setCancelled(true);
+                return;
+            }
+            else if (cannon != null){
+                plugin.getCommandListener().setSelectedCannon(player, cannon);
+                event.setCancelled(true);
+                return;
+            }
         }
 
     	if((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL) && event.getHand() == EquipmentSlot.HAND && cannon != null)

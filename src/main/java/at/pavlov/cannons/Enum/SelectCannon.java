@@ -10,5 +10,6 @@ public enum SelectCannon {
     TARGET_PLAYER,
     TARGET_CANNON,
     TARGET_OTHER,
-    BUY_CANNON
+    BUY_CANNON,
+    BLOCK_DATA
 }

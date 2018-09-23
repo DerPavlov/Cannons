@@ -8,78 +8,8 @@ author: DerPavlov
 description: Fire block build cannons and smash your enemies
 
 commands:
-  build:
-    description: Short introduction how to build a cannon.
-  fire:
-    description: Short introduction how to fire a cannon.
-  adjust:
-    description: Short introduction how to adjust a cannon.
-  commands:
-    description: List all commands.
-  imitate:
-    description: Cannons will show a row of glass block in front of the cannon to illustrate the firing angle.
-    usage: |
-           /<command> [true/false]
-           Example: /<command> - toggles the imitate effect.
-           Example: /<command> true - enables the effect.
-  rename:
-    description: When you build a new cannon the plugin will use the next free name for the cannon. Since 'Cannon11' does not look nice you have the possibility to change the name.
-    usage: |
-           /<command> [old_name] [new_name]
-           Example: /<command> Cannon11 Mortar
-  observer:
-    description: Set yourself as observer for a cannon and you will see the pre-calculated impact (glow stone lamps) of the projectile for a loaded cannon. So this player can observe the target and instruct the gunner of the cannon.
-  info:
-    description: Simple command that gives you the name and design of a cannon. Type in the command and right click on the cannon to get the information.
-  list:
-    description: List all commands.
-    usage: |
-           /<command> [player]
-           Example: /<command> - shows your owns cannons
-           Example: /<command> Player - shows the cannons of the player Player.
-  target :
-    description: Allows the owner of a sentry cannon to toggle the target entities. Just use the command and click on the cannon.
-    usage: |
-           /<command> [mob|player|cannon]
-  whitelist:
-    description: Add or remove player from the cannon whitelist
-    usage: |
-           /<command> [add/remove] {player}
-           Example: /<command> add Player - adds a player to a whitelist
-           Example: /<command> remove Player - adds a player to a whitelist
-  reset:
-    description: You built too many cannons and no idea where they are? This command will remove all your cannons from the database.
-  reload:
-    description: If you update the config or design files it is necessary to reload the plugin.
-  save:
-    description:  However you can also perform '/cannons save' to save the database.
-  load:
-    description: The plugin will reload from the database when it starts up.
-  permissions:
-    description: Permissions command which will display all default permissions of Cannons for a given player.
-    usage: |
-           /<command> [player]
-           Example: /<command> - Shows the permissions of the admin.
-           Example: /<command> Player - Shows the permissions of Player.
-  dismantle:
-    description: Allows the owner of a cannon to deconstruct the cannon. The player will receive a deconstruction refund.
-    usage: |
-           /<command> {player}
-           Example: /<command> - dismantles the cannons you click on
-           Example: /<command> Player - dismantles all cannons of Pavlov
-  create:
-    description: Allows an admin create a cannon just by its design file name (filename without extension).
-    usage: |
-           /<command> [design]
-           Example: /<command> classic
-  give:
-    description: Allows an admin to give projectiles to himself with the projectile file name (filename without extension).
-    usage: |
-           /<command> [projectile] {amount}
-           Example: /<command> minecraft:cobblestone 64.
-
-
-
+  cannons:
+    description: Info how to use/build/adjust a cannon and to reload the plugin.
 
 permissions:
   cannons.*:
@@ -89,7 +19,7 @@ permissions:
       cannons.admin.*: true
       cannons.projectiles.*: true
     default: false
-  
+
   cannons.player.*:
     description: Gives single permissions for loading, adjusting, firing and recall help with cannons
     children:
@@ -213,6 +143,7 @@ permissions:
       cannons.admin.permissions: true
       cannons.admin.give: true
       cannons.admin.notarget: false
+      cannons.admin.blockdata: true
     default: op
 
   cannons.admin.reload:
@@ -239,4 +170,6 @@ permissions:
   cannons.admin.notarget:
       description: Prevents the player from being target by sentry cannons
       default: false
-
+  cannons.admin.blockdata:
+      description: Shows information about the blockdata
+      default: op

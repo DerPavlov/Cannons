@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -492,6 +493,16 @@ public class Commands implements CommandExecutor
                         plugin.getCannonManager().deleteCannons(player.getUniqueId());
                         userMessages.sendMessage(MessageEnum.CannonsReseted, player);
                     }
+                    //get blockdata
+                    else if(args[0].equalsIgnoreCase("blockdata"))
+                    {
+                        if (!player.hasPermission("cannons.player.blockdata"))
+                        {
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
+                            return true;
+                        }
+                        toggleCannonSelector(player, SelectCannon.BLOCK_DATA);
+                    }
                     //no help message if it is forbidden for this player
                     else
                     {
@@ -571,7 +582,10 @@ public class Commands implements CommandExecutor
         if (!isSelectingMode(player))
         {
             cannonSelector.put(player.getUniqueId(),cmd);
-            userMessages.sendMessage(MessageEnum.CmdSelectCannon, player);
+            if (isBlockSelectingMode(player))
+                userMessages.sendMessage(MessageEnum.CmdSelectBlock, player);
+            else
+                userMessages.sendMessage(MessageEnum.CmdSelectCannon, player);
         }
     }
 
@@ -665,6 +679,35 @@ public class Commands implements CommandExecutor
     public boolean isSelectingMode(Player player) {
         return player != null && cannonSelector.containsKey(player.getUniqueId());
     }
+
+    public boolean isBlockSelectingMode(Player player){
+        SelectCannon cmd = cannonSelector.get(player.getUniqueId());
+        return cmd.equals(SelectCannon.BLOCK_DATA);
+    }
+
+    /**
+     * adds a new selected cannon for this player
+     * @param player player that selected the cannon
+     * @param block the selected block
+     */
+    public void setSelectedBlock(Player player, Block block)
+    {
+        if (player == null || block == null)
+            return;
+
+        SelectCannon cmd = cannonSelector.get(player.getUniqueId());
+        if (cmd != null)
+        {
+            switch (cmd){
+                case BLOCK_DATA:{
+                    player.sendMessage(block.getBlockData().getAsString());
+                    break;
+                }
+            }
+        }
+        cannonSelector.remove(player.getUniqueId());
+    }
+
 
     /**
      * adds a new selected cannon for this player

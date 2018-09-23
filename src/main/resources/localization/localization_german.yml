@@ -24,6 +24,7 @@ Error:
 
 Commands:
   SelectCannon: 'YELLOW [Cannons] Bitte Kanone auswählen.'
+    SelectBlock: 'YELLOW [Cannons] Bitte Block auswählen.'
   SelectCanceled: 'RED [Cannons] Auswahl abgebrochen.'
   CannonNotFound: 'RED [Cannons] Kanone existiert nicht.'
   NoSentryWhitelist: 'RED [Cannons] Whitelist funktioniert nur bei Sentrykanonen.'
