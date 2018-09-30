@@ -331,19 +331,19 @@ public class DesignStorage
 		cannonDesign.setSoundSelected(new SoundHolder(cannonDesignConfig.getString("sounds.selected","BLOCK_ANVIL_LAND:1:2")));
 
 		// constructionBlocks
-		cannonDesign.setSchematicBlockTypeIgnore(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.ignore", "minecraft:sand")));
-		cannonDesign.setSchematicBlockTypeMuzzle(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.muzzle", "minecraft:snow_block")));
-		cannonDesign.setSchematicBlockTypeFiringIndicator(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.firingIndicator", "minecraft:torch")));
-		cannonDesign.setSchematicBlockTypeRotationCenter(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.rotationCenter", "Rminecraft:redstone_ore")));
-		cannonDesign.setSchematicBlockTypeChestAndSign(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.chestAndSign", "minecraft:sign")));
-		cannonDesign.setSchematicBlockTypeRedstoneTorch(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTorch", "minecraft:redstone_torch")));
-		cannonDesign.setSchematicBlockTypeRedstoneWireAndRepeater(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.restoneWireAndRepeater", "minecraft:repeater")));
+		cannonDesign.setSchematicBlockTypeIgnore(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.ignore", "minecraft:sand")));
+		cannonDesign.setSchematicBlockTypeMuzzle(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.muzzle", "minecraft:snow_block")));
+		cannonDesign.setSchematicBlockTypeFiringIndicator(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.firingIndicator", "minecraft:torch")));
+		cannonDesign.setSchematicBlockTypeRotationCenter(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.rotationCenter", "minecraft:redstone_ore")));
+		cannonDesign.setSchematicBlockTypeChestAndSign(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.chestAndSign", "minecraft:sign")));
+		cannonDesign.setSchematicBlockTypeRedstoneTorch(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTorch", "minecraft:redstone_torch")));
+		cannonDesign.setSchematicBlockTypeRedstoneWireAndRepeater(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.restoneWireAndRepeater", "minecraft:repeater")));
 		// RedstoneTrigger
-		cannonDesign.setSchematicBlockTypeRedstoneTrigger(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.schematic", "minecraft:lever")));
-		cannonDesign.setIngameBlockTypeRedstoneTrigger(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.ingame", "minecraft:stone_button")));
+		cannonDesign.setSchematicBlockTypeRedstoneTrigger(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.schematic", "minecraft:lever")));
+		cannonDesign.setIngameBlockTypeRedstoneTrigger(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTrigger.ingame", "minecraft:stone_button")));
 		// rightClickTrigger
-		cannonDesign.setSchematicBlockTypeRightClickTrigger(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.schematic", "minecraft:torch")));
-		cannonDesign.setIngameBlockTypeRightClickTrigger(Bukkit.createBlockData(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.ingame", "minecraft:torch")));
+		cannonDesign.setSchematicBlockTypeRightClickTrigger(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.schematic", "minecraft:torch")));
+		cannonDesign.setIngameBlockTypeRightClickTrigger(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.rightClickTrigger.ingame", "minecraft:torch")));
 		// protected Blocks
 		cannonDesign.setSchematicBlockTypeProtected(CannonsUtil.toBlockDataList(cannonDesignConfig.getStringList("constructionBlocks.protectedBlocks")));
 	}
@@ -527,7 +527,6 @@ public class DesignStorage
                 // #############  rightClickTrigger
                 else if (sblock.compareMaterialAndFacing(blockRightClickTrigger))
                 {
-                	plugin.logDebug("is right click trigger");
                     cannonBlocks.getRightClickTrigger().add(new Vector(x, y, z));
                     //can be also a sign
                     if (sblock.compareMaterialAndFacing(blockChestAndSign))
@@ -543,6 +542,7 @@ public class DesignStorage
                 // #############  chests and signs
                 else if (sblock.compareMaterial(blockChestAndSign))
                 {
+                	plugin.logDebug("found a sign");
                     // the id does not matter, but the data is important for signs
                     cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN));
                 }
@@ -595,8 +595,6 @@ public class DesignStorage
                 block.subtract(compensation);
             cannonBlocks.getMuzzle().subtract(compensation);
             cannonBlocks.getRotationCenter().subtract(compensation);
-
-			//plugin.logDebug("rotation loc " + cannonBlocks.getRotationCenter());
 
 			// add blocks to the HashMap
 			cannonDesign.getCannonBlockMap().put(cannonDirection, cannonBlocks);

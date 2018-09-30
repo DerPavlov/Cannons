@@ -62,18 +62,6 @@ public class SimpleBlock
 		return new Location(world, locX + offset.getBlockX(), locY + offset.getBlockY(), locZ + offset.getBlockZ());
 	}
 
-	
-	/**
-	 * compares the real world block by id and data (not data if data = -1)
-	 * @param world the world of the block
-	 * @param offset the locations in x,y,z
-	 * @return true if both block are equal in data and id or only the id if one data = -1
-	 */
-	public boolean compareMaterial(World world, Vector offset)
-	{		
-		Block block = toLocation(world, offset).getBlock();
-        return compareMaterial(block.getBlockData());
-    }
 
 	/**
 	 * compare the location of the block and the id and data or data = -1
@@ -108,10 +96,27 @@ public class SimpleBlock
 	 */
 	public boolean compareMaterialAndFacing(BlockData blockData) {
 		// different materials
-		if (!compareMaterial(blockData))
+		if (!compareMaterial(blockData)) {
 			return false;
+		}
 		// compare facing and face
-		return blockData instanceof Directional && this instanceof Directional && ((Directional) this).getFacing().equals(((Directional) blockData).getFacing());
+		if (blockData instanceof Directional && this instanceof Directional){
+			return ((Directional) this).getFacing().equals(((Directional) blockData).getFacing());
+		}
+		return true;
+	}
+
+	/**
+	 * compares the real world block by material and facing
+	 * @param world the world of the block
+	 * @param offset the locations in x,y,z
+	 * @return true if both block are equal in data and facing
+	 */
+	public boolean compareMaterialAndFacing(World world, Vector offset)
+	{
+		Block block = toLocation(world, offset).getBlock();
+		System.out.println("world block: " + block.getBlockData());
+		return compareMaterialAndFacing(block.getBlockData());
 	}
 
 	/**

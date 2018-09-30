@@ -197,7 +197,7 @@ public class ProjectileStorage
 		projectile.setProjectileName(projectileConfig.getString("general.projectileName", "noProjectileName"));
         projectile.setDescription(projectileConfig.getString("general.description", "no description for this projectile"));
 		projectile.setItemName(projectileConfig.getString("general.itemName", "noItemName"));
-		projectile.setLoadingItem(new ItemHolder(projectileConfig.getString("general.loadingItem", "STONE:0")));
+		projectile.setLoadingItem(new ItemHolder(projectileConfig.getString("general.loadingItem", "minecraft:cobblestone")));
 		projectile.setAlternativeItemList(CannonsUtil.toItemHolderList(projectileConfig.getStringList("general.alternativeId")));
 		
 		//cannonball
@@ -216,7 +216,7 @@ public class ProjectileStorage
         //smokeTrail
         projectile.setSmokeTrailEnabled(projectileConfig.getBoolean("smokeTrail.enabled", false));
         projectile.setSmokeTrailDistance(projectileConfig.getInt("smokeTrail.distance", 10));
-        projectile.setSmokeTrailMaterial(Bukkit.createBlockData(projectileConfig.getString("smokeTrail.material", "WEB:0")));
+        projectile.setSmokeTrailMaterial(Bukkit.createBlockData(projectileConfig.getString("smokeTrail.material", "minecraft:cobweb")));
         projectile.setSmokeTrailDuration(projectileConfig.getDouble("smokeTrail.duration", 20.0));
 		
 		//explosion

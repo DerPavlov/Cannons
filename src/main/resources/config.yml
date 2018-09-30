@@ -21,7 +21,7 @@ keepProjectileAlive:
 
 tools:
   #the item a player needs to be holding to adjust the aim of a cannon. Default is air.
-  #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
+  #minimum is mincraft:material. Named items material;displayName;lore1;lore2;....
   ajust: 'minecraft:air'
   #the item used to autoaim a cannon. Default is clock
   #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
@@ -95,50 +95,98 @@ imitatedEffects:
     #how long the effect will be displayed [s]
     time: 0.5
 
-
 #enter here the blocks which require the superbreaker ability to destroy.
 #e.g. if you enter here the enchantment table it requires a projectile with superbreaker to be destroyed.
 #else it can be destroyed by normal explosions
+#https://www.digminecraft.com/lists/item_id_list_pc.php
 superbreakerBlocks:
   #water
-  - 8
-  - 9
+  - 'minecraft:water'
   #lava
-  - 10
-  - 11
+  - 'minecraft:lava'
   #obsidian
-  - 49
+  - 'minecraft:obsidian'
   #enchantmenttable
-  - 116
+  - 'minecraft:enchanting_table'
   #enderchest
-  - 130
+  - 'minecraft:ender_chest'
   #anvil
-  - 145
-#blocks which can't be destroyed by penetration of the projectile.
-#normal minecraft explosions are not affected by this option.
+  - 'minecraft:anvil'
+  #blocks which can't be destroyed by penetration of the projectile.
+  #normal minecraft explosions are not affected by this option.
 
 
 unbreakableBlocks:
   # bedrock
-  - 7
+  #https://www.digminecraft.com/lists/item_id_list_pc.php
+  - 'minecraft:bedrock'
 
 
 #some items will consumed when used as projectile (e.g. a egg will be thrown) and the event has to be canceled, else the item can't be used as projectile
 #you can also enter here a lever to use it as right click trigger not as redstone trigger.
+#https://www.digminecraft.com/lists/item_id_list_pc.php
 cancelEventForLoadingItem:
   #EGG
-  - 344
+  - 'minecraft:egg'
   #SNOW_BALL
-  - 332
+  - 'minecraft:snowball'
   #SPAWN_EGG
-  - 383
+  - 'minecraft:bat_spawn_egg'
+  - 'minecraft:blaze_spawn_egg'
+  - 'minecraft:cave_spider_spawn_egg'
+  - 'minecraft:chicken_spawn_egg'
+  - 'minecraft:cod_spawn_egg'
+  - 'minecraft:cow_spawn_egg'
+  - 'minecraft:creeper_spawn_egg'
+  - 'minecraft:dolphin_spawn_egg'
+  - 'minecraft:donkey_spawn_egg'
+  - 'minecraft:drowned_spawn_egg'
+  - 'minecraft:elder_guardian_spawn_egg'
+  - 'minecraft:enderman_spawn_egg'
+  - 'minecraft:endermite_spawn_egg'
+  - 'minecraft:evoker_spawn_egg'
+  - 'minecraft:ghast_spawn_egg'
+  - 'minecraft:guardian_spawn_egg'
+  - 'minecraft:horse_spawn_egg'
+  - 'minecraft:husk_spawn_egg'
+  - 'minecraft:llama_spawn_egg'
+  - 'minecraft:magma_cube_spawn_egg'
+  - 'minecraft:mooshroom_spawn_egg'
+  - 'minecraft:mule_spawn_egg'
+  - 'minecraft:ocelot_spawn_egg'
+  - 'minecraft:parrot_spawn_egg'
+  - 'minecraft:phantom_spawn_egg'
+  - 'minecraft:pig_spawn_egg'
+  - 'minecraft:polar_bear_spawn_egg'
+  - 'minecraft:pufferfish_spawn_egg'
+  - 'minecraft:rabbit_spawn_egg'
+  - 'minecraft:salmon_mob_spawn_egg'
+  - 'minecraft:sheep_spawn_egg'
+  - 'minecraft:shulker_spawn_egg'
+  - 'minecraft:silverfish_spawn_egg'
+  - 'minecraft:skeleton_horse_spawn_egg'
+  - 'minecraft:skeleton_spawn_egg'
+  - 'minecraft:slime_spawn_egg'
+  - 'minecraft:spider_spawn_egg'
+  - 'minecraft:squid_spawn_egg'
+  - 'minecraft:stray_spawn_egg'
+  - 'minecraft:tropical_fish_spawn_egg'
+  - 'minecraft:vex_spawn_egg'
+  - 'minecraft:villager_spawn_egg'
+  - 'minecraft:vindicator_spawn_egg'
+  - 'minecraft:witch_spawn_egg'
+  - 'minecraft:wither_skeleton_spawn_egg'
+  - 'minecraft:wolf_spawn_egg'
+  - 'minecraft:zombie_horse_spawn_egg'
+  - 'minecraft:zombie_pigman_spawn_egg'
+  - 'minecraft:zombie_spawn_egg'
+  - 'minecraft:zombie_villager_spawn_egg'
   #ENDER_PEARL
-  - 368
+  - 'minecraft:ender_pearl'
   #FIREWORK
-  - 401
+  - 'minecraft:fireworks'
   #REDSTONE
-  - 331
-
+  - 'minecraft:redstone'
 
 database:
   #database implementation. Default is SQLite, can be changed to MySql if you change the driver.  

@@ -276,8 +276,6 @@ permissions:
   redstone: cannons.player.redstone
   #this player can use a thermometer to measure the temperature of a cannon (default item for thermometer is a gold nugget)
   thermometer: cannons.player.thermometer
-  #used to clean a cannon after firing and pushing a projectile into the barrel
-  ramrod: cannons.player.ramrod
   #cannon will autoreload if the player is sneaking and fires the cannon.
   #The ammunition comes from the chest next to the cannon
   autoreload: cannons.player.autoreload
@@ -355,29 +353,29 @@ constructionBlocks:
   #the block which the projectile is fired from the cannon, direction can be adjusted using the defaultHorizontalFacing property. Default is block of snow
   muzzle: 'minecraft:snow_block'
   #the block used to indicate when a cannon has been fired. default is torch. Makes fancy smoke on this location
-  firingIndicator: 'TORCH:5'
+  firingIndicator: 'minecraft:torch'
   #the block used to indicate where the player can place chests or signs on the cannon. Default is a blank wall sign
-  chestAndSign: 'minecraft:sign'
+  chestAndSign: 'minecraft:wall_sign'
   #indicates where redstone torches can be placed for redstone autoload and firing to work. Default is redstone torch
   redstoneTorch: 'minecraft:redstone_torch'
   #the block used to indicate where redstone wiring needs to be placed for redstone autoloading and firing to work. Default is redstone repeater
   restoneWireAndRepeater: 'minecraft:repeater'
   #options for where a redstone signal needs to lead to in order to activate redstone autoloading and firing
-  redstoneTrigger: 
+  redstoneTrigger:
     #the block used by the schematic to indicate where the redstone signal needs to lead to. Default is a lever
-    schematic: 'LEVER:1'
+    schematic: 'minecraft:lever'
     #the block used in game where the redstone signal needs to lead to. Default is stone button
-    ingame: 'STONE_BUTTON:1'
+    ingame: 'minecraft:stone_button'
   #the blocks which a player right clicks in order to fire a cannon
-  rightClickTrigger: 
+  rightClickTrigger:
     #the block used in the cannons schematic which is used to fire the cannon when right clicked by a player. Default is torch
-    schematic: 'TORCH:5'
+    schematic: 'minecraft:torch'
     #the block used in game to fire the cannon when right clicked by a player. Default is torch
-    ingame: 'TORCH:5'
+    ingame: 'minecraft:torch'
   #list of blocks in the schematic that will be protected from explosions (e.g. buttons, because they break easily)
   protectedBlocks:
-    - 'minecraft:torch'
-    - 'minecraft:lever'
-    - 'minecraft:stone_button'
+  - 'minecraft:torch'
+  - 'minecraft:lever'
+  - 'minecraft:stone_button'
 
 

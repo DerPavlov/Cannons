@@ -52,7 +52,7 @@ smokeTrail:
   #distance between two smoke clouds
   distance: 10
   #material the smoke is made of
-  material: 'WEB:0'
+  material: 'minecraft:cobweb'
   #how long the smoke will stay in seconds
   duration: 5.0
 

@@ -100,13 +100,13 @@ public class ItemHolder
         try
         {
         	material = Material.AIR;
-            Scanner s = new Scanner(str).useDelimiter("\\s*:\\s*");
+            Scanner s = new Scanner(str).useDelimiter("\\s*;\\s*");
             if (s.hasNext()) {
                 String next = s.next();
                 if (next != null)
                     this.material = Material.matchMaterial(next);
                 if (this.material == null) {
-                    System.out.println("[CANNONS] missing id value in: " + str + " element: " + next);
+                    System.out.println("[CANNONS] missing item id value in: " + str + " element: " + next);
                     this.material = Material.AIR;
                 }
             }

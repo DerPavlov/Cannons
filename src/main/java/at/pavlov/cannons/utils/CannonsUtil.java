@@ -1098,4 +1098,19 @@ public class CannonsUtil
         }
         return blockData;
     }
+
+    /**
+     * create BlockData and checks if the result is valid
+     * @param str Material name
+     * @return BlockData or AIR if the block is not valid
+     */
+    public static BlockData createBlockData(String str){
+        try{
+            return Bukkit.createBlockData(str);
+        }
+        catch(Exception e){
+            System.out.println("[Cannons] block data '" + str + "' is not valid");
+            return Material.AIR.createBlockData();
+        }
+    }
 }

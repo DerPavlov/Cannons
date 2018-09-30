@@ -136,26 +136,26 @@ public class Config
         //imitated explosions
         setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));
         setImitatedExplosionSphereSize(plugin.getConfig().getInt("imitatedEffects.explosion.sphereSize", 2));
-        setImitatedExplosionMaterial(Bukkit.createBlockData(plugin.getConfig().getString("imitatedEffects.explosion.material", "minecraft:glowstone")));
+        setImitatedExplosionMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.explosion.material", "minecraft:glowstone")));
         setImitatedExplosionTime(plugin.getConfig().getDouble("imitatedEffects.explosion.time", 1.0));
 
         //imitated aiming
         setImitatedAimingEnabled(plugin.getConfig().getBoolean("imitatedEffects.aiming.enabled", false));
         setImitatedAimingLineLength(plugin.getConfig().getInt("imitatedEffects.aiming.length", 5));
-        setImitatedAimingMaterial(Bukkit.createBlockData(plugin.getConfig().getString("imitatedEffects.aiming.block", "minecraft:glass")));
+        setImitatedAimingMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.aiming.block", "minecraft:glass")));
         setImitatedAimingTime(plugin.getConfig().getDouble("imitatedEffects.aiming.time", 1.0));
 
         //imitated firing effects
         setImitatedFiringEffectEnabled(plugin.getConfig().getBoolean("imitatedEffects.firing.enabled", false));
-        setImitatedFireMaterial(Bukkit.createBlockData(plugin.getConfig().getString("imitatedEffects.firing.fireBlock", "minecraft:glowstone")));
-        setImitatedSmokeMaterial(Bukkit.createBlockData(plugin.getConfig().getString("imitatedEffects.firing.smokeBlock", "'minecraft:cobweb")));
+        setImitatedFireMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.firing.fireBlock", "minecraft:glowstone")));
+        setImitatedSmokeMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.firing.smokeBlock", "'minecraft:cobweb")));
         setImitatedFiringTime(plugin.getConfig().getDouble("imitatedEffects.firing.time", 1.0));
 
         //imitaded predictor
         setImitatedPredictorEnabled(plugin.getConfig().getBoolean("imitatedEffects.predictor.enabled", true));
         setImitatedPredictorIterations(plugin.getConfig().getInt("imitatedEffects.predictor.maxIterations", 500));
         setImitatedPredictorDistance(plugin.getConfig().getDouble("imitatedEffects.predictor.maxDistance", 400.0));
-        setImitatedPredictorMaterial(Bukkit.createBlockData(plugin.getConfig().getString("imitatedEffects.predictor.material", "minecraft:glowstone")));
+        setImitatedPredictorMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.predictor.material", "minecraft:glowstone")));
         setImitatedPredictorTime(plugin.getConfig().getDouble("imitatedEffects.predictor.time", 1.0));
 
         //superbreakerBlocks

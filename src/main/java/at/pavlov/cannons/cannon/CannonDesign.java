@@ -180,7 +180,6 @@ public class CannonDesign
     
     //cannon design block lists for every direction (NORTH, EAST, SOUTH, WEST)
     private HashMap<BlockFace, CannonBlocks> cannonBlockMap = new HashMap<BlockFace, CannonBlocks>();
-    
 
 
     
@@ -237,7 +236,7 @@ public class CannonDesign
     /**
      * returns a list of all cannonBlocks
      * @param cannonDirection - the direction the cannon is facing
-     * @return
+     * @return List of cannon blocks
      */
     public List<SimpleBlock> getAllCannonBlocks(BlockFace cannonDirection)
     {
