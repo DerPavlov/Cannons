@@ -314,7 +314,7 @@ public class DesignStorage
         cannonDesign.setSoundCreate(new SoundHolder(cannonDesignConfig.getString("sounds.create","BLOCK_ANVIL_LAND:1:0.5")));
         cannonDesign.setSoundDestroy(new SoundHolder(cannonDesignConfig.getString("sounds.destroy","ENTITY_ZOMBIE_ATTACK_IRON_DOOR:1:0.5")));
         cannonDesign.setSoundDismantle(new SoundHolder(cannonDesignConfig.getString("sounds.dismantle", "BLOCK_ANVIL_USE:1:0.5")));
-        cannonDesign.setSoundAdjust(new SoundHolder(cannonDesignConfig.getString("sounds.adjust","ENTITY_IRONGOLEM_STEP:1:0.5")));
+        cannonDesign.setSoundAdjust(new SoundHolder(cannonDesignConfig.getString("sounds.adjust","ENTITY_IRON_GOLEM_STEP:1:0.5")));
         cannonDesign.setSoundIgnite(new SoundHolder(cannonDesignConfig.getString("sounds.ignite","ENTITY_TNT_PRIMED:5:1")));
         cannonDesign.setSoundFiring(new SoundHolder(cannonDesignConfig.getString("sounds.firing","ENTITY_GENERIC_EXPLODE:20:1.5")));
         cannonDesign.setSoundGunpowderLoading(new SoundHolder(cannonDesignConfig.getString("sounds.gunpowderLoading","BLOCK_SAND_HIT:1:1.5")));
@@ -378,7 +378,6 @@ public class DesignStorage
 			return false;
 		}
 
-        plugin.logDebug("schematic origin: " + cc.getMinimumPoint().toString());
         AffineTransform transform = new AffineTransform().translate(cc.getMinimumPoint().multiply(-1.)).rotateY(90);
         BlockTransformExtent extent = new BlockTransformExtent(cc, transform);
         ForwardExtentCopy copy = new ForwardExtentCopy(extent, cc.getRegion(), cc.getOrigin(), cc, new com.sk89q.worldedit.Vector(0, 0, 0));
@@ -418,11 +417,8 @@ public class DesignStorage
 		int width = cc.getDimensions().getBlockX();
 		int height = cc.getDimensions().getBlockY();
 		int length = cc.getDimensions().getBlockZ();
-		plugin.logDebug("schematic width, " + width + " height, " + height + " length " + length);
-		plugin.logDebug("loaded schematic with dimension: " + cc.getDimensions() + " origin: " + cc.getOrigin());
 
 		cc.setOrigin(new com.sk89q.worldedit.Vector(0, 0, 0));
-		plugin.logDebug("schematic origin: " + cc.getMinimumPoint().toString());
 
 		// to set the muzzle location the maximum and mininum x, y, z values
 		// of all muzzle blocks have to be found
@@ -454,7 +450,6 @@ public class DesignStorage
 					// ignore if block is AIR or the IgnoreBlock type
 					if (!block.getMaterial().equals(Material.AIR) && !block.matches(blockIgnore)) {
 						schematiclist.add(new SimpleBlock(pt.getBlockX(), pt.getBlockY(), pt.getBlockZ(), block));
-						plugin.logDebug("simpleblock : " + (new SimpleBlock(pt.getBlockX(), pt.getBlockY(), pt.getBlockZ(), block).toString()));
 					}
 				}
 			}
@@ -462,7 +457,6 @@ public class DesignStorage
 
 		for (int i = 0; i < 4; i++)
 		{
-			plugin.logDebug("next direction");
 			// create CannonBlocks entry
             CannonBlocks cannonBlocks = new CannonBlocks();
 
@@ -470,8 +464,6 @@ public class DesignStorage
                 int x = sblock.getLocX();
                 int y = sblock.getLocY();
                 int z = sblock.getLocZ();
-
-                plugin.logDebug("x:" + x + " y:" + y + " z:" + z + " blockData " + sblock.getBlockData().toString());
 
                 // #############  find the min and max for muzzle blocks so the
                 // cannonball is fired from the middle
@@ -542,7 +534,6 @@ public class DesignStorage
                 // #############  chests and signs
                 else if (sblock.compareMaterial(blockChestAndSign))
                 {
-                	plugin.logDebug("found a sign");
                     // the id does not matter, but the data is important for signs
                     cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN));
                 }

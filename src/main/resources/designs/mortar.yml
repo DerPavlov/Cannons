@@ -18,7 +18,7 @@ ammunition:
   #what the gunpowder is called
   gunpowderName: gunpowder
   #what item is used as gunpowder (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
-  gunpowderType: 'SULPHUR:0'
+  gunpowderType: 'minecraft:gunpowder'
   #does this cannon need gunpowder. If false you can directly load the projectile
   needsGunpowder: true
   #gunpowder will be removed from inventories. If false you have to click the cannon until it is reloaded
@@ -132,17 +132,17 @@ heatManagement:
   criticalTemperature: 150.0
   #if the cannon exceeds this temperature it will explode
   maximumTemperature: 300.0
-  #items to cool down a cannon (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
+  #items to cool down a cannon (minimum is minecraft:material. Named items minecraft:material;displayName;lore1;lore2;....)
   coolingItems:
-    - 'WATER_BUCKET:0'
-    - 'ICE:0'
-    - 'SNOW_BLOCK:0'
+    - 'minecraft:water_bucket'
+    - 'minecraft:ice'
+    - 'minecraft:snow_block'
   #items which are returned after cooling the cannon. The order is the same like above.
-  #setting a item to AIR (0:0) means it will only remove one item instead of replacing the item (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
+  #setting a item to minecraft:AIR means it will only remove one item instead of replacing the item minimum is minecraft:material. Named items minecraft:material;displayName;lore1;lore2;....)
   coolingItemsUsed:
-    - 'BUCKET:0'
-    - 'AIR:0'
-    - 'AIR:0'
+    - 'minecraft:bucket'
+    - 'minecraft:air'
+    - 'minecraft:air'
 
 
 #cannon can be loaded with more gunpowder, but might explode after firing
@@ -253,13 +253,13 @@ allowedProjectiles:
 
 sounds:
   #sound effects for this cannon.
-  #You can enter new sounds in the following way 'NAME:VOLUME:PITCH'. Like 'IRONGOLEM_WALK:1:0.5'
+  #You can enter new sounds in the following way 'NAME:VOLUME:PITCH'. Like 'IRON_GOLEM_WALK:1:0.5'
   #NAME: You can use minecraft sounds (block.anvil.hit), custom resource sound packs, or bukkit sound names (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html)
   #VOLUME: How far you will hear this sound
   #PITCH: How fast it is played. (0.5-2)
   #USE 'none:1:1' to disable this sound
 
-   #creating a new cannon
+  #creating a new cannon
   create: 'BLOCK_ANVIL_LAND:1:0.5'
   #paying the cannon fee of a new cannon
   selected: 'BLOCK_ANVIL_LAND:1:2'
@@ -268,14 +268,14 @@ sounds:
   #dismantling a cannon
   dismantle: 'BLOCK_ANVIL_USE:1:0.5'
   #changing the angle of a cannon
-  adjust: 'ENTITY_IRONGOLEM_STEP:1:0.5'
+  adjust: 'ENTITY_IRON_GOLEM_STEP:1:0.5'
   #fuse igniting sound when firing
   ignite: 'ENTITY_TNT_PRIMED:5:1'
   #firing sound
   firing: 'ENTITY_GENERIC_EXPLODE:20:1.5'
   #loading gunpowder
   gunpowderLoading: 'BLOCK_SAND_HIT:1:1.5'
-  #loading gunpowder
+  #overloading gunpowder
   gunpowderOverloading: 'BLOCK_GRASS_HIT:1:1.5'
   #cooling a cannon
   cool: 'BLOCK_FIRE_EXTINGUISH:1:1'
@@ -313,9 +313,9 @@ constructionBlocks:
   #options for where a redstone signal needs to lead to in order to activate redstone autoloading and firing
   redstoneTrigger:
     #the block used by the schematic to indicate where the redstone signal needs to lead to. Default is a lever
-    schematic: 'minecraft:lever'
+    schematic: 'minecraft:lever[face=wall,facing=east]'
     #the block used in game where the redstone signal needs to lead to. Default is stone button
-    ingame: 'minecraft:stone_button'
+    ingame: 'minecraft:stone_button[face=wall,facing=east]'
   #the blocks which a player right clicks in order to fire a cannon
   rightClickTrigger:
     #the block used in the cannons schematic which is used to fire the cannon when right clicked by a player. Default is torch

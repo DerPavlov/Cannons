@@ -14,7 +14,7 @@ public class SoundHolder {
     public SoundHolder(String str)
     {
         // data structure:
-        // 'IRONGOLEM_WALK:1:0.5'
+        // 'IRON_GOLEM_WALK:1:0.5'
         try
         {
             soundenum = null;
@@ -52,7 +52,7 @@ public class SoundHolder {
         }
         catch(Exception e)
         {
-            System.out.println("Error while converting " + str + ". Formatting: 'IRONGOLEM_WALK:1:0.5'" + e.toString());
+            System.out.println("Error while converting " + str + ". Formatting: 'IRON_GOLEM_WALK:1:0.5'" + e.toString());
         }
     }
 

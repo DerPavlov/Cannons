@@ -1,42 +1,42 @@
 package at.pavlov.cannons.container;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 
 import java.util.Scanner;
 import java.util.regex.MatchResult;
 
 public class SpawnMaterialHolder {
-    private ItemHolder material;
+    private BlockData material;
     private int minAmount;
     private int maxAmount;
 
     public SpawnMaterialHolder(String str)
     {
-        //todo rework spawning type
         //split string at space
         // id:data min-max
         // 10:0 1-2
         try
         {
             Scanner s = new Scanner(str);
-            s.findInLine("(\\w+):(\\d+)\\s+(\\d+)-(\\d+)");
+            s.findInLine("(\\S+)\\s(\\d+)-(\\d+)");
             MatchResult result = s.match();
-            material = new ItemHolder(result.group(1) + ":" + result.group(2));
-            setMinAmount(Integer.parseInt(result.group(3)));
-            setMaxAmount(Integer.parseInt(result.group(4)));
+            material = Bukkit.createBlockData(result.group(1));
+            setMinAmount(Integer.parseInt(result.group(2)));
+            setMaxAmount(Integer.parseInt(result.group(3)));
             s.close();
-            //System.out.println("id: " + getId() + " data: " + getData() + " min: " + minAmount + " max: " + maxAmount + " from str: " + str);
         }
         catch(Exception e)
         {
-            System.out.println("Error while converting " + str + ". Check formatting (10:0 1-2)");
-            material = new ItemHolder(Material.AIR);
+            System.out.println("Error while converting " + str + ". Check formatting (minecraft:cobweb 1-2)");
+            material =  Bukkit.createBlockData(Material.AIR);
             setMinAmount(0);
             setMaxAmount(0);
         }
     }
 
-    public SpawnMaterialHolder(ItemHolder material, int minAmount, int maxAmount) {
+    public SpawnMaterialHolder(BlockData material, int minAmount, int maxAmount) {
         this.material = material;
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
@@ -58,11 +58,11 @@ public class SpawnMaterialHolder {
         this.maxAmount = maxAmount;
     }
 
-    public ItemHolder getMaterial(){
+    public BlockData getMaterial(){
         return this.material;
     }
 
-    public void setMaterial(ItemHolder material){
+    public void setMaterial(BlockData material){
         this.material = material;
     }
 }

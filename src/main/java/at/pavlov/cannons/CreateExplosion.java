@@ -498,9 +498,9 @@ public class CreateExplosion {
      * @param item
      *            type of the falling block
      */
-    private void spawnFallingBlock(Location impactLoc, Location placeLoc, double entityVelocity, ItemHolder item) {
+    private void spawnFallingBlock(Location impactLoc, Location placeLoc, double entityVelocity, BlockData item) {
 		//FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getType(), (byte) 0);
-		FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item.getType().createBlockData());
+		FallingBlock entity = impactLoc.getWorld().spawnFallingBlock(placeLoc, item);
 
 		// give the blocks some velocity
 		if (entity != null) {

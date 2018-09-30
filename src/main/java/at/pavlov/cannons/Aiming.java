@@ -252,7 +252,7 @@ public class Aiming {
 		//display message only if the angle has changed
 		if (hasChanged) {
 
-            //player.getWorld().playSound(cannon.getMuzzle(), Sound.IRONGOLEM_WALK, 1f, 0.5f);
+            //player.getWorld().playSound(cannon.getMuzzle(), Sound.IRON_GOLEM_WALK, 1f, 0.5f);
             CannonsUtil.playSound(cannon.getMuzzle(),design.getSoundAdjust());
             //predict impact marker
             updateLastAimed(cannon);

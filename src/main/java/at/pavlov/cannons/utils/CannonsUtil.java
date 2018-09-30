@@ -219,11 +219,9 @@ public class CannonsUtil
     public static List<SpawnMaterialHolder> toSpawnMaterialHolderList(List<String> stringList)
     {
         List<SpawnMaterialHolder> materialList = new ArrayList<SpawnMaterialHolder>();
-
         for (String str : stringList)
         {
             SpawnMaterialHolder material = new SpawnMaterialHolder(str);
-            //if id == -1 the str was invalid
             materialList.add(material);
         }
 

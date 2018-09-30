@@ -115,7 +115,6 @@ public class SimpleBlock
 	public boolean compareMaterialAndFacing(World world, Vector offset)
 	{
 		Block block = toLocation(world, offset).getBlock();
-		System.out.println("world block: " + block.getBlockData());
 		return compareMaterialAndFacing(block.getBlockData());
 	}
 

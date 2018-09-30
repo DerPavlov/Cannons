@@ -106,11 +106,9 @@ public class ItemHolder
                 if (next != null)
                     this.material = Material.matchMaterial(next);
                 if (this.material == null) {
-                    System.out.println("[CANNONS] missing item id value in: " + str + " element: " + next);
                     this.material = Material.AIR;
                 }
             }
-
 
 			if (s.hasNext())
 				displayName = ChatColor.translateAlternateColorCodes('&', s.next());
@@ -123,7 +121,6 @@ public class ItemHolder
                 if (!nextStr.equals(""))
 				    lore.add(nextStr);
 			}
-
             s.close();
         }
         catch(Exception e)
@@ -217,10 +214,7 @@ public class ItemHolder
                 if (similar.size() < size)
                     return false;
             }
-//			if (item.getType().equals(this.material))
-//			{
-//				return (item.getData() == data || data == -1 || item.getData() == -1);
-//			}
+			return item.getType().equals(this.material);
 		}	
 		return false;
 	}

@@ -263,7 +263,7 @@ public class ProjectileStorage
         projectile.setImpactMessage(projectileConfig.getBoolean("messages.hasImpactMessage", false));
 
         //sounds
-        projectile.setSoundLoading(new SoundHolder(projectileConfig.getString("sounds.loading", "ENTITY_SNOWBALL_THROW:5:0.5")));
+        projectile.setSoundLoading(new SoundHolder(projectileConfig.getString("sounds.loading", "BLOCK_STONE_PLACE:5:0.5")));
         projectile.setSoundImpact(new SoundHolder(projectileConfig.getString("sounds.impact", "ENTITY_GENERIC_EXPLODE:10:0.5")));
         projectile.setSoundImpactProtected(new SoundHolder(projectileConfig.getString("sounds.impactProtected", "ENTITY_GENERIC_EXPLODE:10:0.5")));
         projectile.setSoundImpactWater(new SoundHolder(projectileConfig.getString("sounds.impactWater", "ENTITY_GENERIC_SPLASH:10:0.3")));
