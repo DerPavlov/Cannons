@@ -2,6 +2,7 @@ package at.pavlov.cannons.listener;
 
 import java.util.*;
 
+import at.pavlov.cannons.Enum.CommandList;
 import at.pavlov.cannons.Enum.SelectCannon;
 import at.pavlov.cannons.cannon.Cannon;
 
@@ -11,6 +12,7 @@ import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
+import com.google.common.base.Joiner;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -21,6 +23,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import at.pavlov.cannons.Cannons;
@@ -30,7 +33,7 @@ import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.dao.PersistenceDatabase;
 
 
-public class Commands implements CommandExecutor
+public class Commands implements TabExecutor
 {
     private final Cannons plugin;
     private final Config config;
@@ -944,30 +947,52 @@ public class Commands implements CommandExecutor
      * @param player the permission of this player will be checked
      */
     private void displayCommands(Player player) {
+        List<CommandList> playerCmd = new ArrayList<>();
+        List<CommandList> adminCmd = new ArrayList<>();
+        for (CommandList cmd : CommandList.values()) {
+            if (cmd.isAdminCmd())
+                adminCmd.add(cmd);
+            else
+                playerCmd.add(cmd);
+        }
         sendMessage(player, ChatColor.GOLD + "Player commands:" + ChatColor.YELLOW);
-        displayCommand(player, "/cannons build", "cannons.player.command");
-        displayCommand(player, "/cannons fire", "cannons.player.command");
-        displayCommand(player, "/cannons adjust", "cannons.player.command");
-        displayCommand(player, "/cannons commands", "cannons.player.command");
-        displayCommand(player, "/cannons imitate", null);
-        displayCommand(player, "/cannons rename [OLD] [NEW]", "cannons.player.rename");
-        displayCommand(player, "/cannons observer", "cannons.player.observer");
-        displayCommand(player, "/cannons info", "cannons.player.info");
-        displayCommand(player, "/cannons list", "cannons.player.list");
-        displayCommand(player, "/cannons target", "cannons.player.target");
-        displayCommand(player, "/cannons whitelist add [NAME]", "cannons.player.whitelist");
-        displayCommand(player, "/cannons whitelist remove [NAME]", "cannons.player.whitelist");
+        for (CommandList cmd : playerCmd)
+            displayCommand(player, cmd.getUsage(), cmd.getPermission());
+
         sendMessage(player, ChatColor.GOLD + "Admin commands:" + ChatColor.YELLOW);
-        displayCommand(player, "/cannons list [NAME]", "cannons.admin.list");
-        displayCommand(player, "/cannons create [DESIGN]", "cannons.admin.create");
-        displayCommand(player, "/cannons dismantle", "cannons.admin.dismantle");
-        displayCommand(player, "/cannons reset", "cannons.admin.reset");
-        displayCommand(player, "/cannons reload", "cannons.admin.reload");
-        displayCommand(player, "/cannons save", "cannons.admin.save");
-        displayCommand(player, "/cannons load", "cannons.admin.load");
-        displayCommand(player, "/cannons give", "cannons.admin.give");
-        displayCommand(player, "/cannons permissions [NAME]", "cannons.admin.permissions");
+        for (CommandList cmd : adminCmd)
+            displayCommand(player, cmd.getUsage(), cmd.getPermission());
+
+//        displayCommand(player, "/cannons list [NAME]", "cannons.admin.list");
+//        displayCommand(player, "/cannons create [DESIGN]", "cannons.admin.create");
+//        displayCommand(player, "/cannons dismantle", "cannons.admin.dismantle");
+//        displayCommand(player, "/cannons reset", "cannons.admin.reset");
+//        displayCommand(player, "/cannons reload", "cannons.admin.reload");
+//        displayCommand(player, "/cannons save", "cannons.admin.save");
+//        displayCommand(player, "/cannons load", "cannons.admin.load");
+//        displayCommand(player, "/cannons give", "cannons.admin.give");
+//        displayCommand(player, "/cannons permissions [NAME]", "cannons.admin.permissions");
     }
 
 
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, Command cmd, String commandLabel, String[] args) {
+        List<String> cmdList = new ArrayList<>();
+        if (cmd.getName().equalsIgnoreCase("cannons"))
+        {
+            String[] split = new String[args.length + 1];
+            System.arraycopy(args, 0, split, 1, args.length);
+            split[0] = cmd.getName();
+
+            String full = Joiner.on(" ").join(split);
+            plugin.logDebug("FULL: " + full);
+            for (CommandList commandList : CommandList.values()){
+                plugin.logDebug("cmd: " + commandList.getUsage());
+                if (commandList.getUsage().contains(full) && (commandList.getPermission() == null || commandSender.hasPermission(commandList.getPermission())))
+                    cmdList.add(commandList.getUsage().substring(full.lastIndexOf(" ")+2));
+            }
+
+        }
+        return cmdList;
+    }
 }
