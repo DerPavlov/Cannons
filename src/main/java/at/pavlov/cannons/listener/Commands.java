@@ -926,6 +926,7 @@ public class Commands implements TabExecutor
         displayPermission(sender, permPlayer, "cannons.admin.dismantle");
         displayPermission(sender, permPlayer, "cannons.admin.give");
         displayPermission(sender, permPlayer, "cannons.admin.permissions");
+        displayPermission(sender, permPlayer, "cannons.admin.blockdata");
     }
 
     /**
@@ -962,16 +963,6 @@ public class Commands implements TabExecutor
         sendMessage(player, ChatColor.GOLD + "Admin commands:" + ChatColor.YELLOW);
         for (CommandList cmd : adminCmd)
             displayCommand(player, cmd.getUsage(), cmd.getPermission());
-
-//        displayCommand(player, "/cannons list [NAME]", "cannons.admin.list");
-//        displayCommand(player, "/cannons create [DESIGN]", "cannons.admin.create");
-//        displayCommand(player, "/cannons dismantle", "cannons.admin.dismantle");
-//        displayCommand(player, "/cannons reset", "cannons.admin.reset");
-//        displayCommand(player, "/cannons reload", "cannons.admin.reload");
-//        displayCommand(player, "/cannons save", "cannons.admin.save");
-//        displayCommand(player, "/cannons load", "cannons.admin.load");
-//        displayCommand(player, "/cannons give", "cannons.admin.give");
-//        displayCommand(player, "/cannons permissions [NAME]", "cannons.admin.permissions");
     }
 
 
