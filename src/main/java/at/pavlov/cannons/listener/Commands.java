@@ -41,9 +41,9 @@ public class Commands implements TabExecutor
     private final PersistenceDatabase persistenceDatabase;
 
     //<player,command to be performed>;
-    private HashMap<UUID,SelectCannon> cannonSelector = new HashMap<UUID,SelectCannon>();
+    private HashMap<UUID,SelectCannon> cannonSelector = new HashMap<>();
     //<player,playerUID>;
-    private HashMap<UUID,UUID> whitelistPlayer = new HashMap<UUID,UUID>();
+    private HashMap<UUID,UUID> whitelistPlayer = new HashMap<>();
 
 
 
@@ -866,7 +866,7 @@ public class Commands implements TabExecutor
         if (player == null || permission == null) return;
 
         //request permission
-        Boolean hasPerm = player.hasPermission(permission);
+        boolean hasPerm = player.hasPermission(permission);
         //add some color
         String perm;
         if (hasPerm)
@@ -985,9 +985,7 @@ public class Commands implements TabExecutor
             split[0] = cmd.getName();
 
             String full = Joiner.on(" ").join(split);
-            plugin.logDebug("FULL: " + full);
             for (CommandList commandList : CommandList.values()){
-                plugin.logDebug("cmd: " + commandList.getUsage());
                 if (commandList.getUsage().contains(full) && (commandList.getPermission() == null || commandSender.hasPermission(commandList.getPermission())))
                     cmdList.add(commandList.getUsage().substring(full.lastIndexOf(" ")+2));
             }
