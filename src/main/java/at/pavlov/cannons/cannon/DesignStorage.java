@@ -420,21 +420,6 @@ public class DesignStorage
 
 		cc.setOrigin(new com.sk89q.worldedit.Vector(0, 0, 0));
 
-		// to set the muzzle location the maximum and mininum x, y, z values
-		// of all muzzle blocks have to be found
-		Vector minMuzzle = new Vector(0, 0, 0);
-		Vector maxMuzzle = new Vector(0, 0, 0);
-		boolean firstEntryMuzzle = true;
-
-		// to set the rotation Center maximum and mininum x, y, z values
-		// of all rotation blocks have to be found
-		// setting max to the size of the marked area is a good approximation
-		// if no rotationblock is given
-		Vector minRotation = new Vector(0, 0, 0);
-		Vector maxRotation = new Vector(width, height, length);
-		boolean firstEntryRotation = true;
-
-
 		ArrayList<SimpleBlock> schematiclist = new ArrayList<>();
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
@@ -459,6 +444,20 @@ public class DesignStorage
 		{
 			// create CannonBlocks entry
             CannonBlocks cannonBlocks = new CannonBlocks();
+
+			// to set the muzzle location the maximum and mininum x, y, z values
+			// of all muzzle blocks have to be found
+			Vector minMuzzle = new Vector(0, 0, 0);
+			Vector maxMuzzle = new Vector(0, 0, 0);
+			boolean firstEntryMuzzle = true;
+
+			// to set the rotation Center maximum and mininum x, y, z values
+			// of all rotation blocks have to be found
+			// setting max to the size of the marked area is a good approximation
+			// if no rotationblock is given
+			Vector minRotation = new Vector(0, 0, 0);
+			Vector maxRotation = new Vector(width, height, length);
+			boolean firstEntryRotation = true;
 
             for (SimpleBlock sblock : schematiclist) {
                 int x = sblock.getLocX();
