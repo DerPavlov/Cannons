@@ -804,7 +804,7 @@ public class CreateExplosion {
 	Location impactBlock = CannonsUtil.findFirstBlock(impactLoc, cannonball.getVelocity());
 	if (impactBlock != null) {
 	    cannonball.setImpactBlock(impactBlock);
-	    this.plugin.logDebug("todo: impact block: " + impactBlock.getBlock());
+	    //this.plugin.logDebug("todo: impact block: " + impactBlock.getBlock());
 	}
 
 	// teleport snowball to impact
@@ -1081,7 +1081,7 @@ public class CreateExplosion {
 	// vectdeflect.add(new
 	// Vector(vectdeflect.length()*r.nextGaussian()*0.2,vectdeflect.length()*r.nextGaussian()*0.2,vectdeflect.length()*r.nextGaussian()*0.2));
 
-	this.plugin.logDebug("--Deflection");
+	this.plugin.logDebug("Deflection calculating");
 
 	// ignore too slow cannonballs
 	if (vectdeflect.length() < 0.3)
@@ -1095,7 +1095,7 @@ public class CreateExplosion {
 		&& impactBlock.getBlock().getType() != Material.BEDROCK)
 	    return false;
 
-	this.plugin.logDebug("--Deflection valid");
+	this.plugin.logDebug("Deflection valid");
 	// spawn a new deflected cannnonball
 	this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new DelayedTask(cannonball) {
 	    @Override
@@ -1116,7 +1116,7 @@ public class CreateExplosion {
 		// vectdeflect.add(new
 		// Vector(vectdeflect.length()*r.nextGaussian()*0.2,vectdeflect.length()*r.nextGaussian()*0.2,vectdeflect.length()*r.nextGaussian()*0.2));
 		vectdeflect.setY(-vectdeflect.getY());
-		CreateExplosion.this.plugin.logDebug("---Deflect projectile: " + vectdeflect);
+		CreateExplosion.this.plugin.logDebug("Deflect projectile: " + vectdeflect);
 
 		CreateExplosion.this.plugin.getProjectileManager().spawnProjectile(projectile,
 			cannonball.getShooterUID(), cannonball.getSource(), cannonball.getPlayerlocation(),
