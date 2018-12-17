@@ -644,9 +644,9 @@ public class Aiming {
                     updateAngle(null, cannon, null, InteractAction.adjustSentry);
                 }
             }
-            //ready to fire
-            if (cannon.hasSentryEntity() && cannon.targetInSight()) {
-                if (cannon.isReadyToFire()  && System.currentTimeMillis() > cannon.getSentryLastFiringFailed() + 2000) {
+            //ready to fire. Fire!
+            if (cannon.hasSentryEntity() && cannon.targetInSight() ) {
+                if (cannon.isReadyToFire() && System.currentTimeMillis() > cannon.getSentryLastFiringFailed() + 2000) {
                     MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
                     if (messageEnum != null) {
 						plugin.logDebug("Sentry " + cannon.getCannonName() + " firing message: " + messageEnum);

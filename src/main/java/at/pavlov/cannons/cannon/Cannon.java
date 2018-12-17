@@ -1929,11 +1929,23 @@ public class Cannon
         //check if firing is finished and not reseted (after server restart)
         Projectile projectile = getLoadedProjectile();
         //delayTime is the time how long the firing should take
-        Long delayTime = (long) (design.getFuseBurnTime()*1000.);
+        long delayTime = (long) (design.getFuseBurnTime()*1000.);
         if (projectile != null)
             delayTime += (long) (((projectile.getAutomaticFiringMagazineSize()-1)*projectile.getAutomaticFiringDelay())*1000.0);
 
         return (lastIgnited + delayTime) >= System.currentTimeMillis();
+    }
+
+    public boolean finishedFiringAndLoading()
+    {
+        //check if firing is finished and not reseted (after server restart)
+        Projectile projectile = getLoadedProjectile();
+        //delayTime is the time how long the firing should take
+        long delayTime = (long) ((design.getFuseBurnTime() + design.getLoadTime())*1000.);
+        if (projectile != null)
+            delayTime += (long) (((projectile.getAutomaticFiringMagazineSize()-1)*projectile.getAutomaticFiringDelay() + design.getLoadTime())*1000.0);
+
+        return (lastIgnited + delayTime) < System.currentTimeMillis();
     }
 
     public void setFiring() {
@@ -1944,7 +1956,7 @@ public class Cannon
     public boolean isLoading()
     {
         //delayTime is the time how long the loading should take
-        Long delayTime = (long) (design.getLoadTime()*1000.0);
+        long delayTime = (long) (design.getLoadTime()*1000.0);
         return (lastLoaded + delayTime) > System.currentTimeMillis();
     }
 
@@ -2015,7 +2027,7 @@ public class Cannon
      * @return true if the cannon can be loaded
      */
     public boolean isReadyToFire(){
-        return isLoaded() && !isOverheatedAfterFiring() && !isFiring() && isClean() && !barrelTooHot() && isProjectilePushed();
+        return isLoaded() && !isOverheatedAfterFiring() && !isFiring() && isClean() && !barrelTooHot() && isProjectilePushed() && finishedFiringAndLoading();
     }
 
     /**
