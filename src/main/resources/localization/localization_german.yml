@@ -36,6 +36,8 @@ Commands:
   ToggledTargetOther: 'GOLD [Cannons] Sentry erkennt andere Dinge als Ziel: TARGET_OTHER'
   BuyCannon: 'YELLOW [Cannons] Klicke die Kanone um sie zu kaufen.'
   PaidCannon: 'GREEN [Cannons] Kanonenabgabe bezahlt. GOLD BUILD_COSTS GREEN wurde von deinem Konto abgebucht.'
+  ClaimCannonsStarted: 'YELLOW [Cannons] Inbesitznahme alle Kanonen in der Umgebung gestartet. Bitte warten'
+  ClaimCannonsFinished: 'GREEN [Cannons] Vorgang abgeschlossen.'
 
 
 Aiming:

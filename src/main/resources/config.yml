@@ -3,6 +3,8 @@ general:
   debugMode: false
   #relays the new BlockExplodeEvent to the old EntityExplodeEvent for protection plugins, which don't support this feature
   relayExplosionEvent: false
+  #size of the box of the claim cannon command
+  claimEdgeLength: 60
 
 
 cannonLimits:

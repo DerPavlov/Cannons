@@ -506,6 +506,19 @@ public class Commands implements TabExecutor
                         }
                         toggleCannonSelector(player, SelectCannon.BLOCK_DATA);
                     }
+                    //claim cannons in the surrounding
+                    else if(args[0].equalsIgnoreCase(CommandList.CLAIM.getCommand()))
+                    {
+                        if (!player.hasPermission(CommandList.CLAIM.getPermission()))
+                        {
+                            plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
+                            return true;
+                        }
+                        userMessages.sendMessage(MessageEnum.CmdClaimCannonsStarted, player);
+                        Cannons.getPlugin().getCannonManager().claimCannonsInBox(player.getLocation(), player.getUniqueId());
+                        userMessages.sendMessage(MessageEnum.CmdClaimCannonsFinished, player);
+
+                    }
                     //no help message if it is forbidden for this player
                     else
                     {

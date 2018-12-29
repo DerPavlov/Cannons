@@ -17,6 +17,7 @@ public enum CommandList {
     WHITELIST_ADD("whitelist add", "/cannons whitelist add [NAME]", "cannons.player.whitelist", false),
     WHITELIST_REMOVE("whitelist add", "/cannons whitelist remove [NAME]", "cannons.player.whitelist", false),
     RESET("reset", "/cannons reset", "cannons.player.reset", false),
+    CLAIM("claim", "/cannons claim", "cannons.player.claim", false),
     //admin commands
     LIST_ADMIN("list", "/cannons list [NAME]", "cannons.admin.list", true),
     CREATE("create", "/cannons create [DESIGN]", "cannons.admin.create", true),

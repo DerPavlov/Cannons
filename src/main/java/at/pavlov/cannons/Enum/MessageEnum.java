@@ -39,6 +39,8 @@ public enum MessageEnum
 	CmdToggledTargetOther ("Commands.ToggledTargetOther"),
 	CmdBuyCannon ("Commands.BuyCannon"),
 	CmdPaidCannon ("Commands.PaidCannon"),
+	CmdClaimCannonsStarted ("Commands.ClaimCannonsStarted"),
+	CmdClaimCannonsFinished ("Commands.ClaimCannonsFinished"),
 
 	//Aiming
 	SettingCombinedAngle ("Aiming.SettingCombinedAngle"),

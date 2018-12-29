@@ -47,6 +47,8 @@ Commands:
   ToggledTargetOther: 'GOLD [Cannons] Changed sentry Other targeting to: TARGET_OTHER'
   BuyCannon: 'YELLOW [Cannons] Click the cannon buy it. This will withdraw money from your account'
   PaidCannon: 'GREEN [Cannons] Cannon fee paid. GOLD BUILD_COSTS GREEN has be withdrawn from your bank account.'
+  ClaimCannonsStarted: 'YELLOW [Cannons] Claiming cannons in the surrounding. This might take a few seconds.'
+  ClaimCannonsFinished: 'GREEN [Cannons] Successfully claimed all cannons in the surrounding.'
 
 
 Load:  

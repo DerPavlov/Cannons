@@ -28,6 +28,7 @@ public class Config
 	//general
 	private boolean debugMode;
     private boolean relayExplosionEvent;
+    private int claimEdgeLength;
 	
 	//build limits
 	private boolean buildLimitEnabled;
@@ -109,6 +110,7 @@ public class Config
 		//general
 		setDebugMode(plugin.getConfig().getBoolean("general.debugMode", false));
         setRelayExplosionEvent(plugin.getConfig().getBoolean("general.relayExplosionEvent", false));
+        setClaimEdgeLength(plugin.getConfig().getInt("general.claimEdgeLength", 60));
 		
 		//limitOfCannons
 		setBuildLimitEnabled(plugin.getConfig().getBoolean("cannonLimits.useLimits", true));
@@ -533,5 +535,13 @@ public class Config
 
     public void setImitatedSoundMaximumVolume(float imitatedSoundMaximumVolume) {
         this.imitatedSoundMaximumVolume = imitatedSoundMaximumVolume;
+    }
+
+    public int getClaimEdgeLength() {
+        return claimEdgeLength;
+    }
+
+    public void setClaimEdgeLength(int claimEdgeLength) {
+        this.claimEdgeLength = claimEdgeLength;
     }
 }
