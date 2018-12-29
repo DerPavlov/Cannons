@@ -2,6 +2,7 @@ package at.pavlov.cannons.cannon;
 
 import java.util.*;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.event.CannonUseEvent;
@@ -170,11 +171,15 @@ public class Cannon
         this.lastPlayerSpreadMultiplier = 1.0;
 
         // reset
-        if (design.isGunpowderNeeded())
-            this.setLoadedGunpowder(0);
-        else
+        if (!design.isGunpowderNeeded() || design.isPreloaded())
+            // this cannon will start loaded
             this.setLoadedGunpowder(design.getMaxLoadableGunpowderNormal());
-        this.setLoadedProjectile(null);
+        else
+            this.setLoadedGunpowder(0);
+        if (design.isPreloaded())
+            this.setLoadedProjectile(this.getDefaultProjectile(this));
+        else
+            this.setLoadedProjectile(null);
         lastFiredProjectile = null;
         lastFiredGunpowder = 0;
         this.setSoot(design.getStartingSoot());
@@ -548,6 +553,16 @@ public class Cannon
 
 
         return returnVal;
+    }
+
+    /**
+     * Returns the default projectile for this cannon (first entry).
+     * @return default Projectile
+     */
+    public Projectile getDefaultProjectile(Cannon cannon){
+        if (this.getCannonDesign().getAllowedProjectiles().size() > 0)
+            return ProjectileStorage.getProjectile(cannon, this.getCannonDesign().getAllowedProjectiles().get(0));
+        return null;
     }
 
     /**

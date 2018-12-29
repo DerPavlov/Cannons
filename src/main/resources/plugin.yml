@@ -44,6 +44,7 @@ permissions:
       cannons.player.list: true
       cannons.player.create: true
       cannons.player.target: true
+      cannons.player.claim: true
     default: op
 
   cannons.player.command:
@@ -105,6 +106,9 @@ permissions:
     default: false
   cannons.player.target:
     description: Allows a owner to change the target mode of a sentry
+    default: false
+  cannons.player.claim:
+    description: Allows a player to claim cannons in the vicinity
     default: false
 
   cannons.projectile.*:

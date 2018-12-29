@@ -33,6 +33,8 @@ ammunition:
   autoreloadRedstone: true
   #after firing the projectile are usually gone, but you can set this to false to keep the cannon loaded. Just load the cannon once and it stays loaded until you break it.
   removeChargeAfterFiring: true
+  #after creating a cannon it will be preloaded with the maximum amount of gunpowder and the default projectile (first in the list)
+  preloaded: false
 
 
 barrelProperties:

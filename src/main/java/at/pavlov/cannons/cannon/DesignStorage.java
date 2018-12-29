@@ -199,6 +199,7 @@ public class DesignStorage
 		cannonDesign.setAmmoInfiniteForRedstone(cannonDesignConfig.getBoolean("ammunition.ammoInfiniteForRedstone", false));
 		cannonDesign.setAutoreloadRedstone(cannonDesignConfig.getBoolean("ammunition.autoreloadRedstone", false));
 		cannonDesign.setRemoveChargeAfterFiring(cannonDesignConfig.getBoolean("ammunition.removeChargeAfterFiring", true));
+		cannonDesign.setPreloaded(cannonDesignConfig.getBoolean("ammunition.preloaded", false));
 
 		// barrelProperties
 		cannonDesign.setMaxLoadableGunpowder(cannonDesignConfig.getInt("barrelProperties.maxLoadableGunpowder", 1));

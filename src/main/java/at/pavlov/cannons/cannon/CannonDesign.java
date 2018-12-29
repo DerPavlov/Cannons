@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import at.pavlov.cannons.container.SoundHolder;
+import at.pavlov.cannons.projectile.ProjectileStorage;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -38,7 +39,8 @@ public class CannonDesign
     private boolean ammoInfiniteForRedstone;
     private boolean autoreloadRedstone;
 	private boolean removeChargeAfterFiring;
-    
+	private boolean preloaded;
+
     //barrelProperties
 	private int maxLoadableGunpowder;
 	private double multiplierVelocity;
@@ -458,7 +460,7 @@ public class CannonDesign
     	
     	return false;
     }
-    
+
 	public String getDesignID()
 	{
 		return designID;
@@ -1586,5 +1588,13 @@ public class CannonDesign
 
 	public void setSoundSelected(SoundHolder soundSelected) {
 		this.soundSelected = soundSelected;
+	}
+
+	public boolean isPreloaded() {
+		return preloaded;
+	}
+
+	public void setPreloaded(boolean preloaded) {
+		this.preloaded = preloaded;
 	}
 }
