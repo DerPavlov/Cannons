@@ -13,10 +13,7 @@ import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.RemoveTaskWrapper;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -391,6 +388,17 @@ public class CannonManager
         return newCannonList;
     }
 
+    public void claimCannonsInBox(Location center, UUID owner){
+        int halflength = 60;
+        for (int x = halflength; x >= -halflength; x--) {
+            for (int y = halflength; y >= -halflength; y--) {
+                for (int z = halflength; z >= -halflength; z--) {
+                    getCannon(center.clone().add(x, y, z), owner);
+                }
+            }
+        }
+    }
+
     /**
      * returns all cannons for a list of locations
      * @param locations - a list of location to search for cannons
@@ -488,6 +496,10 @@ public class CannonManager
 	 */
 	public Cannon getCannon(Location cannonBlock, UUID owner, boolean silent)
 	{
+        // is this block material used for a cannon design
+        if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getBlockData().getMaterial()))
+            return null;
+
         long startTime = System.nanoTime();
 
         //check if there is a cannon at this location
@@ -599,6 +611,11 @@ public class CannonManager
 	 */
     private Cannon checkCannon(Location cannonBlock, UUID owner)
 	{
+
+	    // is this block material used for a cannon design
+        if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getBlockData().getMaterial()))
+            return null;
+
 		World world = cannonBlock.getWorld();
 
 		// check all cannon design if this block is part of the design

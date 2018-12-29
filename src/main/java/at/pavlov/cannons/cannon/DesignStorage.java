@@ -41,18 +41,20 @@ import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DesignComparator;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 public class DesignStorage
 {
 	
 	private final List<CannonDesign> cannonDesignList;
-
 	private final Cannons plugin;
+	private final List<Material> cannonBlockMaterials;
 
 	public DesignStorage(Cannons cannons)
 	{
 		plugin = cannons;
 		cannonDesignList = new ArrayList<CannonDesign>();
+		cannonBlockMaterials = new ArrayList<>();
 	}
 
 	/**
@@ -106,7 +108,17 @@ public class DesignStorage
 		//important if there is a design with one block less but else identically 
 		Comparator<CannonDesign> comparator = new DesignComparator();
 		Collections.sort(cannonDesignList, comparator);
-		
+
+		for (CannonDesign cannonDesign : getCannonDesignList()) {
+			for (SimpleBlock sBlock : cannonDesign.getAllCannonBlocks(BlockFace.NORTH)){
+				Material material = sBlock.getBlockData().getMaterial();
+				if (material != Material.AIR && !cannonBlockMaterials.contains(material)) {
+					cannonBlockMaterials.add(sBlock.getBlockData().getMaterial());
+				}
+			}
+		}
+
+
 		for (CannonDesign design : cannonDesignList)
 		{
 			plugin.logDebug("design " + design.toString());
@@ -738,5 +750,12 @@ public class DesignStorage
 		}
 		return false;
 	}
-	
+
+	public List<Material> getCannonBlockMaterials() {
+		return cannonBlockMaterials;
+	}
+
+	public boolean isCannonBlockMaterial(Material material) {
+		return material != Material.AIR && cannonBlockMaterials.contains(material);
+	}
 }
