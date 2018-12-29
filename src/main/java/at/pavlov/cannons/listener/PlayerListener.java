@@ -233,7 +233,7 @@ public class PlayerListener implements Listener
 
         // ##########  redstone torch fire
         // off because it turn form off to on
-        if (block.getType() == Material.LEGACY_REDSTONE_TORCH_ON)
+        if ((block.getType() == Material.REDSTONE_TORCH || block.getType() == Material.REDSTONE_WALL_TORCH) && event.getNewCurrent() > event.getOldCurrent())
         {
             // go one block up and check this is a cannon
             Cannon cannon = cannonManager.getCannon(block.getRelative(BlockFace.UP).getLocation(), null);
@@ -242,44 +242,15 @@ public class PlayerListener implements Listener
             {
                 // there is cannon next to the torch - check if the torch is
                 // place right
-
-                plugin.logDebug("redstone torch");
                 if (cannon.isRedstoneTorchInterface(block.getLocation()))
                 {
                     MessageEnum message = fireCannon.redstoneFiring(cannon, InteractAction.fireRedstone);
-                    plugin.logDebug("fire cannon returned: " + message.getString());
                 }
             }
         }
 
         // ##########  redstone wire fire
-        if (block.getType() == Material.REDSTONE_WIRE)
-        {
-            // block is powered
-            if (block.isBlockPowered())
-            {
-                // check all block next to this if there is a cannon
-                for (Block b : CannonsUtil.HorizontalSurroundingBlocks(block))
-                {
-                    Cannon cannon = cannonManager.getCannon(b.getLocation(), null);
-                    if (cannon != null)
-                    {
-                        // there is cannon next to the wire - check if the wire
-                        // is place right
-
-                        plugin.logDebug("redstone wire ");
-                        if (cannon.isRedstoneWireInterface(block.getLocation()))
-                        {
-                            MessageEnum message = fireCannon.redstoneFiring(cannon, InteractAction.fireRedstone);
-                            plugin.logDebug("fire cannon returned: " + message.getString());
-                        }
-                    }
-                }
-            }
-        }
-
-        // ##########  redstone repeater and comparator fire
-        if (block.getType() == Material.LEGACY_DIODE_BLOCK_OFF || block.getType() == Material.LEGACY_REDSTONE_COMPARATOR_OFF)
+        if (block.getType() == Material.REDSTONE_WIRE && event.getNewCurrent() > event.getOldCurrent())
         {
             // check all block next to this if there is a cannon
             for (Block b : CannonsUtil.HorizontalSurroundingBlocks(block))
@@ -289,11 +260,29 @@ public class PlayerListener implements Listener
                 {
                     // there is cannon next to the wire - check if the wire
                     // is place right
-                    plugin.logDebug("redstone repeater ");
+                    if (cannon.isRedstoneWireInterface(block.getLocation()))
+                    {
+                        MessageEnum message = fireCannon.redstoneFiring(cannon, InteractAction.fireRedstone);
+                    }
+                }
+
+            }
+        }
+
+        // ##########  redstone repeater and comparator fire
+        if ((block.getType() == Material.REPEATER || block.getType() == Material.COMPARATOR) && event.getNewCurrent() > event.getOldCurrent())
+        {
+            // check all block next to this if there is a cannon
+            for (Block b : CannonsUtil.HorizontalSurroundingBlocks(block))
+            {
+                Cannon cannon = cannonManager.getCannon(b.getLocation(), null);
+                if (cannon != null)
+                {
+                    // there is cannon next to the wire - check if the wire
+                    // is place right
                     if (cannon.isRedstoneRepeaterInterface(block.getLocation()))
                     {
                         MessageEnum message = fireCannon.redstoneFiring(cannon, InteractAction.fireRedstone);
-                        plugin.logDebug("fire cannon returned: " + message.getString());
                     }
 
                 }
