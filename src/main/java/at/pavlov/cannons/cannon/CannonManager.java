@@ -575,7 +575,7 @@ public class CannonManager
                     if (!silent)
                     {
                         userMessages.sendMessage(message, player, cannon);
-                        CannonsUtil.playErrorSound(player);
+                        CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
 
 

@@ -262,7 +262,6 @@ public class Cannon
         //load gunpowder if there is nothing in the barrel
         if (design.isGunpowderConsumption() && design.isGunpowderNeeded() && consumesAmmo)
         {
-
             //gunpowder will be consumed from the inventory
             //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
             int toLoad = design.getMaxLoadableGunpowderNormal() - getLoadedGunpowder();
@@ -506,7 +505,7 @@ public class Cannon
 	        }
 	        default:
 	        {
-	            CannonsUtil.playErrorSound(player);
+	            CannonsUtil.playErrorSound(getMuzzle());
 	        }
         }
         return returnVal;
@@ -548,7 +547,7 @@ public class Cannon
         else
         {
             //projectile not loaded
-            CannonsUtil.playErrorSound(player);
+            CannonsUtil.playErrorSound(getMuzzle());
         }
 
 
@@ -695,7 +694,7 @@ public class Cannon
         MessageEnum message = useRamRodInteral(player);
         if(message != null)
         {
-            if(message.isError()) CannonsUtil.playErrorSound(player);
+            if(message.isError()) CannonsUtil.playErrorSound(getMuzzle());
             else switch(message)
             {
                 case RamrodCleaning:
@@ -719,7 +718,7 @@ public class Cannon
                     break;
                 }
                 default:
-                    CannonsUtil.playErrorSound(player);
+                    CannonsUtil.playErrorSound(getMuzzle());
             }
         }
         return message;

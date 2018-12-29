@@ -179,7 +179,7 @@ public class FireCannon {
             {
                 //there is not enough gunpowder or no projectile in the chest
                 plugin.logDebug("Can't reload cannon, because there is no valid charge in the chests");
-                CannonsUtil.playErrorSound(player);
+                CannonsUtil.playErrorSound(cannon.getMuzzle());
                 return messageEnum;
             }
             else
@@ -195,7 +195,7 @@ public class FireCannon {
         MessageEnum message = getPrepareFireMessage(cannon, player);
 
         if (message != null && message.isError())
-            CannonsUtil.playErrorSound(player);
+            CannonsUtil.playErrorSound(cannon.getMuzzle());
 
         //return if there are permission missing
         if (message != MessageEnum.CannonFire)
