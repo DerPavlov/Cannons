@@ -16,12 +16,11 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.extent.transform.BlockTransformExtent;
-import com.sk89q.worldedit.function.mask.ExistingBlockMask;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.util.io.Closer;
-import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.world.block.BlockState;
 
 import org.bukkit.Bukkit;
@@ -378,9 +377,11 @@ public class DesignStorage
 			return false;
 		}
 
-        AffineTransform transform = new AffineTransform().translate(cc.getMinimumPoint().multiply(-1.)).rotateY(90);
+		BlockVector3 ve = cc.getMinimumPoint().multiply();
+
+        AffineTransform transform = new AffineTransform().translate(cc.getMinimumPoint().multiply(-1)).rotateY(90);
         BlockTransformExtent extent = new BlockTransformExtent(cc, transform);
-        ForwardExtentCopy copy = new ForwardExtentCopy(extent, cc.getRegion(), cc.getOrigin(), cc, new com.sk89q.worldedit.Vector(0, 0, 0));
+        ForwardExtentCopy copy = new ForwardExtentCopy(extent, cc.getRegion(), cc.getOrigin(), cc, BlockVector3.ZERO);
         copy.setTransform(transform);
         try {
             Operations.complete(copy);
@@ -401,8 +402,7 @@ public class DesignStorage
 		BlockData blockRightClickTrigger = cannonDesign.getSchematicBlockTypeRightClickTrigger();
 		BlockData replaceRedstoneTrigger = cannonDesign.getIngameBlockTypeRedstoneTrigger();
 		BlockData replaceRightClickTrigger = cannonDesign.getIngameBlockTypeRightClickTrigger();
-		List<BlockData> blockProtectedList = new ArrayList<BlockData>();
-		blockProtectedList.addAll(cannonDesign.getSchematicBlockTypeProtected());
+        List<BlockData> blockProtectedList = new ArrayList<BlockData>(cannonDesign.getSchematicBlockTypeProtected());
 		
 		
 		// get facing of the cannon
@@ -418,14 +418,14 @@ public class DesignStorage
 		int height = cc.getDimensions().getBlockY();
 		int length = cc.getDimensions().getBlockZ();
 
-		cc.setOrigin(new com.sk89q.worldedit.Vector(0, 0, 0));
+		cc.setOrigin(BlockVector3.ZERO);
 
 		ArrayList<SimpleBlock> schematiclist = new ArrayList<>();
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
 				for (int z = 0; z < length; ++z) {
 
-					BlockVector pt = new BlockVector(x, y, z);
+					BlockVector3 pt = BlockVector3.at(x, y, z);
 					BlockState blockState = cc.getBlock(pt.add(cc.getMinimumPoint()));
 					//plugin.logDebug("blockstate: " + blockState.getAsString());
 
