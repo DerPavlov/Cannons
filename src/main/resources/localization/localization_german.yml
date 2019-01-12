@@ -113,6 +113,7 @@ Ramrod:
 Permission:
   ErrorRedstone: 'RED [Cannons] Du kannst diese CANNON nicht mit Redstone bedienen.'
   ErrorBuild: 'RED [Cannons] Du darfst diese CANNON nicht bauen.'
+  ErrorDismantle: 'RED [Cannons] Du darfst diese CANNON nicht abbauen.'
   ErrorRename: 'RED [Cannons] Du darfst diese Kanone nicht umbenennen CANNON.'
   ErrorFire: 'RED [Cannons] Du weisst nicht wie du diese CANNON abfeuerst.'
   ErrorLoad: 'RED [Cannons] Keine Berechtigung um die Kanone zu laden.'

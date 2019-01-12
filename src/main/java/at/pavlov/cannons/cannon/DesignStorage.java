@@ -154,7 +154,11 @@ public class DesignStorage
 					ymlFile = listOfFile.getName();
 					if (ymlFile.endsWith(".yml") || ymlFile.endsWith(".yaml")) {
 						String schematicFile = CannonsUtil.changeExtension(ymlFile, ".schematic");
+						String schemFile = CannonsUtil.changeExtension(ymlFile, ".schem");
 						if (new File(getPath() + schematicFile).isFile()) {
+							// there is a shematic file and a .yml file
+							designList.add(new DesignFileName(ymlFile, schematicFile));
+						} else if (new File(getPath() + schematicFile).isFile()) {
 							// there is a shematic file and a .yml file
 							designList.add(new DesignFileName(ymlFile, schematicFile));
 						} else {
