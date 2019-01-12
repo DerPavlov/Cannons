@@ -414,11 +414,6 @@ public class DesignStorage
 		// get facing of the cannon
 		BlockFace cannonDirection = cannonDesign.getDefaultHorizontalFacing();
 
-		// for all directions
-
-
-
-
 		// read out blocks
 		int width = cc.getDimensions().getBlockX();
 		int height = cc.getDimensions().getBlockY();

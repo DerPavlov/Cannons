@@ -45,7 +45,6 @@
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-            <!--<url>http://repo.bukkit.org/content/groups/public/</url>-->
         </repository>
         <repository>
             <id>Plugin Metrics</id>
@@ -62,7 +61,6 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.13-R0.1-SNAPSHOT</version>
-            <!--<version>1.7.9-R0.2</version>-->
             <scope>provided</scope>
         </dependency>
         <dependency>
