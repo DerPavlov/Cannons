@@ -160,7 +160,7 @@ public class DesignStorage
 							designList.add(new DesignFileName(ymlFile, schematicFile));
 						} else if (new File(getPath() + schematicFile).isFile()) {
 							// there is a shematic file and a .yml file
-							designList.add(new DesignFileName(ymlFile, schematicFile));
+							designList.add(new DesignFileName(ymlFile, schemFile));
 						} else {
 							plugin.logSevere(schematicFile + " is missing");
 						}
