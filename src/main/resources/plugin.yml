@@ -42,7 +42,6 @@ permissions:
       cannons.player.reset: true
       cannons.player.redstone: true
       cannons.player.list: true
-      cannons.player.create: true
       cannons.player.target: true
       cannons.player.claim: true
     default: op

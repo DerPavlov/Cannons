@@ -107,7 +107,7 @@ public class DesignStorage
 		//sort the list so the designs with more cannon blocks comes first
 		//important if there is a design with one block less but else identically 
 		Comparator<CannonDesign> comparator = new DesignComparator();
-		Collections.sort(cannonDesignList, comparator);
+		cannonDesignList.sort(comparator);
 
 		for (CannonDesign cannonDesign : getCannonDesignList()) {
 			for (SimpleBlock sBlock : cannonDesign.getAllCannonBlocks(BlockFace.NORTH)){
@@ -149,22 +149,15 @@ public class DesignStorage
             }
 
 
-			for (int i = 0; i < listOfFiles.length; i++)
-			{
-
-				if (listOfFiles[i].isFile())
-				{
-					ymlFile = listOfFiles[i].getName();
-					if (ymlFile.endsWith(".yml") || ymlFile.endsWith(".yaml"))
-					{
+			for (File listOfFile : listOfFiles) {
+				if (listOfFile.isFile()) {
+					ymlFile = listOfFile.getName();
+					if (ymlFile.endsWith(".yml") || ymlFile.endsWith(".yaml")) {
 						String schematicFile = CannonsUtil.changeExtension(ymlFile, ".schematic");
-						if (new File(getPath() + schematicFile).isFile())
-						{
+						if (new File(getPath() + schematicFile).isFile()) {
 							// there is a shematic file and a .yml file
 							designList.add(new DesignFileName(ymlFile, schematicFile));
-						}
-						else
-						{
+						} else {
 							plugin.logSevere(schematicFile + " is missing");
 						}
 					}
