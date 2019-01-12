@@ -1665,8 +1665,11 @@ public class Cannon
     @Override
     public boolean equals(Object obj)
     {
-        Cannon obj2 = (Cannon) obj;
-        return this.getUID().equals(obj2.getUID());
+        if (obj instanceof Cannon) {
+            Cannon obj2 = (Cannon) obj;
+            return this.getUID().equals(obj2.getUID());
+        }
+        return false;
     }
 
     @Override
