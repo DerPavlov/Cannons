@@ -158,7 +158,7 @@ public class DesignStorage
 						if (new File(getPath() + schematicFile).isFile()) {
 							// there is a shematic file and a .yml file
 							designList.add(new DesignFileName(ymlFile, schematicFile));
-						} else if (new File(getPath() + schematicFile).isFile()) {
+						} else if (new File(getPath() + schemFile).isFile()) {
 							// there is a shematic file and a .yml file
 							designList.add(new DesignFileName(ymlFile, schemFile));
 						} else {
