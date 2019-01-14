@@ -847,11 +847,9 @@ public class CannonsUtil
             for (int chZ = 0 -chunkRadius; chZ <= chunkRadius; chZ++){
                 int x=(int) l.getX(),y=(int) l.getY(),z=(int) l.getZ();
                 for (Entity e : new Location(l.getWorld(),x+(chX*16),y,z+(chZ*16)).getChunk().getEntities()){
-                    if (e.getWorld().equals(l.getWorld())) {
-                        double dist = e.getLocation().distance(l);
-                        if (minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock())
-                            radiusEntities.put(e.getUniqueId(), e);
-                    }
+                    double dist = e.getLocation().distance(l);
+                    if (minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock())
+                        radiusEntities.put(e.getUniqueId(), e);
                 }
             }
         }
