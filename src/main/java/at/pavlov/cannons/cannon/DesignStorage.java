@@ -387,8 +387,6 @@ public class DesignStorage
 			return false;
 		}
 
-		BlockVector3 ve = cc.getMinimumPoint().multiply();
-
         AffineTransform transform = new AffineTransform().translate(cc.getMinimumPoint().multiply(-1));
         BlockTransformExtent extent = new BlockTransformExtent(cc, transform);
         ForwardExtentCopy copy = new ForwardExtentCopy(extent, cc.getRegion(), cc.getOrigin(), cc, BlockVector3.ZERO);

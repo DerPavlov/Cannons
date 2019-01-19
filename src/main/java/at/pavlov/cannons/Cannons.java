@@ -21,6 +21,7 @@ import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.FakeBlockHandler;
 import at.pavlov.cannons.scheduler.ProjectileObserver;
 import net.milkbowl.vault.economy.Economy;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -37,7 +38,6 @@ import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.dao.PersistenceDatabase;
 import at.pavlov.cannons.projectile.Projectile;
-import org.mcstats.MetricsLite;
 
 public final class Cannons extends JavaPlugin
 {
@@ -194,13 +194,8 @@ public final class Cannons extends JavaPlugin
 					persistenceDatabase.saveAllCannons(true);
 				}
 			}, 6000L, 6000L);
-			
-			try {
-			    MetricsLite metrics = new MetricsLite(this);
-			    metrics.start();
-			} catch (IOException e) {
-			    // Failed to submit the stats :-(
-			}
+
+			Metrics metrics = new Metrics(this);
 
             logDebug("Time to enable cannons: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
 
