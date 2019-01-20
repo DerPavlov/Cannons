@@ -467,7 +467,7 @@ public class Cannon
             if(player.isSneaking())
             {
                 //get the amount of gunpowder that can be maximal loaded
-                gunpowder = player.getItemInHand().getAmount();
+                gunpowder = player.getInventory().getItemInMainHand().getAmount();
                 if(maximumLoadableNormal < gunpowder) gunpowder = maximumLoadableNormal;
                 else if(maximumLoadableAbsolute < gunpowder) gunpowder = 1;
             }
@@ -1148,7 +1148,7 @@ public class Cannon
         for (Location loc : design.getRedstoneTorches(this))
         {
             Material b = loc.getBlock().getType();
-            if (b == Material.LEGACY_REDSTONE_TORCH_ON || b == Material.LEGACY_REDSTONE_TORCH_OFF)
+            if (b == Material.REDSTONE_TORCH )
             {
                 removeRedstone();
                 return MessageEnum.PermissionErrorRedstone;
@@ -1159,7 +1159,7 @@ public class Cannon
         for (Location loc : design.getRedstoneWireAndRepeater(this))
         {
             Material b = loc.getBlock().getType();
-            if (b == Material.REDSTONE_WIRE || b == Material.REPEATER || b == Material.LEGACY_DIODE_BLOCK_ON || b == Material.LEGACY_DIODE_BLOCK_OFF)
+            if (b == Material.REDSTONE_WIRE || b == Material.REPEATER || b == Material.COMPARATOR)
             {
                 removeRedstone();
                 return MessageEnum.PermissionErrorRedstone;
@@ -1179,7 +1179,7 @@ public class Cannon
         for (Location loc : design.getRedstoneTorches(this))
         {
             Block block = loc.getBlock();
-            if (block.getType() == Material.LEGACY_REDSTONE_TORCH_ON || block.getType() == Material.LEGACY_REDSTONE_TORCH_OFF)
+            if (block.getType() == Material.REDSTONE_TORCH)
             {
                 block.breakNaturally();
             }
@@ -1189,7 +1189,7 @@ public class Cannon
         for (Location loc : design.getRedstoneWireAndRepeater(this))
         {
             Block block = loc.getBlock();
-            if (block.getType() == Material.REDSTONE_WIRE || block.getType() == Material.LEGACY_DIODE_BLOCK_ON || block.getType() == Material.LEGACY_DIODE_BLOCK_OFF)
+            if (block.getType() == Material.REDSTONE_WIRE || block.getType() == Material.REPEATER || block.getType() == Material.COMPARATOR)
             {
                 block.breakNaturally();
             }
