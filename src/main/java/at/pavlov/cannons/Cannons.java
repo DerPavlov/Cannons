@@ -98,10 +98,8 @@ public final class Cannons extends JavaPlugin
 
 	public void onDisable()
 	{
-		logger.info(getLogPrefix() + "Cannons plugin shutting down 1.");
 		getServer().getScheduler().cancelTasks(this);
 
-		logger.info(getLogPrefix() + "Cannons plugin shutting down 2.");
 		// save database on shutdown
 		logger.info(getLogPrefix() + "Wait until scheduler is finished");
 		while(getPlugin().getPersistenceDatabase().isSaveTaskRunning()){
@@ -113,13 +111,10 @@ public final class Cannons extends JavaPlugin
 		}
 		logger.info(getLogPrefix() + "Scheduler finished");
 		persistenceDatabase.saveAllCannons(false);
-		logger.info(getLogPrefix() + "Cannons plugin shutting down 3.");
 		if (connection != null) {
 			try {
-				logger.info(getLogPrefix() + "Cannons plugin shutting down 4.");
 				connection.close();
 			} catch (SQLException e) {
-				logger.info(getLogPrefix() + "Cannons plugin shutting down 5.");
 				e.printStackTrace();
 			}
 		}
