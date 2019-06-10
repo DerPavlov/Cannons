@@ -423,6 +423,7 @@ public class DesignStorage
 
 		cc.setOrigin(BlockVector3.ZERO);
 
+		//plugin.logDebug("design: " + schematicFile);
 		ArrayList<SimpleBlock> schematiclist = new ArrayList<>();
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
@@ -525,7 +526,7 @@ public class DesignStorage
                     //can be also a sign
                     if (sblock.compareMaterialAndFacing(blockChestAndSign))
                         // the id does not matter, but the data is important for signs
-                        cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN));
+                        cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, sblock.getBlockData())); //Material.WALL_SIGN
                     // firing blocks are also part of the cannon are
                     // part of the cannon
                     cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, replaceRightClickTrigger));
@@ -537,7 +538,7 @@ public class DesignStorage
                 else if (sblock.compareMaterial(blockChestAndSign))
                 {
                     // the id does not matter, but the data is important for signs
-                    cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, Material.WALL_SIGN));
+                    cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, sblock.getBlockData())); //Material.WALL_SIGN
                 }
                 // #############  loading Interface is a cannonblock that is non of
                 // the previous blocks

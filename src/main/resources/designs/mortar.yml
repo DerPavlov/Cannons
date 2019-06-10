@@ -307,7 +307,7 @@ constructionBlocks:
   #the block used to indicate when a cannon has been fired. default is torch. Makes fancy smoke on this location
   firingIndicator: 'minecraft:torch'
   #the block used to indicate where the player can place chests or signs on the cannon. Default is a blank wall sign
-  chestAndSign: 'minecraft:wall_sign'
+  chestAndSign: 'minecraft:oak_wall_sign'
   #indicates where redstone torches can be placed for redstone autoload and firing to work. Default is redstone torch
   redstoneTorch: 'minecraft:redstone_torch'
   #the block used to indicate where redstone wiring needs to be placed for redstone autoloading and firing to work. Default is redstone repeater

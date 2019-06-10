@@ -5,6 +5,7 @@ import at.pavlov.cannons.container.DeathCause;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -162,6 +163,19 @@ public class PlayerListener implements Listener
 //                }
 //            }
 //        }
+
+        // Place wallsign
+        if (event.getBlockPlaced().getBlockData() instanceof WallSign)
+        {
+            WallSign wallSign = (WallSign) event.getBlockPlaced().getBlockData();
+            // check cannon
+            Location loc = event.getBlock().getRelative(wallSign.getFacing().getOppositeFace()).getLocation();
+            Cannon cannon = cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true);
+            if (cannon != null)
+            {
+                cannon.updateCannonSigns();
+            }
+        }
 
         // Place redstonetorch under to the cannon
         if (event.getBlockPlaced().getType() == Material.REDSTONE_TORCH || event.getBlockPlaced().getType() == Material.REDSTONE_WALL_TORCH)

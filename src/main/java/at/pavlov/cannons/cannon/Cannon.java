@@ -15,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -974,7 +975,9 @@ public class Cannon
      */
     public boolean isCannonSign(Location loc)
     {
-        if (loc.getBlock().getType() != Material.WALL_SIGN) return false;
+        if (!(loc.getBlock().getBlockData() instanceof WallSign)) {
+            return false;
+        }
 
         CannonBlocks cannonBlocks  = this.getCannonDesign().getCannonBlockMap().get(this.getCannonDirection());
         if (cannonBlocks != null)
@@ -984,7 +987,7 @@ public class Cannon
                 // compare location
                 if (cannonblock.toLocation(this.getWorldBukkit(),this.offset).equals(loc))
                 {
-                    Block block = loc.getBlock();
+                    //Block block = loc.getBlock();
                     //compare and data
                     //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
                     //todo check facing
@@ -1512,7 +1515,7 @@ public class Cannon
         // search all possible sign locations
         for (Location signLoc : design.getChestsAndSigns(this))
         {
-            if (signLoc.getBlock().getType().equals(Material.WALL_SIGN))
+            if (signLoc.getBlock() instanceof WallSign)
                 return true;
         }
         return false;
@@ -1539,7 +1542,6 @@ public class Cannon
     private void updateSign(Block block)
     {
         Sign sign = (Sign) block.getState();
-
         if (isValid)
         {
             // Cannon name in the first line
@@ -1562,7 +1564,7 @@ public class Cannon
             // angles
             sign.setLine(3, "");
         }
-
+        sign.setEditable(false);
         sign.update(true);
     }
 

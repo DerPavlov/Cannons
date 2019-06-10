@@ -22,8 +22,6 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Button;
-import org.bukkit.material.Torch;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -34,47 +32,6 @@ import org.bukkit.util.Vector;
 
 public class CannonsUtil
 {
-    // ################# CheckAttachedButton ###########################
-	public static boolean CheckAttachedButton(Block block, BlockFace face)
-	{
-		Block attachedBlock = block.getRelative(face);
-		if (attachedBlock.getType() == Material.STONE_BUTTON)
-		{
-			Button button = (Button) attachedBlock.getState().getData();
-			if (button.getAttachedFace() != null)
-			{
-				if (attachedBlock.getRelative(button.getAttachedFace()).equals(block)) { return true; }
-			}
-			// attached face not available
-			else
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// ################# CheckAttachedTorch ###########################
-	@Deprecated
-    public static boolean CheckAttachedTorch(Block block)
-	{
-		Block attachedBlock = block.getRelative(BlockFace.UP);
-		if (attachedBlock.getType() == Material.TORCH)
-		{
-			Torch torch = (Torch) attachedBlock.getState().getData();
-			if (torch.getAttachedFace() != null)
-			{
-				if (attachedBlock.getRelative(torch.getAttachedFace()).equals(block)) { return true; }
-			}
-			// attached face not available
-			else
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/**
 	 * changes the extension of the a string (e.g. classic.yml to
 	 * classic.schematic)

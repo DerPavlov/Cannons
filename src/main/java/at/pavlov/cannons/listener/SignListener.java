@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
@@ -40,7 +41,7 @@ public class SignListener implements Listener
 	@EventHandler
 	public void signChange(SignChangeEvent event)
 	{
-		if (event.getBlock().getType() == Material.WALL_SIGN)
+		if (event.getBlock() instanceof WallSign)
 		{
 			Block block = event.getBlock();
 			Sign s = (Sign) event.getBlock().getState();

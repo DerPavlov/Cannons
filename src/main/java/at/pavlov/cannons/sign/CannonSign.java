@@ -3,6 +3,7 @@ package at.pavlov.cannons.sign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.WallSign;
 
 
 public class CannonSign
@@ -16,8 +17,8 @@ public class CannonSign
 	public static String getLineOfThisSign(Block block, int line)
 	{
         if (block == null) return null;
-		if (block.getType() != Material.WALL_SIGN) return null;
-		
+		if (!(block instanceof WallSign)) return null;
+
 		Sign sign = (Sign) block.getState();
 		
 		return sign.getLine(line);
