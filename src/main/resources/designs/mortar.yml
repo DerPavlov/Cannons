@@ -305,7 +305,7 @@ constructionBlocks:
   #the block which the projectile is fired from the cannon, direction can be adjusted using the defaultHorizontalFacing property. Default is block of snow
   muzzle: 'minecraft:snow_block'
   #the block used to indicate when a cannon has been fired. default is torch. Makes fancy smoke on this location
-  firingIndicator: 'minecraft:torch'
+  firingIndicator: 'minecraft:wall_torch'
   #the block used to indicate where the player can place chests or signs on the cannon. Default is a blank wall sign
   chestAndSign: 'minecraft:oak_wall_sign'
   #indicates where redstone torches can be placed for redstone autoload and firing to work. Default is redstone torch
@@ -321,12 +321,12 @@ constructionBlocks:
   #the blocks which a player right clicks in order to fire a cannon
   rightClickTrigger:
     #the block used in the cannons schematic which is used to fire the cannon when right clicked by a player. Default is torch
-    schematic: 'minecraft:torch'
+    schematic: 'minecraft:wall_torch'
     #the block used in game to fire the cannon when right clicked by a player. Default is torch
-    ingame: 'minecraft:torch'
+    ingame: 'minecraft:wall_torch'
   #list of blocks in the schematic that will be protected from explosions (e.g. buttons, because they break easily)
   protectedBlocks:
-  - 'minecraft:torch'
+  - 'minecraft:wall_torch'
   - 'minecraft:lever'
   - 'minecraft:stone_button'
 
