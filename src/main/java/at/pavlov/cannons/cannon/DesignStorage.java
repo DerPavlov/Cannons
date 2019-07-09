@@ -344,7 +344,7 @@ public class DesignStorage
 		cannonDesign.setSchematicBlockTypeMuzzle(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.muzzle", "minecraft:snow_block")));
 		cannonDesign.setSchematicBlockTypeFiringIndicator(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.firingIndicator", "minecraft:torch")));
 		cannonDesign.setSchematicBlockTypeRotationCenter(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.rotationCenter", "minecraft:redstone_ore")));
-		cannonDesign.setSchematicBlockTypeChestAndSign(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.chestAndSign", "minecraft:sign")));
+		cannonDesign.setSchematicBlockTypeChestAndSign(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.chestAndSign", "minecraft:oak_wall_sign")));
 		cannonDesign.setSchematicBlockTypeRedstoneTorch(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.redstoneTorch", "minecraft:redstone_torch")));
 		cannonDesign.setSchematicBlockTypeRedstoneWireAndRepeater(CannonsUtil.createBlockData(cannonDesignConfig.getString("constructionBlocks.restoneWireAndRepeater", "minecraft:repeater")));
 		// RedstoneTrigger
