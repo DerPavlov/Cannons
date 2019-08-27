@@ -136,83 +136,93 @@ public class CreateExplosion {
     private Location blockBreaker(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity) {
 	Projectile projectile = cannonball.getProjectile();
 
-	// has this projectile the super breaker property and makes block damage
-	Boolean superbreaker = projectile.hasProperty(ProjectileProperties.SUPERBREAKER);
-	Boolean doesBlockDamage = projectile.getPenetrationDamage();
 
-	// list of destroy blocks
-	LinkedList<Block> blocklist = new LinkedList<>();
+		// has this projectile the super breaker property and makes block damage
+		Boolean superbreaker = projectile.hasProperty(ProjectileProperties.SUPERBREAKER);
+		Boolean doesBlockDamage = projectile.getPenetrationDamage();
 
-	Vector vel = projectile_entity.getVelocity();
-	Location snowballLoc = projectile_entity.getLocation();
-	World world = projectile_entity.getWorld();
-	Location impactLoc = snowballLoc.clone();
-	this.plugin.logDebug("Projectile impact: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
-		+ impactLoc.getBlockZ());
+		// list of destroy blocks
+		LinkedList<Block> blocklist = new LinkedList<>();
 
-	// find surface and set this as new impact location
-	impactLoc = CannonsUtil.findSurface(impactLoc, vel);
-	this.plugin.logDebug("Impact surface: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
-		+ impactLoc.getBlockZ());
+		Vector vel = projectile_entity.getVelocity();
+		Location snowballLoc = projectile_entity.getLocation();
+		World world = projectile_entity.getWorld();
+		Location impactLoc = snowballLoc.clone();
+		this.plugin.logDebug("Projectile impact: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
+			+ impactLoc.getBlockZ());
 
-	// the cannonball will only break blocks if it has penetration.
-	Random r = new Random();
-	double randomness = (1 + r.nextGaussian() / 5.0);
-	int penetration = (int) Math.round(
-		randomness * (cannonball.getProjectile().getPenetration()) * vel.length() / projectile.getVelocity());
+		// find surface and set this as new impact location
+		impactLoc = CannonsUtil.findSurface(impactLoc, vel);
+		this.plugin.logDebug("Impact surface: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
+			+ impactLoc.getBlockZ());
 
-	blocklist.clear();
-	if (penetration > 0) {
-	    BlockIterator iter2 = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, penetration);
-	    while (iter2.hasNext()) {
-		Block next = iter2.next();
-		// if block can be destroyed the the iterator will check the next block. Else
-		// the projectile will explode
-		if (!this.breakBlock(next, blocklist, superbreaker, doesBlockDamage)) {
-		    // found indestructible block
-		    break;
+		// if the projectile has slowed down to 80% of the max velocity it will not penetrate
+		if (vel.length() / projectile.getVelocity() < 0.8) {
+			this.plugin.logDebug("Projectile velocity of " + vel.length() + " too low for penetration");
 		}
-		impactLoc = next.getLocation();
-	    }
-	}
-	this.plugin.logDebug("Penetration loc: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
-		+ impactLoc.getBlockZ());
+		else {
+			// the cannonball will only break blocks if it has penetration.
+			Random r = new Random();
+			double randomness = (1 + r.nextGaussian() / 5.0);
+			int penetration = (int) Math.round(
+					randomness * (cannonball.getProjectile().getPenetration()) * (vel.length() / projectile.getVelocity() - 0.8) / 0.2);
+			if (penetration < 0)
+				penetration = 0;
+			plugin.logDebug("velocity: " + vel.length() + " penetration: " + penetration + " randomness: " + randomness);
 
-	if (superbreaker) {
-	    // small explosion on impact
-	    Block block = impactLoc.getBlock();
-	    this.breakBlock(block, blocklist, true, doesBlockDamage);
-	    this.breakBlock(block.getRelative(BlockFace.UP), blocklist, true, doesBlockDamage);
-	    this.breakBlock(block.getRelative(BlockFace.DOWN), blocklist, true, doesBlockDamage);
-	    this.breakBlock(block.getRelative(BlockFace.SOUTH), blocklist, true, doesBlockDamage);
-	    this.breakBlock(block.getRelative(BlockFace.WEST), blocklist, true, doesBlockDamage);
-	    this.breakBlock(block.getRelative(BlockFace.EAST), blocklist, true, doesBlockDamage);
-	    this.breakBlock(block.getRelative(BlockFace.NORTH), blocklist, true, doesBlockDamage);
-	}
+			blocklist.clear();
+			if (penetration > 0) {
+				BlockIterator iter2 = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, penetration);
+				while (iter2.hasNext()) {
+					Block next = iter2.next();
+					// if block can be destroyed the the iterator will check the next block. Else
+					// the projectile will explode
+					if (!this.breakBlock(next, blocklist, superbreaker, doesBlockDamage)) {
+						// found indestructible block
+						break;
+					}
+					impactLoc = next.getLocation();
+				}
+			}
+			this.plugin.logDebug("Penetration loc: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
+					+ impactLoc.getBlockZ());
 
-	// no eventhandling if the list is empty
-	if (blocklist.size() > 0) {
-	    // fire custom piercing event to notify other plugins (blocks can be removed)
-	    ProjectilePiercingEvent piercingEvent = new ProjectilePiercingEvent(projectile, impactLoc, blocklist);
-	    this.plugin.getServer().getPluginManager().callEvent(piercingEvent);
+			if (superbreaker) {
+				// small explosion on impact
+				Block block = impactLoc.getBlock();
+				this.breakBlock(block, blocklist, true, doesBlockDamage);
+				this.breakBlock(block.getRelative(BlockFace.UP), blocklist, true, doesBlockDamage);
+				this.breakBlock(block.getRelative(BlockFace.DOWN), blocklist, true, doesBlockDamage);
+				this.breakBlock(block.getRelative(BlockFace.SOUTH), blocklist, true, doesBlockDamage);
+				this.breakBlock(block.getRelative(BlockFace.WEST), blocklist, true, doesBlockDamage);
+				this.breakBlock(block.getRelative(BlockFace.EAST), blocklist, true, doesBlockDamage);
+				this.breakBlock(block.getRelative(BlockFace.NORTH), blocklist, true, doesBlockDamage);
+			}
 
-	    // create bukkit event
-	    EntityExplodeEvent event = new EntityExplodeEvent(null, impactLoc, piercingEvent.getBlockList(), 1.0f);
-	    this.plugin.getServer().getPluginManager().callEvent(event);
+			// no eventhandling if the list is empty
+			if (blocklist.size() > 0) {
+				// fire custom piercing event to notify other plugins (blocks can be removed)
+				ProjectilePiercingEvent piercingEvent = new ProjectilePiercingEvent(projectile, impactLoc, blocklist);
+				this.plugin.getServer().getPluginManager().callEvent(piercingEvent);
 
-	    this.plugin.logDebug("was the cannons explode event canceled: " + event.isCancelled());
-	    // if not canceled break all given blocks
-	    if (!event.isCancelled()) {
-		// break water, lava, obsidian if cannon projectile
-		for (int i = 0; i < event.blockList().size(); i++) {
-		    Block pBlock = event.blockList().get(i);
-		    // break the block, no matter what it is
-		    this.BreakBreakNaturally(pBlock, event.getYield());
+				// create bukkit event
+				EntityExplodeEvent event = new EntityExplodeEvent(null, impactLoc, piercingEvent.getBlockList(), 1.0f);
+				this.plugin.getServer().getPluginManager().callEvent(event);
+
+				this.plugin.logDebug("was the cannons explode event canceled: " + event.isCancelled());
+				// if not canceled break all given blocks
+				if (!event.isCancelled()) {
+					// break water, lava, obsidian if cannon projectile
+					for (int i = 0; i < event.blockList().size(); i++) {
+						Block pBlock = event.blockList().get(i);
+						// break the block, no matter what it is
+						this.BreakBreakNaturally(pBlock, event.getYield());
+					}
+				}
+
+			}
 		}
-	    }
-
-	}
-	return impactLoc;
+		return impactLoc;
     }
 
     /***
