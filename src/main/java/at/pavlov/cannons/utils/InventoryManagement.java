@@ -81,7 +81,7 @@ public class InventoryManagement
      * @param item the item to remove
      * @return the amount of not removed items
      */
-    private static ItemStack removeItem(Inventory inv, ItemStack item)
+    public static ItemStack removeItem(Inventory inv, ItemStack item)
     {
         if (inv == null || item == null)
             return item;

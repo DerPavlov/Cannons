@@ -54,6 +54,7 @@ Aiming:
 Load:  
   Projectile: 'YELLOW [Cannons] Projektil GOLD PROJECTILE YELLOW wurde geladen.'
   Gunpowder: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW von GOLD MAX_GUNPOWDER YELLOW Schwarzpulver geladen.'
+  GunpowderAndProjectile: 'YELLOW [Cannons] GOLD GUNPOWDERkg YELLOW Schwarzpulver und Projektil GOLD PROJECTILE YELLOW geladen.'
   loadGunpowderNormalLimit: 'YELLOW [Cannons] GOLD Maximale Menge von (MAX_GUNPOWDERkg) geladen. Mehr würde die Kanone zerstören.'
   OverloadedGunpowder: 'YELLOW [Cannons] RED GUNPOWDERkg YELLOW von GOLD MAX_GUNPOWDERkg YELLOW Schwarzpulver geladen'
 

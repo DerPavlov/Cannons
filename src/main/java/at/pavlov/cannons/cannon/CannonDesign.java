@@ -39,6 +39,7 @@ public class CannonDesign
     private boolean ammoInfiniteForRedstone;
     private boolean autoreloadRedstone;
 	private boolean removeChargeAfterFiring;
+	private boolean autoloadChargeWhenLoadingProjectile;
 	private boolean preloaded;
 
     //barrelProperties
@@ -1596,5 +1597,13 @@ public class CannonDesign
 
 	public void setPreloaded(boolean preloaded) {
 		this.preloaded = preloaded;
+	}
+
+	public boolean isAutoloadChargeWhenLoadingProjectile() {
+		return autoloadChargeWhenLoadingProjectile;
+	}
+
+	public void setAutoloadChargeWhenLoadingProjectile(boolean autoloadChargeWhenLoadingProjectile) {
+		this.autoloadChargeWhenLoadingProjectile = autoloadChargeWhenLoadingProjectile;
 	}
 }

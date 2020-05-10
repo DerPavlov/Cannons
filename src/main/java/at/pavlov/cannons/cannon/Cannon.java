@@ -465,15 +465,21 @@ public class Cannon
         if (returnVal.equals(MessageEnum.loadGunpowder))
         {
             //if the player is sneaking the maximum gunpowder is loaded, but at least 1
-            if(player.isSneaking())
-            {
-                //get the amount of gunpowder that can be maximal loaded
-                gunpowder = player.getInventory().getItemInMainHand().getAmount();
-                if(maximumLoadableNormal < gunpowder) gunpowder = maximumLoadableNormal;
-                else if(maximumLoadableAbsolute < gunpowder) gunpowder = 1;
+            if(player.isSneaking()) {
+                    gunpowder = player.getInventory().getItemInMainHand().getAmount();
+                    if (maximumLoadableNormal < gunpowder) gunpowder = maximumLoadableNormal;
+                    else if (maximumLoadableAbsolute < gunpowder) gunpowder = 1;
             }
             if (gunpowder <= 0)
                 gunpowder = 1;
+            if (design.isAutoloadChargeWhenLoadingProjectile()) {
+                //get the amount of gunpowder that can be maximal loaded
+                if(player.getInventory().contains(design.getGunpowderType().getType(), maximumLoadableNormal))
+                    gunpowder = maximumLoadableNormal;
+                else
+                    gunpowder = 0;
+                System.out.println("[Cannons] gunpowder: " + gunpowder);
+            }
 
             //load the gunpowder
             returnVal = loadGunpowder(gunpowder);
@@ -487,14 +493,20 @@ public class Cannon
 	        	// take item from the player
                 CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderLoading());
 	            if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
-	                InventoryManagement.takeFromPlayerHand(player, gunpowder);
+                    if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
+                        InventoryManagement.removeItem(player.getInventory(), design.getGunpowderType().toItemStack(gunpowder));
+                    else
+	                    InventoryManagement.takeFromPlayerHand(player, gunpowder);
 	        	break;
 	        }
 	        case loadGunpowderNormalLimit:
 	        {
                 CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderLoading());
 	            if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
-	                InventoryManagement.takeFromPlayerHand(player, gunpowder);
+                    if (design.isGunpowderConsumption()&&!design.isAmmoInfiniteForPlayer())
+                        InventoryManagement.removeItem(player.getInventory(), design.getGunpowderType().toItemStack(gunpowder));
+                    else
+	                    InventoryManagement.takeFromPlayerHand(player, gunpowder);
 	        	break;
 	        }
 	        case loadOverloadedGunpowder:
@@ -529,10 +541,20 @@ public class Cannon
 
         if (projectile == null) return null;
 
-        MessageEnum returnVal = CheckPermProjectile(projectile, player);
+        MessageEnum returnVal;
+
+        // autoload gunpowder
+        if (design.isAutoloadChargeWhenLoadingProjectile()) {
+            returnVal = loadGunpowder(player);
+            //return error if loading of gunpowder was not successful
+            if (!(returnVal.equals(MessageEnum.loadGunpowder)|| returnVal.equals(MessageEnum.loadGunpowderNormalLimit) || returnVal.equals(MessageEnum.loadOverloadedGunpowder)))
+                return returnVal;
+        }
+
+        returnVal = CheckPermProjectile(projectile, player);
 
         // check if loading of projectile was successful
-        if (returnVal.equals(MessageEnum.loadProjectile))
+        if (returnVal.equals(MessageEnum.loadProjectile) || returnVal.equals(MessageEnum.loadGunpowderAndProjectile))
         {
             // load projectile
             setLoadedProjectile(projectile);
@@ -629,6 +651,8 @@ public class Cannon
             return MessageEnum.ErrorNotCleaned;
 
         // loading successful
+        if (design.isAutoloadChargeWhenLoadingProjectile())
+            return MessageEnum.loadGunpowderAndProjectile;
         return MessageEnum.loadProjectile;
     }
 

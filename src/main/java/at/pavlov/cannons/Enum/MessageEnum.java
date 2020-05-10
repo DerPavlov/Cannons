@@ -55,6 +55,7 @@ public enum MessageEnum
 	//load
 	loadProjectile ("Load.Projectile"),
 	loadGunpowder ("Load.Gunpowder"),
+	loadGunpowderAndProjectile ("Load.GunpowderAndProjectile"),
 	loadGunpowderNormalLimit ("Load.loadGunpowderNormalLimit"),
 	loadOverloadedGunpowder ("Load.OverloadedGunpowder"),
 	
