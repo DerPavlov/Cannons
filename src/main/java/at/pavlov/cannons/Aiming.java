@@ -340,8 +340,8 @@ public class Aiming {
          */
 	private GunAngles getGunAngle(Cannon cannon, double yaw, double pitch)
 	{
-        double horizontal = yaw - CannonsUtil.directionToYaw(cannon.getCannonDirection()) - cannon.getTotalHorizontalAngle();
-        horizontal = horizontal % 360;
+		double horizontal = yaw - CannonsUtil.directionToYaw(cannon.getCannonDirection()) - cannon.getTotalHorizontalAngle();
+        //horizontal = horizontal % 360;
 		while(horizontal < -180)
             horizontal = horizontal + 360;
 
