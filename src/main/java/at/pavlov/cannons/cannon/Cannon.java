@@ -1539,7 +1539,7 @@ public class Cannon
         // search all possible sign locations
         for (Location signLoc : design.getChestsAndSigns(this))
         {
-            if (signLoc.getBlock() instanceof WallSign)
+            if (signLoc.getBlock().getBlockData() instanceof WallSign)
                 return true;
         }
         return false;
