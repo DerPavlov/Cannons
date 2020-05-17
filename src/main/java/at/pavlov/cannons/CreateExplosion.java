@@ -63,6 +63,8 @@ public class CreateExplosion {
     private final Cannons plugin;
     private final Config config;
 
+    private FlyingProjectile currentCannonball;
+
     private final HashSet<Entity> affectedEntities = new HashSet<>();
     // the entity is used in 1 tick. There should be no garbage collector problem
     private final HashMap<Entity, Double> damageMap = new HashMap<>();
@@ -852,6 +854,7 @@ public class CreateExplosion {
 	Bukkit.getServer().getPluginManager().callEvent(impactEvent);
 	canceled = impactEvent.isCancelled();
 
+	this.currentCannonball = cannonball;
 	// if canceled then exit
 	if (impactEvent.isCancelled()) {
 	    // event cancelled, make some effects - even if the area is protected by a
@@ -912,14 +915,14 @@ public class CreateExplosion {
 	// check which entities are affected by the event
 	for (Entity entity : this.affectedEntities) {
 	    if (entity != null) {
-		// entity has died
-		if (entity.isDead() && entity instanceof LivingEntity) {
-		    lEntities.add((LivingEntity) entity);
-		    if (entity instanceof Player) {
-			this.killedPlayers.put(entity.getUniqueId(), new DeathCause(cannonball.getProjectile(),
-				cannonball.getCannonUID(), cannonball.getShooterUID()));
-		    }
-		}
+			// entity has died
+			if (entity.isDead() && entity instanceof LivingEntity) {
+				lEntities.add((LivingEntity) entity);
+				if (entity instanceof Player) {
+					this.killedPlayers.put(entity.getUniqueId(), new DeathCause(cannonball.getProjectile(),
+					cannonball.getCannonUID(), cannonball.getShooterUID()));
+				}
+			}
 	    }
 	}
 	this.affectedEntities.clear();
@@ -931,6 +934,16 @@ public class CreateExplosion {
 	    Bukkit.getServer().getPluginManager().callEvent(entityDeathEvent);
 	}
     }
+
+	/**
+	 * was this player affected by cannons, it might have been the death cause
+	 * @param player player to check
+	 * @return true if the player was affected by cannons
+	 */
+	public boolean wasAffectedByCannons(Player player){
+		return this.affectedEntities.contains(player);
+	}
+
 
     /**
      * makes a sphere with additional explosions around the impact
@@ -1268,7 +1281,7 @@ public class CreateExplosion {
      * @return true if player was killed by a cannonball
      */
     public boolean isKilledByCannons(UUID playerUID) {
-	return this.killedPlayers.containsKey(playerUID);
+		return this.killedPlayers.containsKey(playerUID);
     }
 
     /**
@@ -1291,4 +1304,8 @@ public class CreateExplosion {
     public void removeKilledPlayer(UUID playerUID) {
 	this.killedPlayers.remove(playerUID);
     }
+
+	public FlyingProjectile getCurrentCannonball() {
+		return currentCannonball;
+	}
 }

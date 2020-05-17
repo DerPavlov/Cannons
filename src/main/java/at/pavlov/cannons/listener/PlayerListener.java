@@ -2,6 +2,7 @@ package at.pavlov.cannons.listener;
 
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.container.DeathCause;
+import at.pavlov.cannons.projectile.FlyingProjectile;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -61,15 +62,17 @@ public class PlayerListener implements Listener
     public void PlayerDeath(PlayerDeathEvent event)
     {
         UUID killedUID = event.getEntity().getUniqueId();
-        if (plugin.getExplosion().isKilledByCannons(killedUID)){
-            DeathCause cause = plugin.getExplosion().getDeathCause(killedUID);
+        if (plugin.getExplosion().wasAffectedByCannons(event.getEntity())){
+            //DeathCause cause = plugin.getExplosion().getDeathCause(killedUID);
             plugin.getExplosion().removeKilledPlayer(killedUID);
 
             Player shooter = null;
-            if (cause.getShooterUID() != null)
-                shooter = Bukkit.getPlayer(cause.getShooterUID());
-            Cannon cannon = plugin.getCannon(cause.getCannonUID());
-            String message = userMessages.getDeathMessage(killedUID, cause.getShooterUID(), cannon, cause.getProjectile());
+//            if (cause.getShooterUID() != null)
+//                shooter = Bukkit.getPlayer(cause.getShooterUID());
+//            Cannon cannon = plugin.getCannon(cause.getCannonUID());
+            FlyingProjectile c = plugin.getExplosion().getCurrentCannonball();
+            Cannon cannon = CannonManager.getCannon(c.getCannonUID());
+            String message = userMessages.getDeathMessage(killedUID, c.getShooterUID(), cannon, c.getProjectile());
             if (message != null && !message.equals(" "))
                 event.setDeathMessage(message);
         }
