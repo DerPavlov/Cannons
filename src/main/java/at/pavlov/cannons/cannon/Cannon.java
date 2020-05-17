@@ -1546,6 +1546,21 @@ public class Cannon
     }
 
     /**
+     * @return the number of signs on a cannon
+     */
+    public int getNumberCannonSigns()
+    {
+        // search all possible sign locations
+        int i = 0;
+        for (Location signLoc : design.getChestsAndSigns(this))
+        {
+            if (signLoc.getBlock().getBlockData() instanceof WallSign)
+                i++;
+        }
+        return i;
+    }
+
+    /**
      * updates all signs that are attached to a cannon
      */
     public void updateCannonSigns()

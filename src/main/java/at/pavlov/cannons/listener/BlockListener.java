@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
@@ -169,6 +170,17 @@ public class BlockListener implements Listener
             else {
                 event.setCancelled(true);
                 plugin.logDebug("cancelled cannon destruction: " + cannon.isDestructibleBlock(event.getBlock().getLocation()));
+            }
+        }
+
+        //if the the last block on a cannon is broken and signs are required
+        if (event.getBlock().getBlockData() instanceof WallSign){
+            WallSign sign = (WallSign) event.getBlock().getBlockData();
+            cannon = plugin.getCannonManager().getCannon(event.getBlock().getRelative(sign.getFacing().getOppositeFace()).getLocation(), null);
+            plugin.logDebug("cancelled cannon sign  " + event.getBlock().getRelative(sign.getFacing().getOppositeFace()));
+            if (cannon != null && cannon.getCannonDesign().isSignRequired() && cannon.getNumberCannonSigns() <= 1) {
+                plugin.logDebug("cancelled cannon sign destruction");
+                event.setCancelled(true);
             }
         }
     }
