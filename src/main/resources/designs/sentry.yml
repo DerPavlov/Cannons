@@ -17,7 +17,8 @@ signs:
 ammunition:
   #what the gunpowder is called
   gunpowderName: gunpowder
-  #what item is used as gunpowder (minimum is id:data. Named items id:data:displayName:lore1:lore2:....)
+  #what item is used as gunpowder (minimum is id:data. Named items id:data;displayName;lore1;lore2;....)
+  #'minecraft:gunpowder;$rGunpowder'
   gunpowderType: 'minecraft:gunpowder'
   #does this cannon need gunpowder. If false you can directly load the projectile
   needsGunpowder: true

@@ -298,6 +298,11 @@ public final class Cannons extends JavaPlugin
 			this.logger.info(getLogPrefix() + ChatColor.stripColor(msg));
 	}
 
+	public boolean isDebugMode()
+	{
+		return config.isDebugMode();
+	}
+
 	public void broadcast(String msg)
 	{
 		this.getServer().broadcastMessage(msg);
