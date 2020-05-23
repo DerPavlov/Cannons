@@ -195,6 +195,7 @@ public class ItemHolder
 	{
 		if (item != null)
 		{
+			//System.out.println("item: " + item.getDisplayName() + " cannons " + this.getDisplayName());
             //Item does not have the required display name
             if ((this.hasDisplayName() && !item.hasDisplayName()) || (!this.hasDisplayName() && item.hasDisplayName()))
                 return false;
