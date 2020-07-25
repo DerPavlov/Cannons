@@ -269,6 +269,7 @@ public class Cannon
             if (toLoad > 0)
             {
                 ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
+                Cannons.getPlugin().logDebug("Amount of chests next to cannon: " + invlist.size());
                 gunpowder = InventoryManagement.removeItem(invlist, gunpowder);
                 if (gunpowder.getAmount() == 0)
                 {
