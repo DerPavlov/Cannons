@@ -158,34 +158,29 @@ public class CreateExplosion {
 		this.plugin.logDebug("Impact surface: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
 			+ impactLoc.getBlockZ());
 
-		// if the projectile has slowed down to 80% of the max velocity it will not penetrate
-		if (vel.length() / projectile.getVelocity() < 0.8) {
-			this.plugin.logDebug("Projectile velocity of " + vel.length() + " too low for penetration");
-		}
-		else {
-			// the cannonball will only break blocks if it has penetration.
-			Random r = new Random();
-			double randomness = (1 + r.nextGaussian() / 5.0);
-			int penetration = (int) Math.round(
-					randomness * (cannonball.getProjectile().getPenetration()) * (vel.length() / projectile.getVelocity() - 0.8) / 0.2);
-			if (penetration < 0)
-				penetration = 0;
-			plugin.logDebug("velocity: " + vel.length() + " penetration: " + penetration + " randomness: " + randomness);
+		// the cannonball will only break blocks if it has penetration.
+		Random r = new Random();
+		double randomness = (1 + r.nextGaussian() / 5.0);
+		int penetration = (int) Math.round(
+				randomness * cannonball.getProjectile().getPenetration() * Math.pow(vel.length() / projectile.getVelocity(),2));
+		if (penetration < 0)
+			penetration = 0;
+		plugin.logDebug("velocity: " + vel.length() + " percent of max velocity: " + vel.length()/ projectile.getVelocity() + " penetration: " + penetration + " randomness: " + randomness);
 
-			blocklist.clear();
-			if (penetration > 0) {
-				BlockIterator iter2 = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, penetration);
-				while (iter2.hasNext()) {
-					Block next = iter2.next();
-					// if block can be destroyed the the iterator will check the next block. Else
-					// the projectile will explode
-					if (!this.breakBlock(next, blocklist, superbreaker, doesBlockDamage)) {
-						// found indestructible block
-						break;
-					}
-					impactLoc = next.getLocation();
+		blocklist.clear();
+		if (penetration > 0) {
+			BlockIterator iter2 = new BlockIterator(world, impactLoc.toVector(), vel.normalize(), 0, penetration);
+			while (iter2.hasNext()) {
+				Block next = iter2.next();
+				// if block can be destroyed the the iterator will check the next block. Else
+				// the projectile will explode
+				if (!this.breakBlock(next, blocklist, superbreaker, doesBlockDamage)) {
+					// found indestructible block
+					break;
 				}
+				impactLoc = next.getLocation();
 			}
+
 			this.plugin.logDebug("Penetration loc: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
 					+ impactLoc.getBlockZ());
 
