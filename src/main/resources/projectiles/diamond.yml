@@ -55,6 +55,19 @@ smokeTrail:
   material: 'minecraft:cobweb'
   #how long the smoke will stay in seconds
   duration: 5.0
+  particles:
+    # whether to use particles for the smoke trail instead of a block
+    enabled: false
+    # name of the particle to use - see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html for a list
+    type: SMOKE_NORMAL
+    # how many particles to spawn
+    count: 1
+    # the x, y and z offset of the particles
+    x_offset: 0
+    y_offset: 0
+    z_offset: 0
+    # how fast the particle travels to its offset position
+    speed: 1
 
 explosion:
   #the explosion power of the cannonball when it hits; this number determines the explosions range in blocks.

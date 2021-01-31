@@ -128,7 +128,7 @@ public class ProjectileObserver {
 
             if(distance <= maxDist)
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, Bukkit.createBlockData(liquid.getType()), FakeBlockType.WATER_SPLASH, 1.0);
-            
+
         }
         CannonsUtil.imitateSound(loc, sound, maxSoundDist, maxVol);
     }
@@ -231,14 +231,18 @@ public class ProjectileObserver {
             cannonball.setLastSmokeTrailLocation(newLoc);
             plugin.logDebug("smoke trail at: " +  newLoc.getBlockX() + "," + newLoc.getBlockY() + "," + newLoc.getBlockZ());
 
-            for(Player p : newLoc.getWorld().getPlayers())
-            {
-                Location pl = p.getLocation();
-                double distance = pl.distance(newLoc);
+            if (proj.isSmokeTrailParticleEnabled()) {
+                cannonball.getWorld().spawnParticle(proj.getSmokeTrailParticleType(), newLoc, proj.getSmokeTrailParticleCount(), proj.getSmokeTrailParticleOffsetX(), proj.getSmokeTrailParticleOffsetY(), proj.getSmokeTrailParticleOffsetZ(), proj.getSmokeTrailParticleSpeed(), null, true);
+            }
+            else {
+                for (Player p : newLoc.getWorld().getPlayers()) {
+                    Location pl = p.getLocation();
+                    double distance = pl.distance(newLoc);
 
-                if(distance <= maxDist)
-                    plugin.getFakeBlockHandler().imitatedSphere(p, newLoc, 0, proj.getSmokeTrailMaterial(), FakeBlockType.SMOKE_TRAIL, smokeDuration);
+                    if (distance <= maxDist)
+                        plugin.getFakeBlockHandler().imitatedSphere(p, newLoc, 0, proj.getSmokeTrailMaterial(), FakeBlockType.SMOKE_TRAIL, smokeDuration);
 
+                }
             }
         }
 
