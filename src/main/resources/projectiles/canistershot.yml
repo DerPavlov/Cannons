@@ -53,7 +53,7 @@ smokeTrail:
   duration: 5.0
   particles:
     # whether to use particles for the smoke trail instead of a block
-    enabled: true
+    enabled: false
     # name of the particle to use - see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html for a list
     type: SMOKE_NORMAL
     # how many particles to spawn
