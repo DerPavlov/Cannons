@@ -203,7 +203,7 @@ public class CreateExplosion {
 				this.plugin.getServer().getPluginManager().callEvent(piercingEvent);
 
 				// create bukkit event
-				EntityExplodeEvent event = new EntityExplodeEvent(null, impactLoc, piercingEvent.getBlockList(), 1.0f);
+				EntityExplodeEvent event = new EntityExplodeEvent(projectile_entity, impactLoc, piercingEvent.getBlockList(), 1.0f);
 				this.plugin.getServer().getPluginManager().callEvent(event);
 
 				this.plugin.logDebug("was the cannons explode event canceled: " + event.isCancelled());
