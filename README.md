@@ -1,8 +1,11 @@
 Cannons
 =======
 
-by derPavlov    
-http://dev.bukkit.org/server-mods/cannons/
+by derPavlov
+
+Bukkit: https://dev.bukkit.org/projects/cannons  
+Spigot: https://www.spigotmc.org/resources/cannons.56764/
+Discord: https://discord.io/CannonsPlugin+
 
 Install:
 ---------------
