@@ -5,7 +5,7 @@ by derPavlov
 
 Bukkit: https://dev.bukkit.org/projects/cannons  
 Spigot: https://www.spigotmc.org/resources/cannons.56764/  
-Discord: https://discord.link/Cannons
+Discord: https://discord.gg/dM9EsdtQkq
 
 Install:
 ---------------
