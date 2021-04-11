@@ -151,7 +151,7 @@ public class CreateExplosion {
 		World world = projectile_entity.getWorld();
 		Location impactLoc = snowballLoc.clone();
 		this.plugin.logDebug("Projectile impact: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
-			+ impactLoc.getBlockZ());
+			+ impactLoc.getBlockZ() + " direction: " + impactLoc.getDirection());
 
 		// find surface and set this as new impact location
 		impactLoc = CannonsUtil.findSurface(impactLoc, vel);
@@ -219,6 +219,10 @@ public class CreateExplosion {
 
 			}
 		}
+
+		// add the impact velocity as direction of the impactLoc, direction will be normalized
+		impactLoc.setDirection(projectile_entity.getVelocity());
+
 		return impactLoc;
     }
 
@@ -807,6 +811,7 @@ public class CreateExplosion {
 	cannonball.setImpactLocation(impactLoc);
 	World world = impactLoc.getWorld();
 
+
 	// find block which caused the shell impact
 	Location impactBlock = CannonsUtil.findFirstBlock(impactLoc, cannonball.getVelocity());
 	if (impactBlock != null) {
@@ -842,6 +847,9 @@ public class CreateExplosion {
 
 	boolean incendiary = projectile.hasProperty(ProjectileProperties.INCENDIARY);
 	boolean blockDamage = projectile.getExplosionDamage();
+
+	this.plugin.logDebug("Projectile impact event: " + impactLoc.getBlockX() + ", " + impactLoc.getBlockY() + ", "
+				+ impactLoc.getBlockZ() + " direction: " + impactLoc.getYaw() + " Pitch: " + impactLoc.getPitch());
 
 	// fire impact event
 	ProjectileImpactEvent impactEvent = new ProjectileImpactEvent(projectile, impactLoc,
