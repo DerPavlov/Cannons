@@ -4,21 +4,13 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
-
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.Exception;
-import java.lang.String;
-import java.lang.System;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 //small class as at.pavlov.cannons.container for item id and data
