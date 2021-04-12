@@ -862,7 +862,7 @@ public class CreateExplosion {
 	if (impactEvent.isCancelled()) {
 	    // event cancelled, make some effects - even if the area is protected by a
 	    // plugin
-	    world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0);
+	    world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), 0, false, false, cannonball.getProjectileEntity());
 	    this.sendExplosionToPlayers(projectile, impactLoc, projectile.getSoundImpactProtected());
 	} else {
 	    // if the explosion power is negative there will be only a arrow impact sound
@@ -874,7 +874,7 @@ public class CreateExplosion {
 		}
 		// make the explosion
 		canceled = !world.createExplosion(impactLoc.getX(), impactLoc.getY(), impactLoc.getZ(), explosion_power,
-			incendiary, blockDamage);
+			incendiary, blockDamage, cannonball.getProjectileEntity());
 	    }
 	}
 
@@ -972,7 +972,7 @@ public class CreateExplosion {
 				// only do if explosion in blocks are allowed
 				if (proj.isClusterExplosionsInBlocks() || expLoc.getBlock().isEmpty()
 					|| (expLoc.getBlock().isLiquid() && proj.isUnderwaterDamage())) {
-				    expLoc.getWorld().createExplosion(expLoc, (float) proj.getClusterExplosionsPower());
+				    expLoc.getWorld().createExplosion(expLoc, (float) proj.getClusterExplosionsPower(), projectile.hasProperty(ProjectileProperties.INCENDIARY), true, cannonball.getProjectileEntity());
 				    CreateExplosion.this.sendExplosionToPlayers(null, expLoc,
 					    projectile.getSoundImpact());
 				}
