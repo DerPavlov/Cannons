@@ -712,7 +712,14 @@ public class CannonsUtil
      */
     public static boolean hasLineOfSight(Location start, Location stop, int ignoredBlocks){
         Vector dir =  stop.clone().subtract(start).toVector().normalize();
-        BlockIterator iter = new BlockIterator(start.getWorld(), start.clone().add(dir).toVector(),dir, 0, (int) start.distance(stop));
+
+        if (!start.getWorld().equals(stop.getWorld())) return false;
+
+        // limit the iteration distance to 200 blocks
+        int maxDistance = (int) start.distance(stop);
+        if (maxDistance > 200) maxDistance = 200;
+
+        BlockIterator iter = new BlockIterator(start.getWorld(), start.clone().add(dir).toVector(),dir, 0, maxDistance);
 
         int nontransparent = 0;
         while (iter.hasNext()) {
