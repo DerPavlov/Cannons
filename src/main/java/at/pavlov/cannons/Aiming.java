@@ -680,7 +680,11 @@ public class Aiming {
 
         //plugin.logDebug("old target " + target);
         Location newTarget = loctarget.clone();
-//        double distance = target.distance(cannon.getMuzzle());
+        if (target.getCenterLocation().distance(cannon.getMuzzle()) > cannon.getCannonDesign().getSentryMaxRange()) {
+			return false;
+		}
+
+
 //        double velocity = cannon.getCannonballVelocity();
 //        if (velocity > 0) {
 //            double time = distance / velocity;
