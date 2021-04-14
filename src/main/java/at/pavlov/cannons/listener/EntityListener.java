@@ -43,7 +43,7 @@ public class EntityListener implements Listener
 	public void onProjectileHitEntity(EntityDamageByEntityEvent event)
 	{
 		Entity er = event.getDamager();
-		if(er instanceof Projectile)
+		if(event.getDamager() != null && er instanceof Projectile)
 		{
 			Projectile p = (Projectile) er;
 			plugin.getProjectileManager().directHitProjectile(p, event.getEntity());
