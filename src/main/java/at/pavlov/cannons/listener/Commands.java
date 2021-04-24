@@ -929,8 +929,14 @@ public class Commands implements TabExecutor
         if (length > 1000)
             length = 1000;
 
+        boolean choice = true;
+        //buffer the selection because it will be reset after every cannon
+        if (selectTargetBoolean.containsKey(player.getUniqueId()))
+            choice = selectTargetBoolean.get(player.getUniqueId());
+
         HashSet<Cannon> list = CannonManager.getCannonsInBox(player.getLocation(), length, length, length);
         for (Cannon cannon : list){
+            selectTargetBoolean.put(player.getUniqueId(), choice);
             cannonSelector.put(player.getUniqueId(), cmd);
             setSelectedCannon(player, cannon);
         }
