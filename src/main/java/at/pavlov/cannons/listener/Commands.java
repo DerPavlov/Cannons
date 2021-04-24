@@ -913,6 +913,7 @@ public class Commands implements TabExecutor
                 }
             }
         }
+        selectTargetBoolean.remove(player.getUniqueId());
         cannonSelector.remove(player.getUniqueId());
     }
 
@@ -924,6 +925,9 @@ public class Commands implements TabExecutor
     public void selectCannonsInBox(Player player, SelectCannon cmd, int length){
         if (player == null || length <= 0)
             return;
+
+        if (length > 1000)
+            length = 1000;
 
         HashSet<Cannon> list = CannonManager.getCannonsInBox(player.getLocation(), length, length, length);
         for (Cannon cannon : list){
