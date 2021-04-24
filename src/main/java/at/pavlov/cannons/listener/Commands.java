@@ -42,6 +42,8 @@ public class Commands implements TabExecutor
 
     //<player,command to be performed>;
     private HashMap<UUID,SelectCannon> cannonSelector = new HashMap<>();
+    //<player,command to be performed>;
+    private HashMap<UUID,Boolean> selectTargetBoolean = new HashMap<>();
     //<player,playerUID>;
     private HashMap<UUID,UUID> whitelistPlayer = new HashMap<>();
 
@@ -421,21 +423,51 @@ public class Commands implements TabExecutor
                             plugin.logDebug("[Cannons] " + sender.getName() + " has no permission for command /cannons " + args[0]);
                             return true;
                         }
+                        // set selection or use toggle as default
+                        boolean choice = false;
+                        if (args.length >= 3){
+                            choice = Boolean.parseBoolean(args[2]);
+                            selectTargetBoolean.put(player.getUniqueId(), choice);
+                        }
+                        // additional range command to select multiple cannons
+                        int length = 0;
+                        if (args.length >= 4){
+                            try {
+                                length = Integer.parseInt(args[3]);
+                            } catch (NumberFormatException e) {
+                                length = 0;
+                            }
+                        }
                         //selection done by a string '/cannons target mob|player|cannon'
                         if (args.length >= 2 && (args[1].equalsIgnoreCase("mob"))) {
-                            toggleCannonSelector(player, SelectCannon.TARGET_MOB);
+                            if (length > 0)
+                                selectCannonsInBox(player, SelectCannon.TARGET_MOB, length);
+                            else
+                                toggleCannonSelector(player, SelectCannon.TARGET_MOB);
                         }
                         else if (args.length >= 2 && (args[1].equalsIgnoreCase("player"))) {
-                            toggleCannonSelector(player, SelectCannon.TARGET_PLAYER);
+                            if (length > 0)
+                                selectCannonsInBox(player, SelectCannon.TARGET_PLAYER, length);
+                            else
+                                toggleCannonSelector(player, SelectCannon.TARGET_PLAYER);
                         }
                         else if (args.length >= 2 && (args[1].equalsIgnoreCase("cannon"))) {
-                            toggleCannonSelector(player, SelectCannon.TARGET_CANNON);
+                            if (length > 0)
+                                selectCannonsInBox(player, SelectCannon.TARGET_CANNON, length);
+                            else
+                                toggleCannonSelector(player, SelectCannon.TARGET_CANNON);
                         }
                         else if (args.length >= 2 && (args[1].equalsIgnoreCase("other"))) {
-                            toggleCannonSelector(player, SelectCannon.TARGET_OTHER);
+                            if (length > 0)
+                                selectCannonsInBox(player, SelectCannon.TARGET_OTHER, length);
+                            else
+                                toggleCannonSelector(player, SelectCannon.TARGET_OTHER);
                         }
-                        else
-                            sendMessage(sender, ChatColor.RED + "Usage '/cannons target <mob|player|cannon|other>'");
+                        else {
+                            //remove choice for target it the command was invalid
+                            selectTargetBoolean.remove(player.getUniqueId());
+                            sendMessage(sender, ChatColor.RED + "Usage '/cannons target <mob|player|cannon|other> <true|false> <range>'");
+                        }
                     }
                     //get name of cannon
                     else if(args[0].equalsIgnoreCase("info"))
@@ -797,8 +829,12 @@ public class Commands implements TabExecutor
                         userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
-                    else {
-                        cannon.toggleTargetMob();
+                    else  if (cannon.getCannonDesign().isSentry()){
+                        // use preselected choice or toggle
+                        if (selectTargetBoolean.containsKey(player.getUniqueId()))
+                            cannon.setTargetMob(selectTargetBoolean.get(player.getUniqueId()));
+                        else
+                            cannon.toggleTargetMob();
                         userMessages.sendMessage(MessageEnum.CmdToggledTargetMob, player, cannon);
                         CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
                     }
@@ -809,32 +845,44 @@ public class Commands implements TabExecutor
                         userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
-                    else {
-                        cannon.toggleTargetPlayer();
+                    else if (cannon.getCannonDesign().isSentry()){
+                        // use preselected choice or toggle
+                        if (selectTargetBoolean.containsKey(player.getUniqueId()))
+                            cannon.setTargetPlayer(selectTargetBoolean.get(player.getUniqueId()));
+                        else
+                            cannon.toggleTargetPlayer();
                         userMessages.sendMessage(MessageEnum.CmdToggledTargetPlayer, player, cannon);
                         CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
                     }
                     break;
                 }
                 case TARGET_CANNON:{
-                    if (!player.getUniqueId().equals(cannon.getOwner())) {
+                    if (cannon.getCannonDesign().isSentry() && !player.getUniqueId().equals(cannon.getOwner())) {
                         userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
-                    else {
-                        cannon.toggleTargetCannon();
+                    else  if (cannon.getCannonDesign().isSentry()){
+                        // use preselected choice or toggle
+                        if (selectTargetBoolean.containsKey(player.getUniqueId()))
+                            cannon.setTargetCannon(selectTargetBoolean.get(player.getUniqueId()));
+                        else
+                            cannon.toggleTargetCannon();
                         userMessages.sendMessage(MessageEnum.CmdToggledTargetCannon, player, cannon);
                         CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
                     }
                     break;
                 }
                 case TARGET_OTHER:{
-                    if (!player.getUniqueId().equals(cannon.getOwner())) {
+                    if (cannon.getCannonDesign().isSentry() && !player.getUniqueId().equals(cannon.getOwner())) {
                         userMessages.sendMessage(MessageEnum.ErrorNotTheOwner, player, cannon);
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
-                    else {
-                        cannon.toggleTargetOther();
+                    else  if (cannon.getCannonDesign().isSentry()){
+                        // use preselected choice or toggle
+                        if (selectTargetBoolean.containsKey(player.getUniqueId()))
+                            cannon.setTargetOther(selectTargetBoolean.get(player.getUniqueId()));
+                        else
+                            cannon.toggleTargetOther();
                         userMessages.sendMessage(MessageEnum.CmdToggledTargetOther, player, cannon);
                         CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
                     }
@@ -866,6 +914,22 @@ public class Commands implements TabExecutor
             }
         }
         cannonSelector.remove(player.getUniqueId());
+    }
+
+    /**
+     * @param player player for selecting the cannon
+     * @param cmd select command to perform
+     * @param length edge length of of the box
+     */
+    public void selectCannonsInBox(Player player, SelectCannon cmd, int length){
+        if (player == null || length <= 0)
+            return;
+
+        HashSet<Cannon> list = CannonManager.getCannonsInBox(player.getLocation(), length, length, length);
+        for (Cannon cannon : list){
+            cannonSelector.put(player.getUniqueId(), cmd);
+            setSelectedCannon(player, cannon);
+        }
     }
 
     /**
