@@ -36,6 +36,7 @@ public class Projectile implements Cloneable{
 	private int automaticFiringMagazineSize;
 	private int numberOfBullets;
 	private double spreadMultiplier;
+	private int sentryIgnoredBlocks;
 	private List<ProjectileProperties> propertyList = new ArrayList<ProjectileProperties>();
 
 	//smokeTrail
@@ -780,4 +781,11 @@ public class Projectile implements Cloneable{
 
 	public double getSmokeTrailParticleSpeed() { return smokeTrailParticleSpeed; }
 
+	public int getSentryIgnoredBlocks() {
+		return sentryIgnoredBlocks;
+	}
+
+	public void setSentryIgnoredBlocks(int sentryIgnoredBlocks) {
+		this.sentryIgnoredBlocks = sentryIgnoredBlocks;
+	}
 }

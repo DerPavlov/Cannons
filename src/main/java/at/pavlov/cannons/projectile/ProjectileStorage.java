@@ -212,6 +212,7 @@ public class ProjectileStorage
 		projectile.setAutomaticFiringMagazineSize(projectileConfig.getInt("cannonball.automaticFiringMagazineSize", 1));
 		projectile.setNumberOfBullets(projectileConfig.getInt("cannonball.numberOfBullets", 1));
 		projectile.setSpreadMultiplier(projectileConfig.getDouble("cannonball.spreadMultiplier", 1.0));
+		projectile.setSentryIgnoredBlocks(projectileConfig.getInt("cannonball.sentryIgnoredBlocks", 0));
 		projectile.setPropertyList(toProperties(projectileConfig.getStringList("cannonball.properties")));
 
 		//smokeTrail

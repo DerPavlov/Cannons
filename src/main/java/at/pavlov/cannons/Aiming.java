@@ -13,6 +13,7 @@ import at.pavlov.cannons.container.MovingObject;
 import at.pavlov.cannons.container.Target;
 import at.pavlov.cannons.event.CannonTargetEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
+import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -700,6 +701,13 @@ public class Aiming {
 //        }
         //plugin.logDebug("new target " + newTarget);
 		int ignoredBlocks = 0;
+
+        if (cannon.isProjectileLoaded()) {
+			Projectile proj = cannon.getLoadedProjectile();
+			if (proj != null)
+				ignoredBlocks = proj.getSentryIgnoredBlocks();
+		}
+
 		if (target.getTargetType() == TargetType.CANNON)
 			ignoredBlocks = 1;
         if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), loctarget, ignoredBlocks)) {

@@ -38,6 +38,8 @@ cannonball:
   numberOfBullets: 1
   #the higher this is, the more inaccurate the projectile. This multiplies the "spreadOfCannon" property of the cannon it is fired from
   spreadMultiplier: 1.0
+  #ignored the set number of blocks for sentries and will target entities behind walls
+  sentryIgnoredBlocks: 0
   #different properties of the projectile. If you don't want any of these properties then just leave this all blank.
   #possible properties are: superbreaker, incendiary, human_cannonball, teleport, observer
   properties:
