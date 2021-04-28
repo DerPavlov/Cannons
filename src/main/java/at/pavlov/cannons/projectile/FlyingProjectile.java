@@ -7,6 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -51,7 +53,8 @@ public class FlyingProjectile
         this.shooterUID = shooterUID;
         this.playerlocation = playerLoc;
         this.source = source;
-        projectile_entity.setShooter(source);
+        if (source != null)
+            projectile_entity.setShooter(source);
         this.projectileCause = projectileCause;
 
 		this.spawnTime = System.currentTimeMillis();
