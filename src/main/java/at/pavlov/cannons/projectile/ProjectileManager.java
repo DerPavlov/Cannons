@@ -37,6 +37,10 @@ public class ProjectileManager
         spawnLoc.setYaw((float) (Math.atan2(velocity.getZ(),velocity.getX())*180.0/Math.PI - 90));
 
         Entity pEntity = world.spawnEntity(spawnLoc, projectile.getProjectileEntity());
+
+        //calculate firing vector
+        pEntity.setVelocity(velocity);
+
         org.bukkit.entity.Projectile projectileEntity;
         try
         {
@@ -44,7 +48,7 @@ public class ProjectileManager
         }
         catch(Exception e)
         {
-            plugin.logSevere("Can't convert EntityType " + pEntity.getType() + " to projectile. Using Snowball");
+            plugin.logDebug("Can't convert EntityType " + pEntity.getType() + " to projectile. Using additional Snowball");
             projectileEntity = (org.bukkit.entity.Projectile) world.spawnEntity(spawnLoc, EntityType.SNOWBALL);
         }
 
@@ -52,8 +56,7 @@ public class ProjectileManager
             projectileEntity.setFireTicks(100);
         //projectileEntity.setTicksLived(2);
 
-        //calculate firing vector
-        projectileEntity.setVelocity(velocity);
+
 
         //create a new flying projectile container
         FlyingProjectile cannonball = new FlyingProjectile(projectile, projectileEntity, shooter, source, playerLoc, cannonId, projectileCause);
