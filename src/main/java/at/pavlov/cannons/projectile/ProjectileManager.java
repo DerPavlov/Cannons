@@ -50,6 +50,7 @@ public class ProjectileManager
         {
             plugin.logDebug("Can't convert EntityType " + pEntity.getType() + " to projectile. Using additional Snowball");
             projectileEntity = (org.bukkit.entity.Projectile) world.spawnEntity(spawnLoc, EntityType.SNOWBALL);
+            projectileEntity.setVelocity(velocity);
         }
 
         if (projectile.isProjectileOnFire())
