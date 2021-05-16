@@ -18,24 +18,13 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.AreaEffectCloud;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LingeringPotion;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.SpectralArrow;
-import org.bukkit.entity.SplashPotion;
-import org.bukkit.entity.TNTPrimed;
-import org.bukkit.entity.TippedArrow;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
@@ -261,6 +250,7 @@ public class CreateExplosion {
 	World world = impactLoc.getWorld();
 	Random r = new Random();
 
+
 	// move cloud to the ground
 	if (entityHolder.getType() == EntityType.AREA_EFFECT_CLOUD) {
 	    loc = this.moveToGround(loc, cannonball.getProjectile().getSpawnEntityRadius() * 2.);
@@ -283,130 +273,137 @@ public class CreateExplosion {
 	    // add some specific data values
 	    // TNT
 	    if (entity instanceof TNTPrimed) {
-		TNTPrimed tnt = (TNTPrimed) entity;
-		try {
-		    int fusetime = CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.FUSE_TIME),
-			    tnt.getFuseTicks());
-		    int fuseTicks = (int) (fusetime * (1 + r.nextGaussian() / 3.0));
-		    this.plugin.logDebug("reset TNT fuse ticks to: " + fuseTicks + " fusetime " + fusetime);
-		    tnt.setFuseTicks(fuseTicks);
-		} catch (Exception e) {
-		    this.plugin.logSevere("error while converting entity data for "
-			    + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
-		}
+			TNTPrimed tnt = (TNTPrimed) entity;
+			try {
+				int fusetime = CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.FUSE_TIME),
+					tnt.getFuseTicks());
+				int fuseTicks = (int) (fusetime * (1 + r.nextGaussian() / 3.0));
+				this.plugin.logDebug("reset TNT fuse ticks to: " + fuseTicks + " fusetime " + fusetime);
+				tnt.setFuseTicks(fuseTicks);
+			} catch (Exception e) {
+				this.plugin.logSevere("error while converting entity data for "
+					+ cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+			}
 	    }
 	    // AreaEffectCloud
 	    if (entity instanceof AreaEffectCloud) {
-		AreaEffectCloud cloud = (AreaEffectCloud) entity;
-		try {
-		    // PARTICLE ("Particle"),
-		    // EFFECTS ("Effects"),
-		    cloud.setReapplicationDelay(
-			    CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.REAPPLICATION_DELAY),
-				    cloud.getReapplicationDelay()));
-		    cloud.setRadius(CannonsUtil.parseFloat(entityHolder.getData().get(EntityDataType.RADIUS),
-			    cloud.getRadius()));
-		    cloud.setRadiusPerTick(CannonsUtil.parseFloat(
-			    entityHolder.getData().get(EntityDataType.RADIUS_PER_TICK), cloud.getRadiusPerTick()));
-		    cloud.setRadiusOnUse(CannonsUtil.parseFloat(
-			    entityHolder.getData().get(EntityDataType.RADIUS_ON_USE), cloud.getRadiusOnUse()));
-		    cloud.setDuration(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
-			    cloud.getDuration()));
-		    cloud.setDurationOnUse((int) CannonsUtil.parseFloat(
-			    entityHolder.getData().get(EntityDataType.RADIUS_ON_USE), cloud.getDurationOnUse()));
-		    cloud.setWaitTime(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.WAIT_TIME),
-			    cloud.getWaitTime()));
-		    cloud.setColor(
-			    CannonsUtil.parseColor(entityHolder.getData().get(EntityDataType.COLOR), cloud.getColor()));
-		    cloud.setBasePotionData(CannonsUtil.parsePotionData(
-			    entityHolder.getData().get(EntityDataType.POTION_EFFECT), cloud.getBasePotionData()));
-		    cloud.setParticle(CannonsUtil.parseParticle(entityHolder.getData().get(EntityDataType.PARTICLE),
-			    cloud.getParticle()));
-		    cloud.setSource(cannonball.getSource());
-		} catch (Exception e) {
-		    this.plugin.logSevere("error while converting entity data for "
-			    + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+			AreaEffectCloud cloud = (AreaEffectCloud) entity;
+			try {
+				// PARTICLE ("Particle"),
+				// EFFECTS ("Effects"),
+				cloud.setReapplicationDelay(
+					CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.REAPPLICATION_DELAY),
+						cloud.getReapplicationDelay()));
+				cloud.setRadius(CannonsUtil.parseFloat(entityHolder.getData().get(EntityDataType.RADIUS),
+					cloud.getRadius()));
+				cloud.setRadiusPerTick(CannonsUtil.parseFloat(
+					entityHolder.getData().get(EntityDataType.RADIUS_PER_TICK), cloud.getRadiusPerTick()));
+				cloud.setRadiusOnUse(CannonsUtil.parseFloat(
+					entityHolder.getData().get(EntityDataType.RADIUS_ON_USE), cloud.getRadiusOnUse()));
+				cloud.setDuration(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
+					cloud.getDuration()));
+				cloud.setDurationOnUse((int) CannonsUtil.parseFloat(
+					entityHolder.getData().get(EntityDataType.RADIUS_ON_USE), cloud.getDurationOnUse()));
+				cloud.setWaitTime(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.WAIT_TIME),
+					cloud.getWaitTime()));
+				cloud.setColor(
+					CannonsUtil.parseColor(entityHolder.getData().get(EntityDataType.COLOR), cloud.getColor()));
+				cloud.setBasePotionData(CannonsUtil.parsePotionData(
+					entityHolder.getData().get(EntityDataType.POTION_EFFECT), cloud.getBasePotionData()));
+				cloud.setParticle(CannonsUtil.parseParticle(entityHolder.getData().get(EntityDataType.PARTICLE),
+					cloud.getParticle()));
+				cloud.setSource(cannonball.getSource());
+
+				plugin.logDebug("spawn AREA_OF_EFFECT_CLOUD " + cloud);
+				for (PotionEffect effect : entityHolder.getPotionEffects()){
+					plugin.logDebug("add potion effect " + effect);
+					cloud.addCustomEffect(effect, true);
+				}
+			}
+			catch (Exception e) {
+				this.plugin.logSevere("error while converting entity data for "
+					+ cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+			}
 		}
-	    }
-	    // SpectralArrow
-	    if (entity instanceof SpectralArrow) {
-		SpectralArrow arrow = (SpectralArrow) entity;
-		try {
-		    arrow.setGlowingTicks(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
-			    arrow.getGlowingTicks()));
-		} catch (Exception e) {
-		    this.plugin.logSevere("error while converting entity data for "
-			    + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+		// SpectralArrow
+		if (entity instanceof SpectralArrow) {
+			SpectralArrow arrow = (SpectralArrow) entity;
+			try {
+				arrow.setGlowingTicks(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
+					arrow.getGlowingTicks()));
+			} catch (Exception e) {
+				this.plugin.logSevere("error while converting entity data for "
+					+ cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+			}
 		}
-	    }
-	    // TippedArrow
-	    if (entity instanceof TippedArrow) {
-		TippedArrow arrow = (TippedArrow) entity;
-		try {
-		    arrow.setBasePotionData(CannonsUtil.parsePotionData(
-			    entityHolder.getData().get(EntityDataType.POTION_EFFECT), arrow.getBasePotionData()));
-		} catch (Exception e) {
-		    this.plugin.logSevere("error while converting entity data for "
-			    + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+		// TippedArrow
+		if (entity instanceof Arrow) {
+			Arrow arrow = (Arrow) entity;
+			try {
+				arrow.setBasePotionData(CannonsUtil.parsePotionData(
+					entityHolder.getData().get(EntityDataType.POTION_EFFECT), arrow.getBasePotionData()));
+			} catch (Exception e) {
+				this.plugin.logSevere("error while converting entity data for "
+					+ cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+			}
 		}
-	    }
-	    // LivingEntity
-	    if (entity instanceof LivingEntity) {
+		// LivingEntity
+		if (entity instanceof LivingEntity) {
 		LivingEntity living = (LivingEntity) entity;
-		try {
-		    EntityEquipment equipment = living.getEquipment();
-		    if (equipment != null) {
-			equipment.setBoots((CannonsUtil.parseItemstack(
-				entityHolder.getData().get(EntityDataType.BOOTS_ARMOR_ITEM), equipment.getBoots())));
-			equipment.setChestplate((CannonsUtil.parseItemstack(
-				entityHolder.getData().get(EntityDataType.CHESTPLATE_ARMOR_ITEM),
-				equipment.getChestplate())));
-			equipment.setHelmet((CannonsUtil.parseItemstack(
-				entityHolder.getData().get(EntityDataType.HELMET_ARMOR_ITEM), equipment.getHelmet())));
-			equipment.setLeggings((CannonsUtil.parseItemstack(
-				entityHolder.getData().get(EntityDataType.LEGGINGS_ARMOR_ITEM),
-				equipment.getLeggings())));
-			equipment.setItemInMainHand(
-				(CannonsUtil.parseItemstack(entityHolder.getData().get(EntityDataType.MAIN_HAND_ITEM),
-					equipment.getItemInMainHand())));
-			equipment.setItemInOffHand(
-				(CannonsUtil.parseItemstack(entityHolder.getData().get(EntityDataType.OFF_HAND_ITEM),
-					equipment.getItemInOffHand())));
-		    }
-		} catch (Exception e) {
-		    this.plugin.logSevere("error while converting entity data for "
-			    + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
-		}
+			try {
+				EntityEquipment equipment = living.getEquipment();
+				if (equipment != null) {
+				equipment.setBoots((CannonsUtil.parseItemstack(
+					entityHolder.getData().get(EntityDataType.BOOTS_ARMOR_ITEM), equipment.getBoots())));
+				equipment.setChestplate((CannonsUtil.parseItemstack(
+					entityHolder.getData().get(EntityDataType.CHESTPLATE_ARMOR_ITEM),
+					equipment.getChestplate())));
+				equipment.setHelmet((CannonsUtil.parseItemstack(
+					entityHolder.getData().get(EntityDataType.HELMET_ARMOR_ITEM), equipment.getHelmet())));
+				equipment.setLeggings((CannonsUtil.parseItemstack(
+					entityHolder.getData().get(EntityDataType.LEGGINGS_ARMOR_ITEM),
+					equipment.getLeggings())));
+				equipment.setItemInMainHand(
+					(CannonsUtil.parseItemstack(entityHolder.getData().get(EntityDataType.MAIN_HAND_ITEM),
+						equipment.getItemInMainHand())));
+				equipment.setItemInOffHand(
+					(CannonsUtil.parseItemstack(entityHolder.getData().get(EntityDataType.OFF_HAND_ITEM),
+						equipment.getItemInOffHand())));
+				}
+			} catch (Exception e) {
+				this.plugin.logSevere("error while converting entity data for "
+					+ cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+			}
 	    }
 	    // ThrownPotion
 	    if (entity instanceof SplashPotion) {
-		SplashPotion pentity = (SplashPotion) entity;
-		try {
-		    ItemStack potion = new ItemStack(Material.SPLASH_POTION);
-		    PotionMeta meta = (PotionMeta) potion.getItemMeta();
-		    meta.setBasePotionData(CannonsUtil.parsePotionData(
-			    entityHolder.getData().get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
-		    potion.setItemMeta(meta);
-		    pentity.setItem(potion);
-		} catch (Exception e) {
-		    this.plugin.logSevere("error while converting entity data for "
-			    + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
-		}
+			SplashPotion pentity = (SplashPotion) entity;
+			try {
+				ItemStack potion = new ItemStack(Material.SPLASH_POTION);
+				PotionMeta meta = (PotionMeta) potion.getItemMeta();
+				meta.setBasePotionData(CannonsUtil.parsePotionData(
+					entityHolder.getData().get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
+				potion.setItemMeta(meta);
+				pentity.setItem(potion);
+			} catch (Exception e) {
+				this.plugin.logSevere("error while converting entity data for "
+					+ cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+			}
 	    }
 	    // LingeringPotion
 	    if (entity instanceof LingeringPotion) {
-		LingeringPotion pentity = (LingeringPotion) entity;
-		try {
-		    ItemStack potion = new ItemStack(Material.LINGERING_POTION);
-		    PotionMeta meta = (PotionMeta) potion.getItemMeta();
-		    meta.setBasePotionData(CannonsUtil.parsePotionData(
-			    entityHolder.getData().get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
-		    potion.setItemMeta(meta);
-		    pentity.setItem(potion);
-		} catch (Exception e) {
-		    this.plugin.logSevere("error while converting entity data for "
-			    + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
-		}
+			LingeringPotion pentity = (LingeringPotion) entity;
+			try {
+				ItemStack potion = new ItemStack(Material.LINGERING_POTION);
+				PotionMeta meta = (PotionMeta) potion.getItemMeta();
+				meta.setBasePotionData(CannonsUtil.parsePotionData(
+					entityHolder.getData().get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
+				potion.setItemMeta(meta);
+				pentity.setItem(potion);
+			} catch (Exception e) {
+				this.plugin.logSevere("error while converting entity data for "
+					+ cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+			}
 	    }
 	}
 
@@ -458,42 +455,42 @@ public class CreateExplosion {
      */
     private void spreadEntities(FlyingProjectile cannonball) {
 
-	if (!cannonball.getProjectile().isSpawnEnabled())
-	    return;
+		if (!cannonball.getProjectile().isSpawnEnabled())
+			return;
 
-	Projectile projectile = cannonball.getProjectile();
-	Location impactLoc = cannonball.getImpactLocation();
+		Projectile projectile = cannonball.getProjectile();
+		Location impactLoc = cannonball.getImpactLocation();
 
-	Random r = new Random();
-	Location placeLoc;
+		Random r = new Random();
+		Location placeLoc;
 
-	double spread = projectile.getSpawnEntityRadius();
+		double spread = projectile.getSpawnEntityRadius();
 
-	for (SpawnEntityHolder spawn : projectile.getSpawnEntities()) {
-	    // add some randomness to the amount of spawned blocks
-	    int maxPlacement = CannonsUtil.getRandomInt(spawn.getMinAmount(), spawn.getMaxAmount());
+		for (SpawnEntityHolder spawn : projectile.getSpawnEntities()) {
+			// add some randomness to the amount of spawned blocks
+			int maxPlacement = CannonsUtil.getRandomInt(spawn.getMinAmount(), spawn.getMaxAmount());
 
-	    // iterate blocks around to get a good spot
-	    int placedEntities = 0;
-	    int iterations1 = 0;
-	    do {
-		iterations1++;
+			// iterate blocks around to get a good spot
+			int placedEntities = 0;
+			int iterations1 = 0;
+			do {
+				iterations1++;
 
-		// get new position
-		placeLoc = CannonsUtil.randomPointInSphere(impactLoc, spread);
+				// get new position
+				placeLoc = CannonsUtil.randomPointInSphere(impactLoc, spread);
 
-		// check a entity can spawn on this block
-		if (this.canPlaceEntity(placeLoc.getBlock())) {
-		    placedEntities++;
-		    // place the entity
-		    this.spawnEntity(cannonball, placeLoc, projectile.getSpawnVelocity(), spawn);
+				// check a entity can spawn on this block
+				if (this.canPlaceEntity(placeLoc.getBlock())) {
+					placedEntities++;
+					// place the entity
+					this.spawnEntity(cannonball, placeLoc, projectile.getSpawnVelocity(), spawn);
+				}
+			} while (iterations1 < maxPlacement * 10 && placedEntities < maxPlacement);
+
+			if (placedEntities < maxPlacement) {
+			this.plugin.logDebug("Could only place " + placedEntities + " entities instead of " + maxPlacement);
+			}
 		}
-	    } while (iterations1 < maxPlacement * 10 && placedEntities < maxPlacement);
-
-	    if (placedEntities < maxPlacement) {
-		this.plugin.logDebug("Could only place " + placedEntities + " entities instead of " + maxPlacement);
-	    }
-	}
     }
 
     /**

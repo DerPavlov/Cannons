@@ -3,17 +3,20 @@ package at.pavlov.cannons.container;
 import at.pavlov.cannons.Enum.EntityDataType;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.EntityType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SpawnEntityHolder{
     private EntityType type;
     private int minAmount;
     private int maxAmount;
     private Map<EntityDataType, String> data;
+    private List<PotionEffect> potionEffects;
 
     public SpawnEntityHolder(String str)
     {
@@ -22,7 +25,8 @@ public class SpawnEntityHolder{
         // ZOMBIE 1-2
         // EntityData string
 
-        data = new HashMap<EntityDataType, String>();
+        data = new HashMap<>();
+        potionEffects = new ArrayList<>();
         try
         {
             Scanner s = new Scanner(str);
@@ -32,31 +36,96 @@ public class SpawnEntityHolder{
             setMinAmount(Integer.parseInt(result.group(2)));
             setMaxAmount(Integer.parseInt(result.group(3)));
             if (result.group(4) != null) {
-                String strdata = StringUtils.substringBetween(result.group(4), "{", "}");
-                //if there are no curly braces
+                // search for curly braces in as parameter
+                Pattern p = Pattern.compile("(?<=\\{)(.+)(?=\\})");
+                Matcher m = p.matcher(result.group(4));
+                String strdata = null;
+                if(m.find())
+                    strdata = m.group(1);
+
+                //if there are no curly braces set the string to complete argument
                 if (strdata == null)
                     strdata = result.group(4).trim();
 
-                // convert entity data to map
-                for (String s1 : strdata.split(",")){
-                    String[] s2 = s1.split(":");
+                // convert entity data to map. Split the arguments by comma, but don't split inside parentheses []
+                for (String s1 : strdata.split("(?![^)(]*\\([^)(]*?\\)\\)),(?![^\\[]*\\])")){
+                    // separate in type and argument EFFECTS:1b
+                    String[] s2 = s1.split(":(?![^\\[]*\\])");
+                    // check if there are argument and value
                     if (s2.length > 1){
                         boolean found = false;
-                        for (EntityDataType dt : EntityDataType.values()) {
-                            // add new entries
-                            if (s2[0].trim().equalsIgnoreCase(dt.getString())) {
-                                data.put(dt, s2[1].trim());
-                                found = true;
-                                break;
+                        String com1 = s2[0].trim();
+                        // if the type is an effect it can have multiple effects in parentheses
+                        if(com1.equalsIgnoreCase("effects")){
+                            String effects = s2[1].replaceAll("[\\[\\]]","");
+
+                            // isolate every effect inside the parentheses for every potion effect
+                            PotionEffectType type = null;
+                            int duration = 0;
+                            int amplifier = 0;
+                            boolean ambient = false;
+                            boolean particles = false;
+                            boolean icon = true;
+
+                            for (String effect : effects.split(",(?![^\\{]*\\})")) {
+                                // remove the curly braces and split bei comma
+                                for (String arg : effect.replaceAll("[\\{\\}]","").split(",")) {
+                                    // split between argument and value
+                                    String s3[] = arg.split(":");
+                                    if (s3.length > 1) {
+                                        // check arguments type, duration, amplifier, ambient, particles, icon
+                                        String val = s3[1].replaceAll("b","");
+                                        switch (s3[0].toLowerCase())
+                                        {
+                                            case "id":
+                                                type = PotionEffectType.getById(Integer.parseInt(val));
+                                                break;
+                                            case "duration":
+                                                duration = Integer.parseInt(val);
+                                                break;
+                                            case "amplifier":
+                                                amplifier = Integer.parseInt(val);
+                                                break;
+                                            case "ambient":
+                                                ambient = Boolean.parseBoolean(val);
+                                                break;
+                                            case "showparticles":
+                                                particles = Boolean.parseBoolean(val);
+                                                break;
+                                            case "icon":
+                                                icon = Boolean.parseBoolean(val);
+                                                break;
+                                            default:
+                                                System.out.println("[Cannons] '" + s3[0] + "' is not a correct potion effect argument. See Bukkit PotionType");
+                                        }
+                                    }
+                                }
                             }
+                            //System.out.println("[CANNONS]: type: " + type + " duration " +  duration + " amplifier " +  amplifier + " ambient " + ambient + " particles " + particles + " icon " + icon);
+                            if (type != null && duration > 0 && amplifier > 0)
+                                potionEffects.add(new PotionEffect(type, duration, amplifier, ambient, particles, icon));
+
                         }
-                        if (!found)
-                            System.out.println("[Cannons] " + s2[0] + " is not supported by Cannons");
+                        else {
+                            for (EntityDataType dt : EntityDataType.values()) {
+                                // add new entries
+                                if (com1.equalsIgnoreCase(dt.getString())) {
+                                    data.put(dt, s2[1].trim());
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found)
+                                System.out.println("[Cannons] '" + s2[0] + "' is not supported by Cannons");
+                        }
+                    }
+                    else{
+                        System.out.println("[Cannons] " + s1 + " does not have an argument, use 'DURATION:10'");
                     }
                 }
             }
             s.close();
-            //System.out.println("id: " + getId() + " data: " + getData() + " min: " + minAmount + " max: " + maxAmount + " from str: " + str);
+            System.out.println("type: " + getType() + " data: " + getData() + " min: " + minAmount + " max: " + maxAmount + " from str: " + str);
         }
         catch(Exception e)
         {
@@ -104,5 +173,13 @@ public class SpawnEntityHolder{
 
     public void setData(Map<EntityDataType, String> data) {
         this.data = data;
+    }
+
+    public List<PotionEffect> getPotionEffects() {
+        return potionEffects;
+    }
+
+    public void setPotionEffects(List<PotionEffect> potionEffects) {
+        this.potionEffects = potionEffects;
     }
 }
