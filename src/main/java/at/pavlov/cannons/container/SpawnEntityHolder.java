@@ -30,6 +30,7 @@ public class SpawnEntityHolder{
         potionEffects = new ArrayList<>();
         try
         {
+            // 'AREA_EFFECT_CLOUD 1-1 {Particle:"entity_effect",Radius:5f,Duration:300,Color:16711680,Effects:[{Id:2b,Amplifier:3b,Duration:300,ShowParticles:0b},{Id:7b,Amplifier:1b,Duration:20,ShowParticles:0b},{Id:9b,Amplifier:2b,Duration:300,ShowParticles:0b},{Id:19b,Amplifier:2b,Duration:300,ShowParticles:0b}]}'
             Scanner s = new Scanner(str);
             s.findInLine("(\\w+)\\s+(\\d+)-(\\d+)\\s*(.+)?");
             MatchResult result = s.match();
@@ -49,6 +50,7 @@ public class SpawnEntityHolder{
                     strdata = result.group(4).trim();
 
                 // convert entity data to map. Split the arguments by comma, but don't split inside parentheses []
+                // {Particle:"entity_effect",Radius:5f,Duration:300,Color:16711680,Effects:[{Id:2b,Amplifier:3b,Duration:300,ShowParticles:0b},{Id:7b,Amplifier:1b,Duration:20,ShowParticles:0b},{Id:9b,Amplifier:2b,Duration:300,ShowParticles:0b},{Id:19b,Amplifier:2b,Duration:300,ShowParticles:0b}]}
                 for (String s1 : strdata.split("(?![^)(]*\\([^)(]*?\\)\\)),(?![^\\[]*\\])")){
                     // separate in type and argument EFFECTS:1b
                     String[] s2 = s1.split(":(?![^\\[]*\\])");
@@ -57,10 +59,12 @@ public class SpawnEntityHolder{
                         boolean found = false;
                         String com1 = s2[0].trim();
                         // if the type is an effect it can have multiple effects in parentheses
+                        // effects:[{Id:2b,Amplifier:3b,Duration:300,ShowParticles:0b},{Id:7b,Amplifier:1b,Duration:20,ShowParticles:0b},{Id:9b,Amplifier:2b,Duration:300,ShowParticles:0b},{Id:19b,Amplifier:2b,Duration:300,ShowParticles:0b}]
                         if(com1.equalsIgnoreCase("effects")){
                             String effects = s2[1].replaceAll("[\\[\\]]","");
 
                             // isolate every effect inside the parentheses for every potion effect
+                            // {Id:2b,Amplifier:3b,Duration:300,ShowParticles:0b},{Id:7b,Amplifier:1b,Duration:20,ShowParticles:0b},{Id:9b,Amplifier:2b,Duration:300,ShowParticles:0b},{Id:19b,Amplifier:2b,Duration:300,ShowParticles:0b}
                             for (String effect : effects.split(",(?![^\\{]*\\})")) {
                                 PotionEffectType type = null;
                                 int duration = 0;
@@ -69,6 +73,7 @@ public class SpawnEntityHolder{
                                 boolean particles = false;
                                 boolean icon = true;
                                 // remove the curly braces and split bei comma
+                                // {Id:2b,Amplifier:3b,Duration:300,ShowParticles:0b}
                                 for (String arg : effect.replaceAll("[\\{\\}]","").split(",")) {
                                     // split between argument and value
                                     String s3[] = arg.split(":");
