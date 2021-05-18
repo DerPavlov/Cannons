@@ -1,5 +1,6 @@
 package at.pavlov.cannons.container;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.EntityDataType;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.EntityType;
@@ -60,14 +61,13 @@ public class SpawnEntityHolder{
                             String effects = s2[1].replaceAll("[\\[\\]]","");
 
                             // isolate every effect inside the parentheses for every potion effect
-                            PotionEffectType type = null;
-                            int duration = 0;
-                            int amplifier = 0;
-                            boolean ambient = false;
-                            boolean particles = false;
-                            boolean icon = true;
-
                             for (String effect : effects.split(",(?![^\\{]*\\})")) {
+                                PotionEffectType type = null;
+                                int duration = 0;
+                                int amplifier = 0;
+                                boolean ambient = false;
+                                boolean particles = false;
+                                boolean icon = true;
                                 // remove the curly braces and split bei comma
                                 for (String arg : effect.replaceAll("[\\{\\}]","").split(",")) {
                                     // split between argument and value
@@ -100,11 +100,10 @@ public class SpawnEntityHolder{
                                         }
                                     }
                                 }
+                                Cannons.getPlugin().logDebug("AREA OF EFFECT CLOUD potion type: " + type + " duration " +  duration + " amplifier " +  amplifier + " ambient " + ambient + " particles " + particles + " icon " + icon);
+                                if (type != null && duration > 0 && amplifier > 0)
+                                    potionEffects.add(new PotionEffect(type, duration, amplifier, ambient, particles, icon));
                             }
-                            //System.out.println("[CANNONS]: type: " + type + " duration " +  duration + " amplifier " +  amplifier + " ambient " + ambient + " particles " + particles + " icon " + icon);
-                            if (type != null && duration > 0 && amplifier > 0)
-                                potionEffects.add(new PotionEffect(type, duration, amplifier, ambient, particles, icon));
-
                         }
                         else {
                             for (EntityDataType dt : EntityDataType.values()) {

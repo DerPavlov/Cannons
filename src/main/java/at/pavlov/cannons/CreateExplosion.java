@@ -479,8 +479,8 @@ public class CreateExplosion {
 				// get new position
 				placeLoc = CannonsUtil.randomPointInSphere(impactLoc, spread);
 
-				// check a entity can spawn on this block
-				if (this.canPlaceEntity(placeLoc.getBlock())) {
+				// check a entity can spawn on this block if it is a living entity
+				if (this.canPlaceEntity(placeLoc.getBlock()) || !spawn.getType().isAlive()) {
 					placedEntities++;
 					// place the entity
 					this.spawnEntity(cannonball, placeLoc, projectile.getSpawnVelocity(), spawn);
