@@ -253,6 +253,10 @@ public class DesignStorage
         cannonDesign.setSentryUpdateTime((int) (cannonDesignConfig.getDouble("sentry.update", 1.0) * 1000.0));
         cannonDesign.setSentrySwapTime((int) (cannonDesignConfig.getDouble("sentry.swapTime", 10.0)*1000.0));
 
+        //linkCannons
+		cannonDesign.setLinkCannonsEnabled(cannonDesignConfig.getBoolean("linkCannons.enabled", false));
+		cannonDesign.setLinkCannonsDistance(cannonDesignConfig.getInt("linkCannons.distance", 0));
+
         //heatManagement
         cannonDesign.setHeatManagementEnabled(cannonDesignConfig.getBoolean("heatManagement.enabled", false));
         cannonDesign.setAutomaticTemperatureControl(cannonDesignConfig.getBoolean("heatManagement.automaticTemperatureControl", false));

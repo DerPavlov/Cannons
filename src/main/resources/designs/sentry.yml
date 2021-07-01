@@ -116,6 +116,14 @@ sentry:
   swapTime: 10.0
 
 
+#enables the linking of several cannons together. Default is limited to the same design
+linkCannons:
+  #enables the feature to link cannons
+  enabled: false
+  #cannons can be link if they are closer than the given range to the operated cannons in a box shape
+  distance: 40
+
+
 heatManagement:
   #if heat management is used or not
   enabled: true

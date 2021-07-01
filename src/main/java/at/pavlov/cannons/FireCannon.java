@@ -127,9 +127,13 @@ public class FireCannon {
         boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
 
         //todo add firing of multiple cannons
-        for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), 20, 20, 20))
-            if (fcannon.isAimingFinished())
-                this.fire(fcannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
+        if (design.isLinkCannonsEnabled()) {
+            int d = design.getLinkCannonsDistance()*2;
+            for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
+                if (fcannon.isAimingFinished() && fcannon.getCannonDesign().equals(cannon.getCannonDesign()))
+                    this.fire(fcannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
+            }
+        }
 
         return this.fire(cannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
     }

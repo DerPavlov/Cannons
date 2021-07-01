@@ -84,6 +84,10 @@ public class CannonDesign
 	private int sentryUpdateTime;				//in ms
     private int sentrySwapTime;				    //in ms
 
+	//linkCannons
+	private boolean linkCannonsEnabled;
+	private int linkCannonsDistance;
+
     //heatManagment
     private boolean heatManagementEnabled;
     private boolean automaticTemperatureControl;
@@ -1614,5 +1618,21 @@ public class CannonDesign
 
 	public void setFuseBurnTimeRandomness(double fuseBurnTimeRandomness) {
 		this.fuseBurnTimeRandomness = fuseBurnTimeRandomness;
+	}
+
+	public boolean isLinkCannonsEnabled() {
+		return linkCannonsEnabled;
+	}
+
+	public void setLinkCannonsEnabled(boolean linkCannonsEnabled) {
+		this.linkCannonsEnabled = linkCannonsEnabled;
+	}
+
+	public int getLinkCannonsDistance() {
+		return linkCannonsDistance;
+	}
+
+	public void setLinkCannonsDistance(int linkCannonsDistance) {
+		this.linkCannonsDistance = linkCannonsDistance;
 	}
 }

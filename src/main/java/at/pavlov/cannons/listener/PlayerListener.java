@@ -598,8 +598,13 @@ public class PlayerListener implements Listener
                 userMessages.sendMessage(message, player, cannon);
 
                 // todo clean multiple cannons in the vicinity
-                for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), 20, 20, 20))
-                    fcannon.useRamRod(player);
+                if (design.isLinkCannonsEnabled() ) {
+                    int d = design.getLinkCannonsDistance() * 2;
+                    for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
+                        if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()))
+                        fcannon.useRamRod(player);
+                    }
+                }
 
                 //this will directly fire the cannon after it was loaded
                 if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
