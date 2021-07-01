@@ -187,7 +187,6 @@ public class Aiming {
                 angles = getGunAngle(cannon, player.getLocation().getYaw(), player.getLocation().getPitch());
                 // check if cannon is aiming on the target. True if both angles are identical smaller than one angle step
 				cannon.setAimingFinished(Math.abs(angles.getHorizontal())<design.getAngleStepSize() && Math.abs(angles.getVertical())<design.getAngleStepSize());
-				plugin.logDebug("cannon angles: " + cannon.getCannonName() + " finished " + cannon.isAimingFinished() + " horizontal: " + angles.getHorizontal() + " vertical: " + angles.getVertical());
 				// combine both vertical and horizontal message
                 combine = true;
             }
