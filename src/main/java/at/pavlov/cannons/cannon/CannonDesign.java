@@ -50,6 +50,7 @@ public class CannonDesign
 	//timings
 	private double blastConfusion;
 	private double fuseBurnTime;
+	private double fuseBurnTimeRandomness;
     private double barrelCooldownTime;
 	private double loadTime;
 	
@@ -1605,5 +1606,13 @@ public class CannonDesign
 
 	public void setAutoloadChargeWhenLoadingProjectile(boolean autoloadChargeWhenLoadingProjectile) {
 		this.autoloadChargeWhenLoadingProjectile = autoloadChargeWhenLoadingProjectile;
+	}
+
+	public double getFuseBurnTimeRandomness() {
+		return fuseBurnTimeRandomness;
+	}
+
+	public void setFuseBurnTimeRandomness(double fuseBurnTimeRandomness) {
+		this.fuseBurnTimeRandomness = fuseBurnTimeRandomness;
 	}
 }

@@ -219,6 +219,7 @@ public class DesignStorage
 		// timings
 		cannonDesign.setBlastConfusion(cannonDesignConfig.getDouble("timings.blastConfusion", 5.0));
 		cannonDesign.setFuseBurnTime(cannonDesignConfig.getDouble("timings.fuseBurnTime", 1.0));
+		cannonDesign.setFuseBurnTimeRandomness(cannonDesignConfig.getDouble("timings.fuseBurnTimeRandomness", 0.0));
 		cannonDesign.setBarrelCooldownTime(cannonDesignConfig.getDouble("timings.barrelCooldownTime", 1.0));
 		cannonDesign.setLoadTime(cannonDesignConfig.getDouble("timings.loadTime", 3.0));
 

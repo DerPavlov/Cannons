@@ -128,7 +128,8 @@ public class FireCannon {
 
         //todo add firing of multiple cannons
         for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), 20, 20, 20))
-            this.fire(fcannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
+            if (fcannon.isAimingFinished())
+                this.fire(fcannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
 
         return this.fire(cannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
     }
@@ -270,8 +271,7 @@ public class FireCannon {
         {
             //charge is only removed in the last round fired
             boolean lastRound = i==(projectile.getAutomaticFiringMagazineSize()-1);
-            //todo add option for randomness of fuse burn time
-            double randomess = 0.75 + 0.5 * new Random().nextDouble();
+            double randomess = 1. + design.getFuseBurnTimeRandomness() * new Random().nextDouble();
             Long delayTime = (long) (randomess * design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
             FireTaskWrapper fireTask = new FireTaskWrapper(cannon, playerUid, lastRound, projectileCause);
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)

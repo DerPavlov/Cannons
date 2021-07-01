@@ -83,6 +83,8 @@ public class Cannon
     // sentry aiming angles the cannon tries to reach
     private double aimingPitch;
     private double aimingYaw;
+    // is the cannon aiming at the given direction
+    private boolean aimingFinished;
 
     // tracking entity
     private UUID sentryEntity;
@@ -168,6 +170,7 @@ public class Cannon
 
         this.aimingPitch = 0.0;
         this.aimingYaw = 0.0;
+        this.aimingFinished = false;
 
         this.lastPlayerSpreadMultiplier = 1.0;
 
@@ -2661,5 +2664,13 @@ public class Cannon
 
     public void setWhitelistUpdated(boolean whitelistUpdated) {
         this.whitelistUpdated = whitelistUpdated;
+    }
+
+    public boolean isAimingFinished() {
+        return aimingFinished;
+    }
+
+    public void setAimingFinished(boolean aimingFinished) {
+        this.aimingFinished = aimingFinished;
     }
 }
