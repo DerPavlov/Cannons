@@ -481,7 +481,10 @@ public class Aiming {
     			// autoaming or fineadjusting
     			if (distanceCheck(player, cannon) && player.isOnline() && cannon.isValid() && !(cannon.getCannonDesign().isSentry() && cannon.isSentryAutomatic()))
         		{
+        			// todo link multiple cannons
                     MessageEnum message = updateAngle(player, cannon, null, InteractAction.adjustAutoaim);
+                    for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), 20, 20, 20))
+						updateAngle(player, fcannon, null, InteractAction.adjustAutoaim);
                     userMessages.sendMessage(message, player, cannon);
         		}		
         		else

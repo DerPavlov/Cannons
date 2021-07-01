@@ -2,9 +2,11 @@ package at.pavlov.cannons;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import at.pavlov.cannons.Enum.*;
+import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.event.CannonFireEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
@@ -124,6 +126,10 @@ public class FireCannon {
         CannonDesign design = cannon.getCannonDesign();
         boolean autoreload = player.isSneaking() && player.hasPermission(design.getPermissionAutoreload());
 
+        //todo add firing of multiple cannons
+        for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), 20, 20, 20))
+            this.fire(fcannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
+
         return this.fire(cannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
     }
 
@@ -184,7 +190,7 @@ public class FireCannon {
             }
             else
             {
-                //everything went fine - next click on torch wil fire the cannon
+                //everything went fine - next click on torch will fire the cannon
                 //if fire after reloading is active, it will fire automatically. This can be a problem for the impact predictor
                 if (!design.isFireAfterLoading())
                     return MessageEnum.loadProjectile;
@@ -264,7 +270,9 @@ public class FireCannon {
         {
             //charge is only removed in the last round fired
             boolean lastRound = i==(projectile.getAutomaticFiringMagazineSize()-1);
-            Long delayTime = (long) (design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
+            //todo add option for randomness of fuse burn time
+            double randomess = 0.75 + 0.5 * new Random().nextDouble();
+            Long delayTime = (long) (randomess * design.getFuseBurnTime() * 20.0 + i*projectile.getAutomaticFiringDelay()*20.0);
             FireTaskWrapper fireTask = new FireTaskWrapper(cannon, playerUid, lastRound, projectileCause);
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask)
             {

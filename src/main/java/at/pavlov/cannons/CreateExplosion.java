@@ -1090,7 +1090,7 @@ public class CreateExplosion {
      *            the flying projectile
      */
     private boolean deflectProjectile(FlyingProjectile cannonball) {
-	// todo
+	// todo deflect projectiles
 	// if (!cannonball.getProjectile().isSpawnEnabled())
 	// return;
 
