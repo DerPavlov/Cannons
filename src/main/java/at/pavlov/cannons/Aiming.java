@@ -490,7 +490,8 @@ public class Aiming {
 					if (cannon.getCannonDesign().isLinkCannonsEnabled()) {
 						int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
 						for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
-							if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()))
+							// if the design is the same and the player is allowed to used the cannon
+							if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) && (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
 								updateAngle(player, fcannon, null, InteractAction.adjustAutoaim);
 						}
 					}

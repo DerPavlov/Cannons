@@ -816,9 +816,16 @@ public class Commands implements TabExecutor
                             CannonsUtil.playErrorSound(cannon.getMuzzle());
                         }
                         else {
-                            cannon.removeWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
-                            whitelistPlayer.remove(player.getUniqueId());
-                            userMessages.sendMessage(MessageEnum.CmdRemovedWhitelist, player, cannon);
+                            if (player.getUniqueId() != cannon.getOwner())
+                            {
+                                cannon.removeWhitelistPlayer(whitelistPlayer.get(player.getUniqueId()));
+                                whitelistPlayer.remove(player.getUniqueId());
+                                userMessages.sendMessage(MessageEnum.CmdRemovedWhitelist, player, cannon);
+                            }
+                            else
+                            {
+                                userMessages.sendMessage(MessageEnum.CmdRemovedWhitelistOwner, player, cannon);
+                            }
                             CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundSelected());
                         }
                     }

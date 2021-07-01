@@ -41,6 +41,7 @@ Commands:
   NoSentryWhitelist: 'RED [Cannons] Whitelist works for sentries only.'
   AddedWhitelist: 'GREEN [Cannons] Added LASTWHITELISTED to whitelist of CANNON'
   RemovedWhitelist: 'GREEN [Cannons] Removed LASTWHITELISTED from whitelist of CANNON'
+  RemovedWhitelistOwner: 'YELLOW [Cannons] Can not remove the owner of CANNON from the whitelist'
   ToggledTargetMob: 'GOLD [Cannons] Changed sentry Mob targeting to: TARGET_MOB'
   ToggledTargetPlayer: 'GOLD [Cannons] Changed sentry Player targeting to: TARGET_PLAYER'
   ToggledTargetCannon: 'GOLD [Cannons] Changed sentry Cannon targeting to: TARGET_CANNON'

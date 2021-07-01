@@ -601,7 +601,7 @@ public class PlayerListener implements Listener
                 if (design.isLinkCannonsEnabled() ) {
                     int d = design.getLinkCannonsDistance() * 2;
                     for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
-                        if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()))
+                        if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
                         fcannon.useRamRod(player);
                     }
                 }

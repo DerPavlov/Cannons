@@ -33,6 +33,7 @@ public enum MessageEnum
 	CmdNoSentryWhitelist ("Commands.NoSentryWhitelist"),
 	CmdAddedWhitelist ("Commands.AddedWhitelist"),
 	CmdRemovedWhitelist ("Commands.RemovedWhitelist"),
+	CmdRemovedWhitelistOwner ("Commands.RemovedWhitelistOwner"),
 	CmdToggledTargetMob ("Commands.ToggledTargetMob"),
 	CmdToggledTargetPlayer ("Commands.ToggledTargetPlayer"),
 	CmdToggledTargetCannon ("Commands.ToggledTargetCannon"),

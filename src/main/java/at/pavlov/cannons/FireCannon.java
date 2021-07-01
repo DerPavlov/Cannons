@@ -130,7 +130,7 @@ public class FireCannon {
         if (design.isLinkCannonsEnabled()) {
             int d = design.getLinkCannonsDistance()*2;
             for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
-                if (fcannon.isAimingFinished() && fcannon.getCannonDesign().equals(cannon.getCannonDesign()))
+                if (fcannon.isAimingFinished() && fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
                     this.fire(fcannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
             }
         }
