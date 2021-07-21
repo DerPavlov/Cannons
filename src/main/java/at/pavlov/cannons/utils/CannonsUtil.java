@@ -687,8 +687,12 @@ public class CannonsUtil
         if (!start.getBlock().isEmpty())
             return start;
 
+        //check if the direction is > 0, otherwise the blockiterator will fail
+        if (!(direction.lengthSquared() > 0.))
+            return start;
+
         //int length = (int) (direction.length()*3);
-        BlockIterator iter = new BlockIterator(world, start.toVector(), direction.clone().normalize(), 0, 10);
+        BlockIterator iter = new BlockIterator(world, start.toVector(), direction.clone().normalize(), 0., 10);
 
         //try to find a surface of the
         while (iter.hasNext())
