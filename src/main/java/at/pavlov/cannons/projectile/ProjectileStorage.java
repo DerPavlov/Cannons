@@ -205,6 +205,8 @@ public class ProjectileStorage
 		projectile.setProjectileEntity(getProjectileEntity(projectileConfig.getString("cannonball.entityType", "SNOWBALL")));
 		projectile.setProjectileOnFire(projectileConfig.getBoolean("cannonball.isOnFire", false));
 		projectile.setVelocity(projectileConfig.getDouble("cannonball.velocity", 1.0));
+		if (projectile.getVelocity() < 0.01)
+			plugin.logDebug("Low velocity of " + projectile.getVelocity() + " for projectile detected");
 		projectile.setPenetration(projectileConfig.getDouble("cannonball.penetration", 0.0));
 		projectile.setPenetrationDamage(projectileConfig.getBoolean("cannonball.doesPenetrationDamage", true));
 		projectile.setTimefuse(projectileConfig.getDouble("cannonball.timefuse", 0.0));
