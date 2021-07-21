@@ -688,7 +688,7 @@ public class CannonsUtil
             return start;
 
         //check if the direction is > 0, otherwise the blockiterator will fail
-        if (!(direction.lengthSquared() > 0.))
+        if (direction.lengthSquared() < 0.01)
             return start;
 
         //int length = (int) (direction.length()*3);
