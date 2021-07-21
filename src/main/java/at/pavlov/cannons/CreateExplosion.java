@@ -906,10 +906,6 @@ public class CreateExplosion {
 	}
     }
 
-    private void summonEntities() {
-
-    }
-
     private void fireEntityDeathEvent(FlyingProjectile cannonball) {
 	LinkedList<LivingEntity> lEntities = new LinkedList<>();
 	// check which entities are affected by the event
