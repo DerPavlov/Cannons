@@ -1,5 +1,6 @@
 package at.pavlov.cannons.container;
 
+import at.pavlov.cannons.Cannons;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,6 +46,7 @@ public class ItemHolder
 			else if (!meta.hasDisplayName()){
 				useTypeName = true;
 				displayName = getFriendlyName(item, true);
+				//Cannons.getPlugin().logDebug("display name: " + displayName);
 			}
 			else
 				displayName = "";
@@ -285,36 +287,41 @@ public class ItemHolder
 
 	private static String getFriendlyName(ItemStack itemStack, boolean checkDisplayName) {
 		if (itemStack == null || itemStack.getType() == Material.AIR) return "Air";
-		try {
-			if (craftItemStackClass == null)
-				craftItemStackClass = Class.forName(OBC_PREFIX + ".inventory.CraftItemStack");
-			Method nmsCopyMethod = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class);
+//		try {
+//			if (craftItemStackClass == null)
+//				craftItemStackClass = Class.forName(OBC_PREFIX + ".inventory.CraftItemStack");
+//			Method nmsCopyMethod = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class);
+//
+//			if (nmsItemStackClass == null) nmsItemStackClass = Class.forName(NMS_PREFIX + ".ItemStack");
+//			Object nmsItemStack = nmsCopyMethod.invoke(null, itemStack);
+//
+//			Object itemName = null;
+//			if (checkDisplayName) {
+//				Method getNameMethod = nmsItemStackClass.getMethod("getName");
+//				itemName = getNameMethod.invoke(nmsItemStack);
+//			} else {
+//				Method getItemMethod = nmsItemStackClass.getMethod("getItem");
+//				Object nmsItem = getItemMethod.invoke(nmsItemStack);
+//
+//				if (nmsItemClass == null) nmsItemClass = Class.forName(NMS_PREFIX + ".Item");
+//
+//				Method getNameMethod = nmsItemClass.getMethod("getName");
+//				Object localItemName = getNameMethod.invoke(nmsItem);
+//
+//				if (localeClass == null) localeClass = Class.forName(NMS_PREFIX + ".LocaleI18n");
+//				Method getLocaleMethod = localeClass.getMethod("get", String.class);
+//
+//				Object localeString = localItemName == null ? "" : getLocaleMethod.invoke(null, localItemName);
+//				itemName = ("" + getLocaleMethod.invoke(null, localeString.toString() + ".name")).trim();
+//			}
+//			return itemName != null ? itemName.toString() : capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
+//		return capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
 
-			if (nmsItemStackClass == null) nmsItemStackClass = Class.forName(NMS_PREFIX + ".ItemStack");
-			Object nmsItemStack = nmsCopyMethod.invoke(null, itemStack);
-
-			Object itemName = null;
-			if (checkDisplayName) {
-				Method getNameMethod = nmsItemStackClass.getMethod("getName");
-				itemName = getNameMethod.invoke(nmsItemStack);
-			} else {
-				Method getItemMethod = nmsItemStackClass.getMethod("getItem");
-				Object nmsItem = getItemMethod.invoke(nmsItemStack);
-
-				if (nmsItemClass == null) nmsItemClass = Class.forName(NMS_PREFIX + ".Item");
-
-				Method getNameMethod = nmsItemClass.getMethod("getName");
-				Object localItemName = getNameMethod.invoke(nmsItem);
-
-				if (localeClass == null) localeClass = Class.forName(NMS_PREFIX + ".LocaleI18n");
-				Method getLocaleMethod = localeClass.getMethod("get", String.class);
-
-				Object localeString = localItemName == null ? "" : getLocaleMethod.invoke(null, localItemName);
-				itemName = ("" + getLocaleMethod.invoke(null, localeString.toString() + ".name")).trim();
-			}
-			return itemName != null ? itemName.toString() : capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		if (checkDisplayName && itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
+			return itemStack.getItemMeta().getDisplayName();
 		}
 		return capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
 	}
