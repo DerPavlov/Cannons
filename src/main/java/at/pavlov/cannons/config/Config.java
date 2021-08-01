@@ -40,6 +40,7 @@ public class Config
 	//tools
 	private ItemHolder toolAdjust = new ItemHolder("minecraft:air");
 	private ItemHolder toolAutoaim = new ItemHolder("minecraft:clock");
+	private double toolAutoaimRange;
 	private ItemHolder toolFiring = new ItemHolder("minecraft:flint_and_steel");
     private ItemHolder toolRamrod = new ItemHolder("minecraft:stick");
 	private ItemHolder toolRotating = new ItemHolder("minecraft:rail");
@@ -124,6 +125,7 @@ public class Config
 		//tools
 		setToolAdjust(new ItemHolder(plugin.getConfig().getString("tools.adjust", "minecraft:air")));
 		setToolAutoaim(new ItemHolder(plugin.getConfig().getString("tools.autoaim", "minecraft:clock")));
+        setToolAutoaimRange(plugin.getConfig().getDouble("tools.autoaimRange", 4.0));
 		setToolFiring(new ItemHolder(plugin.getConfig().getString("tools.firing", "minecraft:flint_and_steel")));
         setToolRamrod(new ItemHolder(plugin.getConfig().getString("tools.ramrod", "minecraft:stick")));
 		setToolRotating(new ItemHolder(plugin.getConfig().getString("tools.adjust", "minecraft:rail")));
@@ -543,5 +545,13 @@ public class Config
 
     public void setClaimEdgeLength(int claimEdgeLength) {
         this.claimEdgeLength = claimEdgeLength;
+    }
+
+    public double getToolAutoaimRange() {
+        return toolAutoaimRange;
+    }
+
+    public void setToolAutoaimRange(double toolAutoaimRange) {
+        this.toolAutoaimRange = toolAutoaimRange;
     }
 }

@@ -454,8 +454,7 @@ public class Aiming {
             return false;
         }
 
-        //todo add distance for autoaiming
-        return player.getLocation().distance(locCannon) <= 4;
+        return player.getLocation().distance(locCannon) <= config.getToolAutoaimRange();
     }
 
 

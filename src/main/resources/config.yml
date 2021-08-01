@@ -28,6 +28,8 @@ tools:
   #the item used to autoaim a cannon. Default is clock
   #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
   autoaim: 'minecraft:clock'
+  #range of the autoaim tool. Autoaiming will be cancelled if the player farther away than the given distance.
+  autoaimRange: 4.0
   #the item used to fire a cannon. Default is flint and steel. Not every cannon needs a FiringItem.
   #a data value of -1 means that every durability is accepted for flint and steel
   #minimum is id:data. Named items id:data:displayName:lore1:lore2:....
