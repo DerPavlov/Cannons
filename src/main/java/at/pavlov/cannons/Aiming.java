@@ -26,6 +26,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 
@@ -94,11 +95,16 @@ public class Aiming {
         {
             public void run()
             {
-                //long startTime = System.nanoTime();
+                long startTime = System.nanoTime();
                 updateAimingMode();
+				plugin.logDebug("Time update aiming: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+				startTime = System.nanoTime();
                 updateImpactPredictor();
+				plugin.logDebug("Time updateImpactPredictor: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+				startTime = System.nanoTime();
                 updateSentryMode();
-                //plugin.logDebug("Time update aiming: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+				plugin.logDebug("Time updateSentryMode: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+
             }
         }, 1L, 1L);
     }
@@ -448,6 +454,7 @@ public class Aiming {
             return false;
         }
 
+        //todo add distance for autoaiming
         return player.getLocation().distance(locCannon) <= 4;
     }
 
@@ -500,7 +507,7 @@ public class Aiming {
         		else
         		{
         			//leave aiming Mode
-        			MessageEnum message = disableAimingMode(player, cannon);
+        			MessageEnum message = disableAimingMode(player);
                     userMessages.sendMessage(message, player, cannon);
         		}
     		}	
@@ -516,6 +523,12 @@ public class Aiming {
                 iter.remove();
                 continue;
             }
+
+            //todo test if chunk loading is caused by this function
+            if (!cannon.isChunkLoaded()){
+            	plugin.logDebug("Chunk not loaded " + cannon.getCannonName() + " sentry function deactivated");
+            	continue;
+			}
 
 			// ignore cannons which are not in sentry mode
 			if (!cannon.isSentryAutomatic() || !cannon.isPaid())
@@ -926,7 +939,7 @@ public class Aiming {
             else
             {
                 //turn off the aiming mode
-                MessageEnum message = disableAimingMode(player, cannon);
+                MessageEnum message = disableAimingMode(player);
                 userMessages.sendMessage(message, player, cannon);
             }
         }
@@ -958,7 +971,7 @@ public class Aiming {
 
     /**
      * enable the aiming mode
-     * @param player player how operates the cannon
+     * @param player player who operates the cannon
      * @param cannon the cannon in aiming mode
      * @return message for the user
      */
@@ -977,6 +990,16 @@ public class Aiming {
         inAimingMode.put(player.getUniqueId(), cannon.getUID());
 
 		cannon.addObserver(player, false);
+
+		//todo remove player from all cannons as obsever
+		if (cannon.getCannonDesign().isLinkCannonsEnabled() ) {
+			int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
+			for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
+				if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
+					cannon.addObserver(player, false);
+			}
+		}
+
 		CannonsUtil.playSound(player.getEyeLocation(), cannon.getCannonDesign().getSoundEnableAimingMode());
 
         return MessageEnum.AimingModeEnabled;
@@ -1017,6 +1040,16 @@ public class Aiming {
             if (cannon!=null)
             {
                 cannon.removeObserver(player);
+
+//				// todo remove player from all cannons as obsever
+//				if (cannon.getCannonDesign().isLinkCannonsEnabled() ) {
+//					int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
+//					for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
+//						if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
+//							cannon.removeObserver(player);
+//					}
+//				}
+
             }
 
             return MessageEnum.AimingModeDisabled;
