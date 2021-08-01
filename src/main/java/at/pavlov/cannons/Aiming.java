@@ -97,13 +97,21 @@ public class Aiming {
             {
                 long startTime = System.nanoTime();
                 updateAimingMode();
-				plugin.logDebug("Time update aiming: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+                double time = (System.nanoTime() - startTime)/1000000.0;
+                if (time > 10.)
+					plugin.logDebug("Time update aiming: " + new DecimalFormat("0.00").format(time)+ "ms");
+
 				startTime = System.nanoTime();
                 updateImpactPredictor();
-				plugin.logDebug("Time updateImpactPredictor: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+				time = (System.nanoTime() - startTime)/1000000.0;
+				if (time > 10.)
+					plugin.logDebug("Time updateImpactPredictor: " + new DecimalFormat("0.00").format(time) + "ms");
+
 				startTime = System.nanoTime();
                 updateSentryMode();
-				plugin.logDebug("Time updateSentryMode: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+				time = (System.nanoTime() - startTime)/1000000.0;
+				if (time > 10.)
+					plugin.logDebug("Time updateSentryMode: " + new DecimalFormat("0.00").format(time) + "ms");
 
             }
         }, 1L, 1L);
