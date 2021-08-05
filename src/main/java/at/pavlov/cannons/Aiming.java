@@ -449,6 +449,9 @@ public class Aiming {
         if (cannon == null)
             return true;
 
+        if (!player.getWorld().equals(cannon.getWorldBukkit()))
+        	return false;
+
         //check if player if far away from the cannon
         CannonDesign design = plugin.getCannonDesign(cannon);
 		//go to trigger location
