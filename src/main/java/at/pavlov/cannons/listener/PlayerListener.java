@@ -85,7 +85,7 @@ public class PlayerListener implements Listener
         Cannon cannon =  aiming.getCannonInAimingMode(event.getPlayer());
         if (!aiming.distanceCheck(event.getPlayer(), cannon)) {
             userMessages.sendMessage(MessageEnum.AimingModeTooFarAway, event.getPlayer());
-            MessageEnum message = aiming.disableAimingMode(event.getPlayer(), cannon);
+            MessageEnum message = aiming.disableAimingMode(event.getPlayer());
             userMessages.sendMessage(message, event.getPlayer());
         }
     }

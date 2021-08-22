@@ -14,7 +14,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -105,9 +104,15 @@ public class Cannon
     private boolean targetCannon;
     private boolean targetOther;
 
+    // cannon operator (can be null), distance to the cannon matters
+    private UUID cannonOperator;
+    // linked cannon operator is controling cannon via a master cannon.
+    private boolean masterCannon;
+
     //observer will see the impact of the target predictor
     //<Player name, remove after showing impact>
     private HashMap<UUID, Boolean> observerMap = new HashMap<UUID, Boolean>();
+
     //a sentry cannon will not target a whitelisted player
     private HashSet<UUID> whitelist = new HashSet<UUID>();
 
@@ -838,7 +843,7 @@ public class Cannon
         //loaded cannon can exploded (80% chance)
         if (canExplode && design.getExplodingLoadedCannons() > 0 && getLoadedGunpowder() > 0 && Math.random() > 0.2)
         {
-            double power = getLoadedGunpowder()/design.getMaxLoadableGunpowderNormal()*design.getExplodingLoadedCannons();
+            double power = 1.0*getLoadedGunpowder()/design.getMaxLoadableGunpowderNormal()*design.getExplodingLoadedCannons();
             World world = getWorldBukkit();
             if (world != null)
                 //todo fix overheating
@@ -1021,7 +1026,6 @@ public class Cannon
                     //Block block = loc.getBlock();
                     //compare and data
                     //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
-                    //todo check facing
                     //if (cannonblock.getData() == block.getData() || block.getData() == -1 || cannonblock.getData() == -1 )
                     return true;
                 }
@@ -1121,7 +1125,6 @@ public class Cannon
                 {
                     Block block = loc.getBlock();
                     //compare and data
-                    //todo check facing
                     //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
                     //if (cannonblock.getData() == block.getData() %4 || block.getData() == -1 || cannonblock.getData() == -1 )
                     return true;
@@ -2352,6 +2355,16 @@ public class Cannon
     }
 
     /**
+     * is the given Player listed as observer for this cannons
+     * @param player player to test
+     * @return true is player is listed as observer
+     */
+    public boolean isObserver(Player player)
+    {
+        return this.observerMap.containsKey(player.getUniqueId());
+    }
+
+    /**
      * toogles the player as observer for this cannon
      * @param player player will be added as observer
      * @param removeAfterShowing if true, the observer only works once
@@ -2686,5 +2699,92 @@ public class Cannon
 
     public void setAimingFinished(boolean aimingFinished) {
         this.aimingFinished = aimingFinished;
+    }
+
+    public UUID getCannonOperator() {
+        return cannonOperator;
+    }
+
+    public void setCannonOperator(UUID cannonOperator) {
+        this.cannonOperator = cannonOperator;
+    }
+
+
+    /**
+     * checks it this cannon has a cannon operator (linked or master)
+     * @return true if the cannon has a cannon operator
+     */
+    public boolean hasCannonOperator() {
+        return this.cannonOperator != null;
+    }
+
+    /**
+     * add the player as cannon operator for this cannon as master cannon
+     * @param player player will be added as cannon operator
+     * @return message for the player
+     */
+    public MessageEnum addCannonOperator(Player player)
+    {
+        return addCannonOperator(player, true);
+    }
+
+    /**
+     * add the player as cannon operator for this cannon, if
+     * @param player player will be added as cannon operator
+     * @param masterCannon if the controlled cannon is a slave and not the master cannon
+     * @return message for the player
+     */
+    public MessageEnum addCannonOperator(Player player, Boolean masterCannon)
+    {
+        Validate.notNull(player, "player must not be null");
+
+        //permission check
+        if (!player.hasPermission(design.getPermissionAutoaim()))
+            return MessageEnum.PermissionErrorAutoaim;
+
+        //check if only the owner can control the cannon
+        if (this.getCannonDesign().isAccessForOwnerOnly() && this.getOwner() != player.getUniqueId())
+            return MessageEnum.ErrorNotTheOwner;
+
+        //there might already be a player controlling the cannon
+        this.cannonOperator = player.getUniqueId();
+        this.masterCannon = masterCannon;
+        return MessageEnum.AimingModeEnabled;
+    }
+
+    /**
+     * removes the player as observer
+     * @return message for the player
+     */
+    public MessageEnum removeCannonOperator()
+    {
+        this.cannonOperator = null;
+        this.masterCannon = true;
+        return MessageEnum.AimingModeDisabled;
+    }
+
+    /**
+     * is the given Player listed as observer for this cannons
+     * @param player player to test
+     * @return true is player is listed as cannon operator
+     */
+    public boolean isCannonOperator(Player player)
+    {
+        if (this.cannonOperator == null)
+            return false;
+
+        return this.cannonOperator.equals(player.getUniqueId());
+    }
+
+    public boolean hasLinkedOperator() {
+        return this.cannonOperator != null;
+    }
+
+    public boolean isMasterCannon() {
+        return masterCannon;
+    }
+
+    public void setMasterCannon(boolean masterCannon) {
+        this.masterCannon = masterCannon;
     }
 }

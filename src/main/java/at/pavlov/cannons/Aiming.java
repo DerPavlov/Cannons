@@ -502,13 +502,13 @@ public class Aiming {
 
                     MessageEnum message = updateAngle(player, cannon, null, InteractAction.adjustAutoaim);
 
-					// todo link multiple cannons
-					// link Cannons
+					// todo updated cannon angles for linked cannons
+					// linked Cannons
 					if (cannon.getCannonDesign().isLinkCannonsEnabled()) {
 						int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
 						for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
 							// if the design is the same and the player is allowed to used the cannon
-							if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) && (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
+							if (fcannon.isCannonOperator(player) && fcannon.getCannonDesign().equals(cannon.getCannonDesign()) && (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
 								updateAngle(player, fcannon, null, InteractAction.adjustAutoaim);
 						}
 					}
@@ -963,6 +963,10 @@ public class Aiming {
                 if (distanceCheck(player, cannon))
                 {
                     MessageEnum message = enableAimingMode(player, cannon);
+                    if (message == MessageEnum.AimingModeEnabled)
+						CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundEnableAimingMode());
+                    else
+						CannonsUtil.playErrorSound(cannon.getMuzzle());
                     userMessages.sendMessage(message, player, cannon);
                 }
                 else
@@ -999,18 +1003,19 @@ public class Aiming {
 
         inAimingMode.put(player.getUniqueId(), cannon.getUID());
 
-		cannon.addObserver(player, false);
+		MessageEnum message = cannon.addCannonOperator(player, true);
+		if (message != MessageEnum.AimingModeEnabled)
+			return message;
 
-		//todo remove player from all cannons as obsever
+		//todo add player from all cannons as cannon operator
 		if (cannon.getCannonDesign().isLinkCannonsEnabled() ) {
 			int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
 			for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
-				if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
-					cannon.addObserver(player, false);
+				if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()))
+					fcannon.addCannonOperator(player, false);
 			}
 		}
 
-		CannonsUtil.playSound(player.getEyeLocation(), cannon.getCannonDesign().getSoundEnableAimingMode());
 
         return MessageEnum.AimingModeEnabled;
 
@@ -1049,16 +1054,16 @@ public class Aiming {
 
             if (cannon!=null)
             {
-                cannon.removeObserver(player);
+                cannon.removeCannonOperator();
 
-//				// todo remove player from all cannons as obsever
-//				if (cannon.getCannonDesign().isLinkCannonsEnabled() ) {
-//					int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
-//					for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
-//						if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
-//							cannon.removeObserver(player);
-//					}
-//				}
+				// todo remove player from all cannons as cannon operator
+				if (cannon.getCannonDesign().isLinkCannonsEnabled() ) {
+					int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
+					for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
+						if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()))
+							cannon.removeCannonOperator();
+					}
+				}
 
             }
 
