@@ -190,7 +190,7 @@ public final class Cannons extends JavaPlugin
 				}
 			}, 6000L, 6000L);
 
-			Metrics metrics = new Metrics(this);
+			Metrics metrics = new Metrics(this, 4048);
 
             logDebug("Time to enable cannons: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
 
