@@ -160,7 +160,7 @@ public class Config
             setImitatedExplosionParticlesType(Particle.EXPLOSION_LARGE);
         }
         setImitatedExplosionParticlesCount(plugin.getConfig().getInt("imitatedEffects.explosionParticles.count", 5));
-        setImitatedExplosionParticlesDiameter(plugin.getConfig().getDouble("imitatedEffects.explosionParticles.diameter", 3));
+        setImitatedExplosionParticlesDiameter(plugin.getConfig().getDouble("imitatedEffects.explosionParticles.diameter", 1));
 
         //imitated aiming
         setImitatedAimingEnabled(plugin.getConfig().getBoolean("imitatedEffects.aiming.enabled", false));
