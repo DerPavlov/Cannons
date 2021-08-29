@@ -9,9 +9,11 @@ import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Particle;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 
+import java.rmi.server.ExportException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,11 @@ public class Config
     private int imitatedExplosionSphereSize;
     private BlockData imitatedExplosionMaterial= Bukkit.createBlockData("minecraft:glowstone");
     private double imitatedExplosionTime;
+
+    private boolean imitatedExplosionParticlesEnabled;
+    private Particle imitatedExplosionParticlesType;
+    private double imitatedExplosionParticlesDiameter;
+    private int imitatedExplosionParticlesCount;
 
     private boolean imitatedAimingEnabled;
     private int imitatedAimingLineLength;
@@ -137,11 +144,23 @@ public class Config
         setImitatedSoundMaximumDistance(plugin.getConfig().getInt("imitatedEffects.maximumSoundDistance", 200));
         setImitatedSoundMaximumVolume((float) plugin.getConfig().getDouble("imitatedEffects.maximumSoundVolume", 0.8));
 
-        //imitated explosions
+        //imitated explosions block
         setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));
         setImitatedExplosionSphereSize(plugin.getConfig().getInt("imitatedEffects.explosion.sphereSize", 2));
         setImitatedExplosionMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.explosion.material", "minecraft:glowstone")));
         setImitatedExplosionTime(plugin.getConfig().getDouble("imitatedEffects.explosion.time", 1.0));
+
+        //imitated explosions particles
+        setImitatedExplosionParticlesEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosionParticles.enabled", true));
+        try {
+            setImitatedExplosionParticlesType(Particle.valueOf(plugin.getConfig().getString("imitatedEffects.explosionParticles.type", "EXPLOSION_LARGE")));
+        }
+        catch(Exception e){
+            plugin.logSevere("Type for Explosion particle  is not correct. Please check spelling of " + plugin.getConfig().getString("imitatedEffects.explosionParticles.type"));
+            setImitatedExplosionParticlesType(Particle.EXPLOSION_LARGE);
+        }
+        setImitatedExplosionParticlesCount(plugin.getConfig().getInt("imitatedEffects.explosionParticles.count", 5));
+        setImitatedExplosionParticlesDiameter(plugin.getConfig().getDouble("imitatedEffects.explosionParticles.diameter", 3));
 
         //imitated aiming
         setImitatedAimingEnabled(plugin.getConfig().getBoolean("imitatedEffects.aiming.enabled", false));
@@ -553,5 +572,37 @@ public class Config
 
     public void setToolAutoaimRange(double toolAutoaimRange) {
         this.toolAutoaimRange = toolAutoaimRange;
+    }
+
+    public boolean isImitatedExplosionParticlesEnabled() {
+        return imitatedExplosionParticlesEnabled;
+    }
+
+    public void setImitatedExplosionParticlesEnabled(boolean imitatedExplosionParticlesEnabled) {
+        this.imitatedExplosionParticlesEnabled = imitatedExplosionParticlesEnabled;
+    }
+
+    public double getImitatedExplosionParticlesDiameter() {
+        return imitatedExplosionParticlesDiameter;
+    }
+
+    public void setImitatedExplosionParticlesDiameter(double imitatedExplosionParticlesDiameter) {
+        this.imitatedExplosionParticlesDiameter = imitatedExplosionParticlesDiameter;
+    }
+
+    public int getImitatedExplosionParticlesCount() {
+        return imitatedExplosionParticlesCount;
+    }
+
+    public void setImitatedExplosionParticlesCount(int imitatedExplosionParticlesCount) {
+        this.imitatedExplosionParticlesCount = imitatedExplosionParticlesCount;
+    }
+
+    public Particle getImitatedExplosionParticlesType() {
+        return imitatedExplosionParticlesType;
+    }
+
+    public void setImitatedExplosionParticlesType(Particle imitatedExplosionParticlesType) {
+        this.imitatedExplosionParticlesType = imitatedExplosionParticlesType;
     }
 }

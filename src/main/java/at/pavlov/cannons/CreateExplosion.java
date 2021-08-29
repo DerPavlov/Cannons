@@ -9,12 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -1238,35 +1233,42 @@ public class CreateExplosion {
      * Broadcasts an explosion with higher volume to the player. Also adds an impact
      * indicator
      * 
-     * @param projectile
+     * @param proj
      *            Which type of projectile exploded. Can be null to suppress the
      *            impact indicator
-     * @param loc
+     * @param impactLoc
      *            Location of the explosion
      * @param sound
      *            Which sound is broadcasted
      */
-    public void sendExplosionToPlayers(Projectile projectile, Location loc, SoundHolder sound) {
-	CannonsUtil.imitateSound(loc, sound, this.config.getImitatedSoundMaximumDistance(),
-		this.config.getImitatedSoundMaximumVolume());
+    public void sendExplosionToPlayers(Projectile proj, Location impactLoc, SoundHolder sound) {
+		CannonsUtil.imitateSound(impactLoc, sound, this.config.getImitatedSoundMaximumDistance(),
+			this.config.getImitatedSoundMaximumVolume());
 
-	if (!this.config.isImitatedExplosionEnabled())
-	    return;
+		if (proj == null || !proj.isImpactIndicator())
+			return;
 
-	double minDist = this.config.getImitatedBlockMinimumDistance();
-	double maxDist = this.config.getImitatedBlockMaximumDistance();
-	int r = this.config.getImitatedExplosionSphereSize() / 2;
-	BlockData mat = this.config.getImitatedExplosionMaterial();
-	double delay = this.config.getImitatedExplosionTime();
+		double minDist = this.config.getImitatedBlockMinimumDistance();
+		double maxDist = this.config.getImitatedBlockMaximumDistance();
+		int r = this.config.getImitatedExplosionSphereSize() / 2;
+		BlockData mat = this.config.getImitatedExplosionMaterial();
+		double delay = this.config.getImitatedExplosionTime();
 
-	for (Player p : loc.getWorld().getPlayers()) {
-	    Location pl = p.getLocation();
-	    double distance = pl.distance(loc);
+		if (impactLoc.getWorld() != null){
+			for (Player p : impactLoc.getWorld().getPlayers()) {
+				Location pl = p.getLocation();
+				double distance = pl.distance(impactLoc);
 
-	    if (projectile != null && projectile.isImpactIndicator() && distance >= minDist && distance <= maxDist) {
-		this.plugin.getFakeBlockHandler().imitatedSphere(p, loc, r, mat, FakeBlockType.EXPLOSION, delay);
-	    }
-	}
+				if (distance >= minDist && distance <= maxDist) {
+					if (config.isImitatedExplosionEnabled())
+						this.plugin.getFakeBlockHandler().imitatedSphere(p, impactLoc, r, mat, FakeBlockType.EXPLOSION, delay);
+					if (config.isImitatedExplosionParticlesEnabled()) {
+						double d = config.getImitatedExplosionParticlesDiameter();
+						impactLoc.getWorld().spawnParticle(config.getImitatedExplosionParticlesType(), impactLoc, config.getImitatedExplosionParticlesCount(), d, d, d, 0, null, true);
+					}
+				}
+			}
+		}
     }
 
     /**

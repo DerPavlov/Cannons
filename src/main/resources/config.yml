@@ -56,15 +56,28 @@ imitatedEffects:
   #how loud the sound effects will be (possible values: 0.0-1.0)
   maximumSoundVolume: 0.8
 
+  #mark the impact location with blocks from distance
   explosion:
     #are imitated blocks enabled
-    enabled: true
+    enabled: false
     #size of the impact imitated explosion
     sphereSize: 3
     #material of the imitated explosion (default is a active minecraft:glowstone)
     material: 'minecraft:glowstone'
     #how long the effect will be displayed [s]
     time: 2
+
+  #mark the impact location with particles from distance
+  explosionParticles:
+    #are imitated particles enabled
+    enabled: true
+    #particle type. Check https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html for reference
+    type: EXPLOSION_LARGE
+    #number of particles for the explosion
+    count: 5
+    #diameter of the explosion from distance
+    diameter: 3
+
 
   #firing effect if the player is far away and display the aiming angle of the cannon
   aiming:
