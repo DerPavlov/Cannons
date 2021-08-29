@@ -1258,6 +1258,7 @@ public class CreateExplosion {
 			if (config.isImitatedExplosionParticlesEnabled()) {
 				double d = config.getImitatedExplosionParticlesDiameter();
 				impactLoc.getWorld().spawnParticle(config.getImitatedExplosionParticlesType(), impactLoc, config.getImitatedExplosionParticlesCount(), d, d, d, 0, null, true);
+				impactLoc.getWorld().spawnParticle(Particle.FLASH, impactLoc, 5, 0, 0, 0, 0, null, true);
 			}
 			if (config.isImitatedExplosionEnabled()){
 				for (Player p : impactLoc.getWorld().getPlayers()) {
