@@ -235,13 +235,16 @@ public class ProjectileObserver {
                 cannonball.getWorld().spawnParticle(proj.getSmokeTrailParticleType(), newLoc, proj.getSmokeTrailParticleCount(), proj.getSmokeTrailParticleOffsetX(), proj.getSmokeTrailParticleOffsetY(), proj.getSmokeTrailParticleOffsetZ(), proj.getSmokeTrailParticleSpeed(), null, true);
             }
             else {
-                for (Player p : newLoc.getWorld().getPlayers()) {
-                    Location pl = p.getLocation();
-                    double distance = pl.distance(newLoc);
+                // added null if the world was deleted
+                if (newLoc.getWorld() != null) {
+                    for (Player p : newLoc.getWorld().getPlayers()) {
+                        Location pl = p.getLocation();
+                        double distance = pl.distance(newLoc);
 
-                    if (distance <= maxDist)
-                        plugin.getFakeBlockHandler().imitatedSphere(p, newLoc, 0, proj.getSmokeTrailMaterial(), FakeBlockType.SMOKE_TRAIL, smokeDuration);
+                        if (distance <= maxDist)
+                            plugin.getFakeBlockHandler().imitatedSphere(p, newLoc, 0, proj.getSmokeTrailMaterial(), FakeBlockType.SMOKE_TRAIL, smokeDuration);
 
+                    }
                 }
             }
         }
