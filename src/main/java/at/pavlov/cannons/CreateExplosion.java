@@ -1255,16 +1255,16 @@ public class CreateExplosion {
 		double delay = this.config.getImitatedExplosionTime();
 
 		if (impactLoc.getWorld() != null){
-			for (Player p : impactLoc.getWorld().getPlayers()) {
-				Location pl = p.getLocation();
-				double distance = pl.distance(impactLoc);
-
-				if (distance >= minDist && distance <= maxDist) {
-					if (config.isImitatedExplosionEnabled())
+			if (config.isImitatedExplosionParticlesEnabled()) {
+				double d = config.getImitatedExplosionParticlesDiameter();
+				impactLoc.getWorld().spawnParticle(config.getImitatedExplosionParticlesType(), impactLoc, config.getImitatedExplosionParticlesCount(), d, d, d, 0, null, true);
+			}
+			if (config.isImitatedExplosionEnabled()){
+				for (Player p : impactLoc.getWorld().getPlayers()) {
+					Location pl = p.getLocation();
+					double distance = pl.distance(impactLoc);
+					if (distance >= minDist && distance <= maxDist) {
 						this.plugin.getFakeBlockHandler().imitatedSphere(p, impactLoc, r, mat, FakeBlockType.EXPLOSION, delay);
-					if (config.isImitatedExplosionParticlesEnabled()) {
-						double d = config.getImitatedExplosionParticlesDiameter();
-						impactLoc.getWorld().spawnParticle(config.getImitatedExplosionParticlesType(), impactLoc, config.getImitatedExplosionParticlesCount(), d, d, d, 0, null, true);
 					}
 				}
 			}
