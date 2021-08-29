@@ -129,7 +129,7 @@ public class SpawnEntityHolder{
                 }
             }
             s.close();
-            System.out.println("type: " + getType() + " data: " + getData() + " min: " + minAmount + " max: " + maxAmount + " from str: " + str);
+            System.out.println("[Cannons] type: " + getType() + " data: " + getData() + " min: " + minAmount + " max: " + maxAmount + " from str: " + str);
         }
         catch(Exception e)
         {
