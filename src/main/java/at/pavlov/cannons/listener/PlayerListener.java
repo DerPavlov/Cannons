@@ -83,7 +83,7 @@ public class PlayerListener implements Listener
     {
         // only active if the player is in aiming mode
         Cannon cannon =  aiming.getCannonInAimingMode(event.getPlayer());
-        if (!aiming.distanceCheck(event.getPlayer(), cannon)) {
+        if (!aiming.distanceCheck(event.getPlayer(), cannon) && (System.currentTimeMillis() - cannon.getTimestampAimingMode()) > 1000){
             userMessages.sendMessage(MessageEnum.AimingModeTooFarAway, event.getPlayer());
             MessageEnum message = aiming.disableAimingMode(event.getPlayer());
             userMessages.sendMessage(message, event.getPlayer());

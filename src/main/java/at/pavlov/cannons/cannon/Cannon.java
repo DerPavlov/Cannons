@@ -136,6 +136,9 @@ public class Cannon
     // amount of fired cannonballs with this cannon
     private long firedCannonballs;
 
+    // time stamp of the player last time inside the aiming mode range (needs a certain time to disable aiming mode)
+    private long timestampAimingMode;
+
     // has the cannon entry changed since it was last saved in the database
     private boolean updated;
     private boolean whitelistUpdated;
@@ -2786,5 +2789,13 @@ public class Cannon
 
     public void setMasterCannon(boolean masterCannon) {
         this.masterCannon = masterCannon;
+    }
+
+    public long getTimestampAimingMode() {
+        return timestampAimingMode;
+    }
+
+    public void setTimestampAimingMode(long timestampAimingMode) {
+        this.timestampAimingMode = timestampAimingMode;
     }
 }

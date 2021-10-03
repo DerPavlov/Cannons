@@ -496,8 +496,13 @@ public class Aiming {
     		// only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
     		if (System.currentTimeMillis() >= cannon.getLastAimed() + cannon.getCannonDesign().getAngleUpdateSpeed())
     		{
+    			boolean playerInRange = distanceCheck(player, cannon);
+    			// reset diasble aiming mode timer if player is close to the cannon
+				if(playerInRange)
+					cannon.setTimestampAimingMode(System.currentTimeMillis());
+
     			// autoaming or fineadjusting
-    			if (distanceCheck(player, cannon) && player.isOnline() && cannon.isValid() && !(cannon.getCannonDesign().isSentry() && cannon.isSentryAutomatic()))
+    			if (playerInRange && player.isOnline() && cannon.isValid() && !(cannon.getCannonDesign().isSentry() && cannon.isSentryAutomatic()))
         		{
 
                     MessageEnum message = updateAngle(player, cannon, null, InteractAction.adjustAutoaim);
@@ -516,9 +521,12 @@ public class Aiming {
         		}		
         		else
         		{
-        			//leave aiming Mode
-        			MessageEnum message = disableAimingMode(player);
-                    userMessages.sendMessage(message, player, cannon);
+        			//leave aiming Mode but wait a second first
+					if ((System.currentTimeMillis() - cannon.getTimestampAimingMode()) > 1000) {
+						userMessages.sendMessage(MessageEnum.AimingModeTooFarAway, player);
+						MessageEnum message = disableAimingMode(player);
+						userMessages.sendMessage(message, player, cannon);
+					}
         		}
     		}	
     	}
