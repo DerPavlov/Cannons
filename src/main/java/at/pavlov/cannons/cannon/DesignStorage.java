@@ -19,6 +19,7 @@ import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.util.io.Closer;
 import com.sk89q.worldedit.world.block.BlockState;
 
@@ -391,15 +392,9 @@ public class DesignStorage
 			return false;
 		}
 
-        AffineTransform transform = new AffineTransform().translate(cc.getMinimumPoint().multiply(-1));
-        BlockTransformExtent extent = new BlockTransformExtent(cc, transform);
-        ForwardExtentCopy copy = new ForwardExtentCopy(extent, cc.getRegion(), cc.getOrigin(), cc, BlockVector3.ZERO);
-        copy.setTransform(transform);
-        try {
-            Operations.complete(copy);
-        } catch (WorldEditException e) {
-            e.printStackTrace();
-        }
+		ClipboardHolder clipboardHolder = new ClipboardHolder(cc);
+		clipboardHolder.setTransform(new AffineTransform().translate(cc.getMinimumPoint().multiply(-1)));
+		cc = clipboardHolder.getClipboard();
 
 		// convert all schematic blocks from the config to BaseBlocks so they
 		// can be rotated
