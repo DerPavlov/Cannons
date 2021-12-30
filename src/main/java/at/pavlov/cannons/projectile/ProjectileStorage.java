@@ -248,6 +248,10 @@ public class ProjectileStorage
 		projectile.setClusterExplosionsEnabled(projectileConfig.getBoolean("clusterExplosion.enabled", false));
 		projectile.setClusterExplosionsInBlocks(projectileConfig.getBoolean("clusterExplosion.explosionInBlocks", false));
 		projectile.setClusterExplosionsAmount(projectileConfig.getInt("clusterExplosion.amount", 5));
+		if(projectile.getClusterExplosionsAmount() > 100){
+			Cannons.getPlugin().logSevere("Max amount for cluster explosions is >100 and was reset to 5 to prevent lag.");
+			projectile.setClusterExplosionsAmount(5);
+		}
 		projectile.setClusterExplosionsMinDelay(projectileConfig.getDouble("clusterExplosion.minDelay", 0.0));
 		projectile.setClusterExplosionsMaxDelay(projectileConfig.getDouble("clusterExplosion.maxDelay", 5.0));
 		projectile.setClusterExplosionsRadius(projectileConfig.getDouble("clusterExplosion.radius", 5.0));

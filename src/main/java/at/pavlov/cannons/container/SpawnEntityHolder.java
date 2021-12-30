@@ -36,7 +36,15 @@ public class SpawnEntityHolder{
             MatchResult result = s.match();
             setType(EntityType.valueOf(result.group(1)));
             setMinAmount(Integer.parseInt(result.group(2)));
+            if (getMinAmount() < 0) {
+                Cannons.getPlugin().logSevere("Min amount for spawned entity: " + getType() + " is <0");
+                setMinAmount(0);
+            }
             setMaxAmount(Integer.parseInt(result.group(3)));
+            if(getMaxAmount() > 100){
+                Cannons.getPlugin().logSevere("Max amount for spawned entity: " + getType() + " is >1000 and was reset to 10");
+                setMaxAmount(10);
+            }
             if (result.group(4) != null) {
                 // search for curly braces in as parameter
                 Pattern p = Pattern.compile("(?<=\\{)(.+)(?=\\})");
