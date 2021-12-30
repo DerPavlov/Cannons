@@ -946,6 +946,7 @@ public class CreateExplosion {
     private void clusterExplosions(FlyingProjectile cannonball) {
 	final Projectile projectile = cannonball.getProjectile();
 	if (projectile.isClusterExplosionsEnabled()) {
+		plugin.logDebug("Number of Cluster explosions: " + projectile.getClusterExplosionsAmount());
 	    for (int i = 0; i < projectile.getClusterExplosionsAmount(); i++) {
 		double delay = projectile.getClusterExplosionsMinDelay() + Math.random()
 			* (projectile.getClusterExplosionsMaxDelay() - projectile.getClusterExplosionsMinDelay());
