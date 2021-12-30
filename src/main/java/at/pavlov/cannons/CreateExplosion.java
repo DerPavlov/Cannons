@@ -464,6 +464,7 @@ public class CreateExplosion {
 		for (SpawnEntityHolder spawn : projectile.getSpawnEntities()) {
 			// add some randomness to the amount of spawned blocks
 			int maxPlacement = CannonsUtil.getRandomInt(spawn.getMinAmount(), spawn.getMaxAmount());
+			plugin.logDebug("spawn Entity: " + spawn.getType() + " min: " + spawn.getMinAmount() + " max: " + spawn.getMaxAmount());
 
 			// iterate blocks around to get a good spot
 			int placedEntities = 0;
