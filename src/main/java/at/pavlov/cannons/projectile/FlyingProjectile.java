@@ -37,7 +37,7 @@ public class FlyingProjectile
     private boolean teleported;
     //was the projectile fired by a player, redstone or a sentry
     private ProjectileCause projectileCause;
-
+    private boolean hasDetonated;
     private MovingObject predictor;
 
 
@@ -316,5 +316,13 @@ public class FlyingProjectile
 
     public void setImpactBlock(Location impactBlock) {
         this.impactBlock = impactBlock;
+    }
+
+    public boolean hasDetonated() {
+        return this.hasDetonated;
+    }
+
+    public void setHasDetonated(boolean detonated) {
+        this.hasDetonated = detonated;
     }
 }
