@@ -183,7 +183,7 @@ public class CannonManager
 
 
                 //fire and an event that this cannon is destroyed
-                CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon);
+                CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon, cause);
                 Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
 
                 if (cannon.getOwner() != null) {
