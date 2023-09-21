@@ -31,7 +31,7 @@ jobs:
         id:   pomVersion
         run: |
           VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )
-          echo "::set-output name=version::$VERSION"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: 'Upload artifact'
         uses: actions/upload-artifact@v3
