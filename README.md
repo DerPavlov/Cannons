@@ -1,6 +1,6 @@
 Cannons
 =======
-[![build](https://github.com/tadhunt/Cannons/actions/workflows/build.yml/badge.svg?branch=2.5.13-mcpd)](https://github.com/tadhunt/Cannons/actions/workflows/build.yml)
+[![build](https://github.com/tadhunt/Cannons/actions/workflows/build.yml/badge.svg?branch=feature/github-actions)](https://github.com/tadhunt/Cannons/actions/workflows/build.yml)
 
 by derPavlov
 
