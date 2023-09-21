@@ -218,6 +218,10 @@ public final class Cannons extends JavaPlugin
     }
 
     private boolean setupEconomy() {
+		if (config.economyDisabled()) {
+			return false;
+		}
+
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }

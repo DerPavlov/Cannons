@@ -5,6 +5,8 @@ general:
   relayExplosionEvent: false
   #size of the box of the claim cannon command
   claimEdgeLength: 60
+  # don't use an economy plugin, even if it is installed
+  economyDisabled: false
 
 
 cannonLimits:
