@@ -139,8 +139,6 @@ public final class Cannons extends JavaPlugin
 			pm.disablePlugin(this);
 			return;
 		}
-        setupEconomy();
-		
 
 		try
 		{
@@ -153,6 +151,8 @@ public final class Cannons extends JavaPlugin
 
 			// load config
 			config.loadConfig();
+
+			setupEconomy();
 
 			// Initialize the database
 			getServer().getScheduler().runTaskAsynchronously(this, new Runnable()
@@ -219,18 +219,29 @@ public final class Cannons extends JavaPlugin
 
     private boolean setupEconomy() {
 		if (config.economyDisabled()) {
+			this.logInfo("economy disabled: via config");
 			return false;
 		}
 
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
+			this.logInfo("economy disabled: no economy plugin)");
             return false;
         }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
+			this.logInfo("economy disabled: rsp lookup failed)");
             return false;
         }
+
         economy = rsp.getProvider();
-        return economy != null;
+
+		if (economy == null) {
+			this.logInfo("economy disabled: rsp null");
+			return false;
+		}
+
+		this.logInfo("economy enabled");
+        return true;
     }
 
 
