@@ -31,6 +31,7 @@ public class Config
 	private boolean debugMode;
     private boolean relayExplosionEvent;
     private int claimEdgeLength;
+    private boolean economyDisabled;
 	
 	//build limits
 	private boolean buildLimitEnabled;
@@ -119,6 +120,7 @@ public class Config
 		setDebugMode(plugin.getConfig().getBoolean("general.debugMode", false));
         setRelayExplosionEvent(plugin.getConfig().getBoolean("general.relayExplosionEvent", false));
         setClaimEdgeLength(plugin.getConfig().getInt("general.claimEdgeLength", 60));
+		setEconomyDisabled(plugin.getConfig().getBoolean("general.economyDisabled", false));
 		
 		//limitOfCannons
 		setBuildLimitEnabled(plugin.getConfig().getBoolean("cannonLimits.useLimits", true));
@@ -564,6 +566,14 @@ public class Config
 
     public void setClaimEdgeLength(int claimEdgeLength) {
         this.claimEdgeLength = claimEdgeLength;
+    }
+
+    public void setEconomyDisabled(boolean disabled) {
+        this.economyDisabled = true;
+    }
+
+    public boolean economyDisabled() {
+        return this.economyDisabled;
     }
 
     public double getToolAutoaimRange() {
