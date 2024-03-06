@@ -1,15 +1,18 @@
 package at.pavlov.cannons.cannon;
 
-import java.util.*;
-
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
-import at.pavlov.cannons.container.ItemHolder;
-import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.Enum.InteractAction;
+import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.container.ItemHolder;
+import at.pavlov.cannons.container.SimpleBlock;
+import at.pavlov.cannons.event.CannonUseEvent;
+import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
+import at.pavlov.cannons.sign.CannonSign;
 import at.pavlov.cannons.utils.CannonsUtil;
-import org.apache.commons.lang.Validate;
+import at.pavlov.cannons.utils.InventoryManagement;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -22,11 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.util.Vector;
 
-import at.pavlov.cannons.Enum.MessageEnum;
-import at.pavlov.cannons.container.SimpleBlock;
-import at.pavlov.cannons.utils.InventoryManagement;
-import at.pavlov.cannons.projectile.Projectile;
-import at.pavlov.cannons.sign.CannonSign;
+import java.util.*;
 
 public class Cannon
 {

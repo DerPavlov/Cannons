@@ -1,10 +1,9 @@
 package at.pavlov.cannons.cannon;
 
-import java.util.ArrayList;
-
+import at.pavlov.cannons.container.SimpleBlock;
 import org.bukkit.util.Vector;
 
-import at.pavlov.cannons.container.SimpleBlock;
+import java.util.ArrayList;
 
 
 class CannonBlocks

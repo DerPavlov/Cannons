@@ -3,7 +3,6 @@ package at.pavlov.cannons.dao;
 import at.pavlov.cannons.Cannons;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 public class CreateTableTask extends BukkitRunnable {

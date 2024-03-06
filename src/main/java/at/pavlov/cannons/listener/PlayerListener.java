@@ -1,9 +1,22 @@
 package at.pavlov.cannons.listener;
 
+import at.pavlov.cannons.Aiming;
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.InteractAction;
-import at.pavlov.cannons.container.DeathCause;
+import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.FireCannon;
+import at.pavlov.cannons.cannon.Cannon;
+import at.pavlov.cannons.cannon.CannonDesign;
+import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.config.Config;
+import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.FlyingProjectile;
-import org.bukkit.*;
+import at.pavlov.cannons.projectile.Projectile;
+import at.pavlov.cannons.utils.CannonsUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.WallSign;
@@ -17,26 +30,12 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-
-import at.pavlov.cannons.Aiming;
-import at.pavlov.cannons.cannon.CannonManager;
-import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.FireCannon;
-import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.cannon.CannonDesign;
-import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.Enum.MessageEnum;
-import at.pavlov.cannons.config.UserMessages;
-import at.pavlov.cannons.projectile.Projectile;
-import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 public class PlayerListener implements Listener

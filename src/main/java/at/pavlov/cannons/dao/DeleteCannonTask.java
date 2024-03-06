@@ -1,8 +1,6 @@
 package at.pavlov.cannons.dao;
 
 import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.cannon.CannonManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Statement;

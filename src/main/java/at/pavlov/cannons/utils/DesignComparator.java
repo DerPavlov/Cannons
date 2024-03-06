@@ -1,10 +1,9 @@
 package at.pavlov.cannons.utils;
 
-import java.util.Comparator;
-
+import at.pavlov.cannons.cannon.CannonDesign;
 import org.bukkit.block.BlockFace;
 
-import at.pavlov.cannons.cannon.CannonDesign;
+import java.util.Comparator;
 
 public class DesignComparator implements Comparator<CannonDesign>
 {

@@ -1,20 +1,18 @@
 package at.pavlov.cannons.cannon;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
+import at.pavlov.cannons.container.ItemHolder;
+import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.container.SoundHolder;
-import at.pavlov.cannons.projectile.ProjectileStorage;
+import at.pavlov.cannons.projectile.Projectile;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import at.pavlov.cannons.container.ItemHolder;
-import at.pavlov.cannons.container.SimpleBlock;
-import at.pavlov.cannons.projectile.Projectile;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class CannonDesign

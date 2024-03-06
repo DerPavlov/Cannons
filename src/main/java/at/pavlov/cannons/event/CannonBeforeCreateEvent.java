@@ -1,10 +1,9 @@
 package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.cannon.Cannon;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import at.pavlov.cannons.cannon.Cannon;
 
 import java.util.UUID;
 

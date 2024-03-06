@@ -3,13 +3,16 @@ package at.pavlov.cannons.projectile;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.ProjectileCause;
 import at.pavlov.cannons.utils.DelayedTask;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class ProjectileManager
 {

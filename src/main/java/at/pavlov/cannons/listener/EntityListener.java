@@ -1,11 +1,8 @@
 package at.pavlov.cannons.listener;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
-
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
-import at.pavlov.cannons.container.ItemHolder;
+import at.pavlov.cannons.cannon.Cannon;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
@@ -13,8 +10,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 
-import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.cannon.Cannon;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 public class EntityListener implements Listener
 {

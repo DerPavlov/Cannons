@@ -1,10 +1,8 @@
 package at.pavlov.cannons.event;
 
-import org.bukkit.entity.Player;
+import at.pavlov.cannons.cannon.Cannon;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import at.pavlov.cannons.cannon.Cannon;
 
 import java.util.UUID;
 

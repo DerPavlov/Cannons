@@ -1,12 +1,11 @@
 package at.pavlov.cannons.event;
 
-import java.util.UUID;
-
+import at.pavlov.cannons.projectile.Projectile;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import at.pavlov.cannons.projectile.Projectile;
+import java.util.UUID;
 
 public class ProjectileImpactEvent extends Event {
     private static final HandlerList handlers = new HandlerList();

@@ -1,7 +1,11 @@
 package at.pavlov.cannons.listener;
 
+import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.cannon.Cannon;
+import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.config.Config;
+import at.pavlov.cannons.config.UserMessages;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -9,12 +13,6 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
-
-import at.pavlov.cannons.cannon.CannonManager;
-import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.config.UserMessages;
 
 public class SignListener implements Listener
 {

@@ -1,11 +1,11 @@
 package at.pavlov.cannons.config;
 
-import java.io.*;
-import java.util.*;
-
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.projectile.Projectile;
-import org.apache.commons.lang.StringUtils;
+import at.pavlov.cannons.utils.CannonsUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,9 +14,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.cannon.Cannon;
-import at.pavlov.cannons.utils.CannonsUtil;
+import java.io.*;
+import java.util.*;
 
 public class UserMessages {
 	private FileConfiguration customLanguage = null;

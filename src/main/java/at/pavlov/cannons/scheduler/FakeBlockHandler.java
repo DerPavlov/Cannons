@@ -2,23 +2,15 @@ package at.pavlov.cannons.scheduler;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
-import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.container.FakeBlockEntry;
-import at.pavlov.cannons.container.ItemHolder;
-import at.pavlov.cannons.listener.Commands;
-import at.pavlov.cannons.utils.CannonsUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 
 
 public class FakeBlockHandler {

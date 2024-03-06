@@ -1,11 +1,11 @@
 package at.pavlov.cannons.dao;
 
-import java.util.UUID;
-
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.Cannon;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.UUID;
 
 public class PersistenceDatabase
 {

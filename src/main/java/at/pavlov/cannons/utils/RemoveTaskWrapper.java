@@ -1,10 +1,7 @@
 package at.pavlov.cannons.utils;
 
 import at.pavlov.cannons.Enum.BreakCause;
-import at.pavlov.cannons.Enum.ProjectileCause;
 import at.pavlov.cannons.cannon.Cannon;
-
-import java.util.UUID;
 
 
 public class RemoveTaskWrapper {

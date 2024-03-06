@@ -1,29 +1,34 @@
 package at.pavlov.cannons.cannon;
 
-import java.text.DecimalFormat;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
+import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.config.Config;
+import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.container.ItemHolder;
+import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.dao.LoadWhitelistTask;
+import at.pavlov.cannons.event.CannonAfterCreateEvent;
+import at.pavlov.cannons.event.CannonBeforeCreateEvent;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.RemoveTaskWrapper;
-import org.apache.commons.lang.Validate;
-import org.bukkit.*;
+import org.apache.commons.lang3.Validate;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import at.pavlov.cannons.config.Config;
-import at.pavlov.cannons.Enum.MessageEnum;
-import at.pavlov.cannons.config.UserMessages;
-import at.pavlov.cannons.container.SimpleBlock;
-import at.pavlov.cannons.event.CannonAfterCreateEvent;
-import at.pavlov.cannons.event.CannonBeforeCreateEvent;
+import java.text.DecimalFormat;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class CannonManager

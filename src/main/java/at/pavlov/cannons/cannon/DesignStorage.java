@@ -1,28 +1,21 @@
 package at.pavlov.cannons.cannon;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-import com.sk89q.worldedit.WorldEditException;
+import at.pavlov.cannons.Cannons;
+import at.pavlov.cannons.container.DesignFileName;
+import at.pavlov.cannons.container.ItemHolder;
+import at.pavlov.cannons.container.SimpleBlock;
+import at.pavlov.cannons.container.SoundHolder;
+import at.pavlov.cannons.utils.CannonsUtil;
+import at.pavlov.cannons.utils.DesignComparator;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
-import com.sk89q.worldedit.extent.transform.BlockTransformExtent;
-import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
-import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.util.io.Closer;
 import com.sk89q.worldedit.world.block.BlockState;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -31,16 +24,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.util.Vector;
 
-
-
-
-import at.pavlov.cannons.container.SoundHolder;
-import at.pavlov.cannons.Cannons;
-import at.pavlov.cannons.container.DesignFileName;
-import at.pavlov.cannons.container.ItemHolder;
-import at.pavlov.cannons.container.SimpleBlock;
-import at.pavlov.cannons.utils.CannonsUtil;
-import at.pavlov.cannons.utils.DesignComparator;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class DesignStorage
 {
