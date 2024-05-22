@@ -7,8 +7,8 @@ import java.sql.Statement;
 import java.util.UUID;
 
 public class DeleteCannonTask extends BukkitRunnable{
-    private UUID cannonId = null;
-    private UUID playerId = null;
+    private final UUID cannonId;
+    private final UUID playerId;
     public DeleteCannonTask(){
         this.cannonId = null;
         this.playerId = null;

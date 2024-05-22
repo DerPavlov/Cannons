@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class SaveCannonTask extends BukkitRunnable {
 
-    private UUID cannonId = null;
+    private final UUID cannonId;
     public SaveCannonTask(UUID cannonId){
         this.cannonId = cannonId;
     }

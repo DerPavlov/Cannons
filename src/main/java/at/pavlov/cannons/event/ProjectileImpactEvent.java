@@ -15,46 +15,46 @@ public class ProjectileImpactEvent extends Event {
     private boolean cancelled;
 
     public ProjectileImpactEvent(Projectile projectile, Location impactLocation, UUID shooter) {
-	this.projectile = projectile;
-	this.impactLocation = impactLocation;
-	this.shooter = shooter;
-	this.cancelled = false;
+        this.projectile = projectile;
+        this.impactLocation = impactLocation;
+        this.shooter = shooter;
+        this.cancelled = false;
     }
 
     public UUID getShooterUID() {
-	return this.shooter;
+        return this.shooter;
     }
 
     public Location getImpactLocation() {
-	return this.impactLocation;
+        return this.impactLocation;
     }
 
     public void setImpactLocation(Location impactLocation) {
-	this.impactLocation = impactLocation;
+        this.impactLocation = impactLocation;
     }
 
     public Projectile getProjectile() {
-	return this.projectile;
+        return this.projectile;
     }
 
     public void setProjectile(Projectile projectile) {
-	this.projectile = projectile;
+        this.projectile = projectile;
     }
 
     public boolean isCancelled() {
-	return this.cancelled;
+        return this.cancelled;
     }
 
     public void setCancelled(boolean cancelled) {
-	this.cancelled = cancelled;
+        this.cancelled = cancelled;
     }
 
     @Override
     public HandlerList getHandlers() {
-	return handlers;
+        return handlers;
     }
 
     public static HandlerList getHandlerList() {
-	return handlers;
+        return handlers;
     }
 }
