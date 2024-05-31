@@ -53,6 +53,8 @@ public class Aiming {
     //<cannon uid, timespamp>
     private final HashMap<UUID, Long> lastAimed = new HashMap<>();
 
+    private final Random random = new Random();
+
 
     /**
      * Constructor
@@ -791,9 +793,8 @@ public class Aiming {
             }
             //can the cannon aim at this solution
             if (addSpread) {
-                Random rand = new Random();
-                cannon.setAimingPitch(cannon.getAimingPitch() + cannon.getCannonDesign().getSentrySpread() * rand.nextGaussian());
-                cannon.setAimingYaw(cannon.getAimingYaw() + cannon.getCannonDesign().getSentrySpread() * rand.nextGaussian());
+                cannon.setAimingPitch(cannon.getAimingPitch() + cannon.getCannonDesign().getSentrySpread() * random.nextGaussian());
+                cannon.setAimingYaw(cannon.getAimingYaw() + cannon.getCannonDesign().getSentrySpread() * random.nextGaussian());
             }
             if (cannon.canAimPitch(cannon.getAimingPitch()) && cannon.canAimYaw(cannon.getAimingYaw())) {
                 return true;

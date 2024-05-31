@@ -159,6 +159,8 @@ public class Cannon {
     // redstone handling event. Last player that pressed the firing button is saved in this list for the next redstone event
     private String firingButtonActivator;
 
+    private final Random random = new Random();
+
 
     public Cannon(CannonDesign design, UUID world, Vector cannonOffset, BlockFace cannonDirection, UUID owner) {
 
@@ -246,12 +248,11 @@ public class Cannon {
      * @return location of the barrel block
      */
     public Location getRandomBarrelBlock() {
-        Random r = new Random();
         List<Location> barrel = design.getBarrelBlocks(this);
         if (!barrel.isEmpty())
-            return barrel.get(r.nextInt(barrel.size()));
+            return barrel.get(random.nextInt(barrel.size()));
         List<Location> all = design.getAllCannonBlocks(this);
-        return all.get(r.nextInt(all.size()));
+        return all.get(random.nextInt(all.size()));
     }
 
 
@@ -1264,7 +1265,6 @@ public class Cannon {
         if (amount <= 0)
             return;
 
-        Random r = new Random();
         List<Location> barrelList = design.getBarrelBlocks(this);
 
         //if the barrel list is 0 something is completely odd
@@ -1279,7 +1279,7 @@ public class Cannon {
             //int j = 0;
             do {
                 i++;
-                effectLoc = barrelList.get(r.nextInt(max)).getBlock().getRelative(face).getLocation();
+                effectLoc = barrelList.get(random.nextInt(max)).getBlock().getRelative(face).getLocation();
             } while (i < 4 && effectLoc.getBlock().getType() != Material.AIR);
 
             effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, face);
@@ -1350,8 +1350,6 @@ public class Cannon {
         if (projectile == null)
             projectile = lastFiredProjectile;
 
-        Random r = new Random();
-
         double playerSpread = 1.0;
         if (usePlayerSpread)
             playerSpread = getLastPlayerSpreadMultiplier();
@@ -1360,11 +1358,11 @@ public class Cannon {
         double deviation = 0.0;
 
         if (addSpread)
-            deviation = r.nextGaussian() * spread;
+            deviation = random.nextGaussian() * spread;
         double h = (getTotalHorizontalAngle() + deviation + CannonsUtil.directionToYaw(cannonDirection));
 
         if (addSpread)
-            deviation = r.nextGaussian() * spread;
+            deviation = random.nextGaussian() * spread;
         double v = (-getTotalVerticalAngle() + deviation);
 
         double multi = getCannonballVelocity();
@@ -1372,7 +1370,7 @@ public class Cannon {
 
         double randomness = 1.0;
         if (addSpread)
-            randomness = (1.0 + r.nextGaussian() * spread / 180.0);
+            randomness = (1.0 + random.nextGaussian() * spread / 180.0);
         return CannonsUtil.directionToVector(h, v, multi * randomness);
     }
 

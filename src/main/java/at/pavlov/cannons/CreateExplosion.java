@@ -71,6 +71,8 @@ public class CreateExplosion {
     // players killed by cannons <Player, Cannon>
     private final HashMap<UUID, DeathCause> killedPlayers = new HashMap<>();
 
+    private final Random r = new Random();
+
     // ################### Constructor ############################################
     public CreateExplosion(Cannons plugin, Config config) {
         this.plugin = plugin;
@@ -163,7 +165,6 @@ public class CreateExplosion {
                 + impactLoc.getBlockZ());
 
         // the cannonball will only break blocks if it has penetration.
-        Random r = new Random();
         double randomness = (1 + r.nextGaussian() / 5.0);
         int penetration = (int) Math.round(
                 randomness * cannonball.getProjectile().getPenetration() * Math.pow(vel.length() / projectile.getVelocity(), 2));
@@ -245,7 +246,6 @@ public class CreateExplosion {
      *            chance to get the block item
      */
     private void BreakBreakNaturally(Block block, float yield) {
-        Random r = new Random();
         if (r.nextFloat() > yield) {
             block.breakNaturally();
         } else {
@@ -265,8 +265,6 @@ public class CreateExplosion {
                              SpawnEntityHolder entityHolder) {
         Location impactLoc = cannonball.getImpactLocation();
         World world = impactLoc.getWorld();
-        Random r = new Random();
-
 
         // move cloud to the ground
         if (entityHolder.getType() == EntityType.AREA_EFFECT_CLOUD) {
@@ -474,7 +472,6 @@ public class CreateExplosion {
         Projectile projectile = cannonball.getProjectile();
         Location impactLoc = cannonball.getImpactLocation();
 
-        //Random r = new Random();
         Location placeLoc;
 
         double spread = projectile.getSpawnEntityRadius();
@@ -544,7 +541,6 @@ public class CreateExplosion {
         Projectile projectile = cannonball.getProjectile();
         Location impactLoc = cannonball.getImpactLocation();
 
-        //Random r = new Random();
         Location placeLoc;
 
         double spread = projectile.getSpawnBlockRadius();
@@ -652,7 +648,6 @@ public class CreateExplosion {
         duration = duration / (blockingBlocks + 1);
 
         // randomizer
-        Random r = new Random();
         float rand = r.nextFloat();
         duration *= rand / 2 + 0.5;
 
@@ -700,7 +695,6 @@ public class CreateExplosion {
         damage = damage / (blockingBlocks + 1);
 
         // randomizer
-        Random r = new Random();
         float rand = r.nextFloat();
         damage *= (rand + 0.5);
 
@@ -745,7 +739,6 @@ public class CreateExplosion {
         double damage = projectile.getDirectHitDamage();
 
         // randomizer
-        Random r = new Random();
         float rand = r.nextFloat();
         damage *= (rand + 0.5);
 
@@ -1100,7 +1093,6 @@ public class CreateExplosion {
         // if (!cannonball.getProjectile().isSpawnEnabled())
         // return;
 
-        //Random r = new Random();
         //Location impactLoc = cannonball.getImpactLocation();
         Location impactBlock = cannonball.getImpactBlock();
         if (impactBlock == null)
@@ -1133,8 +1125,7 @@ public class CreateExplosion {
 
                 Projectile projectile = cannonball.getProjectile();
 
-                /*Random r = new Random();
-
+                /*
                 Location impactBlock = cannonball.getImpactBlock();
                 Vector vnormal = CannonsUtil.detectImpactSurfaceNormal(cannonball.getImpactLocation().toVector(),
                         cannonball.getVelocity().clone());
@@ -1174,8 +1165,6 @@ public class CreateExplosion {
 
                 Projectile projectile = cannonball.getProjectile();
                 Location impactLoc = cannonball.getImpactLocation();
-
-                Random r = new Random();
 
                 for (String strProj : projectile.getSpawnProjectiles()) {
                     Projectile newProjectiles = CreateExplosion.this.plugin.getProjectileStorage().getByName(strProj);

@@ -33,6 +33,7 @@ import java.util.*;
 
 public class CannonsUtil
 {
+    private static final Random random =  new Random();
 	/**
 	 * changes the extension of the a string (e.g. classic.yml to
 	 * classic.schematic)
@@ -380,8 +381,7 @@ public class CannonsUtil
         if (reduction > 25) reduction = 25;
 
         //give it some randomness
-        Random r = new Random();
-        reduction = reduction * (r.nextFloat()/2 + 0.5);
+        reduction = reduction * (random.nextFloat()/2 + 0.5);
 
         //cap it to 20
         if (reduction > 20) reduction = 20;
@@ -450,8 +450,7 @@ public class CannonsUtil
         if (reduction > 25) reduction = 25;
 
         //give it some randomness
-        Random r = new Random();
-        reduction = reduction * (r.nextFloat()/2 + 0.5);
+        reduction = reduction * (random.nextFloat()/2 + 0.5);
 
         //cap it to 20
         if (reduction > 20) reduction = 20;
@@ -469,21 +468,20 @@ public class CannonsUtil
         org.bukkit.inventory.PlayerInventory inv = entity.getInventory();
         if (inv == null) return;
 
-        Random r = new Random();
 
-        for(ItemStack item : inv.getArmorContents())
-        {
-            if(item != null)
+        for(ItemStack item : inv.getArmorContents()) {
+            if (item == null) {
+                continue;
+            }
+
+            int lvl = item.getEnchantmentLevel(Enchantment.DURABILITY);
+            //chance of breaking in 0-1
+            double breakingChance = 0.6+0.4/(lvl+1);
+
+            if (random.nextDouble() < breakingChance)
             {
-                int lvl = item.getEnchantmentLevel(Enchantment.DURABILITY);
-                //chance of breaking in 0-1
-                double breakingChance = 0.6+0.4/(lvl+1);
-
-                if (r.nextDouble() < breakingChance)
-                {
-                    org.bukkit.inventory.meta.Damageable itemMeta = (org.bukkit.inventory.meta.Damageable) item.getItemMeta();
-                    itemMeta.setDamage(itemMeta.getDamage() + 1);
-                }
+                org.bukkit.inventory.meta.Damageable itemMeta = (org.bukkit.inventory.meta.Damageable) item.getItemMeta();
+                itemMeta.setDamage(itemMeta.getDamage() + 1);
             }
         }
     }
@@ -494,8 +492,7 @@ public class CannonsUtil
      */
     public static BlockFace randomBlockFaceNoDown()
     {
-        Random r = new Random();
-        switch (r.nextInt(5))
+        switch (random.nextInt(5))
         {
             case 0:
                 return BlockFace.UP;
@@ -516,18 +513,16 @@ public class CannonsUtil
      * adds a little bit random to the location so the effects don't spawn at the same point.
      * @return - randomized location
      */
-    public static Location randomLocationOrthogonal(Location loc, BlockFace face)
-    {
-        Random r = new Random();
+    public static Location randomLocationOrthogonal(Location loc, BlockFace face) {
 
         //this is the direction we want to avoid
         Vector vect = new Vector(face.getModX(),face.getModY(),face.getModZ());
         //orthogonal vector - somehow
         vect = vect.multiply(vect).subtract(new Vector(1,1,1));
 
-        loc.setX(loc.getX()+vect.getX()*(r.nextDouble()-0.5));
-        loc.setY(loc.getY()+vect.getY()*(r.nextDouble()-0.5));
-        loc.setZ(loc.getZ()+vect.getZ()*(r.nextDouble()-0.5));
+        loc.setX(loc.getX()+vect.getX()*(random.nextDouble()-0.5));
+        loc.setY(loc.getY()+vect.getY()*(random.nextDouble()-0.5));
+        loc.setZ(loc.getZ()+vect.getZ()*(random.nextDouble()-0.5));
 
         return loc;
     }
@@ -746,10 +741,9 @@ public class CannonsUtil
      */
     public static Location randomPointInSphere(Location center, double radius)
     {
-        Random rand = new Random();
-        double r = radius*rand.nextDouble();
-        double polar = Math.PI*rand.nextDouble();
-        double azi = Math.PI*(rand.nextDouble()*2.0-1.0);
+        double r = radius*random.nextDouble();
+        double polar = Math.PI*random.nextDouble();
+        double azi = Math.PI*(random.nextDouble()*2.0-1.0);
         //sphere coordinates
         double x = r*Math.sin(polar)*Math.cos(azi);
         double y = r*Math.sin(polar)*Math.sin(azi);
@@ -766,8 +760,7 @@ public class CannonsUtil
      */
     public static int getRandomInt(int min, int max)
     {
-        Random r = new Random();
-        return r.nextInt(max+1-min) + min;
+        return random.nextInt(max+1-min) + min;
     }
 
     /**

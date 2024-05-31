@@ -26,6 +26,8 @@ public class UserMessages {
 
 
 	private final Cannons plugin;
+
+	private final Random random = new Random();
 	
 	public UserMessages(Cannons plugin){
 		this.plugin = plugin;
@@ -382,9 +384,8 @@ public class UserMessages {
 	 * @return death message
 	 */
 	public String getDeathMessage(UUID killed, UUID shooter, Cannon cannon, Projectile projectile){
-		Random rand = new Random();
 		MessageEnum messageEnum;
-		switch (rand.nextInt(3)){
+		switch (random.nextInt(3)){
 			case 1:
 				messageEnum = MessageEnum.DeathMessage2;
 				break;

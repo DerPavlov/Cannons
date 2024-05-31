@@ -42,6 +42,8 @@ public class FireCannon {
     private final Config config;
     private final Cannons plugin;
 
+    private final Random random = new Random();
+
 
     public FireCannon(Cannons plugin, Config config) {
         this.plugin = plugin;
@@ -273,7 +275,7 @@ public class FireCannon {
             for (int i = 0; i < projectile.getAutomaticFiringMagazineSize(); i++) {
                 //charge is only removed in the last round fired
                 boolean lastRound = i == (projectile.getAutomaticFiringMagazineSize() - 1);
-                double randomess = 1. + design.getFuseBurnTimeRandomness() * new Random().nextDouble();
+                double randomess = 1. + design.getFuseBurnTimeRandomness() * random.nextDouble();
                 Long delayTime = (long) (randomess * design.getFuseBurnTime() * 20.0 + i * projectile.getAutomaticFiringDelay() * 20.0);
                 FireTaskWrapper fireTask = new FireTaskWrapper(cannon, playerUid, lastRound, projectileCause);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new DelayedTask(fireTask) {
