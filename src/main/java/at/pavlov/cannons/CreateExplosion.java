@@ -295,8 +295,7 @@ public class CreateExplosion {
                 this.plugin.logDebug("reset TNT fuse ticks to: " + fuseTicks + " fusetime " + fusetime);
                 tnt.setFuseTicks(fuseTicks);
             } catch (Exception e) {
-                this.plugin.logSevere("error while converting entity data for "
-                        + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+                logConvertingError(cannonball.getProjectile().getProjectileId(), e);
             }
         }
         // AreaEffectCloud
@@ -334,8 +333,7 @@ public class CreateExplosion {
                     cloud.addCustomEffect(effect, true);
                 }
             } catch (Exception e) {
-                this.plugin.logSevere("error while converting entity data for "
-                        + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+                logConvertingError(cannonball.getProjectile().getProjectileId(), e);
             }
         }
         // SpectralArrow
@@ -345,8 +343,7 @@ public class CreateExplosion {
                 arrow.setGlowingTicks(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
                         arrow.getGlowingTicks()));
             } catch (Exception e) {
-                this.plugin.logSevere("error while converting entity data for "
-                        + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+                logConvertingError(cannonball.getProjectile().getProjectileId(), e);
             }
         }
         // TippedArrow
@@ -356,8 +353,7 @@ public class CreateExplosion {
                 arrow.setBasePotionData(CannonsUtil.parsePotionData(
                         entityHolder.getData().get(EntityDataType.POTION_EFFECT), arrow.getBasePotionData()));
             } catch (Exception e) {
-                this.plugin.logSevere("error while converting entity data for "
-                        + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+                logConvertingError(cannonball.getProjectile().getProjectileId(), e);
             }
         }
         // LivingEntity
@@ -384,8 +380,7 @@ public class CreateExplosion {
                                     equipment.getItemInOffHand())));
                 }
             } catch (Exception e) {
-                this.plugin.logSevere("error while converting entity data for "
-                        + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+                logConvertingError(cannonball.getProjectile().getProjectileId(), e);
             }
         }
         // ThrownPotion
@@ -399,8 +394,7 @@ public class CreateExplosion {
                 potion.setItemMeta(meta);
                 pentity.setItem(potion);
             } catch (Exception e) {
-                this.plugin.logSevere("error while converting entity data for "
-                        + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+                logConvertingError(cannonball.getProjectile().getProjectileId(), e);
             }
         }
         // LingeringPotion
@@ -414,31 +408,14 @@ public class CreateExplosion {
                 potion.setItemMeta(meta);
                 pentity.setItem(potion);
             } catch (Exception e) {
-                this.plugin.logSevere("error while converting entity data for "
-                        + cannonball.getProjectile().getProjectileId() + " occurred: " + e);
+                logConvertingError(cannonball.getProjectile().getProjectileId(), e);
             }
         }
 
-        // //get distance form the center + 1 to avoid division by zero
-        // double dist = impactLoc.distance(loc) + 1;
-        // //calculate veloctiy away from the impact (speed in y makes problems and
-        // entity sinks in ground)
-        // Vector vect =
-        // loc.clone().subtract(impactLoc).toVector().normalize().multiply(entityVelocity/dist).multiply(new
-        // Vector(1.0,0.0,1.0));
-        // String placestr = loc.getX() + " " + loc.getY() + " " + loc.getZ();
-        // String data = entityHolder.getData().replace("IMPACT_VELOCITY",
-        // "["+vect.getX()+"," +vect.getY()+","+vect.getZ()+"]");
-        // plugin.logDebug("/summon " + entityHolder.getType() + " " + placestr + " " +
-        // data);
-        // try {
-        // Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "summon " +
-        // entityHolder.getType() + " " + placestr + " " + data);
-        // }
-        // catch (Exception e) {
-        // plugin.logDebug("Dispatch error: " + e);
-        // }
-
+    }
+    
+    private void logConvertingError(String id, Exception e) {
+        this.plugin.logSevere("error while converting entity data for " + id + " occurred: " + e);
     }
 
     /**
