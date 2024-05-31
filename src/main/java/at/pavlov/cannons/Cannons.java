@@ -2,6 +2,7 @@ package at.pavlov.cannons;
 
 import at.pavlov.cannons.API.CannonsAPI;
 import at.pavlov.cannons.Enum.MessageEnum;
+import at.pavlov.cannons.aim.Aiming;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;

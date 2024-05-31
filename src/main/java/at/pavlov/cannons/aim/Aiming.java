@@ -1,5 +1,6 @@
-package at.pavlov.cannons;
+package at.pavlov.cannons.aim;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.Enum.MessageEnum;
@@ -37,32 +38,6 @@ import java.util.UUID;
 
 
 public class Aiming {
-
-    private class GunAngles {
-        private double horizontal;
-        private double vertical;
-
-        public GunAngles(double horizontal, double vertical) {
-            this.setHorizontal(horizontal);
-            this.setVertical(vertical);
-        }
-
-        public double getHorizontal() {
-            return horizontal;
-        }
-
-        public void setHorizontal(double horizontal) {
-            this.horizontal = horizontal;
-        }
-
-        public double getVertical() {
-            return vertical;
-        }
-
-        public void setVertical(double vertical) {
-            this.vertical = vertical;
-        }
-    }
 
     private final Cannons plugin;
     private final UserMessages userMessages;
@@ -165,90 +140,23 @@ public class Aiming {
         boolean isSentry = design.isSentry();
 
         //both horizontal and vertical angle will be displayed in one message
-        boolean combine;
+
         //angle changed
         boolean hasChanged = false;
         //message Enum
         MessageEnum message = null;
 
-        if (player != null) {
-            //if the player is not the owner of this gun
-            if (cannon.getOwner() != null && !cannon.getOwner().equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
-                return MessageEnum.ErrorNotTheOwner;
-            //if the player has the permission to adjust this gun
-            if (!player.hasPermission(cannon.getCannonDesign().getPermissionAdjust()))
-                return MessageEnum.PermissionErrorAdjust;
-        }
+        MessageEnum resultPerm = checkPermissions(player, cannon);
+        if (resultPerm != null)
+            return resultPerm;
 
-        GunAngles angles;
+        GunAnglesWrapper gunAnglesWrapper = determineGunAngles(player, cannon, clickedFace, action, isSentry);
+        if (gunAnglesWrapper.angles == null) return null;
 
-        if (action == InteractAction.adjustSentry && isSentry) {
-            // sentry mode
-            if (cannon.isChunkLoaded()) {
-                angles = getGunAngle(cannon, cannon.getAimingYaw(), cannon.getAimingPitch());
-                combine = true;
-            } else {
-                plugin.logDebug("chunk not loaded. ignore cannon: " + cannon.getLocation());
-                return null;
-            }
-        } else if (action == InteractAction.adjustAutoaim && player != null && inAimingMode.containsKey(player.getUniqueId())) {
-            //aiming mode only if player is sneaking
-            if (player.isSneaking()) {
-                angles = getGunAngle(cannon, player.getLocation().getYaw(), player.getLocation().getPitch());
-                // check if cannon is aiming on the target. True if both angles are identical smaller than one angle step
-                cannon.setAimingFinished(Math.abs(angles.getHorizontal()) < design.getAngleStepSize() && Math.abs(angles.getVertical()) < design.getAngleStepSize());
-                // combine both vertical and horizontal message
-                combine = true;
-            } else
-                return null;
-        } else {
-            // ignore if the sentry is active
-            if (cannon.getCannonDesign().isSentry() && cannon.isSentryAutomatic())
-                return null;
-
-            //barrel clicked to change angle
-            if (player != null) {
-                angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking(), design.getAngleStepSize());
-                //register impact predictor
-                cannon.addObserver(player, true);
-                combine = false;
-            } else
-                return null;
-        }
-
-        hasChanged = false;
-        boolean largeChange = false;
-        //larger step
-        if (Math.abs(angles.getHorizontal()) >= design.getAngleLargeStepSize()) {
-            if (setHorizontalAngle(cannon, angles, design.getAngleLargeStepSize())) {
-                hasChanged = true;
-                largeChange = true;
-                message = setMessageHorizontal(cannon, combine);
-            }
-        }
-        //small step if no large step was possible
-        if (!largeChange && Math.abs(angles.getHorizontal()) >= design.getAngleStepSize() / 2.) {
-            if (setHorizontalAngle(cannon, angles, design.getAngleStepSize())) {
-                hasChanged = true;
-                message = setMessageHorizontal(cannon, combine);
-            }
-        }
-        //larger step
-        largeChange = false;
-        if (Math.abs(angles.getVertical()) >= design.getAngleLargeStepSize()) {
-            if (setVerticalAngle(cannon, angles, design.getAngleLargeStepSize())) {
-                hasChanged = true;
-                largeChange = true;
-                message = setMessageVertical(cannon, combine);
-            }
-        }
-        //small step if no large step was possible
-        if (!largeChange && Math.abs(angles.getVertical()) >= design.getAngleStepSize() / 2.) {
-            if (setVerticalAngle(cannon, angles, design.getAngleStepSize())) {
-                hasChanged = true;
-                message = setMessageVertical(cannon, combine);
-            }
-        }
+        MessageEnum output = adjustAngles(gunAnglesWrapper, cannon);
+        hasChanged = output != null;
+        if (hasChanged)
+            message = output;
 
         //update the time
         cannon.setLastAimed(System.currentTimeMillis());
@@ -260,42 +168,98 @@ public class Aiming {
             CannonsUtil.playSound(cannon.getMuzzle(), design.getSoundAdjust());
             //predict impact marker
             updateLastAimed(cannon);
-            if (cannon.getCannonDesign().isAngleUpdateMessage())
+            if (design.isAngleUpdateMessage())
                 return message;
 
 			return null;
         }
 
 		//set homing finished flag
-		if (cannon.getCannonDesign().isSentry())
+		if (isSentry)
 			cannon.setSentryHomedAfterFiring(true);
         //no change in angle
         return null;
     }
 
+    private MessageEnum checkPermissions(Player player, Cannon cannon) {
+
+        if (player == null)
+            return null;
+
+        UUID owner = cannon.getOwner();
+        CannonDesign design = cannon.getCannonDesign();
+        //if the player is not the owner of this gun
+        if (owner != null && !owner.equals(player.getUniqueId()) && design.isAccessForOwnerOnly())
+            return MessageEnum.ErrorNotTheOwner;
+        //if the player has the permission to adjust this gun
+        if (!player.hasPermission(design.getPermissionAdjust()))
+            return MessageEnum.PermissionErrorAdjust;
+
+        return null;
+    }
+
+    private MessageEnum adjustAngles(GunAnglesWrapper wrapper, Cannon cannon) {
+        CannonDesign design = cannon.getCannonDesign();
+        boolean largeChange = false;
+        MessageEnum message = null;
+
+        GunAngles angles = wrapper.angles;
+        boolean combine = wrapper.combine;
+
+        if (Math.abs(angles.getHorizontal()) >= design.getAngleLargeStepSize()) {
+            if (setHorizontalAngle(cannon, angles, design.getAngleLargeStepSize())) {
+                largeChange = true;
+                message = setMessageHorizontal(cannon, combine);
+            }
+        }
+        //small step if no large step was possible
+        if (!largeChange && Math.abs(angles.getHorizontal()) >= design.getAngleStepSize() / 2.) {
+            if (setHorizontalAngle(cannon, angles, design.getAngleStepSize())) {
+                message = setMessageHorizontal(cannon, combine);
+            }
+        }
+        //larger step
+        largeChange = false;
+        if (Math.abs(angles.getVertical()) >= design.getAngleLargeStepSize()) {
+            if (setVerticalAngle(cannon, angles, design.getAngleLargeStepSize())) {
+                largeChange = true;
+                message = setMessageVertical(cannon, combine);
+            }
+        }
+        //small step if no large step was possible
+        if (!largeChange && Math.abs(angles.getVertical()) >= design.getAngleStepSize() / 2.) {
+            if (setVerticalAngle(cannon, angles, design.getAngleStepSize())) {
+                message = setMessageVertical(cannon, combine);
+            }
+        }
+
+        return message;
+    }
+
     private boolean setHorizontalAngle(Cannon cannon, GunAngles angles, double step) {
         step = Math.abs(step);
+        double horizontalAngle = cannon.getHorizontalAngle();
+        double minHoriz = cannon.getMinHorizontalAngle();
+        double maxHoriz = cannon.getMaxHorizontalAngle();
 
         if (angles.getHorizontal() >= 0) {
             // right
-            if (cannon.getHorizontalAngle() + step <= cannon.getMaxHorizontalAngle() + 0.001) {
+            if (horizontalAngle + step <= maxHoriz + 0.001) {
                 //if smaller than minimum -> set to minimum
-                if (cannon.getHorizontalAngle() < cannon.getMinHorizontalAngle())
-                    cannon.setHorizontalAngle(cannon.getMinHorizontalAngle());
+                if (horizontalAngle < minHoriz)
+                    cannon.setHorizontalAngle(minHoriz);
 
-				cannon.setHorizontalAngle(cannon.getHorizontalAngle() + step);
+				cannon.setHorizontalAngle(horizontalAngle + step);
                 return true;
             }
-        } else {
-            // left
-            if (cannon.getHorizontalAngle() - step >= cannon.getMinHorizontalAngle() - 0.001) {
-                //if smaller than maximum -> set to maximum
-                if (cannon.getHorizontalAngle() > cannon.getMaxHorizontalAngle())
-                    cannon.setHorizontalAngle(cannon.getMaxHorizontalAngle());
 
-				cannon.setHorizontalAngle(cannon.getHorizontalAngle() - step);
-                return true;
-            }
+        } else if (horizontalAngle - step >= minHoriz - 0.001) { //left
+            //if smaller than maximum -> set to maximum
+            if (horizontalAngle > maxHoriz)
+                cannon.setHorizontalAngle(maxHoriz);
+
+            cannon.setHorizontalAngle(horizontalAngle - step);
+            return true;
         }
         return false;
     }
@@ -326,22 +290,40 @@ public class Aiming {
     }
 
 
-    /**
-     * evaluates the difference between actual cannon direction and the given direction
-     *
-     * @param cannon operated cannon
-     * @param yaw    yaw of the direction to aim
-     * @param pitch  pitch of the direction to aim
-     * @return new cannon aiming direction
-     */
-    private GunAngles getGunAngle(Cannon cannon, double yaw, double pitch) {
-        double horizontal = yaw - CannonsUtil.directionToYaw(cannon.getCannonDirection()) - cannon.getTotalHorizontalAngle();
-        horizontal = horizontal % 360;
-        while (horizontal < -180)
-            horizontal = horizontal + 360;
+    private GunAnglesWrapper determineGunAngles(Player player, Cannon cannon, BlockFace clickedFace, InteractAction action, boolean isSentry) {
+        Location cannonLoc = cannon.getLocation();
+        Location playerLoc = player.getLocation();
+        CannonDesign design = cannon.getCannonDesign();
 
-        return new GunAngles(horizontal, -pitch - cannon.getTotalVerticalAngle());
+        if (action == InteractAction.adjustSentry && isSentry) {
+            if (cannon.isChunkLoaded())
+                return new GunAnglesWrapper(GunAngles.getGunAngle(cannon, cannon.getAimingYaw(), cannon.getAimingPitch()), true);
+
+            plugin.logDebug("chunk not loaded. ignore cannon: " + cannonLoc);
+            return new GunAnglesWrapper(null, false);
+        }
+
+        if (action == InteractAction.adjustAutoaim && player != null && inAimingMode.containsKey(player.getUniqueId())) {
+            if (!player.isSneaking()) {
+                return new GunAnglesWrapper(null, false);
+            }
+
+            GunAngles angles = GunAngles.getGunAngle(cannon, playerLoc.getYaw(), player.getLocation().getPitch());
+            cannon.setAimingFinished(Math.abs(angles.getHorizontal()) < design.getAngleStepSize() && Math.abs(angles.getVertical()) < design.getAngleStepSize());
+            return new GunAnglesWrapper(angles, true);
+        }
+
+        if (isSentry && cannon.isSentryAutomatic())
+            return new GunAnglesWrapper(null, false);
+
+        if (player == null)
+            return new GunAnglesWrapper(null, false);
+
+        GunAngles angles = CheckBlockFace(clickedFace, cannon.getCannonDirection(), player.isSneaking(), design.getAngleStepSize());
+        cannon.addObserver(player, true);
+        return new GunAnglesWrapper(angles, false);
     }
+
 
     /**
      * returns the angle to change by the given block face
@@ -1241,32 +1223,33 @@ public class Aiming {
             }
 
             CannonDesign design = cannon.getCannonDesign();
-            if (last.getValue() + design.getPredictorDelay() < System.currentTimeMillis()) {
-                //reset the aiming so we have the do the next update after the update time
-                last.setValue(System.currentTimeMillis() - design.getPredictorDelay() + design.getPredictorUpdate());
+            if (last.getValue() + design.getPredictorDelay() >= System.currentTimeMillis()) {
+                continue;
+            }
+            //reset the aiming so we have the do the next update after the update time
+            last.setValue(System.currentTimeMillis() - design.getPredictorDelay() + design.getPredictorUpdate());
 
-                //find all the watching players
-                HashMap<UUID, Boolean> nameList = cannon.getObserverMap();
-                if (nameList.isEmpty()) {
-                    //remove wrong entries and cannon with no observer (we don't need to update them)
-                    iter.remove();
-                    continue;
+            //find all the watching players
+            HashMap<UUID, Boolean> nameList = cannon.getObserverMap();
+            if (nameList.isEmpty()) {
+                //remove wrong entries and cannon with no observer (we don't need to update them)
+                iter.remove();
+                continue;
+            }
+
+            Location impact = impactPredictor(cannon);
+            Iterator<Map.Entry<UUID, Boolean>> entry = nameList.entrySet().iterator();
+            while (entry.hasNext()) {
+                Map.Entry<UUID, Boolean> nextName = entry.next();
+                Player player = Bukkit.getPlayer(nextName.getKey());
+                //show impact to the player
+                if (player != null && impact != null && plugin.getFakeBlockHandler().belowMaxLimit(player, impact)) {
+                    plugin.getFakeBlockHandler().imitatedSphere(player, impact, 1, config.getImitatedPredictorMaterial(), FakeBlockType.IMPACT_PREDICTOR, config.getImitatedPredictorTime());
                 }
-
-                Location impact = impactPredictor(cannon);
-                Iterator<Map.Entry<UUID, Boolean>> entry = nameList.entrySet().iterator();
-                while (entry.hasNext()) {
-                    Map.Entry<UUID, Boolean> nextName = entry.next();
-                    Player player = Bukkit.getPlayer(nextName.getKey());
-                    //show impact to the player
-                    if (player != null && impact != null && plugin.getFakeBlockHandler().belowMaxLimit(player, impact)) {
-                        plugin.getFakeBlockHandler().imitatedSphere(player, impact, 1, config.getImitatedPredictorMaterial(), FakeBlockType.IMPACT_PREDICTOR, config.getImitatedPredictorTime());
-                    }
-                    //remove entry if there removeEntry enabled, or player is offline
-                    if (nextName.getValue() || player == null) {
-                        plugin.logDebug("remove " + nextName.getKey() + " from observerlist");
-                        entry.remove();
-                    }
+                //remove entry if there removeEntry enabled, or player is offline
+                if (nextName.getValue() || player == null) {
+                    plugin.logDebug("remove " + nextName.getKey() + " from observerlist");
+                    entry.remove();
                 }
             }
         }

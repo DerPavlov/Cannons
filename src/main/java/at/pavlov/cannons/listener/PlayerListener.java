@@ -1,6 +1,6 @@
 package at.pavlov.cannons.listener;
 
-import at.pavlov.cannons.Aiming;
+import at.pavlov.cannons.aim.Aiming;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.Enum.MessageEnum;
