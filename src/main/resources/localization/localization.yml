@@ -145,8 +145,8 @@ Help:
     NEWLINE YELLOW Finish it by placing a torch on the first block of the barrel.
     NEWLINE YELLOW To check if the cannon works right click the torch and you
     NEWLINE YELLOW will get a message.'
-  Fire: 'NEWLINE GOLD How to load and fire: N
-    EWLINE YELLOW 1) Load the barrel with gunpowder by right clicking a few times with it.
+  Fire: 'NEWLINE GOLD How to load and fire: 
+    NEWLINE YELLOW 1) Load the barrel with gunpowder by right clicking a few times with it.
     NEWLINE YELLOW 2) Right click with a projectile block (e.g. cobblestone).
     NEWLINE YELLOW 3) When you have done everthing right right click the torch.'
   Adjust: 'NEWLINE GOLD You missed the target? Learn now how to aim:

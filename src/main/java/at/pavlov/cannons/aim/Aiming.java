@@ -24,6 +24,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
@@ -65,6 +67,14 @@ public class Aiming {
         this.plugin = plugin;
         this.config = plugin.getMyConfig();
         this.userMessages = plugin.getMyConfig().getUserMessages();
+    }
+
+    private Scoreboard getScoreboard() {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        if (manager == null)
+            return null;
+
+        return manager.getMainScoreboard();
     }
 
     /**
@@ -143,9 +153,7 @@ public class Aiming {
 
         //both horizontal and vertical angle will be displayed in one message
 
-        //angle changed
-        boolean hasChanged = false;
-        //message Enum
+
         MessageEnum message = null;
 
         MessageEnum resultPerm = checkPermissions(player, cannon);
@@ -156,7 +164,7 @@ public class Aiming {
         if (gunAnglesWrapper.angles == null) return null;
 
         MessageEnum output = adjustAngles(gunAnglesWrapper, cannon);
-        hasChanged = output != null;
+        boolean hasChanged = output != null;
         if (hasChanged)
             message = output;
 
@@ -522,121 +530,7 @@ public class Aiming {
             }
 
             // calculate a firing solution
-            if (cannon.isChunkLoaded() && System.currentTimeMillis() > (cannon.getLastSentryUpdate() + cannon.getCannonDesign().getSentryUpdateTime())) {
-                cannon.setLastSentryUpdate(System.currentTimeMillis());
-
-                HashMap<UUID, Target> targets = CannonsUtil.getNearbyTargets(cannon.getMuzzle(), cannon.getCannonDesign().getSentryMinRange(), cannon.getCannonDesign().getSentryMaxRange());
-                //old target - is this still valid?
-                if (cannon.hasSentryEntity()) {
-                    if (System.currentTimeMillis() > cannon.getSentryTargetingTime() + cannon.getCannonDesign().getSentrySwapTime() || !targets.containsKey(cannon.getSentryEntity())) {
-                        cannon.setSentryTarget(null);
-                    } else {
-                        //is the previous target still valid
-                        Target target = targets.get(cannon.getSentryEntity());
-                        if (!canFindTargetSolution(cannon, target, target.getCenterLocation(), target.getVelocity())) {
-                            cannon.setSentryTarget(null);
-                        }
-                    }
-                }
-
-                // find a suitable target
-                if (!cannon.hasSentryEntity()) {
-                    ArrayList<Target> possibleTargets = new ArrayList<>();
-                    for (Target t : targets.values()) {
-                        //Monster
-                        if (t.getTargetType() == TargetType.MONSTER && cannon.isTargetMob()) {
-                            if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
-                                possibleTargets.add(t);
-                            }
-                        }
-                        //Player
-                        else if (t.getTargetType() == TargetType.PLAYER && cannon.isTargetPlayer() && !cannon.isWhitelisted(t.getUniqueId())) {
-                            // ignore if target and player are in the same team
-                            Player p = Bukkit.getPlayer(t.getUniqueId());
-                            if (p != null && Bukkit.getScoreboardManager().getMainScoreboard() != null) {
-                                Team team = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p);
-                                //Team team = Bukkit.getScoreboardManager().getMainScoreboard().getEntryTeam(p.getName());
-                                if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
-                                    continue;
-                            }
-                            // get solution
-                            if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
-                                possibleTargets.add(t);
-                            }
-                        }
-                        //Cannons
-                        else if (t.getTargetType() == TargetType.CANNON && cannon.isTargetCannon()) {
-                            Cannon tCannon = CannonManager.getCannon(t.getUniqueId());
-                            //check if the owner is whitelisted
-                            if (tCannon != null && !cannon.isWhitelisted(tCannon.getOwner())) {
-                                Player p = Bukkit.getPlayer(t.getUniqueId());
-                                // check team board
-                                if (p != null && Bukkit.getScoreboardManager().getMainScoreboard() != null) {
-                                    Team team = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p);
-                                    //Team team = Bukkit.getScoreboardManager().getMainScoreboard().getEntryTeam(p.getName());
-                                    if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
-                                        continue;
-                                }
-                                if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
-                                    possibleTargets.add(t);
-                                }
-                            }
-                        }
-                        //Other
-                        else if (t.getTargetType() == TargetType.OTHER && cannon.isTargetOther()) {
-                            Cannon tCannon = CannonManager.getCannon(t.getUniqueId());
-                            //check if the owner is whitelisted
-                            if (tCannon != null && !cannon.isWhitelisted(tCannon.getOwner())) {
-                                Player p = Bukkit.getPlayer(t.getUniqueId());
-                                // check team board
-                                if (p != null && Bukkit.getScoreboardManager().getMainScoreboard() != null) {
-                                    Team team = Bukkit.getScoreboardManager().getMainScoreboard().getPlayerTeam(p);
-                                    //Team team = Bukkit.getScoreboardManager().getMainScoreboard().getEntryTeam(p.getName());
-                                    if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
-                                        continue;
-                                }
-                                if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
-                                    possibleTargets.add(t);
-                                }
-                            }
-                        }
-                    }
-                    //so we have some targets
-                    if (!possibleTargets.isEmpty()) {
-                        for (Target t : possibleTargets) {
-                            //select one target
-                            if (!cannon.wasSentryTarget(t.getUniqueId())) {
-                                cannon.setSentryTarget(t.getUniqueId());
-                                break;
-                            }
-                        }
-                        if (!cannon.hasSentryEntity()) {
-                            cannon.setSentryTarget(possibleTargets.get(0).getUniqueId());
-                        }
-                    }
-                }
-
-                //find target solution
-                if (cannon.hasSentryEntity()) {
-                    Target target = targets.get(cannon.getSentryEntity());
-                    // find exact solution for the cannon
-                    if (calculateTargetSolution(cannon, target, target.getVelocity(), true)) {
-                        CannonTargetEvent targetEvent = new CannonTargetEvent(cannon, target);
-                        Bukkit.getServer().getPluginManager().callEvent(targetEvent);
-                        if (!targetEvent.isCancelled()) {
-                            cannon.setSentryTarget(target.getUniqueId());
-                        } else {
-                            //event cancelled
-                            plugin.logDebug("can't find solution for target");
-                            cannon.setSentryTarget(null);
-                        }
-                    } else {
-                        //no exact solution found for this target. So skip it and try it again in the next run
-                        cannon.setSentryTarget(null);
-                        //cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
-                    }
-                }
-            }
+            calculateFiringSolution(cannon);
 
             //aim at the found solution
             // only update if since the last update some ticks have past (updateSpeed is in ticks = 50ms)
@@ -647,26 +541,172 @@ public class Aiming {
                 }
             }
             //ready to fire. Fire!
-            if (cannon.hasSentryEntity() && cannon.targetInSight()) {
-                if (cannon.isReadyToFire() && System.currentTimeMillis() > cannon.getSentryLastFiringFailed() + 2000) {
-                    MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
-                    if (messageEnum != null) {
-                        plugin.logDebug("Sentry " + cannon.getCannonName() + " firing message: " + messageEnum);
-                        if (messageEnum.isError()) {
-                            cannon.setSentryLastFiringFailed(System.currentTimeMillis());
-                            CannonsUtil.playErrorSound(cannon.getMuzzle());
-                        }
-                    }
+            boolean sentryAndInSight = cannon.hasSentryEntity() && cannon.targetInSight();
+            boolean ready = cannon.isReadyToFire() && System.currentTimeMillis() > cannon.getSentryLastFiringFailed() + 2000;
+            MessageEnum messageEnum = plugin.getFireCannon().sentryFiring(cannon);
+
+            if (sentryAndInSight && ready && messageEnum != null) {
+                plugin.logDebug("Sentry " + cannon.getCannonName() + " firing message: " + messageEnum);
+                if (messageEnum.isError()) {
+                    cannon.setSentryLastFiringFailed(System.currentTimeMillis());
+                    CannonsUtil.playErrorSound(cannon.getMuzzle());
                 }
             }
 
             //no targets found, return to default angles
-            if (!cannon.hasSentryEntity()) {
-                cannon.setAimingYaw(cannon.getHomeYaw());
-                cannon.setAimingPitch(cannon.getHomePitch());
-                cannon.setSentryHomedAfterFiring(false);
+            if (cannon.hasSentryEntity()) {
+                continue;
+            }
+
+            cannon.setAimingYaw(cannon.getHomeYaw());
+            cannon.setAimingPitch(cannon.getHomePitch());
+            cannon.setSentryHomedAfterFiring(false);
+        }
+    }
+
+    private void calculateFiringSolution(Cannon cannon) {
+
+        CannonDesign design = cannon.getCannonDesign();
+
+        if (!cannon.isChunkLoaded() || System.currentTimeMillis() <= (cannon.getLastSentryUpdate() + design.getSentryUpdateTime())) {
+            return;
+        }
+
+        cannon.setLastSentryUpdate(System.currentTimeMillis());
+
+        HashMap<UUID, Target> targets = CannonsUtil.getNearbyTargets(cannon.getMuzzle(), design.getSentryMinRange(), design.getSentryMaxRange());
+        //old target - is this still valid?
+        if (cannon.hasSentryEntity()) {
+            if (System.currentTimeMillis() > cannon.getSentryTargetingTime() + design.getSentrySwapTime() || !targets.containsKey(cannon.getSentryEntity())) {
+                cannon.setSentryTarget(null);
+            } else {
+                //is the previous target still valid
+                Target target = targets.get(cannon.getSentryEntity());
+                if (!canFindTargetSolution(cannon, target, target.getCenterLocation(), target.getVelocity())) {
+                    cannon.setSentryTarget(null);
+                }
+            }
+
+            //find target solution
+            Target target = targets.get(cannon.getSentryEntity());
+            // find exact solution for the cannon
+            if (!calculateTargetSolution(cannon, target, target.getVelocity(), true)) {//no exact solution found for this target. So skip it and try it again in the next run
+                cannon.setSentryTarget(null);
+                //cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
+                return;
+            }
+
+            CannonTargetEvent targetEvent = new CannonTargetEvent(cannon, target);
+            Bukkit.getServer().getPluginManager().callEvent(targetEvent);
+            if (!targetEvent.isCancelled()) {
+                cannon.setSentryTarget(target.getUniqueId());
+            } else {
+                //event cancelled
+                plugin.logDebug("can't find solution for target");
+                cannon.setSentryTarget(null);
+            }
+            return;
+        }
+
+        // find a suitable target
+        ArrayList<Target> possibleTargets = new ArrayList<>();
+        for (Target t : targets.values()) {
+            switch (t.getTargetType()) {
+                case MONSTER -> {
+                    if (cannon.isTargetMob() && canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
+                        possibleTargets.add(t);
+                    }
+                }
+
+                case PLAYER -> {
+                    if (!cannon.isTargetPlayer() || cannon.isWhitelisted(t.getUniqueId())) {
+                        break;
+                    }
+
+                    Player p = Bukkit.getPlayer(t.getUniqueId());
+                    if (p != null && getScoreboard() != null) {
+                        Team team = getScoreboard().getPlayerTeam(p);
+                        //Team team = scoreboard.getEntryTeam(p.getName());
+                        if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
+                            continue;
+                    }
+                    // get solution
+                    if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
+                        possibleTargets.add(t);
+                    }
+                }
+
+                case CANNON -> {
+                    if (!cannon.isTargetCannon()) {
+                        break;
+                    }
+
+                    Cannon tCannon = CannonManager.getCannon(t.getUniqueId());
+                    //check if the owner is whitelisted
+                    if (tCannon == null || cannon.isWhitelisted(tCannon.getOwner())) {
+                        continue;
+                    }
+
+                    Player p = Bukkit.getPlayer(t.getUniqueId());
+                    // check team board
+                    if (p != null && getScoreboard() != null) {
+                        Team team = getScoreboard().getPlayerTeam(p);
+                        //Team team = scoreboard.getEntryTeam(p.getName());
+                        if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
+                            continue;
+                    }
+                    if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
+                        possibleTargets.add(t);
+                    }
+                }
+
+                case OTHER -> {
+                    if (!cannon.isTargetOther()) {
+                        break;
+                    }
+
+                    Cannon tCannon = CannonManager.getCannon(t.getUniqueId());
+                    //check if the owner is whitelisted
+                    if (tCannon == null || cannon.isWhitelisted(tCannon.getOwner())) {
+                        continue;
+                    }
+
+                    Player p = Bukkit.getPlayer(t.getUniqueId());
+                    // check team board
+                    if (p != null && getScoreboard() != null) {
+                        Team team = getScoreboard().getPlayerTeam(p);
+                        //Team team = scoreboard.getEntryTeam(p.getName());
+                        if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
+                            continue;
+                    }
+                    if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
+                        possibleTargets.add(t);
+                    }
+                }
+
             }
         }
+
+
+        //so we have some targets
+        if (possibleTargets.isEmpty()) {
+            return;
+        }
+
+        for (Target t : possibleTargets) {
+            //select one target
+            if (cannon.wasSentryTarget(t.getUniqueId())) {
+                continue;
+            }
+
+            cannon.setSentryTarget(t.getUniqueId());
+            break;
+        }
+
+        if (!cannon.hasSentryEntity()) {
+            cannon.setSentryTarget(possibleTargets.get(0).getUniqueId());
+        }
+
     }
 
     /**
@@ -687,21 +727,6 @@ public class Aiming {
             return false;
         }
 
-
-//        double velocity = cannon.getCannonballVelocity();
-//        if (velocity > 0) {
-//            double time = distance / velocity;
-//            //indirect fire needs longer
-//            if (cannon.getCannonDesign().isSentryIndirectFire())
-//                time *= 3.0;
-//            time += (cannon.getCannonDesign().getFuseBurnTime()+cannon.getCannonDesign().getSentryUpdateTime())/20.0;
-//            //plugin.logDebug("time: " + time);
-//            //plugin.logDebug("distance: " + distance);
-//            plugin.logDebug("velocity: " + targetVelocity);
-//
-//            newTarget.add(targetVelocity.multiply(time));
-//        }
-        //plugin.logDebug("new target " + newTarget);
         int ignoredBlocks = 0;
 
         if (cannon.isProjectileLoaded()) {
