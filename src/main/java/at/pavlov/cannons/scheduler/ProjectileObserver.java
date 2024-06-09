@@ -22,6 +22,7 @@ import java.util.UUID;
 
 public class ProjectileObserver {
     private final Cannons plugin;
+    private final Random random = new Random();
 
 
     /**
@@ -39,45 +40,41 @@ public class ProjectileObserver {
     public void setupScheduler()
     {
         //changing angles for aiming mode
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
-        {
-            public void run()
-            {
-                //get projectiles
-                Iterator<Map.Entry<UUID,FlyingProjectile>> iter = plugin.getProjectileManager().getFlyingProjectiles().entrySet().iterator();
-                while(iter.hasNext())
-                {
-                    FlyingProjectile cannonball = iter.next().getValue();
-                    org.bukkit.entity.Projectile projectile_entity = cannonball.getProjectileEntity();
-                    //remove an not valid projectile
-                    if (!cannonball.isValid(projectile_entity))
-                    {
-                        //teleport the observer back to its start position
-                        CannonsUtil.teleportBack(cannonball);
-                        if (projectile_entity != null)
-                        {
-                            Location l = projectile_entity.getLocation();
-                            projectile_entity.remove();
-                            plugin.logDebug("removed Projectile at " + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ() + " because it was not valid.");
-                        }
-                        else
-                            plugin.logDebug("removed Projectile at because the entity was missing");
-                        //remove entry in hashmap
-                        iter.remove();
-                        continue;
-                    }
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            //get projectiles
+            Iterator<Map.Entry<UUID,FlyingProjectile>> iter = plugin.getProjectileManager().getFlyingProjectiles().entrySet().iterator();
+            while(iter.hasNext()) {
+                FlyingProjectile cannonball = iter.next().getValue();
+                org.bukkit.entity.Projectile projectile_entity = cannonball.getProjectileEntity();
+
+                if (cannonball.isValid(projectile_entity)) {
 
                     //update the cannonball
                     checkWaterImpact(cannonball, projectile_entity);
                     updateTeleporter(cannonball, projectile_entity);
                     updateSmokeTrail(cannonball, projectile_entity);
+
                     if (updateProjectileLocation(cannonball, projectile_entity)) {
                         iter.remove();
-                        continue;
                     }
+                    continue;
                 }
 
+                //remove a not valid projectile
+                //teleport the observer back to its start position
+                CannonsUtil.teleportBack(cannonball);
+                if (projectile_entity != null)
+                {
+                    Location l = projectile_entity.getLocation();
+                    projectile_entity.remove();
+                    plugin.logDebug("removed Projectile at " + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ() + " because it was not valid.");
+                }
+                else
+                    plugin.logDebug("removed Projectile at because the entity was missing");
+                //remove entry in hashmap
+                iter.remove();
             }
+
         }, 1L, 1L);
     }
 
@@ -85,27 +82,26 @@ public class ProjectileObserver {
      * if cannonball enters water it will spawn a splash effect
      * @param cannonball the projectile to check
      */
-    private void checkWaterImpact(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity)
-    {
+    private void checkWaterImpact(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity) {
 
         //the projectile has passed the water surface, make a splash
-        if (cannonball.updateWaterSurfaceCheck(projectile_entity))
-        {
-            //go up until there is air and place the same liquid
-            Location startLoc = projectile_entity.getLocation().clone();
-            Vector vel = projectile_entity.getVelocity().clone();
-            ItemHolder liquid = new ItemHolder(startLoc.getBlock().getType());
+        if (!cannonball.updateWaterSurfaceCheck(projectile_entity)) {
+            return;
+        }
 
-            for (int i = 0; i<5; i++)
-            {
-                Block block = startLoc.subtract(vel.clone().multiply(i)).getBlock();
-                if (block != null && block.isEmpty())
-                {
-                    //found a free block - make the splash
-                    sendSplashToPlayers(block.getLocation(), liquid, cannonball.getProjectile().getSoundImpactWater());
-                    break;
-                }
+        //go up until there is air and place the same liquid
+        Location startLoc = projectile_entity.getLocation().clone();
+        Vector vel = projectile_entity.getVelocity().clone();
+        ItemHolder liquid = new ItemHolder(startLoc.getBlock().getType());
+
+        for (int i = 0; i<5; i++) {
+            Block block = startLoc.subtract(vel.clone().multiply(i)).getBlock();
+            if (block == null || !block.isEmpty()) {
+                continue;
             }
+            //found a free block - make the splash
+            sendSplashToPlayers(block.getLocation(), liquid, cannonball.getProjectile().getSoundImpactWater());
+            break;
         }
     }
 
@@ -144,35 +140,36 @@ public class ProjectileObserver {
 
         //if projectile has HUMAN_CANNONBALL or OBSERVER - update player position
         Projectile projectile = cannonball.getProjectile();
-        if (projectile.hasProperty(ProjectileProperties.HUMAN_CANNONBALL) || projectile.hasProperty(ProjectileProperties.OBSERVER))
+        if (!projectile.hasProperty(ProjectileProperties.HUMAN_CANNONBALL) && !projectile.hasProperty(ProjectileProperties.OBSERVER)) {
+            return;
+        }
+
+        Player shooter = Bukkit.getPlayer(cannonball.getShooterUID());
+        if(shooter == null)
+            return;
+
+        //set some distance to the snowball to prevent a collision
+        Location optiLoc = projectile_entity.getLocation().clone().subtract(projectile_entity.getVelocity().normalize().multiply(20.0));
+
+        Vector distToOptimum = optiLoc.toVector().subtract(shooter.getLocation().toVector());
+        Vector playerVel = projectile_entity.getVelocity().add(distToOptimum.multiply(0.1));
+        //cap for maximum speed
+        if (playerVel.getX() > 5.0)
+            playerVel.setX(5.0);
+        if (playerVel.getY() > 5.0)
+            playerVel.setY(5.0);
+        if (playerVel.getZ() > 5.0)
+            playerVel.setZ(5.0);
+        shooter.setVelocity(playerVel);
+        shooter.setFallDistance(0.0f);
+
+
+        //teleport if the player is behind
+        if (distToOptimum.length() > 30)
         {
-            Player shooter = Bukkit.getPlayer(cannonball.getShooterUID());
-            if(shooter == null)
-                return;
-
-            //set some distance to the snowball to prevent a collision
-            Location optiLoc = projectile_entity.getLocation().clone().subtract(projectile_entity.getVelocity().normalize().multiply(20.0));
-
-            Vector distToOptimum = optiLoc.toVector().subtract(shooter.getLocation().toVector());
-            Vector playerVel = projectile_entity.getVelocity().add(distToOptimum.multiply(0.1));
-            //cap for maximum speed
-            if (playerVel.getX() > 5.0)
-                playerVel.setX(5.0);
-            if (playerVel.getY() > 5.0)
-                playerVel.setY(5.0);
-            if (playerVel.getZ() > 5.0)
-                playerVel.setZ(5.0);
-            shooter.setVelocity(playerVel);
-            shooter.setFallDistance(0.0f);
-
-
-            //teleport if the player is behind
-            if (distToOptimum.length() > 30)
-            {
-                optiLoc.setYaw(shooter.getLocation().getYaw());
-                optiLoc.setPitch(shooter.getLocation().getPitch());
-                shooter.teleport(optiLoc);
-            }
+            optiLoc.setYaw(shooter.getLocation().getYaw());
+            optiLoc.setPitch(shooter.getLocation().getPitch());
+            shooter.teleport(optiLoc);
         }
     }
 
@@ -215,37 +212,37 @@ public class ProjectileObserver {
      * @param cannonball the cannonball entity entry of cannons
      * @param projectile_entity the entity of the projectile
      */
-    private void updateSmokeTrail(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity)
-    {
-        Random r = new Random();
+    private void updateSmokeTrail(FlyingProjectile cannonball, org.bukkit.entity.Projectile projectile_entity) {
         Projectile proj = cannonball.getProjectile();
         int maxDist = (int) plugin.getMyConfig().getImitatedBlockMaximumDistance();
-        double smokeDist = proj.getSmokeTrailDistance()*(0.5 + r.nextDouble());
-        double smokeDuration = proj.getSmokeTrailDuration()*(0.5 + r.nextGaussian());
+        double smokeDist = proj.getSmokeTrailDistance()*(0.5 + random.nextDouble());
+        double smokeDuration = proj.getSmokeTrailDuration()*(0.5 + random.nextGaussian());
 
-        if (proj.isSmokeTrailEnabled() && cannonball.getExpectedLocation().distance(cannonball.getLastSmokeTrailLocation()) > smokeDist)
-        {
-            //create a new smoke trail cloud
-            Location newLoc = cannonball.getExpectedLocation();
-            cannonball.setLastSmokeTrailLocation(newLoc);
-            plugin.logDebug("smoke trail at: " +  newLoc.getBlockX() + "," + newLoc.getBlockY() + "," + newLoc.getBlockZ());
+        if (!proj.isSmokeTrailEnabled() || !(cannonball.getExpectedLocation().distance(cannonball.getLastSmokeTrailLocation()) > smokeDist)) {
+            return;
+        }
+        //create a new smoke trail cloud
+        Location newLoc = cannonball.getExpectedLocation();
+        cannonball.setLastSmokeTrailLocation(newLoc);
+        plugin.logDebug("smoke trail at: " +  newLoc.getBlockX() + "," + newLoc.getBlockY() + "," + newLoc.getBlockZ());
 
-            if (proj.isSmokeTrailParticleEnabled()) {
-                cannonball.getWorld().spawnParticle(proj.getSmokeTrailParticleType(), newLoc, proj.getSmokeTrailParticleCount(), proj.getSmokeTrailParticleOffsetX(), proj.getSmokeTrailParticleOffsetY(), proj.getSmokeTrailParticleOffsetZ(), proj.getSmokeTrailParticleSpeed(), null, true);
-            }
-            else {
-                // added null if the world was deleted
-                if (newLoc.getWorld() != null) {
-                    for (Player p : newLoc.getWorld().getPlayers()) {
-                        Location pl = p.getLocation();
-                        double distance = pl.distance(newLoc);
+        if (proj.isSmokeTrailParticleEnabled()) {
+            cannonball.getWorld().spawnParticle(proj.getSmokeTrailParticleType(), newLoc, proj.getSmokeTrailParticleCount(), proj.getSmokeTrailParticleOffsetX(), proj.getSmokeTrailParticleOffsetY(), proj.getSmokeTrailParticleOffsetZ(), proj.getSmokeTrailParticleSpeed(), null, true);
+            return;
+        }
 
-                        if (distance <= maxDist)
-                            plugin.getFakeBlockHandler().imitatedSphere(p, newLoc, 0, proj.getSmokeTrailMaterial(), FakeBlockType.SMOKE_TRAIL, smokeDuration);
+        // added null if the world was deleted
+        if (newLoc.getWorld() == null) {
+            return;
+        }
 
-                    }
-                }
-            }
+        for (Player p : newLoc.getWorld().getPlayers()) {
+            Location pl = p.getLocation();
+            double distance = pl.distance(newLoc);
+
+            if (distance <= maxDist)
+                plugin.getFakeBlockHandler().imitatedSphere(p, newLoc, 0, proj.getSmokeTrailMaterial(), FakeBlockType.SMOKE_TRAIL, smokeDuration);
+
         }
 
     }
