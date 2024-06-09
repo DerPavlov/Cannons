@@ -625,14 +625,11 @@ public class Aiming {
                     }
 
                     Player p = Bukkit.getPlayer(t.getUniqueId());
-                    if(scoreboardCheck(p, cannon))
-                        continue;
-                    /*
                     if (p != null && getScoreboard() != null) {
                         Team team = getScoreboard().getPlayerTeam(p);
                         if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
                             continue;
-                    }*/
+                    }
                     // get solution
                     if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
                         possibleTargets.add(t);
@@ -652,15 +649,11 @@ public class Aiming {
 
                     Player p = Bukkit.getPlayer(t.getUniqueId());
                     // check team board
-                    if(scoreboardCheck(p, cannon))
-                        continue;
-
-                    /*
                     if (p != null && getScoreboard() != null) {
                         Team team = getScoreboard().getPlayerTeam(p);
                         if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
                             continue;
-                    }*/
+                    }
                     if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
                         possibleTargets.add(t);
                     }
@@ -678,16 +671,12 @@ public class Aiming {
                     }
 
                     Player p = Bukkit.getPlayer(t.getUniqueId());
-                    if(scoreboardCheck(p, cannon))
-                        continue;
-
-                    /*
                     // check team board
                     if (p != null && getScoreboard() != null) {
                         Team team = getScoreboard().getPlayerTeam(p);
                         if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
                             continue;
-                    }*/
+                    }
                     if (canFindTargetSolution(cannon, t, t.getCenterLocation(), t.getVelocity())) {
                         possibleTargets.add(t);
                     }
@@ -716,20 +705,6 @@ public class Aiming {
             cannon.setSentryTarget(possibleTargets.get(0).getUniqueId());
         }
 
-    }
-
-    private boolean scoreboardCheck(Player p, Cannon cannon) {
-        Scoreboard s = getScoreboard();
-
-        if (p == null || s == null) {
-            return false;
-        }
-
-        Team team = s.getPlayerTeam(p);
-        if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
-            return true;
-
-        return false;
     }
 
     /**
