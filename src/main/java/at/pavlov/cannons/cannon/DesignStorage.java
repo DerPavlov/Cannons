@@ -414,8 +414,8 @@ public class DesignStorage
 		cc.setOrigin(BlockVector3.ZERO);
 
 		//plugin.logDebug("design: " + schematicFile);
-		ArrayList<SimpleBlock> schematiclist = new ArrayList<>();
-		for (int x = 0; x < width; ++x) {
+		ArrayList<SimpleBlock> schematiclist = getSchematic(width, height, length, cc, blockIgnore);
+		/*for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
 				for (int z = 0; z < length; ++z) {
 
@@ -432,7 +432,7 @@ public class DesignStorage
 					}
 				}
 			}
-		}
+		}*/
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -738,5 +738,28 @@ public class DesignStorage
 
 	public boolean isCannonBlockMaterial(Material material) {
 		return material != Material.AIR && cannonBlockMaterials.contains(material);
+	}
+
+	private ArrayList<SimpleBlock> getSchematic(int width, int height, int length, Clipboard cc, BlockData blockIgnore) {
+		ArrayList<SimpleBlock> schematiclist = new ArrayList<>();
+		for (int x = 0; x < width; ++x) {
+			for (int y = 0; y < height; ++y) {
+				for (int z = 0; z < length; ++z) {
+
+					BlockVector3 pt = BlockVector3.at(x, y, z);
+					BlockState blockState = cc.getBlock(pt.add(cc.getMinimumPoint()));
+					//plugin.logDebug("blockstate: " + blockState.getAsString());
+
+					BlockData block = Bukkit.getServer().createBlockData(blockState.getAsString());
+
+
+					// ignore if block is AIR or the IgnoreBlock type
+					if (!block.getMaterial().equals(Material.AIR) && !block.matches(blockIgnore)) {
+						schematiclist.add(new SimpleBlock(pt.getBlockX(), pt.getBlockY(), pt.getBlockZ(), block));
+					}
+				}
+			}
+		}
+		return schematiclist;
 	}
 }

@@ -220,10 +220,11 @@ public class CannonsUtil
 
 		Blocks.add(block.getRelative(BlockFace.UP));
 		Blocks.add(block.getRelative(BlockFace.DOWN));
-		Blocks.add(block.getRelative(BlockFace.SOUTH));
-		Blocks.add(block.getRelative(BlockFace.WEST));
-		Blocks.add(block.getRelative(BlockFace.NORTH));
-		Blocks.add(block.getRelative(BlockFace.EAST));
+        Blocks.addAll(HorizontalSurroundingBlocks(block));
+		//Blocks.add(block.getRelative(BlockFace.SOUTH));
+		//Blocks.add(block.getRelative(BlockFace.WEST));
+		//Blocks.add(block.getRelative(BlockFace.NORTH));
+		//Blocks.add(block.getRelative(BlockFace.EAST));
 		return Blocks;
 	}
 
@@ -407,9 +408,14 @@ public class CannonsUtil
         ItemStack chest = inv.getChestplate();
         ItemStack pants = inv.getLeggings();
 
-        int lvl = 1;
+        //int lvl = 1;
         double reduction = 0;
+        reduction += getItemProjectileProtection(boots);
+        reduction += getItemProjectileProtection(helmet);
+        reduction += getItemProjectileProtection(chest);
+        reduction += getItemProjectileProtection(pants);
 
+        /*
         if (boots != null)
         {
             lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
@@ -445,7 +451,7 @@ public class CannonsUtil
             lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }
+        }*/
         //cap it to 25
         if (reduction > 25) reduction = 25;
 
@@ -457,6 +463,24 @@ public class CannonsUtil
 
         //1 point is 4%
         return reduction*4/100;
+    }
+
+    public static int getItemProjectileProtection(ItemStack item) {
+        int reduction = 0;
+
+        if (item == null) {
+            return reduction;
+        }
+
+        int lvl = item.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+        if (lvl > 0)
+            reduction += (int) Math.floor((6 + lvl * lvl) * 1.5 / 3);
+
+        lvl = item.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+        if (lvl > 0)
+            reduction += (int) Math.floor((6 + lvl * lvl) * 0.75 / 3);
+
+        return reduction;
     }
 
     /**
