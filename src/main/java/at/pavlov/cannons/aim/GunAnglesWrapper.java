@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 
 import static at.pavlov.cannons.aim.GunAngles.getGunAngle;
 
-class GunAnglesWrapper {
-    GunAngles angles;
-    boolean combine;
-    GunAnglesWrapper(GunAngles angles, boolean combine) {
+public class GunAnglesWrapper {
+    public GunAngles angles;
+    public boolean combine;
+    public GunAnglesWrapper(GunAngles angles, boolean combine) {
         this.angles = angles;
         this.combine = combine;
     }

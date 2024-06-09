@@ -3,7 +3,7 @@ package at.pavlov.cannons.aim;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.utils.CannonsUtil;
 
-class GunAngles {
+public class GunAngles {
     private double horizontal;
     private double vertical;
 

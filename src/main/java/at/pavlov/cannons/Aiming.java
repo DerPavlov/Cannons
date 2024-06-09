@@ -1,10 +1,12 @@
-package at.pavlov.cannons.aim;
+package at.pavlov.cannons;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.Enum.TargetType;
+import at.pavlov.cannons.aim.GunAngles;
+import at.pavlov.cannons.aim.GunAnglesWrapper;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
@@ -152,8 +154,6 @@ public class Aiming {
         boolean isSentry = design.isSentry();
 
         //both horizontal and vertical angle will be displayed in one message
-
-
         MessageEnum message = null;
 
         MessageEnum resultPerm = checkPermissions(player, cannon);
@@ -592,7 +592,6 @@ public class Aiming {
             // find exact solution for the cannon
             if (!calculateTargetSolution(cannon, target, target.getVelocity(), true)) {//no exact solution found for this target. So skip it and try it again in the next run
                 cannon.setSentryTarget(null);
-                //cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
                 return;
             }
 
@@ -605,6 +604,8 @@ public class Aiming {
                 plugin.logDebug("can't find solution for target");
                 cannon.setSentryTarget(null);
             }
+
+            cannon.setLastSentryUpdate(System.currentTimeMillis() - cannon.getCannonDesign().getSentryUpdateTime());
             return;
         }
 
@@ -626,7 +627,6 @@ public class Aiming {
                     Player p = Bukkit.getPlayer(t.getUniqueId());
                     if (p != null && getScoreboard() != null) {
                         Team team = getScoreboard().getPlayerTeam(p);
-                        //Team team = scoreboard.getEntryTeam(p.getName());
                         if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
                             continue;
                     }
@@ -651,7 +651,6 @@ public class Aiming {
                     // check team board
                     if (p != null && getScoreboard() != null) {
                         Team team = getScoreboard().getPlayerTeam(p);
-                        //Team team = scoreboard.getEntryTeam(p.getName());
                         if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
                             continue;
                     }
@@ -675,7 +674,6 @@ public class Aiming {
                     // check team board
                     if (p != null && getScoreboard() != null) {
                         Team team = getScoreboard().getPlayerTeam(p);
-                        //Team team = scoreboard.getEntryTeam(p.getName());
                         if (team != null && team.hasPlayer(Bukkit.getOfflinePlayer(cannon.getOwner())))
                             continue;
                     }
