@@ -4,5 +4,7 @@ jdk:
 install:
   - echo $JAVA_HOME
   - java -version
+  - sdk install java 14.0.2-open
+  - sdk use java 14.0.2-open
   - MAVEN_OPTS="-Xmx1024m -Xms512m -XX:+PrintCommandLineFlags -XX:+PrintFlagsFinal"
   - mvn clean install -X
