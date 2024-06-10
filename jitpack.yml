@@ -1,2 +1,6 @@
 jdk:
   - openjdk14
+
+install:
+  - MAVEN_OPTS="-Xmx1024m -Xms512m -XX:+PrintCommandLineFlags -XX:+PrintFlagsFinal"
+  - mvn clean install -X
