@@ -6,5 +6,6 @@ install:
   - java -version
   - sdk install java 17.0.0-open
   - sdk use java 17.0.0-open
+  - sdk install maven 3.6.3
   - MAVEN_OPTS="-Xmx1024m -Xms512m -XX:+PrintCommandLineFlags -XX:+PrintFlagsFinal"
   - mvn clean install -X
