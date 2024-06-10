@@ -2,5 +2,7 @@ jdk:
   - openjdk14
 
 install:
+  - echo $JAVA_HOME
+  - java -version
   - MAVEN_OPTS="-Xmx1024m -Xms512m -XX:+PrintCommandLineFlags -XX:+PrintFlagsFinal"
   - mvn clean install -X
