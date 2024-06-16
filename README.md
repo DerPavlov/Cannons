@@ -11,6 +11,19 @@ New features/fixes:
 - Made ProjectilePiercingEvent cancellable
 - Upgraded to Java 14 language level
 
+How to build / Get the jar
+---------------
+To compile and get the plugin jar you need to first [download maven](https://maven.apache.org/download.cgi) and then [install it](https://maven.apache.org/install.html).
+There are some slight differences between Windows and Linux, you can find tutorials online in case you are stuck.
+
+Now you need to go download the zip of the source code from github and extract it somewhere.
+
+Open the terminal to said folder and run `mvn clean install`. This will start building and compiling the plugin and give
+you a jar to put into the plugin folder of your server.
+
+If you plan on modifying the plugin and stay around the plugin scene for a bit longer
+I suggest you download an IDE like IntellijIDEA and get you more experienced with dependencies and building with maven and gradle.
+
 Dependency:
 ---------------
 

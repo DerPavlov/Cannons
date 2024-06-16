@@ -284,29 +284,10 @@ public class Cannon {
             return MessageEnum.ErrorProjectileAlreadyLoaded;
 
         //load gunpowder if there is nothing in the barrel
-        if (design.isGunpowderConsumption() && design.isGunpowderNeeded() && consumesAmmo) {
-            //gunpowder will be consumed from the inventory
-            //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
-            int toLoad = design.getMaxLoadableGunpowderNormal() - getLoadedGunpowder();
-            if (toLoad > 0) {
-                ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
-                Cannons.getPlugin().logDebug("Amount of chests next to cannon: " + invlist.size());
-                gunpowder = InventoryManagement.removeItem(invlist, gunpowder);
-                if (gunpowder.getAmount() == 0) {
-                    //there was enough gunpowder in the chest
-                    loadedGunpowder = design.getMaxLoadableGunpowderNormal();
-                } else {
-                    //not enough gunpowder, put it back
-                    gunpowder.setAmount(toLoad - gunpowder.getAmount());
-                    InventoryManagement.addItemInChests(invlist, gunpowder);
-                    return MessageEnum.ErrorNoGunpowderInChest;
-                }
-            }
-        } else {
-            //no ammo consumption - only load if there is less gunpowder then normal in the barrel
-            if (getLoadedGunpowder() <= design.getMaxLoadableGunpowderNormal())
-                loadedGunpowder = design.getMaxLoadableGunpowderNormal();
-        }
+        MessageEnum gunpowder = loadGunpowderBarrel(consumesAmmo, invlist);
+        if (gunpowder!=null)
+            return gunpowder;
+
         // find a loadable projectile in the chests
         for (Inventory inv : invlist) {
             for (ItemStack item : inv.getContents()) {
@@ -315,27 +296,61 @@ public class Cannon {
                     continue;
 
                 MessageEnum message = CheckPermProjectile(projectile, player);
-                if (message == MessageEnum.loadProjectile) {
-                    // everything went fine, so remove it from the chest remove projectile
-                    setLoadedProjectile(projectile);
-                    if (design.isProjectileConsumption() && consumesAmmo) {
-                        if (item.getAmount() == 1) {
-                            //last item removed
-                            inv.removeItem(item);
-                        } else {
-                            //remove one item
-                            item.setAmount(item.getAmount() - 1);
-                        }
-                    }
-                    //push projectile and done
-                    setProjectilePushed(0);
-                    CannonsUtil.playSound(getMuzzle(), getLoadedProjectile().getSoundLoading());
-                    lastLoaded = System.currentTimeMillis();
-                    return MessageEnum.loadProjectile;
+                if (message != MessageEnum.loadProjectile) {
+                    continue;
                 }
+                // everything went fine, so remove it from the chest remove projectile
+                setLoadedProjectile(projectile);
+                if (design.isProjectileConsumption() && consumesAmmo) {
+                    if (item.getAmount() == 1) {
+                        //last item removed
+                        inv.removeItem(item);
+                    } else {
+                        //remove one item
+                        item.setAmount(item.getAmount() - 1);
+                    }
+                }
+                //push projectile and done
+                setProjectilePushed(0);
+                CannonsUtil.playSound(getMuzzle(), getLoadedProjectile().getSoundLoading());
+                lastLoaded = System.currentTimeMillis();
+                return MessageEnum.loadProjectile;
             }
         }
         return MessageEnum.ErrorNoProjectileInChest;
+    }
+
+    private MessageEnum loadGunpowderBarrel(boolean consumesAmmo, List<Inventory> invlist) {
+        //load gunpowder if there is nothing in the barrel
+        if (!design.isGunpowderConsumption() || !design.isGunpowderNeeded() || !consumesAmmo) {
+            //no ammo consumption - only load if there is less gunpowder then normal in the barrel
+            if (getLoadedGunpowder() <= design.getMaxLoadableGunpowderNormal())
+                loadedGunpowder = design.getMaxLoadableGunpowderNormal();
+            return null;
+        }
+
+        //gunpowder will be consumed from the inventory
+        //load the maximum gunpowder possible (maximum amount that fits in the cannon or is in the chest)
+        int toLoad = design.getMaxLoadableGunpowderNormal() - getLoadedGunpowder();
+
+        if (toLoad <= 0) {
+            return null;
+        }
+
+        ItemStack gunpowder = design.getGunpowderType().toItemStack(toLoad);
+        Cannons.getPlugin().logDebug("Amount of chests next to cannon: " + invlist.size());
+        gunpowder = InventoryManagement.removeItem(invlist, gunpowder);
+
+        if (gunpowder.getAmount() == 0) {
+            //there was enough gunpowder in the chest
+            loadedGunpowder = design.getMaxLoadableGunpowderNormal();
+            return null;
+        }
+
+        //not enough gunpowder, put it back
+        gunpowder.setAmount(toLoad - gunpowder.getAmount());
+        InventoryManagement.addItemInChests(invlist, gunpowder);
+        return MessageEnum.ErrorNoGunpowderInChest;
     }
 
     /**
@@ -398,7 +413,7 @@ public class Cannon {
      *
      * @param amountToLoad - number of items which are loaded into the cannon
      */
-    MessageEnum loadGunpowder(int amountToLoad) {
+    public MessageEnum loadGunpowder(int amountToLoad) {
         //this cannon does not need gunpowder
         if (!design.isGunpowderNeeded())
             return MessageEnum.ErrorNoGunpowderNeeded;
@@ -430,16 +445,18 @@ public class Cannon {
 
 
         //Overloading is enabled
-        if (design.isOverloadingEnabled()) {
-            if (!design.isOverloadingRealMode()) {
-                if (design.getMaxLoadableGunpowderNormal() < getLoadedGunpowder())
-                    return MessageEnum.loadOverloadedGunpowder;
-                else if (design.getMaxLoadableGunpowderNormal() == getLoadedGunpowder())
-                    return MessageEnum.loadGunpowderNormalLimit;
-            } else if (design.getMaxLoadableGunpowderNormal() < getLoadedGunpowder())
-                return MessageEnum.loadOverloadedGunpowder;
-
+        if (!design.isOverloadingEnabled()) {
+            return MessageEnum.loadGunpowder;
         }
+
+        if (!design.isOverloadingRealMode()) {
+            if (design.getMaxLoadableGunpowderNormal() < getLoadedGunpowder())
+                return MessageEnum.loadOverloadedGunpowder;
+            if (design.getMaxLoadableGunpowderNormal() == getLoadedGunpowder())
+                return MessageEnum.loadGunpowderNormalLimit;
+        } else if (design.getMaxLoadableGunpowderNormal() < getLoadedGunpowder())
+            return MessageEnum.loadOverloadedGunpowder;
+
         return MessageEnum.loadGunpowder;
     }
 
@@ -457,7 +474,6 @@ public class Cannon {
 
         if (useEvent.isCancelled())
             return null;
-
 
         //save the amount of gunpowder we loaded in the cannon
         int gunpowder = 0;
@@ -495,11 +511,12 @@ public class Cannon {
             case loadGunpowder: {
                 // take item from the player
                 CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderLoading());
-                if (design.isGunpowderConsumption() && !design.isAmmoInfiniteForPlayer())
+                if (design.isGunpowderConsumption() && !design.isAmmoInfiniteForPlayer()) {
                     if (design.isGunpowderConsumption() && !design.isAmmoInfiniteForPlayer())
                         InventoryManagement.removeItem(player.getInventory(), design.getGunpowderType().toItemStack(gunpowder));
                     else
                         InventoryManagement.takeFromPlayerHand(player, gunpowder);
+                }
                 break;
             }
             case loadGunpowderNormalLimit: {
@@ -708,28 +725,31 @@ public class Cannon {
      */
     public MessageEnum useRamRod(Player player) {
         MessageEnum message = useRamRodInteral(player);
-        if (message != null) {
-            if (message.isError()) CannonsUtil.playErrorSound(getMuzzle());
-            else switch (message) {
-                case RamrodCleaning: {
-                    CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodCleaning());
-                    break;
-                }
-                case RamrodCleaningDone: {
-                    CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodCleaningDone());
-                    break;
-                }
-                case RamrodPushingProjectile: {
-                    CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodPushing());
-                    break;
-                }
-                case RamrodPushingProjectileDone: {
-                    CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodPushingDone());
-                    break;
-                }
-                default:
-                    CannonsUtil.playErrorSound(getMuzzle());
+
+        if (message == null) {
+            return message;
+        }
+
+        if (message.isError()) CannonsUtil.playErrorSound(getMuzzle());
+        else switch (message) {
+            case RamrodCleaning: {
+                CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodCleaning());
+                break;
             }
+            case RamrodCleaningDone: {
+                CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodCleaningDone());
+                break;
+            }
+            case RamrodPushingProjectile: {
+                CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodPushing());
+                break;
+            }
+            case RamrodPushingProjectileDone: {
+                CannonsUtil.playSound(getMuzzle(), design.getSoundRamrodPushingDone());
+                break;
+            }
+            default:
+                CannonsUtil.playErrorSound(getMuzzle());
         }
         return message;
     }
@@ -822,16 +842,12 @@ public class Cannon {
             dropCharge();
 
         // return message
-        switch (cause) {
-            case Overheating:
-                return MessageEnum.HeatManagementOverheated;
-            case Other:
-                return null;
-            case Dismantling:
-                return MessageEnum.CannonDismantled;
-            default:
-                return MessageEnum.CannonDestroyed;
-        }
+        return switch (cause) {
+            case Overheating -> MessageEnum.HeatManagementOverheated;
+            case Other -> null;
+            case Dismantling -> MessageEnum.CannonDismantled;
+            default -> MessageEnum.CannonDestroyed;
+        };
     }
 
     /**
@@ -962,16 +978,19 @@ public class Cannon {
         }
 
         CannonBlocks cannonBlocks = this.getCannonDesign().getCannonBlockMap().get(this.getCannonDirection());
-        if (cannonBlocks != null) {
-            for (SimpleBlock cannonblock : cannonBlocks.getChestsAndSigns()) {
-                // compare location
-                if (cannonblock.toLocation(this.getWorldBukkit(), this.offset).equals(loc)) {
-                    //Block block = loc.getBlock();
-                    //compare and data
-                    //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
-                    //if (cannonblock.getData() == block.getData() || block.getData() == -1 || cannonblock.getData() == -1 )
-                    return true;
-                }
+
+        if (cannonBlocks == null) {
+            return false;
+        }
+
+        for (SimpleBlock cannonblock : cannonBlocks.getChestsAndSigns()) {
+            // compare location
+            if (cannonblock.toLocation(this.getWorldBukkit(), this.offset).equals(loc)) {
+                //Block block = loc.getBlock();
+                //compare and data
+                //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
+                //if (cannonblock.getData() == block.getData() || block.getData() == -1 || cannonblock.getData() == -1 )
+                return true;
             }
         }
         return false;
@@ -1046,16 +1065,19 @@ public class Cannon {
      */
     public boolean isRedstoneRepeaterInterface(Location loc) {
         CannonBlocks cannonBlocks = this.getCannonDesign().getCannonBlockMap().get(this.getCannonDirection());
-        if (cannonBlocks != null) {
-            for (SimpleBlock cannonblock : cannonBlocks.getRedstoneWiresAndRepeater()) {
-                // compare location
-                if (cannonblock.toLocation(this.getWorldBukkit(), this.offset).equals(loc)) {
-                    //Block block = loc.getBlock();
-                    //compare and data
-                    //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
-                    //if (cannonblock.getData() == block.getData() %4 || block.getData() == -1 || cannonblock.getData() == -1 )
-                    return true;
-                }
+
+        if (cannonBlocks == null) {
+            return false;
+        }
+
+        for (SimpleBlock cannonblock : cannonBlocks.getRedstoneWiresAndRepeater()) {
+            // compare location
+            if (cannonblock.toLocation(this.getWorldBukkit(), this.offset).equals(loc)) {
+                //Block block = loc.getBlock();
+                //compare and data
+                //only the two lower bits of the bytes are important for the direction (delays are not interessting here)
+                //if (cannonblock.getData() == block.getData() %4 || block.getData() == -1 || cannonblock.getData() == -1 )
+                return true;
             }
         }
         return false;
@@ -1411,14 +1433,14 @@ public class Cannon {
 
 
         // only if the permissions system is enabled. If there are no permissions, everything is true.
-        if (!player.hasPermission(this.getCannonDesign().getPermissionSpreadMultiplier() + "." + Integer.MAX_VALUE)) {
-            // search if there is a valid entry
-            for (int i = 1; i <= 10; i++) {
-                if (player.hasPermission(this.getCannonDesign().getPermissionSpreadMultiplier() + "." + i)) {
-                    return i / 10.0;
-                }
+        if (player.hasPermission(this.getCannonDesign().getPermissionSpreadMultiplier() + "." + Integer.MAX_VALUE)) {
+            return 1.0;
+        }
+        // search if there is a valid entry
+        for (int i = 1; i <= 10; i++) {
+            if (player.hasPermission(this.getCannonDesign().getPermissionSpreadMultiplier() + "." + i)) {
+                return i / 10.0;
             }
-
         }
 
         //using default value
@@ -1617,14 +1639,14 @@ public class Cannon {
      * @return
      */
     public World getWorldBukkit() {
-        if (this.world != null) {
-            World bukkitWorld = Bukkit.getWorld(this.world);
-            if (bukkitWorld == null)
-                System.out.println("[Cannons] Can't find world: " + world);
-            return Bukkit.getWorld(this.world);
-            // return new Location(bukkitWorld, )
+        if (this.world == null) {
+            return null;
         }
-        return null;
+        World bukkitWorld = Bukkit.getWorld(this.world);
+        if (bukkitWorld == null)
+            System.out.println("[Cannons] Can't find world: " + world);
+        return Bukkit.getWorld(this.world);
+        // return new Location(bukkitWorld, )
     }
 
     public UUID getUID() {
@@ -1984,7 +2006,7 @@ public class Cannon {
     }
 
     public void setProjectilePushed(int projectilePushed) {
-        this.projectilePushed = (projectilePushed > 0) ? projectilePushed : 0;
+        this.projectilePushed = Math.max(projectilePushed, 0);
         this.hasUpdated();
     }
 
@@ -2131,11 +2153,11 @@ public class Cannon {
     public double horizontalAngleToYaw(double horizontal) {
         double yaw = horizontal + this.additionalHorizontalAngle + CannonsUtil.directionToYaw(getCannonDirection());
 
-        yaw = yaw % 360;
+        yaw %= 360;
         while (yaw < -180)
-            yaw = yaw + 360;
+            yaw += 360;
         while (yaw > 180)
-            yaw = yaw - 360;
+            yaw -= 360;
         return yaw;
     }
 
@@ -2337,13 +2359,14 @@ public class Cannon {
      */
     public void setSentryTarget(UUID sentryTarget) {
         this.sentryEntity = sentryTarget;
-        if (sentryTarget != null) {
-            setSentryTargetingTime(System.currentTimeMillis());
-            //store only 5
-            if (sentryEntityHistory.size() > 5)
-                sentryEntityHistory.remove(0);
-            sentryEntityHistory.add(sentryTarget);
+        if (sentryTarget == null) {
+            return;
         }
+        setSentryTargetingTime(System.currentTimeMillis());
+        //store only 5
+        if (sentryEntityHistory.size() > 5)
+            sentryEntityHistory.remove(0);
+        sentryEntityHistory.add(sentryTarget);
     }
 
     /**
