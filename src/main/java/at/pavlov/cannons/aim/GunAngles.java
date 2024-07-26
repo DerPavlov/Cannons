@@ -16,6 +16,8 @@ public class GunAngles {
         return horizontal;
     }
 
+    public double getAbsHorizontal() { return Math.abs(horizontal); }
+
     public void setHorizontal(double horizontal) {
         this.horizontal = horizontal;
     }
@@ -23,6 +25,8 @@ public class GunAngles {
     public double getVertical() {
         return vertical;
     }
+
+    public double getAbsVertical() { return Math.abs(vertical); }
 
     public void setVertical(double vertical) {
         this.vertical = vertical;

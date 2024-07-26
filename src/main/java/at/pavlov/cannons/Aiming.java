@@ -216,8 +216,8 @@ public class Aiming {
         GunAngles angles = wrapper.angles;
         boolean combine = wrapper.combine;
 
-        double absHorizontal = Math.abs(angles.getHorizontal());
-        double absVertical = Math.abs(angles.getVertical());
+        double absHorizontal = angles.getAbsHorizontal();
+        double absVertical = angles.getAbsVertical();
 
         if (absHorizontal >= design.getAngleLargeStepSize() && setHorizontalAngle(cannon, angles, design.getAngleLargeStepSize())) {
             largeChange = true;
@@ -297,7 +297,12 @@ public class Aiming {
 
     private GunAnglesWrapper determineGunAngles(Player player, Cannon cannon, BlockFace clickedFace, InteractAction action, boolean isSentry) {
         Location cannonLoc = cannon.getLocation();
-        Location playerLoc = player.getLocation();
+        Location playerLoc = null;
+
+        if(player != null) {
+            playerLoc = player.getLocation();
+        }
+
         CannonDesign design = cannon.getCannonDesign();
 
         if (action == InteractAction.adjustSentry && isSentry) {
@@ -308,13 +313,13 @@ public class Aiming {
             return new GunAnglesWrapper(null, false);
         }
 
-        if (action == InteractAction.adjustAutoaim && player != null && inAimingMode.containsKey(player.getUniqueId())) {
+        if (player != null && action == InteractAction.adjustAutoaim && inAimingMode.containsKey(player.getUniqueId())) {
             if (!player.isSneaking()) {
                 return new GunAnglesWrapper(null, false);
             }
 
-            GunAngles angles = GunAngles.getGunAngle(cannon, playerLoc.getYaw(), player.getLocation().getPitch());
-            cannon.setAimingFinished(Math.abs(angles.getHorizontal()) < design.getAngleStepSize() && Math.abs(angles.getVertical()) < design.getAngleStepSize());
+            GunAngles angles = GunAngles.getGunAngle(cannon, playerLoc.getYaw(), playerLoc.getPitch());
+            cannon.setAimingFinished(angles.getAbsHorizontal() < design.getAngleStepSize() && angles.getAbsVertical() < design.getAngleStepSize());
             return new GunAnglesWrapper(angles, true);
         }
 
