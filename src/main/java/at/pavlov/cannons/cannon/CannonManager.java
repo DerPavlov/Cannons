@@ -360,12 +360,15 @@ public class CannonManager
         HashSet<Cannon> newCannonList = new HashSet<>();
 
         for (Cannon cannon : getCannonList().values()) {
-            if (cannon.getWorld().equals(center.getWorld().getUID())) {
-                Location newLoc = cannon.getCannonDesign().getBarrelBlocks(cannon).get(0);
-                if (newLoc.distance(center) < sphereRadius)
-                    newCannonList.add(cannon);
+            if (!cannon.getWorld().equals(center.getWorld().getUID())) {
+                continue;
             }
+
+            Location newLoc = cannon.getCannonDesign().getBarrelBlocks(cannon).get(0);
+            if (newLoc.distanceSquared(center) < sphereRadius * sphereRadius)
+                newCannonList.add(cannon);
         }
+
         return newCannonList;
     }
 
@@ -473,10 +476,9 @@ public class CannonManager
 	 */
 	private Cannon getCannonFromStorage(Location loc)
 	{
-		for (Cannon cannon : cannonList.values())
-		{
-			if (/*:*/loc.toVector().distance(cannon.getOffset()) <= 32 /*To make code faster on servers with a lot of cannons */ && cannon.isCannonBlock(loc.getBlock()))
-			{
+		for (Cannon cannon : cannonList.values()) {
+            //To make code faster on servers with a lot of cannons we check the distance squared
+            if (loc.toVector().distanceSquared(cannon.getOffset()) <= 1024 && cannon.isCannonBlock(loc.getBlock()))  {
 				return cannon;
 			}
 		}

@@ -411,7 +411,7 @@ public class Aiming {
             return false;
         }
 
-        return player.getLocation().distance(locCannon) <= config.getToolAutoaimRange();
+        return player.getLocation().distanceSquared(locCannon) <= config.getToolAutoaimRange() * config.getToolAutoaimRange();
     }
 
 
@@ -741,7 +741,10 @@ public class Aiming {
 
         //plugin.logDebug("old target " + target);
         Location newTarget = loctarget.clone();
-        if (target.getCenterLocation().distance(cannon.getMuzzle()) > cannon.getCannonDesign().getSentryMaxRange()) {
+        Location muzzle = cannon.getMuzzle();
+        int maxSentryRange = cannon.getCannonDesign().getSentryMaxRange();
+
+        if (target.getCenterLocation().distanceSquared(muzzle) > maxSentryRange * maxSentryRange) {
             return false;
         }
 
@@ -755,11 +758,11 @@ public class Aiming {
 
         if (target.getTargetType() == TargetType.CANNON)
             ignoredBlocks = 1;
-        if (!CannonsUtil.hasLineOfSight(cannon.getMuzzle(), loctarget, ignoredBlocks)) {
+        if (!CannonsUtil.hasLineOfSight(muzzle, loctarget, ignoredBlocks)) {
             return false;
         }
 
-        Vector direction = newTarget.toVector().subtract(cannon.getMuzzle().toVector());
+        Vector direction = newTarget.toVector().subtract(muzzle.toVector());
         double yaw = CannonsUtil.vectorToYaw(direction);
         double pitch = CannonsUtil.vectorToPitch(direction);
         //can the cannon fire on this player
@@ -868,18 +871,19 @@ public class Aiming {
         //make a few iterations until we hit something
         for (int i = 0; start.distance(predictor.getLoc()) < cannon.getCannonDesign().getSentryMaxRange() * 1.2 && i < maxInterations; i++) {
             //is target distance shorter than before
-            double newDist = predictor.getLocation().distance(target.getCenterLocation());
-            if (newDist < targetDist) {
-                targetDist = newDist;
-            } else {
+            Location predictorLoc = predictor.getLocation();
+            double newDist = predictorLoc.distance(target.getCenterLocation());
+
+            if (!(newDist < targetDist)) {
                 // missed the target
                 return true;
             }
+            targetDist = newDist;
             //see if we hit something, but wait until the cannonball is 1 block away (safety first)
-            Block block = predictor.getLocation().getBlock();
+            Block block = predictorLoc.getBlock();
             if (start.distance(predictor.getLoc()) > 1. && !block.isEmpty()) {
                 predictor.revertProjectileLocation(false);
-                return CannonsUtil.findSurface(predictor.getLocation(), predictor.getVel()).distance(target.getCenterLocation()) < maxdistance;
+                return CannonsUtil.findSurface(predictorLoc, predictor.getVel()).distance(target.getCenterLocation()) < maxdistance;
             }
             predictor.updateProjectileLocation(false);
         }
@@ -1241,11 +1245,14 @@ public class Aiming {
         //make a few iterations until we hit something
         for (int i = 0; start.distance(predictor.getLoc()) < config.getImitatedPredictorDistance() && i < config.getImitatedPredictorIterations(); i++) {
             //see if we hit something
-            Block block = predictor.getLocation().getBlock();
+            Location loc = predictor.getLocation();
+
+            Block block = loc.getBlock();
             if (!block.isEmpty()) {
                 predictor.revertProjectileLocation(false);
-                return CannonsUtil.findSurface(predictor.getLocation(), predictor.getVel());
+                return CannonsUtil.findSurface(loc, predictor.getVel());
             }
+
             predictor.updateProjectileLocation(false);
         }
 

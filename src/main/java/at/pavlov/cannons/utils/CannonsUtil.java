@@ -851,32 +851,40 @@ public class CannonsUtil
      */
     public static HashMap<UUID, Target> getNearbyTargets(Location l, int minRadius, int maxRadius){
         int chunkTargets = maxRadius < 16 ? 1 : (maxRadius - (maxRadius % 16))/16;
-        HashMap<UUID, Target> radiusTargets = new HashMap<UUID, Target>();
-        for (int chX = 0 -chunkTargets; chX <= chunkTargets; chX ++){
-            for (int chZ = 0 -chunkTargets; chZ <= chunkTargets; chZ++){
-                int x=(int) l.getX(),y=(int) l.getY(),z=(int) l.getZ();
+        HashMap<UUID, Target> radiusTargets = new HashMap<>();
+
+        for (int chX = -chunkTargets; chX <= chunkTargets; chX++){
+            for (int chZ = -chunkTargets; chZ <= chunkTargets; chZ++){
+
+                int x=(int) l.getX(), y=(int) l.getY(), z=(int) l.getZ();
+
                 for (Entity e : new Location(l.getWorld(),x+(chX*16),y,z+(chZ*16)).getChunk().getEntities()){
-                    if (e.getWorld().equals(l.getWorld())) {
-                        double dist = e.getLocation().distance(l);
-                        if (e instanceof LivingEntity && !e.isDead() && minRadius <= dist && dist <= maxRadius && e.getLocation().getBlock() != l.getBlock()) {
-                            if ((e instanceof Player)){
-                                Player p = (Player) e;
-                                if (p.getGameMode() == GameMode.CREATIVE || p.hasPermission("cannons.admin.notarget"))
-                                    continue;
-                            }
-                            radiusTargets.put(e.getUniqueId(), new Target(e));
-                        }
+                    if (!e.getWorld().equals(l.getWorld())) {
+                        continue;
                     }
+
+                    double dist = e.getLocation().distanceSquared(l);
+                    if (!(e instanceof LivingEntity) || e.isDead() || !(minRadius*minRadius <= dist) || !(dist <= maxRadius*maxRadius) || e.getLocation().getBlock() == l.getBlock()) {
+                        continue;
+                    }
+
+                    if ((e instanceof Player)){
+                        Player p = (Player) e;
+                        if (p.getGameMode() == GameMode.CREATIVE || p.hasPermission("cannons.admin.notarget"))
+                            continue;
+                    }
+
+                    radiusTargets.put(e.getUniqueId(), new Target(e));
                 }
             }
         }
         for (Cannon cannon : CannonManager.getCannonsInSphere(l, maxRadius))
-            if (cannon.getRandomBarrelBlock().distance(l) > minRadius)
+            if (cannon.getRandomBarrelBlock().distanceSquared(l) > minRadius * minRadius)
                 radiusTargets.put(cannon.getUID(), new Target(cannon));
 
         // additional targets from different plugins e.g. ships
         for (Target target : TargetManager.getTargetsInSphere(l, maxRadius))
-            if (target.getCenterLocation().distance(l) > minRadius)
+            if (target.getCenterLocation().distanceSquared(l) > minRadius * minRadius)
                 radiusTargets.put(target.getUniqueId(), target);
         return radiusTargets;
     }

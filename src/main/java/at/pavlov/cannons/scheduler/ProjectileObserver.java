@@ -119,9 +119,9 @@ public class ProjectileObserver {
         for(Player p : loc.getWorld().getPlayers())
         {
             Location pl = p.getLocation();
-            double distance = pl.distance(loc);
+            double distance = pl.distanceSquared(loc);
 
-            if(distance <= maxDist)
+            if(distance <= maxDist * maxDist)
                 plugin.getFakeBlockHandler().imitatedSphere(p, loc, 1, Bukkit.createBlockData(liquid.getType()), FakeBlockType.WATER_SPLASH, 1.0);
 
         }
