@@ -33,8 +33,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CannonManager
 {
-	private static final ConcurrentHashMap<UUID, Cannon> cannonList = new ConcurrentHashMap<UUID, Cannon>();
-    private static final ConcurrentHashMap<String, UUID> cannonNameMap = new ConcurrentHashMap<String, UUID>();
+	private static final ConcurrentHashMap<UUID, Cannon> cannonList = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, UUID> cannonNameMap = new ConcurrentHashMap<>();
 
 
     private final Cannons plugin;
@@ -89,7 +89,7 @@ public class CannonManager
             if (cannon.getOwner()!=null && cannon.getOwner().equals(player.getUniqueId()))
                 removeCannon(cannon, true, false, BreakCause.Dismantling);
             else
-            userMessages.sendMessage(MessageEnum.ErrorDismantlingNotOwner, player, cannon);
+                userMessages.sendMessage(MessageEnum.ErrorDismantlingNotOwner, player, cannon);
         }
         else{
             userMessages.sendMessage(MessageEnum.PermissionErrorDismantle, player, cannon);
@@ -325,7 +325,7 @@ public class CannonManager
             cannon.addWhitelistPlayer(cannon.getOwner());
 		
 		//if the cannonName is empty make a new one
-		if (cannon.getCannonName() ==  null || cannon.getCannonName().equals(""))
+		if (cannon.getCannonName() ==  null || cannon.getCannonName().isEmpty())
 			cannon.setCannonName(newCannonName(cannon));
 
 		// add cannon to the list
@@ -357,7 +357,7 @@ public class CannonManager
      */
     public static HashSet<Cannon> getCannonsInSphere(Location center, double sphereRadius)
     {
-        HashSet<Cannon> newCannonList = new HashSet<Cannon>();
+        HashSet<Cannon> newCannonList = new HashSet<>();
 
         for (Cannon cannon : getCannonList().values()) {
             if (cannon.getWorld().equals(center.getWorld().getUID())) {
@@ -379,16 +379,18 @@ public class CannonManager
      */
     public static HashSet<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
     {
-        HashSet<Cannon> newCannonList = new HashSet<Cannon>();
+        HashSet<Cannon> newCannonList = new HashSet<>();
 
         for (Cannon cannon : getCannonList().values())
         {
-            if (cannon.getWorld().equals(center.getWorld().getUID())) {
-                Location newLoc = cannon.getCannonDesign().getBarrelBlocks(cannon).get(0);
-                Vector box = newLoc.subtract(center).toVector();
-                if (cannon.getWorld().equals(center.getWorld().getUID()) && Math.abs(box.getX()) < lengthX / 2 && Math.abs(box.getY()) < lengthY / 2 && Math.abs(box.getZ()) < lengthZ / 2)
-                    newCannonList.add(cannon);
+            if (!cannon.getWorld().equals(center.getWorld().getUID())) {
+                continue;
             }
+
+            Location newLoc = cannon.getCannonDesign().getBarrelBlocks(cannon).get(0);
+            Vector box = newLoc.subtract(center).toVector();
+            if (cannon.getWorld().equals(center.getWorld().getUID()) && Math.abs(box.getX()) < lengthX / 2 && Math.abs(box.getY()) < lengthY / 2 && Math.abs(box.getZ()) < lengthZ / 2)
+                newCannonList.add(cannon);
         }
         return newCannonList;
     }
@@ -411,7 +413,7 @@ public class CannonManager
      */
     public static HashSet<Cannon> getCannonsByLocations(List<Location> locations)
     {
-        HashSet<Cannon> newCannonList = new HashSet<Cannon>();
+        HashSet<Cannon> newCannonList = new HashSet<>();
         for (Cannon cannon : getCannonList().values())
         {
             for (Location loc : locations)
@@ -433,7 +435,7 @@ public class CannonManager
      */
     public HashSet<Cannon> getCannons(List<Location> locations, UUID player, boolean silent)
     {
-        HashSet<Cannon> newCannonList = new HashSet<Cannon>();
+        HashSet<Cannon> newCannonList = new HashSet<>();
         for (Location loc : locations)
         {
             Cannon newCannon = getCannon(loc, player, silent);
@@ -502,7 +504,7 @@ public class CannonManager
 	public Cannon getCannon(Location cannonBlock, UUID owner, boolean silent)
 	{
         // is this block material used for a cannon design
-        if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getBlockData().getMaterial()))
+        if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getType()))
             return null;
 
         long startTime = System.nanoTime();
@@ -518,28 +520,22 @@ public class CannonManager
         Cannon cannonFromSign = getCannon(cannon.getCannonNameFromSign());
 
         // if there is a different name on the cannon sign we use that one
-        if (cannonFromSign != null)
-        {
+        if (cannonFromSign != null) {
             plugin.logDebug("use entry from cannon sign");
             //update the position of the cannon
             cannonFromSign.setCannonDirection(cannon.getCannonDirection());
             cannonFromSign.setOffset(cannon.getOffset());
             //use the updated object from the storage
             cannon = cannonFromSign;
-        }
-        else
-        {
+        } else {
             // this cannon has no sign, so look in the database if there is something
             Cannon storageCannon =  getCannonFromStorage(cannonBlock);
-            if (storageCannon != null)
-            {
+            if (storageCannon != null) {
                 //try to find something in the storage
                 plugin.logDebug("cannon found in storage");
                 cannon = storageCannon;
-            }
-            //nothing in the storage, so we make a new entry
-            else
-            {
+            } else { //nothing in the storage, so we make a new entry
+
                 //search for a player, because owner == null is not valid
                 if (owner == null)
                     return null;
@@ -563,33 +559,28 @@ public class CannonManager
                 Bukkit.getServer().getPluginManager().callEvent(cbceEvent);
 
                 //add cannon to the list if everything was fine and return the cannon
-                if (!cbceEvent.isCancelled() && cbceEvent.getMessage() != null && cbceEvent.getMessage() == MessageEnum.CannonCreated)
-                {
-                    plugin.logDebug("a new cannon was created by " + cannon.getOwner());
-                    createCannon(cannon, true);
-
+                if (cbceEvent.isCancelled() || cbceEvent.getMessage() == null || cbceEvent.getMessage() != MessageEnum.CannonCreated) {
                     //send messages
-                    if (!silent)
-                    {
-                        userMessages.sendMessage(message, owner, cannon);
-                        CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundCreate());
-                    }
-                    CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player.getUniqueId());
-                	Bukkit.getServer().getPluginManager().callEvent(caceEvent);
-                }
-                else
-                {
-                    //send messages
-                    if (!silent)
-                    {
+                    if (!silent) {
                         userMessages.sendMessage(message, player, cannon);
                         CannonsUtil.playErrorSound(cannon.getMuzzle());
                     }
 
-
                     plugin.logDebug("Creating a cannon event was canceled: " + message);
                     return null;
                 }
+
+                plugin.logDebug("a new cannon was created by " + cannon.getOwner());
+                createCannon(cannon, true);
+
+                //send messages
+                if (!silent) {
+                    userMessages.sendMessage(message, owner, cannon);
+                    CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundCreate());
+                }
+
+                CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player.getUniqueId());
+                Bukkit.getServer().getPluginManager().callEvent(caceEvent);
             }
         }
 
@@ -621,56 +612,52 @@ public class CannonManager
 	{
 
 	    // is this block material used for a cannon design
-        if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getBlockData().getMaterial()))
+        if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getType()))
             return null;
 
 		World world = cannonBlock.getWorld();
 
 		// check all cannon design if this block is part of the design
-		for (CannonDesign cannonDesign : plugin.getDesignStorage().getCannonDesignList())
-		{
+		for (CannonDesign cannonDesign : plugin.getDesignStorage().getCannonDesignList()) {
 			// check of all directions
 			BlockFace cannonDirection = BlockFace.NORTH;
-			for (int i = 0; i < 4; i++)
-			{
+			for (int i = 0; i < 4; i++) {
 				// for all blocks for the design
 				List<SimpleBlock> designBlockList = cannonDesign.getAllCannonBlocks(cannonDirection);
                 //check for empty entries
-                if (designBlockList.size() == 0)
-                {
+                if (designBlockList.isEmpty()) {
                     plugin.logSevere("There are empty cannon design schematics in your design folder. Please check it.");
                     return null;
                 }
-				for (SimpleBlock designBlock : designBlockList)
-				{
+
+				for (SimpleBlock designBlock : designBlockList) {
 					// compare blocks
-					if (designBlock.compareMaterialAndFacing(cannonBlock.getBlock().getBlockData()))
-					{
-						// this block is same as in the design, get the offset
-						Vector offset = designBlock.subtractInverted(cannonBlock).toVector();
+                    if (!designBlock.compareMaterialAndFacing(cannonBlock.getBlock().getBlockData())) {
+                        continue;
+                    }
 
-						// check all other blocks of the cannon
-						boolean isCannon = true;
+                    // this block is same as in the design, get the offset
+                    Vector offset = designBlock.subtractInverted(cannonBlock).toVector();
 
-						for (SimpleBlock checkBlocks : designBlockList)
-						{
-							if (!checkBlocks.compareMaterialAndFacing(world, offset))
-							{
-								// if the block does not match this is not the
-								// right one
-								isCannon = false;
-								break;
-							}
-						}
+                    // check all other blocks of the cannon
+                    boolean isCannon = true;
 
-						// this is a cannon
-						if (isCannon)
-						{
-                           // cannon
-							return new Cannon(cannonDesign, world.getUID(), offset, cannonDirection, owner);
-						}
-					}
-				}
+                    for (SimpleBlock checkBlocks : designBlockList)
+                    {
+                        if (!checkBlocks.compareMaterialAndFacing(world, offset))
+                        {
+                            // if the block does not match this is not the
+                            // right one
+                            isCannon = false;
+                            break;
+                        }
+                    }
+
+                    // this is a cannon
+                    if (isCannon) {
+                        return new Cannon(cannonDesign, world.getUID(), offset, cannonDirection, owner);
+                    }
+                }
 				// rotate cannon direction
 				cannonDirection = CannonsUtil.roatateFace(cannonDirection);
 			}
@@ -684,17 +671,13 @@ public class CannonManager
 	 * @param player the owner of the cannons
 	 * @return number of cannons
 	 */
-	public int getNumberOfCannons(UUID player)
-	{
+	public int getNumberOfCannons(UUID player) {
 		int i = 0;
 		for (Cannon cannon : cannonList.values())
 		{
-			if (cannon.getOwner() == null)
-			{
+			if (cannon.getOwner() == null) {
 				plugin.logSevere("Cannon has no owner. Contact the plugin developer");
-			}
-			else if (cannon.getOwner().equals(player))
-			{
+			} else if (cannon.getOwner().equals(player)) {
 				i++;
 			}
 		}
@@ -733,8 +716,7 @@ public class CannonManager
 	 * @param player check the number of cannon this player can build
 	 * @return the maximum number of cannons
 	 */
-    public int getCannonBuiltLimit(Player player)
-	{
+    public int getCannonBuiltLimit(Player player) {
 		// the player is not valid - no limit check
 		if (player == null) return Integer.MAX_VALUE;
 
@@ -779,22 +761,17 @@ public class CannonManager
     {
         if (player == null) return -1;
 
-        if (player.hasPermission("cannons.limit." + Integer.MAX_VALUE))
-        {
+        if (player.hasPermission("cannons.limit." + Integer.MAX_VALUE)) {
             //all nodes are enabled
             plugin.logDebug("BuildLimit: all entries for cannons.limit.x are TRUE. Returning max build limit.");
             return Integer.MAX_VALUE;
         }
-        else
-        {
-            // else check all nodes for the player
-            for (int i = 100; i >= 0; i--)
-            {
-                if (player.hasPermission("cannons.limit." + i))
-                {
-                    plugin.logDebug("BuildLimit: entry for cannons.limit."+i+" found");
-                    return i;
-                }
+
+        // else check all nodes for the player
+        for (int i = 100; i >= 0; i--) {
+            if (player.hasPermission("cannons.limit." + i)) {
+                plugin.logDebug("BuildLimit: entry for cannons.limit." + i + " found");
+                return i;
             }
         }
         //no build limit found
@@ -858,8 +835,7 @@ public class CannonManager
 	 * @param owner the owner of the cannon
      * @return returns true if there was an entry of this player in the list
 	 */
-	public boolean deleteCannons(UUID owner)
-	{
+	public boolean deleteCannons(UUID owner) {
 		Iterator<Cannon> iter = cannonList.values().iterator();
         boolean inList = false;
 
@@ -879,10 +855,8 @@ public class CannonManager
     /**
      * reloads designs from the design list and updates all entries in the cannon
      */
-    public void updateCannons()
-    {
-        for (Cannon cannon : cannonList.values())
-        {
+    public void updateCannons() {
+        for (Cannon cannon : cannonList.values()) {
             cannon.setCannonDesign(plugin.getCannonDesign(cannon));
             if (cannon.getLoadedProjectile() != null) {
                 ItemHolder item = cannon.getLoadedProjectile().getLoadingItem();
@@ -890,8 +864,4 @@ public class CannonManager
             }
         }
     }
-
-
-
-
 }

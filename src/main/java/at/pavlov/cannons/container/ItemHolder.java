@@ -20,6 +20,7 @@ public class ItemHolder
 	private List<String> lore;
 	private boolean useTypeName;
 
+	//half of this stuff is useless, keeping it for compatibity maybe for now
 	private static Class localeClass = null;
 	private static Class craftItemStackClass = null, nmsItemStackClass = null, nmsItemClass = null;
 	private static String OBC_PREFIX = Bukkit.getServer().getClass().getPackage().getName();
@@ -37,23 +38,24 @@ public class ItemHolder
 
 		material = item.getType();
 
-		if (item.hasItemMeta()){
-            ItemMeta meta = item.getItemMeta();
-			if (meta.hasDisplayName() && meta.getDisplayName()!=null)
-				displayName = meta.getDisplayName();
-			else if (!meta.hasDisplayName()){
-				useTypeName = true;
-				displayName = getFriendlyName(item, true);
-				//Cannons.getPlugin().logDebug("display name: " + displayName);
-			}
-			else
-				displayName = "";
-			if (meta.hasLore() && meta.getLore()!=null)
-				lore = meta.getLore();
-			else
-				lore = new ArrayList<String>();
+        if (!item.hasItemMeta()) {
+            return;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta.hasDisplayName() && meta.getDisplayName()!=null) {
+			displayName = meta.getDisplayName();
+		} else if (!meta.hasDisplayName()){
+            useTypeName = true;
+            displayName = getFriendlyName(item, true);
+            //Cannons.getPlugin().logDebug("display name: " + displayName);
+        } else {
+			displayName = "";
 		}
-	}
+
+		boolean loreExists = meta.hasLore() && meta.getLore() != null;
+        lore = loreExists ? meta.getLore() : new ArrayList<>();
+    }
 
     @Deprecated
     public ItemHolder(int id)
@@ -69,19 +71,11 @@ public class ItemHolder
 
 	public ItemHolder(Material material, String description, List<String> lore)
 	{
-        if (material != null)
-		    this.material = material;
-        else
-            this.material = Material.AIR;
-		if (description != null)
-			this.displayName = ChatColor.translateAlternateColorCodes('&',description);
-		else
-			this.displayName = "";
+        this.material = Objects.requireNonNullElse(material, Material.AIR);
 
-		if (lore != null)
-			this.lore = lore;
-		else
-			this.lore = new ArrayList<String>();
+		Objects.requireNonNullElse(description, "");
+        this.displayName = description == null ? "" : ChatColor.translateAlternateColorCodes('&', description);
+        this.lore = Objects.requireNonNullElseGet(lore, ArrayList::new);
 	}
 
 	public ItemHolder(String str)
@@ -89,34 +83,30 @@ public class ItemHolder
         // data structure:
         // id;DESCRIPTION;LORE1;LORE2
         // HOE;COOL Item;Looks so cool;Fancy
-        try
-        {
-        	material = Material.AIR;
-            Scanner s = new Scanner(str).useDelimiter("\\s*;\\s*");
-            if (s.hasNext()) {
-                String next = s.next();
-                if (next != null)
-                    this.material = Material.matchMaterial(next);
-                if (this.material == null) {
-                    this.material = Material.AIR;
-                }
-            }
+        try {
+			material = Material.AIR;
+			Scanner s = new Scanner(str).useDelimiter("\\s*;\\s*");
 
-			if (s.hasNext())
-				displayName = ChatColor.translateAlternateColorCodes('&', s.next());
-			else
-				displayName = "";
-
-			lore = new ArrayList<String>();
-			while (s.hasNext()){
-                String nextStr = s.next();
-                if (!nextStr.equals(""))
-				    lore.add(nextStr);
+			if (s.hasNext()) {
+				String next = s.next();
+				if (next != null)
+					this.material = Material.matchMaterial(next);
+				if (this.material == null) {
+					this.material = Material.AIR;
+				}
 			}
-            s.close();
-        }
-        catch(Exception e)
-        {
+
+			displayName = s.hasNext() ? ChatColor.translateAlternateColorCodes('&', s.next()) : "";
+			lore = new ArrayList<>();
+
+			while (s.hasNext()) {
+				String nextStr = s.next();
+				if (!nextStr.isEmpty())
+					lore.add(nextStr);
+			}
+
+			s.close();
+		} catch(Exception e) {
             System.out.println("[CANNONS] Error while converting " + str + ". Check formatting (minecraft:clock)");
         }
 	}
@@ -183,52 +173,51 @@ public class ItemHolder
 	 * @param item the item to compare
 	 * @return true if both items are equal in data and id or only the id if one data = -1
 	 */	
-	public boolean equalsFuzzy(ItemHolder item)
-	{
-		if (item != null)
-		{
-			//System.out.println("item: " + item.getDisplayName() + " cannons " + this.getDisplayName());
-            //Item does not have the required display name
-            if ((this.hasDisplayName() && !item.hasDisplayName()) || (!this.hasDisplayName() && item.hasDisplayName()))
-                return false;
-            //Display name do not match
-            if (item.hasDisplayName() && this.hasDisplayName() && !item.getDisplayName().equals(displayName))
-				return false;
+	public boolean equalsFuzzy(ItemHolder item) {
+        if (item == null) {
+            return false;
+        }
 
-            if (this.hasLore()) {
-                //does Item have a Lore
-                if (!item.hasLore())
-                    return false;
+		//System.out.println("item: " + item.getDisplayName() + " cannons " + this.getDisplayName());
+        //Item does not have the required display name
+        if ((this.hasDisplayName() && !item.hasDisplayName()) || (!this.hasDisplayName() && item.hasDisplayName()))
+            return false;
 
-                Collection<String> similar = new HashSet<String>(this.lore);
+		//Display name do not match
+        if (item.hasDisplayName() && this.hasDisplayName() && !item.getDisplayName().equals(displayName))
+            return false;
 
-                int size = similar.size();
-                similar.retainAll(item.getLore());
-                if (similar.size() < size)
-                    return false;
-            }
-			return item.getType().equals(this.material);
-		}	
-		return false;
-	}
+        if (!this.hasLore()) {
+            return item.getType().equals(this.material);
+        }
+        //does Item have a Lore
+        if (!item.hasLore())
+            return false;
+
+        Collection<String> similar = new HashSet<>(this.lore);
+
+        int size = similar.size();
+        similar.retainAll(item.getLore());
+
+		if (similar.size() < size)
+            return false;
+
+        return item.getType().equals(this.material);
+    }
 	
 	/**
 	 * compares id and data, but skips data comparison if one is -1
 	 * @param block item to compare
 	 * @return true if both items are equal in data and id or only the id if one data = -1
 	 */
-	public boolean equalsFuzzy(Block block)
-	{
+	public boolean equalsFuzzy(Block block) {
 		//System.out.println("id:" + item.getId() + "-" + id + " data:" + item.getData() + "-" + data);
-		if (block != null)
-		{
-			if (block.getType().equals(this.material))
-			{
-				return true;
-			}
-		}	
-		return false;
-	}
+        if (block == null) {
+            return false;
+        }
+
+        return block.getType().equals(this.material);
+    }
 	
 	public String toString()
 	{
@@ -261,23 +250,24 @@ public class ItemHolder
     }
 
 	private static String capitalizeFully(String name) {
-		if (name != null) {
-			if (name.length() > 1) {
-				if (name.contains("_")) {
-					StringBuilder sbName = new StringBuilder();
-					for (String subName : name.split("_"))
-						sbName.append(subName.substring(0, 1).toUpperCase() + subName.substring(1).toLowerCase()).append(" ");
-					return sbName.toString().substring(0, sbName.length() - 1);
-				} else {
-					return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-				}
-			} else {
-				return name.toUpperCase();
-			}
-		} else {
-			return "";
-		}
-	}
+        if (name == null) {
+            return "";
+        }
+
+        if (name.length() <= 1) {
+            return name.toUpperCase();
+        }
+
+        if (!name.contains("_")) {
+            return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        }
+
+        StringBuilder sbName = new StringBuilder();
+        for (String subName : name.split("_"))
+            sbName.append(subName.substring(0, 1).toUpperCase() + subName.substring(1).toLowerCase()).append(" ");
+
+		return sbName.toString().substring(0, sbName.length() - 1);
+    }
 
 	private static String getFriendlyName(Material material) {
 		return material == null ? "Air" : getFriendlyName(new ItemStack(material), false);
@@ -285,42 +275,11 @@ public class ItemHolder
 
 	private static String getFriendlyName(ItemStack itemStack, boolean checkDisplayName) {
 		if (itemStack == null || itemStack.getType() == Material.AIR) return "Air";
-//		try {
-//			if (craftItemStackClass == null)
-//				craftItemStackClass = Class.forName(OBC_PREFIX + ".inventory.CraftItemStack");
-//			Method nmsCopyMethod = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class);
-//
-//			if (nmsItemStackClass == null) nmsItemStackClass = Class.forName(NMS_PREFIX + ".ItemStack");
-//			Object nmsItemStack = nmsCopyMethod.invoke(null, itemStack);
-//
-//			Object itemName = null;
-//			if (checkDisplayName) {
-//				Method getNameMethod = nmsItemStackClass.getMethod("getName");
-//				itemName = getNameMethod.invoke(nmsItemStack);
-//			} else {
-//				Method getItemMethod = nmsItemStackClass.getMethod("getItem");
-//				Object nmsItem = getItemMethod.invoke(nmsItemStack);
-//
-//				if (nmsItemClass == null) nmsItemClass = Class.forName(NMS_PREFIX + ".Item");
-//
-//				Method getNameMethod = nmsItemClass.getMethod("getName");
-//				Object localItemName = getNameMethod.invoke(nmsItem);
-//
-//				if (localeClass == null) localeClass = Class.forName(NMS_PREFIX + ".LocaleI18n");
-//				Method getLocaleMethod = localeClass.getMethod("get", String.class);
-//
-//				Object localeString = localItemName == null ? "" : getLocaleMethod.invoke(null, localItemName);
-//				itemName = ("" + getLocaleMethod.invoke(null, localeString.toString() + ".name")).trim();
-//			}
-//			return itemName != null ? itemName.toString() : capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-//		return capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
 
 		if (checkDisplayName && itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()) {
 			return itemStack.getItemMeta().getDisplayName();
 		}
+
 		return capitalizeFully(itemStack.getType().name().replace("_", " ").toLowerCase());
 	}
 }

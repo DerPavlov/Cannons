@@ -17,8 +17,8 @@ public class FlyingProjectile
 	private final long spawnTime;
 	
 	private final UUID entityUID;
-    private UUID shooterUID;
-    private UUID worldUID;
+    private final UUID shooterUID;
+    private final UUID worldUID;
     private UUID cannonUID;
 	private final Projectile projectile;
     private final org.bukkit.projectiles.ProjectileSource source;
@@ -34,9 +34,9 @@ public class FlyingProjectile
     //if the teleport was already performed
     private boolean teleported;
     //was the projectile fired by a player, redstone or a sentry
-    private ProjectileCause projectileCause;
+    private final ProjectileCause projectileCause;
     private boolean hasDetonated;
-    private MovingObject predictor;
+    private final MovingObject predictor;
 
 
 	public FlyingProjectile(Projectile projectile, org.bukkit.entity.Projectile projectile_entity, UUID shooterUID, org.bukkit.projectiles.ProjectileSource source, Location playerLoc, UUID cannonId, ProjectileCause projectileCause)
@@ -73,17 +73,16 @@ public class FlyingProjectile
     /*
      * Returns the entity of the flying projectile
      * This is time consuming, the projectile should be cached
+     *
+     *
      * @return
      */
-	public org.bukkit.entity.Projectile getProjectileEntity()
-	{
-        World world = Bukkit.getWorld(worldUID);
-        for (Entity entity : world.getEntitiesByClass(org.bukkit.entity.Projectile.class)) {
-            if (entity instanceof org.bukkit.entity.Projectile && entity.getUniqueId().equals(entityUID)) {
-                return (org.bukkit.entity.Projectile) entity;
-            }
-        }
-        return null;
+	public org.bukkit.entity.Projectile getProjectileEntity() {
+        Entity e = Bukkit.getEntity(entityUID);
+        if (e == null)
+            return null;
+
+        return (org.bukkit.entity.Projectile) Bukkit.getEntity(entityUID);
 	}
 
 	public Projectile getProjectile()

@@ -10,6 +10,8 @@ New features/fixes:
 - Random Optimization (Original created a random number generator every time it needed to be used, now each object has its own Random)
 - Made ProjectilePiercingEvent cancellable
 - Upgraded to Java 14 language level
+- Better FlyingProjectile lookup
+- UserMessage Optimization
 
 How to build / Get the jar
 ---------------

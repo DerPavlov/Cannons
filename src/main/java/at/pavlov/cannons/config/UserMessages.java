@@ -68,7 +68,7 @@ public class UserMessages {
 		{
 			String key = keyEnum.getString();
 			String entry = getEntry(key);
-			if (!entry.equals(""))
+			if (!entry.isEmpty())
 			{
 				messageMap.put(key, entry);
 			}
@@ -352,26 +352,30 @@ public class UserMessages {
 			}
 			// show whitelist
 			if (cannon.getWhitelist() != null){
-				List<String> names = new ArrayList<String>();
+				List<String> names = new ArrayList<>();
 				for (UUID playerUID : cannon.getWhitelist()){
 					OfflinePlayer offplayer = Bukkit.getOfflinePlayer(playerUID);
 					if (offplayer != null) {
 						names.add(offplayer.getName());
 					}
 				}
-				if (names.size() > 0)
+				if (!names.isEmpty())
 					message = message.replace("WHITELIST", "\n " + ChatColor.GOLD + "  - " + StringUtils.join(names, "\n " + ChatColor.GOLD + "  - "));
 				else
 					message = message.replace("WHITELIST", ChatColor.GOLD + "none");
 			}
         }
 
-        if (player != null)
-		{
-			//replace the number of cannons
-            message = message.replace("PLAYER", player.getName());
-			message = message.replace("LIMIT", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getUniqueId())));
-		}
+        if (player == null) {
+            return message;
+        }
+        //replace the number of cannons
+        message = message.replace("PLAYER", player.getName());
+
+        //check limit only if needed
+        if (message.contains("LIMIT"))
+            message = message.replace("LIMIT", Integer.toString(plugin.getCannonManager().getNumberOfCannons(player.getUniqueId())));
+
 		return message;
 	}
 
@@ -384,18 +388,13 @@ public class UserMessages {
 	 * @return death message
 	 */
 	public String getDeathMessage(UUID killed, UUID shooter, Cannon cannon, Projectile projectile){
-		MessageEnum messageEnum;
-		switch (random.nextInt(3)){
-			case 1:
-				messageEnum = MessageEnum.DeathMessage2;
-				break;
-			case 2:
-				messageEnum = MessageEnum.DeathMessage3;
-				break;
-			default:
-				messageEnum = MessageEnum.DeathMessage1;
-		}
-		Player killedPlayer = null;
+		MessageEnum messageEnum = switch (random.nextInt(3)) {
+            case 1 -> MessageEnum.DeathMessage2;
+            case 2 -> MessageEnum.DeathMessage3;
+            default -> MessageEnum.DeathMessage1;
+        };
+
+        Player killedPlayer = null;
 		if (killed != null) {
 			killedPlayer = Bukkit.getPlayer(killed);
 		}
@@ -406,6 +405,7 @@ public class UserMessages {
 			if (shooterPlayer != null)
 				shooterStr = shooterPlayer.getName();
 		}
+
 		String projectileStr = "none";
 		if (projectile != null)
 			projectileStr = projectile.getProjectileName();
