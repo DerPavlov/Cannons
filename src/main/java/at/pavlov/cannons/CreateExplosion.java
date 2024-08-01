@@ -18,6 +18,7 @@ import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.ExplosionResult;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -217,7 +218,7 @@ public class CreateExplosion {
 
         if (!piercingEvent.isCancelled()) {
             // create bukkit event
-            EntityExplodeEvent event = new EntityExplodeEvent(projectile_entity, impactLoc, piercingEvent.getBlockList(), 1.0f);
+            EntityExplodeEvent event = new EntityExplodeEvent(projectile_entity, impactLoc, piercingEvent.getBlockList(), 1.0f, ExplosionResult.DESTROY);
             this.plugin.getServer().getPluginManager().callEvent(event);
 
             this.plugin.logDebug("was the cannons explode event canceled: " + event.isCancelled());
@@ -1192,7 +1193,7 @@ public class CreateExplosion {
         }
 
         // apply to rocket
-        final Firework fw = (Firework) world.spawnEntity(projectile_entity.getLocation(), EntityType.FIREWORK);
+        final Firework fw = (Firework) world.spawnEntity(projectile_entity.getLocation(), EntityType.FIREWORK_ROCKET);
         FireworkMeta meta = fw.getFireworkMeta();
 
         meta.addEffect(fwb.build());

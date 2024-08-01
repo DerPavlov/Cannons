@@ -425,7 +425,7 @@ public class PlayerListener implements Listener
                 if (design.getBurnDamage() > 0)
                     player.damage(design.getBurnDamage()*2);
                 if (design.getBurnSlowing() > 0)
-                    PotionEffectType.SLOW.createEffect((int) (design.getBurnSlowing()*20.0), 0).apply(player);
+                    PotionEffectType.SLOWNESS.createEffect((int) (design.getBurnSlowing()*20.0), 0).apply(player);
 
                 BlockFace clickedFace = event.getBlockFace();
 

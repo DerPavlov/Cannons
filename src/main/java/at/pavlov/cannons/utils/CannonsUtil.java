@@ -344,37 +344,37 @@ public class CannonsUtil
 
         if (boots != null)
         {
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
+            lvl = boots.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (helmet != null)
         {
-            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
+            lvl = helmet.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (chest != null)
         {
-            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
+            lvl = chest.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (pants != null)
         {
-            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
+            lvl = pants.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
@@ -418,37 +418,37 @@ public class CannonsUtil
         /*
         if (boots != null)
         {
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (helmet != null)
         {
-            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+            lvl = helmet.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (chest != null)
         {
-            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+            lvl = chest.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }
         if (pants != null)
         {
-            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+            lvl = pants.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
         }*/
@@ -472,11 +472,11 @@ public class CannonsUtil
             return reduction;
         }
 
-        int lvl = item.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+        int lvl = item.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
         if (lvl > 0)
             reduction += (int) Math.floor((6 + lvl * lvl) * 1.5 / 3);
 
-        lvl = item.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+        lvl = item.getEnchantmentLevel(Enchantment.PROTECTION);
         if (lvl > 0)
             reduction += (int) Math.floor((6 + lvl * lvl) * 0.75 / 3);
 
@@ -498,7 +498,7 @@ public class CannonsUtil
                 continue;
             }
 
-            int lvl = item.getEnchantmentLevel(Enchantment.DURABILITY);
+            int lvl = item.getEnchantmentLevel(Enchantment.UNBREAKING);
             //chance of breaking in 0-1
             double breakingChance = 0.6+0.4/(lvl+1);
 

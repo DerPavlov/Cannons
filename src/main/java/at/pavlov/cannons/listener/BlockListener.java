@@ -5,6 +5,7 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.cannon.Cannon;
 import org.bukkit.Bukkit;
+import org.bukkit.ExplosionResult;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -35,7 +36,7 @@ public class BlockListener implements Listener {
     @EventHandler
     public void blockExplodeEvent(BlockExplodeEvent event) {
         if (plugin.getMyConfig().isRelayExplosionEvent()) {
-            EntityExplodeEvent explodeEvent = new EntityExplodeEvent(null, event.getBlock().getLocation(), event.blockList(), event.getYield());
+            EntityExplodeEvent explodeEvent = new EntityExplodeEvent(null, event.getBlock().getLocation(), event.blockList(), event.getYield(), ExplosionResult.DESTROY);
             Bukkit.getServer().getPluginManager().callEvent(explodeEvent);
             event.setCancelled(explodeEvent.isCancelled());
         }
