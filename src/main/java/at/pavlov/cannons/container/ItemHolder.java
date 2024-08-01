@@ -118,6 +118,7 @@ public class ItemHolder
 	
 	public ItemStack toItemStack(int amount)
 	{
+		material = material == null ? Material.AIR : material;
 		ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         if (this.hasDisplayName())

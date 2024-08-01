@@ -371,9 +371,15 @@ public class Cannon {
 
         //do this for every cooling item
         for (ItemHolder mat : design.getItemCooling()) {
-            item = mat.toItemStack(item.getAmount());
-            item = InventoryManagement.removeItem(invlist, item);
+            if (mat == null)
+                continue;
 
+            int itemAmount = item.getAmount();
+            if (itemAmount <= 0)
+                continue;
+
+            item = mat.toItemStack(itemAmount);
+            item = InventoryManagement.removeItem(invlist, item);
 
             int usedItems = toCool - item.getAmount();
             this.setTemperature(this.getTemperature() - usedItems * design.getCoolingAmount());
