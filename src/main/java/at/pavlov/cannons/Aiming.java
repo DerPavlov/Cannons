@@ -1,6 +1,5 @@
 package at.pavlov.cannons;
 
-import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.Enum.MessageEnum;
@@ -900,12 +899,15 @@ public class Aiming {
      */
     private double simulateShot(Vector vector, Location muzzle, Location target, EntityType projectileType, int maxInterations) {
         MovingObject cannonball = new MovingObject(muzzle, vector, projectileType);
-        double target_distance = Math.sqrt(Math.pow(target.getX() - muzzle.getX(), 2) + Math.pow(target.getZ() - muzzle.getZ(), 2));
+        double target_distance_squared = Math.pow(target.getX() - muzzle.getX(), 2) + Math.pow(target.getZ() - muzzle.getZ(), 2);
+
         Vector oldLoc = null;
         for (int i = 0; i < 500; i++) {
             cannonball.updateProjectileLocation(false);
             Vector cLoc = cannonball.getLoc();
-            if (Math.sqrt(Math.pow(cLoc.getX() - muzzle.getX(), 2) + Math.pow(cLoc.getZ() - muzzle.getZ(), 2)) > target_distance) {
+            double calculated_distance_squared = Math.pow(cLoc.getX() - muzzle.getX(), 2) + Math.pow(cLoc.getZ() - muzzle.getZ(), 2);
+
+            if (calculated_distance_squared > target_distance_squared) {
                 //calculate intersection
                 if (oldLoc == null)
                     return cLoc.getY() - target.getY();

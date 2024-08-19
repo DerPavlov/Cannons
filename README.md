@@ -17,6 +17,7 @@ Optimizations:
 - Some CannonManager Optimization
 - Random Optimization (Original created a random number generator every time it needed to be used, now each object has its own Random)
 - Distance optimization by using `Location#distanceSquared()` over `Location#distance` when possible
+- Aiming shot simulation Optimization
 
 How to build / Get the jar
 ---------------
