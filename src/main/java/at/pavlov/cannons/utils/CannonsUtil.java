@@ -73,15 +73,15 @@ public class CannonsUtil
 	public static boolean isFolderEmpty(String folderPath)
 	{
 		File file = new File(folderPath);
-		if (file.isDirectory())
-		{
-			if (file.list().length > 0)
-			{
-				//folder is not empty
-				return false;
-			}
-		}
-		return true;
+        if (!file.isDirectory()) {
+            return true;
+        }
+
+        if (file.list().length > 0)  {
+            //folder is not empty
+            return false;
+        }
+        return true;
 	}
 	
 	/**
@@ -194,7 +194,7 @@ public class CannonsUtil
      */
     public static List<SpawnEntityHolder> toSpawnEntityHolderList(List<String> stringList)
     {
-        List<SpawnEntityHolder> entityList = new ArrayList<SpawnEntityHolder>();
+        List<SpawnEntityHolder> entityList = new ArrayList<>();
 
         for (String str : stringList)
         {
@@ -216,15 +216,11 @@ public class CannonsUtil
 	 */
 	public static ArrayList<Block> SurroundingBlocks(Block block)
 	{
-		ArrayList<Block> Blocks = new ArrayList<Block>();
+		ArrayList<Block> Blocks = new ArrayList<>();
 
 		Blocks.add(block.getRelative(BlockFace.UP));
 		Blocks.add(block.getRelative(BlockFace.DOWN));
         Blocks.addAll(HorizontalSurroundingBlocks(block));
-		//Blocks.add(block.getRelative(BlockFace.SOUTH));
-		//Blocks.add(block.getRelative(BlockFace.WEST));
-		//Blocks.add(block.getRelative(BlockFace.NORTH));
-		//Blocks.add(block.getRelative(BlockFace.EAST));
 		return Blocks;
 	}
 
@@ -235,7 +231,7 @@ public class CannonsUtil
 	 */
 	public static ArrayList<Block> HorizontalSurroundingBlocks(Block block)
 	{
-		ArrayList<Block> Blocks = new ArrayList<Block>();
+		ArrayList<Block> Blocks = new ArrayList<>();
 
 		Blocks.add(block.getRelative(BlockFace.SOUTH));
 		Blocks.add(block.getRelative(BlockFace.WEST));
@@ -251,17 +247,17 @@ public class CannonsUtil
 	 * @return
 	 */
     public static int directionToYaw(BlockFace direction) {
-        switch (direction) {
-            case NORTH: return 180;
-            case EAST: return 270;
-            case SOUTH: return 0;
-            case WEST: return 90;
-            case NORTH_EAST: return 135;
-            case NORTH_WEST: return 45;
-            case SOUTH_EAST: return -135;
-            case SOUTH_WEST: return -45;
-            default: return 0;
-        }
+        return switch (direction) {
+            case NORTH -> 180;
+            case EAST -> 270;
+            case SOUTH -> 0;
+            case WEST -> 90;
+            case NORTH_EAST -> 135;
+            case NORTH_WEST -> 45;
+            case SOUTH_EAST -> -135;
+            case SOUTH_WEST -> -45;
+            default -> 0;
+        };
     }
 
     /**
@@ -339,9 +335,13 @@ public class CannonsUtil
         ItemStack chest = inv.getChestplate();
         ItemStack pants = inv.getLeggings();
 
-        int lvl = 0;
         double reduction = 0.0;
+        reduction += getItemSpecialeProtection(boots, Enchantment.BLAST_PROTECTION);
+        reduction += getItemSpecialeProtection(helmet, Enchantment.BLAST_PROTECTION);
+        reduction += getItemSpecialeProtection(chest, Enchantment.BLAST_PROTECTION);
+        reduction += getItemSpecialeProtection(pants, Enchantment.BLAST_PROTECTION);
 
+        /*
         if (boots != null)
         {
             lvl = boots.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
@@ -377,7 +377,7 @@ public class CannonsUtil
             lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION);
             if (lvl > 0)
                 reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }
+        }*/
         //cap it to 25
         if (reduction > 25) reduction = 25;
 
@@ -410,10 +410,10 @@ public class CannonsUtil
 
         //int lvl = 1;
         double reduction = 0;
-        reduction += getItemProjectileProtection(boots);
-        reduction += getItemProjectileProtection(helmet);
-        reduction += getItemProjectileProtection(chest);
-        reduction += getItemProjectileProtection(pants);
+        reduction += getItemSpecialeProtection(boots, Enchantment.PROJECTILE_PROTECTION);
+        reduction += getItemSpecialeProtection(helmet, Enchantment.PROJECTILE_PROTECTION);
+        reduction += getItemSpecialeProtection(chest, Enchantment.PROJECTILE_PROTECTION);
+        reduction += getItemSpecialeProtection(pants, Enchantment.PROJECTILE_PROTECTION);
 
         /*
         if (boots != null)
@@ -465,14 +465,14 @@ public class CannonsUtil
         return reduction*4/100;
     }
 
-    public static int getItemProjectileProtection(ItemStack item) {
+    public static double getItemSpecialeProtection(ItemStack item, Enchantment special) {
         int reduction = 0;
 
         if (item == null) {
             return reduction;
         }
 
-        int lvl = item.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
+        int lvl = item.getEnchantmentLevel(special);
         if (lvl > 0)
             reduction += (int) Math.floor((6 + lvl * lvl) * 1.5 / 3);
 
@@ -516,21 +516,14 @@ public class CannonsUtil
      */
     public static BlockFace randomBlockFaceNoDown()
     {
-        switch (random.nextInt(5))
-        {
-            case 0:
-                return BlockFace.UP;
-            case 1:
-                return BlockFace.EAST;
-            case 2:
-                return BlockFace.SOUTH;
-            case 3:
-                return BlockFace.WEST;
-            case 4:
-                return BlockFace.NORTH;
-            default:
-                return BlockFace.SELF;
-        }
+        return switch (random.nextInt(5)) {
+            case 0 -> BlockFace.UP;
+            case 1 -> BlockFace.EAST;
+            case 2 -> BlockFace.SOUTH;
+            case 3 -> BlockFace.WEST;
+            case 4 -> BlockFace.NORTH;
+            default -> BlockFace.SELF;
+        };
     }
 
     /**
@@ -572,22 +565,23 @@ public class CannonsUtil
             //readable code
             Vector v = loc.clone().subtract(pl).toVector();
             float d = (float) v.length();
-            if(d<=maxDist)
-            {
-                //float volume = 2.1f-(float)(d/maxDist);
-                //float newPitch = sound.getPitch()/(float) Math.sqrt(d);
-                float newPitch = sound.getPitch();
-                //p.playSound(p.getEyeLocation().add(v.normalize().multiply(16)), sound, volume, newPitch);
-                //https://bukkit.org/threads/playsound-parameters-volume-and-pitch.151517/
-                float maxv = d/(1-maxVolume)/16f;
-                maxv = Math.max(maxv, maxVolume);
-                float setvol = Math.min(maxv, (float)maxDist/16f);
-                //System.out.println("distance: " + d + "maxv: " + maxv + " (float)maxDist/16f: " + (float)maxDist/16f + " setvol: " + setvol);
-                if (sound.isSoundEnum())
-                    p.playSound(loc, sound.getSoundEnum(), setvol, newPitch);
-                if (sound.isSoundString())
-                    p.playSound(loc, sound.getSoundString(), setvol, newPitch);
+            if (d > maxDist) {
+                continue;
             }
+
+            //float volume = 2.1f-(float)(d/maxDist);
+            //float newPitch = sound.getPitch()/(float) Math.sqrt(d);
+            float newPitch = sound.getPitch();
+            //p.playSound(p.getEyeLocation().add(v.normalize().multiply(16)), sound, volume, newPitch);
+            //https://bukkit.org/threads/playsound-parameters-volume-and-pitch.151517/
+            float maxv = d/(1-maxVolume)/16f;
+            maxv = Math.max(maxv, maxVolume);
+            float setvol = Math.min(maxv, (float)maxDist/16f);
+            //System.out.println("distance: " + d + "maxv: " + maxv + " (float)maxDist/16f: " + (float)maxDist/16f + " setvol: " + setvol);
+            if (sound.isSoundEnum())
+                p.playSound(loc, sound.getSoundEnum(), setvol, newPitch);
+            if (sound.isSoundString())
+                p.playSound(loc, sound.getSoundString(), setvol, newPitch);
         }
     }
 
@@ -607,33 +601,17 @@ public class CannonsUtil
      * creates a imitated error sound (called when played doing something wrong)
      * @param location location of the error sound
      */
-    public static void playErrorSound(final Location location)
-    {
-//        try
-//        {
-            location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING  , 0.25f, 0.75f);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
-            {
-                @Override public void run()
-                {
-                    location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING , 0.25f, 0.1f);
-                }
-            }
-                    , 3);
-//        }
-//        catch(Exception e)
-//        {
-//            //Fired if bukkit doen't have this sound, try/catch block is not neccesury
-//            location.getWorld().playSound(location, Sound.NOTE_PIANO, 0.25f, 2f);
-//            Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), new Runnable()
-//            {
-//                @Override public void run()
-//                {
-//                    location.getWorld().playSound(location, Sound.NOTE_PIANO, 0.25f, 0.75f);
-//                }
-//            }
-//                    , 3);
-//        }
+    public static void playErrorSound(final Location location) {
+        if (location == null)
+            return;
+
+        var world = location.getWorld();
+        if (world == null)
+            return;
+
+        world.playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING  , 0.25f, 0.75f);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Cannons.getPlugin(), () ->
+                world.playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING , 0.25f, 0.1f), 3);
     }
 
     /**
@@ -822,15 +800,15 @@ public class CannonsUtil
     /**
      * returns all entity in a given radius
      * @param l center location
-     * @param minRadius minium radius for search
+     * @param minRadius minimum radius for search
      * @param maxRadius radius for search
-     * @return array of Entities in area
+     * @return hashmap of Entities in area
      */
     public static HashMap<UUID, Entity> getNearbyEntities(Location l, int minRadius, int maxRadius){
         int chunkRadius = maxRadius < 16 ? 1 : (maxRadius - (maxRadius % 16))/16;
-        HashMap<UUID, Entity> radiusEntities = new HashMap<UUID, Entity>();
-        for (int chX = 0 -chunkRadius; chX <= chunkRadius; chX ++){
-            for (int chZ = 0 -chunkRadius; chZ <= chunkRadius; chZ++){
+        HashMap<UUID, Entity> radiusEntities = new HashMap<>();
+        for (int chX = -chunkRadius; chX <= chunkRadius; chX ++){
+            for (int chZ = -chunkRadius; chZ <= chunkRadius; chZ++){
                 int x=(int) l.getX(),y=(int) l.getY(),z=(int) l.getZ();
                 for (Entity e : new Location(l.getWorld(),x+(chX*16),y,z+(chZ*16)).getChunk().getEntities()){
                     double dist = e.getLocation().distance(l);
@@ -845,7 +823,7 @@ public class CannonsUtil
     /**
      * returns all targets (entity and cannons) in a given radius
      * @param l center location
-     * @param minRadius minium radius for search
+     * @param minRadius minimum radius for search
      * @param maxRadius radius for search
      * @return array of Entities in area
      */
@@ -931,16 +909,14 @@ public class CannonsUtil
         OfflinePlayer bPlayer = Bukkit.getOfflinePlayer(uuid);
         if (bPlayer == null)
             return false;
-        if (bPlayer.isOnline()){
-            Player player = (Player) bPlayer;
-            if (player.isOnline())
-                return true;
+
+        if (!bPlayer.isOnline()) {
+            return bPlayer.hasPlayedBefore();
         }
-        else{
-            if(bPlayer.hasPlayedBefore())
-                return true;
-        }
-        return false;
+
+        Player player = (Player) bPlayer;
+
+        return player.isOnline();
     }
 
 
