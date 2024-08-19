@@ -8,6 +8,7 @@ New features/fixes:
 ---------------
 - 1.20.6 + Support
 - Made ProjectilePiercingEvent cancellable
+- New CannonLinkFiringEvent to handle linked cannons operations
 - Upgraded to Java 14 language level
 
 Optimizations:

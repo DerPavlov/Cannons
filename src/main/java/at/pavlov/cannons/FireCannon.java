@@ -10,6 +10,7 @@ import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.event.CannonFireEvent;
+import at.pavlov.cannons.event.CannonLinkFiringEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
@@ -32,10 +33,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class FireCannon {
 
@@ -143,11 +141,27 @@ public class FireCannon {
 
         int d = design.getLinkCannonsDistance() * 2;
 
+        LinkedList<Cannon> linkedCannons = new LinkedList<>();
         for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
             plugin.logDebug(fcannon.getCannonName() + " is cannon operator: " + fcannon.isCannonOperator(player));
-            if (fcannon.isCannonOperator(player) && fcannon.canAimYaw(player.getEyeLocation().getYaw()) &&/*fcannon.isAimingFinished() &&*/ fcannon.getCannonDesign().equals(cannon.getCannonDesign()) && (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
-                this.fire(fcannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
+            boolean allowedToFire = !cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId();
+
+            if (fcannon.isCannonOperator(player) &&
+                    fcannon.canAimYaw(player.getEyeLocation().getYaw()) &&
+                    /*fcannon.isAimingFinished() &&*/
+                    fcannon.sameDesign(cannon) &&
+                    allowedToFire) {
+                linkedCannons.add(fcannon);
+            }
         }
+
+        CannonLinkFiringEvent event = new CannonLinkFiringEvent(cannon, linkedCannons, player.getUniqueId());
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (!event.isCancelled())
+            for (var fcannon : event.getLinkedCannons()) {
+                this.fire(fcannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
+            }
 
         return this.fire(cannon, player.getUniqueId(), autoreload, !design.isAmmoInfiniteForPlayer(), action);
     }

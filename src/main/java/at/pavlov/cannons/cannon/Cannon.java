@@ -1837,6 +1837,10 @@ public class Cannon {
         return this.design;
     }
 
+    public boolean sameDesign(Cannon cannon) {
+        return design.equals(cannon.getCannonDesign());
+    }
+
     public Projectile getLoadedProjectile() {
         return loadedProjectile;
     }

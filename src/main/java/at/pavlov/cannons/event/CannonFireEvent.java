@@ -1,12 +1,14 @@
 package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.cannon.Cannon;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class CannonFireEvent extends Event {
+public class CannonFireEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final Cannon cannon;
     private final UUID player;
@@ -35,7 +37,7 @@ public class CannonFireEvent extends Event {
         this.cancelled = cancelled;
     }
 
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
