@@ -30,6 +30,7 @@ public class Config
 	private boolean debugMode;
     private boolean relayExplosionEvent;
     private int claimEdgeLength;
+    private boolean economyDisabled;
 	
 	//build limits
 	private boolean buildLimitEnabled;
@@ -116,6 +117,7 @@ public class Config
 		
 		//general
 		setDebugMode(plugin.getConfig().getBoolean("general.debugMode", false));
+        setEconomyDisabled(plugin.getConfig().getBoolean("economy.disabled", false));
         setRelayExplosionEvent(plugin.getConfig().getBoolean("general.relayExplosionEvent", false));
         setClaimEdgeLength(plugin.getConfig().getInt("general.claimEdgeLength", 60));
 		
@@ -205,7 +207,7 @@ public class Config
 		userMessage.loadLanguage();
 
 	}
-	
+
 
 	/**
 	 * returns the class UserMessages
@@ -295,6 +297,14 @@ public class Config
 	{
 		this.debugMode = debugMode;
 	}
+
+    public boolean isEconomyDisabled() {
+        return this.economyDisabled;
+    }
+
+    public void setEconomyDisabled(boolean b) {
+        this.economyDisabled = b;
+    }
 
 	public ItemHolder getToolFiring()
 	{

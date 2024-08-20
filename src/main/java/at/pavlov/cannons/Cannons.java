@@ -88,6 +88,8 @@ public final class Cannons extends JavaPlugin
         this.signListener = new SignListener(this);
         this.commands = new Commands(this);
 
+		setupEconomy();
+
     }
 
     public static Cannons getPlugin() {
@@ -137,8 +139,6 @@ public final class Cannons extends JavaPlugin
 			pm.disablePlugin(this);
 			return;
 		}
-        setupEconomy();
-		
 
 		try
 		{
@@ -205,17 +205,25 @@ public final class Cannons extends JavaPlugin
 		}
     }
 
-    private boolean setupEconomy() {
+    private void setupEconomy() {
+		if (config.isEconomyDisabled()) {
+			economy = null;
+			return;
+		}
+
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
+			economy = null;
+            return;
         }
+
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            return false;
+			economy = null;
+            return;
         }
+
         economy = rsp.getProvider();
-        return economy != null;
-    }
+	}
 
 
 
