@@ -188,25 +188,17 @@ public class CannonManager
 
 
                 //fire and an event that this cannon is destroyed
-                CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon);
+                CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon, cause);
                 Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
 
                 if (cannon.getOwner() != null) {
                     OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
                     if (offplayer != null && offplayer.hasPlayedBefore() && plugin.getEconomy() != null) {
                         // return message
-                        double funds;
-                        switch (cause) {
-                            case Other:
-                                funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
-                                break;
-                            case Dismantling:
-                                funds = cannon.getCannonDesign().getEconomyDismantlingRefund();
-                                break;
-                            default:
-                                funds = cannon.getCannonDesign().getEconomyDestructionRefund();
-                                break;
-                        }
+                        double funds = switch (cause) {
+                            case Other, Dismantling -> cannon.getCannonDesign().getEconomyDismantlingRefund();
+                            default -> cannon.getCannonDesign().getEconomyDestructionRefund();
+                        };
                         if (cannon.isPaid())
                             plugin.getEconomy().depositPlayer(offplayer, funds);
                     }
