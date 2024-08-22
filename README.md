@@ -1,7 +1,7 @@
-Cannons
+Cannons Revamped
 =======
 
-Fork by Intybyte / Vaan1310
+Fork by Intybyte / Vaan1310 </br>
 Original by derPavlov
 
 New features/fixes:
@@ -9,6 +9,7 @@ New features/fixes:
 - 1.20.6 + Support
 - Made ProjectilePiercingEvent cancellable
 - New CannonLinkFiringEvent to handle linked cannons operations
+- CannonDestroyEvent now has the destruction cause in it
 - Upgraded to Java 14 language level
 
 Optimizations:
@@ -20,12 +21,21 @@ Optimizations:
 - Distance optimization by using `Location#distanceSquared()` over `Location#distance` when possible
 - Aiming shot simulation Optimization
 
+Issues:
+---------------
+If you have issues it is better that you report in this repository as the original one looks unmaintained for the time being
+
+Help:
+---------------
+You can join the original cannons discord for assistance as I am there
+https://discord.gg/fdt6sgsAgN
+
 How to build / Get the jar
 ---------------
 To compile and get the plugin jar you need to first [download maven](https://maven.apache.org/download.cgi) and then [install it](https://maven.apache.org/install.html).
 There are some slight differences between Windows and Linux, you can find tutorials online in case you are stuck.
 
-Now you need to go download the zip of the source code from github and extract it somewhere.
+Now you need to go download the zip of the source code from GitHub and extract it somewhere.
 
 Open the terminal to said folder and run `mvn clean install`. This will start building and compiling the plugin and give
 you a jar to put into the plugin folder of your server.

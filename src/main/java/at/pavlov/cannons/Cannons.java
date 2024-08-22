@@ -178,7 +178,7 @@ public final class Cannons extends JavaPlugin
 			// save cannons
 			getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> persistenceDatabase.saveAllCannons(true), 6000L, 6000L);
 
-			Metrics metrics = new Metrics(this, 4048);
+			Metrics metrics = new Metrics(this, 23139);
 
             logDebug("Time to enable cannons: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
 
