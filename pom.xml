@@ -88,11 +88,6 @@
             <version>7.2.7</version>
             <scope>provided</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.boydti</groupId>-->
-            <!--<artifactId>fawe-api</artifactId>-->
-            <!--<version>latest</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
