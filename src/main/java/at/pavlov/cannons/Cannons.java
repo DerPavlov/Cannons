@@ -152,9 +152,6 @@ public final class Cannons extends JavaPlugin
 			//call command executer
 			getCommand("cannons").setExecutor(commands);
 
-			// load config
-			config.loadConfig();
-
 			// Initialize the database
 			getServer().getScheduler().runTaskAsynchronously(this, () -> {
                 try {

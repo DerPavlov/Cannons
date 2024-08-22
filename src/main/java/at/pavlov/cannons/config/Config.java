@@ -100,6 +100,7 @@ public class Config
 		userMessage = new UserMessages(this.plugin);
 		projectileStorage = new ProjectileStorage(this.plugin);
         cannonManager = new CannonManager(plugin, userMessage, this);
+        this.loadConfig();
 	}
 
 	public void loadConfig()

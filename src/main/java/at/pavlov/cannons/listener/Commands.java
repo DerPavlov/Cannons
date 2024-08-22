@@ -192,13 +192,13 @@ public class Commands implements TabExecutor {
                 return true;
             }
             //check if the design name is valid
-            if (!config.getDesignStorage().hasDesign(args[1])) {
-                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found Available designs are: " + StringUtils.join(plugin.getMyConfig().getDesignStorage().getDesignIds(), ", "));
+            if (!plugin.getDesignStorage().hasDesign(args[1])) {
+                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found Available designs are: " + StringUtils.join(plugin.getDesignStorage().getDesignIds(), ", "));
                 return true;
             }
 
             sendMessage(sender, ChatColor.GREEN + "[Cannons] Create design: " + ChatColor.GOLD + args[1]);
-            CannonDesign cannonDesign = config.getDesignStorage().getDesign(args[1]);
+            CannonDesign cannonDesign = plugin.getDesignStorage().getDesign(args[1]);
 
             Cannon cannon = new Cannon(cannonDesign, player.getWorld().getUID(), player.getLocation().toVector(), BlockFace.NORTH, player.getUniqueId());
             //createCannon(cannon);
