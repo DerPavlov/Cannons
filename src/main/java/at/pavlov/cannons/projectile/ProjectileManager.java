@@ -16,16 +16,27 @@ import java.util.UUID;
 
 public class ProjectileManager
 {
+    private static ProjectileManager instance = null;
 
     private final Cannons plugin;
-    private final HashMap<UUID, FlyingProjectile> flyingProjectilesMap = new HashMap<UUID, FlyingProjectile>();
+    private final HashMap<UUID, FlyingProjectile> flyingProjectilesMap = new HashMap<>();
+
+    public static void initialize(Cannons plugin) {
+        if (instance != null)
+            return;
+
+        instance = new ProjectileManager(plugin);
+    }
+
+    public static ProjectileManager getInstance() {
+        return instance;
+    }
 
     /**
      * ProjectileManager
      * @param plugin - Cannons instance
      */
-    public ProjectileManager(Cannons plugin)
-    {
+    private ProjectileManager(Cannons plugin) {
         this.plugin = plugin;
     }
 

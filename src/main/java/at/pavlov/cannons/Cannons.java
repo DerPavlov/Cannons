@@ -74,6 +74,7 @@ public final class Cannons extends JavaPlugin
         //setup all classes
         this.config = new Config(this);
 		DesignStorage.initialize(this);
+		ProjectileManager.initialize(this);
 
         this.explosion = new CreateExplosion(this, config);
         this.fireCannon = new FireCannon(this, config);
@@ -419,8 +420,9 @@ public final class Cannons extends JavaPlugin
         return observer;
     }
 
+	@Deprecated
     public ProjectileManager getProjectileManager(){
-        return this.config.getProjectileManager();
+        return ProjectileManager.getInstance();
     }
 
     public CannonsAPI getCannonsAPI() {

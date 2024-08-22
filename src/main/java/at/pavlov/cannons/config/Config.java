@@ -3,9 +3,7 @@ package at.pavlov.cannons.config;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.CannonManager;
-import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.container.ItemHolder;
-import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
@@ -82,10 +80,10 @@ public class Config
 
 
     //superbreakerBlocks
-    private List<BlockData> superbreakerBlocks = new ArrayList<BlockData>();
+    private List<BlockData> superbreakerBlocks = new ArrayList<>();
 
     //unbreakableBlocks
-    private List<BlockData> unbreakableBlocks = new ArrayList<BlockData>();
+    private List<BlockData> unbreakableBlocks = new ArrayList<>();
 
     //cancelEventForLoadingItem
     private List<ItemHolder> cancelItems = new ArrayList<>();
@@ -95,7 +93,6 @@ public class Config
 	private final Cannons plugin;
 	private final ProjectileStorage projectileStorage;
     private final CannonManager cannonManager;
-    private final ProjectileManager projectileManager;
 
 	public Config(Cannons plugin)
 	{
@@ -103,7 +100,6 @@ public class Config
 		userMessage = new UserMessages(this.plugin);
 		projectileStorage = new ProjectileStorage(this.plugin);
         cannonManager = new CannonManager(plugin, userMessage, this);
-        projectileManager = new ProjectileManager(plugin);
 	}
 
 	public void loadConfig()
@@ -329,10 +325,6 @@ public class Config
 
     public CannonManager getCannonManager() {
         return cannonManager;
-    }
-
-    public ProjectileManager getProjectileManager() {
-        return projectileManager;
     }
 
     public ItemHolder getToolThermometer() {
