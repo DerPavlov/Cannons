@@ -93,7 +93,6 @@ public class Config
 
     private final UserMessages userMessage;
 	private final Cannons plugin;
-	private final DesignStorage designStorage;
 	private final ProjectileStorage projectileStorage;
     private final CannonManager cannonManager;
     private final ProjectileManager projectileManager;
@@ -102,7 +101,6 @@ public class Config
 	{
 		this.plugin = plugin;
 		userMessage = new UserMessages(this.plugin);
-		designStorage = new DesignStorage(this.plugin);
 		projectileStorage = new ProjectileStorage(this.plugin);
         cannonManager = new CannonManager(plugin, userMessage, this);
         projectileManager = new ProjectileManager(plugin);
@@ -205,10 +203,8 @@ public class Config
 	
 		//load other configs	
 		projectileStorage.loadProjectiles();
-		designStorage.loadCannonDesigns();
         cannonManager.updateCannons();
 		userMessage.loadLanguage();
-
 	}
 
 
@@ -219,11 +215,6 @@ public class Config
 	public UserMessages getUserMessages()
 	{
 		return userMessage;
-	}
-
-	public DesignStorage getDesignStorage()
-	{
-		return designStorage;
 	}
 
 	public ProjectileStorage getProjectileStorage()

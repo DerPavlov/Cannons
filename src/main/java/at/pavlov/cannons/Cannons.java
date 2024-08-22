@@ -73,6 +73,8 @@ public final class Cannons extends JavaPlugin
 
         //setup all classes
         this.config = new Config(this);
+		DesignStorage.initialize(this);
+
         this.explosion = new CreateExplosion(this, config);
         this.fireCannon = new FireCannon(this, config);
         this.aiming = new Aiming(this);
@@ -358,9 +360,9 @@ public final class Cannons extends JavaPlugin
 		return signListener;
 	}
 
-	public DesignStorage getDesignStorage()
-	{
-		return this.config.getDesignStorage();
+	@Deprecated
+	public DesignStorage getDesignStorage() {
+		return DesignStorage.getInstance();
 	}
 	
 	public CannonDesign getCannonDesign(Cannon cannon)

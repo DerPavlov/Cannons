@@ -35,15 +35,28 @@ import java.util.List;
 
 public class DesignStorage
 {
-	
+
+	private static DesignStorage instance = null;
+
 	private final List<CannonDesign> cannonDesignList;
 	private final Cannons plugin;
 	private final List<Material> cannonBlockMaterials;
 
-	public DesignStorage(Cannons cannons)
-	{
+	public static void initialize(Cannons cannons) {
+		if (instance != null)
+			return;
+
+		instance = new DesignStorage(cannons);
+		instance.loadCannonDesigns();
+	}
+
+	public static DesignStorage getInstance() {
+		return instance;
+	}
+
+	private DesignStorage(Cannons cannons)  {
 		plugin = cannons;
-		cannonDesignList = new ArrayList<CannonDesign>();
+		cannonDesignList = new ArrayList<>();
 		cannonBlockMaterials = new ArrayList<>();
 	}
 
