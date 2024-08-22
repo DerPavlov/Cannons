@@ -11,6 +11,7 @@ import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -114,76 +115,78 @@ public class Config
 
         plugin.logDebug("load Config");
         plugin.reloadConfig();
+
+        FileConfiguration config = plugin.getConfig();
 		
 		//general
-		setDebugMode(plugin.getConfig().getBoolean("general.debugMode", false));
-        setEconomyDisabled(plugin.getConfig().getBoolean("economy.disabled", false));
-        setRelayExplosionEvent(plugin.getConfig().getBoolean("general.relayExplosionEvent", false));
-        setClaimEdgeLength(plugin.getConfig().getInt("general.claimEdgeLength", 60));
+		setDebugMode(config.getBoolean("general.debugMode", false));
+        setEconomyDisabled(config.getBoolean("economy.disabled", false));
+        setRelayExplosionEvent(config.getBoolean("general.relayExplosionEvent", false));
+        setClaimEdgeLength(config.getInt("general.claimEdgeLength", 60));
 		
 		//limitOfCannons
-		setBuildLimitEnabled(plugin.getConfig().getBoolean("cannonLimits.useLimits", true));
-		setBuildLimitA(plugin.getConfig().getInt("cannonLimits.buildLimitA", 10));
-		setBuildLimitB(plugin.getConfig().getInt("cannonLimits.buildLimitB", 2));
+		setBuildLimitEnabled(config.getBoolean("cannonLimits.useLimits", true));
+		setBuildLimitA(config.getInt("cannonLimits.buildLimitA", 10));
+		setBuildLimitB(config.getInt("cannonLimits.buildLimitB", 2));
 
         //keepProjectileAlive
-        setKeepAliveEnabled(plugin.getConfig().getBoolean("keepProjectileAlive.enabled", true));
-        setKeepAliveTeleportDistance(plugin.getConfig().getDouble("keepProjectileAlive.teleportProjectile", 5.0));
+        setKeepAliveEnabled(config.getBoolean("keepProjectileAlive.enabled", true));
+        setKeepAliveTeleportDistance(config.getDouble("keepProjectileAlive.teleportProjectile", 5.0));
 
 		//tools
-		setToolAdjust(new ItemHolder(plugin.getConfig().getString("tools.adjust", "minecraft:air")));
-		setToolAutoaim(new ItemHolder(plugin.getConfig().getString("tools.autoaim", "minecraft:clock")));
-        setToolAutoaimRange(plugin.getConfig().getDouble("tools.autoaimRange", 4.0));
-		setToolFiring(new ItemHolder(plugin.getConfig().getString("tools.firing", "minecraft:flint_and_steel")));
-        setToolRamrod(new ItemHolder(plugin.getConfig().getString("tools.ramrod", "minecraft:stick")));
-		setToolRotating(new ItemHolder(plugin.getConfig().getString("tools.adjust", "minecraft:rail")));
-        setToolThermometer(new ItemHolder(plugin.getConfig().getString("tools.thermometer", "minecraft:gold_nugget")));
+		setToolAdjust(new ItemHolder(config.getString("tools.adjust", "minecraft:air")));
+		setToolAutoaim(new ItemHolder(config.getString("tools.autoaim", "minecraft:clock")));
+        setToolAutoaimRange(config.getDouble("tools.autoaimRange", 4.0));
+		setToolFiring(new ItemHolder(config.getString("tools.firing", "minecraft:flint_and_steel")));
+        setToolRamrod(new ItemHolder(config.getString("tools.ramrod", "minecraft:stick")));
+		setToolRotating(new ItemHolder(config.getString("tools.adjust", "minecraft:rail")));
+        setToolThermometer(new ItemHolder(config.getString("tools.thermometer", "minecraft:gold_nugget")));
 
         //imitated effects
-        setImitatedBlockMinimumDistance(plugin.getConfig().getInt("imitatedEffects.minimumBlockDistance", 40));
-        setImitatedBlockMaximumDistance(plugin.getConfig().getInt("imitatedEffects.maximumBlockDistance", 200));
-        setImitatedSoundMaximumDistance(plugin.getConfig().getInt("imitatedEffects.maximumSoundDistance", 200));
-        setImitatedSoundMaximumVolume((float) plugin.getConfig().getDouble("imitatedEffects.maximumSoundVolume", 0.8));
+        setImitatedBlockMinimumDistance(config.getInt("imitatedEffects.minimumBlockDistance", 40));
+        setImitatedBlockMaximumDistance(config.getInt("imitatedEffects.maximumBlockDistance", 200));
+        setImitatedSoundMaximumDistance(config.getInt("imitatedEffects.maximumSoundDistance", 200));
+        setImitatedSoundMaximumVolume((float) config.getDouble("imitatedEffects.maximumSoundVolume", 0.8));
 
         //imitated explosions block
-        setImitatedExplosionEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosion.enabled", false));
-        setImitatedExplosionSphereSize(plugin.getConfig().getInt("imitatedEffects.explosion.sphereSize", 2));
-        setImitatedExplosionMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.explosion.material", "minecraft:glowstone")));
-        setImitatedExplosionTime(plugin.getConfig().getDouble("imitatedEffects.explosion.time", 1.0));
+        setImitatedExplosionEnabled(config.getBoolean("imitatedEffects.explosion.enabled", false));
+        setImitatedExplosionSphereSize(config.getInt("imitatedEffects.explosion.sphereSize", 2));
+        setImitatedExplosionMaterial(CannonsUtil.createBlockData(config.getString("imitatedEffects.explosion.material", "minecraft:glowstone")));
+        setImitatedExplosionTime(config.getDouble("imitatedEffects.explosion.time", 1.0));
 
         //imitated explosions particles
-        setImitatedExplosionParticlesEnabled(plugin.getConfig().getBoolean("imitatedEffects.explosionParticles.enabled", true));
+        setImitatedExplosionParticlesEnabled(config.getBoolean("imitatedEffects.explosionParticles.enabled", true));
         try {
-            setImitatedExplosionParticlesType(Particle.valueOf(plugin.getConfig().getString("imitatedEffects.explosionParticles.type", "EXPLOSION_LARGE")));
+            setImitatedExplosionParticlesType(Particle.valueOf(config.getString("imitatedEffects.explosionParticles.type", "EXPLOSION_LARGE")));
         }
         catch(Exception e){
-            plugin.logSevere("Type for Explosion particle  is not correct. Please check spelling of " + plugin.getConfig().getString("imitatedEffects.explosionParticles.type"));
+            plugin.logSevere("Type for Explosion particle  is not correct. Please check spelling of " + config.getString("imitatedEffects.explosionParticles.type"));
             setImitatedExplosionParticlesType(Particle.EXPLOSION);
         }
-        setImitatedExplosionParticlesCount(plugin.getConfig().getInt("imitatedEffects.explosionParticles.count", 5));
-        setImitatedExplosionParticlesDiameter(plugin.getConfig().getDouble("imitatedEffects.explosionParticles.diameter", 1));
+        setImitatedExplosionParticlesCount(config.getInt("imitatedEffects.explosionParticles.count", 5));
+        setImitatedExplosionParticlesDiameter(config.getDouble("imitatedEffects.explosionParticles.diameter", 1));
 
         //imitated aiming
-        setImitatedAimingEnabled(plugin.getConfig().getBoolean("imitatedEffects.aiming.enabled", false));
-        setImitatedAimingLineLength(plugin.getConfig().getInt("imitatedEffects.aiming.length", 5));
-        setImitatedAimingMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.aiming.block", "minecraft:glass")));
-        setImitatedAimingTime(plugin.getConfig().getDouble("imitatedEffects.aiming.time", 1.0));
+        setImitatedAimingEnabled(config.getBoolean("imitatedEffects.aiming.enabled", false));
+        setImitatedAimingLineLength(config.getInt("imitatedEffects.aiming.length", 5));
+        setImitatedAimingMaterial(CannonsUtil.createBlockData(config.getString("imitatedEffects.aiming.block", "minecraft:glass")));
+        setImitatedAimingTime(config.getDouble("imitatedEffects.aiming.time", 1.0));
 
         //imitated firing effects
-        setImitatedFiringEffectEnabled(plugin.getConfig().getBoolean("imitatedEffects.firing.enabled", false));
-        setImitatedFireMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.firing.fireBlock", "minecraft:glowstone")));
-        setImitatedSmokeMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.firing.smokeBlock", "'minecraft:cobweb")));
-        setImitatedFiringTime(plugin.getConfig().getDouble("imitatedEffects.firing.time", 1.0));
+        setImitatedFiringEffectEnabled(config.getBoolean("imitatedEffects.firing.enabled", false));
+        setImitatedFireMaterial(CannonsUtil.createBlockData(config.getString("imitatedEffects.firing.fireBlock", "minecraft:glowstone")));
+        setImitatedSmokeMaterial(CannonsUtil.createBlockData(config.getString("imitatedEffects.firing.smokeBlock", "'minecraft:cobweb")));
+        setImitatedFiringTime(config.getDouble("imitatedEffects.firing.time", 1.0));
 
         //imitaded predictor
-        setImitatedPredictorEnabled(plugin.getConfig().getBoolean("imitatedEffects.predictor.enabled", true));
-        setImitatedPredictorIterations(plugin.getConfig().getInt("imitatedEffects.predictor.maxIterations", 500));
-        setImitatedPredictorDistance(plugin.getConfig().getDouble("imitatedEffects.predictor.maxDistance", 400.0));
-        setImitatedPredictorMaterial(CannonsUtil.createBlockData(plugin.getConfig().getString("imitatedEffects.predictor.material", "minecraft:glowstone")));
-        setImitatedPredictorTime(plugin.getConfig().getDouble("imitatedEffects.predictor.time", 1.0));
+        setImitatedPredictorEnabled(config.getBoolean("imitatedEffects.predictor.enabled", true));
+        setImitatedPredictorIterations(config.getInt("imitatedEffects.predictor.maxIterations", 500));
+        setImitatedPredictorDistance(config.getDouble("imitatedEffects.predictor.maxDistance", 400.0));
+        setImitatedPredictorMaterial(CannonsUtil.createBlockData(config.getString("imitatedEffects.predictor.material", "minecraft:glowstone")));
+        setImitatedPredictorTime(config.getDouble("imitatedEffects.predictor.time", 1.0));
 
         //superbreakerBlocks
-        setSuperbreakerBlocks(CannonsUtil.toBlockDataList(plugin.getConfig().getStringList("superbreakerBlocks")));
+        setSuperbreakerBlocks(CannonsUtil.toBlockDataList(config.getStringList("superbreakerBlocks")));
         //if this list is empty add some blocks
         if (superbreakerBlocks.size() == 0)
         {
@@ -191,14 +194,14 @@ public class Config
         }
 
         //unbreakableBlocks
-        setUnbreakableBlocks(CannonsUtil.toBlockDataList(plugin.getConfig().getStringList("unbreakableBlocks")));
+        setUnbreakableBlocks(CannonsUtil.toBlockDataList(config.getStringList("unbreakableBlocks")));
         if (unbreakableBlocks.size() == 0)
         {
             plugin.logInfo("unbreakableBlocks list is empty");
         }
 
         //cancelEventForLoadingItem
-        setCancelItems(CannonsUtil.toItemHolderList(plugin.getConfig().getStringList("cancelEventForLoadingItem")));
+        setCancelItems(CannonsUtil.toItemHolderList(config.getStringList("cancelEventForLoadingItem")));
 	
 		//load other configs	
 		projectileStorage.loadProjectiles();
