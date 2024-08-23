@@ -7,6 +7,10 @@ general:
   claimEdgeLength: 60
   # don't use economy features of Vault
   economyDisabled: false
+  # changes how much the armor points are effective, max armor points in vanilla are 20
+  # meaning the most protection you can get is 80%, if you put this value at 0.05 or above player
+  # can be completely immune to cannon shots
+  armorEffectiveness: 0.04
 
 
 cannonLimits:

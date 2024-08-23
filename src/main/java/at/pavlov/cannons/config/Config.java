@@ -5,6 +5,7 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.projectile.ProjectileStorage;
+import at.pavlov.cannons.utils.ArmorCalculationUtil;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -118,6 +119,7 @@ public class Config
         setEconomyDisabled(config.getBoolean("economy.disabled", false));
         setRelayExplosionEvent(config.getBoolean("general.relayExplosionEvent", false));
         setClaimEdgeLength(config.getInt("general.claimEdgeLength", 60));
+        ArmorCalculationUtil.setMagicValue(config.getDouble("general.armorEffectiveness", 0.04));
 		
 		//limitOfCannons
 		setBuildLimitEnabled(config.getBoolean("cannonLimits.useLimits", true));

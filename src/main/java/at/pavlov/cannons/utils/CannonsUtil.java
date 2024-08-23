@@ -267,54 +267,7 @@ public class CannonsUtil
      */
     public static double getArmorDamageReduced(HumanEntity entity)
     {
-        // http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
-
-        if (entity == null) return 0.0;
-
-        org.bukkit.inventory.PlayerInventory inv = entity.getInventory();
-        if (inv == null) return 0.0;
-
-        ItemStack boots = inv.getBoots();
-        ItemStack helmet = inv.getHelmet();
-        ItemStack chest = inv.getChestplate();
-        ItemStack pants = inv.getLeggings();
-        double red = 0.0;
-        if (helmet != null)
-        {
-            if(helmet.getType() == Material.LEATHER_HELMET)red = red + 0.04;
-            else if(helmet.getType() == Material.GOLDEN_HELMET)red = red + 0.08;
-            else if(helmet.getType() == Material.CHAINMAIL_HELMET)red = red + 0.08;
-            else if(helmet.getType() == Material.IRON_HELMET)red = red + 0.08;
-            else if(helmet.getType() == Material.DIAMOND_HELMET)red = red + 0.12;
-        }
-        //
-        if (boots != null)
-        {
-            if(boots.getType() == Material.LEATHER_BOOTS)red = red + 0.04;
-            else if(boots.getType() == Material.GOLDEN_BOOTS)red = red + 0.04;
-            else if(boots.getType() == Material.CHAINMAIL_BOOTS)red = red + 0.04;
-            else if(boots.getType() == Material.IRON_BOOTS)red = red + 0.08;
-            else if(boots.getType() == Material.DIAMOND_BOOTS)red = red + 0.12;
-        }
-        //
-        if (pants != null)
-        {
-            if(pants.getType() == Material.LEATHER_LEGGINGS)red = red + 0.08;
-            else if(pants.getType() == Material.GOLDEN_LEGGINGS)red = red + 0.12;
-            else if(pants.getType() == Material.CHAINMAIL_LEGGINGS)red = red + 0.16;
-            else if(pants.getType() == Material.IRON_LEGGINGS)red = red + 0.20;
-            else if(pants.getType() == Material.DIAMOND_LEGGINGS)red = red + 0.24;
-        }
-        //
-        if (chest != null)
-        {
-            if(chest.getType() == Material.LEATHER_CHESTPLATE)red = red + 0.12;
-            else if(chest.getType() == Material.GOLDEN_CHESTPLATE)red = red + 0.20;
-            else if(chest.getType() == Material.CHAINMAIL_CHESTPLATE)red = red + 0.20;
-            else if(chest.getType() == Material.IRON_CHESTPLATE)red = red + 0.24;
-            else if(chest.getType() == Material.DIAMOND_CHESTPLATE)red = red + 0.32;
-        }
-        return red;
+        return ArmorCalculationUtil.getArmorDamageReduced(entity);
     }
 
     /**
