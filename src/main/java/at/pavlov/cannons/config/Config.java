@@ -108,8 +108,6 @@ public class Config
 	{
 		// copy the default config to the disk if it does not exist
 		plugin.saveDefaultConfig();
-
-        plugin.logDebug("load Config");
         plugin.reloadConfig();
 
         FileConfiguration config = plugin.getConfig();
@@ -281,14 +279,16 @@ public class Config
 		this.toolRotating = toolRotating;
 	}
 
+    @Deprecated
 	public boolean isDebugMode()
 	{
 		return debugMode;
 	}
 
+    @Deprecated
 	void setDebugMode(boolean debugMode)
 	{
-		this.debugMode = debugMode;
+		plugin.setDebugMode(debugMode);
 	}
 
     public boolean isEconomyDisabled() {

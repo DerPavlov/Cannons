@@ -41,59 +41,31 @@ public final class Cannons extends JavaPlugin
 {
 	private PluginManager pm;
 	private final Logger logger = Logger.getLogger("Minecraft");
+	private boolean debugMode = false;
 
-    private final Config config;
-	private final FireCannon fireCannon;
-	private final CreateExplosion explosion;
-	private final Aiming aiming;
-    private final ProjectileObserver observer;
-    private final FakeBlockHandler fakeBlockHandler;
+    private Config config;
+	private FireCannon fireCannon;
+	private CreateExplosion explosion;
+	private Aiming aiming;
+    private ProjectileObserver observer;
+    private FakeBlockHandler fakeBlockHandler;
 
-    private final CannonsAPI cannonsAPI;
+    private CannonsAPI cannonsAPI;
     private Economy economy;
 	
 	//Listener
-    private final BlockListener blockListener;
-	private final PlayerListener playerListener;
-	private final EntityListener entityListener;
-	private final SignListener signListener;
-    private final Commands commands;
+    private BlockListener blockListener;
+	private PlayerListener playerListener;
+	private EntityListener entityListener;
+	private SignListener signListener;
+    private Commands commands;
 	
 	// database
-	private final PersistenceDatabase persistenceDatabase;
+	private PersistenceDatabase persistenceDatabase;
 	private Connection connection = null;
 
 	private final String cannonDatabase = "cannonlist_2_4_6";
 	private final String whitelistDatabase = "whitelist_2_4_6";
-
-
-	public Cannons()
-	{
-		super();
-
-        //setup all classes
-        this.config = new Config(this);
-		DesignStorage.initialize(this);
-		ProjectileManager.initialize(this);
-
-        this.explosion = new CreateExplosion(this, config);
-        this.fireCannon = new FireCannon(this, config);
-        this.aiming = new Aiming(this);
-        this.observer = new ProjectileObserver(this);
-        this.fakeBlockHandler = new FakeBlockHandler(this);
-        this.cannonsAPI = new CannonsAPI(this);
-
-        this.persistenceDatabase = new PersistenceDatabase(this);
-
-        this.blockListener = new BlockListener(this);
-        this.playerListener = new PlayerListener(this);
-        this.entityListener = new EntityListener(this);
-        this.signListener = new SignListener(this);
-        this.commands = new Commands(this);
-
-		setupEconomy();
-
-    }
 
     public static Cannons getPlugin() {
         return (Cannons) Bukkit.getPluginManager().getPlugin("Cannons");
@@ -126,7 +98,30 @@ public final class Cannons extends JavaPlugin
 
 	public void onEnable()
 	{
+
+		this.config = new Config(this);
+		DesignStorage.initialize(this);
+		ProjectileManager.initialize(this);
+
+		this.explosion = new CreateExplosion(this, config);
+		this.fireCannon = new FireCannon(this, config);
+		this.aiming = new Aiming(this);
+		this.observer = new ProjectileObserver(this);
+		this.fakeBlockHandler = new FakeBlockHandler(this);
+		this.cannonsAPI = new CannonsAPI(this);
+
+		this.persistenceDatabase = new PersistenceDatabase(this);
+
+		this.blockListener = new BlockListener(this);
+		this.playerListener = new PlayerListener(this);
+		this.entityListener = new EntityListener(this);
+		this.signListener = new SignListener(this);
+		this.commands = new Commands(this);
+
+		setupEconomy();
+
         long startTime = System.nanoTime();
+
 
 		//load some global variables
 		pm = getServer().getPluginManager();
@@ -290,13 +285,8 @@ public final class Cannons extends JavaPlugin
 
 	public void logDebug(String msg)
 	{
-		if (config.isDebugMode())
+		if (debugMode)
 			this.logger.info(getLogPrefix() + ChatColor.stripColor(msg));
-	}
-
-	public boolean isDebugMode()
-	{
-		return config.isDebugMode();
 	}
 
 	public void broadcast(String msg)
@@ -448,5 +438,13 @@ public final class Cannons extends JavaPlugin
 
 	public String getWhitelistDatabase() {
 		return whitelistDatabase;
+	}
+
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+    }
+
+	public boolean isDebugMode() {
+		return debugMode;
 	}
 }
