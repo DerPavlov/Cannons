@@ -7,6 +7,7 @@ import at.pavlov.cannons.Enum.SelectCannon;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
+import at.pavlov.cannons.cannon.DesignStorage;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.dao.PersistenceDatabase;
@@ -91,6 +92,7 @@ public class Commands implements TabExecutor {
             if (player == null || player.hasPermission("cannons.admin.reload")) {
                 // reload config
                 config.loadConfig();
+                DesignStorage.getInstance().loadCannonDesigns();
                 sendMessage(sender, ChatColor.GREEN + "[Cannons] Config loaded");
             } else
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
