@@ -13,9 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -229,8 +227,7 @@ public class CannonsUtil
 	 * @param block
 	 * @return
 	 */
-	public static ArrayList<Block> HorizontalSurroundingBlocks(Block block)
-	{
+	public static ArrayList<Block> HorizontalSurroundingBlocks(Block block) {
 		ArrayList<Block> Blocks = new ArrayList<>();
 
 		Blocks.add(block.getRelative(BlockFace.SOUTH));
@@ -258,209 +255,6 @@ public class CannonsUtil
             case SOUTH_WEST -> -45;
             default -> 0;
         };
-    }
-
-    /**
-     * Armor would reduce the damage the player receives
-     * @param entity - the affected human player
-     * @return - how much the damage is reduced by the armor
-     */
-    public static double getArmorDamageReduced(HumanEntity entity)
-    {
-        return ArmorCalculationUtil.getArmorDamageReduced(entity);
-    }
-
-    /**
-     * returns the total blast protection of the player
-     * @param entity - the affected human player
-     */
-    public static double getBlastProtection(HumanEntity entity)
-    {
-        //http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
-
-        if (entity == null) return 0.0;
-
-        org.bukkit.inventory.PlayerInventory inv = entity.getInventory();
-        if (inv == null) return 0.0;
-
-        ItemStack boots = inv.getBoots();
-        ItemStack helmet = inv.getHelmet();
-        ItemStack chest = inv.getChestplate();
-        ItemStack pants = inv.getLeggings();
-
-        double reduction = 0.0;
-        reduction += getItemSpecialeProtection(boots, Enchantment.BLAST_PROTECTION);
-        reduction += getItemSpecialeProtection(helmet, Enchantment.BLAST_PROTECTION);
-        reduction += getItemSpecialeProtection(chest, Enchantment.BLAST_PROTECTION);
-        reduction += getItemSpecialeProtection(pants, Enchantment.BLAST_PROTECTION);
-
-        /*
-        if (boots != null)
-        {
-            lvl = boots.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }
-        if (helmet != null)
-        {
-            lvl = helmet.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }
-        if (chest != null)
-        {
-            lvl = chest.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }
-        if (pants != null)
-        {
-            lvl = pants.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }*/
-        //cap it to 25
-        if (reduction > 25) reduction = 25;
-
-        //give it some randomness
-        reduction = reduction * (random.nextFloat()/2 + 0.5);
-
-        //cap it to 20
-        if (reduction > 20) reduction = 20;
-
-        //1 point is 4%
-        return reduction*4/100;
-    }
-
-    /**
-     * returns the total projectile protection of the player
-     * @param entity - the affected human player
-     */
-    public static double getProjectileProtection(HumanEntity entity)
-    {
-        //http://www.minecraftwiki.net/wiki/Armor#Armor_enchantment_effect_calculation
-
-        if (entity == null) return 0.0;
-
-        org.bukkit.inventory.PlayerInventory inv = entity.getInventory();
-        if (inv == null) return 0.0;
-        ItemStack boots = inv.getBoots();
-        ItemStack helmet = inv.getHelmet();
-        ItemStack chest = inv.getChestplate();
-        ItemStack pants = inv.getLeggings();
-
-        //int lvl = 1;
-        double reduction = 0;
-        reduction += getItemSpecialeProtection(boots, Enchantment.PROJECTILE_PROTECTION);
-        reduction += getItemSpecialeProtection(helmet, Enchantment.PROJECTILE_PROTECTION);
-        reduction += getItemSpecialeProtection(chest, Enchantment.PROJECTILE_PROTECTION);
-        reduction += getItemSpecialeProtection(pants, Enchantment.PROJECTILE_PROTECTION);
-
-        /*
-        if (boots != null)
-        {
-            lvl = boots.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = boots.getEnchantmentLevel(Enchantment.PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }
-        if (helmet != null)
-        {
-            lvl = helmet.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = helmet.getEnchantmentLevel(Enchantment.PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }
-        if (chest != null)
-        {
-            lvl = chest.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = chest.getEnchantmentLevel(Enchantment.PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }
-        if (pants != null)
-        {
-            lvl = pants.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 1.5 / 3);
-            lvl = pants.getEnchantmentLevel(Enchantment.PROTECTION);
-            if (lvl > 0)
-                reduction += Math.floor((6 + lvl * lvl) * 0.75 / 3);
-        }*/
-        //cap it to 25
-        if (reduction > 25) reduction = 25;
-
-        //give it some randomness
-        reduction = reduction * (random.nextFloat()/2 + 0.5);
-
-        //cap it to 20
-        if (reduction > 20) reduction = 20;
-
-        //1 point is 4%
-        return reduction*4/100;
-    }
-
-    public static double getItemSpecialeProtection(ItemStack item, Enchantment special) {
-        int reduction = 0;
-
-        if (item == null) {
-            return reduction;
-        }
-
-        int lvl = item.getEnchantmentLevel(special);
-        if (lvl > 0)
-            reduction += (int) Math.floor((6 + lvl * lvl) * 1.5 / 3);
-
-        lvl = item.getEnchantmentLevel(Enchantment.PROTECTION);
-        if (lvl > 0)
-            reduction += (int) Math.floor((6 + lvl * lvl) * 0.75 / 3);
-
-        return reduction;
-    }
-
-    /**
-     * reduces the durability of the player's armor
-     * @param entity - the affected human player
-     */
-    public static void reduceArmorDurability(HumanEntity entity)
-    {
-        org.bukkit.inventory.PlayerInventory inv = entity.getInventory();
-        if (inv == null) return;
-
-
-        for(ItemStack item : inv.getArmorContents()) {
-            if (item == null) {
-                continue;
-            }
-
-            int lvl = item.getEnchantmentLevel(Enchantment.UNBREAKING);
-            //chance of breaking in 0-1
-            double breakingChance = 0.6+0.4/(lvl+1);
-
-            if (random.nextDouble() < breakingChance)
-            {
-                org.bukkit.inventory.meta.Damageable itemMeta = (org.bukkit.inventory.meta.Damageable) item.getItemMeta();
-                itemMeta.setDamage(itemMeta.getDamage() + 1);
-            }
-        }
     }
 
     /**

@@ -14,6 +14,7 @@ import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
+import at.pavlov.cannons.utils.ArmorCalculationUtil;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
 import org.bukkit.Bukkit;
@@ -678,11 +679,9 @@ public class CreateExplosion {
 
         // calculate the armor reduction
         double reduction = 1.0;
-        if (living instanceof HumanEntity) {
-            HumanEntity human = (HumanEntity) living;
+        if (living instanceof HumanEntity human) {
             double armorPiercing = Math.max(projectile.getPenetration(), 0);
-            reduction *= (1 - CannonsUtil.getArmorDamageReduced(human) / (armorPiercing + 1))
-                    * (1 - CannonsUtil.getBlastProtection(human));
+            reduction *= ArmorCalculationUtil.getExplosionHitReduction(human, armorPiercing);
         }
 
         this.plugin.logDebug("PlayerDamage " + living.getType() + ":" + String.format("%.2f", damage) + ",reduct:"
@@ -722,11 +721,9 @@ public class CreateExplosion {
 
         // calculate the armor reduction
         double reduction = 1.0;
-        if (living instanceof HumanEntity) {
-            HumanEntity human = (HumanEntity) living;
+        if (living instanceof HumanEntity human) {
             double armorPiercing = Math.max(projectile.getPenetration(), 0);
-            reduction *= (1 - CannonsUtil.getArmorDamageReduced(human) / (armorPiercing + 1))
-                    * (1 - CannonsUtil.getProjectileProtection(human) / (armorPiercing + 1));
+            reduction *= ArmorCalculationUtil.getDirectHitReduction(human, armorPiercing);
         }
 
         this.plugin.logDebug("DirectHitDamage " + living.getType() + ": " + String.format("%.2f", damage)
@@ -1040,8 +1037,8 @@ public class CreateExplosion {
             living.damage(damage);
 
             // if player wears armor reduce damage if the player has take damage
-            if (living instanceof HumanEntity && health > living.getHealth()) {
-                CannonsUtil.reduceArmorDurability((HumanEntity) living);
+            if (living instanceof HumanEntity humanEntity && health > living.getHealth()) {
+                ArmorCalculationUtil.reduceArmorDurability(humanEntity);
             }
 
         }
