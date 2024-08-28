@@ -5,7 +5,7 @@
     <groupId>at.pavlov</groupId>
     <artifactId>cannons</artifactId>
     <name>Cannons</name>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
     <packaging>jar</packaging>
 
     <properties>
