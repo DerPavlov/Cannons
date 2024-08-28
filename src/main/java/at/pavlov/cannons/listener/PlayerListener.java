@@ -414,7 +414,7 @@ public class PlayerListener implements Listener
 
             // I used here System.out.println to display the correct color code
             if (plugin.isDebugMode() && event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().getItemMeta().hasDisplayName()) {
-                System.out.println("Cannon interaction with item " + event.getItem());
+                Cannons.logger().info("Cannon interaction with item " + event.getItem());
             }
 
             // ############ touching a hot cannon will burn you ####################

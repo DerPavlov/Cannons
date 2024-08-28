@@ -505,7 +505,7 @@ public class Cannon {
                     gunpowder = maximumLoadableNormal;
                 else
                     gunpowder = 0;
-                System.out.println("[Cannons] gunpowder: " + gunpowder);
+                Cannons.logger().info("[Cannons] gunpowder: " + gunpowder);
             }
 
             //load the gunpowder
@@ -878,7 +878,7 @@ public class Cannon {
             //if that block is not loaded
 
             if (wBlock.getState() instanceof Attachable) {
-                //System.out.println("hide " + wBlock.getType());
+                //Cannons.logger().info("hide " + wBlock.getType());
                 wBlock.setType(Material.AIR);
                 //wBlock.setData((byte) 0, false);
             }
@@ -1585,7 +1585,7 @@ public class Cannon {
         for (Location signLoc : design.getChestsAndSigns(this)) {
             lineStr = CannonSign.getLineOfThisSign(signLoc.getBlock(), line);
             // if something is found return it
-            if (lineStr != null && !lineStr.equals("")) {
+            if (lineStr != null && !lineStr.isEmpty()) {
                 return lineStr;
             }
         }
@@ -1615,7 +1615,7 @@ public class Cannon {
      * returns true if cannon design for this cannon is found
      *
      * @param cannonDesign
-     * @return
+     * @return result
      */
     public boolean equals(CannonDesign cannonDesign) {
         return designID.equals(cannonDesign.getDesignID());
@@ -1650,7 +1650,7 @@ public class Cannon {
         }
         World bukkitWorld = Bukkit.getWorld(this.world);
         if (bukkitWorld == null)
-            System.out.println("[Cannons] Can't find world: " + world);
+            Cannons.logger().info("[Cannons] Can't find world: " + world);
         return Bukkit.getWorld(this.world);
         // return new Location(bukkitWorld, )
     }
@@ -1746,7 +1746,7 @@ public class Cannon {
     /**
      * returns the maximum horizontal angle, depending if the cannon is on a ship or not
      *
-     * @retun the maximum horizontal angle
+     * @return tun the maximum horizontal angle
      */
     public double getMaxHorizontalAngle() {
         return (isOnShip()) ? design.getMaxHorizontalAngleOnShip() : design.getMaxHorizontalAngleNormal();
@@ -1755,7 +1755,7 @@ public class Cannon {
     /**
      * returns the minimum horizontal angle, depending if the cannon is on a ship or not
      *
-     * @retun the minimum horizontal angle
+     * @return the minimum horizontal angle
      */
     public double getMinHorizontalAngle() {
         return (isOnShip()) ? design.getMinHorizontalAngleOnShip() : design.getMinHorizontalAngleNormal();

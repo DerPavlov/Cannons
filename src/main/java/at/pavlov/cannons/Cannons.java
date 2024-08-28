@@ -447,4 +447,8 @@ public final class Cannons extends JavaPlugin
 	public boolean isDebugMode() {
 		return debugMode;
 	}
+
+	public static Logger logger() {
+		return Cannons.getPlugin().getLogger();
+	}
 }

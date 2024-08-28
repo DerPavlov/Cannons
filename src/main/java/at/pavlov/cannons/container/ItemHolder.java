@@ -1,5 +1,6 @@
 package at.pavlov.cannons.container;
 
+import at.pavlov.cannons.Cannons;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+import java.util.logging.Level;
 
 
 //small class as at.pavlov.cannons.container for item id and data
@@ -107,7 +109,7 @@ public class ItemHolder
 
 			s.close();
 		} catch(Exception e) {
-            System.out.println("[CANNONS] Error while converting " + str + ". Check formatting (minecraft:clock)");
+			Cannons.logger().log(Level.SEVERE,"[CANNONS] Error while converting " + str + ". Check formatting (minecraft:clock)");
         }
 	}
 	

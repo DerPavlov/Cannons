@@ -1,5 +1,6 @@
 package at.pavlov.cannons.cannon;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.container.SoundHolder;
@@ -201,12 +202,12 @@ public class CannonDesign
     	{
     		return cannonBlocks.getRotationCenter().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
-    	
-    	System.out.println("[Cannons] missing rotation center for cannon design " + cannon.getCannonName());
+
+    	Cannons.logger().info("[Cannons] missing rotation center for cannon design " + cannon.getCannonName());
     	return cannon.getOffset().toLocation(cannon.getWorldBukkit());
-    } 
-    
-    
+    }
+
+
     /**
      * returns the muzzle location
      * @param cannon
@@ -220,7 +221,7 @@ public class CannonDesign
     		return cannonBlocks.getMuzzle().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
 
-    	System.out.println("[Cannons] missing muzzle location for cannon design " + cannon.getCannonName());
+    	Cannons.logger().info("[Cannons] missing muzzle location for cannon design " + cannon.getCannonName());
     	return cannon.getOffset().toLocation(cannon.getWorldBukkit());
     }
     

@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
+import java.util.logging.Level;
 
 
 public class CannonsUtil
@@ -784,11 +785,11 @@ public class CannonsUtil
         else
             //impact was above
             plane = -0.5;
-        System.out.println("impact: " + imb + " rv: " + rv + " direction " + direction + " plane: " + plane);
+        Cannons.logger().info("impact: " + imb + " rv: " + rv + " direction " + direction + " plane: " + plane);
         double t = (plane - rv.getY())/direction.getY();
         Vector is = direction.clone().multiply(t).add(rv);
         //detect if is within bonds
-        System.out.println("isurface: " + is);
+        Cannons.logger().info("isurface: " + is);
         if (is.getX() > -0.5 && is.getX() < 0.5 && is.getZ() > -0.5 && is.getZ() < 0.5){
             return new Vector(0,1,0);
         }
@@ -822,7 +823,7 @@ public class CannonsUtil
             return Bukkit.createBlockData(str);
         }
         catch(Exception e){
-            System.out.println("[Cannons] block data '" + str + "' is not valid");
+            Cannons.logger().log(Level.WARNING,"[Cannons] block data '" + str + "' is not valid");
             return Material.AIR.createBlockData();
         }
     }

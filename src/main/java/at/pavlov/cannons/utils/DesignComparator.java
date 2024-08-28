@@ -1,9 +1,11 @@
 package at.pavlov.cannons.utils;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.cannon.CannonDesign;
 import org.bukkit.block.BlockFace;
 
 import java.util.Comparator;
+import java.util.logging.Level;
 
 public class DesignComparator implements Comparator<CannonDesign>
 {
@@ -23,7 +25,7 @@ public class DesignComparator implements Comparator<CannonDesign>
 		//if the design is invalid something goes wrong, message the user
 		if (design.getAllCannonBlocks(BlockFace.NORTH) == null) 
 		{
-			System.out.println("[Cannons] invalid cannon design for " + design.getDesignName());
+			Cannons.logger().log(Level.SEVERE, "[Cannons] invalid cannon design for " + design.getDesignName());
 			return 0;
 		}
 		

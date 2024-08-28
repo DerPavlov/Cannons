@@ -1,5 +1,6 @@
 package at.pavlov.cannons.projectile;
 
+import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
@@ -118,7 +119,7 @@ public class Projectile implements Cloneable{
 		}
 		catch(CloneNotSupportedException e)
 		{
-			System.out.println("Cloning not allowed.");
+			Cannons.logger().info("Cloning not allowed.");
 			return this;
 		}
 	}

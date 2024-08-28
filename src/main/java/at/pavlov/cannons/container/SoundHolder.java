@@ -1,9 +1,11 @@
 package at.pavlov.cannons.container;
 
+import at.pavlov.cannons.Cannons;
 import org.bukkit.Sound;
 
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.logging.Level;
 
 public class SoundHolder {
     private Sound soundenum;
@@ -38,21 +40,21 @@ public class SoundHolder {
                     }
             }
             else
-                System.out.println("missing sound value in: " + str);
+                Cannons.logger().log(Level.WARNING,"missing sound value in: " + str);
 
             if (s.hasNextFloat())
                 volume = s.nextFloat();
             else
-                System.out.println("missing volume value in: " + str);
+                Cannons.logger().log(Level.WARNING,"missing volume value in: " + str);
             if (s.hasNextFloat())
                 pitch = s.nextFloat();
             else
-                System.out.println("missing pitch value in: " + str);
+                Cannons.logger().log(Level.WARNING,"missing pitch value in: " + str);
             s.close();
         }
         catch(Exception e)
         {
-            System.out.println("Error while converting " + str + ". Formatting: 'IRON_GOLEM_WALK:1:0.5'" + e.toString());
+            Cannons.logger().log(Level.SEVERE,"Error while converting " + str + ". Formatting: 'IRON_GOLEM_WALK:1:0.5'" + e.toString());
         }
     }
 
