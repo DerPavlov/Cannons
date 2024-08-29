@@ -69,12 +69,18 @@ class CannonBlocks
 	public void setAllCannonBlocks(ArrayList<SimpleBlock> allCannonBlocks) {
 		this.allCannonBlocks = allCannonBlocks;
 	}
+	public void addAllCannonBlocks(SimpleBlock add) {
+		this.allCannonBlocks.add(add);
+	}
 
 	public ArrayList<Vector> getBarrelBlocks() {
 		return barrelBlocks;
 	}
-	public void setBarrel (ArrayList<Vector> barrelBlocks) {
+	public void setBarrel(ArrayList<Vector> barrelBlocks) {
 		this.barrelBlocks = barrelBlocks;
+	}
+	public void addBarrel(Vector add) {
+		this.barrelBlocks.add(add);
 	}
 
 	public ArrayList<Vector> getRedstoneTorches() {
@@ -83,12 +89,18 @@ class CannonBlocks
 	public void setRedstoneTorches(ArrayList<Vector> redstoneTorches) {
 		this.redstoneTorches = redstoneTorches;
 	}
+	public void addRedstoneTorch(Vector add) {
+		this.redstoneTorches.add(add);
+	}
 
 	public ArrayList<Vector> getRedstoneTrigger() {
 		return redstoneTrigger;
 	}
 	public void setRedstoneTrigger(ArrayList<Vector> redstoneTrigger) {
 		this.redstoneTrigger = redstoneTrigger;
+	}
+	public void addRedstoneTrigger(Vector add) {
+		this.redstoneTrigger.add(add);
 	}
 
 	public ArrayList<Vector> getRightClickTrigger() {
@@ -97,12 +109,18 @@ class CannonBlocks
 	public void setRightClickTrigger(ArrayList<Vector> rightClickTrigger) {
 		this.rightClickTrigger = rightClickTrigger;
 	}
+	public void addRightClickTrigger(Vector add) {
+		this.rightClickTrigger.add(add);
+	}
 
 	public ArrayList<SimpleBlock> getChestsAndSigns() {
 		return chestsAndSigns;
 	}
 	public void setChestsAndSigns(ArrayList<SimpleBlock> chestsAndSigns) {
 		this.chestsAndSigns = chestsAndSigns;
+	}
+	public void addChestsAndSigns(SimpleBlock add) {
+		this.chestsAndSigns.add(add);
 	}
 
 	public ArrayList<SimpleBlock> getRedstoneWiresAndRepeater() {
@@ -111,6 +129,9 @@ class CannonBlocks
 	public void setRedstoneWiresAndRepeater(ArrayList<SimpleBlock> redstoneWiresAndRepeater) {
 		this.redstoneWiresAndRepeater = redstoneWiresAndRepeater;
 	}
+	public void addRedstoneWiresAndRepeater(SimpleBlock add) {
+		this.redstoneWiresAndRepeater.add(add);
+	}
 
 	public ArrayList<Vector> getFiringIndicator() {
 		return firingIndicator;
@@ -118,12 +139,18 @@ class CannonBlocks
 	public void setFiringIndicator(ArrayList<Vector> firingIndicator) {
 		this.firingIndicator = firingIndicator;
 	}
+	public void addFiringIndicator(Vector add) {
+		this.firingIndicator.add(add);
+	}
 
 	public ArrayList<Vector> getDestructibleBlocks() {
 		return destructibleBlocks;
 	}
 	public void setDestructibleBlocks(ArrayList<Vector> destructibleBlocks) {
 		this.destructibleBlocks = destructibleBlocks;
+	}
+	public void addDestructibleBlocks(Vector add) {
+		this.destructibleBlocks.add(add);
 	}
     
 }
