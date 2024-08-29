@@ -20,11 +20,12 @@ Error:
   NotPaid: "RED [Cannons] Die Kanonenabgabe wurde noch nicht bezahlt. Verwende GOLD '/cannons buy' RED um diese CANNON für GOLD BUILD_COSTS zu kaufen"
   AlreadyPaid: 'RED [Cannons] Die Kanonenabgabe wurde für diese Kanone bereits bezahlt'
   PlayerNotFound: 'RED [Cannons] Spielername nicht vorhanden.'
+  Generic: 'RED [Cannons] Error.'
 
 
 Commands:
   SelectCannon: 'YELLOW [Cannons] Bitte Kanone auswählen.'
-    SelectBlock: 'YELLOW [Cannons] Bitte Block auswählen.'
+  SelectBlock: 'YELLOW [Cannons] Bitte Block auswählen.'
   SelectCanceled: 'RED [Cannons] Auswahl abgebrochen.'
   CannonNotFound: 'RED [Cannons] Kanone existiert nicht.'
   NoSentryWhitelist: 'RED [Cannons] Whitelist funktioniert nur bei Sentrykanonen.'

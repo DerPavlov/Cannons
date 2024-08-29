@@ -11,6 +11,7 @@ import at.pavlov.cannons.dao.LoadWhitelistTask;
 import at.pavlov.cannons.event.CannonAfterCreateEvent;
 import at.pavlov.cannons.event.CannonBeforeCreateEvent;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
+import at.pavlov.cannons.event.CannonRenameEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
 import at.pavlov.cannons.utils.RemoveTaskWrapper;
@@ -268,6 +269,12 @@ public class CannonManager {
             return MessageEnum.CannonRenameFail;
 
         //put the new name
+        CannonRenameEvent event = new CannonRenameEvent(player, cannon, newCannonName);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled())
+            return MessageEnum.ErrorGeneric;
+
         cannon.setCannonName(newCannonName);
         cannon.updateCannonSigns();
 

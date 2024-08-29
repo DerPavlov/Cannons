@@ -24,6 +24,7 @@ public enum MessageEnum
 	ErrorNotPaid ("Error.NotPaid", true),
 	ErrorAlreadyPaid ("Error.AlreadyPaid", true),
 	ErrorPlayerNotFound ("Error.PlayerNotFound", true),
+	ErrorGeneric ("Error.Generic", true),
 
     //Commands
     CmdSelectCannon ("Commands.SelectCannon"),

@@ -20,6 +20,7 @@ Error:
   NotPaid: "RED [Cannons] The cannon fee is not paid. Use GOLD '/cannons buy' RED to buy this CANNON for GOLD BUILD_COSTS"
   AlreadyPaid: 'RED [Cannons] The fee for this cannon has already been paid'
   PlayerNotFound: 'RED [Cannons] Player does not exist.'
+  Generic: 'RED [Cannons] Error.'
 
 
 Aiming:
