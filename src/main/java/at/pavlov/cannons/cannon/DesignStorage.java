@@ -476,16 +476,13 @@ public class DesignStorage
                 if (sblock.compareMaterial(blockMuzzle))
                 {
                     // reset for the first entry
-                    if (firstEntryMuzzle)
-                    {
+                    if (firstEntryMuzzle) {
                         firstEntryMuzzle = false;
                         minMuzzle = new Vector(x, y, z);
                         maxMuzzle = new Vector(x, y, z);
-                    }
-                    else
-                    {
-                        minMuzzle = findMinimum(x, y, z, minMuzzle);
-                        maxMuzzle = findMaximum(x, y, z, maxMuzzle);
+                    } else {
+                        setMinimum(x, y, z, minMuzzle);
+                        setMaximum(x, y, z, maxMuzzle);
                     }
                     //muzzle blocks need to be air - else the projectile would spawn in a block
                     cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, Material.AIR));
@@ -494,16 +491,13 @@ public class DesignStorage
                 else if (sblock.compareMaterial(blockRotationCenter))
                 {
                     // reset for the first entry
-                    if (firstEntryRotation)
-                    {
+                    if (firstEntryRotation) {
                         firstEntryRotation = false;
                         minRotation = new Vector(x, y, z);
                         maxRotation= new Vector(x, y, z);
-                    }
-                    else
-                    {
-                        minRotation = findMinimum(x, y, z, minRotation);
-                        maxRotation = findMaximum(x, y, z, maxRotation);
+                    } else {
+                        setMinimum(x, y, z, minRotation);
+                        setMaximum(x, y, z, maxRotation);
                     }
                 }
                 // #############  redstoneTorch
@@ -513,8 +507,7 @@ public class DesignStorage
                 else if (sblock.compareMaterial(blockRedstoneWireAndRepeater))
                     cannonBlocks.getRedstoneWiresAndRepeater().add(new SimpleBlock(x, y, z, Material.REPEATER));
                     // #############  redstoneTrigger
-                else if (sblock.compareMaterialAndFacing(blockRedstoneTrigger))
-                {
+                else if (sblock.compareMaterialAndFacing(blockRedstoneTrigger)) {
                     cannonBlocks.getRedstoneTrigger().add(new Vector(x, y, z));
                     // buttons or levers are part of the cannon
                     cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, replaceRedstoneTrigger));
@@ -538,15 +531,13 @@ public class DesignStorage
                         cannonBlocks.getDestructibleBlocks().add(new Vector(x, y, z));
                 }
                 // #############  chests and signs
-                else if (sblock.compareMaterial(blockChestAndSign))
-                {
+                else if (sblock.compareMaterial(blockChestAndSign)) {
                     // the id does not matter, but the data is important for signs
                     cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, sblock.getBlockData())); //Material.WALL_SIGN
                 }
                 // #############  loading Interface is a cannonblock that is non of
                 // the previous blocks
-                else
-                {
+                else {
                     // all remaining blocks are loading interface or cannonBlocks
                     cannonBlocks.getBarrelBlocks().add(new Vector(x, y, z));
                     cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, sblock.getBlockData()));
@@ -628,28 +619,16 @@ public class DesignStorage
         return true;
 	}
 
-	private Vector findMinimum(int x, int y, int z, Vector min)
-	{
-		if (x < min.getBlockX())
-			min.setX(x);
-		if (y < min.getBlockY())
-			min.setY(y);
-		if (z < min.getBlockZ())
-			min.setZ(z);
-
-		return min;
+	private void setMinimum(int x, int y, int z, Vector min) {
+		if (x < min.getBlockX()) min.setX(x);
+		if (y < min.getBlockY()) min.setY(y);
+		if (z < min.getBlockZ()) min.setZ(z);
 	}
 
-	private Vector findMaximum(int x, int y, int z, Vector max)
-	{
-		if (x > max.getBlockX())
-			max.setX(x);
-		if (y > max.getBlockY())
-			max.setY(y);
-		if (z > max.getBlockZ())
-			max.setZ(z);
-
-		return max;
+	private void setMaximum(int x, int y, int z, Vector max) {
+		if (x > max.getBlockX()) max.setX(x);
+		if (y > max.getBlockY()) max.setY(y);
+		if (z > max.getBlockZ()) max.setZ(z);
 	}
 
 	/**
