@@ -94,34 +94,35 @@ public class EntityListener implements Listener
      * @param blocklist list of blocks involved in the event
      */
     public void ExplosionEventHandler(List<Block> blocklist){
-        HashSet<UUID> remove = new HashSet<UUID>();
+        HashSet<UUID> remove = new HashSet<>();
 
         // first search if a barrel block was destroyed.
         for (Block block : blocklist) {
             Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
 
             // if it is a cannon block
-            if (cannon != null) {
-                if (cannon.isDestructibleBlock(block.getLocation())) {
-                    //this cannon is destroyed
-                    remove.add(cannon.getUID());
-                }
+            if (cannon == null) {
+                continue;
+            }
+
+            if (cannon.isDestructibleBlock(block.getLocation())) {
+                //this cannon is destroyed
+                remove.add(cannon.getUID());
             }
         }
 
         //iterate again and remove all block of intact cannons
-        for (int i = 0; i < blocklist.size(); i++)
-        {
+        for (int i = 0; i < blocklist.size(); i++) {
             Block block = blocklist.get(i);
             Cannon cannon = plugin.getCannonManager().getCannon(block.getLocation(), null);
 
             // if it is a cannon block and the cannon is not destroyed (see above)
-            if (cannon != null && !remove.contains(cannon.getUID()))
-            {
-                if (cannon.isCannonBlock(block))
-                {
-                    blocklist.remove(i--);
-                }
+            if (cannon == null || remove.contains(cannon.getUID())) {
+                continue;
+            }
+
+            if (cannon.isCannonBlock(block)) {
+                blocklist.remove(i--);
             }
         }
 
