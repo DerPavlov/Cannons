@@ -93,11 +93,10 @@ public class DesignStorage
 		ArrayList<DesignFileName> designFileList = getDesignFiles();
 
 		// stop if there are no files found
-		if (designFileList == null || designFileList.size() == 0)
+		if (designFileList == null || designFileList.isEmpty())
 			return;
 
-		for (DesignFileName designFile : designFileList)
-		{
+		for (DesignFileName designFile : designFileList) {
 			plugin.logDebug("loading cannon " + designFile.getYmlString());
 			CannonDesign cannonDesign = new CannonDesign();
 			//load .yml
@@ -134,45 +133,44 @@ public class DesignStorage
 	 * 
 	 * @return
 	 */
-	private ArrayList<DesignFileName> getDesignFiles()
-	{
-		ArrayList<DesignFileName> designList = new ArrayList<DesignFileName>();
+	private ArrayList<DesignFileName> getDesignFiles() {
+		ArrayList<DesignFileName> designList = new ArrayList<>();
 
-		try
-		{
+		try {
 			// check plugin/cannons/designs for .yml and .schematic files
 			String ymlFile;
 			File folder = new File(getPath());
 
 			File[] listOfFiles = folder.listFiles();
-            if (listOfFiles == null)
-            {
+            if (listOfFiles == null) {
                 plugin.logSevere("Design folder empty");
                 return designList;
             }
 
 
 			for (File listOfFile : listOfFiles) {
-				if (listOfFile.isFile()) {
-					ymlFile = listOfFile.getName();
-					if (ymlFile.endsWith(".yml") || ymlFile.endsWith(".yaml")) {
-						String schematicFile = CannonsUtil.changeExtension(ymlFile, ".schematic");
-						String schemFile = CannonsUtil.changeExtension(ymlFile, ".schem");
-						if (new File(getPath() + schematicFile).isFile()) {
-							// there is a shematic file and a .yml file
-							designList.add(new DesignFileName(ymlFile, schematicFile));
-						} else if (new File(getPath() + schemFile).isFile()) {
-							// there is a shematic file and a .yml file
-							designList.add(new DesignFileName(ymlFile, schemFile));
-						} else {
-							plugin.logSevere(schematicFile + " is missing");
-						}
-					}
+                if (!listOfFile.isFile()) {
+                	continue;
 				}
-			}
-		}
-		catch (Exception e)
-		{
+
+                ymlFile = listOfFile.getName();
+                if (!ymlFile.endsWith(".yml") && !ymlFile.endsWith(".yaml")) {
+                	continue;
+				}
+
+                String schematicFile = CannonsUtil.changeExtension(ymlFile, ".schematic");
+                String schemFile = CannonsUtil.changeExtension(ymlFile, ".schem");
+                if (new File(getPath() + schematicFile).isFile()) {
+                    // there is a shematic file and a .yml file
+                    designList.add(new DesignFileName(ymlFile, schematicFile));
+                } else if (new File(getPath() + schemFile).isFile()) {
+                    // there is a shematic file and a .yml file
+                    designList.add(new DesignFileName(ymlFile, schemFile));
+                } else {
+                    plugin.logSevere(schematicFile + " is missing");
+                }
+            }
+		} catch (Exception e) {
 			plugin.logSevere("Error while checking yml and schematic " + e);
 		}
 		return designList;
@@ -485,11 +483,10 @@ public class DesignStorage
                         setMaximum(x, y, z, maxMuzzle);
                     }
                     //muzzle blocks need to be air - else the projectile would spawn in a block
-                    cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, Material.AIR));
+                    cannonBlocks.addAllCannonBlocks(new SimpleBlock(x, y, z, Material.AIR));
                 }
                 // #############  find the min and max for rotation blocks
-                else if (sblock.compareMaterial(blockRotationCenter))
-                {
+                else if (sblock.compareMaterial(blockRotationCenter)) {
                     // reset for the first entry
                     if (firstEntryRotation) {
                         firstEntryRotation = false;
@@ -502,54 +499,54 @@ public class DesignStorage
                 }
                 // #############  redstoneTorch
                 else if (sblock.compareMaterial(blockRedstoneTorch))
-                    cannonBlocks.getRedstoneTorches().add(new Vector(x, y, z));
+                    cannonBlocks.addRedstoneTorch(new Vector(x, y, z));
                     // #############  redstoneWire and Repeater
                 else if (sblock.compareMaterial(blockRedstoneWireAndRepeater))
-                    cannonBlocks.getRedstoneWiresAndRepeater().add(new SimpleBlock(x, y, z, Material.REPEATER));
+                    cannonBlocks.addRedstoneWiresAndRepeater(new SimpleBlock(x, y, z, Material.REPEATER));
                     // #############  redstoneTrigger
                 else if (sblock.compareMaterialAndFacing(blockRedstoneTrigger)) {
-                    cannonBlocks.getRedstoneTrigger().add(new Vector(x, y, z));
+                    cannonBlocks.addRedstoneTrigger(new Vector(x, y, z));
                     // buttons or levers are part of the cannon
-                    cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, replaceRedstoneTrigger));
+                    cannonBlocks.addAllCannonBlocks(new SimpleBlock(x, y, z, replaceRedstoneTrigger));
                     // this can be a destructible block
                     if (!isInList(blockProtectedList, sblock.getBlockData()))
-                        cannonBlocks.getDestructibleBlocks().add(new Vector(x, y, z));
+                        cannonBlocks.addDestructibleBlocks(new Vector(x, y, z));
                 }
                 // #############  rightClickTrigger
                 else if (sblock.compareMaterialAndFacing(blockRightClickTrigger))
                 {
-                    cannonBlocks.getRightClickTrigger().add(new Vector(x, y, z));
+                    cannonBlocks.addRightClickTrigger(new Vector(x, y, z));
                     //can be also a sign
                     if (sblock.compareMaterialAndFacing(blockChestAndSign))
                         // the id does not matter, but the data is important for signs
-                        cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, sblock.getBlockData())); //Material.WALL_SIGN
+                        cannonBlocks.addChestsAndSigns(new SimpleBlock(x, y, z, sblock.getBlockData())); //Material.WALL_SIGN
                     // firing blocks are also part of the cannon are
                     // part of the cannon
-                    cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, replaceRightClickTrigger));
+                    cannonBlocks.addAllCannonBlocks(new SimpleBlock(x, y, z, replaceRightClickTrigger));
                     // this can be a destructible block
                     if (!isInList(blockProtectedList, sblock.getBlockData()))
-                        cannonBlocks.getDestructibleBlocks().add(new Vector(x, y, z));
+                        cannonBlocks.addDestructibleBlocks(new Vector(x, y, z));
                 }
                 // #############  chests and signs
                 else if (sblock.compareMaterial(blockChestAndSign)) {
                     // the id does not matter, but the data is important for signs
-                    cannonBlocks.getChestsAndSigns().add(new SimpleBlock(x, y, z, sblock.getBlockData())); //Material.WALL_SIGN
+                    cannonBlocks.addChestsAndSigns(new SimpleBlock(x, y, z, sblock.getBlockData())); //Material.WALL_SIGN
                 }
                 // #############  loading Interface is a cannonblock that is non of
                 // the previous blocks
                 else {
                     // all remaining blocks are loading interface or cannonBlocks
-                    cannonBlocks.getBarrelBlocks().add(new Vector(x, y, z));
-                    cannonBlocks.getAllCannonBlocks().add(new SimpleBlock(x, y, z, sblock.getBlockData()));
+                    cannonBlocks.addBarrel(new Vector(x, y, z));
+                    cannonBlocks.addAllCannonBlocks(new SimpleBlock(x, y, z, sblock.getBlockData()));
                     // this can be a destructible block
                     if (!isInList(blockProtectedList, sblock.getBlockData()))
-                        cannonBlocks.getDestructibleBlocks().add(new Vector(x, y, z));
+                        cannonBlocks.addDestructibleBlocks(new Vector(x, y, z));
                 }
 
                 // #############  firingIndicator
                 // can be everywhere on the cannon
                 if (sblock.compareMaterialAndFacing(blockFiringIndicator))
-                    cannonBlocks.getFiringIndicator().add(new Vector(x, y, z));
+                    cannonBlocks.addFiringIndicator(new Vector(x, y, z));
             }
 
 			// calculate the muzzle location
