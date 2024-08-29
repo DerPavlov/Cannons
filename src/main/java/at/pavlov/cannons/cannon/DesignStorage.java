@@ -364,39 +364,36 @@ public class DesignStorage
 		cannonDesign.setSchematicBlockTypeProtected(CannonsUtil.toBlockDataList(cannonDesignConfig.getStringList("constructionBlocks.protectedBlocks")));
 	}
 
-	/**
-	 * loads the schematic of the config file
-	 * @param cannonDesign design of the cannon
-	 * @param schematicFile path of the schematic file
-	 */
-	private boolean loadDesignSchematic(CannonDesign cannonDesign, String schematicFile)
-	{
-        long startTime = System.nanoTime();
-		
-		// load schematic with worldedit
-        Clipboard cc;
-        File f = new File(getPath() + schematicFile);
+	private Clipboard loadSchematic(String schematicFile) {
+		File f = new File(getPath() + schematicFile);
 		ClipboardFormat format = ClipboardFormats.findByFile(f);
 		try (Closer closer = Closer.create()) {
 			FileInputStream fis = closer.register(new FileInputStream(f));
 			BufferedInputStream bis = closer.register(new BufferedInputStream(fis));
 			ClipboardReader reader = closer.register(format.getReader(bis));
 
-			cc = reader.read();
+			return reader.read();
 		} catch (IOException e) {
 			plugin.logSevere("Error while loading schematic " + getPath() + schematicFile + " :" + e  + "; does file exist: " + f.exists());
-			return false;
+			return null;
 		}
+	}
+
+	/**
+	 * loads the schematic of the config file
+	 * @param cannonDesign design of the cannon
+	 * @param schematicFile path of the schematic file
+	 */
+	private boolean loadDesignSchematic(CannonDesign cannonDesign, String schematicFile) {
+        long startTime = System.nanoTime();
+		
+		// load schematic with worldedit
+        Clipboard cc = loadSchematic(schematicFile);
 		//failed to load schematic
-		if (cc == null) 
-		{
+		if (cc == null) {
 			plugin.logSevere("Failed to loading schematic");
 			return false;
 		}
-
-		ClipboardHolder clipboardHolder = new ClipboardHolder(cc);
-		clipboardHolder.setTransform(new AffineTransform().translate(cc.getMinimumPoint().multiply(-1)));
-		cc = clipboardHolder.getClipboard();
 
 		// convert all schematic blocks from the config to BaseBlocks so they
 		// can be rotated
@@ -411,11 +408,14 @@ public class DesignStorage
 		BlockData blockRightClickTrigger = cannonDesign.getSchematicBlockTypeRightClickTrigger();
 		BlockData replaceRedstoneTrigger = cannonDesign.getIngameBlockTypeRedstoneTrigger();
 		BlockData replaceRightClickTrigger = cannonDesign.getIngameBlockTypeRightClickTrigger();
-        List<BlockData> blockProtectedList = new ArrayList<BlockData>(cannonDesign.getSchematicBlockTypeProtected());
-		
-		
+        List<BlockData> blockProtectedList = new ArrayList<>(cannonDesign.getSchematicBlockTypeProtected());
+
 		// get facing of the cannon
 		BlockFace cannonDirection = cannonDesign.getDefaultHorizontalFacing();
+
+		ClipboardHolder clipboardHolder = new ClipboardHolder(cc);
+		clipboardHolder.setTransform(new AffineTransform().translate(cc.getMinimumPoint().multiply(-1)));
+		cc = clipboardHolder.getClipboard();
 
 		// read out blocks
 		int width = cc.getDimensions().getBlockX();
@@ -425,28 +425,9 @@ public class DesignStorage
 		cc.setOrigin(BlockVector3.ZERO);
 
 		//plugin.logDebug("design: " + schematicFile);
-		ArrayList<SimpleBlock> schematiclist = getSchematic(width, height, length, cc, blockIgnore);
-		/*for (int x = 0; x < width; ++x) {
-			for (int y = 0; y < height; ++y) {
-				for (int z = 0; z < length; ++z) {
+		ArrayList<SimpleBlock> schematicList = getSchematic(width, height, length, cc, blockIgnore);
 
-					BlockVector3 pt = BlockVector3.at(x, y, z);
-					BlockState blockState = cc.getBlock(pt.add(cc.getMinimumPoint()));
-					//plugin.logDebug("blockstate: " + blockState.getAsString());
-
-					BlockData block = Bukkit.getServer().createBlockData(blockState.getAsString());
-
-
-					// ignore if block is AIR or the IgnoreBlock type
-					if (!block.getMaterial().equals(Material.AIR) && !block.matches(blockIgnore)) {
-						schematiclist.add(new SimpleBlock(pt.getBlockX(), pt.getBlockY(), pt.getBlockZ(), block));
-					}
-				}
-			}
-		}*/
-
-		for (int i = 0; i < 4; i++)
-		{
+		for (int i = 0; i < 4; i++) {
 			// create CannonBlocks entry
             CannonBlocks cannonBlocks = new CannonBlocks();
 
@@ -464,7 +445,7 @@ public class DesignStorage
 			Vector maxRotation = new Vector(width, height, length);
 			boolean firstEntryRotation = true;
 
-            for (SimpleBlock sblock : schematiclist) {
+            for (SimpleBlock sblock : schematicList) {
                 int x = sblock.getLocX();
                 int y = sblock.getLocY();
                 int z = sblock.getLocZ();
@@ -602,7 +583,7 @@ public class DesignStorage
 			}
 
 			//rotate schematic blocks
-			for (SimpleBlock simpleBlock : schematiclist){
+			for (SimpleBlock simpleBlock : schematicList){
 				simpleBlock.rotate90();
 			}
 
