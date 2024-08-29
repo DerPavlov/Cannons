@@ -13,6 +13,7 @@ import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.container.MovingObject;
 import at.pavlov.cannons.container.Target;
+import at.pavlov.cannons.event.CannonLinkAimingEvent;
 import at.pavlov.cannons.event.CannonTargetEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.projectile.Projectile;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -398,7 +400,7 @@ public class Aiming {
         if (!player.getWorld().equals(cannon.getWorldBukkit()))
             return false;
 
-        //check if player if far away from the cannon
+        //check if player is far away from the cannon
         CannonDesign design = plugin.getCannonDesign(cannon);
         //go to trigger location
         Location locCannon = design.getFiringTrigger(cannon);
@@ -449,26 +451,6 @@ public class Aiming {
             // autoaming or fineadjusting
             if (handleAutoamingFineadjusting(playerInRange, player, cannon))
                 return;
-            /*
-            if (playerInRange && player.isOnline() && cannon.isValid() && !(cannon.getCannonDesign().isSentry() && cannon.isSentryAutomatic())) {
-
-                MessageEnum message = updateAngle(player, cannon, null, InteractAction.adjustAutoaim);
-                // linked Cannons
-                if (!cannon.getCannonDesign().isLinkCannonsEnabled()) {
-					userMessages.sendMessage(message, player, cannon);
-					return;
-                }
-
-				int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
-				for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
-					// if the design is the same and the player is allowed to used the cannon
-					if (fcannon.isCannonOperator(player) && fcannon.getCannonDesign().equals(cannon.getCannonDesign()) && (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
-						updateAngle(player, fcannon, null, InteractAction.adjustAutoaim);
-				}
-
-                userMessages.sendMessage(message, player, cannon);
-				return;
-            }*/
 
 			//leave aiming Mode but wait a second first
 			if ((System.currentTimeMillis() - cannon.getTimestampAimingMode()) > 1000) {
@@ -496,7 +478,7 @@ public class Aiming {
 
         int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
         for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
-            // if the design is the same and the player is allowed to used the cannon
+            // if the design is the same, and the player is allowed to use the cannon
             boolean checkDesign = fcannon.getCannonDesign().equals(cannon.getCannonDesign());
             boolean canAccess = !cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId();
 
@@ -1015,17 +997,22 @@ public class Aiming {
             return message;
 
         //todo add player from all cannons as cannon operator
-        if (cannon.getCannonDesign().isLinkCannonsEnabled()) {
-            int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
-            for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
-                if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()))
-                    fcannon.addCannonOperator(player, false);
-            }
+        if (!cannon.getCannonDesign().isLinkCannonsEnabled()) {
+            return MessageEnum.AimingModeEnabled;
         }
 
+        int d = cannon.getCannonDesign().getLinkCannonsDistance() * 2;
+        LinkedList<Cannon> cannonList = new LinkedList<>(CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d));
+
+        CannonLinkAimingEvent event = new CannonLinkAimingEvent(cannon, player, cannonList, false);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        for (Cannon fcannon : event.getCannonList()) {
+            if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) || event.isSameDesign())
+                fcannon.addCannonOperator(player, false);
+        }
 
         return MessageEnum.AimingModeEnabled;
-
     }
 
 
