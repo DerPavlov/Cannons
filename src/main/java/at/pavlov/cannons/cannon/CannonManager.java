@@ -31,8 +31,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class CannonManager
-{
+public class CannonManager {
 	private static final ConcurrentHashMap<UUID, Cannon> cannonList = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, UUID> cannonNameMap = new ConcurrentHashMap<>();
 
@@ -43,8 +42,7 @@ public class CannonManager
 
 
 
-	public CannonManager(Cannons cannons, UserMessages userMessages, Config config)
-	{
+	public CannonManager(Cannons cannons, UserMessages userMessages, Config config) {
 		this.userMessages = userMessages;
 		this.config = config;
 		this.plugin = cannons;
@@ -54,15 +52,12 @@ public class CannonManager
 	 * removes a cannons from the list that are not valid
      * @param cause the reason why the cannon is removed
 	 */
-	private void removeInvalidCannons(BreakCause cause)
-	{
+	private void removeInvalidCannons(BreakCause cause) {
 		Iterator<Cannon> iter = cannonList.values().iterator();
 
-        while(iter.hasNext())
-        {
+        while(iter.hasNext()) {
             Cannon next = iter.next();
-			if (!next.isValid())
-			{
+			if (!next.isValid()) {
 				removeCannon(next, false, false, cause, false, false);
                 iter.remove();
 			}
@@ -73,8 +68,7 @@ public class CannonManager
      * deconstructs a cannon without the risk of explosion
      * @param cannon cannon to remove
      */
-    public void dismantleCannon(Cannon cannon, Player player)
-    {
+    public void dismantleCannon(Cannon cannon, Player player) {
         if (cannon == null)
             return;
         if (player==null){
@@ -82,19 +76,21 @@ public class CannonManager
             return;
         }
         // admins can dismantle all cannons
-        if (player.hasPermission("cannons.admin.dismantle"))
+        if (player.hasPermission("cannons.admin.dismantle")) {
             removeCannon(cannon, true, false, BreakCause.Dismantling);
-        else if (player.hasPermission(cannon.getCannonDesign().getPermissionDismantle())) {
+            return;
+        }
+
+        if (player.hasPermission(cannon.getCannonDesign().getPermissionDismantle())) {
             //only the owner of the cannon can dismantle a cannon
             if (cannon.getOwner()!=null && cannon.getOwner().equals(player.getUniqueId()))
                 removeCannon(cannon, true, false, BreakCause.Dismantling);
             else
                 userMessages.sendMessage(MessageEnum.ErrorDismantlingNotOwner, player, cannon);
-        }
-        else{
-            userMessages.sendMessage(MessageEnum.PermissionErrorDismantle, player, cannon);
+            return;
         }
 
+        userMessages.sendMessage(MessageEnum.PermissionErrorDismantle, player, cannon);
     }
 
 	/**
@@ -104,8 +100,7 @@ public class CannonManager
      * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
 	 */
-	public void removeCannon(Location loc, boolean breakCannon, boolean canExplode, BreakCause cause)
-	{
+	public void removeCannon(Location loc, boolean breakCannon, boolean canExplode, BreakCause cause) {
 		Cannon cannon = getCannon(loc, null);
 		removeCannon(cannon, breakCannon, canExplode, cause);
 	}
@@ -117,8 +112,7 @@ public class CannonManager
      * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
 	 */
-	public void removeCannon(Cannon cannon, boolean breakCannon, boolean canExplode, BreakCause cause)
-	{
+	public void removeCannon(Cannon cannon, boolean breakCannon, boolean canExplode, BreakCause cause) {
         removeCannon(cannon, breakCannon, canExplode, cause, true, true);
 	}
 
@@ -129,8 +123,7 @@ public class CannonManager
      * @param canExplode if the cannon can explode when loaded with gunpowder
      * @param cause the reason way the cannon was broken
      */
-    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause)
-    {
+    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause) {
         removeCannon(uid, breakCannon, canExplode, cause, true);
     }
 
@@ -142,8 +135,7 @@ public class CannonManager
      * @param cause the reason way the cannon was broken
      * @param removeEntry should the cannon be removed from the list
      */
-    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause, boolean removeEntry)
-    {
+    public void removeCannon(UUID uid, boolean breakCannon, boolean canExplode, BreakCause cause, boolean removeEntry) {
         Cannon cannon = cannonList.get(uid);
         removeCannon(cannon, breakCannon, canExplode, cause, removeEntry, true);
     }
@@ -157,8 +149,7 @@ public class CannonManager
      * @param cause the reason way the cannon was broken
      * @param ignoreInvalid if true invalid cannons will be skipped and not removed
      */
-    public void removeCannon(Cannon cannon, boolean breakCannon, boolean canExplode, BreakCause cause, boolean removeEntry, boolean ignoreInvalid)
-    {
+    public void removeCannon(Cannon cannon, boolean breakCannon, boolean canExplode, BreakCause cause, boolean removeEntry, boolean ignoreInvalid) {
         //ignore invalid cannons
         if (cannon == null || (!cannon.isValid() && ignoreInvalid))
             return;
@@ -232,8 +223,7 @@ public class CannonManager
 	 * @param name name of the cannon
 	 * @return true if the name is unique
 	 */
-	private static boolean isCannonNameUnique(String name)
-	{
+	private static boolean isCannonNameUnique(String name) {
         if (name == null)
             return false;
 
@@ -247,8 +237,7 @@ public class CannonManager
 	 * generates a new unique cannon name
 	 * @return name string for the new cannon
 	 */
-	private String newCannonName(Cannon cannon)
-	{		
+	private String newCannonName(Cannon cannon) {
 		//check if this cannon has a owner
 		if (cannon.getOwner() == null)
             return "missing Owner";
@@ -261,20 +250,17 @@ public class CannonManager
 			name = "cannon";
 	
 
-		for (int i = 1; i < Integer.MAX_VALUE; i++)
-		{
+		for (int i = 1; i < Integer.MAX_VALUE; i++) {
 			String cannonName = name + " " + i;
 
-			if (isCannonNameUnique(cannonName))
-			{
+			if (isCannonNameUnique(cannonName)) {
 				return cannonName;
 			}
 		}
 		return "no unique name";
 	}
 
-    public MessageEnum renameCannon(Player player, Cannon cannon, String newCannonName)
-    {
+    public MessageEnum renameCannon(Player player, Cannon cannon, String newCannonName) {
         Validate.notNull(player, "player must not be null");
         Validate.notNull(cannon, "cannon must not be null");
 
@@ -299,11 +285,9 @@ public class CannonManager
 	 * @param cannon create this cannon
      * @param saveToDatabase if the cannon will be saved to the database after loading
 	 */
-	public void createCannon(Cannon cannon, boolean saveToDatabase)
-	{
+	public void createCannon(Cannon cannon, boolean saveToDatabase) {
         //the owner can't be null
-		if (cannon.getOwner() == null) 
-		{
+		if (cannon.getOwner() == null) {
 			plugin.logInfo("can't save a cannon when the owner is null");
 			return;
 		}
@@ -330,8 +314,7 @@ public class CannonManager
         if (saveToDatabase) {
             plugin.getPersistenceDatabase().saveCannon(cannon);
             cannon.updateCannonSigns();
-        }
-        else {
+        } else {
             cannon.setUpdated(false);
             cannon.setWhitelistUpdated(false);
         }
@@ -347,8 +330,7 @@ public class CannonManager
      * @param sphereRadius - radius of the sphere in blocks
      * @return - list of all cannons in this sphere
      */
-    public static HashSet<Cannon> getCannonsInSphere(Location center, double sphereRadius)
-    {
+    public static HashSet<Cannon> getCannonsInSphere(Location center, double sphereRadius) {
         HashSet<Cannon> newCannonList = new HashSet<>();
 
         for (Cannon cannon : getCannonList().values()) {
@@ -372,12 +354,10 @@ public class CannonManager
      * @param lengthZ - box length in Z
      * @return - list of all cannons in this sphere
      */
-    public static HashSet<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ)
-    {
+    public static HashSet<Cannon> getCannonsInBox(Location center, double lengthX, double lengthY, double lengthZ) {
         HashSet<Cannon> newCannonList = new HashSet<>();
 
-        for (Cannon cannon : getCannonList().values())
-        {
+        for (Cannon cannon : getCannonList().values()) {
             if (!cannon.getWorld().equals(center.getWorld().getUID())) {
                 continue;
             }
@@ -390,7 +370,7 @@ public class CannonManager
         return newCannonList;
     }
 
-    public void claimCannonsInBox(Location center, UUID owner){
+    public void claimCannonsInBox(Location center, UUID owner) {
         int halflength = 60;
         for (int x = halflength; x >= -halflength; x--) {
             for (int y = halflength; y >= -halflength; y--) {
@@ -406,17 +386,13 @@ public class CannonManager
      * @param locations - a list of location to search for cannons
      * @return - list of all cannons in this sphere
      */
-    public static HashSet<Cannon> getCannonsByLocations(List<Location> locations)
-    {
+    public static HashSet<Cannon> getCannonsByLocations(List<Location> locations) {
         HashSet<Cannon> newCannonList = new HashSet<>();
-        for (Cannon cannon : getCannonList().values())
-        {
-            for (Location loc : locations)
-            {
+        for (Cannon cannon : getCannonList().values()) {
+            for (Location loc : locations) {
                 if (cannon.isCannonBlock(loc.getBlock()))
                     newCannonList.add(cannon);
             }
-
         }
         return newCannonList;
     }
@@ -428,14 +404,11 @@ public class CannonManager
      * @param silent - no messages will be displayed if silent is true
      * @return - list of all cannons in this sphere
      */
-    public HashSet<Cannon> getCannons(List<Location> locations, UUID player, boolean silent)
-    {
+    public HashSet<Cannon> getCannons(List<Location> locations, UUID player, boolean silent) {
         HashSet<Cannon> newCannonList = new HashSet<>();
-        for (Location loc : locations)
-        {
+        for (Location loc : locations) {
             Cannon newCannon = getCannon(loc, player, silent);
-            if (newCannon != null)
-            {
+            if (newCannon != null) {
                 newCannonList.add(newCannon);
             }
         }
@@ -448,8 +421,7 @@ public class CannonManager
 	 * @param cannonName name of the cannon
 	 * @return the cannon with this name
 	 */
-	public static Cannon getCannon(String cannonName)
-	{
+	public static Cannon getCannon(String cannonName) {
 		if (cannonName == null) return null;
 
         UUID uid = cannonNameMap.get(cannonName);
@@ -466,8 +438,7 @@ public class CannonManager
 	 * @param loc location of one cannon block
 	 * @return the cannon at this location
 	 */
-	private Cannon getCannonFromStorage(Location loc)
-	{
+	private Cannon getCannonFromStorage(Location loc) {
 		for (Cannon cannon : cannonList.values()) {
             //To make code faster on servers with a lot of cannons we check the distance squared
             if (loc.toVector().distanceSquared(cannon.getOffset()) <= 1024 && cannon.isCannonBlock(loc.getBlock()))  {
@@ -483,8 +454,7 @@ public class CannonManager
 	 * @param owner - the owner of the cannon (important for message notification). Can't be null if a new cannon is created
 	 * @return the cannon at this location
 	 */
-	public Cannon getCannon(Location cannonBlock, UUID owner)
-	{
+	public Cannon getCannon(Location cannonBlock, UUID owner) {
 		return getCannon(cannonBlock, owner, false);
 	}
 	
@@ -495,8 +465,7 @@ public class CannonManager
 	 * @param owner - the owner of the cannon (important for message notification). Can't be null
 	 * @return the cannon at this location
 	 */
-	public Cannon getCannon(Location cannonBlock, UUID owner, boolean silent)
-	{
+	public Cannon getCannon(Location cannonBlock, UUID owner, boolean silent) {
         // is this block material used for a cannon design
         if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getType()))
             return null;
@@ -521,65 +490,69 @@ public class CannonManager
             cannonFromSign.setOffset(cannon.getOffset());
             //use the updated object from the storage
             cannon = cannonFromSign;
-        } else {
-            // this cannon has no sign, so look in the database if there is something
-            Cannon storageCannon =  getCannonFromStorage(cannonBlock);
-            if (storageCannon != null) {
-                //try to find something in the storage
-                plugin.logDebug("cannon found in storage");
-                cannon = storageCannon;
-            } else { //nothing in the storage, so we make a new entry
 
-                //search for a player, because owner == null is not valid
-                if (owner == null)
-                    return null;
-                Player player = Bukkit.getPlayer(owner);
-
-                //can this player can build one more cannon
-                MessageEnum	message = canBuildCannon(cannon, owner);
-
-                //check the permissions for redstone
-                if (message == null || message == MessageEnum.CannonCreated)
-                    message = cannon.checkRedstonePermission(owner);
-
-                //if a sign is required to operate the cannon, there must be at least one sign
-                if (message == MessageEnum.CannonCreated && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
-                    message = MessageEnum.ErrorMissingSign;
-
-                plugin.logDebug("CannonBeforeCreateEvent Cannon: " + cannon + "message: " + message + " player: " + player);
-                plugin.logDebug("player.getUniqueId(): " + player.getUniqueId());
-
-                CannonBeforeCreateEvent cbceEvent = new CannonBeforeCreateEvent(cannon, message, player.getUniqueId());
-                Bukkit.getServer().getPluginManager().callEvent(cbceEvent);
-
-                //add cannon to the list if everything was fine and return the cannon
-                if (cbceEvent.isCancelled() || cbceEvent.getMessage() == null || cbceEvent.getMessage() != MessageEnum.CannonCreated) {
-                    //send messages
-                    if (!silent) {
-                        userMessages.sendMessage(message, player, cannon);
-                        CannonsUtil.playErrorSound(cannon.getMuzzle());
-                    }
-
-                    plugin.logDebug("Creating a cannon event was canceled: " + message);
-                    return null;
-                }
-
-                plugin.logDebug("a new cannon was created by " + cannon.getOwner());
-                createCannon(cannon, true);
-
-                //send messages
-                if (!silent) {
-                    userMessages.sendMessage(message, owner, cannon);
-                    CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundCreate());
-                }
-
-                CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player.getUniqueId());
-                Bukkit.getServer().getPluginManager().callEvent(caceEvent);
-            }
+            plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+            return cannon;
         }
 
-        plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+        // this cannon has no sign, so look in the database if there is something
+        Cannon storageCannon =  getCannonFromStorage(cannonBlock);
+        if (storageCannon != null) {
+            //try to find something in the storage
+            plugin.logDebug("cannon found in storage");
+            cannon = storageCannon;
 
+            plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+            return cannon;
+        } //nothing in the storage, so we make a new entry
+
+        //search for a player, because owner == null is not valid
+        if (owner == null)
+            return null;
+        Player player = Bukkit.getPlayer(owner);
+
+        //can this player can build one more cannon
+        MessageEnum	message = canBuildCannon(cannon, owner);
+
+        //check the permissions for redstone
+        if (message == null || message == MessageEnum.CannonCreated)
+            message = cannon.checkRedstonePermission(owner);
+
+        //if a sign is required to operate the cannon, there must be at least one sign
+        if (message == MessageEnum.CannonCreated && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
+            message = MessageEnum.ErrorMissingSign;
+
+        plugin.logDebug("CannonBeforeCreateEvent Cannon: " + cannon + "message: " + message + " player: " + player);
+        plugin.logDebug("player.getUniqueId(): " + player.getUniqueId());
+
+        CannonBeforeCreateEvent cbceEvent = new CannonBeforeCreateEvent(cannon, message, player.getUniqueId());
+        Bukkit.getServer().getPluginManager().callEvent(cbceEvent);
+
+        //add cannon to the list if everything was fine and return the cannon
+        if (cbceEvent.isCancelled() || cbceEvent.getMessage() == null || cbceEvent.getMessage() != MessageEnum.CannonCreated) {
+            //send messages
+            if (!silent) {
+                userMessages.sendMessage(message, player, cannon);
+                CannonsUtil.playErrorSound(cannon.getMuzzle());
+            }
+
+            plugin.logDebug("Creating a cannon event was canceled: " + message);
+            return null;
+        }
+
+        plugin.logDebug("a new cannon was created by " + cannon.getOwner());
+        createCannon(cannon, true);
+
+        //send messages
+        if (!silent) {
+            userMessages.sendMessage(message, owner, cannon);
+            CannonsUtil.playSound(cannon.getMuzzle(), cannon.getCannonDesign().getSoundCreate());
+        }
+
+        CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player.getUniqueId());
+        Bukkit.getServer().getPluginManager().callEvent(caceEvent);
+
+        plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
         return cannon;
 	}
 
@@ -588,8 +561,7 @@ public class CannonManager
      * @param uid UUID of the cannon
      * @return the cannon from the storage
      */
-    public static Cannon getCannon(UUID uid)
-    {
+    public static Cannon getCannon(UUID uid) {
         if (uid == null)
             return null;
 
@@ -602,9 +574,7 @@ public class CannonManager
 	 * @param owner the player who will be the owner of the cannon if it is a new cannon
 	 * @return cannon if found, else null
 	 */
-    private Cannon checkCannon(Location cannonBlock, UUID owner)
-	{
-
+    private Cannon checkCannon(Location cannonBlock, UUID owner) {
 	    // is this block material used for a cannon design
         if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getType()))
             return null;
@@ -636,10 +606,8 @@ public class CannonManager
                     // check all other blocks of the cannon
                     boolean isCannon = true;
 
-                    for (SimpleBlock checkBlocks : designBlockList)
-                    {
-                        if (!checkBlocks.compareMaterialAndFacing(world, offset))
-                        {
+                    for (SimpleBlock checkBlocks : designBlockList) {
+                        if (!checkBlocks.compareMaterialAndFacing(world, offset)) {
                             // if the block does not match this is not the
                             // right one
                             isCannon = false;
@@ -667,8 +635,7 @@ public class CannonManager
 	 */
 	public int getNumberOfCannons(UUID player) {
 		int i = 0;
-		for (Cannon cannon : cannonList.values())
-		{
+		for (Cannon cannon : cannonList.values()) {
 			if (cannon.getOwner() == null) {
 				plugin.logSevere("Cannon has no owner. Contact the plugin developer");
 			} else if (cannon.getOwner().equals(player)) {
@@ -682,16 +649,14 @@ public class CannonManager
 	 * 
 	 * @return List of cannons
 	 */
-	public static ConcurrentHashMap<UUID,Cannon> getCannonList()
-	{
+	public static ConcurrentHashMap<UUID,Cannon> getCannonList() {
 		return cannonList;
 	}
 	
 	/**
 	 * List of cannons
 	 */
-	public void clearCannonList()
-	{
+	public void clearCannonList() {
 		cannonList.clear();
 	}
 
@@ -699,8 +664,7 @@ public class CannonManager
 	 * returns the number of cannons manged by the plugin
 	 * @return number of cannons in all world
 	 */
-	public int getCannonListSize()
-	{
+	public int getCannonListSize() {
 		return cannonList.size();
 	}
 
@@ -720,25 +684,25 @@ public class CannonManager
         int newBuiltLimit = getNewBuildLimit(player);
 
 		// config implementation
-		if (config.isBuildLimitEnabled())
-		{
+		if (config.isBuildLimitEnabled()) {
             plugin.logDebug("BuildLimit: limitA and limitB are enabled");
-			if (player.hasPermission("cannons.limit.limitB") && (newBuiltLimit > config.getBuildLimitB()))
-			{
+            int buildLimitB = config.getBuildLimitB();
+            int buildLimitA = config.getBuildLimitA();
+
+			if (player.hasPermission("cannons.limit.limitB") && (newBuiltLimit > buildLimitB)) {
 				// return the
-                plugin.logDebug("build limitB sets the number of cannons to: " + config.getBuildLimitB());
-				return config.getBuildLimitB();
+                plugin.logDebug("build limitB sets the number of cannons to: " + buildLimitB);
+				return buildLimitB;
 			}
-			// limit B is stronger
-			else if (player.hasPermission("cannons.limit.limitA") && (newBuiltLimit > config.getBuildLimitA()))
-			{
-                plugin.logDebug("build limitA sets the number of cannons to: " + config.getBuildLimitA());
-				return config.getBuildLimitA();
-			}
-		}
+
+            if (player.hasPermission("cannons.limit.limitA") && (newBuiltLimit > buildLimitA)) {
+                // limit B is stronger
+                plugin.logDebug("build limitA sets the number of cannons to: " + buildLimitA);
+                return buildLimitA;
+            }
+        }
 		// player implementation
-		if (newBuiltLimit >= 0)
-        {
+		if (newBuiltLimit >= 0) {
             plugin.logDebug("permission build limit sets the maximum number of cannons to: " + newBuiltLimit);
             return newBuiltLimit;
 		}
@@ -751,8 +715,7 @@ public class CannonManager
      * @param player the build limit for this player
      * @return how many cannosn this player can build
      */
-    public int getNewBuildLimit(Player player)
-    {
+    public int getNewBuildLimit(Player player) {
         if (player == null) return -1;
 
         if (player.hasPermission("cannons.limit." + Integer.MAX_VALUE)) {
@@ -779,8 +742,7 @@ public class CannonManager
 	 * @param owner
 	 * @return
 	 */
-	private MessageEnum canBuildCannon(Cannon cannon, UUID owner)
-	{
+	private MessageEnum canBuildCannon(Cannon cannon, UUID owner) {
 		CannonDesign design = cannon.getCannonDesign();
 		
 		//get the player from the server
@@ -789,13 +751,11 @@ public class CannonManager
 		if (player == null) return null;
 	
 		// check if player has permission to build
-		if (!player.hasPermission(design.getPermissionBuild()))
-		{
+		if (!player.hasPermission(design.getPermissionBuild())) {
 			return MessageEnum.PermissionErrorBuild;
 		}
 		// player does not have too many guns
-		if (getNumberOfCannons(owner) >= getCannonBuiltLimit(player))
-		{
+		if (getNumberOfCannons(owner) >= getCannonBuiltLimit(player)) {
 			return MessageEnum.ErrorCannonBuiltLimit;
 		}
 		// player has sufficient permission to build a cannon
@@ -805,19 +765,15 @@ public class CannonManager
     /**
      * removes all cannon
      */
-    public void deleteAllCannons()
-    {
+    public void deleteAllCannons() {
         Iterator<Cannon> iter = cannonList.values().iterator();
 
-        while (iter.hasNext())
-        {
+        while (iter.hasNext()) {
             Cannon cannon = iter.next();
             OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
             // return money to the player if the cannon was paid
-            if (offplayer != null && offplayer.hasPlayedBefore() && plugin.getEconomy() != null) {
-                if (cannon.isPaid())
-                    plugin.getEconomy().depositPlayer(offplayer, cannon.getCannonDesign().getEconomyBuildingCost());
-            }
+            if (offplayer != null && offplayer.hasPlayedBefore() && plugin.getEconomy() != null && cannon.isPaid())
+                plugin.getEconomy().depositPlayer(offplayer, cannon.getCannonDesign().getEconomyBuildingCost());
             cannon.destroyCannon(false, false, BreakCause.Other);
             iter.remove();
         }
@@ -833,11 +789,9 @@ public class CannonManager
 		Iterator<Cannon> iter = cannonList.values().iterator();
         boolean inList = false;
 
-		while (iter.hasNext())
-		{
+		while (iter.hasNext()) {
 			Cannon next = iter.next();
-			if (next.getOwner() != null && next.getOwner().equals(owner))
-			{
+			if (next.getOwner() != null && next.getOwner().equals(owner)) {
                 inList = true;
 				next.destroyCannon(false, false, BreakCause.Other);
 				iter.remove();

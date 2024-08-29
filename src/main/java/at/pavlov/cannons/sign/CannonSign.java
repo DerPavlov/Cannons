@@ -5,8 +5,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.WallSign;
 
 
-public class CannonSign
-{
+public class CannonSign {
 
 	
 	/**
@@ -16,7 +15,7 @@ public class CannonSign
 	public static String getLineOfThisSign(Block block, int line)
 	{
         if (block == null) return null;
-		if (!(block instanceof WallSign)) return null;
+		if (!(block.getBlockData() instanceof WallSign)) return null;
 
 		Sign sign = (Sign) block.getState();
 		
