@@ -447,14 +447,14 @@ public class Cannon {
         //load the maximum gunpowder
 
 
-        // update Signs
-        updateCannonSigns();
-
         int gunpowder = Math.min(getLoadedGunpowder() + amountToLoad, design.getMaxLoadableGunpowderOverloaded());
         CannonGunpowderLoadEvent event = new CannonGunpowderLoadEvent(this, getLoadedGunpowder(), amountToLoad, gunpowder, player);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         setLoadedGunpowder(gunpowder);
+
+        // update Signs
+        updateCannonSigns();
 
         //Overloading is enabled
         if (!design.isOverloadingEnabled()) {
