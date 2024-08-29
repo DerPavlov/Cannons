@@ -49,72 +49,59 @@ class CannonBlocks
         return null;
     }
     
-	public Vector getRotationCenter()
-	{
+	public Vector getRotationCenter() {
 		return rotationCenter;
 	}
-	public void setRotationCenter(Vector rotationCenter)
-	{
+	public void setRotationCenter(Vector rotationCenter) {
 		this.rotationCenter = rotationCenter;
 	}
 
-	public Vector getMuzzle()
-	{
+	public Vector getMuzzle() {
 		return muzzle;
 	}
-	public void setMuzzle(Vector muzzle)
-	{
+	public void setMuzzle(Vector muzzle) {
 		this.muzzle = muzzle;
 	}
 
-	public ArrayList<SimpleBlock> getAllCannonBlocks()
-	{
+	public ArrayList<SimpleBlock> getAllCannonBlocks() {
 		return allCannonBlocks;
 	}
-	public void setAllCannonBlocks(ArrayList<SimpleBlock> allCannonBlocks)
-	{
+	public void setAllCannonBlocks(ArrayList<SimpleBlock> allCannonBlocks) {
 		this.allCannonBlocks = allCannonBlocks;
 	}
 
-	public ArrayList<Vector> getBarrelBlocks()
-	{
+	public ArrayList<Vector> getBarrelBlocks() {
 		return barrelBlocks;
 	}
 	public void setBarrel (ArrayList<Vector> barrelBlocks) {
 		this.barrelBlocks = barrelBlocks;
 	}
 
-	public ArrayList<Vector> getRedstoneTorches()
-	{
+	public ArrayList<Vector> getRedstoneTorches() {
 		return redstoneTorches;
 	}
-	public void setRedstoneTorches(ArrayList<Vector> redstoneTorches)
-	{
+	public void setRedstoneTorches(ArrayList<Vector> redstoneTorches) {
 		this.redstoneTorches = redstoneTorches;
 	}
 
 	public ArrayList<Vector> getRedstoneTrigger() {
 		return redstoneTrigger;
 	}
-	public void setRedstoneTrigger(ArrayList<Vector> redstoneTrigger)
-	{
+	public void setRedstoneTrigger(ArrayList<Vector> redstoneTrigger) {
 		this.redstoneTrigger = redstoneTrigger;
 	}
 
-	public ArrayList<Vector> getRightClickTrigger()
-	{
+	public ArrayList<Vector> getRightClickTrigger() {
 		return rightClickTrigger;
 	}
-	public void setRightClickTrigger(ArrayList<Vector> rightClickTrigger)
-	{
+	public void setRightClickTrigger(ArrayList<Vector> rightClickTrigger) {
 		this.rightClickTrigger = rightClickTrigger;
 	}
 
 	public ArrayList<SimpleBlock> getChestsAndSigns() {
 		return chestsAndSigns;
 	}
-	public void setChestsAndSigns(ArrayList<SimpleBlock> chestsAndSigns)
-	{
+	public void setChestsAndSigns(ArrayList<SimpleBlock> chestsAndSigns) {
 		this.chestsAndSigns = chestsAndSigns;
 	}
 
@@ -125,17 +112,14 @@ class CannonBlocks
 		this.redstoneWiresAndRepeater = redstoneWiresAndRepeater;
 	}
 
-	public ArrayList<Vector> getFiringIndicator()
-	{
+	public ArrayList<Vector> getFiringIndicator() {
 		return firingIndicator;
 	}
-	public void setFiringIndicator(ArrayList<Vector> firingIndicator)
-	{
+	public void setFiringIndicator(ArrayList<Vector> firingIndicator) {
 		this.firingIndicator = firingIndicator;
 	}
 
-	public ArrayList<Vector> getDestructibleBlocks()
-	{
+	public ArrayList<Vector> getDestructibleBlocks() {
 		return destructibleBlocks;
 	}
 	public void setDestructibleBlocks(ArrayList<Vector> destructibleBlocks) {
