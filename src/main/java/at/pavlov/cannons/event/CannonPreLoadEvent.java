@@ -1,24 +1,21 @@
 package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.cannon.Cannon;
+import at.pavlov.cannons.projectile.Projectile;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class CannonGunpowderLoadEvent extends Event {
+public class CannonPreLoadEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Cannon cannon;
-    private final int startAmount;
-    private final int amountToLoad;
-    private final int newAmount;
+    private Projectile projectile;
     private final Player player;
 
-    public CannonGunpowderLoadEvent(Cannon cannon, int startAmount, int amountToLoad, int newAmount, Player player) {
+    public CannonPreLoadEvent(Cannon cannon, Projectile projectile, Player player) {
         this.cannon = cannon;
-        this.startAmount = startAmount;
-        this.amountToLoad = amountToLoad;
-        this.newAmount = newAmount;
+        this.projectile = projectile;
         this.player = player;
     }
 
@@ -34,16 +31,12 @@ public class CannonGunpowderLoadEvent extends Event {
         return cannon;
     }
 
-    public int getAmountToLoad() {
-        return amountToLoad;
+    public Projectile getProjectile() {
+        return projectile;
     }
 
-    public int getNewAmount() {
-        return newAmount;
-    }
-
-    public int getStartAmount() {
-        return startAmount;
+    public void setProjectile(Projectile projectile) {
+        this.projectile = projectile;
     }
 
     public Player getPlayer() {

@@ -8,6 +8,7 @@ import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.event.CannonGunpowderLoadEvent;
+import at.pavlov.cannons.event.CannonPreLoadEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
@@ -420,8 +421,9 @@ public class Cannon {
      * loads Gunpowder in a cannon
      *
      * @param amountToLoad - number of items which are loaded into the cannon
+     * @param player
      */
-    public MessageEnum loadGunpowder(int amountToLoad) {
+    public MessageEnum loadGunpowder(int amountToLoad, Player player) {
         //this cannon does not need gunpowder
         if (!design.isGunpowderNeeded())
             return MessageEnum.ErrorNoGunpowderNeeded;
@@ -449,7 +451,7 @@ public class Cannon {
         updateCannonSigns();
 
         int gunpowder = Math.min(getLoadedGunpowder() + amountToLoad, design.getMaxLoadableGunpowderOverloaded());
-        CannonGunpowderLoadEvent event = new CannonGunpowderLoadEvent(this, getLoadedGunpowder(), amountToLoad, gunpowder);
+        CannonGunpowderLoadEvent event = new CannonGunpowderLoadEvent(this, getLoadedGunpowder(), amountToLoad, gunpowder, player);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         setLoadedGunpowder(gunpowder);
@@ -513,7 +515,7 @@ public class Cannon {
             }
 
             //load the gunpowder
-            returnVal = loadGunpowder(gunpowder);
+            returnVal = loadGunpowder(gunpowder, player);
         }
 
         // the cannon was loaded with gunpowder - lets get it form the player
@@ -567,6 +569,8 @@ public class Cannon {
                 return returnVal;
         }
 
+        CannonPreLoadEvent event = new CannonPreLoadEvent(this, projectile, player);
+        Bukkit.getServer().getPluginManager().callEvent(event);
         returnVal = CheckPermProjectile(projectile, player);
 
         // check if loading of projectile was successful
