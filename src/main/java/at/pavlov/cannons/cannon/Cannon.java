@@ -455,13 +455,13 @@ public class Cannon {
             return MessageEnum.loadGunpowder;
         }
 
-        if (!design.isOverloadingRealMode()) {
-            if (design.getMaxLoadableGunpowderNormal() < getLoadedGunpowder())
-                return MessageEnum.loadOverloadedGunpowder;
-            if (design.getMaxLoadableGunpowderNormal() == getLoadedGunpowder())
-                return MessageEnum.loadGunpowderNormalLimit;
-        } else if (design.getMaxLoadableGunpowderNormal() < getLoadedGunpowder())
+        if (design.getMaxLoadableGunpowderNormal() < getLoadedGunpowder()) {
             return MessageEnum.loadOverloadedGunpowder;
+        }
+
+        if (!design.isOverloadingRealMode() && design.getMaxLoadableGunpowderNormal() == getLoadedGunpowder()) {
+            return MessageEnum.loadGunpowderNormalLimit;
+        }
 
         return MessageEnum.loadGunpowder;
     }
@@ -513,30 +513,19 @@ public class Cannon {
         }
 
         // the cannon was loaded with gunpowder - lets get it form the player
+        final boolean checkGunpowder = design.isGunpowderConsumption() && !design.isAmmoInfiniteForPlayer();
         switch (returnVal) {
-            case loadGunpowder: {
-                // take item from the player
-                CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderLoading());
-                if (design.isGunpowderConsumption() && !design.isAmmoInfiniteForPlayer()) {
-                    if (design.isGunpowderConsumption() && !design.isAmmoInfiniteForPlayer())
-                        InventoryManagement.removeItem(player.getInventory(), design.getGunpowderType().toItemStack(gunpowder));
-                    else
-                        InventoryManagement.takeFromPlayerHand(player, gunpowder);
-                }
-                break;
-            }
+            case loadGunpowder:
             case loadGunpowderNormalLimit: {
                 CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderLoading());
-                if (design.isGunpowderConsumption() && !design.isAmmoInfiniteForPlayer())
-                    if (design.isGunpowderConsumption() && !design.isAmmoInfiniteForPlayer())
-                        InventoryManagement.removeItem(player.getInventory(), design.getGunpowderType().toItemStack(gunpowder));
-                    else
-                        InventoryManagement.takeFromPlayerHand(player, gunpowder);
+                if (checkGunpowder) {
+                    InventoryManagement.removeItem(player.getInventory(), design.getGunpowderType().toItemStack(gunpowder));
+                }
                 break;
             }
             case loadOverloadedGunpowder: {
                 CannonsUtil.playSound(getMuzzle(), design.getSoundGunpowderOverloading());
-                if (design.isGunpowderConsumption() && !design.isAmmoInfiniteForPlayer())
+                if (checkGunpowder)
                     InventoryManagement.takeFromPlayerHand(player, gunpowder);
                 break;
             }
