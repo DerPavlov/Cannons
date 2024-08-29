@@ -6,6 +6,7 @@ import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SimpleBlock;
+import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
@@ -566,21 +567,21 @@ public class Cannon {
         returnVal = CheckPermProjectile(projectile, player);
 
         // check if loading of projectile was successful
-        if (returnVal.equals(MessageEnum.loadProjectile) || returnVal.equals(MessageEnum.loadGunpowderAndProjectile)) {
-            // load projectile
-            setLoadedProjectile(projectile);
-            CannonsUtil.playSound(getMuzzle(), projectile.getSoundLoading());
-
-            // remove from player
-            if (design.isProjectileConsumption() && !design.isAmmoInfiniteForPlayer())
-                InventoryManagement.takeFromPlayerHand(player, 1);
-
-            // update Signs
-            updateCannonSigns();
-        } else {
+        if (!returnVal.equals(MessageEnum.loadProjectile) && !returnVal.equals(MessageEnum.loadGunpowderAndProjectile)) {
             //projectile not loaded
             CannonsUtil.playErrorSound(getMuzzle());
+            return returnVal;
         }
+        // load projectile
+        setLoadedProjectile(projectile);
+        CannonsUtil.playSound(getMuzzle(), projectile.getSoundLoading());
+
+        // remove from player
+        if (design.isProjectileConsumption() && !design.isAmmoInfiniteForPlayer())
+            InventoryManagement.takeFromPlayerHand(player, 1);
+
+        // update Signs
+        updateCannonSigns();
 
 
         return returnVal;
@@ -820,6 +821,10 @@ public class Cannon {
         // update cannon signs the last time
         isValid = false;
         updateCannonSigns();
+
+        //fire and an event that this cannon is destroyed
+        CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(this, cause, breakBlocks, canExplode);
+        Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
 
         if (breakBlocks)
             breakAllCannonBlocks();

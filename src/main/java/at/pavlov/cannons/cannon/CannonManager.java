@@ -177,11 +177,6 @@ public class CannonManager {
                     player = Bukkit.getPlayer(cannon.getOwner());
                 }
 
-
-                //fire and an event that this cannon is destroyed
-                CannonDestroyedEvent destroyedEvent = new CannonDestroyedEvent(cannon, cause);
-                Bukkit.getServer().getPluginManager().callEvent(destroyedEvent);
-
                 if (cannon.getOwner() != null) {
                     OfflinePlayer offplayer = Bukkit.getOfflinePlayer(cannon.getOwner());
                     if (offplayer != null && offplayer.hasPlayedBefore() && plugin.getEconomy() != null) {
