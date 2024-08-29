@@ -421,7 +421,7 @@ public class Cannon {
      * loads Gunpowder in a cannon
      *
      * @param amountToLoad - number of items which are loaded into the cannon
-     * @param player
+     * @param player - Player loading the cannon
      */
     public MessageEnum loadGunpowder(int amountToLoad, Player player) {
         //this cannon does not need gunpowder
@@ -945,7 +945,7 @@ public class Cannon {
      * the barrel the barrel
      *
      * @param block
-     * @return
+     * @return true if this block is a part of the loading interface
      */
     public boolean isLoadingBlock(Location block) {
         for (Location loc : design.getLoadingInterface(this)) {
@@ -961,7 +961,7 @@ public class Cannon {
      * return true if this location where the torch interacts with the cannon
      *
      * @param block
-     * @return
+     * @return true if this location where the torch interacts with the cannon
      */
     public boolean isChestInterface(Location block) {
         for (Location loc : design.getChestsAndSigns(this)) {
@@ -973,11 +973,11 @@ public class Cannon {
     }
 
     /**
-     * return true if this location where the torch interacts with the cannon
+     * true if this location where there is a cannon status sign
      * does not check the ID
      *
      * @param loc
-     * @return
+     * @return true if this location where there is a cannon status sign
      */
     public boolean isCannonSign(Location loc) {
         if (!(loc.getBlock().getBlockData() instanceof WallSign)) {
@@ -1004,10 +1004,8 @@ public class Cannon {
     }
 
     /**
-     * return true if this is a right click trigger block
-     *
      * @param block
-     * @return
+     * @return true if this is a right click trigger block
      */
     public boolean isRightClickTrigger(Location block) {
         for (Location loc : design.getRightClickTrigger(this)) {
@@ -1019,10 +1017,8 @@ public class Cannon {
     }
 
     /**
-     * return true if this is a redstone trigger block
-     *
      * @param block
-     * @return
+     * @return true if this is a redstone trigger block
      */
     public boolean isRestoneTrigger(Location block) {
         for (Location loc : design.getRedstoneTrigger(this)) {
@@ -1034,10 +1030,8 @@ public class Cannon {
     }
 
     /**
-     * return true if this location where the torch interacts with the cannon
-     *
      * @param block
-     * @return
+     * @return true if this location where the torch interacts with the cannon
      */
     public boolean isRedstoneTorchInterface(Location block) {
         for (Location loc : design.getRedstoneTorches(this)) {
@@ -1049,10 +1043,8 @@ public class Cannon {
     }
 
     /**
-     * return true if this location where the torch interacts with the cannon
-     *
      * @param block
-     * @return
+     * @return true if this location where a redstone torch interacts with the cannon
      */
     public boolean isRedstoneWireInterface(Location block) {
         for (Location loc : design.getRedstoneWireAndRepeater(this)) {
@@ -1064,11 +1056,8 @@ public class Cannon {
     }
 
     /**
-     * return true if this location where the torch interacts with the cannon
-     * does not check the ID
-     *
      * @param loc
-     * @return
+     * @return true if this location where the repeater interacts with the cannon
      */
     public boolean isRedstoneRepeaterInterface(Location loc) {
         CannonBlocks cannonBlocks = this.getCannonDesign().getCannonBlockMap().get(this.getCannonDirection());

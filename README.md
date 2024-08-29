@@ -4,22 +4,7 @@ Cannons Revamped
 Fork by Intybyte / Vaan1310 </br>
 Original by derPavlov
 
-New features/fixes:
----------------
-- 1.20.6 + Support
-- Made ProjectilePiercingEvent cancellable
-- New CannonLinkFiringEvent to handle linked cannons operations
-- CannonDestroyEvent now has the destruction cause in it
-- Upgraded to Java 14 language level
-
-Optimizations:
----------------
-- Better FlyingProjectile lookup
-- UserMessage Optimization
-- Some CannonManager Optimization
-- Random Optimization (Original created a random number generator every time it needed to be used, now each object has its own Random)
-- Distance optimization by using `Location#distanceSquared()` over `Location#distance` when possible
-- Aiming shot simulation Optimization
+[What is new?](./FEATURES.md)
 
 Issues:
 ---------------

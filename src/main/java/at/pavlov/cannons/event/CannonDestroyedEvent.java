@@ -40,11 +40,11 @@ public class CannonDestroyedEvent extends Event {
         return breakCause;
     }
 
-    public boolean isBreakAllCannonBlocks() {
+    public boolean doBreakAllCannonBlocks() {
         return breakAllCannonBlocks;
     }
 
-    public boolean isCanExplode() {
+    public boolean canExplode() {
         return canExplode;
     }
 }

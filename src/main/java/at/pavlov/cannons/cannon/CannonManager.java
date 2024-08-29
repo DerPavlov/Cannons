@@ -10,7 +10,6 @@ import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.dao.LoadWhitelistTask;
 import at.pavlov.cannons.event.CannonAfterCreateEvent;
 import at.pavlov.cannons.event.CannonBeforeCreateEvent;
-import at.pavlov.cannons.event.CannonDestroyedEvent;
 import at.pavlov.cannons.event.CannonRenameEvent;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
@@ -738,11 +737,7 @@ public class CannonManager {
         return Integer.MAX_VALUE;
     }
 	/**
-	 * checks if the player can build a cannon (permission, builtLimit)
-	 * 
-	 * @param cannon
-	 * @param owner
-	 * @return
+	 * checks if the player can build a cannon, checks permission and builtLimit
 	 */
 	private MessageEnum canBuildCannon(Cannon cannon, UUID owner) {
 		CannonDesign design = cannon.getCannonDesign();
