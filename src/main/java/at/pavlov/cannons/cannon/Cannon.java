@@ -7,6 +7,7 @@ import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.event.CannonDestroyedEvent;
+import at.pavlov.cannons.event.CannonGunpowderLoadEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
@@ -442,14 +443,16 @@ public class Cannon {
             return MessageEnum.ErrorMaximumGunpowderLoaded;
 
         //load the maximum gunpowder
-        setLoadedGunpowder(getLoadedGunpowder() + amountToLoad);
+
 
         // update Signs
         updateCannonSigns();
 
-        if (getLoadedGunpowder() > design.getMaxLoadableGunpowderOverloaded())
-            setLoadedGunpowder(design.getMaxLoadableGunpowderOverloaded());
+        int gunpowder = Math.min(getLoadedGunpowder() + amountToLoad, design.getMaxLoadableGunpowderOverloaded());
+        CannonGunpowderLoadEvent event = new CannonGunpowderLoadEvent(this, getLoadedGunpowder(), amountToLoad, gunpowder);
+        Bukkit.getServer().getPluginManager().callEvent(event);
 
+        setLoadedGunpowder(gunpowder);
 
         //Overloading is enabled
         if (!design.isOverloadingEnabled()) {
