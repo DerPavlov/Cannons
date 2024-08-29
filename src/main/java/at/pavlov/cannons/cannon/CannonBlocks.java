@@ -5,9 +5,12 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-
-class CannonBlocks
-{
+/**
+ * This class is used internally to keep track of some blocks,
+ * it is not suggested to create new instances of it but instead
+ * use it to get the posi
+ */
+public class CannonBlocks {
 	private Vector rotationCenter;	//center off all rotation blocks
     private Vector muzzle;			//center off all muzzle blocks - spawing Vector for snowball
 
@@ -20,7 +23,6 @@ class CannonBlocks
     private ArrayList<Vector> rightClickTrigger = new ArrayList<>();
     private ArrayList<Vector> firingIndicator = new ArrayList<>();
     private ArrayList<Vector> destructibleBlocks = new ArrayList<>();
-    
 
     /**
      * returns true if this block is part of the loading interface
