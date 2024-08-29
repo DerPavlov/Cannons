@@ -823,7 +823,7 @@ public class CannonsUtil
             return Bukkit.createBlockData(str);
         }
         catch(Exception e){
-            Cannons.logger().log(Level.WARNING,"[Cannons] block data '" + str + "' is not valid");
+            Cannons.logger().log(Level.WARNING,"block data '" + str + "' is not valid");
             return Material.AIR.createBlockData();
         }
     }

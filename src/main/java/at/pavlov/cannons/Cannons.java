@@ -131,8 +131,8 @@ public final class Cannons extends JavaPlugin
 		if (!checkWorldEdit())
 		{
 			//no worldEdit has been loaded. Disable plugin
-			console.sendMessage(ChatColor.RED + "[Cannons] Please install WorldEdit, else Cannons can't load.");
-			console.sendMessage(ChatColor.RED + "[Cannons] Plugin is now disabled.");
+			console.sendMessage(ChatColor.RED + "Please install WorldEdit, else Cannons can't load.");
+			console.sendMessage(ChatColor.RED + "Plugin is now disabled.");
 			
 			pm.disablePlugin(this);
 			return;

@@ -93,7 +93,7 @@ public class Commands implements TabExecutor {
                 // reload config
                 config.loadConfig();
                 DesignStorage.getInstance().loadCannonDesigns();
-                sendMessage(sender, ChatColor.GREEN + "[Cannons] Config loaded");
+                sendMessage(sender, ChatColor.GREEN + tag + "Config loaded");
             } else
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
             return true;
@@ -190,16 +190,16 @@ public class Commands implements TabExecutor {
             }
 
             if (args.length < 2) {
-                sendMessage(sender, ChatColor.RED + "[Cannons] Usage: '/cannons create <design>'");
+                sendMessage(sender, ChatColor.RED + tag + "Usage: '/cannons create <design>'");
                 return true;
             }
             //check if the design name is valid
             if (!plugin.getDesignStorage().hasDesign(args[1])) {
-                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found Available designs are: " + StringUtils.join(plugin.getDesignStorage().getDesignIds(), ", "));
+                sendMessage(sender, ChatColor.RED + tag + "Design not found Available designs are: " + StringUtils.join(plugin.getDesignStorage().getDesignIds(), ", "));
                 return true;
             }
 
-            sendMessage(sender, ChatColor.GREEN + "[Cannons] Create design: " + ChatColor.GOLD + args[1]);
+            sendMessage(sender, ChatColor.GREEN + tag + "Create design: " + ChatColor.GOLD + args[1]);
             CannonDesign cannonDesign = plugin.getDesignStorage().getDesign(args[1]);
 
             Cannon cannon = new Cannon(cannonDesign, player.getWorld().getUID(), player.getLocation().toVector(), BlockFace.NORTH, player.getUniqueId());
@@ -215,17 +215,17 @@ public class Commands implements TabExecutor {
             }
 
             if (args.length < 2) {
-                sendMessage(sender, ChatColor.RED + "[Cannons] Usage: '/cannons give <projectile> ] {amount}'");
+                sendMessage(sender, ChatColor.RED + tag +"Usage: '/cannons give <projectile> ] {amount}'");
                 return true;
             }
 
             //check if the projectile id is valid
             Projectile projectile = ProjectileStorage.getProjectile(args[1]);
             if (projectile == null) {
-                sendMessage(sender, ChatColor.RED + "[Cannons] Design not found. Available designs are: " + StringUtils.join(ProjectileStorage.getProjectileIds(), ", "));
+                sendMessage(sender, ChatColor.RED + tag + "Design not found. Available designs are: " + StringUtils.join(ProjectileStorage.getProjectileIds(), ", "));
                 return true;
             }
-            sendMessage(sender, ChatColor.GREEN + "[Cannons] Give projectile: " + ChatColor.GOLD + args[1]);
+            sendMessage(sender, ChatColor.GREEN + tag + "Give projectile: " + ChatColor.GOLD + args[1]);
             int amount = 1;
             if (args.length >= 3)
                 try {
@@ -447,7 +447,7 @@ public class Commands implements TabExecutor {
         //list cannons of this player name
         else if (args[0].equalsIgnoreCase("list")) {
             if (!player.hasPermission("cannons.player.list")) {
-                plugin.logDebug("[Cannons] Missing permission 'cannons.player.list' for command /cannons " + args[0]);
+                plugin.logDebug("Missing permission 'cannons.player.list' for command /cannons " + args[0]);
                 return true;
             }
             sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");

@@ -203,7 +203,7 @@ public class CannonDesign
     		return cannonBlocks.getRotationCenter().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
 
-    	Cannons.logger().info("[Cannons] missing rotation center for cannon design " + cannon.getCannonName());
+    	Cannons.logger().info("missing rotation center for cannon design " + cannon.getCannonName());
     	return cannon.getOffset().toLocation(cannon.getWorldBukkit());
     }
 
@@ -221,7 +221,7 @@ public class CannonDesign
     		return cannonBlocks.getMuzzle().clone().add(cannon.getOffset()).toLocation(cannon.getWorldBukkit());
     	}
 
-    	Cannons.logger().info("[Cannons] missing muzzle location for cannon design " + cannon.getCannonName());
+    	Cannons.logger().info("missing muzzle location for cannon design " + cannon.getCannonName());
     	return cannon.getOffset().toLocation(cannon.getWorldBukkit());
     }
     

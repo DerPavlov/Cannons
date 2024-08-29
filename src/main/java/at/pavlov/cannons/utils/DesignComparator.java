@@ -25,7 +25,7 @@ public class DesignComparator implements Comparator<CannonDesign>
 		//if the design is invalid something goes wrong, message the user
 		if (design.getAllCannonBlocks(BlockFace.NORTH) == null) 
 		{
-			Cannons.logger().log(Level.SEVERE, "[Cannons] invalid cannon design for " + design.getDesignName());
+			Cannons.logger().log(Level.SEVERE, "invalid cannon design for " + design.getDesignName());
 			return 0;
 		}
 		

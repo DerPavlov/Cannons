@@ -31,7 +31,7 @@ public class SaveCannonTask extends BukkitRunnable {
                 "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                 , Cannons.getPlugin().getCannonDatabase());
         try (PreparedStatement preparedStatement = Cannons.getPlugin().getConnection().prepareStatement(insert)) {
-            Cannons.getPlugin().logDebug("[Cannons] save Task start");
+            Cannons.getPlugin().logDebug("save Task start");
             for (Cannon cannon : CannonManager.getCannonList().values()) {
                 // in case we want to save just one cannon
                 if (this.cannonId != null && cannon.getUID() != this.cannonId) {
@@ -107,7 +107,7 @@ public class SaveCannonTask extends BukkitRunnable {
 
                 preparedStatement.addBatch();
             }
-            Cannons.getPlugin().logDebug("[Cannons] save Task execute");
+            Cannons.getPlugin().logDebug("save Task execute");
             preparedStatement.executeBatch();
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,6 +134,6 @@ public class SaveCannonTask extends BukkitRunnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Cannons.getPlugin().logDebug("[Cannons] save Task finish");
+        Cannons.getPlugin().logDebug("save Task finish");
     }
 }

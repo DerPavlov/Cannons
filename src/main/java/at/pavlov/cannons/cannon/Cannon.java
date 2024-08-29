@@ -505,7 +505,7 @@ public class Cannon {
                     gunpowder = maximumLoadableNormal;
                 else
                     gunpowder = 0;
-                Cannons.logger().info("[Cannons] gunpowder: " + gunpowder);
+                Cannons.logger().info("gunpowder: " + gunpowder);
             }
 
             //load the gunpowder
@@ -1639,7 +1639,7 @@ public class Cannon {
         }
         World bukkitWorld = Bukkit.getWorld(this.world);
         if (bukkitWorld == null)
-            Cannons.logger().info("[Cannons] Can't find world: " + world);
+            Cannons.logger().info("Can't find world: " + world);
         return Bukkit.getWorld(this.world);
         // return new Location(bukkitWorld, )
     }
