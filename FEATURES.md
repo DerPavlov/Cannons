@@ -17,6 +17,7 @@ API Changes/New Events:
 --------------
 - ProjectilePiercingEvent is now cancellable
 - New CannonLinkFiringEvent to handle linked cannons operations
+- New CannonLinkAimingEvent to handle linked cannons aiming
 - You can now get more data from CannonDestroyEvent, which execute when cannons are broken too
 - New CannonPreLoadEvent 
 - New CannonRenameEvent
