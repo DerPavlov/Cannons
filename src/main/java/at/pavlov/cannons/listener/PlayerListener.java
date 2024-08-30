@@ -391,26 +391,8 @@ public class PlayerListener implements Listener
             measureTemperature(cannon, eventitem, event);
 
             // ############ set angle ################################
-            if((config.getToolAdjust().equalsFuzzy(eventitem) || config.getToolAutoaim().equalsFuzzy(eventitem)) && cannon.isLoadingBlock(clickedBlock.getLocation()))
-            {
-                plugin.logDebug("change cannon angle");
-                event.setCancelled(true);
-
-                if (plugin.getEconomy() != null && !cannon.isPaid()){
-                    // cannon fee is not paid
-                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
-                    CannonsUtil.playErrorSound(cannon.getMuzzle());
-                    return;
-                }
-
-                MessageEnum message = aiming.changeAngle(cannon, event.getAction(), event.getBlockFace(), player);
-                userMessages.sendMessage(message, player, cannon);
-
-                // update Signs
-                cannon.updateCannonSigns();
-
-                if(message!=null)
-                    return;
+            if (setAngle(cannon, eventitem, clickedBlock, event)) {
+                return;
             }
 
             // ########## Load Projectile ######################
@@ -654,4 +636,28 @@ public class PlayerListener implements Listener
         CannonsUtil.playSound(cannon.getMuzzle(), design.getSoundThermometer());
     }
 
+    private boolean setAngle(Cannon cannon, ItemStack eventitem, Block clickedBlock, PlayerInteractEvent event) {
+        if ((!config.getToolAdjust().equalsFuzzy(eventitem) && !config.getToolAutoaim().equalsFuzzy(eventitem)) || !cannon.isLoadingBlock(clickedBlock.getLocation())) {
+            return false;
+        }
+
+        plugin.logDebug("change cannon angle");
+        event.setCancelled(true);
+
+        final Player player = event.getPlayer();
+        if (plugin.getEconomy() != null && !cannon.isPaid()){
+            // cannon fee is not paid
+            userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+            CannonsUtil.playErrorSound(cannon.getMuzzle());
+            return true;
+        }
+
+        MessageEnum message = aiming.changeAngle(cannon, event.getAction(), event.getBlockFace(), player);
+        userMessages.sendMessage(message, player, cannon);
+
+        // update Signs
+        cannon.updateCannonSigns();
+
+        return message != null;
+    }
 }
