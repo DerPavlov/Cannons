@@ -413,23 +413,9 @@ public class PlayerListener implements Listener
             }
 
             // ############ Redstone trigger clicked (e.g. button) ############################
-            if(cannon.isRestoneTrigger(clickedBlock.getLocation()))
-            {
-                plugin.logDebug("interact event: fire redstone trigger");
-
-                if (plugin.getEconomy() != null && !cannon.isPaid()){
-                    // cannon fee is not paid
-                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
-                    CannonsUtil.playErrorSound(cannon.getMuzzle());
-                    return;
-                }
-
-                // do not cancel the event
-                cannon.setLastUser(player.getUniqueId());
-
+            if (isRedstoneTrigger(cannon, clickedBlock, event)) {
                 return;
             }
-
 
             // ########## Ramrod ###############################
             if(config.getToolRamrod().equalsFuzzy(eventitem) && cannon.isLoadingBlock(clickedBlock.getLocation()))
@@ -476,6 +462,26 @@ public class PlayerListener implements Listener
             CannonsUtil.teleportBack(plugin.getProjectileManager().getAttachedProjectile(event.getPlayer()));
         	aiming.aimingMode(event.getPlayer(), null, true);
         }
+    }
+
+    private boolean isRedstoneTrigger(Cannon cannon, Block clickedBlock, PlayerInteractEvent event) {
+        if (!cannon.isRestoneTrigger(clickedBlock.getLocation())) {
+            return false;
+        }
+
+        plugin.logDebug("interact event: fire redstone trigger");
+
+        final Player player = event.getPlayer();
+        if (plugin.getEconomy() != null && !cannon.isPaid()){
+            // cannon fee is not paid
+            userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+            CannonsUtil.playErrorSound(cannon.getMuzzle());
+            return true;
+        }
+
+        // do not cancel the event
+        cannon.setLastUser(player.getUniqueId());
+        return true;
     }
 
     private boolean isRightClickTrigger(Cannon cannon, Block clickedBlock, PlayerInteractEvent event) {
