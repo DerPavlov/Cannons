@@ -385,15 +385,7 @@ public class PlayerListener implements Listener
             handleBurningTouch(cannon, player, event.getBlockFace(), clickedBlock);
 
             // ############ cooling a hot cannon ####################
-            if(design.isCoolingTool(eventitem))
-            {
-                event.setCancelled(true);
-                if (cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation())) {
-                    plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
-                    userMessages.sendMessage(MessageEnum.HeatManagementCooling, player, cannon);
-                }
-            }
-
+            handleCooling(cannon, eventitem, clickedBlock, event);
 
             // ############ temperature measurement ################################
             if(config.getToolThermometer().equalsFuzzy(eventitem))
@@ -638,6 +630,23 @@ public class PlayerListener implements Listener
         effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
         effectLoc.getWorld().playSound(effectLoc, Sound.BLOCK_FIRE_EXTINGUISH, 0.1F, 1F);
         CannonsUtil.playSound(effectLoc, design.getSoundHot());
+    }
+
+    private void handleCooling(Cannon cannon, ItemStack eventitem, Block clickedBlock, PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
+
+        if (!cannon.getCannonDesign().isCoolingTool(eventitem)) {
+            return;
+        }
+
+        event.setCancelled(true);
+
+        if (!cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation())) {
+            return;
+        }
+
+        plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
+        userMessages.sendMessage(MessageEnum.HeatManagementCooling, player, cannon);
     }
 
 }
