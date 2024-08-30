@@ -12,6 +12,7 @@ import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
+import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -396,29 +397,8 @@ public class PlayerListener implements Listener
             }
 
             // ########## Load Projectile ######################
-            Projectile projectile = plugin.getProjectile(cannon, eventitem);
-            if (cannon.isLoadingBlock(clickedBlock.getLocation()) && projectile != null) {
-                plugin.logDebug("load projectile");
-                event.setCancelled(true);
-
-                if (plugin.getEconomy() != null && !cannon.isPaid()){
-                    // cannon fee is not paid
-                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
-                    CannonsUtil.playErrorSound(cannon.getMuzzle());
-                    return;
-                }
-
-                // load projectile
-                MessageEnum message = cannon.loadProjectile(projectile, player);
-                // display message
-                userMessages.sendMessage(message, player, cannon);
-
-                //this will directly fire the cannon after it was loaded
-                if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
-                    fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
-
-                if(message!=null)
-                    return;
+            if (isLoadProjectile(cannon, eventitem, clickedBlock, event)) {
+                return;
             }
 
 
@@ -657,6 +637,34 @@ public class PlayerListener implements Listener
 
         // update Signs
         cannon.updateCannonSigns();
+
+        return message != null;
+    }
+
+    private boolean isLoadProjectile(Cannon cannon, ItemStack eventitem, Block clickedBlock, PlayerInteractEvent event) {
+        Projectile projectile = ProjectileStorage.getProjectile(cannon, eventitem);;
+        if (!cannon.isLoadingBlock(clickedBlock.getLocation()) || projectile == null) {
+            return false;
+        }
+
+        plugin.logDebug("load projectile");
+        event.setCancelled(true);
+        final Player player = event.getPlayer();
+        if (plugin.getEconomy() != null && !cannon.isPaid()){
+            // cannon fee is not paid
+            userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+            CannonsUtil.playErrorSound(cannon.getMuzzle());
+            return true;
+        }
+
+        // load projectile
+        MessageEnum message = cannon.loadProjectile(projectile, player);
+        // display message
+        userMessages.sendMessage(message, player, cannon);
+
+        //this will directly fire the cannon after it was loaded
+        if (!player.isSneaking() && cannon.getCannonDesign().isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
+            fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
 
         return message != null;
     }
