@@ -35,7 +35,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 import org.jetbrains.annotations.Nullable;
@@ -70,7 +69,6 @@ public class PlayerListener implements Listener
             //DeathCause cause = plugin.getExplosion().getDeathCause(killedUID);
             plugin.getExplosion().removeKilledPlayer(killedUID);
 
-            Player shooter = null;
 //            if (cause.getShooterUID() != null)
 //                shooter = Bukkit.getPlayer(cause.getShooterUID());
 //            Cannon cannon = plugin.getCannon(cause.getCannonUID());
@@ -172,9 +170,8 @@ public class PlayerListener implements Listener
 //        }
 
         // Place wallsign
-        if (event.getBlockPlaced().getBlockData() instanceof WallSign)
+        if (event.getBlockPlaced().getBlockData() instanceof WallSign wallSign)
         {
-            WallSign wallSign = (WallSign) event.getBlockPlaced().getBlockData();
             // check cannon
             Location loc = event.getBlock().getRelative(wallSign.getFacing().getOppositeFace()).getLocation();
             Cannon cannon = cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true);
@@ -265,7 +262,7 @@ public class PlayerListener implements Listener
                 // place right
                 if (cannon.isRedstoneTorchInterface(block.getLocation()))
                 {
-                    MessageEnum message = fireCannon.redstoneFiring(cannon, InteractAction.fireRedstone);
+                    fireCannon.redstoneFiring(cannon, InteractAction.fireRedstone);
                 }
             }
         }
@@ -359,7 +356,7 @@ public class PlayerListener implements Listener
 
         final Location barrel = clickedBlock.getLocation();
 
-        //if try if the player has really nothing in his hands, or minecraft is blocking it
+        //try if the player has really nothing in his hands, or minecraft is blocking it
         final ItemStack eventitem = Objects.requireNonNullElse(event.getItem(), player.getInventory().getItemInMainHand());
 
         // find cannon or add it to the list
@@ -374,9 +371,6 @@ public class PlayerListener implements Listener
         }
 
     	if((event.getAction().isRightClick() || event.getAction() == Action.PHYSICAL) && cannon != null) {
-            // get cannon design
-            final CannonDesign design = cannon.getCannonDesign();
-
             // prevent eggs and snowball from firing when loaded into the gun
             if(config.isCancelItem(eventitem))
                 event.setCancelled(true);
@@ -625,7 +619,7 @@ public class PlayerListener implements Listener
     }
 
     private boolean isLoadProjectile(Cannon cannon, ItemStack eventitem, Block clickedBlock, PlayerInteractEvent event) {
-        Projectile projectile = ProjectileStorage.getProjectile(cannon, eventitem);;
+        Projectile projectile = ProjectileStorage.getProjectile(cannon, eventitem);
         if (!cannon.isLoadingBlock(clickedBlock.getLocation()) || projectile == null) {
             return false;
         }
