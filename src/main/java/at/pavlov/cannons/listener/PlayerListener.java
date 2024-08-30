@@ -33,6 +33,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 import org.jetbrains.annotations.Nullable;
@@ -363,21 +364,10 @@ public class PlayerListener implements Listener
         final Cannon cannon = cannonManager.getCannon(barrel, player.getUniqueId(), false);
 
         // ############ select a cannon ####################
-        if(plugin.getCommandListener().isSelectingMode(player)) {
-            if (plugin.getCommandListener().isBlockSelectingMode(player)){
-                plugin.getCommandListener().setSelectedBlock(player, clickedBlock);
-                event.setCancelled(true);
-                return;
-            }
-            else if (cannon != null){
-                plugin.getCommandListener().setSelectedCannon(player, cannon);
-                event.setCancelled(true);
-                return;
-            }
-        }
+        if (isCannonSelect(event, clickedBlock, cannon))
+            return;
 
-    	if((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL) && event.getHand() == EquipmentSlot.HAND && cannon != null)
-        {
+    	if((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.PHYSICAL) && event.getHand() == EquipmentSlot.HAND && cannon != null) {
             // get cannon design
             final CannonDesign design = cannon.getCannonDesign();
 
@@ -386,8 +376,8 @@ public class PlayerListener implements Listener
                 event.setCancelled(true);
 
             // I used here System.out.println to display the correct color code
-            if (plugin.isDebugMode() && event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().getItemMeta().hasDisplayName()) {
-                Cannons.logger().info("Cannon interaction with item " + event.getItem());
+            if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().getItemMeta().hasDisplayName()) {
+                plugin.logDebug("Cannon interaction with item " + event.getItem());
             }
 
             // ############ touching a hot cannon will burn you ####################
@@ -582,8 +572,6 @@ public class PlayerListener implements Listener
                 if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
                     fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
 
-                if(message!=null)
-                    return;
             }
         }
         //no cannon found - maybe the player has click into the air to stop aiming
@@ -624,6 +612,28 @@ public class PlayerListener implements Listener
         }
 
         return clickedBlock;
+    }
+
+    private boolean isCannonSelect(PlayerInteractEvent event, Block clickedBlock, Cannon cannon) {
+        final Player player = event.getPlayer();
+
+        if (!plugin.getCommandListener().isSelectingMode(player)) {
+            return false;
+        }
+
+        if (plugin.getCommandListener().isBlockSelectingMode(player)){
+            plugin.getCommandListener().setSelectedBlock(player, clickedBlock);
+            event.setCancelled(true);
+            return true;
+        }
+
+        else if (cannon != null){
+            plugin.getCommandListener().setSelectedCannon(player, cannon);
+            event.setCancelled(true);
+            return true;
+        }
+
+        return false;
     }
 
 }
