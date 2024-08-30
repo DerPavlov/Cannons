@@ -412,27 +412,6 @@ public class PlayerListener implements Listener
                 return;
             }
 
-            if(cannon.isRightClickTrigger(clickedBlock.getLocation()))
-            {
-                plugin.logDebug("fire torch");
-                event.setCancelled(true);
-
-                if (plugin.getEconomy() != null && !cannon.isPaid()){
-                    // cannon fee is not paid
-                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
-                    CannonsUtil.playErrorSound(cannon.getMuzzle());
-                    return;
-                }
-
-                MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireRightClickTigger);
-                // display message
-                userMessages.sendMessage(message, player, cannon);
-
-                if(message!=null)
-                    return;
-            }
-
-
             // ############ Redstone trigger clicked (e.g. button) ############################
             if(cannon.isRestoneTrigger(clickedBlock.getLocation()))
             {
@@ -500,7 +479,26 @@ public class PlayerListener implements Listener
     }
 
     private boolean isRightClickTrigger(Cannon cannon, Block clickedBlock, PlayerInteractEvent event) {
-        return false;
+        if (!cannon.isRightClickTrigger(clickedBlock.getLocation())) {
+            return false;
+        }
+
+        plugin.logDebug("fire torch");
+        event.setCancelled(true);
+
+        final Player player = event.getPlayer();
+        if (plugin.getEconomy() != null && !cannon.isPaid()) {
+            // cannon fee is not paid
+            userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+            CannonsUtil.playErrorSound(cannon.getMuzzle());
+            return true;
+        }
+
+        MessageEnum message = fireCannon.playerFiring(cannon, player, InteractAction.fireRightClickTigger);
+        // display message
+        userMessages.sendMessage(message, player, cannon);
+
+        return message != null;
     }
 
     private boolean isCannonSelect(PlayerInteractEvent event, Block clickedBlock, Cannon cannon) {
