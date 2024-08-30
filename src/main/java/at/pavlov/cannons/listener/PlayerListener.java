@@ -418,34 +418,8 @@ public class PlayerListener implements Listener
             }
 
             // ########## Ramrod ###############################
-            if(config.getToolRamrod().equalsFuzzy(eventitem) && cannon.isLoadingBlock(clickedBlock.getLocation()))
-            {
-                plugin.logDebug("Ramrod used");
-                event.setCancelled(true);
-
-                if (plugin.getEconomy() != null && !cannon.isPaid()){
-                    // cannon fee is not paid
-                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
-                    CannonsUtil.playErrorSound(cannon.getMuzzle());
-                    return;
-                }
-
-                MessageEnum message = cannon.useRamRod(player);
-                userMessages.sendMessage(message, player, cannon);
-
-                // todo clean multiple cannons in the vicinity
-                if (design.isLinkCannonsEnabled() ) {
-                    int d = design.getLinkCannonsDistance() * 2;
-                    for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
-                        if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
-                            fcannon.useRamRod(player);
-                    }
-                }
-
-                //this will directly fire the cannon after it was loaded
-                if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
-                    fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
-
+            if (isRamrod(cannon, eventitem, clickedBlock, event)) {
+                return;
             }
         }
         //no cannon found - maybe the player has click into the air to stop aiming
@@ -462,6 +436,42 @@ public class PlayerListener implements Listener
             CannonsUtil.teleportBack(plugin.getProjectileManager().getAttachedProjectile(event.getPlayer()));
         	aiming.aimingMode(event.getPlayer(), null, true);
         }
+    }
+
+    private boolean isRamrod(Cannon cannon, ItemStack eventitem, Block clickedBlock, PlayerInteractEvent event) {
+        if (!config.getToolRamrod().equalsFuzzy(eventitem) || !cannon.isLoadingBlock(clickedBlock.getLocation())) {
+            return false;
+        }
+
+        plugin.logDebug("Ramrod used");
+        event.setCancelled(true);
+
+        final Player player = event.getPlayer();
+        if (plugin.getEconomy() != null && !cannon.isPaid()){
+            // cannon fee is not paid
+            userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+            CannonsUtil.playErrorSound(cannon.getMuzzle());
+            return true;
+        }
+
+        MessageEnum message = cannon.useRamRod(player);
+        userMessages.sendMessage(message, player, cannon);
+
+        final CannonDesign design = cannon.getCannonDesign();
+        // todo clean multiple cannons in the vicinity
+        if (design.isLinkCannonsEnabled() ) {
+            int d = design.getLinkCannonsDistance() * 2;
+            for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
+                if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
+                    fcannon.useRamRod(player);
+            }
+        }
+
+        //this will directly fire the cannon after it was loaded
+        if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
+            fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
+
+        return false;
     }
 
     private boolean isRedstoneTrigger(Cannon cannon, Block clickedBlock, PlayerInteractEvent event) {
