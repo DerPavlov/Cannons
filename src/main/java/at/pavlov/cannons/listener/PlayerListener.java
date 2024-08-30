@@ -403,28 +403,9 @@ public class PlayerListener implements Listener
 
 
             // ########## Barrel clicked with gunpowder
-            if(cannon.isLoadingBlock(clickedBlock.getLocation()) && design.getGunpowderType().equalsFuzzy(eventitem))
-            {
-                plugin.logDebug("load gunpowder");
-                event.setCancelled(true);
-
-                if (plugin.getEconomy() != null && !cannon.isPaid()){
-                    // cannon fee is not paid
-                    userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
-                    CannonsUtil.playErrorSound(cannon.getMuzzle());
-                    return;
-                }
-
-                // load gunpowder
-                MessageEnum message = cannon.loadGunpowder(player);
-
-                // display message
-                userMessages.sendMessage(message, player, cannon);
-
-                if(message!=null)
-                    return;
+            if (isLoadGunpowder(cannon, eventitem, clickedBlock, event)) {
+                return;
             }
-
 
             // ############ Right click trigger clicked (e.g.torch) ############################
             if(cannon.isRightClickTrigger(clickedBlock.getLocation()))
@@ -665,6 +646,31 @@ public class PlayerListener implements Listener
         //this will directly fire the cannon after it was loaded
         if (!player.isSneaking() && cannon.getCannonDesign().isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
             fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
+
+        return message != null;
+    }
+
+    private boolean isLoadGunpowder(Cannon cannon, ItemStack eventitem, Block clickedBlock, PlayerInteractEvent event) {
+        if (!cannon.isLoadingBlock(clickedBlock.getLocation()) || !cannon.getCannonDesign().getGunpowderType().equalsFuzzy(eventitem)) {
+            return false;
+        }
+
+        plugin.logDebug("load gunpowder");
+        event.setCancelled(true);
+
+        final Player player = event.getPlayer();
+        if (plugin.getEconomy() != null && !cannon.isPaid()){
+            // cannon fee is not paid
+            userMessages.sendMessage(MessageEnum.ErrorNotPaid, player, cannon);
+            CannonsUtil.playErrorSound(cannon.getMuzzle());
+            return true;
+        }
+
+        // load gunpowder
+        MessageEnum message = cannon.loadGunpowder(player);
+
+        // display message
+        userMessages.sendMessage(message, player, cannon);
 
         return message != null;
     }
