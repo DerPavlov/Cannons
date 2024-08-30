@@ -389,22 +389,6 @@ public class PlayerListener implements Listener
 
             // ############ temperature measurement ################################
             measureTemperature(cannon, eventitem, event);
-            if(config.getToolThermometer().equalsFuzzy(eventitem))
-            {
-                if (player.hasPermission(design.getPermissionThermometer()))
-                {
-                    plugin.logDebug("measure temperature");
-                    event.setCancelled(true);
-                    userMessages.sendMessage(MessageEnum.HeatManagementInfo, player, cannon);
-                    //player.playSound(cannon.getMuzzle(), Sound.ANVIL_LAND, 10f, 1f);
-                    CannonsUtil.playSound(cannon.getMuzzle(), design.getSoundThermometer());
-                }
-                else
-                {
-                    plugin.logDebug("Player " + player.getName() + " has no permission " + design.getPermissionThermometer());
-                }
-            }
-
 
             // ############ set angle ################################
             if((config.getToolAdjust().equalsFuzzy(eventitem) || config.getToolAutoaim().equalsFuzzy(eventitem)) && cannon.isLoadingBlock(clickedBlock.getLocation()))
