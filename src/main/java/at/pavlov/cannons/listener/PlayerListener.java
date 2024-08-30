@@ -408,6 +408,10 @@ public class PlayerListener implements Listener
             }
 
             // ############ Right click trigger clicked (e.g.torch) ############################
+            if (isRightClickTrigger(cannon, clickedBlock, event)) {
+                return;
+            }
+
             if(cannon.isRightClickTrigger(clickedBlock.getLocation()))
             {
                 plugin.logDebug("fire torch");
@@ -495,28 +499,8 @@ public class PlayerListener implements Listener
         }
     }
 
-    private static @Nullable Block getBlock(Block eventClickedBlock, Player player) {
-        Block clickedBlock = null;
-        if (eventClickedBlock != null) {
-            return eventClickedBlock;
-        }
-
-        // no clicked block - get block player is looking at
-        Location location = player.getEyeLocation();
-        BlockIterator blocksToAdd = new BlockIterator(location, 0, 5);
-        Block block = null;
-        while(blocksToAdd.hasNext()) {
-            block = blocksToAdd.next();
-            if (!block.getType().isAir()){
-                clickedBlock = block;
-            }
-        }
-
-        if (clickedBlock == null) {
-            return block;
-        }
-
-        return clickedBlock;
+    private boolean isRightClickTrigger(Cannon cannon, Block clickedBlock, PlayerInteractEvent event) {
+        return false;
     }
 
     private boolean isCannonSelect(PlayerInteractEvent event, Block clickedBlock, Cannon cannon) {
@@ -673,5 +657,29 @@ public class PlayerListener implements Listener
         userMessages.sendMessage(message, player, cannon);
 
         return message != null;
+    }
+
+    private static @Nullable Block getBlock(Block eventClickedBlock, Player player) {
+        Block clickedBlock = null;
+        if (eventClickedBlock != null) {
+            return eventClickedBlock;
+        }
+
+        // no clicked block - get block player is looking at
+        Location location = player.getEyeLocation();
+        BlockIterator blocksToAdd = new BlockIterator(location, 0, 5);
+        Block block = null;
+        while(blocksToAdd.hasNext()) {
+            block = blocksToAdd.next();
+            if (!block.getType().isAir()){
+                clickedBlock = block;
+            }
+        }
+
+        if (clickedBlock == null) {
+            return block;
+        }
+
+        return clickedBlock;
     }
 }
