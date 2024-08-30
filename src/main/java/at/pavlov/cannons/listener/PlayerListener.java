@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.WallSign;
@@ -381,23 +382,7 @@ public class PlayerListener implements Listener
             }
 
             // ############ touching a hot cannon will burn you ####################
-            if(cannon.getTemperature() > design.getWarningTemperature())
-            {
-                plugin.logDebug("someone touched a hot cannon");
-                userMessages.sendMessage(MessageEnum.HeatManagementBurn, player, cannon);
-                if (design.getBurnDamage() > 0)
-                    player.damage(design.getBurnDamage()*2);
-                if (design.getBurnSlowing() > 0)
-                    PotionEffectType.SLOWNESS.createEffect((int) (design.getBurnSlowing()*20.0), 0).apply(player);
-
-                BlockFace clickedFace = event.getBlockFace();
-
-                Location effectLoc = clickedBlock.getRelative(clickedFace).getLocation();
-                effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
-                //ffectLoc.getWorld().playSound(effectLoc, Sound.FIZZ, 0.1F, 1F);
-                CannonsUtil.playSound(effectLoc, design.getSoundHot());
-            }
-
+            handleBurningTouch(cannon, player, event.getBlockFace(), clickedBlock);
 
             // ############ cooling a hot cannon ####################
             if(design.isCoolingTool(eventitem))
@@ -634,6 +619,25 @@ public class PlayerListener implements Listener
         }
 
         return false;
+    }
+
+    private void handleBurningTouch(Cannon cannon, Player player, BlockFace clickedFace, Block clickedBlock) {
+        final CannonDesign design = cannon.getCannonDesign();
+        if (!(cannon.getTemperature() > design.getWarningTemperature())) {
+            return;
+        }
+
+        plugin.logDebug("someone touched a hot cannon");
+        userMessages.sendMessage(MessageEnum.HeatManagementBurn, player, cannon);
+        if (design.getBurnDamage() > 0)
+            player.damage(design.getBurnDamage()*2);
+        if (design.getBurnSlowing() > 0)
+            PotionEffectType.SLOWNESS.createEffect((int) (design.getBurnSlowing()*20.0), 0).apply(player);
+
+        Location effectLoc = clickedBlock.getRelative(clickedFace).getLocation();
+        effectLoc.getWorld().playEffect(effectLoc, Effect.SMOKE, BlockFace.UP);
+        effectLoc.getWorld().playSound(effectLoc, Sound.BLOCK_FIRE_EXTINGUISH, 0.1F, 1F);
+        CannonsUtil.playSound(effectLoc, design.getSoundHot());
     }
 
 }
