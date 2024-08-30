@@ -458,10 +458,10 @@ public class PlayerListener implements Listener
         userMessages.sendMessage(message, player, cannon);
 
         final CannonDesign design = cannon.getCannonDesign();
-        // todo clean multiple cannons in the vicinity
         if (design.isLinkCannonsEnabled() ) {
             int d = design.getLinkCannonsDistance() * 2;
             for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
+                //todo make a function for this !cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()
                 if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
                     fcannon.useRamRod(player);
             }
