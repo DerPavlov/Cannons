@@ -35,7 +35,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class PlayerListener implements Listener
@@ -343,54 +345,25 @@ public class PlayerListener implements Listener
      * @param event
      */
 	@EventHandler
-    public void PlayerInteract(PlayerInteractEvent event)
-    {
+    public void PlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
 
-        Block clickedBlock = null;
-        if(event.getClickedBlock() == null)
-        {
-            // no clicked block - get block player is looking at
-            Location location = event.getPlayer().getEyeLocation();
-            BlockIterator blocksToAdd = new BlockIterator(location, 0, 5);
-            Block block = null;
-            while(blocksToAdd.hasNext()) {
-                block = blocksToAdd.next();
-                if (block.getType() != Material.AIR){
-                    clickedBlock = block;
-                }
-            }
-            if (clickedBlock == null) {
-                clickedBlock = block;
-            }
-        }
-        else
-        {
-            clickedBlock = event.getClickedBlock();
-        }
-
+        final Player player = event.getPlayer();
+        Block clickedBlock = getBlock(event.getClickedBlock(), player);
         if (clickedBlock == null){
             return;
         }
 
-        final Player player = event.getPlayer();
         final Location barrel = clickedBlock.getLocation();
 
         //if try if the player has really nothing in his hands, or minecraft is blocking it
-        final ItemStack eventitem;
-        if (event.getItem() == null) {
-            eventitem = player.getInventory().getItemInMainHand();
-        }
-        else{
-            eventitem = event.getItem();
-        }
+        final ItemStack eventitem = Objects.requireNonNullElse(event.getItem(), player.getInventory().getItemInMainHand());
 
         // find cannon or add it to the list
         final Cannon cannon = cannonManager.getCannon(barrel, player.getUniqueId(), false);
 
         // ############ select a cannon ####################
-        if(plugin.getCommandListener().isSelectingMode(player))
-        {
+        if(plugin.getCommandListener().isSelectingMode(player)) {
             if (plugin.getCommandListener().isBlockSelectingMode(player)){
                 plugin.getCommandListener().setSelectedBlock(player, clickedBlock);
                 event.setCancelled(true);
@@ -601,7 +574,7 @@ public class PlayerListener implements Listener
                     int d = design.getLinkCannonsDistance() * 2;
                     for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
                         if (fcannon.getCannonDesign().equals(cannon.getCannonDesign()) &&  (!cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId()))
-                        fcannon.useRamRod(player);
+                            fcannon.useRamRod(player);
                     }
                 }
 
@@ -627,6 +600,30 @@ public class PlayerListener implements Listener
             CannonsUtil.teleportBack(plugin.getProjectileManager().getAttachedProjectile(event.getPlayer()));
         	aiming.aimingMode(event.getPlayer(), null, true);
         }
+    }
+
+    private static @Nullable Block getBlock(Block eventClickedBlock, Player player) {
+        Block clickedBlock = null;
+        if (eventClickedBlock != null) {
+            return eventClickedBlock;
+        }
+
+        // no clicked block - get block player is looking at
+        Location location = player.getEyeLocation();
+        BlockIterator blocksToAdd = new BlockIterator(location, 0, 5);
+        Block block = null;
+        while(blocksToAdd.hasNext()) {
+            block = blocksToAdd.next();
+            if (!block.getType().isAir()){
+                clickedBlock = block;
+            }
+        }
+
+        if (clickedBlock == null) {
+            return block;
+        }
+
+        return clickedBlock;
     }
 
 }
