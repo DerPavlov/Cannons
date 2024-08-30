@@ -388,6 +388,7 @@ public class PlayerListener implements Listener
             handleCooling(cannon, eventitem, clickedBlock, event);
 
             // ############ temperature measurement ################################
+            measureTemperature(cannon, eventitem, event);
             if(config.getToolThermometer().equalsFuzzy(eventitem))
             {
                 if (player.hasPermission(design.getPermissionThermometer()))
@@ -647,6 +648,26 @@ public class PlayerListener implements Listener
 
         plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
         userMessages.sendMessage(MessageEnum.HeatManagementCooling, player, cannon);
+    }
+
+    private void measureTemperature(Cannon cannon, ItemStack eventitem, PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
+        final CannonDesign design = cannon.getCannonDesign();
+
+        if (!config.getToolThermometer().equalsFuzzy(eventitem)) {
+            return;
+        }
+
+        if (!player.hasPermission(design.getPermissionThermometer())) {
+            plugin.logDebug("Player " + player.getName() + " has no permission " + design.getPermissionThermometer());
+            return;
+        }
+
+        plugin.logDebug("measure temperature");
+        event.setCancelled(true);
+        userMessages.sendMessage(MessageEnum.HeatManagementInfo, player, cannon);
+        player.playSound(cannon.getMuzzle(), Sound.BLOCK_ANVIL_LAND, 10f, 1f);
+        CannonsUtil.playSound(cannon.getMuzzle(), design.getSoundThermometer());
     }
 
 }
