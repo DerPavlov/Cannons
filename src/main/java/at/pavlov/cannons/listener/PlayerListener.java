@@ -137,38 +137,6 @@ public class PlayerListener implements Listener
         // setup a new cannon
         cannonManager.getCannon(blockLoc, event.getPlayer().getUniqueId());
 
-//        // delete placed projectile or gunpowder if clicked against the barrel
-//        if (event.getBlockAgainst() != null)
-//        {
-//            Location barrel = event.getBlockAgainst().getLocation();
-//
-//            // check if block is cannonblock
-//            Cannon cannon = cannonManager.getCannon(barrel, event.getPlayer().getUniqueId(), true);
-//            if (cannon != null)
-//            {
-//                // delete projectile
-//
-//                Projectile projectile = plugin.getProjectile(cannon, event.getItemInHand());
-//                if (projectile != null && cannon.getCannonDesign().canLoad(projectile))
-//                {
-//                    // check if the placed block is not part of the cannon
-//                    if (!cannon.isCannonBlock(event.getBlock()))
-//                    {
-//                        event.setCancelled(true);
-//                    }
-//                }
-//                // delete gunpowder block
-//                if (cannon.getCannonDesign().getGunpowderType().equalsFuzzy(event.getBlock()))
-//                {
-//                    // check if the placed block is not part of the cannon
-//                    if (!cannon.isCannonBlock(event.getBlock()))
-//                    {
-//                        event.setCancelled(true);
-//                    }
-//                }
-//            }
-//        }
-
         // Place wallsign
         if (event.getBlockPlaced().getBlockData() instanceof WallSign wallSign)
         {
@@ -384,10 +352,14 @@ public class PlayerListener implements Listener
             handleBurningTouch(cannon, player, event.getBlockFace(), clickedBlock);
 
             // ############ cooling a hot cannon ####################
-            handleCooling(cannon, eventitem, clickedBlock, event);
+            if (isHandleCooling(cannon, eventitem, clickedBlock, event)) {
+                return;
+            }
 
             // ############ temperature measurement ################################
-            measureTemperature(cannon, eventitem, event);
+            if(isMeasureTemperature(cannon, eventitem, event)) {
+                return;
+            }
 
             // ############ set angle ################################
             if (setAngle(cannon, eventitem, clickedBlock, event)) {
@@ -398,7 +370,6 @@ public class PlayerListener implements Listener
             if (isLoadProjectile(cannon, eventitem, clickedBlock, event)) {
                 return;
             }
-
 
             // ########## Barrel clicked with gunpowder
             if (isLoadGunpowder(cannon, eventitem, clickedBlock, event)) {
@@ -556,34 +527,35 @@ public class PlayerListener implements Listener
         CannonsUtil.playSound(effectLoc, design.getSoundHot());
     }
 
-    private void handleCooling(Cannon cannon, ItemStack eventitem, Block clickedBlock, PlayerInteractEvent event) {
+    private boolean isHandleCooling(Cannon cannon, ItemStack eventitem, Block clickedBlock, PlayerInteractEvent event) {
         final Player player = event.getPlayer();
 
         if (!cannon.getCannonDesign().isCoolingTool(eventitem)) {
-            return;
+            return false;
         }
 
         event.setCancelled(true);
 
         if (!cannon.coolCannon(player, clickedBlock.getRelative(event.getBlockFace()).getLocation())) {
-            return;
+            return false;
         }
 
         plugin.logDebug(player.getName() + " cooled the cannon " + cannon.getCannonName());
         userMessages.sendMessage(MessageEnum.HeatManagementCooling, player, cannon);
+        return true;
     }
 
-    private void measureTemperature(Cannon cannon, ItemStack eventitem, PlayerInteractEvent event) {
+    private boolean isMeasureTemperature(Cannon cannon, ItemStack eventitem, PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         final CannonDesign design = cannon.getCannonDesign();
 
         if (!config.getToolThermometer().equalsFuzzy(eventitem)) {
-            return;
+            return false;
         }
 
         if (!player.hasPermission(design.getPermissionThermometer())) {
             plugin.logDebug("Player " + player.getName() + " has no permission " + design.getPermissionThermometer());
-            return;
+            return true;
         }
 
         plugin.logDebug("measure temperature");
@@ -591,6 +563,8 @@ public class PlayerListener implements Listener
         userMessages.sendMessage(MessageEnum.HeatManagementInfo, player, cannon);
         player.playSound(cannon.getMuzzle(), Sound.BLOCK_ANVIL_LAND, 10f, 1f);
         CannonsUtil.playSound(cannon.getMuzzle(), design.getSoundThermometer());
+
+        return true;
     }
 
     private boolean setAngle(Cannon cannon, ItemStack eventitem, Block clickedBlock, PlayerInteractEvent event) {
