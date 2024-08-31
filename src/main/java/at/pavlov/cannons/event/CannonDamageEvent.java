@@ -1,23 +1,27 @@
-package at.pavlov.cannons.event.damage;
+package at.pavlov.cannons.event;
 
+import at.pavlov.cannons.Enum.DamageType;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class CannonDirectDamageEvent extends Event {
+public class CannonDamageEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final FlyingProjectile cannonball;
-    private final Entity target;
+    private final LivingEntity target;
     private double damage;
     private double reduction;
+    private final DamageType type;
 
-    public CannonDirectDamageEvent(FlyingProjectile cannonball, Entity target, double damage, double reduction) {
+    public CannonDamageEvent(FlyingProjectile cannonball, LivingEntity target, double damage, double reduction, DamageType type) {
         this.cannonball = cannonball;
         this.target = target;
         this.damage = damage;
         this.reduction = reduction;
+        this.type = type;
     }
 
     @Override
@@ -33,7 +37,7 @@ public class CannonDirectDamageEvent extends Event {
         return cannonball;
     }
 
-    public Entity getTarget() {
+    public LivingEntity getTarget() {
         return target;
     }
 
@@ -51,5 +55,9 @@ public class CannonDirectDamageEvent extends Event {
 
     public void setReduction(double reduction) {
         this.reduction = reduction;
+    }
+
+    public DamageType getType() {
+        return type;
     }
 }

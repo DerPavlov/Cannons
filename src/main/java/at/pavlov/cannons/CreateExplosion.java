@@ -1,5 +1,6 @@
 package at.pavlov.cannons;
 
+import at.pavlov.cannons.Enum.DamageType;
 import at.pavlov.cannons.Enum.EntityDataType;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.Enum.ProjectileCause;
@@ -8,11 +9,10 @@ import at.pavlov.cannons.container.DeathCause;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
-import at.pavlov.cannons.event.CannonRedstoneEvent;
 import at.pavlov.cannons.event.CannonsEntityDeathEvent;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
-import at.pavlov.cannons.event.damage.CannonDirectDamageEvent;
+import at.pavlov.cannons.event.CannonDamageEvent;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
@@ -610,11 +610,9 @@ public class CreateExplosion {
     private void applyPotionEffect(Location impactLoc, Entity next, FlyingProjectile cannonball) {
         Projectile projectile = cannonball.getProjectile();
 
-        if (!(next instanceof LivingEntity)) {
+        if (!(next instanceof LivingEntity living)) {
             return;
         }
-
-        LivingEntity living = (LivingEntity) next;
 
         double dist = impactLoc.distanceSquared(living.getEyeLocation());
         // if the entity is too far away, return
@@ -657,11 +655,9 @@ public class CreateExplosion {
     private double getPlayerDamage(Location impactLoc, Entity next, FlyingProjectile cannonball) {
         Projectile projectile = cannonball.getProjectile();
 
-        if (!(next instanceof LivingEntity)) {
+        if (!(next instanceof LivingEntity living)) {
             return 0.0;
         }
-
-        LivingEntity living = (LivingEntity) next;
 
         double dist = impactLoc.distance((living).getEyeLocation());
         // if the entity is too far away, return
@@ -683,15 +679,16 @@ public class CreateExplosion {
         double reduction = 1.0;
         if (living instanceof HumanEntity human) {
             double armorPiercing = Math.max(projectile.getPenetration(), 0);
-            reduction *= ArmorCalculationUtil.getExplosionHitReduction(human, armorPiercing);
+            reduction = ArmorCalculationUtil.getExplosionHitReduction(human, armorPiercing);
         }
 
         this.plugin.logDebug("PlayerDamage " + living.getType() + ":" + String.format("%.2f", damage) + ",reduct:"
                 + String.format("%.2f", reduction) + ",dist:" + String.format("%.2f", dist));
 
-        damage *= reduction;
+        CannonDamageEvent event = new CannonDamageEvent(cannonball, living, damage, reduction, DamageType.DIRECT);
+        Bukkit.getServer().getPluginManager().callEvent(event);
 
-        return damage;
+        return event.getDamage() * event.getReduction();
         // if the entity is not alive
     }
 
@@ -731,7 +728,7 @@ public class CreateExplosion {
         this.plugin.logDebug("DirectHitDamage " + living.getType() + ": " + String.format("%.2f", damage)
                 + ", reduction: " + String.format("%.2f", reduction));
 
-        CannonDirectDamageEvent event = new CannonDirectDamageEvent(cannonball, target, damage, reduction);
+        CannonDamageEvent event = new CannonDamageEvent(cannonball, living, damage, reduction, DamageType.DIRECT);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         return event.getDamage() * event.getReduction();
