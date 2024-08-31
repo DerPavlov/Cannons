@@ -144,7 +144,7 @@ public class FireCannon {
         LinkedList<Cannon> linkedCannons = new LinkedList<>();
         for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
             plugin.logDebug(fcannon.getCannonName() + " is cannon operator: " + fcannon.isCannonOperator(player));
-            boolean allowedToFire = !cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId();
+            boolean allowedToFire = cannon.isAccessLinkingAllowed(fcannon, player);
 
             if (fcannon.isCannonOperator(player) &&
                     fcannon.canAimYaw(player.getEyeLocation().getYaw()) &&

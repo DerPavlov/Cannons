@@ -480,7 +480,7 @@ public class Aiming {
         for (Cannon fcannon : CannonManager.getCannonsInBox(cannon.getLocation(), d, d, d)) {
             // if the design is the same, and the player is allowed to use the cannon
             boolean checkDesign = fcannon.getCannonDesign().equals(cannon.getCannonDesign());
-            boolean canAccess = !cannon.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId();
+            boolean canAccess = cannon.isAccessLinkingAllowed(fcannon, player);
 
             if (fcannon.isCannonOperator(player) && checkDesign && canAccess)
                 updateAngle(player, fcannon, null, InteractAction.adjustAutoaim);

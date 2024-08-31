@@ -2682,4 +2682,8 @@ public class Cannon {
     public void setTimestampAimingMode(long timestampAimingMode) {
         this.timestampAimingMode = timestampAimingMode;
     }
+
+    public boolean isAccessLinkingAllowed(Cannon fcannon, Player player) {
+        return !this.getCannonDesign().isAccessForOwnerOnly() || fcannon.getOwner() == player.getUniqueId();
+    }
 }
