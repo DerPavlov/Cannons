@@ -58,6 +58,7 @@ public final class Cannons extends JavaPlugin
 	private PlayerListener playerListener;
 	private EntityListener entityListener;
 	private SignListener signListener;
+	private RedstoneListener redstoneListener;
     private Commands commands;
 	
 	// database
@@ -116,6 +117,7 @@ public final class Cannons extends JavaPlugin
 		this.playerListener = new PlayerListener(this);
 		this.entityListener = new EntityListener(this);
 		this.signListener = new SignListener(this);
+		this.redstoneListener = new RedstoneListener(this);
 		this.commands = new Commands(this);
 
 		setupEconomy();
@@ -144,6 +146,7 @@ public final class Cannons extends JavaPlugin
 			pm.registerEvents(playerListener, this);
 			pm.registerEvents(entityListener, this);
 			pm.registerEvents(signListener, this);
+			pm.registerEvents(redstoneListener, this);
 			//call command executer
 			getCommand("cannons").setExecutor(commands);
 
