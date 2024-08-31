@@ -8,9 +8,11 @@ import at.pavlov.cannons.container.DeathCause;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.container.SpawnEntityHolder;
 import at.pavlov.cannons.container.SpawnMaterialHolder;
+import at.pavlov.cannons.event.CannonRedstoneEvent;
 import at.pavlov.cannons.event.CannonsEntityDeathEvent;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
+import at.pavlov.cannons.event.damage.CannonDirectDamageEvent;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileProperties;
@@ -723,12 +725,16 @@ public class CreateExplosion {
         double reduction = 1.0;
         if (living instanceof HumanEntity human) {
             double armorPiercing = Math.max(projectile.getPenetration(), 0);
-            reduction *= ArmorCalculationUtil.getDirectHitReduction(human, armorPiercing);
+            reduction = ArmorCalculationUtil.getDirectHitReduction(human, armorPiercing);
         }
 
         this.plugin.logDebug("DirectHitDamage " + living.getType() + ": " + String.format("%.2f", damage)
                 + ", reduction: " + String.format("%.2f", reduction));
-        return damage * reduction;
+
+        CannonDirectDamageEvent event = new CannonDirectDamageEvent(cannonball, target, damage, reduction);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        return event.getDamage() * event.getReduction();
         // if the entity is not living
     }
 
