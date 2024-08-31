@@ -177,7 +177,7 @@ public class CreateExplosion {
         plugin.logDebug("velocity: " + vel.length() + " percent of max velocity: " + vel.length() / projectile.getVelocity() + " penetration: " + penetration + " randomness: " + randomness);
 
         blocklist.clear();
-        if (penetration <= 0) {
+        if (penetration == 0) {
             impactLoc.setDirection(projectile_entity.getVelocity());
             return impactLoc;
         }
@@ -210,7 +210,7 @@ public class CreateExplosion {
         }
 
         // no eventhandling if the list is empty
-        if (blocklist.size() <= 0) {
+        if (blocklist.isEmpty()) {
             impactLoc.setDirection(projectile_entity.getVelocity());
             return impactLoc;
         }
@@ -290,8 +290,7 @@ public class CreateExplosion {
 
         // add some specific data values
         // TNT
-        if (entity instanceof TNTPrimed) {
-            TNTPrimed tnt = (TNTPrimed) entity;
+        if (entity instanceof TNTPrimed tnt) {
             try {
                 int fusetime = CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.FUSE_TIME),
                         tnt.getFuseTicks());
@@ -341,8 +340,7 @@ public class CreateExplosion {
             }
         }
         // SpectralArrow
-        if (entity instanceof SpectralArrow) {
-            SpectralArrow arrow = (SpectralArrow) entity;
+        if (entity instanceof SpectralArrow arrow) {
             try {
                 arrow.setGlowingTicks(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
                         arrow.getGlowingTicks()));
@@ -351,8 +349,7 @@ public class CreateExplosion {
             }
         }
         // TippedArrow
-        if (entity instanceof Arrow) {
-            Arrow arrow = (Arrow) entity;
+        if (entity instanceof Arrow arrow) {
             try {
                 arrow.setBasePotionData(CannonsUtil.parsePotionData(
                         entityHolder.getData().get(EntityDataType.POTION_EFFECT), arrow.getBasePotionData()));
@@ -361,8 +358,7 @@ public class CreateExplosion {
             }
         }
         // LivingEntity
-        if (entity instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) entity;
+        if (entity instanceof LivingEntity living) {
             try {
                 EntityEquipment equipment = living.getEquipment();
                 if (equipment != null) {
@@ -388,8 +384,7 @@ public class CreateExplosion {
             }
         }
         // ThrownPotion
-        if (entity instanceof SplashPotion) {
-            SplashPotion pentity = (SplashPotion) entity;
+        if (entity instanceof SplashPotion pentity) {
             try {
                 ItemStack potion = new ItemStack(Material.SPLASH_POTION);
                 PotionMeta meta = (PotionMeta) potion.getItemMeta();
@@ -402,8 +397,7 @@ public class CreateExplosion {
             }
         }
         // LingeringPotion
-        if (entity instanceof LingeringPotion) {
-            LingeringPotion pentity = (LingeringPotion) entity;
+        if (entity instanceof LingeringPotion pentity) {
             try {
                 ItemStack potion = new ItemStack(Material.LINGERING_POTION);
                 PotionMeta meta = (PotionMeta) potion.getItemMeta();
@@ -705,11 +699,9 @@ public class CreateExplosion {
         // if (cannonball.getProjectileEntity()==null)
         // return 0.0;
 
-        if (!(target instanceof LivingEntity)) {
+        if (!(target instanceof LivingEntity living)) {
             return 0.0;
         }
-
-        LivingEntity living = (LivingEntity) target;
 
         // given damage is in half hearts
         double damage = projectile.getDirectHitDamage();
@@ -798,7 +790,7 @@ public class CreateExplosion {
             double maxVel = projectile.getVelocity();
             double maxEnergy = Math.pow(maxVel, 2);
             double energy = Math.pow(vel, 2);
-            explosion_power *= energy / maxEnergy;
+            explosion_power *= (float) (energy / maxEnergy);
         }
 
         // reset explosion power if it is underwater and not allowed
