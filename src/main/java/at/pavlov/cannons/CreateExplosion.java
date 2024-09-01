@@ -176,7 +176,6 @@ public class CreateExplosion {
             penetration = 0;
         plugin.logDebug("velocity: " + vel.length() + " percent of max velocity: " + vel.length() / projectile.getVelocity() + " penetration: " + penetration + " randomness: " + randomness);
 
-        blocklist.clear();
         if (penetration == 0) {
             impactLoc.setDirection(projectile_entity.getVelocity());
             return impactLoc;
@@ -209,7 +208,7 @@ public class CreateExplosion {
             this.breakBlock(block.getRelative(BlockFace.NORTH), blocklist, true, doesBlockDamage);
         }
 
-        // no eventhandling if the list is empty
+        // no event handling if the list is empty
         if (blocklist.isEmpty()) {
             impactLoc.setDirection(projectile_entity.getVelocity());
             return impactLoc;
@@ -219,21 +218,28 @@ public class CreateExplosion {
         ProjectilePiercingEvent piercingEvent = new ProjectilePiercingEvent(projectile, impactLoc, blocklist);
         this.plugin.getServer().getPluginManager().callEvent(piercingEvent);
 
-        if (!piercingEvent.isCancelled()) {
-            // create bukkit event
-            EntityExplodeEvent event = new EntityExplodeEvent(projectile_entity, impactLoc, piercingEvent.getBlockList(), 1.0f, ExplosionResult.DESTROY);
-            this.plugin.getServer().getPluginManager().callEvent(event);
+        if (piercingEvent.isCancelled()) {
+            impactLoc.setDirection(projectile_entity.getVelocity());
+            return impactLoc;
+        }
 
-            this.plugin.logDebug("was the cannons explode event canceled: " + event.isCancelled());
-            // if not canceled break all given blocks
-            if (!event.isCancelled()) {
-                // break water, lava, obsidian if cannon projectile
-                for (int i = 0; i < event.blockList().size(); i++) {
-                    Block pBlock = event.blockList().get(i);
-                    // break the block, no matter what it is
-                    this.BreakBreakNaturally(pBlock, event.getYield());
-                }
-            }
+        // create bukkit event
+        EntityExplodeEvent event = new EntityExplodeEvent(projectile_entity, impactLoc, piercingEvent.getBlockList(), 1.0f, ExplosionResult.DESTROY);
+        this.plugin.getServer().getPluginManager().callEvent(event);
+
+        this.plugin.logDebug("was the cannons explode event canceled: " + event.isCancelled());
+
+        if (event.isCancelled()) {
+            impactLoc.setDirection(projectile_entity.getVelocity());
+            return impactLoc;
+        }
+
+        // if not canceled break all given blocks
+        // break water, lava, obsidian if cannon projectile
+        for (int i = 0; i < event.blockList().size(); i++) {
+            Block pBlock = event.blockList().get(i);
+            // break the block, no matter what it is
+            this.BreakBreakNaturally(pBlock, event.getYield());
         }
 
         // add the impact velocity as direction of the impactLoc, direction will be normalized
@@ -302,8 +308,7 @@ public class CreateExplosion {
             }
         }
         // AreaEffectCloud
-        if (entity instanceof AreaEffectCloud) {
-            AreaEffectCloud cloud = (AreaEffectCloud) entity;
+        if (entity instanceof AreaEffectCloud cloud) {
             try {
                 // PARTICLE ("Particle"),
                 // EFFECTS ("Effects"),
@@ -973,13 +978,15 @@ public class CreateExplosion {
             teleLoc = cannonball.getPlayerlocation();
         }
         // teleport to this location
-        if (teleLoc != null) {
-            teleLoc.setYaw(player.getLocation().getYaw());
-            teleLoc.setPitch(player.getLocation().getPitch());
-            player.teleport(teleLoc);
-            player.setVelocity(new Vector(0, 0, 0));
-            cannonball.setTeleported(true);
+        if (teleLoc == null) {
+            return;
         }
+
+        teleLoc.setYaw(player.getLocation().getYaw());
+        teleLoc.setPitch(player.getLocation().getPitch());
+        player.teleport(teleLoc);
+        player.setVelocity(new Vector(0, 0, 0));
+        cannonball.setTeleported(true);
     }
 
     /**
