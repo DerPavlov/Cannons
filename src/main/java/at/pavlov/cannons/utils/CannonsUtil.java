@@ -41,15 +41,11 @@ public class CannonsUtil
 	 * @param newExtension
 	 * @return
 	 */
-	public static String changeExtension(String originalName, String newExtension)
-	{
+	public static String changeExtension(String originalName, String newExtension) {
 		int lastDot = originalName.lastIndexOf(".");
-		if (lastDot != -1)
-		{
+		if (lastDot != -1) {
 			return originalName.substring(0, lastDot) + newExtension;
-		}
-		else
-		{
+		} else {
 			return originalName + newExtension;
 		}
 	}
@@ -69,8 +65,7 @@ public class CannonsUtil
 	 * @param folderPath
 	 * @return
 	 */
-	public static boolean isFolderEmpty(String folderPath)
-	{
+	public static boolean isFolderEmpty(String folderPath) {
 		File file = new File(folderPath);
         if (!file.isDirectory()) {
             return true;
@@ -109,8 +104,7 @@ public class CannonsUtil
 	 * @param face
 	 * @return
 	 */
-	public static BlockFace roatateFace(BlockFace face)
-	{
+	public static BlockFace roatateFace(BlockFace face) {
 		if (face.equals(BlockFace.NORTH)) return BlockFace.EAST;
 		if (face.equals(BlockFace.EAST)) return BlockFace.SOUTH;
 		if (face.equals(BlockFace.SOUTH)) return BlockFace.WEST;
@@ -137,12 +131,10 @@ public class CannonsUtil
      * @param stringList list of Materials as strings
      * @return list of MaterialHolders
      */
-    public static List<BlockData> toBlockDataList(List<String> stringList)
-    {
+    public static List<BlockData> toBlockDataList(List<String> stringList) {
         List<BlockData> blockDataList = new ArrayList<>();
 
-        for (String str : stringList)
-        {
+        for (String str : stringList) {
             BlockData material = Bukkit.createBlockData(str);
             blockDataList.add(material);
         }
@@ -155,12 +147,10 @@ public class CannonsUtil
 	 * @param stringList list of Materials as strings
 	 * @return list of ItemHolders
 	 */
-	public static List<ItemHolder> toItemHolderList(List<String> stringList)
-	{
+	public static List<ItemHolder> toItemHolderList(List<String> stringList) {
 		List<ItemHolder> materialList = new ArrayList<>();
 		
-		for (String str : stringList)
-		{
+		for (String str : stringList) {
             ItemHolder material = new ItemHolder(str);
 			//if id == -1 the str was invalid
             materialList.add(material);
@@ -174,11 +164,9 @@ public class CannonsUtil
      * @param stringList list of strings to convert
      * @return list of converted SpawnItemHolder
      */
-    public static List<SpawnMaterialHolder> toSpawnMaterialHolderList(List<String> stringList)
-    {
+    public static List<SpawnMaterialHolder> toSpawnMaterialHolderList(List<String> stringList) {
         List<SpawnMaterialHolder> materialList = new ArrayList<SpawnMaterialHolder>();
-        for (String str : stringList)
-        {
+        for (String str : stringList) {
             SpawnMaterialHolder material = new SpawnMaterialHolder(str);
             materialList.add(material);
         }
@@ -191,12 +179,10 @@ public class CannonsUtil
      * @param stringList list of strings to convert
      * @return list of converted SpawnMaterialHolder
      */
-    public static List<SpawnEntityHolder> toSpawnEntityHolderList(List<String> stringList)
-    {
+    public static List<SpawnEntityHolder> toSpawnEntityHolderList(List<String> stringList) {
         List<SpawnEntityHolder> entityList = new ArrayList<>();
 
-        for (String str : stringList)
-        {
+        for (String str : stringList) {
             SpawnEntityHolder entity = new SpawnEntityHolder(str);
             //if id == -1 the str was invalid
             if (entity.getType() != null)
@@ -213,8 +199,7 @@ public class CannonsUtil
 	 * @param block
 	 * @return
 	 */
-	public static ArrayList<Block> SurroundingBlocks(Block block)
-	{
+	public static ArrayList<Block> SurroundingBlocks(Block block) {
 		ArrayList<Block> Blocks = new ArrayList<>();
 
 		Blocks.add(block.getRelative(BlockFace.UP));
@@ -262,8 +247,7 @@ public class CannonsUtil
      * returns a random block face
      * @return - random BlockFace
      */
-    public static BlockFace randomBlockFaceNoDown()
-    {
+    public static BlockFace randomBlockFaceNoDown() {
         return switch (random.nextInt(5)) {
             case 0 -> BlockFace.UP;
             case 1 -> BlockFace.EAST;
@@ -300,15 +284,13 @@ public class CannonsUtil
      * @param sound sound
      * @param maxDist maximum distance
      */
-    public static void imitateSound(Location loc, SoundHolder sound, int maxDist, float maxVolume)
-    {
+    public static void imitateSound(Location loc, SoundHolder sound, int maxDist, float maxVolume) {
         //https://forums.bukkit.org/threads/playsound-parameters-volume-and-pitch.151517/
         World w = loc.getWorld();
         //w.playSound(loc, sound.getSound(), maxVolume*16f, sound.getPitch());
         maxVolume = Math.max(0.0f, Math.min(0.95f, maxVolume));
 
-        for(Player p : w.getPlayers())
-        {
+        for(Player p : w.getPlayers()) {
         	Location pl = p.getLocation();
             //readable code
             Vector v = loc.clone().subtract(pl).toVector();
@@ -337,8 +319,7 @@ public class CannonsUtil
      * creates a imitated error sound (called when played doing something wrong)
      * @param p player
      */
-    public static void playErrorSound(final Player p)
-    {
+    public static void playErrorSound(final Player p) {
         if (p == null)
             return;
 
@@ -367,8 +348,7 @@ public class CannonsUtil
      * @param loc location of the sound
      * @param sound type of sound (sound, volume, pitch)
      */
-    public static void playSound(Location loc, SoundHolder sound)
-    {
+    public static void playSound(Location loc, SoundHolder sound) {
         if (!sound.isValid())
             return;
 
@@ -384,8 +364,7 @@ public class CannonsUtil
      * @param direction direction
      * @return returns the the location of one block in front of the surface or (if the surface is not found) the start location
      */
-    public static Location findSurface(Location start, Vector direction)
-    {
+    public static Location findSurface(Location start, Vector direction) {
         World world = start.getWorld();
         Location surface = start.clone();
 
@@ -420,8 +399,7 @@ public class CannonsUtil
      * @param direction direction
      * @return returns the the location of one block in front of the surface or (if the surface is not found) the start location
      */
-    public static Location findFirstBlock(Location start, Vector direction)
-    {
+    public static Location findFirstBlock(Location start, Vector direction) {
         World world = start.getWorld();
         Location surface = start.clone();
 
@@ -489,8 +467,7 @@ public class CannonsUtil
      * @param radius radius of the sphere
      * @return returns a random point in a sphere
      */
-    public static Location randomPointInSphere(Location center, double radius)
-    {
+    public static Location randomPointInSphere(Location center, double radius) {
         double r = radius*random.nextDouble();
         double polar = Math.PI*random.nextDouble();
         double azi = Math.PI*(random.nextDouble()*2.0-1.0);
@@ -517,8 +494,7 @@ public class CannonsUtil
      * teleports the player back to the starting point if the cannonball has the property 'observer'
      * @param cannonball the flying projectile
      */
-    public static void teleportBack(FlyingProjectile cannonball)
-    {
+    public static void teleportBack(FlyingProjectile cannonball) {
         if (cannonball == null)
             return;
 
@@ -530,19 +506,19 @@ public class CannonsUtil
 
         Location teleLoc = null;
         //teleport the player back to the location before firing
-        if(projectile.hasProperty(ProjectileProperties.OBSERVER))
-        {
+        if(projectile.hasProperty(ProjectileProperties.OBSERVER)) {
             teleLoc = cannonball.getPlayerlocation();
         }
         //teleport to this location
-        if (teleLoc != null)
-        {
-            teleLoc.setYaw(player.getLocation().getYaw());
-            teleLoc.setPitch(player.getLocation().getPitch());
-            player.teleport(teleLoc);
-            player.setVelocity(new Vector(0,0,0));
-            cannonball.setTeleported(true);
+        if (teleLoc == null) {
+            return;
         }
+
+        teleLoc.setYaw(player.getLocation().getYaw());
+        teleLoc.setPitch(player.getLocation().getPitch());
+        player.teleport(teleLoc);
+        player.setVelocity(new Vector(0,0,0));
+        cannonball.setTeleported(true);
     }
 
     /**
@@ -594,8 +570,7 @@ public class CannonsUtil
                         continue;
                     }
 
-                    if ((e instanceof Player)){
-                        Player p = (Player) e;
+                    if (e instanceof Player p){
                         if (p.getGameMode() == GameMode.CREATIVE || p.hasPermission("cannons.admin.notarget"))
                             continue;
                     }
@@ -674,14 +649,14 @@ public class CannonsUtil
      * @return returns parsed number or default
      */
     public static float parseFloat(String str, float default_value) {
-        if (str != null) {
-            try {
-                return Float.parseFloat(str);
-            } catch (Exception e) {
-                throw new NumberFormatException();
-            }
+        if (str == null) {
+            return default_value;
         }
-        return default_value;
+        try {
+            return Float.parseFloat(str);
+        } catch (Exception e) {
+            throw new NumberFormatException();
+        }
     }
 
     /**
@@ -690,14 +665,14 @@ public class CannonsUtil
      * @return returns parsed number or default
      */
     public static int parseInt(String str, int default_value) {
-        if (str != null) {
-            try {
-                return Integer.parseInt(str);
-            } catch (Exception e) {
-                throw new NumberFormatException();
-            }
+        if (str == null) {
+            return default_value;
         }
-        return default_value;
+        try {
+            return Integer.parseInt(str);
+        } catch (Exception e) {
+            throw new NumberFormatException();
+        }
     }
 
     /**
@@ -706,15 +681,15 @@ public class CannonsUtil
      * @return returns parsed color or default
      */
     public static Color parseColor(String str, Color default_value) {
-        if (str != null) {
-            try {
-                return Color.fromRGB(Integer.parseInt(str));
-
-            } catch (Exception e) {
-                throw new NumberFormatException();
-            }
+        if (str == null) {
+            return default_value;
         }
-        return default_value;
+
+        try {
+            return Color.fromRGB(Integer.parseInt(str));
+        } catch (Exception e) {
+            throw new NumberFormatException();
+        }
     }
 
     /**
@@ -729,6 +704,7 @@ public class CannonsUtil
                 if (str.contains(pt.toString().toLowerCase())) {
                     boolean extended = str.contains("long");
                     boolean upgraded = str.contains("strong");
+                    Cannons.logSDebug("Potion parsing: " + str);
                     return new PotionData(pt, extended, upgraded);
                 }
             }
@@ -742,12 +718,14 @@ public class CannonsUtil
      * @return returns parsed number or default
      */
     public static Particle parseParticle(String str, Particle default_value) {
-        if (str != null) {
-            for (Particle pt : Particle.values())
-                if (str.equalsIgnoreCase(pt.toString())){
-                    return pt;
-                }
+        if (str == null) {
+            return default_value;
         }
+
+        for (Particle pt : Particle.values())
+            if (str.equalsIgnoreCase(pt.toString())){
+                return pt;
+            }
         return default_value;
     }
 
@@ -757,12 +735,14 @@ public class CannonsUtil
      * @return returns parsed number or default
      */
     public static ItemStack parseItemstack(String str, ItemStack default_value) {
-        if (str != null) {
-            for (Material mt : Material.values())
-                if (str.equalsIgnoreCase(mt.toString())){
-                    return new ItemStack(mt);
-                }
+        if (str == null) {
+            return default_value;
         }
+
+        for (Material mt : Material.values())
+            if (str.equalsIgnoreCase(mt.toString())){
+                return new ItemStack(mt);
+            }
         return default_value;
     }
 
@@ -807,8 +787,8 @@ public class CannonsUtil
      * @return rotated blockData
      */
     public static BlockData roateBlockFacingClockwise(BlockData blockData){
-        if (blockData instanceof Directional){
-            ((Directional) blockData).setFacing(roatateFace(((Directional) blockData).getFacing()));
+        if (blockData instanceof Directional directional){
+            directional.setFacing(roatateFace(directional.getFacing()));
         }
         return blockData;
     }
