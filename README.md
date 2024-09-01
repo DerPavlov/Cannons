@@ -43,6 +43,7 @@ Use [jitpack.io](https://jitpack.io/#Intybyte/Cannons/) for dependency
     <groupId>com.github.Intybyte</groupId>
     <artifactId>Cannons</artifactId>
     <version>Tag</version>
+    <scope>provided</scope>
 </dependency>
 ```
 
