@@ -1,12 +1,14 @@
 package at.pavlov.cannons.event;
 
 import at.pavlov.cannons.Enum.DamageType;
+import at.pavlov.cannons.Enum.InteractAction;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CannonDamageEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
@@ -14,13 +16,15 @@ public class CannonDamageEvent extends Event {
     private final LivingEntity target;
     private double damage;
     private double reduction;
+    private Double distance;
     private final DamageType type;
 
-    public CannonDamageEvent(FlyingProjectile cannonball, LivingEntity target, double damage, double reduction, DamageType type) {
+    public CannonDamageEvent(FlyingProjectile cannonball, LivingEntity target, double damage, double reduction, @Nullable Double distance, DamageType type) {
         this.cannonball = cannonball;
         this.target = target;
         this.damage = damage;
         this.reduction = reduction;
+        this.distance = distance; //this will be Location of the target if DamageType.DIRECT
         this.type = type;
     }
 
@@ -59,5 +63,12 @@ public class CannonDamageEvent extends Event {
 
     public DamageType getType() {
         return type;
+    }
+
+    public double getDistance() {
+        if (distance == null && type == DamageType.DIRECT)
+            distance = cannonball.getImpactLocation().distance(target.getLocation());
+
+        return distance;
     }
 }

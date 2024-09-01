@@ -651,7 +651,7 @@ public class CreateExplosion {
      * @param cannonball
      * @return - damage done to the entity
      */
-    private double getPlayerDamage(Location impactLoc, Entity next, FlyingProjectile cannonball) {
+    private double getExplosionDamage(Location impactLoc, Entity next, FlyingProjectile cannonball) {
         Projectile projectile = cannonball.getProjectile();
 
         if (!(next instanceof LivingEntity living)) {
@@ -681,11 +681,11 @@ public class CreateExplosion {
             reduction = ArmorCalculationUtil.getExplosionHitReduction(human, armorPiercing);
         }
 
-        this.plugin.logDebug("PlayerDamage " + living.getType() + ":" + String.format("%.2f", damage) + ",reduct:"
-                + String.format("%.2f", reduction) + ",dist:" + String.format("%.2f", dist));
-
-        CannonDamageEvent event = new CannonDamageEvent(cannonball, living, damage, reduction, DamageType.DIRECT);
+        CannonDamageEvent event = new CannonDamageEvent(cannonball, living, damage, reduction, dist, DamageType.EXPLOSION);
         Bukkit.getServer().getPluginManager().callEvent(event);
+
+        this.plugin.logDebug("PlayerDamage " + living.getType() + ":" + String.format("%.2f", event.getDamage()) + ",reduct:"
+                + String.format("%.2f", event.getReduction()) + ",dist:" + String.format("%.2f", dist));
 
         return event.getDamage() * event.getReduction();
         // if the entity is not alive
@@ -722,11 +722,11 @@ public class CreateExplosion {
             reduction = ArmorCalculationUtil.getDirectHitReduction(human, armorPiercing);
         }
 
-        this.plugin.logDebug("DirectHitDamage " + living.getType() + ": " + String.format("%.2f", damage)
-                + ", reduction: " + String.format("%.2f", reduction));
-
-        CannonDamageEvent event = new CannonDamageEvent(cannonball, living, damage, reduction, DamageType.DIRECT);
+        CannonDamageEvent event = new CannonDamageEvent(cannonball, living, damage, reduction, null, DamageType.DIRECT);
         Bukkit.getServer().getPluginManager().callEvent(event);
+
+        this.plugin.logDebug("DirectHitDamage " + living.getType() + ": " + String.format("%.2f", event.getDamage())
+                + ", reduction: " + String.format("%.2f", event.getReduction()));
 
         return event.getDamage() * event.getReduction();
         // if the entity is not living
@@ -1018,7 +1018,7 @@ public class CreateExplosion {
             }
 
             // add explosion damage
-            damage += this.getPlayerDamage(impactLoc, next, cannonball);
+            damage += this.getExplosionDamage(impactLoc, next, cannonball);
             this.damageMap.put(next, damage);
         }
 

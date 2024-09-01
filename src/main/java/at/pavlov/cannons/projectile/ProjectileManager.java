@@ -142,21 +142,22 @@ public class ProjectileManager
      * @param cannonball - the projectile with this entity
      * @param target the entity hit by the projectile
      */
-    public void directHitProjectile(Entity cannonball, Entity target)
-    {
+    public void directHitProjectile(Entity cannonball, Entity target) {
         if(cannonball == null || target == null) return;
 
         FlyingProjectile fproj = flyingProjectilesMap.get(cannonball.getUniqueId());
-        if (fproj != null)
-        {
-            org.bukkit.entity.Projectile projectile_entity = fproj.getProjectileEntity();
-            if (!fproj.hasDetonated() && cannonball.isValid()) {
-                fproj.setHasDetonated(true);
-                plugin.getExplosion().directHit(fproj, projectile_entity, target);
-                projectile_entity.remove();
-            }
-            flyingProjectilesMap.remove(fproj.getUID());
+        if (fproj == null) {
+            return;
         }
+
+        org.bukkit.entity.Projectile projectile_entity = fproj.getProjectileEntity();
+        if (!fproj.hasDetonated() && cannonball.isValid()) {
+            fproj.setHasDetonated(true);
+            plugin.getExplosion().directHit(fproj, projectile_entity, target);
+            projectile_entity.remove();
+        }
+
+        flyingProjectilesMap.remove(fproj.getUID());
     }
 
     /**
