@@ -676,7 +676,7 @@ public class Cannon {
      * @param player player using the ramrod tool (null will bypass permission check)
      * @return message for the player
      */
-    private MessageEnum useRamRodInteral(Player player) {
+    private MessageEnum useRamRodInternal(Player player) {
         //no permission to use this tool
         if (player != null && !player.hasPermission(design.getPermissionRamrod()))
             return MessageEnum.PermissionErrorRamrod;
@@ -692,8 +692,11 @@ public class Cannon {
             cleanCannon(1);
             if (isClean())
                 return MessageEnum.RamrodCleaningDone;
-            else
+            else {
+                CannonUseEvent cleaning = new CannonUseEvent(this, player.getUniqueId(), InteractAction.cleaningCannon);
+                Bukkit.getServer().getPluginManager().callEvent(cleaning);
                 return MessageEnum.RamrodCleaning;
+            }
         }
         //if clean show message that cleaning is done
         if (isClean() && !isGunpowderLoaded()) {
@@ -706,10 +709,13 @@ public class Cannon {
         //if the projectile is loaded
         if (!isProjectilePushed()) {
             pushProjectile(1);
-            if (isProjectilePushed())
+            if (isProjectilePushed()) {
                 return MessageEnum.RamrodPushingProjectileDone;
-            else
+            } else {
+                CannonUseEvent cleaning = new CannonUseEvent(this, player.getUniqueId(), InteractAction.pushingProjectile);
+                Bukkit.getServer().getPluginManager().callEvent(cleaning);
                 return MessageEnum.RamrodPushingProjectile;
+            }
         }
         //if projectile is in place
         if (isLoaded() && isProjectilePushed())
@@ -727,7 +733,7 @@ public class Cannon {
      * @return message for the player
      */
     public MessageEnum useRamRod(Player player) {
-        MessageEnum message = useRamRodInteral(player);
+        MessageEnum message = useRamRodInternal(player);
 
         if (message == null) {
             return message;

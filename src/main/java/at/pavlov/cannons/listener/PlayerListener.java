@@ -338,13 +338,7 @@ public class PlayerListener implements Listener
         if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
             fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
 
-        if (message != null) {
-            CannonUseEvent cleaning = new CannonUseEvent(cannon, player.getUniqueId(), InteractAction.cleaningCannon);
-            Bukkit.getServer().getPluginManager().callEvent(cleaning);
-            return true;
-        }
-
-        return false;
+        return message != null;
     }
 
     private boolean isRedstoneTrigger(Cannon cannon, Block clickedBlock, PlayerInteractEvent event) {
