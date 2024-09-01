@@ -10,10 +10,12 @@ import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.config.UserMessages;
+import at.pavlov.cannons.event.CannonUseEvent;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.utils.CannonsUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -335,6 +337,12 @@ public class PlayerListener implements Listener
         //this will directly fire the cannon after it was loaded
         if (!player.isSneaking() && design.isFireAfterLoading() && cannon.isLoaded() && cannon.isProjectilePushed())
             fireCannon.playerFiring(cannon, player, InteractAction.fireAfterLoading);
+
+        if (message != null) {
+            CannonUseEvent cleaning = new CannonUseEvent(cannon, player.getUniqueId(), InteractAction.cleaningCannon);
+            Bukkit.getServer().getPluginManager().callEvent(cleaning);
+            return true;
+        }
 
         return false;
     }
