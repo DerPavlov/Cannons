@@ -129,13 +129,12 @@ public class Aiming {
             return null;
         }
 
-        if (config.getToolAutoaim().equalsFuzzy(player.getInventory().getItemInMainHand())) {
-            //aiming mode
-            aimingMode(player, cannon, false);
-        } else {
+        if (!config.getToolAutoaim().equalsFuzzy(player.getInventory().getItemInMainHand())) {
             //barrel clicked to change angle
             return updateAngle(player, cannon, clickedFace, InteractAction.adjustPlayer);
         }
+        //aiming mode
+        aimingMode(player, cannon, false);
         return null;
     }
 
@@ -220,74 +219,78 @@ public class Aiming {
         double absHorizontal = angles.getAbsHorizontal();
         double absVertical = angles.getAbsVertical();
 
-        if (absHorizontal >= design.getAngleLargeStepSize() && setHorizontalAngle(cannon, angles, design.getAngleLargeStepSize())) {
+        final double angleStepSize = design.getAngleStepSize();
+        final double angleLargeStepSize = design.getAngleLargeStepSize();
+        if (absHorizontal >= angleLargeStepSize && setHorizontalAngle(cannon, angles, angleLargeStepSize)) {
             largeChange = true;
             message = setMessageHorizontal(cannon, combine);
         }
         //small step if no large step was possible
-        if (!largeChange && absHorizontal >= design.getAngleStepSize() / 2. && setHorizontalAngle(cannon, angles, design.getAngleStepSize())) {
+        if (!largeChange && absHorizontal >= angleStepSize / 2. && setHorizontalAngle(cannon, angles, angleStepSize)) {
             message = setMessageHorizontal(cannon, combine);
         }
         //larger step
         largeChange = false;
-        if (absVertical >= design.getAngleLargeStepSize() && setVerticalAngle(cannon, angles, design.getAngleLargeStepSize())) {
+        if (absVertical >= angleLargeStepSize && setVerticalAngle(cannon, angles, angleLargeStepSize)) {
             largeChange = true;
             message = setMessageVertical(cannon, combine);
         }
         //small step if no large step was possible
-        if (!largeChange && absVertical >= design.getAngleStepSize() / 2. && setVerticalAngle(cannon, angles, design.getAngleStepSize())) {
+        if (!largeChange && absVertical >= angleStepSize / 2. && setVerticalAngle(cannon, angles, angleStepSize)) {
             message = setMessageVertical(cannon, combine);
         }
 
         return message;
     }
 
-    private boolean setHorizontalAngle(Cannon cannon, GunAngles angles, double step) {
+    public boolean setHorizontalAngle(Cannon cannon, GunAngles angles, double step) {
         step = Math.abs(step);
-        double horizontalAngle = cannon.getHorizontalAngle();
-        double minHoriz = cannon.getMinHorizontalAngle();
-        double maxHoriz = cannon.getMaxHorizontalAngle();
+
+        final double minHoriz = cannon.getMinHorizontalAngle();
+        final double maxHoriz = cannon.getMaxHorizontalAngle();
 
         if (angles.getHorizontal() >= 0) {
             // right
-            if (horizontalAngle + step <= maxHoriz + 0.001) {
+            if (cannon.getHorizontalAngle() + step <= maxHoriz + 0.001) {
                 //if smaller than minimum -> set to minimum
-                if (horizontalAngle < minHoriz)
+                if (cannon.getHorizontalAngle() < minHoriz)
                     cannon.setHorizontalAngle(minHoriz);
 
-				cannon.setHorizontalAngle(horizontalAngle + step);
+				cannon.setHorizontalAngle(cannon.getHorizontalAngle() + step);
                 return true;
             }
-
-        } else if (horizontalAngle - step >= minHoriz - 0.001) { //left
+        } else if (cannon.getHorizontalAngle() - step >= minHoriz - 0.001) { //left
             //if smaller than maximum -> set to maximum
-            if (horizontalAngle > maxHoriz)
+            if (cannon.getHorizontalAngle() > maxHoriz)
                 cannon.setHorizontalAngle(maxHoriz);
 
-            cannon.setHorizontalAngle(horizontalAngle - step);
+            cannon.setHorizontalAngle(cannon.getHorizontalAngle() - step);
             return true;
         }
         return false;
     }
 
-    private boolean setVerticalAngle(Cannon cannon, GunAngles angles, double step) {
+    public boolean setVerticalAngle(Cannon cannon, GunAngles angles, double step) {
         step = Math.abs(step);
+
+        final double minVert = cannon.getMinVerticalAngle();
+        final double maxVert = cannon.getMaxVerticalAngle();
 
         if (angles.getVertical() >= 0.0) {
             // up
-            if (cannon.getVerticalAngle() + step <= cannon.getMaxVerticalAngle() + 0.001) {
+            if (cannon.getVerticalAngle() + step <= maxVert + 0.001) {
                 //if smaller than minimum -> set to minimum
-                if (cannon.getVerticalAngle() < cannon.getMinVerticalAngle())
-                    cannon.setVerticalAngle(cannon.getMinVerticalAngle());
+                if (cannon.getVerticalAngle() < minVert)
+                    cannon.setVerticalAngle(minVert);
                 cannon.setVerticalAngle(cannon.getVerticalAngle() + step);
                 return true;
 
             }
         } else {
             // down
-            if (cannon.getVerticalAngle() - step >= cannon.getMinVerticalAngle() - 0.001) {
-                if (cannon.getVerticalAngle() > cannon.getMaxVerticalAngle())
-                    cannon.setVerticalAngle(cannon.getMaxVerticalAngle());
+            if (cannon.getVerticalAngle() - step >= minVert - 0.001) {
+                if (cannon.getVerticalAngle() > maxVert)
+                    cannon.setVerticalAngle(maxVert);
                 cannon.setVerticalAngle(cannon.getVerticalAngle() - step);
                 return true;
             }
