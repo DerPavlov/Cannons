@@ -26,8 +26,7 @@ public class FakeBlockEntry implements Cloneable{
 
 
 
-    public FakeBlockEntry(Location loc, Player player, FakeBlockType type, long duration)
-    {
+    public FakeBlockEntry(Location loc, Player player, FakeBlockType type, long duration) {
         this.locX = loc.getBlockX();
         this.locY = loc.getBlockY();
         this.locZ = loc.getBlockZ();
@@ -61,7 +60,7 @@ public class FakeBlockEntry implements Cloneable{
         return Bukkit.getWorld(getWorld());
     }
 
-    public Location getLocation(){
+    public Location getLocation() {
         World world = getWorldBukkit();
         if(world != null)
             return new Location(world,getLocX(),getLocY(),getLocZ());
@@ -96,24 +95,23 @@ public class FakeBlockEntry implements Cloneable{
 
     @Override
     public int hashCode() {
-        int hash = 3;
+        int hash = 17;
 
-        hash = 19 * hash + (this.world != null ? this.world.hashCode() : 0);
-        hash = 19 * hash + (int) (Double.doubleToLongBits(this.locX) ^ (Double.doubleToLongBits(this.locX) >>> 32));
-        hash = 19 * hash + (int) (Double.doubleToLongBits(this.locY) ^ (Double.doubleToLongBits(this.locY) >>> 32));
-        hash = 19 * hash + (int) (Double.doubleToLongBits(this.locZ) ^ (Double.doubleToLongBits(this.locZ) >>> 32));
-        hash = 19 * hash + player.hashCode();
-        hash = 19 * hash + type.hashCode();
+        hash = 31 * hash + (this.world != null ? this.world.hashCode() : 0);
+        hash = 31 * hash + Integer.hashCode(this.locX);
+        hash = 31 * hash + Integer.hashCode(this.locY);
+        hash = 31 * hash + Integer.hashCode(this.locZ);
+        hash = 31 * hash + player.hashCode();
+        hash = 31 * hash + type.hashCode();
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         FakeBlockEntry obj2 = (FakeBlockEntry) obj;
-        return this.locX == obj2.getLocX() && this.locY == obj2.getLocY() && this.locZ == obj2.getLocZ() && this.world.equals(obj2.getWorld())
-                && this.player.equals(obj2.getPlayer())
-                && this.type == obj2.getType();
+        return this.type == obj2.getType() &&
+                this.locX == obj2.getLocX() && this.locY == obj2.getLocY() && this.locZ == obj2.getLocZ() && this.world.equals(obj2.getWorld())
+                && this.player.equals(obj2.getPlayer());
     }
 
     public FakeBlockType getType() {

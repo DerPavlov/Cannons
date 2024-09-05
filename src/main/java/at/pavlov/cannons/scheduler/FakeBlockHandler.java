@@ -146,14 +146,12 @@ public class FakeBlockHandler {
      * @param length lenght of the line
      * @param player name of the player
      */
-    public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, BlockData blockData, FakeBlockType type, double duration)
-    {
+    public void imitateLine(final Player player, Location loc, Vector direction, int offset, int length, BlockData blockData, FakeBlockType type, double duration) {
         if(loc == null || player == null)
             return;
 
         BlockIterator iter = new BlockIterator(loc.getWorld(), loc.toVector(), direction, offset, length);
-        while (iter.hasNext())
-        {
+        while (iter.hasNext()) {
             sendBlockChangeToPlayer(player, iter.next().getLocation(), blockData, type, duration);
         }
 
@@ -166,43 +164,39 @@ public class FakeBlockHandler {
      * @param blockData type of the block
      * @param duration how long to remove the block in [s]
      */
-    private void sendBlockChangeToPlayer(final Player player, final Location loc, BlockData blockData, FakeBlockType type, double duration)
-    {
+    private void sendBlockChangeToPlayer(final Player player, final Location loc, BlockData blockData, FakeBlockType type, double duration) {
         //only show block in air
-        if(loc.getBlock().isEmpty())
-        {
-            long time = System.currentTimeMillis();
-            FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc, player, type, (long) (duration*20.0));
-
-
-            boolean found = false;
-            for (FakeBlockEntry block : list)
-            {
-                if (block.equals(fakeBlockEntry))
-                {
-                    //renew entry
-                    //plugin.logDebug("renew block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
-                    block.setStartTime(System.currentTimeMillis());
-                    found = true;
-                    //there is only one block here
-                    break;
-                }
-            }
-            if (!found)
-            {
-                //plugin.logDebug("new block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
-                //player.sendBlockChange(loc, material.getType(), (byte) material.getData());
-                player.sendBlockChange(loc, blockData);
-                list.add(fakeBlockEntry);
-            }
-
-
-            if (type == FakeBlockType.IMPACT_PREDICTOR)
-                lastImpactPredictor = System.currentTimeMillis();
-            if (type == FakeBlockType.AIMING)
-                lastAiming = System.currentTimeMillis();
-
+        if (!loc.getBlock().isEmpty()) {
+            return;
         }
+
+        FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc, player, type, (long) (duration*20.0));
+
+        boolean found = false;
+        for (FakeBlockEntry block : list) {
+            if (block.equals(fakeBlockEntry)) {
+                //renew entry
+                //plugin.logDebug("renew block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
+                block.setStartTime(System.currentTimeMillis());
+                found = true;
+                //there is only one block here
+                break;
+            }
+        }
+        if (!found)
+        {
+            //plugin.logDebug("new block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
+            //player.sendBlockChange(loc, material.getType(), (byte) material.getData());
+            player.sendBlockChange(loc, blockData);
+            list.add(fakeBlockEntry);
+        }
+
+
+        if (type == FakeBlockType.IMPACT_PREDICTOR)
+            lastImpactPredictor = System.currentTimeMillis();
+        if (type == FakeBlockType.AIMING)
+            lastAiming = System.currentTimeMillis();
+
     }
 
     /**
