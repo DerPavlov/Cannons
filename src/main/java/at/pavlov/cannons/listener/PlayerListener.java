@@ -126,8 +126,7 @@ public class PlayerListener implements Listener
      * @param event BlockPlaceEvent
      */
     @EventHandler
-    public void BlockPlace(BlockPlaceEvent event)
-    {
+    public void BlockPlace(BlockPlaceEvent event) {
 
         Block block = event.getBlockPlaced();
         Location blockLoc = block.getLocation();
@@ -136,31 +135,25 @@ public class PlayerListener implements Listener
         cannonManager.getCannon(blockLoc, event.getPlayer().getUniqueId());
 
         // Place wallsign
-        if (event.getBlockPlaced().getBlockData() instanceof WallSign wallSign)
-        {
+        if (event.getBlockPlaced().getBlockData() instanceof WallSign wallSign) {
             // check cannon
             Location loc = event.getBlock().getRelative(wallSign.getFacing().getOppositeFace()).getLocation();
             Cannon cannon = cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true);
-            if (cannon != null)
-            {
+            if (cannon != null) {
                 cannon.updateCannonSigns();
             }
         }
 
         // Place redstonetorch under to the cannon
-        if (event.getBlockPlaced().getType() == Material.REDSTONE_TORCH || event.getBlockPlaced().getType() == Material.REDSTONE_WALL_TORCH)
-        {
+        if (event.getBlockPlaced().getType() == Material.REDSTONE_TORCH || event.getBlockPlaced().getType() == Material.REDSTONE_WALL_TORCH) {
             // check cannon
             Location loc = event.getBlock().getRelative(BlockFace.UP).getLocation();
             Cannon cannon = cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true);
-            if (cannon != null)
-            {
+            if (cannon != null) {
                 // check permissions
-                if (!event.getPlayer().hasPermission(cannon.getCannonDesign().getPermissionRedstone()))
-                {
+                if (!event.getPlayer().hasPermission(cannon.getCannonDesign().getPermissionRedstone())) {
                     //check if the placed block is in the redstone torch interface
-                    if (cannon.isRedstoneTorchInterface(event.getBlock().getLocation()))
-                    {
+                    if (cannon.isRedstoneTorchInterface(event.getBlock().getLocation())) {
                         userMessages.sendMessage(MessageEnum.PermissionErrorRedstone, event.getPlayer());
                         event.setCancelled(true);
                     }
@@ -169,32 +162,29 @@ public class PlayerListener implements Listener
         }
 
         // Place redstone wire next to the button
-        if (event.getBlockPlaced().getType() == Material.REDSTONE_WIRE)
-        {
+        if (event.getBlockPlaced().getType() == Material.REDSTONE_WIRE) {
             // check cannon
-            for (Block b : CannonsUtil.HorizontalSurroundingBlocks(event.getBlock()))
-            {
+            for (Block b : CannonsUtil.HorizontalSurroundingBlocks(event.getBlock())) {
                 Location loc = b.getLocation();
                 Cannon cannon = cannonManager.getCannon(loc, event.getPlayer().getUniqueId(), true);
-                if (cannon != null)
-                {
-                    // check permissions
-                    if (!event.getPlayer().hasPermission(cannon.getCannonDesign().getPermissionRedstone()))
-                    {
-                        //check if the placed block is in the redstone wire interface
-                        if (cannon.isRedstoneWireInterface(event.getBlock().getLocation()))
-                        {
-                            userMessages.sendMessage(MessageEnum.PermissionErrorRedstone, event.getPlayer());
-                            event.setCancelled(true);
-                        }
-                    }
+                if (cannon == null) {
+                    continue;
+                }
+                // check permissions
+                if (event.getPlayer().hasPermission(cannon.getCannonDesign().getPermissionRedstone())) {
+                    continue;
+                }
+
+                //check if the placed block is in the redstone wire interface
+                if (cannon.isRedstoneWireInterface(event.getBlock().getLocation())) {
+                    userMessages.sendMessage(MessageEnum.PermissionErrorRedstone, event.getPlayer());
+                    event.setCancelled(true);
                 }
             }
         }
 
         // cancel igniting of the cannon
-        if (event.getBlock().getType() == Material.FIRE)
-        {
+        if (event.getBlock().getType() == Material.FIRE) {
             // check cannon
             if (event.getBlockAgainst() != null) {
                 Location loc = event.getBlockAgainst().getLocation();

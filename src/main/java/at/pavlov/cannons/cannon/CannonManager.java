@@ -523,6 +523,12 @@ public class CannonManager {
         if (message == MessageEnum.CannonCreated && (cannon.getCannonDesign().isSignRequired() && !cannon.hasCannonSign()))
             message = MessageEnum.ErrorMissingSign;
 
+        Cannon created = startCannonCreation(cannon, message, player, owner, silent);
+        plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
+        return created;
+	}
+
+    private Cannon startCannonCreation(Cannon cannon, MessageEnum message, Player player, UUID owner, boolean silent) {
         plugin.logDebug("CannonBeforeCreateEvent Cannon: " + cannon + "message: " + message + " player: " + player);
         plugin.logDebug("player.getUniqueId(): " + player.getUniqueId());
 
@@ -552,10 +558,8 @@ public class CannonManager {
 
         CannonAfterCreateEvent caceEvent = new CannonAfterCreateEvent(cannon, player.getUniqueId());
         Bukkit.getServer().getPluginManager().callEvent(caceEvent);
-
-        plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime)/1000000.0) + "ms");
         return cannon;
-	}
+    }
 
     /**
      * returns the cannon from the storage
