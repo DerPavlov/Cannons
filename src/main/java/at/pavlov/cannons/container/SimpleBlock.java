@@ -10,25 +10,24 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.material.Directional;
 import org.bukkit.util.Vector;
 
-public class SimpleBlock
-{
+public class SimpleBlock {
 	private int locX;
 	private int locY;
 	private int locZ;
+	private final boolean directional;
 	
 	private BlockData blockData;
 
-	public SimpleBlock(int x, int y, int z, BlockData blockData)
-	{
+	public SimpleBlock(int x, int y, int z, BlockData blockData) {
 		locX = x;
 		locY = y;
 		locZ = z;
 
 		this.blockData = blockData;
+		this.directional = this instanceof Directional;
 	}
 
-	public SimpleBlock(Vector vect, BlockData blockData)
-	{
+	public SimpleBlock(Vector vect, BlockData blockData) {
 		this(vect.getBlockX(), vect.getBlockY(), vect.getBlockZ(), blockData);
 	}
 
@@ -42,13 +41,13 @@ public class SimpleBlock
 		this(vect, material.createBlockData());
 	}
 	
-	public SimpleBlock(Location loc, Material material)
-	{
+	public SimpleBlock(Location loc, Material material) {
 		locX = loc.getBlockX();
 		locY = loc.getBlockY();
 		locZ = loc.getBlockZ();
 		
 		this.blockData = material.createBlockData();
+		this.directional = blockData instanceof Directional;
 	}
 
 	
@@ -57,8 +56,7 @@ public class SimpleBlock
 	 * @param world bukkit world
 	 * @return location of the block
 	 */
-	public Location toLocation(World world, Vector offset)
-	{
+	public Location toLocation(World world, Vector offset) {
 		return new Location(world, locX + offset.getBlockX(), locY + offset.getBlockY(), locZ + offset.getBlockZ());
 	}
 
@@ -70,22 +68,20 @@ public class SimpleBlock
 	 * @return true if both block match
 	 */
 	public boolean compareMaterialAndLoc(Block block, Vector offset)
-	{		
-		if (toVector().add(offset).equals(block.getLocation().toVector()))
-		{
-			if (compareMaterial(block.getBlockData()))
-				return true;
-		}
-		return false;
-	}
+	{
+        if (!toVector().add(offset).equals(block.getLocation().toVector())) {
+            return false;
+        }
+
+        return compareMaterial(block.getBlockData());
+    }
 
 	/**
 	 * return true if Materials match
 	 * @param block block to compare to
 	 * @return true if both block match
 	 */
-	public boolean compareMaterial(BlockData block)
-	{
+	public boolean compareMaterial(BlockData block) {
 		return block.getMaterial().equals(this.blockData.getMaterial());
 	}
 
@@ -100,7 +96,7 @@ public class SimpleBlock
 			return false;
 		}
 		// compare facing and face
-		if (blockData instanceof Directional && this instanceof Directional){
+		if (directional && blockData instanceof Directional){
 			return ((Directional) this).getFacing().equals(((Directional) blockData).getFacing());
 		}
 		return true;
