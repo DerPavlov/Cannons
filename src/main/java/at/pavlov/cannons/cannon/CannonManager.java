@@ -532,7 +532,7 @@ public class CannonManager {
             plugin.logDebug("cannon found in storage");
             cannon = storageCannon;
 
-            plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime) / 1000000.0) + "ms");
+            plugin.logDebug("Time to find cannon: " + new DecimalFormat("0.00").format((System.nanoTime() - startTime) / 1000000.0) + "ms. Cannon name: " + cannon.getCannonName());
             return cannon;
         } //nothing in the storage, so we make a new entry
 

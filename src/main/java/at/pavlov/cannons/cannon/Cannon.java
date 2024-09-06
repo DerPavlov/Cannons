@@ -921,11 +921,13 @@ public class Cannon {
      * @return - true if it is part of this cannon
      */
     public boolean isCannonBlock(Block block) {
-        if (getWorld().equals(block.getWorld().getUID())) {
-            for (SimpleBlock designBlock : design.getAllCannonBlocks(cannonDirection)) {
-                if (designBlock.compareMaterialAndLoc(block, offset)) {
-                    return true;
-                }
+        if (!getWorld().equals(block.getWorld().getUID())) {
+            return false;
+        }
+
+        for (SimpleBlock designBlock : design.getAllCannonBlocks(cannonDirection)) {
+            if (designBlock.compareMaterialAndLoc(block, offset)) {
+                return true;
             }
         }
         return false;
