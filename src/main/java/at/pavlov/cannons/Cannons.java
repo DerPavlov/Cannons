@@ -15,6 +15,7 @@ import at.pavlov.cannons.projectile.ProjectileManager;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.FakeBlockHandler;
 import at.pavlov.cannons.scheduler.ProjectileObserver;
+import at.pavlov.cannons.utils.CannonSelector;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -103,6 +104,7 @@ public final class Cannons extends JavaPlugin
 		this.config = new Config(this);
 		DesignStorage.initialize(this);
 		ProjectileManager.initialize(this);
+		CannonSelector.initialize(this);
 
 		this.explosion = new CreateExplosion(this, config);
 		this.fireCannon = new FireCannon(this, config);

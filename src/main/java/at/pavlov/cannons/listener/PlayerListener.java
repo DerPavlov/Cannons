@@ -13,6 +13,7 @@ import at.pavlov.cannons.config.UserMessages;
 import at.pavlov.cannons.projectile.FlyingProjectile;
 import at.pavlov.cannons.projectile.Projectile;
 import at.pavlov.cannons.projectile.ProjectileStorage;
+import at.pavlov.cannons.utils.CannonSelector;
 import at.pavlov.cannons.utils.CannonsUtil;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -48,6 +49,7 @@ public class PlayerListener implements Listener
     private final CannonManager cannonManager;
     private final FireCannon fireCannon;
     private final Aiming aiming;
+    private final CannonSelector selector;
 
     public PlayerListener(Cannons plugin)
     {
@@ -57,6 +59,7 @@ public class PlayerListener implements Listener
         this.cannonManager = this.plugin.getCannonManager();
         this.fireCannon = this.plugin.getFireCannon();
         this.aiming = this.plugin.getAiming();
+        this.selector = CannonSelector.getInstance();
     }
 
     @EventHandler
@@ -280,10 +283,10 @@ public class PlayerListener implements Listener
         }
         //no cannon found - maybe the player has click into the air to stop aiming
         else if(cannon == null && action == Action.RIGHT_CLICK_AIR){
-                // stop aiming mode when right clicking in the air
-                if (config.getToolAutoaim().equalsFuzzy(eventitem))
-                    aiming.aimingMode(player, null, false);
-                plugin.getCommandListener().removeCannonSelector(player);
+            // stop aiming mode when right clicking in the air
+            if (config.getToolAutoaim().equalsFuzzy(eventitem))
+                aiming.aimingMode(player, null, false);
+            selector.removeCannonSelector(player);
         }
         //fire cannon
         else if(event.getAction().equals(Action.LEFT_CLICK_AIR)) //|| event.getAction().equals(Action.LEFT_CLICK_BLOCK))
@@ -375,18 +378,18 @@ public class PlayerListener implements Listener
     private boolean isCannonSelect(PlayerInteractEvent event, Block clickedBlock, Cannon cannon) {
         final Player player = event.getPlayer();
 
-        if (!plugin.getCommandListener().isSelectingMode(player)) {
+        if (!selector.isSelectingMode(player)) {
             return false;
         }
 
-        if (plugin.getCommandListener().isBlockSelectingMode(player)){
-            plugin.getCommandListener().setSelectedBlock(player, clickedBlock);
+        if (selector.isBlockSelectingMode(player)){
+            selector.setSelectedBlock(player, clickedBlock);
             event.setCancelled(true);
             return true;
         }
 
         else if (cannon != null){
-            plugin.getCommandListener().setSelectedCannon(player, cannon);
+            selector.setSelectedCannon(player, cannon);
             event.setCancelled(true);
             return true;
         }

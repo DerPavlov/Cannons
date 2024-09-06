@@ -4,6 +4,7 @@ package at.pavlov.cannons.listener;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.BreakCause;
 import at.pavlov.cannons.cannon.Cannon;
+import at.pavlov.cannons.utils.CannonSelector;
 import org.bukkit.Bukkit;
 import org.bukkit.ExplosionResult;
 import org.bukkit.Location;
@@ -162,7 +163,7 @@ public class BlockListener implements Listener {
             if (plugin.getAiming().isInAimingMode(event.getPlayer().getUniqueId()))
                 aimingCannon = plugin.getAiming().getCannonInAimingMode(event.getPlayer());
 
-            if (cannon.isDestructibleBlock(location) && (aimingCannon == null || !cannon.equals(aimingCannon)) && !plugin.getCommandListener().isSelectingMode(event.getPlayer())) {
+            if (cannon.isDestructibleBlock(location) && (aimingCannon == null || !cannon.equals(aimingCannon)) && !CannonSelector.getInstance().isSelectingMode(event.getPlayer())) {
                 plugin.getCannonManager().removeCannon(cannon, false, true, BreakCause.PlayerBreak);
                 plugin.logDebug("cannon broken:  " + cannon.isDestructibleBlock(location));
             } else {
