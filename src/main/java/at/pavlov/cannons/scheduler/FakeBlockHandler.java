@@ -4,6 +4,7 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.FakeBlockType;
 import at.pavlov.cannons.container.FakeBlockEntry;
 import org.bukkit.Location;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockIterator;
@@ -11,12 +12,12 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
+import java.util.LinkedList;
 
 public class FakeBlockHandler {
     private final Cannons plugin;
 
-    private ArrayList<FakeBlockEntry> list = new ArrayList<FakeBlockEntry>();
+    private final ArrayList<FakeBlockEntry> list = new ArrayList<>();
 
     private long lastAiming;
     private long lastImpactPredictor;
@@ -117,25 +118,28 @@ public class FakeBlockHandler {
      * @param blockData material of the fake block
      * @param duration delay until the block disappears again in s
      */
-    public void imitatedSphere(Player player, Location loc, int r, BlockData blockData, FakeBlockType type, double duration)
-    {
+    public void imitatedSphere(Player player, Location loc, int r, BlockData blockData, FakeBlockType type, double duration) {
         if(loc == null || player == null)
             return;
 
-        for(int x = -r; x <=r; x++)
-        {
-            for(int y = -r; y<=r; y++)
-            {
-                for(int z = -r; z<=r; z++)
-                {
+        LinkedList<BlockState> updates = new LinkedList<>();
+        for(int x = -r; x <=r; x++) {
+            for(int y = -r; y<=r; y++) {
+                for(int z = -r; z<=r; z++) {
                     Location newL = loc.clone().add(x, y, z);
-                    if(newL.distance(loc)<=r)
-                    {
-                        sendBlockChangeToPlayer(player, newL, blockData, type, duration);
+                    if (newL.distance(loc) > r) {
+                        continue;
+                    }
+
+                    var block = sendBlockChangeToPlayer(player, newL, blockData, type, duration);
+                    if (block != null) {
+                        updates.add(block);
                     }
                 }
             }
         }
+
+        player.sendBlockChanges(updates);
     }
 
     /**
@@ -151,10 +155,14 @@ public class FakeBlockHandler {
             return;
 
         BlockIterator iter = new BlockIterator(loc.getWorld(), loc.toVector(), direction, offset, length);
+        LinkedList<BlockState> updateList = new LinkedList<>();
         while (iter.hasNext()) {
-            sendBlockChangeToPlayer(player, iter.next().getLocation(), blockData, type, duration);
+            var block = sendBlockChangeToPlayer(player, iter.next().getLocation(), blockData, type, duration);
+            if (block != null)
+                updateList.add(block);
         }
 
+        player.sendBlockChanges(updateList);
     }
 
     /**
@@ -164,10 +172,10 @@ public class FakeBlockHandler {
      * @param blockData type of the block
      * @param duration how long to remove the block in [s]
      */
-    private void sendBlockChangeToPlayer(final Player player, final Location loc, BlockData blockData, FakeBlockType type, double duration) {
+    private BlockState sendBlockChangeToPlayer(final Player player, final Location loc, BlockData blockData, FakeBlockType type, double duration) {
         //only show block in air
         if (!loc.getBlock().isEmpty()) {
-            return;
+            return null;
         }
 
         FakeBlockEntry fakeBlockEntry = new FakeBlockEntry(loc, player, type, (long) (duration*20.0));
@@ -183,11 +191,9 @@ public class FakeBlockHandler {
                 break;
             }
         }
-        if (!found)
-        {
-            //plugin.logDebug("new block at: " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ", " + type.toString());
-            //player.sendBlockChange(loc, material.getType(), (byte) material.getData());
-            player.sendBlockChange(loc, blockData);
+
+        if (!found) {
+            //player.sendBlockChange(loc, blockData);
             list.add(fakeBlockEntry);
         }
 
@@ -197,6 +203,7 @@ public class FakeBlockHandler {
         if (type == FakeBlockType.AIMING)
             lastAiming = System.currentTimeMillis();
 
+        return blockData.createBlockState().copy(loc);
     }
 
     /**

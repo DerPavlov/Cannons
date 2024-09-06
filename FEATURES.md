@@ -12,6 +12,7 @@ Optimizations:
 - Random Optimization (Original created a random number generator every time it needed to be used, now each object has its own Random)
 - Distance optimization by using `Location#distanceSquared()` over `Location#distance` when possible
 - Aiming shot simulation Optimization
+- Simulating aim is less resource expensive (after testing, this feature requires about 50% less CPU usage)
 
 API Changes/New Events:
 --------------
