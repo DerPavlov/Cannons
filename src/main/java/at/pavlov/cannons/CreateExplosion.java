@@ -398,8 +398,7 @@ public class CreateExplosion {
             case ThrownPotion pentity -> {
                 // ThrownPotion
                 try {
-                    boolean isSpash = pentity instanceof SplashPotion;
-                    ItemStack potion = new ItemStack(isSpash ? Material.SPLASH_POTION : Material.LINGERING_POTION);
+                    ItemStack potion = new ItemStack(pentity.getItem().getType());
                     PotionMeta meta = (PotionMeta) potion.getItemMeta();
                     meta.setBasePotionData(ParseUtils.parsePotionData(
                             entityData.get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
