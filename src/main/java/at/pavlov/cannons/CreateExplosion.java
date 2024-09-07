@@ -362,6 +362,11 @@ public class CreateExplosion {
                 try {
                     arrow.setBasePotionData(ParseUtils.parsePotionData(
                             entityData.get(EntityDataType.POTION_EFFECT), arrow.getBasePotionData()));
+                    plugin.logDebug("spawn TIPPER_ARROW " + arrow);
+                    for (PotionEffect effect : entityHolder.getPotionEffects()) {
+                        plugin.logDebug("add potion effect " + effect);
+                        arrow.addCustomEffect(effect, true);
+                    }
                 } catch (Exception e) {
                     logConvertingError(cannonball.getProjectile().getProjectileId(), e);
                 }
@@ -400,7 +405,15 @@ public class CreateExplosion {
                     PotionMeta meta = (PotionMeta) potion.getItemMeta();
                     meta.setBasePotionData(ParseUtils.parsePotionData(
                             entityData.get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
+
+                    plugin.logDebug("spawn THROWN_POTION " + pentity);
+                    for (PotionEffect effect : entityHolder.getPotionEffects()) {
+                        plugin.logDebug("add potion effect " + effect);
+                        meta.addCustomEffect(effect, true);
+                    }
+
                     potion.setItemMeta(meta);
+
                     pentity.setItem(potion);
                 } catch (Exception e) {
                     logConvertingError(cannonball.getProjectile().getProjectileId(), e);
