@@ -19,7 +19,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -36,11 +38,10 @@ public class CannonManager {
     private static final ConcurrentHashMap<UUID, Cannon> cannonList = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, UUID> cannonNameMap = new ConcurrentHashMap<>();
 
-
     private final Cannons plugin;
     private final UserMessages userMessages;
     private final Config config;
-
+    private static final BlockFace[] blockFaces = { BlockFace.EAST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.WEST };
 
     public CannonManager(Cannons cannons, UserMessages userMessages, Config config) {
         this.userMessages = userMessages;
@@ -497,7 +498,7 @@ public class CannonManager {
      */
     public Cannon getCannon(Location cannonBlock, UUID owner, boolean silent) {
         // is this block material used for a cannon design
-        if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getType()))
+        if (!isValidCannonBlock(cannonBlock.getBlock()))
             return null;
 
         long startTime = System.nanoTime();
@@ -612,16 +613,19 @@ public class CannonManager {
      */
     private Cannon checkCannon(Location cannonBlock, UUID owner) {
         // is this block material used for a cannon design
-        if (cannonBlock.getBlock() == null || !plugin.getDesignStorage().isCannonBlockMaterial(cannonBlock.getBlock().getType()))
+        Block block = cannonBlock.getBlock();
+        BlockData blockData = cannonBlock.getBlock().getBlockData();
+        if (!isValidCannonBlock(block))
             return null;
 
         World world = cannonBlock.getWorld();
+        var designList = plugin.getDesignStorage().getCannonDesignList();
+        designList = designList.stream().filter(it -> it.isAllowedMaterial(block.getType())).toList();
 
         // check all cannon design if this block is part of the design
-        for (CannonDesign cannonDesign : plugin.getDesignStorage().getCannonDesignList()) {
+        for (CannonDesign cannonDesign : designList) {
             // check of all directions
-            BlockFace cannonDirection = BlockFace.NORTH;
-            for (int i = 0; i < 4; i++) {
+            for (BlockFace cannonDirection : blockFaces) {
                 // for all blocks for the design
                 List<SimpleBlock> designBlockList = cannonDesign.getAllCannonBlocks(cannonDirection);
                 //check for empty entries
@@ -632,7 +636,7 @@ public class CannonManager {
 
                 for (SimpleBlock designBlock : designBlockList) {
                     // compare blocks
-                    if (!designBlock.compareMaterialAndFacing(cannonBlock.getBlock().getBlockData())) {
+                    if (!designBlock.compareMaterialAndFacing(blockData)) {
                         continue;
                     }
 
@@ -656,12 +660,13 @@ public class CannonManager {
                         return new Cannon(cannonDesign, world.getUID(), offset, cannonDirection, owner);
                     }
                 }
-                // rotate cannon direction
-                cannonDirection = CannonsUtil.roatateFace(cannonDirection);
             }
-
         }
         return null;
+    }
+
+    public boolean isValidCannonBlock(Block block) {
+        return block != null && plugin.getDesignStorage().isCannonBlockMaterial(block.getType());
     }
 
     /**

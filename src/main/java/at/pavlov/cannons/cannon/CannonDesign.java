@@ -6,12 +6,14 @@ import at.pavlov.cannons.container.SimpleBlock;
 import at.pavlov.cannons.container.SoundHolder;
 import at.pavlov.cannons.projectile.Projectile;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
@@ -186,7 +188,8 @@ public class CannonDesign
     private List<BlockData> schematicBlockTypeProtected;				//list of blocks that are protected from explosions (e.g. buttons)
     
     //cannon design block lists for every direction (NORTH, EAST, SOUTH, WEST)
-    private HashMap<BlockFace, CannonBlocks> cannonBlockMap = new HashMap<BlockFace, CannonBlocks>();
+    private final HashMap<BlockFace, CannonBlocks> cannonBlockMap = new HashMap<>();
+	private final EnumSet<Material> allowedMaterials = EnumSet.noneOf(Material.class);
 
 
     
@@ -817,13 +820,21 @@ public class CannonDesign
 	{
 		this.ingameBlockTypeRightClickTrigger = ingameBlockTypeRightClickTrigger;
 	}
-	public HashMap<BlockFace, CannonBlocks> getCannonBlockMap()
-	{
+
+	public HashMap<BlockFace, CannonBlocks> getCannonBlockMap() {
 		return cannonBlockMap;
 	}
-	public void setCannonBlockMap(HashMap<BlockFace, CannonBlocks> cannonBlockMap)
-	{
-		this.cannonBlockMap = cannonBlockMap;
+
+	public void putCannonBlockMap(BlockFace cannonDirection, CannonBlocks blocks) {
+		for (var block : blocks.getAllCannonBlocks()) {
+			allowedMaterials.add(block.getBlockData().getMaterial());
+		}
+
+		cannonBlockMap.put(cannonDirection, blocks);
+	}
+
+	public boolean isAllowedMaterial(Material m) {
+		return allowedMaterials.contains(m);
 	}
 	
 	@Override

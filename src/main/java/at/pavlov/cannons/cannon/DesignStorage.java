@@ -563,7 +563,7 @@ public class DesignStorage
             cannonBlocks.getRotationCenter().subtract(compensation);
 
 			// add blocks to the HashMap
-			cannonDesign.getCannonBlockMap().put(cannonDirection, cannonBlocks);
+			cannonDesign.putCannonBlockMap(cannonDirection, cannonBlocks);
 
 			//rotate blocks for the next iteration
             CannonsUtil.roateBlockFacingClockwise(blockIgnore);
