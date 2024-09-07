@@ -422,6 +422,9 @@ public class CreateExplosion {
                     logConvertingError(cannonball.getProjectile().getProjectileId(), e);
                 }
             }
+            default -> {
+                return;
+            }
         }
 
     }
