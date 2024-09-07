@@ -298,56 +298,57 @@ public class CreateExplosion {
         // add some specific data values
         // TNT
         var entityData = entityHolder.getData();
-        if (entity instanceof TNTPrimed tnt) {
-            try {
-                int fusetime = ParseUtils.parseInt(entityData.get(EntityDataType.FUSE_TIME),
-                        tnt.getFuseTicks());
-                int fuseTicks = (int) (fusetime * (1 + r.nextGaussian() / 3.0));
-                this.plugin.logDebug("reset TNT fuse ticks to: " + fuseTicks + " fusetime " + fusetime);
-                tnt.setFuseTicks(fuseTicks);
-            } catch (Exception e) {
-                logConvertingError(cannonball.getProjectile().getProjectileId(), e);
-            }
-        }
-        // AreaEffectCloud
-        if (entity instanceof AreaEffectCloud cloud) {
-            try {
-                // PARTICLE ("Particle"),
-                // EFFECTS ("Effects"),
-                cloud.setReapplicationDelay(
-                        ParseUtils.parseInt(entityData.get(EntityDataType.REAPPLICATION_DELAY),
-                                cloud.getReapplicationDelay()));
-                cloud.setRadius(ParseUtils.parseFloat(entityData.get(EntityDataType.RADIUS),
-                        cloud.getRadius()));
-                cloud.setRadiusPerTick(ParseUtils.parseFloat(
-                        entityData.get(EntityDataType.RADIUS_PER_TICK), cloud.getRadiusPerTick()));
-                cloud.setRadiusOnUse(ParseUtils.parseFloat(
-                        entityData.get(EntityDataType.RADIUS_ON_USE), cloud.getRadiusOnUse()));
-                cloud.setDuration(ParseUtils.parseInt(entityData.get(EntityDataType.DURATION),
-                        cloud.getDuration()));
-                cloud.setDurationOnUse((int) ParseUtils.parseFloat(
-                        entityData.get(EntityDataType.RADIUS_ON_USE), cloud.getDurationOnUse()));
-                cloud.setWaitTime(ParseUtils.parseInt(entityData.get(EntityDataType.WAIT_TIME),
-                        cloud.getWaitTime()));
-                cloud.setColor(
-                        ParseUtils.parseColor(entityData.get(EntityDataType.COLOR), cloud.getColor()));
-                cloud.setBasePotionData(ParseUtils.parsePotionData(
-                        entityData.get(EntityDataType.POTION_EFFECT), cloud.getBasePotionData()));
-                cloud.setParticle(ParseUtils.parseParticle(entityData.get(EntityDataType.PARTICLE),
-                        cloud.getParticle()));
-                cloud.setSource(cannonball.getSource());
-
-                plugin.logDebug("spawn AREA_OF_EFFECT_CLOUD " + cloud);
-                for (PotionEffect effect : entityHolder.getPotionEffects()) {
-                    plugin.logDebug("add potion effect " + effect);
-                    cloud.addCustomEffect(effect, true);
-                }
-            } catch (Exception e) {
-                logConvertingError(cannonball.getProjectile().getProjectileId(), e);
-            }
-        }
 
         switch (entity) {
+            case TNTPrimed tnt -> {
+                try {
+                    int fusetime = ParseUtils.parseInt(entityData.get(EntityDataType.FUSE_TIME),
+                            tnt.getFuseTicks());
+                    int fuseTicks = (int) (fusetime * (1 + r.nextGaussian() / 3.0));
+                    this.plugin.logDebug("reset TNT fuse ticks to: " + fuseTicks + " fusetime " + fusetime);
+                    tnt.setFuseTicks(fuseTicks);
+                } catch (Exception e) {
+                    logConvertingError(cannonball.getProjectile().getProjectileId(), e);
+                }
+            }
+
+            case AreaEffectCloud cloud -> {
+                try {
+                    // PARTICLE ("Particle"),
+                    // EFFECTS ("Effects"),
+                    cloud.setReapplicationDelay(
+                            ParseUtils.parseInt(entityData.get(EntityDataType.REAPPLICATION_DELAY),
+                                    cloud.getReapplicationDelay()));
+                    cloud.setRadius(ParseUtils.parseFloat(entityData.get(EntityDataType.RADIUS),
+                            cloud.getRadius()));
+                    cloud.setRadiusPerTick(ParseUtils.parseFloat(
+                            entityData.get(EntityDataType.RADIUS_PER_TICK), cloud.getRadiusPerTick()));
+                    cloud.setRadiusOnUse(ParseUtils.parseFloat(
+                            entityData.get(EntityDataType.RADIUS_ON_USE), cloud.getRadiusOnUse()));
+                    cloud.setDuration(ParseUtils.parseInt(entityData.get(EntityDataType.DURATION),
+                            cloud.getDuration()));
+                    cloud.setDurationOnUse((int) ParseUtils.parseFloat(
+                            entityData.get(EntityDataType.RADIUS_ON_USE), cloud.getDurationOnUse()));
+                    cloud.setWaitTime(ParseUtils.parseInt(entityData.get(EntityDataType.WAIT_TIME),
+                            cloud.getWaitTime()));
+                    cloud.setColor(
+                            ParseUtils.parseColor(entityData.get(EntityDataType.COLOR), cloud.getColor()));
+                    cloud.setBasePotionData(ParseUtils.parsePotionData(
+                            entityData.get(EntityDataType.POTION_EFFECT), cloud.getBasePotionData()));
+                    cloud.setParticle(ParseUtils.parseParticle(entityData.get(EntityDataType.PARTICLE),
+                            cloud.getParticle()));
+                    cloud.setSource(cannonball.getSource());
+
+                    plugin.logDebug("spawn AREA_OF_EFFECT_CLOUD " + cloud);
+                    for (PotionEffect effect : entityHolder.getPotionEffects()) {
+                        plugin.logDebug("add potion effect " + effect);
+                        cloud.addCustomEffect(effect, true);
+                    }
+                } catch (Exception e) {
+                    logConvertingError(cannonball.getProjectile().getProjectileId(), e);
+                }
+            }
+
             case SpectralArrow arrow -> {
                 // SpectralArrow
                 try {
