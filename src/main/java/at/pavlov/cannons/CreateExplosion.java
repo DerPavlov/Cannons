@@ -38,12 +38,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LingeringPotion;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SpectralArrow;
 import org.bukkit.entity.SplashPotion;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -395,10 +395,11 @@ public class CreateExplosion {
                 }
             }
 
-            case SplashPotion pentity -> {
+            case ThrownPotion pentity -> {
                 // ThrownPotion
                 try {
-                    ItemStack potion = new ItemStack(Material.SPLASH_POTION);
+                    boolean isSpash = pentity instanceof SplashPotion;
+                    ItemStack potion = new ItemStack(isSpash ? Material.SPLASH_POTION : Material.LINGERING_POTION);
                     PotionMeta meta = (PotionMeta) potion.getItemMeta();
                     meta.setBasePotionData(ParseUtils.parsePotionData(
                             entityData.get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
@@ -409,19 +410,6 @@ public class CreateExplosion {
                 }
             }
 
-            case LingeringPotion pentity -> {
-                // LingeringPotion
-                try {
-                    ItemStack potion = new ItemStack(Material.LINGERING_POTION);
-                    PotionMeta meta = (PotionMeta) potion.getItemMeta();
-                    meta.setBasePotionData(ParseUtils.parsePotionData(
-                            entityData.get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
-                    potion.setItemMeta(meta);
-                    pentity.setItem(potion);
-                } catch (Exception e) {
-                    logConvertingError(cannonball.getProjectile().getProjectileId(), e);
-                }
-            }
             default -> {
                 return;
             }
