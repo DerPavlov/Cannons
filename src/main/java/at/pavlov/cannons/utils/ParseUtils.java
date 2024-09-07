@@ -64,16 +64,19 @@ public class ParseUtils {
      * @return returns parsed number or default
      */
     public static PotionData parsePotionData(String str, PotionData default_value) {
-        if (str != null) {
-            str = str.toLowerCase();
-            for (PotionType pt : PotionType.values()) {
-                if (str.contains(pt.toString().toLowerCase())) {
-                    boolean extended = str.contains("long");
-                    boolean upgraded = str.contains("strong");
-                    Cannons.logSDebug("Potion parsing: " + str);
-                    return new PotionData(pt, extended, upgraded);
-                }
+        if (str == null) {
+            return default_value;
+        }
+        str = str.toLowerCase();
+        for (PotionType pt : PotionType.values()) {
+            if (!str.contains(pt.toString().toLowerCase())) {
+                continue;
             }
+
+            boolean extended = str.contains("long");
+            boolean upgraded = str.contains("strong");
+            Cannons.logSDebug("Potion parsing: " + str);
+            return new PotionData(pt, extended, upgraded);
         }
         return default_value;
     }
