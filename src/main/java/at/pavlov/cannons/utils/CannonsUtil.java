@@ -373,7 +373,14 @@ public class CannonsUtil
         if (!start.getBlock().isEmpty())
             return start;
 
+        try {
+            direction.checkFinite();
+        } catch (Exception e) {
+            return start;
+        }
+
         //int length = (int) (direction.length()*3);
+        Cannons.logSDebug("World: " + world + " Start vector: " + start.toVector() + " Normalized direction: " + direction.clone().normalize());
         BlockIterator iter = new BlockIterator(world, start.toVector(), direction.clone().normalize(), 0, 10);
 
         //try to find a surface of the
