@@ -19,6 +19,7 @@ import at.pavlov.cannons.projectile.ProjectileProperties;
 import at.pavlov.cannons.utils.ArmorCalculationUtil;
 import at.pavlov.cannons.utils.CannonsUtil;
 import at.pavlov.cannons.utils.DelayedTask;
+import at.pavlov.cannons.utils.ParseUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.ExplosionResult;
@@ -298,7 +299,7 @@ public class CreateExplosion {
         // TNT
         if (entity instanceof TNTPrimed tnt) {
             try {
-                int fusetime = CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.FUSE_TIME),
+                int fusetime = ParseUtils.parseInt(entityHolder.getData().get(EntityDataType.FUSE_TIME),
                         tnt.getFuseTicks());
                 int fuseTicks = (int) (fusetime * (1 + r.nextGaussian() / 3.0));
                 this.plugin.logDebug("reset TNT fuse ticks to: " + fuseTicks + " fusetime " + fusetime);
@@ -313,25 +314,25 @@ public class CreateExplosion {
                 // PARTICLE ("Particle"),
                 // EFFECTS ("Effects"),
                 cloud.setReapplicationDelay(
-                        CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.REAPPLICATION_DELAY),
+                        ParseUtils.parseInt(entityHolder.getData().get(EntityDataType.REAPPLICATION_DELAY),
                                 cloud.getReapplicationDelay()));
-                cloud.setRadius(CannonsUtil.parseFloat(entityHolder.getData().get(EntityDataType.RADIUS),
+                cloud.setRadius(ParseUtils.parseFloat(entityHolder.getData().get(EntityDataType.RADIUS),
                         cloud.getRadius()));
-                cloud.setRadiusPerTick(CannonsUtil.parseFloat(
+                cloud.setRadiusPerTick(ParseUtils.parseFloat(
                         entityHolder.getData().get(EntityDataType.RADIUS_PER_TICK), cloud.getRadiusPerTick()));
-                cloud.setRadiusOnUse(CannonsUtil.parseFloat(
+                cloud.setRadiusOnUse(ParseUtils.parseFloat(
                         entityHolder.getData().get(EntityDataType.RADIUS_ON_USE), cloud.getRadiusOnUse()));
-                cloud.setDuration(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
+                cloud.setDuration(ParseUtils.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
                         cloud.getDuration()));
-                cloud.setDurationOnUse((int) CannonsUtil.parseFloat(
+                cloud.setDurationOnUse((int) ParseUtils.parseFloat(
                         entityHolder.getData().get(EntityDataType.RADIUS_ON_USE), cloud.getDurationOnUse()));
-                cloud.setWaitTime(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.WAIT_TIME),
+                cloud.setWaitTime(ParseUtils.parseInt(entityHolder.getData().get(EntityDataType.WAIT_TIME),
                         cloud.getWaitTime()));
                 cloud.setColor(
-                        CannonsUtil.parseColor(entityHolder.getData().get(EntityDataType.COLOR), cloud.getColor()));
-                cloud.setBasePotionData(CannonsUtil.parsePotionData(
+                        ParseUtils.parseColor(entityHolder.getData().get(EntityDataType.COLOR), cloud.getColor()));
+                cloud.setBasePotionData(ParseUtils.parsePotionData(
                         entityHolder.getData().get(EntityDataType.POTION_EFFECT), cloud.getBasePotionData()));
-                cloud.setParticle(CannonsUtil.parseParticle(entityHolder.getData().get(EntityDataType.PARTICLE),
+                cloud.setParticle(ParseUtils.parseParticle(entityHolder.getData().get(EntityDataType.PARTICLE),
                         cloud.getParticle()));
                 cloud.setSource(cannonball.getSource());
 
@@ -347,7 +348,7 @@ public class CreateExplosion {
         // SpectralArrow
         if (entity instanceof SpectralArrow arrow) {
             try {
-                arrow.setGlowingTicks(CannonsUtil.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
+                arrow.setGlowingTicks(ParseUtils.parseInt(entityHolder.getData().get(EntityDataType.DURATION),
                         arrow.getGlowingTicks()));
             } catch (Exception e) {
                 logConvertingError(cannonball.getProjectile().getProjectileId(), e);
@@ -356,7 +357,7 @@ public class CreateExplosion {
         // TippedArrow
         if (entity instanceof Arrow arrow) {
             try {
-                arrow.setBasePotionData(CannonsUtil.parsePotionData(
+                arrow.setBasePotionData(ParseUtils.parsePotionData(
                         entityHolder.getData().get(EntityDataType.POTION_EFFECT), arrow.getBasePotionData()));
             } catch (Exception e) {
                 logConvertingError(cannonball.getProjectile().getProjectileId(), e);
@@ -367,21 +368,21 @@ public class CreateExplosion {
             try {
                 EntityEquipment equipment = living.getEquipment();
                 if (equipment != null) {
-                    equipment.setBoots((CannonsUtil.parseItemstack(
+                    equipment.setBoots((ParseUtils.parseItemstack(
                             entityHolder.getData().get(EntityDataType.BOOTS_ARMOR_ITEM), equipment.getBoots())));
-                    equipment.setChestplate((CannonsUtil.parseItemstack(
+                    equipment.setChestplate((ParseUtils.parseItemstack(
                             entityHolder.getData().get(EntityDataType.CHESTPLATE_ARMOR_ITEM),
                             equipment.getChestplate())));
-                    equipment.setHelmet((CannonsUtil.parseItemstack(
+                    equipment.setHelmet((ParseUtils.parseItemstack(
                             entityHolder.getData().get(EntityDataType.HELMET_ARMOR_ITEM), equipment.getHelmet())));
-                    equipment.setLeggings((CannonsUtil.parseItemstack(
+                    equipment.setLeggings((ParseUtils.parseItemstack(
                             entityHolder.getData().get(EntityDataType.LEGGINGS_ARMOR_ITEM),
                             equipment.getLeggings())));
                     equipment.setItemInMainHand(
-                            (CannonsUtil.parseItemstack(entityHolder.getData().get(EntityDataType.MAIN_HAND_ITEM),
+                            (ParseUtils.parseItemstack(entityHolder.getData().get(EntityDataType.MAIN_HAND_ITEM),
                                     equipment.getItemInMainHand())));
                     equipment.setItemInOffHand(
-                            (CannonsUtil.parseItemstack(entityHolder.getData().get(EntityDataType.OFF_HAND_ITEM),
+                            (ParseUtils.parseItemstack(entityHolder.getData().get(EntityDataType.OFF_HAND_ITEM),
                                     equipment.getItemInOffHand())));
                 }
             } catch (Exception e) {
@@ -393,7 +394,7 @@ public class CreateExplosion {
             try {
                 ItemStack potion = new ItemStack(Material.SPLASH_POTION);
                 PotionMeta meta = (PotionMeta) potion.getItemMeta();
-                meta.setBasePotionData(CannonsUtil.parsePotionData(
+                meta.setBasePotionData(ParseUtils.parsePotionData(
                         entityHolder.getData().get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
                 potion.setItemMeta(meta);
                 pentity.setItem(potion);
@@ -406,7 +407,7 @@ public class CreateExplosion {
             try {
                 ItemStack potion = new ItemStack(Material.LINGERING_POTION);
                 PotionMeta meta = (PotionMeta) potion.getItemMeta();
-                meta.setBasePotionData(CannonsUtil.parsePotionData(
+                meta.setBasePotionData(ParseUtils.parsePotionData(
                         entityHolder.getData().get(EntityDataType.POTION_EFFECT), meta.getBasePotionData()));
                 potion.setItemMeta(meta);
                 pentity.setItem(potion);
