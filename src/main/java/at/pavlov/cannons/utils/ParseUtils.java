@@ -47,7 +47,7 @@ public class ParseUtils {
      * @return returns parsed color or default
      */
     public static Color parseColor(String str, Color default_value) {
-        if (str == null) {
+        if (str == null || str.isEmpty()) {
             return default_value;
         }
 
@@ -87,7 +87,7 @@ public class ParseUtils {
      * @return returns parsed number or default
      */
     public static Particle parseParticle(String str, Particle default_value) {
-        if (str == null) {
+        if (str == null || str.isEmpty()) {
             return default_value;
         }
 

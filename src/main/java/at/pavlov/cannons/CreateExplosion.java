@@ -41,7 +41,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SpectralArrow;
-import org.bukkit.entity.SplashPotion;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -332,11 +331,10 @@ public class CreateExplosion {
                     cloud.setWaitTime(ParseUtils.parseInt(entityData.get(EntityDataType.WAIT_TIME),
                             cloud.getWaitTime()));
                     cloud.setColor(
-                            ParseUtils.parseColor(entityData.get(EntityDataType.COLOR), cloud.getColor()));
+                            ParseUtils.parseColor(entityData.get(EntityDataType.COLOR), Color.WHITE));
                     cloud.setBasePotionData(ParseUtils.parsePotionData(
                             entityData.get(EntityDataType.POTION_EFFECT), cloud.getBasePotionData()));
-                    cloud.setParticle(ParseUtils.parseParticle(entityData.get(EntityDataType.PARTICLE),
-                            cloud.getParticle()));
+                    cloud.setParticle(ParseUtils.parseParticle(entityData.get(EntityDataType.PARTICLE), Particle.ASH));
                     cloud.setSource(cannonball.getSource());
 
                     plugin.logDebug("spawn AREA_OF_EFFECT_CLOUD " + cloud);
@@ -418,6 +416,7 @@ public class CreateExplosion {
     
     private void logConvertingError(String id, Exception e) {
         this.plugin.logSevere("error while converting entity data for " + id + " occurred: " + e);
+        e.printStackTrace();
     }
 
     /**
