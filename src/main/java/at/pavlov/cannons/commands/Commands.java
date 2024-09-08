@@ -400,6 +400,12 @@ public class Commands extends BaseCommand {
         userMessages.sendMessage(MessageEnum.CannonsReseted, player);
     }
 
+    @Subcommand("blockdata")
+    @CommandPermission("cannons.player.blockdata")
+    public static void onBlockData(Player player) {
+        CannonSelector.getInstance().toggleCannonSelector(player, SelectCannon.BLOCK_DATA);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -432,16 +438,8 @@ public class Commands extends BaseCommand {
             return;
         }
 
-        //get blockdata
-        if (args[0].equalsIgnoreCase("blockdata")) {
-            if (!player.hasPermission("cannons.player.blockdata")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            selector.toggleCannonSelector(player, SelectCannon.BLOCK_DATA);
-        }
         //claim cannons in the surrounding
-        else if (args[0].equalsIgnoreCase(CommandList.CLAIM.getCommand())) {
+        if (args[0].equalsIgnoreCase(CommandList.CLAIM.getCommand())) {
             if (!player.hasPermission(CommandList.CLAIM.getPermission())) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
