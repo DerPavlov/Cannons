@@ -20,7 +20,9 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.HelpCommand;
+import co.aikar.commands.annotation.Optional;
 import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.Syntax;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -71,6 +73,46 @@ public class Commands extends BaseCommand {
         sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
     }
 
+    @Subcommand("reset")
+    @Syntax("[all|all_players|PLAYER")
+    @CommandPermission("cannons.admin.reset")
+    public static void onReset(CommandSender sender, String arg) {
+        //try first if there is no player "all" or "all_players"
+        OfflinePlayer offall = CannonsUtil.getOfflinePlayer("all");
+        OfflinePlayer offallplayers = CannonsUtil.getOfflinePlayer("all_players");
+
+        Cannons plugin = Cannons.getPlugin();
+        UserMessages userMessages = plugin.getMyConfig().getUserMessages();
+        PersistenceDatabase persistenceDatabase = plugin.getPersistenceDatabase();
+
+        if (arg.equals("all") &&
+                (offall == null || !offall.hasPlayedBefore()) ||
+                arg.equals("all_players") &&
+                        (offallplayers == null || !offallplayers.hasPlayedBefore())) {
+            //remove all cannons
+            persistenceDatabase.deleteAllCannons();
+            plugin.getCannonManager().deleteAllCannons();
+            sendMessage(sender, ChatColor.GREEN + "All cannons have been deleted");
+            return;
+        }
+
+        // delete all cannon entries for this player
+        OfflinePlayer offplayer = CannonsUtil.getOfflinePlayer(arg);
+        if (offplayer == null || !offplayer.hasPlayedBefore()) {
+            sendMessage(sender, ChatColor.RED + "Player " + ChatColor.GOLD + arg + ChatColor.RED + " not found");
+            return;
+        }
+
+        boolean b1 = plugin.getCannonManager().deleteCannons(offplayer.getUniqueId());
+        persistenceDatabase.deleteCannons(offplayer.getUniqueId());
+        if (b1) {
+            //there was an entry in the list
+            sendMessage(sender, ChatColor.GREEN + userMessages.getMessage(MessageEnum.CannonsReseted).replace("PLAYER", arg));
+        } else {
+            sendMessage(sender, ChatColor.RED + "Player " + ChatColor.GOLD + arg + ChatColor.RED + " has no cannons.");
+        }
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -98,45 +140,8 @@ public class Commands extends BaseCommand {
         }
 
         //############## console and player commands ######################
-        //cannons reset
-        if (args[0].equalsIgnoreCase("reset") && (player == null || player.hasPermission("cannons.admin.reset"))) {
-            //try first if there is no player "all" or "all_players"
-            OfflinePlayer offall = CannonsUtil.getOfflinePlayer("all");
-            OfflinePlayer offallplayers = CannonsUtil.getOfflinePlayer("all_players");
-            if (args.length >= 2 && (
-                    (args[1].equals("all") && (offall == null || !offall.hasPlayedBefore())) ||
-                            (args[1].equals("all_players") && (offallplayers == null || !offallplayers.hasPlayedBefore())))) {
-                //remove all cannons
-                persistenceDatabase.deleteAllCannons();
-                plugin.getCannonManager().deleteAllCannons();
-                sendMessage(sender, ChatColor.GREEN + "All cannons have been deleted");
-                return;
-            }
-
-            if (args.length >= 2 && args[1] != null) {
-                // delete all cannon entries for this player
-                OfflinePlayer offplayer = CannonsUtil.getOfflinePlayer(args[1]);
-                if (offplayer == null || !offplayer.hasPlayedBefore()) {
-                    sendMessage(sender, ChatColor.RED + "Player " + ChatColor.GOLD + args[1] + ChatColor.RED + " not found");
-                    return;
-                }
-
-                boolean b1 = plugin.getCannonManager().deleteCannons(offplayer.getUniqueId());
-                persistenceDatabase.deleteCannons(offplayer.getUniqueId());
-                if (b1) {
-                    //there was an entry in the list
-                    sendMessage(sender, ChatColor.GREEN + userMessages.getMessage(MessageEnum.CannonsReseted).replace("PLAYER", args[1]));
-                } else {
-                    sendMessage(sender, ChatColor.RED + "Player " + ChatColor.GOLD + args[1] + ChatColor.RED + " has no cannons.");
-                }
-                return;
-            }
-
-            sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons reset <NAME>' or '/cannons reset all' or '/cannons reset all_players'");
-            return;
-        }
         //cannons list
-        else if (args[0].equalsIgnoreCase("list") && (player == null || player.hasPermission("cannons.admin.list"))) {
+        if (args[0].equalsIgnoreCase("list") && (player == null || player.hasPermission("cannons.admin.list"))) {
             if (args.length >= 2) {
                 //additional player name
                 OfflinePlayer offplayer = CannonsUtil.getOfflinePlayer(args[1]);
