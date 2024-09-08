@@ -63,6 +63,14 @@ public class Commands extends BaseCommand {
         sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
     }
 
+    @Subcommand("load")
+    @CommandPermission("cannons.admin.reload")
+    public static void onLoad(CommandSender sender) {
+        // load database
+        Cannons.getPlugin().getPersistenceDatabase().loadCannons();
+        sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -90,18 +98,8 @@ public class Commands extends BaseCommand {
         }
 
         //############## console and player commands ######################
-        //cannons load
-        if (args[0].equalsIgnoreCase("load")) {
-            if (player == null || player.hasPermission("cannons.admin.reload")) {
-                // load database
-                persistenceDatabase.loadCannons();
-                sendMessage(sender, ChatColor.GREEN + "Cannons database loaded ");
-            } else
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-            return;
-        }
         //cannons reset
-        else if (args[0].equalsIgnoreCase("reset") && (player == null || player.hasPermission("cannons.admin.reset"))) {
+        if (args[0].equalsIgnoreCase("reset") && (player == null || player.hasPermission("cannons.admin.reset"))) {
             //try first if there is no player "all" or "all_players"
             OfflinePlayer offall = CannonsUtil.getOfflinePlayer("all");
             OfflinePlayer offallplayers = CannonsUtil.getOfflinePlayer("all_players");
