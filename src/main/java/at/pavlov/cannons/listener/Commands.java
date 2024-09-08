@@ -201,6 +201,13 @@ public class Commands extends BaseCommand {
             sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
     }
 
+    @Subcommand("build")
+    @CommandPermission("cannons.player.command")
+    public static void onBuild(Player player) {
+        var userMessages = Cannons.getPlugin().getMyConfig().getUserMessages();
+        userMessages.sendMessage(MessageEnum.HelpBuild, player);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -232,17 +239,8 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-        //cannons build
-        if (args[0].equalsIgnoreCase("build")) {
-            if (!player.hasPermission("cannons.player.command")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            // how to build a cannon
-            userMessages.sendMessage(MessageEnum.HelpBuild, player);
-        }
         //cannons fire
-        else if (args[0].equalsIgnoreCase("fire")) {
+        if (args[0].equalsIgnoreCase("fire")) {
             if (!player.hasPermission("cannons.player.command")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
