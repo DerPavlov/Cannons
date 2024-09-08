@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 @CommandAlias("cannons")
+@SuppressWarnings("unused")
 public class Commands extends BaseCommand {
     private static final String tag = "[Cannons] ";
 
