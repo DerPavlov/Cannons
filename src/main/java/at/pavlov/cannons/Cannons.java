@@ -16,6 +16,7 @@ import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.FakeBlockHandler;
 import at.pavlov.cannons.scheduler.ProjectileObserver;
 import at.pavlov.cannons.utils.CannonSelector;
+import co.aikar.commands.PaperCommandManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -120,7 +121,7 @@ public final class Cannons extends JavaPlugin
 		this.entityListener = new EntityListener(this);
 		this.signListener = new SignListener(this);
 		this.redstoneListener = new RedstoneListener(this);
-		this.commands = new Commands(this);
+		this.commands = new Commands();
 
 		setupEconomy();
 
@@ -150,7 +151,8 @@ public final class Cannons extends JavaPlugin
 			pm.registerEvents(signListener, this);
 			pm.registerEvents(redstoneListener, this);
 			//call command executer
-			getCommand("cannons").setExecutor(commands);
+			var pcm = new PaperCommandManager(this);
+			pcm.registerCommand(commands);
 
 			// Initialize the database
 			getServer().getScheduler().runTaskAsynchronously(this, () -> {
