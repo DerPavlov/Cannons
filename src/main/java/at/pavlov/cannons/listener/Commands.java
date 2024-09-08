@@ -382,56 +382,9 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-        //toggle sentry target
-        if (args[0].equalsIgnoreCase("target")) {
-            if (!player.hasPermission("cannons.player.target")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            // set selection or use toggle as default
-            boolean choice = false;
-            if (args.length >= 3) {
-                choice = Boolean.parseBoolean(args[2]);
-                selector.putTarget(player.getUniqueId(), choice);
-            }
-            // additional range command to select multiple cannons
-            int length = 0;
-            if (args.length >= 4) {
-                try {
-                    length = Integer.parseInt(args[3]);
-                } catch (NumberFormatException e) {
-                    length = 0;
-                }
-            }
-            //selection done by a string '/cannons target mob|player|cannon'
-            if (args.length >= 2 && (args[1].equalsIgnoreCase("mob"))) {
-                if (length > 0)
-                    selectCannonsInBox(player, SelectCannon.TARGET_MOB, length);
-                else
-                    selector.toggleCannonSelector(player, SelectCannon.TARGET_MOB);
-            } else if (args.length >= 2 && (args[1].equalsIgnoreCase("player"))) {
-                if (length > 0)
-                    selectCannonsInBox(player, SelectCannon.TARGET_PLAYER, length);
-                else
-                    selector.toggleCannonSelector(player, SelectCannon.TARGET_PLAYER);
-            } else if (args.length >= 2 && (args[1].equalsIgnoreCase("cannon"))) {
-                if (length > 0)
-                    selectCannonsInBox(player, SelectCannon.TARGET_CANNON, length);
-                else
-                    selector.toggleCannonSelector(player, SelectCannon.TARGET_CANNON);
-            } else if (args.length >= 2 && (args[1].equalsIgnoreCase("other"))) {
-                if (length > 0)
-                    selectCannonsInBox(player, SelectCannon.TARGET_OTHER, length);
-                else
-                    selector.toggleCannonSelector(player, SelectCannon.TARGET_OTHER);
-            } else {
-                //remove choice for target it the command was invalid
-                selector.removeTarget(player.getUniqueId());
-                sendMessage(sender, ChatColor.RED + "Usage '/cannons target <mob|player|cannon|other> <true|false> <range>'");
-            }
-        }
+
         //get name of cannon
-        else if (args[0].equalsIgnoreCase("info")) {
+        if (args[0].equalsIgnoreCase("info")) {
             if (!player.hasPermission("cannons.player.info")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
