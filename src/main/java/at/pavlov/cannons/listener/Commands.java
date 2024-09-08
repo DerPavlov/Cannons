@@ -177,6 +177,30 @@ public class Commands extends BaseCommand {
         player.getInventory().addItem(projectile.getLoadingItem().toItemStack(amount));
     }
 
+    @Subcommand("permissions")
+    @Syntax("<PLAYER>")
+    @CommandPermission("cannons.admin.permissions")
+    public static void onPermission(CommandSender sender, @Optional String subject) {
+        Player player = null;
+        if (sender instanceof Player) {
+            player = (Player) sender;
+        }
+
+        //given name in args[1]
+        if (subject != null) {
+            Player permPlayer = Bukkit.getPlayer(subject);
+            if (permPlayer != null)
+                displayAllPermissions(sender, permPlayer);
+            else
+                sendMessage(sender, ChatColor.GREEN + "Player not found. Usage: " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
+        }
+        //the command sender is also a player - return the permissions of the sender
+        else if (player != null) {
+            displayAllPermissions(sender, player);
+        } else
+            sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -203,31 +227,8 @@ public class Commands extends BaseCommand {
             return;
         }
 
-        //############## console and player commands ######################
-        //cannons permissions
-        if (args[0].equalsIgnoreCase("permissions")) {
-            if (player != null && !player.hasPermission("cannons.admin.permissions")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-
-            //given name in args[1]
-            if (args.length >= 2 && args[1] != null) {
-                Player permPlayer = Bukkit.getPlayer(args[1]);
-                if (permPlayer != null)
-                    displayAllPermissions(sender, permPlayer);
-                else
-                    sendMessage(sender, ChatColor.GREEN + "Player not found. Usage: " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
-            }
-            //the command sender is also a player - return the permissions of the sender
-            else if (player != null) {
-                displayAllPermissions(sender, player);
-            } else
-                sendMessage(sender, ChatColor.GREEN + "Missing player name " + ChatColor.GOLD + "'/cannons permissions <NAME>'");
-            return;
-        }
         //################### Player only commands #####################
-        else if (player == null) {
+        if (player == null) {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
