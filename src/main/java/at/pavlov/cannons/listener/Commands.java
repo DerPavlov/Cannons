@@ -113,6 +113,35 @@ public class Commands extends BaseCommand {
         }
     }
 
+    @Subcommand("list")
+    @Syntax("<PLAYER>")
+    @CommandPermission("cannons.admin.list")
+    public static void onList(CommandSender sender, @Optional String arg) {
+        if (arg != null) {
+            //additional player name
+            OfflinePlayer offplayer = CannonsUtil.getOfflinePlayer(arg);
+            if (offplayer == null || !offplayer.hasPlayedBefore()) {
+                return;
+            }
+
+            sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + offplayer.getName() + ChatColor.GREEN + ":");
+            for (Cannon cannon : CannonManager.getCannonList().values()) {
+                if (cannon.getOwner() != null && cannon.getOwner().equals(offplayer.getUniqueId()))
+                    sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " location:" + ChatColor.GOLD + cannon.getOffset().toString());
+            }
+            return;
+        }
+
+        //plot all cannons
+        sendMessage(sender, ChatColor.GREEN + "List of all cannons:");
+        for (Cannon cannon : CannonManager.getCannonList().values()) {
+            if (cannon.getOwner() != null) {
+                OfflinePlayer owner = Bukkit.getOfflinePlayer(cannon.getOwner());
+                sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + owner.getName() + ChatColor.GREEN + " location:" + ChatColor.GOLD + cannon.getOffset().toString());
+            }
+        }
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -140,35 +169,8 @@ public class Commands extends BaseCommand {
         }
 
         //############## console and player commands ######################
-        //cannons list
-        if (args[0].equalsIgnoreCase("list") && (player == null || player.hasPermission("cannons.admin.list"))) {
-            if (args.length >= 2) {
-                //additional player name
-                OfflinePlayer offplayer = CannonsUtil.getOfflinePlayer(args[1]);
-                if (offplayer == null || !offplayer.hasPlayedBefore()) {
-                    return;
-                }
-
-                sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + offplayer.getName() + ChatColor.GREEN + ":");
-                for (Cannon cannon : CannonManager.getCannonList().values()) {
-                    if (cannon.getOwner() != null && cannon.getOwner().equals(offplayer.getUniqueId()))
-                        sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" + ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " location:" + ChatColor.GOLD + cannon.getOffset().toString());
-                }
-                return;
-            }
-
-            //plot all cannons
-            sendMessage(sender, ChatColor.GREEN + "List of all cannons:");
-            for (Cannon cannon : CannonManager.getCannonList().values()) {
-                if (cannon.getOwner() != null) {
-                    OfflinePlayer owner = Bukkit.getOfflinePlayer(cannon.getOwner());
-                    sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " owner:" + ChatColor.GOLD + owner.getName() + ChatColor.GREEN + " location:" + ChatColor.GOLD + cannon.getOffset().toString());
-                }
-            }
-            return;
-        }
         //cannons create
-        else if (args[0].equalsIgnoreCase("create")) {
+        if (args[0].equalsIgnoreCase("create")) {
             if (player == null || !player.hasPermission("cannons.admin.create")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
