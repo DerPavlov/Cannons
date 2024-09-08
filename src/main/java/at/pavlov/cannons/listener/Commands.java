@@ -283,6 +283,34 @@ public class Commands extends BaseCommand {
         userMessages.sendMessage(message, player, cannon);
     }
 
+    @Subcommand("observer")
+    @Syntax("<off|disable|CANNON_NAME>")
+    @CommandPermission("cannons.player.observer")
+    public static void onObserver(Player player, String[] args) {
+        CannonSelector selector = CannonSelector.getInstance();
+
+        if (args.length < 1) {
+            selector.toggleCannonSelector(player, SelectCannon.OBSERVER);
+            return;
+        }
+
+        Cannons plugin = Cannons.getPlugin();
+        UserMessages userMessages = plugin.getMyConfig().getUserMessages();
+
+        if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("disable") || args[0].equalsIgnoreCase("remove"))
+            plugin.getAiming().removeObserverForAllCannons(player);
+        else {
+            //selection done by a string '/cannons observer CANNON_NAME'
+            Cannon cannon = CannonManager.getCannon(args[0]);
+            if (cannon != null)
+                cannon.toggleObserver(player, false);
+            else
+                userMessages.sendMessage(MessageEnum.CmdCannonNotFound, player);
+        }
+        //this never gets called
+        //sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -314,28 +342,8 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-        //add observer for cannon
-        if (args[0].equalsIgnoreCase("observer")) {
-            if (!player.hasPermission("cannons.player.observer")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            if (args.length >= 2 && (args[1].equalsIgnoreCase("off") || args[1].equalsIgnoreCase("disable") || args[1].equalsIgnoreCase("remove")))
-                plugin.getAiming().removeObserverForAllCannons(player);
-            else if (args.length < 2)
-                selector.toggleCannonSelector(player, SelectCannon.OBSERVER);
-            else if (args.length >= 2 && args[1] != null) {
-                //selection done by a string '/cannons observer CANNON_NAME'
-                Cannon cannon = CannonManager.getCannon(args[1]);
-                if (cannon != null)
-                    cannon.toggleObserver(player, false);
-                else
-                    userMessages.sendMessage(MessageEnum.CmdCannonNotFound, player);
-            } else
-                sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
-        }
         //add player to whitelist
-        else if (args[0].equalsIgnoreCase("whitelist")) {
+        if (args[0].equalsIgnoreCase("whitelist")) {
             if (!player.hasPermission("cannons.player.whitelist")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
