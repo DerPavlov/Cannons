@@ -17,8 +17,10 @@ import at.pavlov.cannons.utils.CannonSelector;
 import at.pavlov.cannons.utils.CannonsUtil;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
-import com.google.common.base.Joiner;
+import co.aikar.commands.annotation.HelpCommand;
+import co.aikar.commands.annotation.Subcommand;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +36,26 @@ import java.util.List;
 
 @CommandAlias("cannons")
 public class Commands extends BaseCommand {
+    private static final String tag = "[Cannons] ";
+
+    @HelpCommand
+    @CommandPermission("cannons.player.command")
+    public static void onHelpCommand(Player sender) {
+        Cannons plugin = Cannons.getPlugin();
+        UserMessages userMessages = plugin.getMyConfig().getUserMessages();
+        userMessages.sendMessage(MessageEnum.HelpText, sender);
+    }
+
+    @Subcommand("reload")
+    @CommandPermission("cannons.admin.reload")
+    public static void onReload(CommandSender sender) {
+        Config config = Cannons.getPlugin().getMyConfig();
+        config.loadConfig();
+        DesignStorage.getInstance().loadCannonDesigns();
+        sendMessage(sender, ChatColor.GREEN + tag + "Config loaded");
+    }
+
+
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
 
@@ -48,7 +70,6 @@ public class Commands extends BaseCommand {
         CannonSelector selector = CannonSelector.getInstance();
         PersistenceDatabase persistenceDatabase = plugin.getPersistenceDatabase();
 
-        String tag = "[Cannons] ";
         String noPerm = " has no permission for command /cannons ";
         
         if (args.length < 1) { //console command
@@ -57,29 +78,12 @@ public class Commands extends BaseCommand {
                 plugin.logInfo("Cannons plugin v" + plugin.getPluginDescription().getVersion() + " is running");
                 return;
             }
-            if (player.hasPermission("cannons.player.command")) {
-                // display help
-                userMessages.sendMessage(MessageEnum.HelpText, player);
-            } else {
-                plugin.logInfo("Player has no permission: cannons.player.command");
-            }
             return;
         }
 
         //############## console and player commands ######################
-        //cannons reload
-        if (args[0].equalsIgnoreCase("reload")) {
-            if (player == null || player.hasPermission("cannons.admin.reload")) {
-                // reload config
-                config.loadConfig();
-                DesignStorage.getInstance().loadCannonDesigns();
-                sendMessage(sender, ChatColor.GREEN + tag + "Config loaded");
-            } else
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-            return;
-        }
         //cannons save
-        else if (args[0].equalsIgnoreCase("save")) {
+        if (args[0].equalsIgnoreCase("save")) {
             if (player == null || player.hasPermission("cannons.admin.reload")) {
                 // save database
                 persistenceDatabase.saveAllCannons(true);
