@@ -351,6 +351,12 @@ public class Commands extends BaseCommand {
             selector.toggleCannonSelector(player, selectCannon);
     }
 
+    @Subcommand("info")
+    @CommandPermission("cannons.player.info")
+    public static void onInfo(Player player) {
+        CannonSelector.getInstance().toggleCannonSelector(player, SelectCannon.INFO);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -384,15 +390,7 @@ public class Commands extends BaseCommand {
         }
 
         //get name of cannon
-        if (args[0].equalsIgnoreCase("info")) {
-            if (!player.hasPermission("cannons.player.info")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            selector.toggleCannonSelector(player, SelectCannon.INFO);
-        }
-        //get name of cannon
-        else if (args[0].equalsIgnoreCase("dismantle")) {
+        if (args[0].equalsIgnoreCase("dismantle")) {
             if (!player.hasPermission("cannons.player.dismantle") && !player.hasPermission("cannons.admin.dismantle")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
