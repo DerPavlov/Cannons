@@ -1,5 +1,6 @@
 package at.pavlov.cannons.listener;
 
+import at.pavlov.cannons.Aiming;
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.Enum.CommandList;
 import at.pavlov.cannons.Enum.MessageEnum;
@@ -17,6 +18,7 @@ import at.pavlov.cannons.utils.CannonSelector;
 import at.pavlov.cannons.utils.CannonsUtil;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.HelpCommand;
@@ -35,6 +37,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 @CommandAlias("cannons")
 public class Commands extends BaseCommand {
@@ -228,6 +231,29 @@ public class Commands extends BaseCommand {
         displayCommands(player);
     }
 
+    @Subcommand("imitate")
+    @CommandCompletion("true|enable|false|disable")
+    @CommandPermission("cannons.player.command")
+    public static void onImitate(Player player, @Optional String arg) {
+        Cannons plugin = Cannons.getPlugin();
+        Aiming aiming = plugin.getAiming();
+        Config config = plugin.getMyConfig();
+
+        if (!config.isImitatedAimingEnabled()) {
+            return;
+        }
+
+        if (arg == null) {
+            aiming.toggleImitating(player);
+            return;
+        }
+
+        switch (arg.toLowerCase(Locale.ROOT)) {
+            case "true", "enable" -> aiming.enableImitating(player);
+            case "false", "disable" -> aiming.disableImitating(player);
+        }
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -259,22 +285,8 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-
-        //cannons imitating toggle
-        if (args[0].equalsIgnoreCase("imitate") && config.isImitatedAimingEnabled()) {
-            if (!player.hasPermission("cannons.player.command")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            if (args.length >= 2 && (args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("enable")))
-                plugin.getAiming().enableImitating(player);
-            else if (args.length >= 2 && (args[1].equalsIgnoreCase("false") || args[1].equalsIgnoreCase("disable")))
-                plugin.getAiming().disableImitating(player);
-            else
-                plugin.getAiming().toggleImitating(player);
-        }
         //buy cannon
-        else if (args[0].equalsIgnoreCase("buy")) {
+        if (args[0].equalsIgnoreCase("buy")) {
             if (!player.hasPermission("cannons.player.build")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
