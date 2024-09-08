@@ -142,6 +142,24 @@ public class Commands extends BaseCommand {
         }
     }
 
+    @Subcommand("create")
+    @CommandPermission("cannons.admin.create")
+    public static void onCreate(Player player, String arg) {
+        Cannons plugin = Cannons.getPlugin();
+        //check if the design name is valid
+        if (!plugin.getDesignStorage().hasDesign(arg)) {
+            sendMessage(player, ChatColor.RED + tag + "Design not found Available designs are: " + StringUtils.join(plugin.getDesignStorage().getDesignIds(), ", "));
+            return;
+        }
+
+        sendMessage(player, ChatColor.GREEN + tag + "Create design: " + ChatColor.GOLD + arg);
+        CannonDesign cannonDesign = plugin.getDesignStorage().getDesign(arg);
+
+        Cannon cannon = new Cannon(cannonDesign, player.getWorld().getUID(), player.getLocation().toVector(), BlockFace.NORTH, player.getUniqueId());
+        //createCannon(cannon);
+        cannon.show();
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -169,33 +187,8 @@ public class Commands extends BaseCommand {
         }
 
         //############## console and player commands ######################
-        //cannons create
-        if (args[0].equalsIgnoreCase("create")) {
-            if (player == null || !player.hasPermission("cannons.admin.create")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-
-            if (args.length < 2) {
-                sendMessage(sender, ChatColor.RED + tag + "Usage: '/cannons create <design>'");
-                return;
-            }
-            //check if the design name is valid
-            if (!plugin.getDesignStorage().hasDesign(args[1])) {
-                sendMessage(sender, ChatColor.RED + tag + "Design not found Available designs are: " + StringUtils.join(plugin.getDesignStorage().getDesignIds(), ", "));
-                return;
-            }
-
-            sendMessage(sender, ChatColor.GREEN + tag + "Create design: " + ChatColor.GOLD + args[1]);
-            CannonDesign cannonDesign = plugin.getDesignStorage().getDesign(args[1]);
-
-            Cannon cannon = new Cannon(cannonDesign, player.getWorld().getUID(), player.getLocation().toVector(), BlockFace.NORTH, player.getUniqueId());
-            //createCannon(cannon);
-            cannon.show();
-            return;
-        }
         //cannons give projectile
-        else if (args[0].equalsIgnoreCase("give")) {
+        if (args[0].equalsIgnoreCase("give")) {
             if (player == null || !player.hasPermission("cannons.admin.give")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
