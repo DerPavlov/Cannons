@@ -208,6 +208,13 @@ public class Commands extends BaseCommand {
         userMessages.sendMessage(MessageEnum.HelpBuild, player);
     }
 
+    @Subcommand("fire")
+    @CommandPermission("cannons.player.command")
+    public static void onFire(Player player) {
+        var userMessages = Cannons.getPlugin().getMyConfig().getUserMessages();
+        userMessages.sendMessage(MessageEnum.HelpFire, player);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -239,17 +246,8 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-        //cannons fire
-        if (args[0].equalsIgnoreCase("fire")) {
-            if (!player.hasPermission("cannons.player.command")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            // how to fire
-            userMessages.sendMessage(MessageEnum.HelpFire, player);
-        }
         //cannons adjust
-        else if (args[0].equalsIgnoreCase("adjust")) {
+        if (args[0].equalsIgnoreCase("adjust")) {
             if (!player.hasPermission("cannons.player.command")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
