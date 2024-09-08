@@ -55,6 +55,14 @@ public class Commands extends BaseCommand {
         sendMessage(sender, ChatColor.GREEN + tag + "Config loaded");
     }
 
+    @Subcommand("save")
+    @CommandPermission("cannons.admin.reload")
+    public static void onSave(CommandSender sender) {
+        // save database
+        Cannons.getPlugin().getPersistenceDatabase().saveAllCannons(true);
+        sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -82,18 +90,8 @@ public class Commands extends BaseCommand {
         }
 
         //############## console and player commands ######################
-        //cannons save
-        if (args[0].equalsIgnoreCase("save")) {
-            if (player == null || player.hasPermission("cannons.admin.reload")) {
-                // save database
-                persistenceDatabase.saveAllCannons(true);
-                sendMessage(sender, ChatColor.GREEN + "Cannons database saved ");
-            } else
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-            return;
-        }
         //cannons load
-        else if (args[0].equalsIgnoreCase("load")) {
+        if (args[0].equalsIgnoreCase("load")) {
             if (player == null || player.hasPermission("cannons.admin.reload")) {
                 // load database
                 persistenceDatabase.loadCannons();
