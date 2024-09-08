@@ -26,6 +26,7 @@ import co.aikar.commands.annotation.Optional;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.jcajce.provider.symmetric.ARC4;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -311,6 +312,40 @@ public class Commands extends BaseCommand {
         //sendMessage(sender, ChatColor.RED + "Usage '/cannons observer' or '/cannons observer <off|disable>' or '/cannons observer <CANNON NAME>'");
     }
 
+    @Subcommand("whitelist")
+    @CommandPermission("cannons.player.whitelist")
+    public class onWhitelist extends BaseCommand {
+
+        @Default
+        public static void help(Player player) {
+            sendMessage(player, ChatColor.RED + "Usage '/cannons whitelist <add|remove> <NAME>'");
+        }
+
+        @Subcommand("add")
+        public static void onAdd(Player player, String subject) {
+            OfflinePlayer offPlayer = CannonsUtil.getOfflinePlayer(subject);
+            CannonSelector selector = CannonSelector.getInstance();
+            UserMessages userMessages = Cannons.getPlugin().getMyConfig().getUserMessages();
+
+            if (offPlayer != null && offPlayer.hasPlayedBefore())
+                selector.toggleCannonSelector(player, SelectCannon.WHITELIST_ADD, offPlayer);
+            else
+                userMessages.sendMessage(MessageEnum.ErrorPlayerNotFound, player);
+        }
+
+        @Subcommand("remove")
+        public static void onRemove(Player player, String subject) {
+            OfflinePlayer offPlayer = CannonsUtil.getOfflinePlayer(subject);
+            CannonSelector selector = CannonSelector.getInstance();
+            UserMessages userMessages = Cannons.getPlugin().getMyConfig().getUserMessages();
+
+            if (offPlayer != null && offPlayer.hasPlayedBefore()) {
+                selector.toggleCannonSelector(player, SelectCannon.WHITELIST_REMOVE, offPlayer);
+            } else
+                userMessages.sendMessage(MessageEnum.ErrorPlayerNotFound, player);
+        }
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -342,30 +377,8 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-        //add player to whitelist
-        if (args[0].equalsIgnoreCase("whitelist")) {
-            if (!player.hasPermission("cannons.player.whitelist")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            //selection done by a string '/cannons observer add|remove NAME'
-            if (args.length >= 3 && (args[1].equalsIgnoreCase("add"))) {
-                OfflinePlayer offPlayer = CannonsUtil.getOfflinePlayer(args[2]);
-                if (offPlayer != null && offPlayer.hasPlayedBefore()) {
-                    selector.toggleCannonSelector(player, SelectCannon.WHITELIST_ADD, offPlayer);
-                } else
-                    userMessages.sendMessage(MessageEnum.ErrorPlayerNotFound, player);
-            } else if (args.length >= 3 && (args[1].equalsIgnoreCase("remove"))) {
-                OfflinePlayer offPlayer = CannonsUtil.getOfflinePlayer(args[2]);
-                if (offPlayer != null && offPlayer.hasPlayedBefore()) {
-                    selector.toggleCannonSelector(player, SelectCannon.WHITELIST_REMOVE, offPlayer);
-                } else
-                    userMessages.sendMessage(MessageEnum.ErrorPlayerNotFound, player);
-            } else
-                sendMessage(sender, ChatColor.RED + "Usage '/cannons whitelist <add|remove> <NAME>'");
-        }
         //toggle sentry target
-        else if (args[0].equalsIgnoreCase("target")) {
+        if (args[0].equalsIgnoreCase("target")) {
             if (!player.hasPermission("cannons.player.target")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
