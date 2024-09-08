@@ -2,11 +2,12 @@ package at.pavlov.cannons;
 
 import at.pavlov.cannons.API.CannonsAPI;
 import at.pavlov.cannons.Enum.MessageEnum;
-import at.pavlov.cannons.Enum.SelectCannon;
 import at.pavlov.cannons.cannon.Cannon;
 import at.pavlov.cannons.cannon.CannonDesign;
 import at.pavlov.cannons.cannon.CannonManager;
 import at.pavlov.cannons.cannon.DesignStorage;
+import at.pavlov.cannons.commands.CannonsCommandManager;
+import at.pavlov.cannons.commands.Commands;
 import at.pavlov.cannons.config.Config;
 import at.pavlov.cannons.container.ItemHolder;
 import at.pavlov.cannons.dao.PersistenceDatabase;
@@ -17,8 +18,6 @@ import at.pavlov.cannons.projectile.ProjectileStorage;
 import at.pavlov.cannons.scheduler.FakeBlockHandler;
 import at.pavlov.cannons.scheduler.ProjectileObserver;
 import at.pavlov.cannons.utils.CannonSelector;
-import co.aikar.commands.InvalidCommandArgument;
-import co.aikar.commands.PaperCommandManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -38,7 +37,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -211,32 +209,8 @@ public final class Cannons extends JavaPlugin
     }
 
 	private void initializeCommands() {
-		var pcm = new PaperCommandManager(this);
-		var context = pcm.getCommandContexts();
-		context.registerContext(SelectCannon.class, c -> {
-			String select = c.popFirstArg();
-			switch (select.toLowerCase(Locale.ROOT)) {
-                case "mob" -> {
-                    return SelectCannon.TARGET_MOB;
-                }
-
-				case "player" -> {
-					return SelectCannon.TARGET_PLAYER;
-				}
-
-				case "cannon" -> {
-					return SelectCannon.TARGET_CANNON;
-				}
-
-				case "other" -> {
-					return SelectCannon.TARGET_OTHER;
-				}
-
-				default -> throw new InvalidCommandArgument("Invalid target specified, only allowed values: mob|player|cannon|other");
-            }
-		});
-
-		pcm.registerCommand(commands);
+		var cannonsCommandManager = new CannonsCommandManager(this);
+		cannonsCommandManager.registerCommand(commands);
 	}
 
 	private void setupEconomy() {

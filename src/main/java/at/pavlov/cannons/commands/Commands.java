@@ -1,4 +1,4 @@
-package at.pavlov.cannons.listener;
+package at.pavlov.cannons.commands;
 
 import at.pavlov.cannons.Aiming;
 import at.pavlov.cannons.Cannons;
@@ -357,6 +357,12 @@ public class Commands extends BaseCommand {
         CannonSelector.getInstance().toggleCannonSelector(player, SelectCannon.INFO);
     }
 
+    @Subcommand("dismantle")
+    @CommandPermission("cannons.player.dismantle|cannons.admin.dismantle")
+    public static void onDismantle(Player player) {
+        CannonSelector.getInstance().toggleCannonSelector(player, SelectCannon.DISMANTLE);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -389,16 +395,8 @@ public class Commands extends BaseCommand {
             return;
         }
 
-        //get name of cannon
-        if (args[0].equalsIgnoreCase("dismantle")) {
-            if (!player.hasPermission("cannons.player.dismantle") && !player.hasPermission("cannons.admin.dismantle")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            selector.toggleCannonSelector(player, SelectCannon.DISMANTLE);
-        }
         //list cannons of this player name
-        else if (args[0].equalsIgnoreCase("list")) {
+        if (args[0].equalsIgnoreCase("list")) {
             if (!player.hasPermission("cannons.player.list")) {
                 plugin.logDebug("Missing permission 'cannons.player.list' for command /cannons " + args[0]);
                 return;
