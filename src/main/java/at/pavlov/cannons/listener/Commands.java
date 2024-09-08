@@ -143,6 +143,7 @@ public class Commands extends BaseCommand {
     }
 
     @Subcommand("create")
+    @Syntax("[DESIGN]")
     @CommandPermission("cannons.admin.create")
     public static void onCreate(Player player, String arg) {
         Cannons plugin = Cannons.getPlugin();
@@ -158,6 +159,22 @@ public class Commands extends BaseCommand {
         Cannon cannon = new Cannon(cannonDesign, player.getWorld().getUID(), player.getLocation().toVector(), BlockFace.NORTH, player.getUniqueId());
         //createCannon(cannon);
         cannon.show();
+    }
+
+    @Subcommand("give")
+    @Syntax("[PROJECTILE] <amount>")
+    @CommandPermission("cannons.admin.give")
+    public static void onGive(Player player, String projectileString, @Default("1") int amount) {
+        //check if the projectile id is valid
+        Projectile projectile = ProjectileStorage.getProjectile(projectileString);
+        if (projectile == null) {
+            String out = StringUtils.join(ProjectileStorage.getProjectileIds(), ", ");
+            sendMessage(player, ChatColor.RED + tag + "Design not found. Available designs are: " + out);
+            return;
+        }
+
+        sendMessage(player, ChatColor.GREEN + tag + "Give projectile: " + ChatColor.GOLD + projectileString);
+        player.getInventory().addItem(projectile.getLoadingItem().toItemStack(amount));
     }
 
 
@@ -187,36 +204,8 @@ public class Commands extends BaseCommand {
         }
 
         //############## console and player commands ######################
-        //cannons give projectile
-        if (args[0].equalsIgnoreCase("give")) {
-            if (player == null || !player.hasPermission("cannons.admin.give")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-
-            if (args.length < 2) {
-                sendMessage(sender, ChatColor.RED + tag +"Usage: '/cannons give <projectile> ] {amount}'");
-                return;
-            }
-
-            //check if the projectile id is valid
-            Projectile projectile = ProjectileStorage.getProjectile(args[1]);
-            if (projectile == null) {
-                sendMessage(sender, ChatColor.RED + tag + "Design not found. Available designs are: " + StringUtils.join(ProjectileStorage.getProjectileIds(), ", "));
-                return;
-            }
-            sendMessage(sender, ChatColor.GREEN + tag + "Give projectile: " + ChatColor.GOLD + args[1]);
-            int amount = 1;
-            if (args.length >= 3)
-                try {
-                    amount = Integer.parseInt(args[2]);
-                } catch (NumberFormatException ignored) {
-                }
-            player.getInventory().addItem(projectile.getLoadingItem().toItemStack(amount));
-            return;
-        }
         //cannons permissions
-        else if (args[0].equalsIgnoreCase("permissions")) {
+        if (args[0].equalsIgnoreCase("permissions")) {
             if (player != null && !player.hasPermission("cannons.admin.permissions")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
