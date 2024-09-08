@@ -215,6 +215,13 @@ public class Commands extends BaseCommand {
         userMessages.sendMessage(MessageEnum.HelpFire, player);
     }
 
+    @Subcommand("adjust")
+    @CommandPermission("cannons.player.command")
+    public static void onAdjust(Player player) {
+        var userMessages = Cannons.getPlugin().getMyConfig().getUserMessages();
+        userMessages.sendMessage(MessageEnum.HelpAdjust, player);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -246,17 +253,8 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-        //cannons adjust
-        if (args[0].equalsIgnoreCase("adjust")) {
-            if (!player.hasPermission("cannons.player.command")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            // how to adjust
-            userMessages.sendMessage(MessageEnum.HelpAdjust, player);
-        }
         //cannons commands
-        else if (args[0].equalsIgnoreCase("commands")) {
+        if (args[0].equalsIgnoreCase("commands")) {
             if (!player.hasPermission("cannons.player.command")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
