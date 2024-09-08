@@ -363,6 +363,31 @@ public class Commands extends BaseCommand {
         CannonSelector.getInstance().toggleCannonSelector(player, SelectCannon.DISMANTLE);
     }
 
+    @Subcommand("listme")
+    @CommandPermission("cannons.player.list")
+    public static void onMyList(Player player) {
+        CannonManager cannonManager = Cannons.getPlugin().getCannonManager();
+        sendMessage(player, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");
+        for (Cannon cannon : CannonManager.getCannonList().values()) {
+            if (cannon.getOwner() != null && cannon.getOwner().equals(player.getUniqueId()))
+                sendMessage(player, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
+                        ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
+        }
+        //show cannon limit
+        int builtLimit = cannonManager.getCannonBuiltLimit(player);
+
+        if (builtLimit == Integer.MAX_VALUE) {
+            return;
+        }
+
+        int cannonAmount = cannonManager.getNumberOfCannons(player.getUniqueId());
+        int allowedNewCannons = builtLimit - cannonAmount;
+        if (allowedNewCannons > 0)
+            sendMessage(player, ChatColor.GREEN + "You can build " + ChatColor.GOLD + allowedNewCannons + ChatColor.GREEN + " additional cannons");
+        else
+            sendMessage(player, ChatColor.RED + "You reached your maximum number of cannons");
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -395,31 +420,8 @@ public class Commands extends BaseCommand {
             return;
         }
 
-        //list cannons of this player name
-        if (args[0].equalsIgnoreCase("list")) {
-            if (!player.hasPermission("cannons.player.list")) {
-                plugin.logDebug("Missing permission 'cannons.player.list' for command /cannons " + args[0]);
-                return;
-            }
-            sendMessage(sender, ChatColor.GREEN + "Cannon list for " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + ":");
-            for (Cannon cannon : CannonManager.getCannonList().values()) {
-                if (cannon.getOwner() != null && cannon.getOwner().equals(player.getUniqueId()))
-                    sendMessage(sender, ChatColor.GREEN + "Name:" + ChatColor.GOLD + cannon.getCannonName() + ChatColor.GREEN + " design:" +
-                            ChatColor.GOLD + cannon.getCannonDesign().getDesignName() + ChatColor.GREEN + " loc: " + ChatColor.GOLD + cannon.getOffset().toString());
-            }
-            //show cannon limit
-            int buildlimit = plugin.getCannonManager().getCannonBuiltLimit(player);
-            if (buildlimit < Integer.MAX_VALUE) {
-                int ncannon = plugin.getCannonManager().getNumberOfCannons(player.getUniqueId());
-                int newcannons = buildlimit - ncannon;
-                if (newcannons > 0)
-                    sendMessage(sender, ChatColor.GREEN + "You can build " + ChatColor.GOLD + newcannons + ChatColor.GREEN + " additional cannons");
-                else
-                    sendMessage(sender, ChatColor.RED + "You reached your maximum number of cannons");
-            }
-        }
         //cannons reset
-        else if (args[0].equalsIgnoreCase("reset")) {
+        if (args[0].equalsIgnoreCase("reset")) {
             if (!player.hasPermission("cannons.player.reset")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
