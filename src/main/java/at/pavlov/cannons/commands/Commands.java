@@ -406,6 +406,17 @@ public class Commands extends BaseCommand {
         CannonSelector.getInstance().toggleCannonSelector(player, SelectCannon.BLOCK_DATA);
     }
 
+    @Subcommand("claim")
+    @CommandPermission("cannons.player.claim")
+    public static void onClaim(Player player) {
+        Cannons plugin = Cannons.getPlugin();
+        UserMessages userMessages = plugin.getMyConfig().getUserMessages();
+
+        userMessages.sendMessage(MessageEnum.CmdClaimCannonsStarted, player);
+        plugin.getCannonManager().claimCannonsInBox(player.getLocation(), player.getUniqueId());
+        userMessages.sendMessage(MessageEnum.CmdClaimCannonsFinished, player);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -436,25 +447,6 @@ public class Commands extends BaseCommand {
         if (player == null) {
             plugin.logDebug("This command can only be used by a player");
             return;
-        }
-
-        //claim cannons in the surrounding
-        if (args[0].equalsIgnoreCase(CommandList.CLAIM.getCommand())) {
-            if (!player.hasPermission(CommandList.CLAIM.getPermission())) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            userMessages.sendMessage(MessageEnum.CmdClaimCannonsStarted, player);
-            Cannons.getPlugin().getCannonManager().claimCannonsInBox(player.getLocation(), player.getUniqueId());
-            userMessages.sendMessage(MessageEnum.CmdClaimCannonsFinished, player);
-
-        } else { //no help message if it is forbidden for this player
-            if (!player.hasPermission("cannons.player.command")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            // display help
-            userMessages.sendMessage(MessageEnum.HelpText, player);
         }
     }
 
