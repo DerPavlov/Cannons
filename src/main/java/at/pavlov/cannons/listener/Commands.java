@@ -261,6 +261,28 @@ public class Commands extends BaseCommand {
         selector.toggleBuyCannon(player, SelectCannon.BUY_CANNON);
     }
 
+    @Subcommand("rename")
+    @CommandPermission("cannons.player.rename")
+    public static void onRename(Player player, String[] args) {
+        //TODO: When calling this all default names have a space in it so it won't work as expected
+        if (args.length < 2 || args[0] == null || args[1] == null) {
+            sendMessage(player, ChatColor.RED + "Usage '/cannons rename <OLD_NAME> <NEW_NAME>'");
+            return;
+        }
+
+        //selection done by a string '/cannons rename OLD NEW'
+        Cannons plugin = Cannons.getPlugin();
+        UserMessages userMessages = plugin.getMyConfig().getUserMessages();
+        Cannon cannon = CannonManager.getCannon(args[0]);
+        if (cannon == null) {
+            sendMessage(player, ChatColor.RED + "Cannon not found");
+            return;
+        }
+
+        MessageEnum message = plugin.getCannonManager().renameCannon(player, cannon, args[1]);
+        userMessages.sendMessage(message, player, cannon);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -292,25 +314,8 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-        //rename cannon
-        if (args[0].equalsIgnoreCase("rename")) {
-            if (!player.hasPermission("cannons.player.rename")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            if (args.length >= 3 && args[1] != null && args[2] != null) {
-                //selection done by a string '/cannons rename OLD NEW'
-                Cannon cannon = CannonManager.getCannon(args[1]);
-                if (cannon != null) {
-                    MessageEnum message = plugin.getCannonManager().renameCannon(player, cannon, args[2]);
-                    userMessages.sendMessage(message, player, cannon);
-                }
-            } else
-                sendMessage(sender, ChatColor.RED + "Usage '/cannons rename <OLD_NAME> <NEW_NAME>'");
-            return;
-        }
         //add observer for cannon
-        else if (args[0].equalsIgnoreCase("observer")) {
+        if (args[0].equalsIgnoreCase("observer")) {
             if (!player.hasPermission("cannons.player.observer")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
