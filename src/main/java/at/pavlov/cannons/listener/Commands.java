@@ -254,6 +254,13 @@ public class Commands extends BaseCommand {
         }
     }
 
+    @Subcommand("buy")
+    @CommandPermission("cannons.player.build")
+    public static void onBuy(Player player) {
+        CannonSelector selector = CannonSelector.getInstance();
+        selector.toggleBuyCannon(player, SelectCannon.BUY_CANNON);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -285,17 +292,8 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-        //buy cannon
-        if (args[0].equalsIgnoreCase("buy")) {
-            if (!player.hasPermission("cannons.player.build")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            selector.toggleBuyCannon(player, SelectCannon.BUY_CANNON);
-            return;
-        }
         //rename cannon
-        else if (args[0].equalsIgnoreCase("rename")) {
+        if (args[0].equalsIgnoreCase("rename")) {
             if (!player.hasPermission("cannons.player.rename")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
