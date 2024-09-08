@@ -388,6 +388,18 @@ public class Commands extends BaseCommand {
             sendMessage(player, ChatColor.RED + "You reached your maximum number of cannons");
     }
 
+    @Subcommand("resetme")
+    @CommandPermission("cannons.player.reset")
+    public static void onResetMe(Player player) {
+        Cannons plugin = Cannons.getPlugin();
+        PersistenceDatabase persistenceDatabase = plugin.getPersistenceDatabase();
+        UserMessages userMessages = plugin.getMyConfig().getUserMessages();
+
+        persistenceDatabase.deleteCannons(player.getUniqueId());
+        plugin.getCannonManager().deleteCannons(player.getUniqueId());
+        userMessages.sendMessage(MessageEnum.CannonsReseted, player);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -420,19 +432,8 @@ public class Commands extends BaseCommand {
             return;
         }
 
-        //cannons reset
-        if (args[0].equalsIgnoreCase("reset")) {
-            if (!player.hasPermission("cannons.player.reset")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            // delete all cannon entries for this player
-            persistenceDatabase.deleteCannons(player.getUniqueId());
-            plugin.getCannonManager().deleteCannons(player.getUniqueId());
-            userMessages.sendMessage(MessageEnum.CannonsReseted, player);
-        }
         //get blockdata
-        else if (args[0].equalsIgnoreCase("blockdata")) {
+        if (args[0].equalsIgnoreCase("blockdata")) {
             if (!player.hasPermission("cannons.player.blockdata")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
