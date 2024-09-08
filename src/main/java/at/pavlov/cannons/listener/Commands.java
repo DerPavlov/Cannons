@@ -222,6 +222,12 @@ public class Commands extends BaseCommand {
         userMessages.sendMessage(MessageEnum.HelpAdjust, player);
     }
 
+    @Subcommand("commands")
+    @CommandPermission("cannons.player.command")
+    public static void onDisplayCommand(Player player) {
+        displayCommands(player);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
@@ -253,16 +259,9 @@ public class Commands extends BaseCommand {
             plugin.logDebug("This command can only be used by a player");
             return;
         }
-        //cannons commands
-        if (args[0].equalsIgnoreCase("commands")) {
-            if (!player.hasPermission("cannons.player.command")) {
-                plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
-                return;
-            }
-            displayCommands(player);
-        }
+
         //cannons imitating toggle
-        else if (args[0].equalsIgnoreCase("imitate") && config.isImitatedAimingEnabled()) {
+        if (args[0].equalsIgnoreCase("imitate") && config.isImitatedAimingEnabled()) {
             if (!player.hasPermission("cannons.player.command")) {
                 plugin.logDebug(tag + sender.getName() + noPerm + args[0]);
                 return;
