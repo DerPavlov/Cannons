@@ -420,33 +420,20 @@ public class Commands extends BaseCommand {
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
-
         Player player = null;
         if (sender instanceof Player) {
             player = (Player) sender;
         }
 
         Cannons plugin = Cannons.getPlugin();
-        Config config = plugin.getMyConfig();
-        UserMessages userMessages = config.getUserMessages();
-        CannonSelector selector = CannonSelector.getInstance();
-        PersistenceDatabase persistenceDatabase = plugin.getPersistenceDatabase();
 
-        String noPerm = " has no permission for command /cannons ";
-        
-        if (args.length < 1) { //console command
-            //no help message if it is forbidden for this player
-            if (player == null) {
-                plugin.logInfo("Cannons plugin v" + plugin.getPluginDescription().getVersion() + " is running");
-                return;
-            }
+        if (args.length >= 1) {
             return;
         }
 
-        //################### Player only commands #####################
+        //console command
         if (player == null) {
-            plugin.logDebug("This command can only be used by a player");
-            return;
+            plugin.logInfo("Cannons plugin v" + plugin.getPluginDescription().getVersion() + " is running");
         }
     }
 
