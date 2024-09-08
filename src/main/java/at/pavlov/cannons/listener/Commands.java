@@ -337,6 +337,20 @@ public class Commands extends BaseCommand {
         }
     }
 
+    @Subcommand("target")
+    @CommandPermission("cannons.player.target")
+    @Syntax("[mob|player|cannon|other] <true|false> <range>")
+    @CommandCompletion("mob|player|cannon|other true|false range")
+    public static void onTarget(Player player, SelectCannon selectCannon, @Default("false") boolean choice, @Default("0") int length) {
+        CannonSelector selector = CannonSelector.getInstance();
+        selector.putTarget(player.getUniqueId(), choice);
+
+        if (length > 0)
+            selectCannonsInBox(player, selectCannon, length);
+        else
+            selector.toggleCannonSelector(player, selectCannon);
+    }
+
 
     @Default
     public static void onCommand(CommandSender sender, String[] args) {
